@@ -1,0 +1,63 @@
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --border: #475569;
+  --pin-color: #fbbf24;
+  --wire-color: #38bdf8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; }
+
+#app-container { display: grid; grid-template-columns: 240px 1fr 280px; height: 100%; }
+.toolbar { grid-column: 1 / -1; background: var(--bg-secondary); padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.toolbar h1 { font-size: 1.2rem; margin-right: 1rem; }
+.controls { display: flex; gap: 0.75rem; align-items: center; }
+select, button { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
+button:hover { background: #475569; }
+.btn-primary { background: var(--accent); color: #0f172a; border: none; font-weight: 600; }
+.btn-danger { background: var(--danger); color: white; border: none; }
+
+.sidebar { background: var(--bg-secondary); padding: 1rem; overflow-y: auto; border-right: 1px solid var(--border); }
+#properties-panel { border-left: 1px solid var(--border); border-right: none; }
+h2 { font-size: 1rem; margin-bottom: 0.75rem; color: var(--accent); }
+.hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem; }
+
+#library-list, #props-content { list-style: none; }
+.lib-item { background: var(--bg-tertiary); padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 6px; cursor: grab; user-select: none; transition: transform 0.1s, box-shadow 0.2s; }
+.lib-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); border-left: 3px solid var(--accent); }
+.lib-meta { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+.canvas-area { position: relative; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); overflow: hidden; }
+#wiring-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+.wire-line { stroke: var(--wire-color); stroke-width: 2.5; fill: none; stroke-dasharray: 6,4; transition: opacity 0.2s; cursor: crosshair; pointer-events: all; }
+.wire-line:hover { stroke: #7dd3fc; stroke-width: 3.5; }
+
+.board-zone { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 180px; height: 240px; background: #1a1a1a; border: 2px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; z-index: 5; box-shadow: 0 0 30px rgba(0,0,0,0.6); }
+.board-label { position: absolute; bottom: -25px; font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+
+.component-zone { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 15; }
+.component { position: absolute; background: var(--bg-tertiary); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem; min-width: 140px; cursor: grab; user-select: none; box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+.component.dragging { opacity: 0.9; z-index: 100; cursor: grabbing; }
+.comp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+.comp-name { font-weight: 600; font-size: 0.9rem; }
+.btn-remove { background: transparent; color: var(--danger); border: none; font-size: 1.2rem; cursor: pointer; padding: 0 4px; }
+
+.pin { fill: var(--pin-color); stroke: #0f172a; stroke-width: 1.5; cursor: crosshair; transition: r 0.15s, filter 0.2s; }
+.pin:hover { r: 8; filter: drop-shadow(0 0 4px var(--pin-color)); }
+.pin.active { fill: #f97316; animation: pulse 1s infinite; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.props-content .prop-group { margin-bottom: 1rem; }
+.prop-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem; }
+.prop-group input, .prop-group select { width: 100%; background: var(--bg-tertiary); border: 1px solid var(--border); color: var(--text-primary); padding: 0.4rem; border-radius: 4px; font-size: 0.9rem; }
+.empty-state { color: var(--text-muted); text-align: center; margin-top: 2rem; font-style: italic; }
+.library-info { background: var(--bg-primary); padding: 0.5rem; border-radius: 4px; margin-top: 0.5rem; font-size: 0.8rem; border-left: 3px solid var(--accent); }
