@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 Mini Project Configurator</title>
+</head>
+<body>
+  <div id="app-container">
+    <header class="toolbar">
+      <h1>ESP32 Mini Visual Configurator</h1>
+      <div class="controls">
+        <label for="board-select">Target Board:</label>
+        <select id="board-select">
+          <option value="esp32-s3-mini">ESP32-S3 Super Mini</option>
+          <option value="esp32-c3-mini">ESP32-C3 Super Mini</option>
+        </select>
+        <button id="btn-reset" class="btn btn-danger">Reset Canvas</button>
+        <button id="btn-export" class="btn btn-primary">Export Config (JSON)</button>
+      </div>
+    </header>
+
+    <aside id="component-library" class="sidebar">
+      <h2>Component Library</h2>
+      <p class="hint">Drag components to the canvas. Click pins to wire them.</p>
+      <ul id="library-list"></ul>
+    </aside>
+
+    <main id="canvas-container" class="canvas-area">
+      <svg id="wiring-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="board-area" class="board-zone"></div>
+      <div id="component-area" class="component-zone"></div>
+    </main>
+
+    <aside id="properties-panel" class="sidebar">
+      <h2>Properties</h2>
+      <div id="props-content">
+        <p class="empty-state">Select a component or connection to configure.</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Template for library items -->
+  <template id="library-item-tpl">
+    <li class="lib-item" draggable="false">
+      <strong data-type=""></strong>
+      <small class="lib-meta"></small>
+    </li>
+  </template>
+
+  <!-- Template for component instances -->
+  <template id="component-tpl">
+    <div class="component" data-id="" data-type="">
+      <div class="comp-header">
+        <span class="comp-name"></span>
+        <button class="btn-remove">&times;</button>
+      </div>
+      <div class="comp-body"></div>
+    </div>
+  </template>
+
+  <!-- Template for board pins -->
+  <template id="board-pin-tpl">
+    <circle class="pin" data-id="" cx="" cy="" r="6" />
+  </template>
+</body>
+</html>
