@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Block",
+    "category": "General Skill",
+    "description": "When this player performs a Block action (or assists a teammate doing so), if the block dice show Attacker Down or Both Down, the player may re-roll the block dice once per block action."
+  },
+  {
+    "name": "Catch",
+    "category": "Agility Skill",
+    "description": "If this player fails a Catch roll, they may re-roll the dice once. This skill may also be used to re-roll a failed attempt to catch a kick-off."
+  },
+  {
+    "name": "Consummate Professional",
+    "category": "Star Player Trait",
+    "description": "Once per game, this player may use one of their team's re-rolls without it being removed from the team's available pool for the remainder of the drive."
+  },
+  {
+    "name": "Dodge",
+    "category": "Agility Skill",
+    "description": "This player adds +1 to all Dodge rolls. Additionally, once per turn, if this player is knocked down as a result of a block, they may immediately attempt to dodge away — roll against their Agility (2+ for most Humans). On a success, they are not knocked down."
+  },
+  {
+    "name": "Fend",
+    "category": "General Skill",
+    "description": "When this player is pushed back as the result of a block, the opposing player may not follow up. The player is still pushed back normally; only the follow-up is prevented."
+  },
+  {
+    "name": "Give and Go",
+    "category": "Agility Skill",
+    "description": "After this player makes a successful Hand-off action, they may immediately move up to their MA in additional squares. This extra movement follows all normal movement rules (including Dodge rolls for leaving tackle zones)."
+  },
+  {
+    "name": "Loner (3+)",
+    "category": "Trait",
+    "description": "Before this player uses a team re-roll, they must first roll a D6. On a 3 or higher, the re-roll is granted as normal. On a 1 or 2, the team re-roll is wasted. This represents a Star Player's reluctance to rely on the team."
+  },
+  {
+    "name": "Pass",
+    "category": "Passing Skill",
+    "description": "If this player fails a Pass action roll, they may re-roll the dice once. Note that a Fumble cannot be re-rolled using Pass."
+  },
+  {
+    "name": "Pro",
+    "category": "General Skill",
+    "description": "Once per turn, before or after making any dice roll, this player may attempt to use Pro. Roll a D6 — on a 4 or higher, they may re-roll one dice of their choice. This skill cannot be used to re-roll a Pro roll itself."
+  },
+  {
+    "name": "Sprint",
+    "category": "Agility Skill",
+    "description": "This player may Rush up to 3 extra squares during their activation, rather than the usual maximum of 2. Each Rush still requires a roll of 2+ on a D6."
+  },
+  {
+    "name": "Stand Firm",
+    "category": "Strength Skill",
+    "description": "When this player is pushed back as the result of a block, they may choose not to be pushed back and remain in their current square. The opposing player may still follow up if they wish."
+  },
+  {
+    "name": "Sure Feet",
+    "category": "Agility Skill",
+    "description": "Once per game, this player may re-roll a single failed Rush attempt (a Rush roll of 1 on a D6). The re-roll is used up regardless of the result."
+  },
+  {
+    "name": "Wrestle",
+    "category": "General Skill",
+    "description": "When either player involved in a block would be knocked down (but neither has been pushed back yet), this player may use Wrestle to have both players fall over instead. Neither player is at risk of injury from this — the Armour roll is skipped. Wrestle can be used even when this player is the one being blocked."
+  }
+]
