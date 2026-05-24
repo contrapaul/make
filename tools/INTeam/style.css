@@ -19,7 +19,6 @@
 }
 
 /* --- PAGE BACKGROUND --- */
-/* Override the site's dark body; header/footer keep their own backgrounds */
 main {
   background: var(--in-bg);
   min-height: calc(100vh - 52px - 60px);
@@ -86,26 +85,30 @@ main {
 
 .roster-grid {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
+  flex-direction: column;  /* table-like vertical stack */
+  gap: 0.6rem;
 }
 
-/* --- PLAYER CARDS --- */
+/* ==============================================
+   PLAYER CARDS — short, wide, horizontal rows
+   ============================================== */
 .player-card {
   background: var(--in-card);
   border: 3px solid var(--in-red);
   border-radius: var(--in-radius);
-  min-width: 260px;
-  max-width: 320px;
-  flex: 1 1 260px;
+  width: 100%;
   cursor: pointer;
   position: relative;
   touch-action: manipulation;
   user-select: none;
   outline: none;
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
   box-shadow:
     3px 3px 0 0 var(--in-red-dark),
-    6px 6px 0 0 rgba(0, 0, 0, 0.25),
+    6px 6px 0 0 rgba(0, 0, 0, 0.22),
     inset 1px 1px 0 rgba(255, 255, 255, 0.7),
     inset -1px -1px 0 rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.14s ease, transform 0.14s ease;
@@ -115,7 +118,7 @@ main {
 .player-card:focus-visible {
   box-shadow:
     5px 5px 0 0 var(--in-red-dark),
-    10px 10px 0 0 rgba(0, 0, 0, 0.2),
+    10px 10px 0 0 rgba(0, 0, 0, 0.18),
     inset 1px 1px 0 rgba(255, 255, 255, 0.7),
     inset -1px -1px 0 rgba(0, 0, 0, 0.1);
   transform: translate(-2px, -2px);
@@ -125,12 +128,12 @@ main {
   border-color: #00e5a0;
 }
 
-/* Star Player — gold border + glow */
+/* Star Player — gold border + ambient glow */
 .player-card.star-player {
   border-color: var(--in-gold);
   box-shadow:
     3px 3px 0 0 var(--in-gold-dark),
-    6px 6px 0 0 rgba(0, 0, 0, 0.25),
+    6px 6px 0 0 rgba(0, 0, 0, 0.22),
     inset 1px 1px 0 rgba(255, 255, 255, 0.7),
     inset -1px -1px 0 rgba(0, 0, 0, 0.1),
     0 0 16px rgba(212, 175, 55, 0.35);
@@ -140,146 +143,149 @@ main {
 .player-card.star-player:focus-visible {
   box-shadow:
     5px 5px 0 0 var(--in-gold-dark),
-    10px 10px 0 0 rgba(0, 0, 0, 0.2),
+    10px 10px 0 0 rgba(0, 0, 0, 0.18),
     inset 1px 1px 0 rgba(255, 255, 255, 0.7),
     inset -1px -1px 0 rgba(0, 0, 0, 0.1),
     0 0 24px rgba(212, 175, 55, 0.55);
   transform: translate(-2px, -2px);
 }
 
-/* --- CARD TOP BAR --- */
-.card-top {
-  background: var(--in-red);
-  padding: 0.45rem 0.75rem;
+/* --- TOP ROW: #number · Name · Position [· badge] --- */
+.card-row-top {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 1px 1px 0 0;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.player-card.star-player .card-top {
-  background: linear-gradient(100deg, #7A5800 0%, var(--in-gold) 48%, #7A5800 100%);
-}
-
-.jersey-number {
+.card-num {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 800;
-  font-size: 1rem;
-  color: #fff;
-  letter-spacing: 0.05em;
+  font-size: 0.88rem;
+  color: var(--in-red);
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
 }
 
-.player-card.star-player .jersey-number {
-  color: #1a0005;
-}
-
-.star-badge {
-  font-family: 'Bespoke Slab', Georgia, serif;
-  font-weight: 700;
-  font-size: 0.6rem;
-  color: #1a0005;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.35);
-  padding: 2px 7px;
-  border-radius: 2px;
-}
-
-/* --- CARD BODY --- */
-.card-body {
-  padding: 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+.player-card.star-player .card-num {
+  color: var(--in-gold-dark);
 }
 
 .player-name {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--in-text);
-  line-height: 1.2;
-  margin: 0;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.player-position {
+.top-sep {
+  color: #bbb;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+}
+
+.player-pos {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 500;
   font-size: 0.7rem;
   color: var(--in-muted);
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  margin: 0 0 0.1rem;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
 }
 
-/* --- STATS ROW (card) --- */
-.stats-row {
-  display: flex;
-  border: 1px solid var(--in-border);
+.star-badge {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-weight: 700;
+  font-size: 0.58rem;
+  color: var(--in-gold-dark);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: 1px solid var(--in-gold);
+  background: rgba(212, 175, 55, 0.12);
+  padding: 1px 5px;
   border-radius: 2px;
-  overflow: hidden;
-  margin: 0.1rem 0;
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
-.stat {
-  flex: 1;
+/* --- BOTTOM ROW: stat chips + skills --- */
+.card-row-bottom {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+/* Stat chips (MA ST AG PA AV joined strip) */
+.stats-inline {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.sc {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0.3rem 0.15rem;
-  border-right: 1px solid var(--in-border);
-}
-
-.stat:last-child {
+  padding: 0.12rem 0.38rem;
+  border: 1px solid var(--in-border);
   border-right: none;
+  background: #fafafa;
 }
 
-.stat-label {
+.sc:first-child { border-radius: 2px 0 0 2px; }
+.sc:last-child  { border-right: 1px solid var(--in-border); border-radius: 0 2px 2px 0; }
+
+.sc-l {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 500;
-  font-size: 0.55rem;
-  color: #999;
+  font-size: 0.46rem;
+  color: #aaa;
   text-transform: uppercase;
   letter-spacing: 0.07em;
   line-height: 1;
 }
 
-.stat-value {
+.sc-v {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--in-text);
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
-/* --- SKILLS (card) --- */
-.player-skills {
+/* Skills text — takes remaining space, truncates */
+.card-skills {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 400;
-  font-size: 0.75rem;
-  color: #444;
-  line-height: 1.5;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-size: 0.72rem;
+  color: #555;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
 }
 
-.player-value {
+/* GP value — star player only */
+.card-value {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.78rem;
-  color: var(--in-red);
-  letter-spacing: 0.02em;
-  margin: 0.05rem 0 0;
-}
-
-.player-card.star-player .player-value {
+  font-size: 0.7rem;
   color: var(--in-gold-dark);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-/* --- MODAL OVERLAY --- */
+/* ====================================================
+   MODAL OVERLAY
+   ==================================================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -301,7 +307,7 @@ main {
   opacity: 1;
 }
 
-/* --- TRADING CARD (modal) --- */
+/* --- TRADING CARD --- */
 .trading-card {
   background: var(--in-card);
   border: 4px solid var(--in-red);
@@ -327,17 +333,17 @@ main {
     inset 1px 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.trading-card::-webkit-scrollbar { width: 4px; }
+.trading-card::-webkit-scrollbar       { width: 4px; }
 .trading-card::-webkit-scrollbar-track { background: #eee; }
 .trading-card::-webkit-scrollbar-thumb { background: var(--in-red); border-radius: 2px; }
 .trading-card.star-card::-webkit-scrollbar-thumb { background: var(--in-gold-dark); }
 
 @keyframes cardIn {
   from { transform: scale(0.93) translateY(10px); opacity: 0; }
-  to   { transform: scale(1) translateY(0);       opacity: 1; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
 }
 
-/* --- MODAL CLOSE BUTTON --- */
+/* --- MODAL CLOSE --- */
 .modal-close {
   position: absolute;
   top: 0.5rem;
@@ -356,7 +362,6 @@ main {
   align-items: center;
   justify-content: center;
   transition: background 0.13s;
-  flex-shrink: 0;
 }
 
 .modal-close:hover { background: rgba(0, 0, 0, 0.55); }
@@ -480,9 +485,7 @@ main {
   border-right: 1px solid var(--in-border);
 }
 
-.modal-stat:last-child {
-  border-right: none;
-}
+.modal-stat:last-child { border-right: none; }
 
 .ms-label {
   font-family: 'Bespoke Slab', Georgia, serif;
@@ -540,20 +543,22 @@ main {
   border-top: 1px solid var(--in-border);
 }
 
-/* --- RESPONSIVE --- */
+/* ====================================================
+   RESPONSIVE
+   ==================================================== */
 @media (max-width: 720px) {
-  .page-banner { padding: 1.25rem 1rem; }
-  .team-title  { font-size: 1.5rem; }
-  .team-badge  { width: 48px; height: 48px; font-size: 1.1rem; }
-  .roster-section { padding: 1rem; }
-  .roster-grid { gap: 0.85rem; }
-  .player-card { min-width: 0; max-width: none; flex: 1 1 240px; }
-  .trading-card { max-width: 100%; }
-  .modal-name  { font-size: 1.25rem; }
+  .page-banner     { padding: 1.25rem 1rem; }
+  .team-title      { font-size: 1.5rem; }
+  .team-badge      { width: 48px; height: 48px; font-size: 1.1rem; }
+  .roster-section  { padding: 1rem; }
+  .roster-grid     { gap: 0.5rem; }
+  .trading-card    { max-width: 100%; }
+  .modal-name      { font-size: 1.25rem; }
 }
 
 @media (max-width: 480px) {
-  .player-card { flex: 1 1 100%; }
   .modal-overlay { padding: 0.5rem; align-items: flex-end; }
-  .trading-card { max-height: 94vh; border-radius: 6px 6px 0 0; }
+  .trading-card  { max-height: 94vh; border-radius: 6px 6px 0 0; }
+  /* Let skills wrap on very small screens rather than truncate aggressively */
+  .card-skills   { font-size: 0.66rem; }
 }

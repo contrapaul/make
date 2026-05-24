@@ -35,26 +35,27 @@ function buildCard(player) {
   const card = document.createElement('div');
   card.className = 'player-card' + (player.isStarPlayer ? ' star-player' : '');
   card.setAttribute('tabindex', '0');
-  card.setAttribute('role', 'listitem button');
+  card.setAttribute('role', 'listitem');
   card.setAttribute('aria-label', `View ${player.name} — ${player.position}`);
 
   card.innerHTML = `
-    <div class="card-top">
-      <span class="jersey-number">#${player.id}</span>
+    <div class="card-row-top">
+      <span class="card-num">#${player.id}</span>
+      <span class="player-name">${esc(player.name)}</span>
+      <span class="top-sep" aria-hidden="true">&middot;</span>
+      <span class="player-pos">${esc(player.position)}</span>
       ${player.isStarPlayer ? '<span class="star-badge">&#9733; Star Player</span>' : ''}
     </div>
-    <div class="card-body">
-      <h2 class="player-name">${esc(player.name)}</h2>
-      <p class="player-position">${esc(player.position)}</p>
-      <div class="stats-row" aria-label="Stats">
+    <div class="card-row-bottom">
+      <div class="stats-inline" aria-label="Stats">
         ${STAT_KEYS.map(s => `
-          <span class="stat">
-            <span class="stat-label">${s.toUpperCase()}</span>
-            <span class="stat-value">${player[s]}</span>
-          </span>`).join('')}
+          <div class="sc">
+            <span class="sc-l">${s.toUpperCase()}</span>
+            <span class="sc-v">${player[s]}</span>
+          </div>`).join('')}
       </div>
-      <p class="player-skills">${esc(player.skills)}</p>
-      ${player.value ? `<p class="player-value">${player.value.toLocaleString()} gp</p>` : ''}
+      <span class="card-skills">${esc(player.skills)}</span>
+      ${player.value ? `<span class="card-value">${Math.round(player.value / 1000)}k gp</span>` : ''}
     </div>
   `;
 
