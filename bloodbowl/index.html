@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Bowl Match Reference | contrapaul/make</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../WEB/css/bespoke-slab.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <nav class="nav">
+        <a href="/#projects">Projects</a>
+        <a href="/#files">Files</a>
+        <a href="/#collab">Collaborate</a>
+        <a href="https://contrapaul.com" class="nav-home">← contrapaul.com</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-main">
+
+    <div class="bb-banner">
+      <h1 class="bb-title">Blood Bowl</h1>
+      <p class="bb-subtitle">Match Reference</p>
+    </div>
+
+    <div class="bb-field">
+
+      <!-- ═══════════════ HOME SIDE (LEFT) ═══════════════ -->
+      <section class="bb-side" id="side-left" aria-label="Home team">
+
+        <div class="side-header">
+          <span class="side-label">Home</span>
+          <select class="team-select" id="select-left" aria-label="Select home team">
+            <option value="">— Select a team —</option>
+          </select>
+        </div>
+
+        <div class="roster-wrap">
+          <div class="roster-grid" id="roster-left" role="list">
+            <p class="empty-state">Select a team to load the roster.</p>
+          </div>
+        </div>
+
+        <!-- Trading-card modal: covers left half of viewport -->
+        <div class="modal-overlay" id="modal-left" hidden
+             role="dialog" aria-modal="true" aria-label="Player trading card">
+          <div class="trading-card" id="card-left"></div>
+        </div>
+
+      </section>
+
+      <!-- ═══════════════ CENTRE DIVIDER ═══════════════ -->
+      <div class="bb-divider" aria-hidden="true">
+        <span class="vs-text">VS</span>
+      </div>
+
+      <!-- ═══════════════ AWAY SIDE (RIGHT) ═══════════════ -->
+      <section class="bb-side" id="side-right" aria-label="Away team">
+
+        <div class="side-header">
+          <span class="side-label">Away</span>
+          <select class="team-select" id="select-right" aria-label="Select away team">
+            <option value="">— Select a team —</option>
+          </select>
+        </div>
+
+        <div class="roster-wrap">
+          <div class="roster-grid" id="roster-right" role="list">
+            <p class="empty-state">Select a team to load the roster.</p>
+          </div>
+        </div>
+
+        <!-- Trading-card modal: covers right half of viewport -->
+        <div class="modal-overlay" id="modal-right" hidden
+             role="dialog" aria-modal="true" aria-label="Player trading card">
+          <div class="trading-card" id="card-right"></div>
+        </div>
+
+      </section>
+
+    </div><!-- /.bb-field -->
+
+  </main>
+
+  <!-- ═══════════════ SKILL POPUP (above all modals) ═══════════════ -->
+  <div class="skill-overlay" id="skill-overlay" hidden
+       role="dialog" aria-modal="true" aria-label="Skill reference">
+    <div class="skill-card" id="skill-card"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-brand">contrapaul / make</span>
+      <div class="footer-links">
+        <a href="https://contrapaul.com">Main site</a>
+        <a href="https://edu.contrapaul.com">Edu</a>
+        <a href="mailto:hello@contrapaul.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
