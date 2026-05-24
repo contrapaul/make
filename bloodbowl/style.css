@@ -69,6 +69,7 @@
 .bb-field {
   display: flex;
   flex: 1;
+  position: relative;   /* overlay anchors here, below banner */
 }
 
 /* ─────────────────────────────────────────────
@@ -180,8 +181,10 @@
 }
 
 /* ─────────────────────────────────────────────
-   PLAYER CARDS  (short, wide, table-row style)
-   Border / shadow colours inherit --tc-* from .bb-side
+   PLAYER CARDS  (single-line, full-width rows)
+   Everything on one line; name/position/stats/skills
+   all share the same font size.
+   Border / shadow colours inherit --tc-* from .bb-side.
    ───────────────────────────────────────────── */
 .player-card {
   background: #F2F2F2;
@@ -193,10 +196,14 @@
   touch-action: manipulation;
   user-select: none;
   outline: none;
-  padding: 0.5rem 0.8rem;
+  /* Single row — all items on one line */
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
+  padding: 0.28rem 0.75rem;
+  min-height: 36px;
   box-shadow:
     3px 3px 0 0 var(--tc-primary-dark),
     6px 6px 0 0 rgba(0, 0, 0, 0.22),
@@ -239,23 +246,14 @@
   transform: translate(-2px, -2px);
 }
 
-/* Card top row: #N · Name · Position */
-.card-row-top {
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
+/* ── All card text elements ── */
 .card-num {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 800;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--tc-primary);
   flex-shrink: 0;
-  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
 .player-card.star-player .card-num { color: var(--tc-gold-dark); }
@@ -263,24 +261,30 @@
 .player-name {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: #0D0D0D;
   flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.top-sep { color: #bbb; flex-shrink: 0; font-size: 0.85rem; }
+/* Separator dots and pipes between sections */
+.cd {
+  color: #ccc;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  user-select: none;
+}
 
 .player-pos {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 500;
-  font-size: 0.7rem;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  color: #666;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .star-badge {
@@ -288,72 +292,51 @@
   font-weight: 700;
   font-size: 0.58rem;
   color: var(--tc-gold-dark);
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   border: 1px solid var(--tc-gold);
   background: rgba(212, 175, 55, 0.12);
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 2px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
-/* Card bottom row: stat chips + skills */
-.card-row-bottom {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  min-width: 0;
-}
-
-.stats-inline { display: flex; flex-shrink: 0; }
-
-.sc {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.12rem 0.38rem;
-  border: 1px solid #D8D8D8;
-  border-right: none;
-  background: #fafafa;
-}
-
-.sc:first-child { border-radius: 2px 0 0 2px; }
-.sc:last-child  { border-right: 1px solid #D8D8D8; border-radius: 0 2px 2px 0; }
-
-.sc-l {
+/* Inline stats: "MA 7 · ST 3 · AG 3+ · PA 4+ · AV 9+" */
+.card-stats {
   font-family: 'Bespoke Slab', Georgia, serif;
-  font-weight: 500;
-  font-size: 0.46rem;
-  color: #aaa;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1;
-}
-
-.sc-v {
-  font-family: 'Bespoke Slab', Georgia, serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.82rem;
-  color: #0D0D0D;
-  line-height: 1.25;
+  color: #555;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
+/* Stat abbreviation label within .card-stats */
+.ss {
+  font-weight: 600;
+  font-size: 0.72rem;
+  color: #999;
+}
+
+/* Skills — takes all remaining space, truncates */
 .card-skills {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 400;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: #555;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
 }
 
+/* GP value — star player only, pinned to right */
 .card-value {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   color: var(--tc-gold-dark);
   flex-shrink: 0;
   white-space: nowrap;
@@ -362,14 +345,17 @@
 /* ─────────────────────────────────────────────
    TRADING CARD MODALS  (one per side)
 
-   Each overlay covers exactly its half of the viewport.
-   Because the overlay's DOM parent is .bb-side, it inherits
-   all --tc-* custom properties even with position:fixed.
+   position:absolute + inset:0 anchors the overlay to
+   .bb-field (position:relative), so the dark backdrop
+   starts below the banner — not covering the page header.
+   #modal-left overrides right:0 → covers left half.
+   #modal-right overrides left:0 → covers right half.
+   CSS custom properties (--tc-*) are still inherited through
+   DOM ancestry despite position:absolute.
    ───────────────────────────────────────────── */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,11 +369,11 @@
 .modal-overlay[hidden] { display: none; }
 .modal-overlay.active  { opacity: 1; }
 
-/* Left modal: covers left 50% */
-#modal-left  { left: 0;    width: 50%; }
+/* Left modal: inset:0 sets all sides to 0; override right → left half only */
+#modal-left  { right: 50%; }
 
-/* Right modal: covers right 50% */
-#modal-right { right: 0;   width: 50%; }
+/* Right modal: inset:0 sets all sides to 0; override left → right half only */
+#modal-right { left:  50%; }
 
 /* Trading card box */
 .trading-card {
@@ -762,14 +748,9 @@
 
   .vs-text { writing-mode: horizontal-tb; }
 
-  /* Both modals go full-width on mobile */
-  #modal-left,
-  #modal-right {
-    left:   0;
-    right:  0;
-    width:  100%;
-    align-items: flex-end;
-  }
+  /* Both modals go full-width on mobile — reset the half-side overrides */
+  #modal-left  { right: 0; align-items: flex-end; }
+  #modal-right { left:  0; align-items: flex-end; }
 
   .trading-card {
     max-height: 85vh;
