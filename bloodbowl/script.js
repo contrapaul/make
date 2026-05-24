@@ -13,15 +13,16 @@
    ──────────────
    Each side owns a <div class="modal-overlay"> that lives in its DOM
    subtree, so it inherits the side's --tc-* CSS custom properties even
-   though the overlay uses position:fixed. Both modals can be open at
-   the same time.
+   though the overlay uses position:absolute anchored to .bb-field.
+   Both modals can be open at the same time.
 
-   Skill popup
-   ───────────
-   A single global overlay (#skill-overlay) sits above both trading-card
-   modals (z-index 1000 vs 500). Clicking any .skill-link inside a
-   trading card opens it. Escape closes skill popup first, then trading
-   cards; clicking the backdrop closes only the topmost layer open.
+   Skill tooltip
+   ─────────────
+   #skill-overlay is a transparent, pointer-events:none fixed wrapper.
+   #skill-card inside it is positioned by JS directly above (or below)
+   whatever .skill-link was clicked or hovered — on roster cards AND on
+   trading cards. No page dimming. Escape closes the tooltip first, then
+   trading cards. Clicking/hovering anywhere outside closes the tooltip.
    ═══════════════════════════════════════════════════════ */
 
 const STAT_KEYS = ['ma', 'st', 'ag', 'pa', 'av'];
@@ -42,6 +43,10 @@ const state = {
   left:   { team: null, players: [] },
   right:  { team: null, players: [] },
 };
+
+/* Timers for skill-link hover/close grace period */
+let hoverTimer = null;
+let closeTimer  = null;
 
 /* ────────────────────────────────────────────────────────
    INIT
@@ -179,7 +184,7 @@ function buildCard(player, side) {
     <span class="cd" aria-hidden="true">|</span>
     <span class="card-stats" aria-label="Stats">${statsStr}</span>
     <span class="cd" aria-hidden="true">|</span>
-    <span class="card-skills">${esc(player.skills)}</span>
+    <span class="card-skills">${renderSkillLinks(player.skills)}</span>
     ${player.value
       ? `<span class="card-value">${Math.round(player.value / 1000)}k gp</span>`
       : ''}
@@ -187,11 +192,16 @@ function buildCard(player, side) {
 
   card.addEventListener('click', () => openModal(side, player));
   card.addEventListener('keydown', e => {
+    if (e.target.closest('.skill-link')) return; /* skill-link handles its own activation */
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       openModal(side, player);
     }
   });
+
+  /* Skill links in roster card: hover shows tooltip, click stops propagation
+     so the card's own click handler (open modal) doesn't also fire. */
+  attachSkillEvents(card, true);
 
   return card;
 }
@@ -266,13 +276,9 @@ function openModal(side, player) {
   card.querySelector('.modal-close')
     .addEventListener('click', () => closeModal(side));
 
-  /* Skill links — stop propagation so backdrop click doesn't fire */
-  card.querySelectorAll('.skill-link').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openSkillPopup(btn.dataset.skill);
-    });
-  });
+  /* Skill links in trading card: hover + click open the anchored tooltip.
+     No stopPropagation needed — modal backdrop only closes on e.target===overlay. */
+  attachSkillEvents(card, false);
 
   overlay.removeAttribute('hidden');
   requestAnimationFrame(() => overlay.classList.add('active'));
@@ -291,7 +297,7 @@ function closeModal(side) {
 }
 
 /* ────────────────────────────────────────────────────────
-   SKILL LINKS  (inside trading card)
+   SKILL LINKS  — used in roster cards and trading cards
    ──────────────────────────────────────────────────────── */
 function renderSkillLinks(skillsStr) {
   return skillsStr
@@ -303,10 +309,48 @@ function renderSkillLinks(skillsStr) {
     .join('<span class="skill-sep">, </span>');
 }
 
+/* Attach hover + click listeners to every .skill-link inside container.
+   stopClick = true  → e.stopPropagation() on click (prevents roster card's
+                        own click handler from opening the trading card modal).
+   stopClick = false → let clicks bubble (safe in trading card: backdrop only
+                        closes when e.target === the overlay element itself). */
+function attachSkillEvents(container, stopClick) {
+  container.querySelectorAll('.skill-link').forEach(btn => {
+    const name = btn.dataset.skill;
+
+    btn.addEventListener('mouseenter', () => {
+      cancelClose();
+      clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(() => openSkillPopup(name, btn), 160);
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimer);
+      scheduleClose();
+    });
+
+    btn.addEventListener('click', e => {
+      if (stopClick) e.stopPropagation();
+      clearTimeout(hoverTimer);
+      clearTimeout(closeTimer);
+      openSkillPopup(name, btn);
+    });
+  });
+}
+
+function scheduleClose() {
+  clearTimeout(closeTimer);
+  closeTimer = setTimeout(closeSkillPopup, 220);
+}
+
+function cancelClose() {
+  clearTimeout(closeTimer);
+}
+
 /* ────────────────────────────────────────────────────────
-   SKILL POPUP
+   SKILL TOOLTIP  — anchored above (or below) the trigger link
    ──────────────────────────────────────────────────────── */
-function openSkillPopup(skillName) {
+function openSkillPopup(skillName, anchorEl) {
   const overlay = document.getElementById('skill-overlay');
   const card    = document.getElementById('skill-card');
   const entry   = state.skills[skillName.toLowerCase()];
@@ -322,27 +366,51 @@ function openSkillPopup(skillName) {
     <div class="skill-body">
       ${entry
         ? `<p class="skill-desc">${esc(entry.description)}</p>`
-        : `<p class="skill-unknown">No description on file yet for this skill.
-             Full rules reference coming soon.</p>`}
+        : `<p class="skill-unknown">No description on file yet for this skill.</p>`}
     </div>
   `;
 
-  card.querySelector('.skill-close')
-    .addEventListener('click', closeSkillPopup);
+  card.querySelector('.skill-close').addEventListener('click', closeSkillPopup);
 
   overlay.removeAttribute('hidden');
-  requestAnimationFrame(() => overlay.classList.add('active'));
+  /* Position after the card is in the render tree so getBoundingClientRect works */
+  requestAnimationFrame(() => positionSkillCard(card, anchorEl));
+}
+
+function positionSkillCard(card, anchor) {
+  const ar  = anchor.getBoundingClientRect();
+  const cr  = card.getBoundingClientRect();
+  const vw  = window.innerWidth;
+  const vh  = window.innerHeight;
+  const GAP = 14;  /* px between card edge and anchor (includes arrow height) */
+
+  /* Horizontal: centred on the anchor's midpoint, clamped to viewport */
+  let left = ar.left + ar.width / 2 - cr.width / 2;
+  left = Math.max(8, Math.min(left, vw - cr.width - 8));
+
+  /* Vertical: prefer above; flip below if too close to top */
+  let top = ar.top - cr.height - GAP;
+  let arrowUp = false;
+  if (top < 8) {
+    top = ar.bottom + GAP;
+    arrowUp = true;
+  }
+  top = Math.min(top, vh - cr.height - 8);
+
+  /* Arrow X: points at the anchor's horizontal centre, clamped within card */
+  const rawX   = ar.left + ar.width / 2 - left;
+  const arrowX = Math.max(18, Math.min(rawX, cr.width - 18));
+
+  card.style.left = `${left}px`;
+  card.style.top  = `${top}px`;
+  card.style.setProperty('--arrow-x', `${arrowX}px`);
+  card.classList.toggle('arrow-up', arrowUp);
 }
 
 function closeSkillPopup() {
   const overlay = document.getElementById('skill-overlay');
   if (overlay.hasAttribute('hidden')) return;
-  overlay.classList.remove('active');
-  overlay.addEventListener(
-    'transitionend',
-    () => overlay.setAttribute('hidden', ''),
-    { once: true }
-  );
+  overlay.setAttribute('hidden', '');
 }
 
 /* ────────────────────────────────────────────────────────
@@ -357,10 +425,16 @@ function bindGlobalListeners() {
       });
   });
 
-  document.getElementById('skill-overlay')
-    .addEventListener('click', function (e) {
-      if (e.target === this) closeSkillPopup();
-    });
+  /* Click anywhere outside the skill card (or a skill-link) closes the tooltip */
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#skill-card, .skill-link')) closeSkillPopup();
+  });
+
+  /* Moving the mouse onto the tooltip itself cancels the grace-period close timer,
+     so users can read the description without the card vanishing. */
+  const skillCard = document.getElementById('skill-card');
+  skillCard.addEventListener('mouseenter', cancelClose);
+  skillCard.addEventListener('mouseleave', scheduleClose);
 
   /* Escape: close skill popup first; if none open, close trading cards */
   document.addEventListener('keydown', e => {
