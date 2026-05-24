@@ -90,7 +90,8 @@ main {
 }
 
 /* ==============================================
-   PLAYER CARDS — short, wide, horizontal rows
+   PLAYER CARDS — single-line, full-width rows
+   Everything on one line: num · name · pos | stats | skills
    ============================================== */
 .player-card {
   background: var(--in-card);
@@ -102,10 +103,14 @@ main {
   touch-action: manipulation;
   user-select: none;
   outline: none;
-  padding: 0.5rem 0.8rem;
+  /* Single row — all items on one line */
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
+  padding: 0.28rem 0.75rem;
+  min-height: 36px;
   box-shadow:
     3px 3px 0 0 var(--in-red-dark),
     6px 6px 0 0 rgba(0, 0, 0, 0.22),
@@ -124,9 +129,7 @@ main {
   transform: translate(-2px, -2px);
 }
 
-.player-card:focus-visible {
-  border-color: #00e5a0;
-}
+.player-card:focus-visible { border-color: #00e5a0; }
 
 /* Star Player — gold border + ambient glow */
 .player-card.star-player {
@@ -150,54 +153,45 @@ main {
   transform: translate(-2px, -2px);
 }
 
-/* --- TOP ROW: #number · Name · Position [· badge] --- */
-.card-row-top {
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
+/* ── All card text elements ── */
 .card-num {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 800;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--in-red);
   flex-shrink: 0;
-  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
-.player-card.star-player .card-num {
-  color: var(--in-gold-dark);
-}
+.player-card.star-player .card-num { color: var(--in-gold-dark); }
 
 .player-name {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--in-text);
   flex-shrink: 1;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.top-sep {
-  color: #bbb;
+/* Separator dots and pipes between sections */
+.cd {
+  color: #ccc;
+  font-size: 0.8rem;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  user-select: none;
 }
 
 .player-pos {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 500;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   color: var(--in-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .star-badge {
@@ -205,79 +199,51 @@ main {
   font-weight: 700;
   font-size: 0.58rem;
   color: var(--in-gold-dark);
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   border: 1px solid var(--in-gold);
   background: rgba(212, 175, 55, 0.12);
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 2px;
   flex-shrink: 0;
-  vertical-align: middle;
+  white-space: nowrap;
 }
 
-/* --- BOTTOM ROW: stat chips + skills --- */
-.card-row-bottom {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  min-width: 0;
-}
-
-/* Stat chips (MA ST AG PA AV joined strip) */
-.stats-inline {
-  display: flex;
-  flex-shrink: 0;
-}
-
-.sc {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.12rem 0.38rem;
-  border: 1px solid var(--in-border);
-  border-right: none;
-  background: #fafafa;
-}
-
-.sc:first-child { border-radius: 2px 0 0 2px; }
-.sc:last-child  { border-right: 1px solid var(--in-border); border-radius: 0 2px 2px 0; }
-
-.sc-l {
+/* Inline stats: "MA 7 · ST 3 · AG 3+ · PA 4+ · AV 9+" */
+.card-stats {
   font-family: 'Bespoke Slab', Georgia, serif;
-  font-weight: 500;
-  font-size: 0.46rem;
-  color: #aaa;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  line-height: 1;
-}
-
-.sc-v {
-  font-family: 'Bespoke Slab', Georgia, serif;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 0.82rem;
-  color: var(--in-text);
-  line-height: 1.25;
+  color: #555;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-/* Skills text — takes remaining space, truncates */
+/* Stat abbreviation label within .card-stats */
+.ss {
+  font-weight: 600;
+  font-size: 0.72rem;
+  color: #999;
+}
+
+/* Skills — takes all remaining space, truncates */
 .card-skills {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 400;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: #555;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
-  min-width: 0;
 }
 
-/* GP value — star player only */
+/* GP value — star player only, pinned to right */
 .card-value {
   font-family: 'Bespoke Slab', Georgia, serif;
   font-weight: 700;
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   color: var(--in-gold-dark);
   flex-shrink: 0;
   white-space: nowrap;
