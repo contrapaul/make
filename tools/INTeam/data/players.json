@@ -17,7 +17,7 @@
   {
     "id": 13,
     "name": "Fert Chortlemann",
-    "position": "Lineman",
+    "position": "Bodyguard",
     "ma": 5,
     "st": 3,
     "ag": "3+",
@@ -30,7 +30,7 @@
   {
     "id": 14,
     "name": "Bradley Michael Fahrtz",
-    "position": "Lineman",
+    "position": "Bodyguard",
     "ma": 5,
     "st": 3,
     "ag": "3+",
@@ -69,7 +69,7 @@
   {
     "id": 5,
     "name": "Gabriela Krumpton",
-    "position": "Thrower",
+    "position": "Lineman",
     "ma": 6,
     "st": 3,
     "ag": "3+",
@@ -77,12 +77,12 @@
     "av": "8+",
     "skills": "Fend",
     "value": null,
-    "fact": "Can throw a spiral through a moving carriage wheel from 20 yards."
+    "fact": "Former kindergarten teacher, hired on the spot when a scout spotted her block 13 children rushing for a plate of cookies."
   },
   {
     "id": 6,
     "name": "Vivian \"Salty\" Pretzler",
-    "position": "Thrower",
+    "position": "Lineman",
     "ma": 6,
     "st": 3,
     "ag": "3+",
@@ -121,7 +121,7 @@
   {
     "id": 9,
     "name": "Prance Dingle",
-    "position": "Bodyguard",
+    "position": "Lineman",
     "ma": 6,
     "st": 3,
     "ag": "3+",
@@ -134,7 +134,7 @@
   {
     "id": 10,
     "name": "Fritz Churner",
-    "position": "Bodyguard",
+    "position": "Lineman",
     "ma": 6,
     "st": 3,
     "ag": "3+",
@@ -147,7 +147,7 @@
   {
     "id": 11,
     "name": "\"Cannon\" Blotzum",
-    "position": "Catcher",
+    "position": "Thrower",
     "ma": 6,
     "st": 3,
     "ag": "3+",
@@ -155,12 +155,12 @@
     "av": "9+",
     "skills": "Give and Go, Pass, Pro",
     "value": null,
-    "fact": "Once caught a ball while being thrown out of a tavern."
+    "fact": "Can throw a spiral through a moving carriage wheel from 20 yards."
   },
   {
     "id": 12,
     "name": "Chuck \"Parabolic\" Archer",
-    "position": "Catcher",
+    "position": "Thrower",
     "ma": 6,
     "st": 3,
     "ag": "3+",
