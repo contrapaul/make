@@ -350,10 +350,23 @@ function cancelClose() {
 /* ────────────────────────────────────────────────────────
    SKILL TOOLTIP  — anchored above (or below) the trigger link
    ──────────────────────────────────────────────────────── */
+
+/* Look up a skill entry by name.
+   First tries an exact (case-insensitive) match.
+   Falls back to stripping a trailing parenthetical so variable traits
+   like "Loner (3+)", "Animosity (Orcs)", and "Bloodlust (2+)" all
+   resolve to their base entry ("Loner", "Animosity", "Bloodlust"). */
+function lookupSkill(skillName) {
+  const key = skillName.toLowerCase();
+  if (state.skills[key]) return state.skills[key];
+  const base = key.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  return state.skills[base] ?? null;
+}
+
 function openSkillPopup(skillName, anchorEl) {
   const overlay = document.getElementById('skill-overlay');
   const card    = document.getElementById('skill-card');
-  const entry   = state.skills[skillName.toLowerCase()];
+  const entry   = lookupSkill(skillName);
 
   card.innerHTML = `
     <div class="skill-card-header">
