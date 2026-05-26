@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Hobgoblin Lineman", "position": "Hobgoblin Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "", "value": 40000 },
+  { "id": 2, "name": "Sneaky Stabba", "position": "Sneaky Stabba", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "5+", "av": "8+", "skills": "Shadowing, Stab", "value": 60000 },
+  { "id": 3, "name": "Chaos Dwarf Blocker", "position": "Chaos Dwarf Blocker", "qty": "0-4", "ma": 4, "st": 3, "ag": "4+", "pa": "6+", "av": "10+", "skills": "Block, Iron Hard Skin, Thick Skull", "value": 70000 },
+  { "id": 4, "name": "Flamesmith", "position": "Flamesmith", "qty": "0-2", "ma": 5, "st": 3, "ag": "4+", "pa": "6+", "av": "10+", "skills": "Brawler, Breathe Fire, Disturbing Presence, Thick Skull", "value": 80000 },
+  { "id": 5, "name": "Bull Centaur Blitzer", "position": "Bull Centaur Blitzer", "qty": "0-2", "ma": 6, "st": 4, "ag": "4+", "pa": "6+", "av": "10+", "skills": "Sprint, Sure Feet, Thick Skull, Unsteady", "value": 130000 },
+  { "id": 6, "name": "Minotaur", "position": "Minotaur", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Frenzy, Horns, Loner (4+), Mighty Blow, Thick Skull, Unchannelled Fury", "value": 150000 }
+]

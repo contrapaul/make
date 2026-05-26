@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Snotling Lineman", "position": "Snotling Lineman", "qty": "0-16", "ma": 5, "st": 1, "ag": "3+", "pa": "4+", "av": "6+", "skills": "Dodge, Insignificant, Right Stuff, Sidestep, Stunty, Titchy",         "value": 15000 },
+  { "id": 2, "name": "Fun-hoppa",        "position": "Fun-hoppa",        "qty": "0-2",  "ma": 6, "st": 1, "ag": "3+", "pa": "4+", "av": "6+", "skills": "Dodge, Pogo, Right Stuff, Sidestep, Stunty",                        "value": 20000 },
+  { "id": 3, "name": "Stilty Runna",     "position": "Stilty Runna",     "qty": "0-2",  "ma": 6, "st": 1, "ag": "3+", "pa": "4+", "av": "6+", "skills": "Dodge, Right Stuff, Sidestep, Sprint, Stunty",                      "value": 20000 },
+  { "id": 4, "name": "Fungus Flinga",    "position": "Fungus Flinga",    "qty": "0-2",  "ma": 5, "st": 1, "ag": "3+", "pa": "4+", "av": "6+", "skills": "Bombardier, Dodge, Right Stuff, Secret Weapon, Sidestep, Stunty, Titchy", "value": 30000 },
+  { "id": 5, "name": "Pump Wagon",       "position": "Pump Wagon",       "qty": "0-2",  "ma": 5, "st": 5, "ag": "5+", "pa": "6+", "av": "9+", "skills": "Dirty Player, Juggernaut, Mighty Blow, Really Stupid, Stand Firm",   "value": 100000 },
+  { "id": 6, "name": "Trained Troll",    "position": "Trained Troll",    "qty": "0-2",  "ma": 4, "st": 5, "ag": "5+", "pa": "5+", "av": "10+","skills": "Always Hungry, Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate", "value": 115000 }
+]

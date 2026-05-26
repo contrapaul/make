@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Gnome Lineman", "position": "Gnome Lineman", "qty": "0-16", "ma": 5, "st": 2, "ag": "3+", "pa": "4+", "av": "7+", "skills": "Jump Up, Right Stuff, Stunty, Wrestle", "value": 40000 },
+  { "id": 2, "name": "Woodland Fox", "position": "Woodland Fox", "qty": "0-2", "ma": 7, "st": 2, "ag": "2+", "pa": "-", "av": "6+", "skills": "Dodge, My Ball, Sidestep, Stunty", "value": 50000 },
+  { "id": 3, "name": "Gnome Illusionist", "position": "Gnome Illusionist", "qty": "0-2", "ma": 5, "st": 2, "ag": "3+", "pa": "3+", "av": "7+", "skills": "Jump Up, Stunty, Trickster, Wrestle", "value": 50000 },
+  { "id": 4, "name": "Gnome Beastmaster", "position": "Gnome Beastmaster", "qty": "0-2", "ma": 5, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Guard, Jump Up, Stunty, Wrestle", "value": 55000 },
+  { "id": 5, "name": "Altern Forest Treeman", "position": "Altern Forest Treeman", "qty": "0-2", "ma": 2, "st": 6, "ag": "5+", "pa": "5+", "av": "11+", "skills": "Mighty Blow, Stand Firm, Strong Arm, Take Root, Thick Skull, Throw Team-mate, Timmm-ber!", "value": 120000 }
+]

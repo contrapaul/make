@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Elf Lineman", "position": "Elf Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "2+", "pa": "3+", "av": "8+", "skills": "Fumblerooski", "value": 65000 },
+  { "id": 2, "name": "Elf Thrower", "position": "Elf Thrower", "qty": "0-2", "ma": 6, "st": 3, "ag": "2+", "pa": "2+", "av": "8+", "skills": "Hail Mary Pass, Pass", "value": 75000 },
+  { "id": 3, "name": "Elf Catcher", "position": "Elf Catcher", "qty": "0-2", "ma": 8, "st": 3, "ag": "2+", "pa": "4+", "av": "8+", "skills": "Catch, Diving Catch, Nerves of Steel", "value": 100000 },
+  { "id": 4, "name": "Elf Blitzer", "position": "Elf Blitzer", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "Block, Sidestep", "value": 115000 }
+]

@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Norse Raider", "position": "Norse Raider", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Block, Drunkard, Thick Skull, Unsteady", "value": 50000 },
+  { "id": 2, "name": "Beer Boar", "position": "Beer Boar", "qty": "0-2", "ma": 5, "st": 1, "ag": "3+", "pa": "-", "av": "6+", "skills": "Dodge, No Ball, Pick-me-up, Stunty, Titchy", "value": 20000 },
+  { "id": 3, "name": "Norse Berserker", "position": "Norse Berserker", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "5+", "av": "8+", "skills": "Block, Frenzy, Jump Up", "value": 90000 },
+  { "id": 4, "name": "Valkyrie", "position": "Valkyrie", "qty": "0-2", "ma": 7, "st": 3, "ag": "3+", "pa": "3+", "av": "8+", "skills": "Catch, Dauntless, Pass, Strip Ball", "value": 95000 },
+  { "id": 5, "name": "Ulfwerener", "position": "Ulfwerener", "qty": "0-2", "ma": 6, "st": 4, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Frenzy, Unsteady", "value": 105000 },
+  { "id": 6, "name": "Yhetee", "position": "Yhetee", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Claws, Disturbing Presence, Frenzy, Loner (4+), Unchannelled Fury", "value": 140000 }
+]

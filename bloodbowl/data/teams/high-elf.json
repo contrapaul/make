@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "High Elf Lineman", "position": "High Elf Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "", "value": 65000 },
+  { "id": 2, "name": "Phoenix Warrior", "position": "Phoenix Warrior", "qty": "0-2", "ma": 6, "st": 3, "ag": "2+", "pa": "2+", "av": "9+", "skills": "Cloud Burster, Pass, Safe Pass", "value": 90000 },
+  { "id": 3, "name": "Dragon Prince", "position": "Dragon Prince", "qty": "0-2", "ma": 8, "st": 3, "ag": "2+", "pa": "4+", "av": "9+", "skills": "Block, My Ball, Steady Footing", "value": 110000 },
+  { "id": 4, "name": "White Lion", "position": "White Lion", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "Claws, Wrestle", "value": 110000 }
+]

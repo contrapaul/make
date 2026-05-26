@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Eagle Warrior", "position": "Eagle Warrior", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge", "value": 50000 },
+  { "id": 2, "name": "Python Warrior", "position": "Python Warrior", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "3+", "av": "8+", "skills": "Dodge, On the Ball, Pass, Safe Pass", "value": 80000 },
+  { "id": 3, "name": "Piranha Warrior", "position": "Piranha Warrior", "qty": "0-2", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge, Hit and Run, Jump Up", "value": 90000 },
+  { "id": 4, "name": "Jaguar Warrior", "position": "Jaguar Warrior", "qty": "0-2", "ma": 6, "st": 4, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Defensive, Dodge", "value": 110000 }
+]

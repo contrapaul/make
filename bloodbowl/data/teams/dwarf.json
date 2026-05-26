@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Dwarf Lineman", "position": "Dwarf Lineman", "qty": "0-16", "ma": 4, "st": 3, "ag": "4+", "pa": "5+", "av": "10+", "skills": "Block, Defensive, Thick Skull", "value": 70000 },
+  { "id": 2, "name": "Dwarf Runner", "position": "Dwarf Runner", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Sprint, Sure Hands, Thick Skull", "value": 80000 },
+  { "id": 3, "name": "Dwarf Blitzer", "position": "Dwarf Blitzer", "qty": "0-2", "ma": 5, "st": 3, "ag": "4+", "pa": "4+", "av": "10+", "skills": "Block, Diving Tackle, Tackle, Thick Skull", "value": 100000 },
+  { "id": 4, "name": "Troll Slayer", "position": "Troll Slayer", "qty": "0-2", "ma": 5, "st": 3, "ag": "4+", "pa": "5+", "av": "9+", "skills": "Block, Dauntless, Frenzy, Hatred (Troll), Thick Skull", "value": 95000 },
+  { "id": 5, "name": "Deathroller", "position": "Deathroller", "qty": "0-1", "ma": 5, "st": 7, "ag": "5+", "pa": "-", "av": "11+", "skills": "Break Tackle, Dirty Player, Juggernaut, Loner (4+), Mighty Blow, No Ball, Secret Weapon, Stand Firm", "value": 170000 }
+]

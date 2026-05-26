@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Wood Elf Lineman",       "position": "Wood Elf Lineman",       "qty": "0-16", "ma": 7, "st": 3, "ag": "2+", "pa": "4+", "av": "8+",  "skills": "",                                                                                    "value": 65000 },
+  { "id": 2, "name": "Wood Elf Thrower",        "position": "Wood Elf Thrower",        "qty": "0-2",  "ma": 7, "st": 3, "ag": "2+", "pa": "2+", "av": "8+",  "skills": "Pass, Safe Pair of Hands",                                                           "value": 85000 },
+  { "id": 3, "name": "Wood Elf Catcher",        "position": "Wood Elf Catcher",        "qty": "0-2",  "ma": 8, "st": 2, "ag": "2+", "pa": "3+", "av": "8+",  "skills": "Catch, Dodge, Sprint",                                                               "value": 90000 },
+  { "id": 4, "name": "Wardancer",               "position": "Wardancer",               "qty": "0-2",  "ma": 8, "st": 3, "ag": "2+", "pa": "3+", "av": "8+",  "skills": "Block, Dodge, Leap",                                                                 "value": 130000 },
+  { "id": 5, "name": "Loren Forest Treeman",    "position": "Loren Forest Treeman",    "qty": "0-1",  "ma": 2, "st": 6, "ag": "5+", "pa": "5+", "av": "11+", "skills": "Loner (4+), Mighty Blow, Stand Firm, Strong Arm, Take Root, Thick Skull, Throw Team-mate", "value": 120000 }
+]

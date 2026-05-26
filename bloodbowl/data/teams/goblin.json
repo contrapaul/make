@@ -1,0 +1,10 @@
+[
+  { "id": 1, "name": "Goblin Lineman", "position": "Goblin Lineman", "qty": "0-16", "ma": 6, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge, Right Stuff, Stunty", "value": 40000 },
+  { "id": 2, "name": "Looney", "position": "Looney", "qty": "0-1", "ma": 6, "st": 2, "ag": "3+", "pa": "-", "av": "8+", "skills": "Chainsaw, No Ball, Secret Weapon, Stunty", "value": 40000 },
+  { "id": 3, "name": "Bomma", "position": "Bomma", "qty": "0-1", "ma": 6, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Bombardier, Dodge, Secret Weapon, Stunty", "value": 45000 },
+  { "id": 4, "name": "'Ooligan", "position": "'Ooligan", "qty": "0-1", "ma": 6, "st": 2, "ag": "3+", "pa": "5+", "av": "8+", "skills": "Dirty Player (+1), Disturbing Presence, Dodge, Right Stuff, Stunty, Taunt", "value": 60000 },
+  { "id": 5, "name": "Doom Diver", "position": "Doom Diver", "qty": "0-1", "ma": 6, "st": 2, "ag": "3+", "pa": "6+", "av": "8+", "skills": "Dodge, Right Stuff, Stunty, Swoop", "value": 65000 },
+  { "id": 6, "name": "Fanatic", "position": "Fanatic", "qty": "0-1", "ma": 3, "st": 7, "ag": "3+", "pa": "-", "av": "8+", "skills": "Ball & Chain, No Ball, Secret Weapon, Stunty", "value": 70000 },
+  { "id": 7, "name": "Pogoer", "position": "Pogoer", "qty": "0-1", "ma": 7, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge, Pogo, Stunty", "value": 75000 },
+  { "id": 8, "name": "Trained Troll", "position": "Trained Troll", "qty": "0-2", "ma": 4, "st": 5, "ag": "5+", "pa": "5+", "av": "10+", "skills": "Always Hungry, Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate", "value": 115000 }
+]

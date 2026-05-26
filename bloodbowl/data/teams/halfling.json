@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Halfling Hopeful", "position": "Halfling Hopeful", "qty": "0-16", "ma": 5, "st": 2, "ag": "3+", "pa": "4+", "av": "7+", "skills": "Dodge, Right Stuff, Stunty", "value": 30000 },
+  { "id": 2, "name": "Halfling Hefty", "position": "Halfling Hefty", "qty": "0-2", "ma": 5, "st": 2, "ag": "3+", "pa": "3+", "av": "8+", "skills": "Dodge, Fend, Stunty", "value": 50000 },
+  { "id": 3, "name": "Halfling Catcher", "position": "Halfling Catcher", "qty": "0-2", "ma": 5, "st": 2, "ag": "3+", "pa": "4+", "av": "7+", "skills": "Catch, Dodge, Right Stuff, Sprint, Stunty", "value": 55000 },
+  { "id": 4, "name": "Athel Forest Treeman", "position": "Athel Forest Treeman", "qty": "0-2", "ma": 2, "st": 6, "ag": "5+", "pa": "5+", "av": "11+", "skills": "Mighty Blow, Stand Firm, Strong Arm, Take Root, Thick Skull, Throw Team-mate, Timmm-ber!", "value": 120000 }
+]

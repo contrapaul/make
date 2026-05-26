@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Thrall Lineman",   "position": "Thrall Lineman",   "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "",                                                         "value": 40000 },
+  { "id": 2, "name": "Vampire Runner",   "position": "Vampire Runner",   "qty": "0-2",  "ma": 8, "st": 3, "ag": "2+", "pa": "3+", "av": "8+", "skills": "Bloodlust (2+), Hypnotic Gaze, Regeneration",             "value": 100000 },
+  { "id": 3, "name": "Vampire Thrower",  "position": "Vampire Thrower",  "qty": "0-2",  "ma": 6, "st": 4, "ag": "2+", "pa": "2+", "av": "9+", "skills": "Bloodlust (2+), Hypnotic Gaze, Pass, Regeneration",       "value": 110000 },
+  { "id": 4, "name": "Vampire Blitzer",  "position": "Vampire Blitzer",  "qty": "0-2",  "ma": 6, "st": 4, "ag": "2+", "pa": "4+", "av": "9+", "skills": "Bloodlust (3+), Hypnotic Gaze, Juggernaut, Regeneration", "value": 110000 },
+  { "id": 5, "name": "Vargheist",        "position": "Vargheist",        "qty": "0-1",  "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "10+","skills": "Bloodlust (3+), Claws, Frenzy, Loner (4+), Regeneration","value": 150000 }
+]

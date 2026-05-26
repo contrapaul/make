@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Bretonnian Squire", "position": "Bretonnian Squire", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Wrestle", "value": 50000 },
+  { "id": 2, "name": "Bretonnian Knight Catcher", "position": "Bretonnian Knight Catcher", "qty": "0-2", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Catch, Dauntless, Nerves of Steel", "value": 85000 },
+  { "id": 3, "name": "Bretonnian Knight Thrower", "position": "Bretonnian Knight Thrower", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "3+", "av": "9+", "skills": "Dauntless, Nerves of Steel, Pass", "value": 80000 },
+  { "id": 4, "name": "Grail Knight", "position": "Grail Knight", "qty": "0-2", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "10+", "skills": "Block, Dauntless, Steady Footing", "value": 95000 }
+]

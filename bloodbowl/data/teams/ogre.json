@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Gnoblar Lineman", "position": "Gnoblar Lineman", "qty": "0-16", "ma": 5, "st": 1, "ag": "3+", "pa": "4+", "av": "6+", "skills": "Dodge, Right Stuff, Sidestep, Stunty, Titchy", "value": 15000 },
+  { "id": 2, "name": "Ogre Blocker", "position": "Ogre Blocker", "qty": "0-5", "ma": 5, "st": 5, "ag": "4+", "pa": "5+", "av": "10+", "skills": "Bone Head, Mighty Blow, Thick Skull, Throw Team-mate", "value": 140000 },
+  { "id": 3, "name": "Ogre Runt Punter", "position": "Ogre Runt Punter", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "4+", "av": "10+", "skills": "Bone Head, Kick Team-mate, Mighty Blow, Thick Skull", "value": 145000 }
+]
