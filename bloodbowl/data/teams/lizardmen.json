@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Skink Lineman", "position": "Skink Lineman", "qty": "0-16", "ma": 8, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge, Stunty", "value": 60000 },
+  { "id": 2, "name": "Chameleon Skink", "position": "Chameleon Skink", "qty": "0-2", "ma": 7, "st": 2, "ag": "3+", "pa": "3+", "av": "8+", "skills": "Dodge, On the Ball, Shadowing, Stunty", "value": 70000 },
+  { "id": 3, "name": "Saurus Blocker", "position": "Saurus Blocker", "qty": "0-6", "ma": 6, "st": 4, "ag": "5+", "pa": "6+", "av": "10+", "skills": "Juggernaut, Unsteady", "value": 90000 },
+  { "id": 4, "name": "Kroxigor", "position": "Kroxigor", "qty": "0-1", "ma": 6, "st": 5, "ag": "5+", "pa": "6+", "av": "10+", "skills": "Bone Head, Loner (4+), Mighty Blow, Prehensile Tail, Thick Skull", "value": 140000 }
+]

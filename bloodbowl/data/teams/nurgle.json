@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Rotter Lineman", "position": "Rotter Lineman", "qty": "0-16", "ma": 5, "st": 3, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Decay, Plague Ridden", "value": 40000 },
+  { "id": 2, "name": "Pestigor", "position": "Pestigor", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Horns, Plague Ridden, Regeneration, Steady Footing, Thick Skull", "value": 70000 },
+  { "id": 3, "name": "Bloater", "position": "Bloater", "qty": "0-4", "ma": 4, "st": 4, "ag": "4+", "pa": "6+", "av": "10+", "skills": "Disturbing Presence, Foul Appearance, Plague Ridden, Regeneration, Stand Firm, Unsteady", "value": 110000 },
+  { "id": 4, "name": "Rotspawn", "position": "Rotspawn", "qty": "0-1", "ma": 4, "st": 5, "ag": "5+", "pa": "6+", "av": "10+", "skills": "Disturbing Presence, Foul Appearance, Loner (4+), Mighty Blow, Pick-me-up, Plague Ridden, Really Stupid, Regeneration, Tentacles", "value": 140000 }
+]

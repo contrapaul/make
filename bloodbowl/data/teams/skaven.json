@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Skaven Clanrat",  "position": "Skaven Clanrat",  "qty": "0-16", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "",                                                                             "value": 50000 },
+  { "id": 2, "name": "Skaven Thrower",  "position": "Skaven Thrower",  "qty": "0-2",  "ma": 7, "st": 3, "ag": "3+", "pa": "2+", "av": "8+", "skills": "Pass, Sure Hands",                                                            "value": 80000 },
+  { "id": 3, "name": "Gutter Runner",   "position": "Gutter Runner",   "qty": "0-2",  "ma": 9, "st": 2, "ag": "2+", "pa": "4+", "av": "8+", "skills": "Dodge, Stab",                                                               "value": 85000 },
+  { "id": 4, "name": "Skaven Blitzer",  "position": "Skaven Blitzer",  "qty": "0-2",  "ma": 8, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Block, Strip Ball",                                                          "value": 90000 },
+  { "id": 5, "name": "Rat Ogre",        "position": "Rat Ogre",        "qty": "0-1",  "ma": 6, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Animal Savagery, Frenzy, Loner (4+), Mighty Blow, Prehensile Tail",          "value": 150000 }
+]

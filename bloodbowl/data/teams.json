@@ -4,6 +4,7 @@
     "name": "Imperial Nobility — Custom",
     "file": "data/Imperialv1.json",
     "imageDir": "data/images/imperial-v1/",
+    "reroll": 60000,
     "colors": {
       "bg":          "#8C8C8C",
       "primary":     "#73030D",
@@ -12,6 +13,486 @@
       "gold":        "#D4AF37",
       "goldDark":    "#9A7D0A",
       "headerBg":    "#1a0005"
+    }
+  },
+  {
+    "id": "amazon",
+    "name": "Amazon",
+    "file": "data/teams/amazon.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0E2A14",
+      "primary":     "#1E5A2A",
+      "primaryDark": "#081408",
+      "accent":      "#3A7A40",
+      "gold":        "#D4AF37",
+      "goldDark":    "#9A7D0A",
+      "headerBg":    "#050A06"
+    }
+  },
+  {
+    "id": "black-orc",
+    "name": "Black Orc",
+    "file": "data/teams/black-orc.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#1A1A1A",
+      "primary":     "#3A3A3A",
+      "primaryDark": "#0A0A0A",
+      "accent":      "#5A5A5A",
+      "gold":        "#CC6600",
+      "goldDark":    "#885500",
+      "headerBg":    "#080808"
+    }
+  },
+  {
+    "id": "bretonnian",
+    "name": "Bretonnian",
+    "file": "data/teams/bretonnian.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0A0A2A",
+      "primary":     "#1A1A6A",
+      "primaryDark": "#050518",
+      "accent":      "#2A2A9A",
+      "gold":        "#D4AF37",
+      "goldDark":    "#9A7D0A",
+      "headerBg":    "#050514"
+    }
+  },
+  {
+    "id": "chaos-chosen",
+    "name": "Chaos Chosen",
+    "file": "data/teams/chaos-chosen.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#1A0A1A",
+      "primary":     "#4A0A4A",
+      "primaryDark": "#0D050D",
+      "accent":      "#7A1A7A",
+      "gold":        "#8B0000",
+      "goldDark":    "#5A0000",
+      "headerBg":    "#0A040A"
+    }
+  },
+  {
+    "id": "chaos-dwarf",
+    "name": "Chaos Dwarf",
+    "file": "data/teams/chaos-dwarf.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#1A0A00",
+      "primary":     "#4A1A00",
+      "primaryDark": "#0D0800",
+      "accent":      "#7A3A0A",
+      "gold":        "#CD7F32",
+      "goldDark":    "#8B5E3C",
+      "headerBg":    "#0A0600"
+    }
+  },
+  {
+    "id": "chaos-renegades",
+    "name": "Chaos Renegades",
+    "file": "data/teams/chaos-renegades.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#1A0A1A",
+      "primary":     "#3A0A3A",
+      "primaryDark": "#0D050D",
+      "accent":      "#5A1A5A",
+      "gold":        "#9B59B6",
+      "goldDark":    "#6C3483",
+      "headerBg":    "#0A040A"
+    }
+  },
+  {
+    "id": "dark-elf",
+    "name": "Dark Elf",
+    "file": "data/teams/dark-elf.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#0A0A1E",
+      "primary":     "#1A1A5A",
+      "primaryDark": "#050510",
+      "accent":      "#3A3A8A",
+      "gold":        "#C0C0C0",
+      "goldDark":    "#808080",
+      "headerBg":    "#050510"
+    }
+  },
+  {
+    "id": "dwarf",
+    "name": "Dwarf",
+    "file": "data/teams/dwarf.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#1E1A14",
+      "primary":     "#4A3A2A",
+      "primaryDark": "#0F0E0A",
+      "accent":      "#7A5A3A",
+      "gold":        "#CD7F32",
+      "goldDark":    "#8B5E3C",
+      "headerBg":    "#0A0906"
+    }
+  },
+  {
+    "id": "elven-union",
+    "name": "Elven Union",
+    "file": "data/teams/elven-union.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#0A1E0A",
+      "primary":     "#1A5A1A",
+      "primaryDark": "#051205",
+      "accent":      "#2A8A2A",
+      "gold":        "#E8D5A0",
+      "goldDark":    "#B8A060",
+      "headerBg":    "#051005"
+    }
+  },
+  {
+    "id": "gnome",
+    "name": "Gnome",
+    "file": "data/teams/gnome.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#0E1A0A",
+      "primary":     "#2A4A1A",
+      "primaryDark": "#08100A",
+      "accent":      "#4A6A3A",
+      "gold":        "#8FBC8F",
+      "goldDark":    "#2E8B57",
+      "headerBg":    "#060A06"
+    }
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "file": "data/teams/goblin.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0A1A00",
+      "primary":     "#2A6A00",
+      "primaryDark": "#051000",
+      "accent":      "#4A9A00",
+      "gold":        "#CCCC00",
+      "goldDark":    "#888800",
+      "headerBg":    "#050A00"
+    }
+  },
+  {
+    "id": "halfling",
+    "name": "Halfling",
+    "file": "data/teams/halfling.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#1E1200",
+      "primary":     "#5A3A00",
+      "primaryDark": "#120A00",
+      "accent":      "#8A5A1A",
+      "gold":        "#DAA520",
+      "goldDark":    "#9A7215",
+      "headerBg":    "#0D0800"
+    }
+  },
+  {
+    "id": "high-elf",
+    "name": "High Elf",
+    "file": "data/teams/high-elf.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#0A1420",
+      "primary":     "#1A3A6A",
+      "primaryDark": "#050A10",
+      "accent":      "#3A5A8A",
+      "gold":        "#C0C0C0",
+      "goldDark":    "#A0A0A0",
+      "headerBg":    "#05080E"
+    }
+  },
+  {
+    "id": "human",
+    "name": "Human",
+    "file": "data/teams/human.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#1A0A0A",
+      "primary":     "#5A1A1A",
+      "primaryDark": "#0D0505",
+      "accent":      "#8A2A2A",
+      "gold":        "#D4AF37",
+      "goldDark":    "#9A7D0A",
+      "headerBg":    "#0A0505"
+    }
+  },
+  {
+    "id": "imperial-nobility",
+    "name": "Imperial Nobility",
+    "file": "data/teams/imperial-nobility.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#140005",
+      "primary":     "#6A000F",
+      "primaryDark": "#0A0006",
+      "accent":      "#9A1A2A",
+      "gold":        "#D4AF37",
+      "goldDark":    "#9A7D0A",
+      "headerBg":    "#080004"
+    }
+  },
+  {
+    "id": "khorne",
+    "name": "Khorne",
+    "file": "data/teams/khorne.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#1A0000",
+      "primary":     "#6A0000",
+      "primaryDark": "#0D0000",
+      "accent":      "#9A0000",
+      "gold":        "#CD7F32",
+      "goldDark":    "#8B5E3C",
+      "headerBg":    "#0A0000"
+    }
+  },
+  {
+    "id": "lizardmen",
+    "name": "Lizardmen",
+    "file": "data/teams/lizardmen.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#003A2A",
+      "primary":     "#005A40",
+      "primaryDark": "#002014",
+      "accent":      "#008060",
+      "gold":        "#FFD700",
+      "goldDark":    "#DAA520",
+      "headerBg":    "#001A14"
+    }
+  },
+  {
+    "id": "necromantic-horror",
+    "name": "Necromantic Horror",
+    "file": "data/teams/necromantic-horror.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#0A1414",
+      "primary":     "#1A3A3A",
+      "primaryDark": "#050A0A",
+      "accent":      "#2A5A5A",
+      "gold":        "#7B68EE",
+      "goldDark":    "#4B0082",
+      "headerBg":    "#030A0A"
+    }
+  },
+  {
+    "id": "norse",
+    "name": "Norse",
+    "file": "data/teams/norse.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0A1A2A",
+      "primary":     "#1A3A6A",
+      "primaryDark": "#050A14",
+      "accent":      "#3A6A9A",
+      "gold":        "#E0F0FF",
+      "goldDark":    "#90B0D0",
+      "headerBg":    "#050A14"
+    }
+  },
+  {
+    "id": "nurgle",
+    "name": "Nurgle",
+    "file": "data/teams/nurgle.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0E1200",
+      "primary":     "#2A3A00",
+      "primaryDark": "#080A00",
+      "accent":      "#4A5A00",
+      "gold":        "#6B8E23",
+      "goldDark":    "#4A6615",
+      "headerBg":    "#050800"
+    }
+  },
+  {
+    "id": "ogre",
+    "name": "Ogre",
+    "file": "data/teams/ogre.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#1A1814",
+      "primary":     "#3A3220",
+      "primaryDark": "#0E0D0A",
+      "accent":      "#5A5040",
+      "gold":        "#CD7F32",
+      "goldDark":    "#8B5E3C",
+      "headerBg":    "#0A0906"
+    }
+  },
+  {
+    "id": "old-world-alliance",
+    "name": "Old World Alliance",
+    "file": "data/teams/old-world-alliance.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#1A0A00",
+      "primary":     "#4A1A00",
+      "primaryDark": "#0D0800",
+      "accent":      "#7A3A1A",
+      "gold":        "#D4AF37",
+      "goldDark":    "#9A7D0A",
+      "headerBg":    "#0A0600"
+    }
+  },
+  {
+    "id": "orc",
+    "name": "Orc",
+    "file": "data/teams/orc.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#001A00",
+      "primary":     "#003A00",
+      "primaryDark": "#000D00",
+      "accent":      "#005A00",
+      "gold":        "#808000",
+      "goldDark":    "#606000",
+      "headerBg":    "#000A00"
+    }
+  },
+  {
+    "id": "shambling-undead",
+    "name": "Shambling Undead",
+    "file": "data/teams/shambling-undead.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#0E0E0A",
+      "primary":     "#2A2A1A",
+      "primaryDark": "#080808",
+      "accent":      "#4A4A3A",
+      "gold":        "#A0A030",
+      "goldDark":    "#706020",
+      "headerBg":    "#060606"
+    }
+  },
+  {
+    "id": "skaven",
+    "name": "Skaven",
+    "file": "data/teams/skaven.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#1A0E0E",
+      "primary":     "#3A1A1A",
+      "primaryDark": "#0D0808",
+      "accent":      "#5A2A2A",
+      "gold":        "#C06830",
+      "goldDark":    "#804020",
+      "headerBg":    "#0A0808"
+    }
+  },
+  {
+    "id": "snotling",
+    "name": "Snotling",
+    "file": "data/teams/snotling.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#1A1E00",
+      "primary":     "#3A4A00",
+      "primaryDark": "#0D0E00",
+      "accent":      "#5A7000",
+      "gold":        "#ADFF2F",
+      "goldDark":    "#7CFC00",
+      "headerBg":    "#0A0D00"
+    }
+  },
+  {
+    "id": "tomb-kings",
+    "name": "Tomb Kings",
+    "file": "data/teams/tomb-kings.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#1E1400",
+      "primary":     "#4A3000",
+      "primaryDark": "#100A00",
+      "accent":      "#7A5A0A",
+      "gold":        "#FFD700",
+      "goldDark":    "#C8A800",
+      "headerBg":    "#0D0A00"
+    }
+  },
+  {
+    "id": "underworld-denizens",
+    "name": "Underworld Denizens",
+    "file": "data/teams/underworld-denizens.json",
+    "imageDir": "images/",
+    "reroll": 70000,
+    "colors": {
+      "bg":          "#0A0A14",
+      "primary":     "#1A1A3A",
+      "primaryDark": "#050508",
+      "accent":      "#2A2A5A",
+      "gold":        "#7B68EE",
+      "goldDark":    "#4B0082",
+      "headerBg":    "#030308"
+    }
+  },
+  {
+    "id": "vampire",
+    "name": "Vampire",
+    "file": "data/teams/vampire.json",
+    "imageDir": "images/",
+    "reroll": 60000,
+    "colors": {
+      "bg":          "#0E0000",
+      "primary":     "#4A0020",
+      "primaryDark": "#080000",
+      "accent":      "#7A0030",
+      "gold":        "#800020",
+      "goldDark":    "#500010",
+      "headerBg":    "#060000"
+    }
+  },
+  {
+    "id": "wood-elf",
+    "name": "Wood Elf",
+    "file": "data/teams/wood-elf.json",
+    "imageDir": "images/",
+    "reroll": 50000,
+    "colors": {
+      "bg":          "#001A00",
+      "primary":     "#0A4A0A",
+      "primaryDark": "#000D00",
+      "accent":      "#1A6A1A",
+      "gold":        "#8FBC8F",
+      "goldDark":    "#3CB371",
+      "headerBg":    "#000800"
     }
   }
 ]

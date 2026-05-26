@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Renegade Human Lineman", "position": "Renegade Human Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Animosity (All)", "value": 50000 },
+  { "id": 2, "name": "Renegade Goblin Cutter", "position": "Renegade Goblin Cutter", "qty": "0-1", "ma": 6, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Animosity (All), Dodge, Right Stuff, Stunty", "value": 40000 },
+  { "id": 3, "name": "Renegade Orc Lineman", "position": "Renegade Orc Lineman", "qty": "0-1", "ma": 5, "st": 3, "ag": "3+", "pa": "4+", "av": "10+", "skills": "Animosity (All)", "value": 50000 },
+  { "id": 4, "name": "Renegade Skaven Lineman", "position": "Renegade Skaven Lineman", "qty": "0-1", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Animosity (All)", "value": 50000 },
+  { "id": 5, "name": "Renegade Dark Elf Lineman", "position": "Renegade Dark Elf Lineman", "qty": "0-1", "ma": 6, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "Animosity (All)", "value": 65000 },
+  { "id": 6, "name": "Renegade Human Thrower", "position": "Renegade Human Thrower", "qty": "0-1", "ma": 6, "st": 3, "ag": "3+", "pa": "3+", "av": "9+", "skills": "Animosity (All), Pass, Sure Hands", "value": 75000 },
+  { "id": 7, "name": "Chaos Troll", "position": "Chaos Troll", "qty": "0-1", "ma": 4, "st": 5, "ag": "5+", "pa": "5+", "av": "10+", "skills": "Always Hungry, Loner (4+), Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate", "value": 115000 },
+  { "id": 8, "name": "Chaos Ogre", "position": "Chaos Ogre", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "5+", "av": "10+", "skills": "Bone Head, Loner (4+), Mighty Blow, Thick Skull, Throw Team-mate", "value": 140000 },
+  { "id": 9, "name": "Minotaur", "position": "Minotaur", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Frenzy, Horns, Loner (4+), Mighty Blow, Thick Skull, Unchannelled Fury", "value": 150000 },
+  { "id": 10, "name": "Rat Ogre", "position": "Rat Ogre", "qty": "0-1", "ma": 6, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Animal Savagery, Frenzy, Loner (4+), Mighty Blow, Prehensile Tail", "value": 150000 }
+]

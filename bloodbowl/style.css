@@ -482,6 +482,12 @@
 
 .modal-player-header.star-header .modal-position { color: rgba(10, 5, 0, 0.6); }
 
+.modal-qty {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+}
+
 /* Image area (placeholder or real photo) */
 .modal-image-area {
   width: 100%;

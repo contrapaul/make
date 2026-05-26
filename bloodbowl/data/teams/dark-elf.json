@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Dark Elf Lineman", "position": "Dark Elf Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "", "value": 65000 },
+  { "id": 2, "name": "Dark Elf Runner", "position": "Dark Elf Runner", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "8+", "skills": "Dump-off, Punt", "value": 80000 },
+  { "id": 3, "name": "Dark Elf Assassin", "position": "Dark Elf Assassin", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "4+", "av": "8+", "skills": "Hit and Run, Shadowing, Stab", "value": 90000 },
+  { "id": 4, "name": "Dark Elf Blitzer", "position": "Dark Elf Blitzer", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "Block", "value": 105000 },
+  { "id": 5, "name": "Witch Elf", "position": "Witch Elf", "qty": "0-2", "ma": 7, "st": 3, "ag": "2+", "pa": "4+", "av": "8+", "skills": "Dodge, Frenzy, Jump Up", "value": 110000 }
+]

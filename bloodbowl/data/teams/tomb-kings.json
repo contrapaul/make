@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Skeleton Lineman",    "position": "Skeleton Lineman",    "qty": "0-16", "ma": 5, "st": 3, "ag": "4+", "pa": "6+", "av": "8+",  "skills": "Regeneration, Thick Skull",                            "value": 40000 },
+  { "id": 2, "name": "Tomb Kings Thrower",  "position": "Tomb Kings Thrower",  "qty": "0-2",  "ma": 6, "st": 3, "ag": "4+", "pa": "3+", "av": "9+",  "skills": "Pass, Regeneration, Sure Hands, Thick Skull",          "value": 65000 },
+  { "id": 3, "name": "Tomb Kings Blitzer",  "position": "Tomb Kings Blitzer",  "qty": "0-2",  "ma": 6, "st": 3, "ag": "4+", "pa": "5+", "av": "9+",  "skills": "Block, Regeneration, Thick Skull",                     "value": 85000 },
+  { "id": 4, "name": "Tomb Guardian",       "position": "Tomb Guardian",       "qty": "0-4",  "ma": 4, "st": 5, "ag": "5+", "pa": "6+", "av": "10+", "skills": "Brawler, Decay, Regeneration",                         "value": 115000 }
+]

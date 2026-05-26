@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Goblin Bruiser", "position": "Goblin Bruiser", "qty": "0-16", "ma": 6, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Dodge, Right Stuff, Stunty, Thick Skull", "value": 45000 },
+  { "id": 2, "name": "Black Orc Blocker", "position": "Black Orc Blocker", "qty": "0-6", "ma": 4, "st": 4, "ag": "4+", "pa": "5+", "av": "10+", "skills": "Brawler, Grab", "value": 90000 },
+  { "id": 3, "name": "Trained Troll", "position": "Trained Troll", "qty": "0-1", "ma": 4, "st": 5, "ag": "5+", "pa": "5+", "av": "10+", "skills": "Always Hungry, Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate", "value": 115000 }
+]

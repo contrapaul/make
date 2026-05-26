@@ -1,0 +1,6 @@
+[
+  { "id": 1, "name": "Bloodborn Marauder", "position": "Bloodborn Marauder", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Frenzy", "value": 50000 },
+  { "id": 2, "name": "Khorngor", "position": "Khorngor", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Horns, Juggernaut, Jump Up, Thick Skull", "value": 70000 },
+  { "id": 3, "name": "Bloodseeker", "position": "Bloodseeker", "qty": "0-4", "ma": 5, "st": 4, "ag": "4+", "pa": "6+", "av": "10+", "skills": "Frenzy", "value": 105000 },
+  { "id": 4, "name": "Bloodspawn", "position": "Bloodspawn", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "9+", "skills": "Claws, Frenzy, Loner (4+), Mighty Blow, Unchannelled Fury", "value": 160000 }
+]

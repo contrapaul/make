@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Human Lineman", "position": "Human Lineman", "qty": "0-16", "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "", "value": 50000 },
+  { "id": 2, "name": "Halfling Hopeful", "position": "Halfling Hopeful", "qty": "0-3", "ma": 5, "st": 2, "ag": "3+", "pa": "4+", "av": "7+", "skills": "Dodge, Right Stuff, Stunty", "value": 30000 },
+  { "id": 3, "name": "Human Catcher", "position": "Human Catcher", "qty": "0-2", "ma": 8, "st": 3, "ag": "3+", "pa": "4+", "av": "8+", "skills": "Catch, Dodge", "value": 75000 },
+  { "id": 4, "name": "Human Thrower", "position": "Human Thrower", "qty": "0-2", "ma": 6, "st": 3, "ag": "3+", "pa": "3+", "av": "9+", "skills": "Pass, Sure Hands", "value": 75000 },
+  { "id": 5, "name": "Human Blitzer", "position": "Human Blitzer", "qty": "0-2", "ma": 7, "st": 3, "ag": "3+", "pa": "4+", "av": "9+", "skills": "Block, Tackle", "value": 85000 },
+  { "id": 6, "name": "Ogre", "position": "Ogre", "qty": "0-1", "ma": 5, "st": 5, "ag": "4+", "pa": "5+", "av": "10+", "skills": "Bone Head, Loner (3+), Mighty Blow, Thick Skull, Throw Team-mate", "value": 140000 }
+]

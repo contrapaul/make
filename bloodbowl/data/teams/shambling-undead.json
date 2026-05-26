@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Skeleton Lineman", "position": "Skeleton Lineman", "qty": "0-16", "ma": 5, "st": 3, "ag": "4+", "pa": "6+", "av": "8+",  "skills": "Regeneration, Thick Skull",                            "value": 40000 },
+  { "id": 2, "name": "Zombie Lineman",   "position": "Zombie Lineman",   "qty": "0-16", "ma": 4, "st": 3, "ag": "4+", "pa": "6+", "av": "9+",  "skills": "Eye Gouge, Regeneration, Unsteady",                    "value": 40000 },
+  { "id": 3, "name": "Ghoul Runner",     "position": "Ghoul Runner",     "qty": "0-2",  "ma": 7, "st": 3, "ag": "3+", "pa": "3+", "av": "8+",  "skills": "Dodge, Regeneration",                                  "value": 75000 },
+  { "id": 4, "name": "Wight Blitzer",    "position": "Wight Blitzer",    "qty": "0-2",  "ma": 6, "st": 3, "ag": "3+", "pa": "5+", "av": "9+",  "skills": "Block, Regeneration, Tackle, Thick Skull",             "value": 95000 },
+  { "id": 5, "name": "Mummy",            "position": "Mummy",            "qty": "0-2",  "ma": 3, "st": 5, "ag": "5+", "pa": "6+", "av": "10+", "skills": "Mighty Blow, Regeneration",                            "value": 125000 }
+]

@@ -175,11 +175,16 @@ function buildCard(player, side) {
     `<span class="ss">${s.toUpperCase()}</span>${esc(String(player[s]))}`
   ).join('<span class="sd" aria-hidden="true"> · </span>');
 
+  /* For canonical roster templates, name === position — show qty instead */
+  const posDisplay = (player.qty && player.name === player.position)
+    ? player.qty
+    : player.position;
+
   card.innerHTML = `
     <span class="card-num">#${player.id}</span>
     <span class="player-name">${esc(player.name)}</span>
     <span class="cd" aria-hidden="true">·</span>
-    <span class="player-pos">${esc(player.position)}</span>
+    <span class="player-pos">${esc(posDisplay)}</span>
     ${player.isStarPlayer ? '<span class="star-badge">&#9733; Star</span>' : ''}
     <span class="cd" aria-hidden="true">|</span>
     <span class="card-stats" aria-label="Stats">${statsStr}</span>
@@ -228,6 +233,8 @@ function openModal(side, player) {
       <p class="modal-position">
         ${esc(player.position)}${player.characteristic
           ? ` &middot; ${esc(player.characteristic)}`
+          : ''}${player.qty
+          ? ` <span class="modal-qty">(${esc(player.qty)})</span>`
           : ''}
       </p>
     </div>
@@ -300,12 +307,10 @@ function closeModal(side) {
    SKILL LINKS  — used in roster cards and trading cards
    ──────────────────────────────────────────────────────── */
 function renderSkillLinks(skillsStr) {
-  return skillsStr
-    .split(', ')
-    .map(skill => {
-      const name = skill.trim();
-      return `<button class="skill-link" data-skill="${esc(name)}">${esc(name)}</button>`;
-    })
+  const skills = (skillsStr || '').split(', ').map(s => s.trim()).filter(Boolean);
+  if (!skills.length) return '<span class="no-skills">—</span>';
+  return skills
+    .map(name => `<button class="skill-link" data-skill="${esc(name)}">${esc(name)}</button>`)
     .join('<span class="skill-sep">, </span>');
 }
 
@@ -350,10 +355,23 @@ function cancelClose() {
 /* ────────────────────────────────────────────────────────
    SKILL TOOLTIP  — anchored above (or below) the trigger link
    ──────────────────────────────────────────────────────── */
+
+/* Look up a skill entry by name.
+   First tries an exact (case-insensitive) match.
+   Falls back to stripping a trailing parenthetical so variable traits
+   like "Loner (3+)", "Animosity (Orcs)", and "Bloodlust (2+)" all
+   resolve to their base entry ("Loner", "Animosity", "Bloodlust"). */
+function lookupSkill(skillName) {
+  const key = skillName.toLowerCase();
+  if (state.skills[key]) return state.skills[key];
+  const base = key.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  return state.skills[base] ?? null;
+}
+
 function openSkillPopup(skillName, anchorEl) {
   const overlay = document.getElementById('skill-overlay');
   const card    = document.getElementById('skill-card');
-  const entry   = state.skills[skillName.toLowerCase()];
+  const entry   = lookupSkill(skillName);
 
   card.innerHTML = `
     <div class="skill-card-header">
