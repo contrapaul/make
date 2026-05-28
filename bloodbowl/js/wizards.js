@@ -147,12 +147,15 @@ function initBlockWizard() {
   }
 
   /* Wire up steppers */
-  bindStepper(document.getElementById('block-att-st'),      1, 7, v => { attST  = v; updateInfo(); });
-  bindStepper(document.getElementById('block-def-st'),      1, 7, v => { defST  = v; updateInfo(); });
+  const attStStepper = bindStepper(document.getElementById('block-att-st'),      1, 7, v => { attST  = v; updateInfo(); });
+  const defStStepper = bindStepper(document.getElementById('block-def-st'),      1, 7, v => { defST  = v; updateInfo(); });
   bindStepper(document.getElementById('block-att-assists'), 0, 6, v => { attAst = v; updateInfo(); });
   bindStepper(document.getElementById('block-def-assists'), 0, 6, v => { defAst = v; updateInfo(); });
 
   updateInfo();
+
+  /* Player selection lists */
+  initBlockPlayerSelect(attStStepper, defStStepper);
 
   const resultEl = document.getElementById('block-result');
 
@@ -396,6 +399,21 @@ function initFoulWizard() {
   const mods     = { 'dirty-player': false, stunty: false };
 
   /* AV picker */
+  function setFoulAV(av) {
+    const clamped = Math.max(5, Math.min(10, av));
+    /* Find the closest matching button */
+    let best = null, bestDiff = Infinity;
+    document.querySelectorAll('#foul-av-picker .av-btn').forEach(b => {
+      const d = Math.abs(parseInt(b.dataset.av, 10) - clamped);
+      if (d < bestDiff) { bestDiff = d; best = b; }
+    });
+    if (best) {
+      document.querySelectorAll('#foul-av-picker .av-btn').forEach(b => b.classList.remove('active'));
+      best.classList.add('active');
+      selectedAV = parseInt(best.dataset.av, 10);
+    }
+  }
+
   document.getElementById('foul-av-picker')?.addEventListener('click', e => {
     const btn = e.target.closest('.av-btn');
     if (!btn) return;
@@ -403,6 +421,9 @@ function initFoulWizard() {
     btn.classList.add('active');
     selectedAV = parseInt(btn.dataset.av, 10);
   });
+
+  /* Player selection lists */
+  initFoulPlayerSelect(setFoulAV);
 
   /* Assists stepper */
   bindStepper(document.getElementById('foul-assists'), 0, 11, v => { assists = v; });
@@ -709,6 +730,155 @@ function initThrowWizard() {
     }
     landBtn.disabled = false;
   });
+}
+
+/* ════════════════════════════════════════════════════════
+   PLAYER SELECTION PANELS (shared utility)
+   Used by Block and Foul wizards to show roster lists.
+   ════════════════════════════════════════════════════════ */
+
+/**
+ * Populate a wizard player list container.
+ * @param {string}   listId    – ID of the .wps-list container
+ * @param {string}   side      – 'left' | 'right'
+ * @param {Function} filterFn  – receives a player object, returns bool
+ * @param {Function} onSelect  – called with the player object when clicked
+ * @returns {{ getSelected: Function }} — accessor
+ */
+function buildWizardPlayerList(listId, side, filterFn, onSelect) {
+  const container = document.getElementById(listId);
+  if (!container) return { getSelected: () => null };
+
+  const allPlayers = window.getPlayerList?.(side) ?? [];
+  const players    = allPlayers.filter(filterFn);
+
+  container.innerHTML = '';
+
+  if (allPlayers.length === 0) {
+    container.innerHTML = '<p class="wps-empty">No roster loaded</p>';
+    return { getSelected: () => null };
+  }
+
+  if (players.length === 0) {
+    container.innerHTML = '<p class="wps-empty">No eligible players</p>';
+    return { getSelected: () => null };
+  }
+
+  let selectedIdx = null;
+
+  players.forEach(p => {
+    const btn = document.createElement('button');
+    btn.type  = 'button';
+    btn.className = 'wps-player-btn';
+
+    /* Extract stat hint from card stats text if possible */
+    const stMatch  = p.statsText.match(/\bST\s*(\d+)/i);
+    const avMatch  = p.statsText.match(/\bAV\s*(\d+)/i);
+    const stVal    = stMatch  ? stMatch[1]  : null;
+    const avVal    = avMatch  ? avMatch[1]  : null;
+    const statHint = stVal ? `ST${stVal}` : (avVal ? `AV${avVal}+` : '');
+
+    const statusMeta = window.STATUS_META?.[p.status];
+    const statusHtml = statusMeta?.label
+      ? `<span class="player-status-badge ${statusMeta.cls}">${statusMeta.label}</span>`
+      : '';
+
+    btn.innerHTML = `
+      <span class="wps-name">${esc(p.name)}</span>
+      ${p.pos   ? `<span class="wps-pos">${esc(p.pos)}</span>` : ''}
+      ${statHint ? `<span class="wps-stat-badge">${statHint}</span>` : ''}
+      ${statusHtml}
+    `;
+
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.wps-player-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedIdx = p.idx;
+      onSelect?.(p, { st: stVal ? parseInt(stVal, 10) : null, av: avVal ? parseInt(avVal, 10) : null });
+    });
+
+    container.appendChild(btn);
+  });
+
+  return {
+    getSelected: () => players.find(p => p.idx === selectedIdx) ?? null,
+    clearSelection: () => {
+      selectedIdx = null;
+      container.querySelectorAll('.wps-player-btn').forEach(b => b.classList.remove('selected'));
+    },
+  };
+}
+
+/** Watch for a panel to open (hidden attribute removed) and call fn each time. */
+function onPanelOpen(panelId, fn) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      if (m.attributeName === 'hidden' && !panel.hasAttribute('hidden')) fn();
+    });
+  }).observe(panel, { attributes: true });
+}
+
+/* ════════════════════════════════════════════════════════
+   BLOCK WIZARD — player involvement extension
+   ════════════════════════════════════════════════════════ */
+
+function initBlockPlayerSelect(attStStepper, defStStepper) {
+  const PS = window.PlayerStatus;
+
+  function refreshBlockLists() {
+    buildWizardPlayerList(
+      'block-attacker-list',
+      'left',
+      p => p.status === PS?.AVAILABLE || p.status === PS?.PRONE || p.status === PS?.STUNNED,
+      (p, stats) => {
+        if (stats.st && attStStepper) attStStepper.set(stats.st);
+      }
+    );
+
+    buildWizardPlayerList(
+      'block-defender-list',
+      'right',
+      p => true,   /* any opposition player can be blocked */
+      (p, stats) => {
+        if (stats.st && defStStepper) defStStepper.set(stats.st);
+      }
+    );
+  }
+
+  onPanelOpen('panel-block', refreshBlockLists);
+}
+
+/* ════════════════════════════════════════════════════════
+   FOUL WIZARD — player involvement extension
+   ════════════════════════════════════════════════════════ */
+
+function initFoulPlayerSelect(avPickerUpdate) {
+  const PS = window.PlayerStatus;
+
+  function refreshFoulLists() {
+    /* Foulers: home team available players */
+    buildWizardPlayerList(
+      'foul-fouler-list',
+      'left',
+      p => !window.STATUS_META?.[p.status]?.dim,
+      (_p, _stats) => { /* fouler selected — no auto-stat in foul */ }
+    );
+
+    /* Targets: away team prone or stunned (legal foul targets) */
+    buildWizardPlayerList(
+      'foul-target-list',
+      'right',
+      p => p.status === PS?.PRONE || p.status === PS?.STUNNED,
+      (p, stats) => {
+        /* Auto-set the AV picker if we could parse AV */
+        if (stats.av && avPickerUpdate) avPickerUpdate(stats.av);
+      }
+    );
+  }
+
+  onPanelOpen('panel-foul', refreshFoulLists);
 }
 
 /* ════════════════════════════════════════════════════════

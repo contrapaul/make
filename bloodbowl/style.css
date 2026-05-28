@@ -30,10 +30,14 @@
 
 /* ─────────────────────────────────────────────
    2. APP SHELL
+   Glass-blue game UI aesthetic.
    ───────────────────────────────────────────── */
 .bb-app {
   min-height: calc(100vh - 52px - 60px);
-  background: var(--bb-red-deeper);
+  background:
+    radial-gradient(ellipse at 30% 0%,   rgba(20, 50, 140, 0.35) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 90%,  rgba(10, 30, 100, 0.3)  0%, transparent 55%),
+    linear-gradient(160deg, #040A18 0%, #081428 60%, #06101E 100%);
   display: flex;
   flex-direction: column;
 }
@@ -641,6 +645,230 @@
 .result-ko  { color: #FF8C00         !important; }
 .result-kas { color: #FF5500         !important; }  /* Stunty Badly Hurt — auto-casualty, no roll */
 .result-cas { color: var(--bb-red,   #C8102E) !important; }
+
+/* ─────────────────────────────────────────────
+   PLAYER STATUS BADGES
+   Applied by state.js to .player-card elements
+   ───────────────────────────────────────────── */
+
+.player-status-badge {
+  font-family:    'Bespoke Slab', Georgia, serif;
+  font-weight:    700;
+  font-size:      0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding:        1px 5px;
+  border-radius:  3px;
+  border:         1px solid currentColor;
+  flex-shrink:    0;
+  white-space:    nowrap;
+  pointer-events: none;
+}
+
+.status-prone    { color: #AACCFF; background: rgba(100, 160, 255, 0.12); }
+.status-stunned  { color: #FFCC44; background: rgba(255, 200, 50, 0.12);  }
+.status-ko       { color: #FF8C00; background: rgba(255, 140, 0, 0.12);   }
+.status-mng      { color: #FF6600; background: rgba(255, 100, 0, 0.12);   }
+.status-cas      { color: var(--bb-red, #C8102E); background: rgba(200, 16, 46, 0.12); }
+.status-dead     { color: #888;    background: rgba(80, 80, 80, 0.18);    }
+.status-sent-off { color: #FFAACC; background: rgba(255, 80, 130, 0.12);  }
+.status-temp     { color: #BBAAFF; background: rgba(160, 120, 255, 0.12); }
+
+/* Dim out-of-game players */
+.player-unavailable {
+  opacity: 0.42;
+  filter:  grayscale(0.6);
+}
+
+/* Subtle highlight for prone/stunned (legal foul targets) */
+.player-prone  .player-name { text-decoration: underline dotted rgba(100, 160, 255, 0.5); }
+.player-stunned .player-name { text-decoration: underline dotted rgba(255, 200, 50, 0.5); }
+
+/* ── Status cycle button (⚑) ── */
+.status-cycle-btn {
+  position:   absolute;
+  top:        2px;
+  right:      2px;
+  background: none;
+  border:     none;
+  font-size:  0.65rem;
+  color:      rgba(120, 160, 230, 0.3);
+  cursor:     pointer;
+  padding:    2px;
+  line-height: 1;
+  transition: color 0.15s, transform 0.1s;
+  z-index:    10;
+}
+
+.status-cycle-btn:hover {
+  color:     rgba(160, 200, 255, 0.85);
+  transform: scale(1.3);
+}
+
+/* ── Status context menu ── */
+.status-menu {
+  position:    absolute;
+  top:         100%;
+  right:       0;
+  z-index:     600;
+  background:  rgba(8, 16, 50, 0.95);
+  backdrop-filter: blur(12px);
+  border:      1px solid rgba(80, 130, 255, 0.3);
+  border-radius: 6px;
+  padding:     0.3rem;
+  display:     flex;
+  flex-direction: column;
+  gap:         2px;
+  min-width:   110px;
+  box-shadow:  0 8px 28px rgba(0, 0, 0, 0.6);
+  animation:   smIn 0.14s ease both;
+}
+
+@keyframes smIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.status-menu-item {
+  font-family:    'Bespoke Slab', Georgia, serif;
+  font-weight:    600;
+  font-size:      0.7rem;
+  padding:        0.3rem 0.55rem;
+  background:     none;
+  border:         none;
+  border-radius:  4px;
+  cursor:         pointer;
+  color:          rgba(180, 210, 255, 0.75);
+  text-align:     left;
+  transition:     background 0.1s, color 0.1s;
+}
+
+.status-menu-item:hover          { background: rgba(60, 100, 200, 0.35); color: #fff; }
+.status-menu-item.smitem-active  { background: rgba(212, 175, 55, 0.18); color: var(--bb-gold, #D4AF37); }
+.status-menu-item.status-prone   { color: #AACCFF; }
+.status-menu-item.status-stunned { color: #FFCC44; }
+.status-menu-item.status-ko      { color: #FF8C00; }
+.status-menu-item.status-mng     { color: #FF6600; }
+.status-menu-item.status-cas     { color: var(--bb-red, #C8102E); }
+.status-menu-item.status-dead    { color: #888; }
+.status-menu-item.status-sent-off{ color: #FFAACC; }
+
+/* ─────────────────────────────────────────────
+   WIZARD PLAYER SELECTION PANELS
+   ─────────────────────────────────────────────  */
+
+.wps-panel {
+  display:       grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap:           0.6rem;
+  margin-bottom: 0.85rem;
+  align-items:   start;
+}
+
+.wps-side {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.3rem;
+}
+
+.wps-heading {
+  font-family:    'Bespoke Slab', Georgia, serif;
+  font-weight:    800;
+  font-size:      0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color:          rgba(140, 175, 240, 0.55);
+  margin-bottom:  0.2rem;
+}
+
+.wps-divider {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding-top:     1.4rem;
+  font-size:       1.2rem;
+  opacity:         0.35;
+  flex-shrink:     0;
+}
+
+.wps-list {
+  display:        flex;
+  flex-direction: column;
+  gap:            3px;
+  max-height:     140px;
+  overflow-y:     auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(80, 120, 200, 0.3) transparent;
+}
+
+.wps-empty {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-size:   0.75rem;
+  font-style:  italic;
+  color:       rgba(120, 160, 230, 0.35);
+  padding:     0.4rem 0;
+  margin:      0;
+}
+
+.wps-player-btn {
+  display:        flex;
+  align-items:    center;
+  gap:            0.3rem;
+  padding:        0.3rem 0.5rem;
+  background:     rgba(15, 30, 80, 0.55);
+  border:         1px solid rgba(60, 100, 200, 0.28);
+  border-radius:  4px;
+  cursor:         pointer;
+  text-align:     left;
+  transition:     background 0.12s, border-color 0.12s;
+  width:          100%;
+}
+
+.wps-player-btn:hover {
+  background:    rgba(40, 80, 180, 0.5);
+  border-color:  rgba(100, 155, 255, 0.5);
+}
+
+.wps-player-btn.selected {
+  background:    rgba(212, 175, 55, 0.18);
+  border-color:  rgba(212, 175, 55, 0.6);
+  box-shadow:    0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.wps-name {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-weight: 700;
+  font-size:   0.76rem;
+  color:       rgba(200, 220, 255, 0.88);
+  flex:        1;
+  min-width:   0;
+  overflow:    hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wps-pos {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-size:   0.62rem;
+  color:       rgba(130, 170, 240, 0.5);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.wps-stat-badge {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-weight: 800;
+  font-size:   0.68rem;
+  color:       var(--bb-gold, #D4AF37);
+  flex-shrink: 0;
+  white-space: nowrap;
+  opacity:     0.85;
+}
+
+@media (max-width: 500px) {
+  .wps-panel { grid-template-columns: 1fr 1fr; }
+  .wps-divider { display: none; }
+}
 
 /* ─────────────────────────────────────────────
    6. RESPONSIVE
