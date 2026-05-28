@@ -113,7 +113,20 @@ function closePanel(id) {
 function togglePanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   if (!panel) return;
-  panel.hasAttribute('hidden') ? openPanel(id) : closePanel(id);
+
+  /* If this panel is already open, just close it */
+  if (!panel.hasAttribute('hidden')) {
+    closePanel(id);
+    return;
+  }
+
+  /* Mutual exclusion — close any other open panels first */
+  document.querySelectorAll('.bb-panel:not([hidden])').forEach(openEl => {
+    const openId = openEl.id.replace('panel-', '');
+    if (openId !== id) closePanel(openId);
+  });
+
+  openPanel(id);
 }
 
 function initPanels() {

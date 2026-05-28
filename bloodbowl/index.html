@@ -79,6 +79,16 @@
 
     </div><!-- /.game-bar -->
 
+    <!-- ═══════════════ GAME TIMELINE ═══════════════ -->
+    <nav class="game-timeline-wrap" aria-label="Game phase">
+      <div class="game-timeline" id="game-timeline">
+        <!-- Steps rendered by state.js -->
+      </div>
+      <button class="timeline-next-btn" id="timeline-next-btn" hidden>
+        Next
+      </button>
+    </nav>
+
     <!-- ═══════════════ MODULE GRID ═══════════════ -->
     <section class="module-section" aria-label="Game tools">
       <div class="module-grid">
@@ -388,7 +398,24 @@
           <button class="panel-close" aria-label="Close block panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-block-body">
-          <p class="panel-intro">Set Strength for both players, count assists on each side, then roll the block dice.</p>
+          <p class="panel-intro">Select attacker and defender from your rosters, or set Strength manually. Count assists, then roll.</p>
+
+          <!-- Player selection (populated by wizards.js when rosters are loaded) -->
+          <div class="wps-panel" id="block-player-select">
+            <div class="wps-side">
+              <div class="wps-heading">Attacker</div>
+              <div class="wps-list" id="block-attacker-list">
+                <p class="wps-empty">Load a roster first</p>
+              </div>
+            </div>
+            <div class="wps-divider">🛡</div>
+            <div class="wps-side">
+              <div class="wps-heading">Defender</div>
+              <div class="wps-list" id="block-defender-list">
+                <p class="wps-empty">Load a roster first</p>
+              </div>
+            </div>
+          </div>
 
           <div class="block-setup-grid">
             <!-- Attacker -->
@@ -526,7 +553,24 @@
           <button class="panel-close" aria-label="Close foul panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-foul-body">
-          <p class="panel-intro">Each assisting player adds +1 to both the Armour and Injury rolls. A natural double on the Armour roll means the referee spots the foul.</p>
+          <p class="panel-intro">Select fouler and prone/stunned target from the rosters. Each assist adds +1. A natural double on Armour means the ref spots the foul.</p>
+
+          <!-- Player selection (populated by wizards.js) -->
+          <div class="wps-panel" id="foul-player-select">
+            <div class="wps-side">
+              <div class="wps-heading">Fouler</div>
+              <div class="wps-list" id="foul-fouler-list">
+                <p class="wps-empty">Load a roster first</p>
+              </div>
+            </div>
+            <div class="wps-divider">⚽</div>
+            <div class="wps-side">
+              <div class="wps-heading">Target (Prone / Stunned)</div>
+              <div class="wps-list" id="foul-target-list">
+                <p class="wps-empty">No prone/stunned players</p>
+              </div>
+            </div>
+          </div>
 
           <div class="injury-inputs">
             <label class="input-label">Target Armour Value (AV)</label>
@@ -693,8 +737,9 @@
     </div>
   </footer>
 
-  <!-- JS — load order: dice → panels → wizards → app -->
+  <!-- JS — load order: dice → state → panels → wizards → app -->
   <script src="js/dice.js"></script>
+  <script src="js/state.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js"></script>
   <script src="script.js"></script>
