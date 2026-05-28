@@ -1,0 +1,57 @@
+[
+  {
+    "roll": 2,
+    "name": "Get the Ref",
+    "desc": "Each team immediately receives one free Bribe Inducement. This Bribe must be used by the end of the game or it is lost."
+  },
+  {
+    "roll": 3,
+    "name": "Time-Out!",
+    "desc": "If the kicking team's Turn Marker is on turn 6, 7 or 8 for the half, move both teams' Turn Markers back one space. Otherwise, move both teams' Turn Markers forwards one space."
+  },
+  {
+    "roll": 4,
+    "name": "Solid Defence",
+    "desc": "The Coach of the kicking team selects up to D3+3 Open players on their team. The selected players are removed from the pitch and may be set up again following all the usual restrictions."
+  },
+  {
+    "roll": 5,
+    "name": "High Kick",
+    "desc": "One Open player on the receiving team may immediately be placed in the square the ball is going to land in (after the kick-off deviation has been resolved)."
+  },
+  {
+    "roll": 6,
+    "name": "Cheering Fans",
+    "desc": "Both Coaches roll a D6 and add the number of Cheerleaders on their Team Roster. The first Block Action performed during the Coach with the highest total's next turn receives an additional Offensive Assist. If the result is a tie, both coaches receive this bonus."
+  },
+  {
+    "roll": 7,
+    "name": "Brilliant Coaching",
+    "desc": "Both Coaches roll a D6 and add the number of Assistant Coaches on their Team Roster. The Coach with the highest total immediately gains a free Team Re-roll for the Drive ahead. If the result is a tie, both coaches gain a free Team Re-roll."
+  },
+  {
+    "roll": 8,
+    "name": "Changing Weather",
+    "desc": "Immediately make a new roll on the Weather Table and apply the result. If the new result is Perfect Conditions, the ball will Scatter (3) in the air before it lands."
+  },
+  {
+    "roll": 9,
+    "name": "Quick Snap!",
+    "desc": "The Coach of the receiving team selects up to D3+3 Open players on their team. The selected players may immediately move one square in any direction, even if this takes them into the opposition's half of the pitch. This move is free and does not require Rush or Dodge rolls."
+  },
+  {
+    "roll": 10,
+    "name": "Charge!",
+    "desc": "The Coach of the kicking team selects up to D3+3 Open players on their team. The selected players may then be activated one at a time, exactly as if it were their team's turn, and each performs a free Move Action — moving up to their MA. No other actions may be performed."
+  },
+  {
+    "roll": 11,
+    "name": "Dodgy Snack",
+    "desc": "Both Coaches roll a D6. The Coach that rolled the lowest randomly selects one of their players currently on the pitch and rolls a D6. On a 2+, the player reduces their MA and AV by 1 for the duration of this Drive only. On a 1, nothing happens."
+  },
+  {
+    "roll": 12,
+    "name": "Pitch Invasion!",
+    "desc": "Both Coaches roll a D6 and add their team's current Fan Factor. The Coach that rolled the lowest total randomly selects D3 of their players currently on the pitch. The selected players are immediately Placed Prone and become Stunned (no Armour roll is made)."
+  }
+]

@@ -1,0 +1,86 @@
+{
+  "armourRule": "Roll 2D6 vs. the player's Armour Value. If the result meets or exceeds the AV, the armour is broken — make an Injury Roll. If the result is lower, the armour holds and no further effect occurs.",
+  "modifiers": [
+    { "source": "Mighty Blow (+1)", "applies": "Armour or Injury roll (choose after rolling)", "value": 1 },
+    { "source": "Dirty Player (+1)", "applies": "Armour or Injury roll (choose after rolling)", "value": 1 },
+    { "source": "Claws",            "applies": "Any natural Armour roll of 8+ automatically breaks armour", "value": 0 }
+  ],
+  "injury": [
+    {
+      "min": 2, "max": 7,
+      "result": "Stunned",
+      "class": "result-ok",
+      "desc": "The player is immediately Stunned. Place them face-down on the pitch. They will be turned face-up (but not activated) at the start of your next team turn."
+    },
+    {
+      "min": 8, "max": 9,
+      "result": "Knocked Out",
+      "class": "result-ko",
+      "desc": "The player is Knocked Out. Remove them from the pitch and place them in the Knocked-out box of their dugout. At the start of each drive they may attempt to return — roll a D6 on a 4+, they return to the Reserves Box."
+    },
+    {
+      "min": 10, "max": 12,
+      "result": "Casualty!",
+      "class": "result-cas",
+      "desc": "The player suffers a Casualty. Remove them from the pitch and place them in the Casualty box of their dugout. The opposing Coach now makes a Casualty Roll (D16) against them."
+    }
+  ],
+  "stunty": [
+    {
+      "min": 2, "max": 6,
+      "result": "Stunned",
+      "class": "result-ok",
+      "desc": "The player is immediately Stunned. Place them face-down on the pitch."
+    },
+    {
+      "min": 7, "max": 8,
+      "result": "Knocked Out",
+      "class": "result-ko",
+      "desc": "The player is Knocked Out. Remove them from the pitch and place them in the Knocked-out box."
+    },
+    {
+      "min": 9, "max": 9,
+      "result": "Badly Hurt",
+      "class": "result-kas",
+      "desc": "The player suffers a Casualty. In League Play, no Casualty Roll is made — they automatically suffer the Badly Hurt result (no long-term effect, but miss the rest of this game)."
+    },
+    {
+      "min": 10, "max": 12,
+      "result": "Casualty!",
+      "class": "result-cas",
+      "desc": "The player suffers a Casualty. Remove them from the pitch and place them in the Casualty box. The opposing Coach now makes a Casualty Roll (D16) against them."
+    }
+  ],
+  "casualty": [
+    {
+      "min": 1, "max": 8,
+      "result": "Badly Hurt",
+      "class": "result-ok",
+      "desc": "The player suffers no long-term effects. They miss the rest of this game but are fully recovered for the next."
+    },
+    {
+      "min": 9, "max": 10,
+      "result": "Seriously Hurt",
+      "class": "result-ko",
+      "desc": "The player must miss their next game. In League play, they cannot play in the next fixture — mark them as MNG (Miss Next Game) on the Team Roster."
+    },
+    {
+      "min": 11, "max": 12,
+      "result": "Serious Injury",
+      "class": "result-ko",
+      "desc": "The player suffers a Niggling Injury and must miss their next game. In League play, mark them as MNG and add a Niggling Injury to their record — this permanently applies -1 to all future Casualty rolls made for this player."
+    },
+    {
+      "min": 13, "max": 14,
+      "result": "Lasting Injury",
+      "class": "result-cas",
+      "desc": "The player suffers a permanent Characteristic reduction and must miss their next game. Roll on the Lasting Injury table to determine which characteristic is reduced by 1."
+    },
+    {
+      "min": 15, "max": 16,
+      "result": "DEAD",
+      "class": "result-cas",
+      "desc": "The player is dead! Remove them permanently from the Team Roster. An Apothecary may attempt to bring them back — roll a D6: on a 4+, they survive but suffer a Serious Injury instead; on a 1-3, they are gone forever."
+    }
+  ]
+}

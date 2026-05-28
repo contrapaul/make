@@ -1,0 +1,42 @@
+[
+  {
+    "rollMin": 2,
+    "rollMax": 2,
+    "name": "Sweltering Heat",
+    "emoji": "☀️",
+    "effect": "Players faint!",
+    "desc": "The intense heat causes some players to faint! At the end of each Drive whilst this weather condition is in effect, one Coach rolls a D3 — each Coach then randomly selects that many of their players who were on the pitch when the Drive ended and places them in the Reserves Box."
+  },
+  {
+    "rollMin": 3,
+    "rollMax": 3,
+    "name": "Very Sunny",
+    "emoji": "🌤",
+    "effect": "-1 to all Passing Ability tests",
+    "desc": "The glorious sunshine makes for a beautiful day, but plays havoc with the passing game! Whenever a player makes a Passing Ability Test, apply a -1 modifier to the roll."
+  },
+  {
+    "rollMin": 4,
+    "rollMax": 10,
+    "name": "Perfect Conditions",
+    "emoji": "⛅",
+    "effect": "No effect",
+    "desc": "Not too hot, nor too cold. It's perfect weather for Blood Bowl! There is no additional effect."
+  },
+  {
+    "rollMin": 11,
+    "rollMax": 11,
+    "name": "Pouring Rain",
+    "emoji": "🌧",
+    "effect": "-1 to Pick Up, Catch & Intercept",
+    "desc": "The heavens have opened and the sudden downpour has left the players soaked and the ball rather slippery! Whenever a player attempts to pick up or Catch the ball, or Intercept a Pass Action, they suffer a -1 modifier to the roll."
+  },
+  {
+    "rollMin": 12,
+    "rollMax": 12,
+    "name": "Blizzard",
+    "emoji": "❄️",
+    "effect": "-1 to Rush; only Quick/Short passes allowed",
+    "desc": "The freezing conditions and swirling snow makes the footing treacherous and drastically impedes a player's vision. Whenever a player attempts to Rush, apply an additional -1 modifier to the roll. Additionally, when a player makes a Pass Action, they may only attempt to make a Quick Pass or a Short Pass — any other pass type is automatically fumbled."
+  }
+]

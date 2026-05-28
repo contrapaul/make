@@ -1,0 +1,82 @@
+[
+  {
+    "roll": 1,
+    "name": "Treacherous Trapdoor",
+    "desc": "Until the end of the game, each time any player from either team enters a square containing a Trapdoor for any reason, roll a D6. On a 1, the Trapdoor falls open and the player falls through it — they are immediately removed from the pitch and placed in the Reserves Box."
+  },
+  {
+    "roll": 2,
+    "name": "Friends with the Ref",
+    "desc": "Until the end of the game, when this team's Coach uses the Argue the Call rule, they are successful on a roll of 5 or 6 rather than the usual 6."
+  },
+  {
+    "roll": 3,
+    "name": "Stiletto",
+    "desc": "Until the end of the game, one randomly selected player on this team gains the Stab trait. If the selected player already has this trait, select again until a player without it is chosen."
+  },
+  {
+    "roll": 4,
+    "name": "Iron Man",
+    "desc": "Until the end of the game, select one player on this team. That player improves their Armour Value characteristic by 1, up to a maximum of 11+."
+  },
+  {
+    "roll": 5,
+    "name": "Knuckle Dusters",
+    "desc": "Until the end of the game, select one player on this team. That player gains the Mighty Blow (+1) skill."
+  },
+  {
+    "roll": 6,
+    "name": "Bad Habits",
+    "desc": "Until the end of the game, randomly select D3 opposition players that are playing in this game. Each selected player gains the Loner (2+) trait for the duration of the game."
+  },
+  {
+    "roll": 7,
+    "name": "Greasy Cleats",
+    "desc": "Until the end of the game, select one opposition player currently on the pitch. That player reduces their Movement Allowance characteristic by 1, down to a minimum of 1."
+  },
+  {
+    "roll": 8,
+    "name": "Blessing of Nuffle",
+    "desc": "Until the end of the game, select one player on this team. That player gains the Pro skill."
+  },
+  {
+    "roll": 9,
+    "name": "Moles Under the Pitch",
+    "desc": "Until the end of the game, whenever any opposition player attempts to Rush, they must apply an additional -1 modifier to the roll."
+  },
+  {
+    "roll": 10,
+    "name": "Perfect Passing",
+    "desc": "Until the end of the game, whenever a player on this team makes a Completion, they earn 2 Star Player Points instead of 1."
+  },
+  {
+    "roll": 11,
+    "name": "Dazzling Catching",
+    "desc": "Until the end of the game, whenever a player on this team makes a successful Catch as part of a Pass Action (not a Hand-off), they earn 1 Star Player Point."
+  },
+  {
+    "roll": 12,
+    "name": "Fan Interaction",
+    "desc": "Until the end of the game, whenever a player on this team pushes an opposition player into the crowd, the pushing player earns 2 Star Player Points."
+  },
+  {
+    "roll": 13,
+    "name": "Fouling Frenzy",
+    "desc": "Until the end of the game, whenever a player on this team causes a Casualty as the result of a Foul Action, the fouling player earns 2 Star Player Points."
+  },
+  {
+    "roll": 14,
+    "name": "Throw a Rock",
+    "desc": "Once during the game, this team's Coach may declare they are using this prayer. Randomly select one opposition player currently on the pitch — that player is immediately Knocked Down on a D6 roll of 4+. If the roll fails, nothing happens."
+  },
+  {
+    "roll": 15,
+    "name": "Under Scrutiny",
+    "desc": "Until the end of the game, any opposition player that performs a Foul Action is automatically Sent-off if they break the target's armour, regardless of whether a natural double was rolled on the Armour check."
+  },
+  {
+    "roll": 16,
+    "name": "Intensive Training",
+    "desc": "Select one player on this team. That player immediately gains a single Primary skill of your choosing. This skill is lost at the end of the game and awards no Star Player Points."
+  }
+]
