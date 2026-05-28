@@ -114,6 +114,14 @@ async function loadTeam(side, teamId) {
     state[side].players = players;
     applyTeamColors(side, team.colors);
     renderRoster(side, players);
+
+    /* Update companion UI */
+    if (window.Panels) {
+      Panels.openAccordion(side);
+      Panels.setAccordionLabel(side, team.name);
+      /* Default 3 re-rolls — will be team-builder-driven in Phase 4 */
+      Panels.setRerolls(side === 'left' ? 'home' : 'away', 3);
+    }
   } catch (err) {
     console.error(`[BB] Failed to load team "${teamId}":`, err);
   }
@@ -122,18 +130,28 @@ async function loadTeam(side, teamId) {
 function clearSide(side) {
   state[side].team    = null;
   state[side].players = [];
-  /* Remove all inline --tc-* overrides so defaults take effect */
-  document.getElementById(`side-${side}`).removeAttribute('style');
+
+  /* Remove all inline --tc-* overrides from roster accordion AND modal */
+  document.getElementById(`side-${side}`)?.removeAttribute('style');
+  document.getElementById(`modal-${side}`)?.removeAttribute('style');
   document.getElementById(`roster-${side}`).innerHTML =
     '<p class="empty-state">Select a team to load the roster.</p>';
+
+  /* Reset companion UI */
+  if (window.Panels) {
+    const gbSide = side === 'left' ? 'home' : 'away';
+    Panels.setAccordionLabel(side, null);
+    Panels.setRerolls(gbSide, 0);
+  }
 }
 
 /* ────────────────────────────────────────────────────────
    TEAM COLOUR THEMING
-   CSS custom properties are set directly on the .bb-side element.
-   Child elements (cards, modal, skill links) inherit them through
-   the normal CSS cascade — even when position:fixed breaks visual
-   containment — because custom properties follow DOM ancestry.
+   CSS custom properties are set on both the .roster-accordion
+   (id="side-{side}") and the trading-card modal overlay
+   (id="modal-{side}", now position:fixed outside the accordion).
+   Custom properties follow DOM ancestry, so the fixed modal
+   needs the properties applied directly to inherit them.
    ──────────────────────────────────────────────────────── */
 const COLOR_PROP_MAP = {
   bg:          '--tc-bg',
@@ -146,9 +164,16 @@ const COLOR_PROP_MAP = {
 };
 
 function applyTeamColors(side, colors) {
-  const el = document.getElementById(`side-${side}`);
-  Object.entries(COLOR_PROP_MAP).forEach(([key, prop]) => {
-    if (colors[key] !== undefined) el.style.setProperty(prop, colors[key]);
+  /* Apply to roster accordion AND modal overlay */
+  const targets = [
+    document.getElementById(`side-${side}`),
+    document.getElementById(`modal-${side}`),
+  ];
+  targets.forEach(el => {
+    if (!el) return;
+    Object.entries(COLOR_PROP_MAP).forEach(([key, prop]) => {
+      if (colors[key] !== undefined) el.style.setProperty(prop, colors[key]);
+    });
   });
 }
 

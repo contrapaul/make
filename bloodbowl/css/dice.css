@@ -1,0 +1,165 @@
+/* ============================================================
+   Blood Bowl Companion — css/dice.css
+   2D die faces with pip layouts and roll animation.
+   ============================================================ */
+
+/* ── Dice tray ── */
+.dice-tray {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-end;
+  padding: 0.25rem 0 0;
+  flex-wrap: wrap;
+}
+
+.dice-tray.single {
+  justify-content: flex-start;
+}
+
+/* ── Die container ── */
+.die {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ── D6 face ── */
+.die-face {
+  width: 60px;
+  height: 60px;
+  background: var(--bb-cream, #F5F0E8);
+  border: 2px solid #2A2525;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 8px;
+  gap: 0;
+  box-shadow:
+    3px 3px 0 #2A2525,
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  position: relative;
+  user-select: none;
+}
+
+/* ── D8 face (octagonal feel via clip-path) ── */
+.die-face.d8-face {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+  border-radius: 4px;
+  border-color: #2A2525;
+  background: #E8E0D0;
+}
+
+/* ── Pip ── */
+.pip {
+  width: 10px;
+  height: 10px;
+  background: #0D0D0D;
+  border-radius: 50%;
+  justify-self: center;
+  align-self: center;
+}
+
+/* D8 pips are smaller since the face is clipped */
+.d8-face .pip {
+  width: 8px;
+  height: 8px;
+}
+
+/* ── D8 number display ── */
+.d8-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #0D0D0D;
+  line-height: 1;
+}
+
+/* ── Die sub-label (e.g. "Squares", "Direction") ── */
+.die-sub-label {
+  font-family: 'Bespoke Slab', Georgia, serif;
+  font-weight: 500;
+  font-size: 0.55rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── Roll animation ── */
+@keyframes diceRoll {
+  0%   { transform: rotate(0deg)   scale(1); }
+  10%  { transform: rotate(-18deg) scale(1.08); }
+  20%  { transform: rotate(22deg)  scale(0.93); }
+  30%  { transform: rotate(-14deg) scale(1.06); }
+  40%  { transform: rotate(16deg)  scale(0.95); }
+  50%  { transform: rotate(-10deg) scale(1.04); }
+  60%  { transform: rotate(12deg)  scale(0.97); }
+  70%  { transform: rotate(-6deg)  scale(1.02); }
+  80%  { transform: rotate(6deg)   scale(0.99); }
+  90%  { transform: rotate(-2deg)  scale(1.01); }
+  100% { transform: rotate(0deg)   scale(1); }
+}
+
+.die-face.rolling {
+  animation: diceRoll 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  box-shadow:
+    5px 5px 0 #2A2525,
+    0 0 16px rgba(200, 16, 46, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* ── Result flash ── */
+@keyframes diceSettle {
+  0%   { box-shadow: 3px 3px 0 #2A2525, 0 0 20px rgba(212, 175, 55, 0.7), inset 0 1px 0 rgba(255,255,255,0.8); }
+  60%  { box-shadow: 3px 3px 0 #2A2525, 0 0 12px rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255,255,255,0.8); }
+  100% { box-shadow: 3px 3px 0 #2A2525, 0 0  0px rgba(212, 175, 55, 0),   inset 0 1px 0 rgba(255,255,255,0.8); }
+}
+
+.die-face.settled {
+  animation: diceSettle 0.5s ease-out both;
+}
+
+/* ── Pip layout utility classes — applied by Dice.setPips() ── */
+
+/* 1 pip — center only */
+.pips-1 .pip:nth-child(n+2) { display: none; }
+.pips-1 .pip:nth-child(1) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* 2 pips — top-left, bottom-right */
+.pips-2 .pip:nth-child(1) { grid-column: 1; grid-row: 1; }
+.pips-2 .pip:nth-child(2) { grid-column: 3; grid-row: 3; }
+
+/* 3 pips — top-left, center, bottom-right */
+.pips-3 .pip:nth-child(1) { grid-column: 1; grid-row: 1; }
+.pips-3 .pip:nth-child(2) { grid-column: 2; grid-row: 2; }
+.pips-3 .pip:nth-child(3) { grid-column: 3; grid-row: 3; }
+
+/* 4 pips — corners */
+.pips-4 .pip:nth-child(1) { grid-column: 1; grid-row: 1; }
+.pips-4 .pip:nth-child(2) { grid-column: 3; grid-row: 1; }
+.pips-4 .pip:nth-child(3) { grid-column: 1; grid-row: 3; }
+.pips-4 .pip:nth-child(4) { grid-column: 3; grid-row: 3; }
+
+/* 5 pips — corners + center */
+.pips-5 .pip:nth-child(1) { grid-column: 1; grid-row: 1; }
+.pips-5 .pip:nth-child(2) { grid-column: 3; grid-row: 1; }
+.pips-5 .pip:nth-child(3) { grid-column: 2; grid-row: 2; }
+.pips-5 .pip:nth-child(4) { grid-column: 1; grid-row: 3; }
+.pips-5 .pip:nth-child(5) { grid-column: 3; grid-row: 3; }
+
+/* 6 pips — left and right columns, all rows */
+.pips-6 .pip:nth-child(1) { grid-column: 1; grid-row: 1; }
+.pips-6 .pip:nth-child(2) { grid-column: 3; grid-row: 1; }
+.pips-6 .pip:nth-child(3) { grid-column: 1; grid-row: 2; }
+.pips-6 .pip:nth-child(4) { grid-column: 3; grid-row: 2; }
+.pips-6 .pip:nth-child(5) { grid-column: 1; grid-row: 3; }
+.pips-6 .pip:nth-child(6) { grid-column: 3; grid-row: 3; }
