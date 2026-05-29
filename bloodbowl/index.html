@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/dice.css">
   <link rel="stylesheet" href="css/wizards.css">
   <link rel="stylesheet" href="css/pitch.css">
+  <link rel="stylesheet" href="css/drive-wizard.css">
 </head>
 <body>
 
@@ -57,7 +58,9 @@
           <button class="gb-turn-btn" id="gb-prev-turn" aria-label="Previous turn">◂</button>
           <span class="gb-turn-label" id="gb-turn-label">TURN 1</span>
           <button class="gb-turn-btn" id="gb-next-turn" aria-label="Next turn">▸</button>
+          <button class="gb-settings-btn" id="gb-settings-btn" aria-label="Open settings" title="Settings">⚙</button>
         </div>
+        <div class="gb-weather-chip" id="gb-weather-chip" hidden aria-live="polite"></div>
       </div>
 
       <div class="gb-team gb-away" id="gb-away-team">
@@ -85,9 +88,8 @@
       <div class="game-timeline" id="game-timeline">
         <!-- Steps rendered by state.js -->
       </div>
-      <button class="timeline-next-btn" id="timeline-next-btn" hidden>
-        Next
-      </button>
+      <button class="timeline-next-btn" id="timeline-next-btn" hidden>Next</button>
+      <button class="start-drive-inline-btn" id="start-drive-inline" aria-label="Start drive wizard" title="Open drive wizard">▸ Drive</button>
     </nav>
 
     <!-- ═══════════════ MODULE GRID ═══════════════ -->
@@ -158,6 +160,11 @@
         </button>
 
       </div>
+    </section>
+
+    <!-- Beginner mode CTA (hidden unless mode-beginner) -->
+    <section class="beginner-cta-section" aria-label="Start drive">
+      <button class="start-drive-btn-big" id="start-drive-beginner">▸ Start Drive</button>
     </section>
 
     <!-- ═══════════════ PANELS ZONE ═══════════════ -->
@@ -590,6 +597,37 @@
 
   </main>
 
+  <!-- ═══════════════ SETTINGS DRAWER ═══════════════ -->
+  <aside class="settings-drawer" id="settings-drawer" hidden aria-label="Settings">
+    <div class="settings-drawer-header">
+      <h2 class="settings-drawer-title">⚙ Settings</h2>
+      <button class="settings-close" id="settings-close" aria-label="Close settings">&#215;</button>
+    </div>
+    <div class="settings-body" id="settings-body">
+      <!-- Populated by panels.js -->
+    </div>
+  </aside>
+  <div class="settings-backdrop" id="settings-backdrop"></div>
+
+  <!-- ═══════════════ DRIVE WIZARD ═══════════════ -->
+  <div class="drive-wizard" id="drive-wizard" hidden aria-label="Drive wizard" role="dialog" aria-modal="true">
+    <div class="dw-header">
+      <div class="dw-step-dots" id="dw-step-dots"></div>
+      <button class="dw-minimise" id="dw-minimise" aria-label="Minimise drive wizard" title="Minimise">−</button>
+    </div>
+    <div class="dw-content" id="dw-content"></div>
+    <div class="dw-nav">
+      <button class="dw-nav-btn" id="dw-back">← Back</button>
+      <button class="dw-nav-btn dw-primary" id="dw-next">Next →</button>
+    </div>
+  </div>
+  <!-- Drive wizard minimised pill -->
+  <button class="dw-pill" id="dw-pill" hidden aria-label="Restore drive wizard">
+    ▸ Drive: Step <span id="dw-pill-step">1</span>
+  </button>
+  <!-- Drive wizard backdrop -->
+  <div class="dw-backdrop" id="dw-backdrop"></div>
+
   <!-- Panel backdrop — dims the page when any module panel is open -->
   <div class="panel-backdrop" id="panel-backdrop"></div>
 
@@ -623,6 +661,7 @@
   <script src="js/settings.js"></script>
   <script src="js/physical-dice.js"></script>
   <script src="js/pitch.js"></script>
+  <script src="js/drive-wizard.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js"></script>
   <script src="script.js"></script>
