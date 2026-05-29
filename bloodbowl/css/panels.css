@@ -496,6 +496,27 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Re-roll button — appears inside a .roll-result after a roll completes */
+.reroll-btn {
+  display:          block;
+  margin-top:       0.75rem;
+  padding:          0.35rem 0.8rem;
+  background:       rgba(80, 130, 255, 0.12);
+  border:           1px solid rgba(80, 130, 255, 0.35);
+  border-radius:    4px;
+  color:            rgba(160, 200, 255, 0.85);
+  font-family:      'JetBrains Mono', monospace;
+  font-size:        0.78rem;
+  font-weight:      600;
+  cursor:           pointer;
+  transition:       background 0.15s, border-color 0.15s, color 0.15s;
+}
+.reroll-btn:hover {
+  background:   rgba(80, 130, 255, 0.22);
+  border-color: rgba(80, 130, 255, 0.6);
+  color:        #fff;
+}
+
 /* Large dice total */
 .result-roll-num {
   font-family: 'JetBrains Mono', monospace;
@@ -718,4 +739,167 @@
   .panel-body   { padding: 0.8rem 0.85rem 1rem; }
   .tl-label     { display: none; }
   .tl-icon      { font-size: 1.15rem; }
+}
+
+/* ════════════════════════════════════════════════════════
+   DICE MODE TOGGLE PILL  (Sprint 2)
+   ════════════════════════════════════════════════════════ */
+
+.dmt-pill {
+  display:       flex;
+  gap:           0;
+  border:        1px solid rgba(80, 130, 255, 0.28);
+  border-radius: 4px;
+  overflow:      hidden;
+  margin:        0 0.4rem;
+  flex-shrink:   0;
+}
+.dmt-btn {
+  padding:     0.2rem 0.5rem;
+  background:  transparent;
+  border:      none;
+  color:       rgba(140, 170, 230, 0.45);
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.68rem;
+  font-weight: 700;
+  cursor:      pointer;
+  transition:  background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+.dmt-btn.active {
+  background: rgba(80, 130, 255, 0.2);
+  color:      rgba(160, 200, 255, 0.95);
+}
+.dmt-btn:hover:not(.active) {
+  background: rgba(80, 130, 255, 0.08);
+  color:      rgba(160, 200, 255, 0.7);
+}
+
+/* ════════════════════════════════════════════════════════
+   PHYSICAL DICE BUTTONS  (Sprint 2)
+   ════════════════════════════════════════════════════════ */
+
+.physical-zone { margin-top: 0.7rem; }
+
+.phys-grid {
+  display:               grid;
+  grid-template-columns: repeat(var(--phys-cols, 4), 1fr);
+  gap:                   0.3rem;
+}
+
+.phys-btn {
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  padding:         0.4rem 0.25rem;
+  background:      rgba(4, 10, 28, 0.72);
+  border:          1px solid rgba(80, 130, 255, 0.18);
+  border-left:     2px solid rgba(80, 130, 255, 0.3);
+  border-radius:   4px;
+  cursor:          pointer;
+  min-height:      3rem;
+  font-family:     'JetBrains Mono', monospace;
+  line-height:     1.2;
+  transition:      background 0.1s, border-color 0.1s, transform 0.07s;
+}
+.phys-btn:hover {
+  background:   rgba(80, 130, 255, 0.1);
+  border-color: rgba(80, 130, 255, 0.35);
+}
+.phys-btn.selected {
+  background:   rgba(80, 130, 255, 0.22);
+  border-color: rgba(80, 130, 255, 0.65);
+  transform:    scale(1.04);
+  box-shadow:   0 0 8px rgba(80, 130, 255, 0.25);
+}
+
+.phys-val {
+  font-size:   0.95rem;
+  font-weight: 800;
+  color:       var(--bb-gold, #D4AF37);
+  line-height: 1;
+}
+.phys-label {
+  font-size:     0.6rem;
+  font-weight:   600;
+  color:         rgba(200, 220, 255, 0.6);
+  text-align:    center;
+  margin-top:    0.18rem;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  max-width:     100%;
+}
+
+/* Severity colour bands */
+.phys-btn.phys-muted   { opacity: 0.42; }
+.phys-btn.phys-neutral { border-left-color: rgba(80, 130, 255, 0.45); }
+.phys-btn.phys-warn    { border-left-color: #FF8C00; }
+.phys-btn.phys-warn .phys-val  { color: #FF8C00; }
+.phys-btn.phys-bad     { border-left-color: var(--bb-red, #C8102E); }
+.phys-btn.phys-bad .phys-val   { color: #ff8fa0; }
+.phys-btn.phys-good    { border-left-color: #4CAF50; }
+.phys-btn.phys-good .phys-val  { color: #81c784; }
+
+/* Compass grid */
+.phys-compass-grid {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   0.3rem;
+  max-width:             170px;
+  margin:                0.5rem auto;
+}
+.phys-compass-btn .phys-val {
+  font-size: 1.3rem;
+  color:     rgba(160, 200, 255, 0.85);
+}
+.phys-compass-centre {
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       1rem;
+}
+
+/* ════════════════════════════════════════════════════════
+   WEATHER CHIP  (Sprint 2)
+   ════════════════════════════════════════════════════════ */
+
+.weather-chip-slot { margin-bottom: 0.55rem; }
+
+.weather-chip {
+  display:       flex;
+  align-items:   center;
+  gap:           0.45rem;
+  padding:       0.38rem 0.7rem;
+  background:    rgba(255, 140, 0, 0.09);
+  border:        1px solid rgba(255, 140, 0, 0.28);
+  border-radius: 4px;
+  color:         #FF8C00;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  font-weight:   600;
+  cursor:        pointer;
+  width:         100%;
+  text-align:    left;
+  transition:    background 0.12s;
+}
+.weather-chip:hover { background: rgba(255, 140, 0, 0.16); }
+
+.wchip-expand {
+  margin-left: auto;
+  opacity:     0.55;
+  font-size:   0.85rem;
+  flex-shrink: 0;
+}
+.weather-chip-desc {
+  margin-top:    0.4rem;
+  padding:       0.5rem 0.7rem;
+  background:    rgba(0, 0, 0, 0.35);
+  border:        1px solid rgba(255, 140, 0, 0.18);
+  border-radius: 4px;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  color:         rgba(255, 220, 160, 0.8);
+  line-height:   1.5;
 }

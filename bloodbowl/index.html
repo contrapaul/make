@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/panels.css">
   <link rel="stylesheet" href="css/dice.css">
   <link rel="stylesheet" href="css/wizards.css">
+  <link rel="stylesheet" href="css/pitch.css">
 </head>
 <body>
 
@@ -163,7 +164,7 @@
     <div class="panels-zone" id="panels-zone">
 
       <!-- KICKOFF PANEL -->
-      <div class="bb-panel" id="panel-kickoff" hidden aria-label="Kickoff event">
+      <div class="bb-panel" id="panel-kickoff" data-wizard="kickoff" hidden aria-label="Kickoff event">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -191,7 +192,7 @@
       </div>
 
       <!-- WEATHER PANEL -->
-      <div class="bb-panel" id="panel-weather" hidden aria-label="Weather">
+      <div class="bb-panel" id="panel-weather" data-wizard="weather" hidden aria-label="Weather">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -215,7 +216,7 @@
       </div>
 
       <!-- PRAYERS TO NUFFLE PANEL -->
-      <div class="bb-panel" id="panel-prayers" hidden aria-label="Prayers to Nuffle">
+      <div class="bb-panel" id="panel-prayers" data-wizard="prayers" hidden aria-label="Prayers to Nuffle">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -238,7 +239,7 @@
       </div>
 
       <!-- BALL SCATTER PANEL -->
-      <div class="bb-panel" id="panel-scatter" hidden aria-label="Ball scatter and deviation">
+      <div class="bb-panel" id="panel-scatter" data-wizard="scatter" hidden aria-label="Ball scatter and deviation">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -303,7 +304,7 @@
       </div>
 
       <!-- PASS PANEL (wizard placeholder for Phase 3) -->
-      <div class="bb-panel" id="panel-pass" hidden aria-label="Make a Pass">
+      <div class="bb-panel" id="panel-pass" data-wizard="pass" hidden aria-label="Make a Pass">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -313,81 +314,12 @@
           </div>
           <button class="panel-close" aria-label="Close pass panel">&#215;</button>
         </div>
-        <div class="panel-body" id="panel-pass-body">
-          <p class="panel-intro">Set the thrower's Passing Ability, choose the range, apply modifiers, then roll. A catch sub-step follows a complete or inaccurate pass.</p>
-
-          <div class="injury-inputs">
-            <label class="input-label">Passing Ability (PA) — need to meet or beat this</label>
-            <div class="av-picker" id="pass-pa-picker">
-              <button class="av-btn" data-pa="2">2+</button>
-              <button class="av-btn" data-pa="3">3+</button>
-              <button class="av-btn active" data-pa="4">4+</button>
-              <button class="av-btn" data-pa="5">5+</button>
-              <button class="av-btn" data-pa="6">6+</button>
-              <button class="av-btn" data-pa="99">No PA</button>
-            </div>
-
-            <label class="input-label">Pass Range</label>
-            <div class="av-picker" id="pass-range-picker">
-              <button class="av-btn active" data-range="0" title="Up to 3 squares">Quick</button>
-              <button class="av-btn" data-range="-1" title="4–6 squares">Short (−1)</button>
-              <button class="av-btn" data-range="-1" title="7–10 squares">Long (−1)</button>
-              <button class="av-btn" data-range="-2" title="11–13 squares">Long Bomb (−2)</button>
-            </div>
-
-            <label class="input-label">Modifiers</label>
-            <div class="mod-toggles">
-              <button class="mod-toggle" id="pass-mod-tz" title="Each tackle zone the thrower is in = −1">In Tackle Zone (−1)</button>
-              <button class="mod-toggle" id="pass-mod-weather" title="Very Sunny or Pouring Rain = −1">Bad Weather (−1)</button>
-            </div>
-          </div>
-
-          <div class="wizard-info-bar" id="pass-target-bar">
-            <span class="input-label" style="margin:0;">Target:</span>
-            <span class="wizard-info-num" id="pass-target">4+</span>
-            <span class="wizard-info-note" id="pass-mod-note"></span>
-          </div>
-
-          <div class="dice-tray single">
-            <div class="die" id="pass-d1" data-value="1" aria-label="Pass die"><div class="die-face"></div></div>
-          </div>
-          <button class="roll-btn" id="pass-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Pass Action
-          </button>
-          <div class="roll-result" id="pass-result" hidden aria-live="polite"></div>
-
-          <!-- Catch sub-step — revealed after a non-fumble result -->
-          <div id="pass-catch-section" class="wizard-sub-section" hidden>
-            <hr class="wizard-divider">
-            <p class="panel-intro" id="pass-catch-intro">The ball is in the air — catcher attempts to catch it.</p>
-            <div class="injury-inputs">
-              <label class="input-label">Catcher Agility (AG) — need to meet or beat this</label>
-              <div class="av-picker" id="catch-ag-picker">
-                <button class="av-btn" data-ag="2">2+</button>
-                <button class="av-btn" data-ag="3">3+</button>
-                <button class="av-btn active" data-ag="4">4+</button>
-                <button class="av-btn" data-ag="5">5+</button>
-                <button class="av-btn" data-ag="6">6+</button>
-              </div>
-              <label class="input-label">Catch Modifiers</label>
-              <div class="mod-toggles">
-                <button class="mod-toggle" id="catch-mod-tz" title="Each tackle zone on catcher = −1">In Tackle Zone (−1)</button>
-                <button class="mod-toggle" id="catch-mod-weather" title="Very Sunny or Pouring Rain = −1">Bad Weather (−1)</button>
-              </div>
-            </div>
-            <div class="dice-tray single">
-              <div class="die" id="catch-d1" data-value="1" aria-label="Catch die"><div class="die-face"></div></div>
-            </div>
-            <button class="roll-btn" id="catch-roll-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Catch
-            </button>
-            <div class="roll-result" id="catch-result" hidden aria-live="polite"></div>
-          </div>
-        </div>
+        <!-- Pass panel body rebuilt by initPassWizard() in wizards.js -->
+        <div class="panel-body" id="panel-pass-body"></div>
       </div>
 
       <!-- BLOCK PANEL (wizard placeholder for Phase 3) -->
-      <div class="bb-panel" id="panel-block" hidden aria-label="Block">
+      <div class="bb-panel" id="panel-block" data-wizard="block" hidden aria-label="Block">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -469,7 +401,7 @@
       </div>
 
       <!-- THROW PANEL (wizard placeholder for Phase 3) -->
-      <div class="bb-panel" id="panel-throw" hidden aria-label="Throw a Team-Mate">
+      <div class="bb-panel" id="panel-throw" data-wizard="throw" hidden aria-label="Throw a Team-Mate">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -479,70 +411,12 @@
           </div>
           <button class="panel-close" aria-label="Close throw panel">&#215;</button>
         </div>
-        <div class="panel-body" id="panel-throw-body">
-          <p class="panel-intro">Requires <strong>Throw Team-Mate</strong> on the thrower and <strong>Stunty</strong> on the thrown player. Roll D6 for the throw, then D6 for landing (4+ to land safely).</p>
-
-          <div class="injury-inputs">
-            <label class="input-label">Throw Range</label>
-            <div class="av-picker" id="throw-range-picker">
-              <button class="av-btn active" data-target="4" title="Up to 3 squares">Short (4+)</button>
-              <button class="av-btn" data-target="5" title="4–6 squares">Long (5+)</button>
-            </div>
-
-            <label class="input-label">Traits on the Thrower</label>
-            <div class="mod-toggles">
-              <button class="mod-toggle" id="throw-mod-hungry" title="Always Hungry: roll 2+ before throwing — on a 1 the team-mate is eaten!">Always Hungry</button>
-              <button class="mod-toggle" id="throw-mod-hailmary" title="Hail Mary Pass: throw any distance but always inaccurate">Hail Mary Pass</button>
-            </div>
-          </div>
-
-          <!-- Always Hungry sub-step (shown when trait is active) -->
-          <div id="throw-hungry-section" hidden>
-            <div class="dice-tray single" id="throw-hungry-tray">
-              <div class="die" id="throw-hungry-d1" data-value="1" aria-label="Always Hungry die"><div class="die-face"></div></div>
-            </div>
-            <button class="roll-btn" id="throw-hungry-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Always Hungry (need 2+)
-            </button>
-            <div class="roll-result" id="throw-hungry-result" hidden aria-live="polite"></div>
-            <hr class="wizard-divider">
-          </div>
-
-          <!-- Main throw roll -->
-          <div id="throw-main-section">
-            <div class="dice-tray single">
-              <div class="die" id="throw-d1" data-value="1" aria-label="Throw die"><div class="die-face"></div></div>
-            </div>
-            <button class="roll-btn" id="throw-roll-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Throw
-            </button>
-            <div class="roll-result" id="throw-result" hidden aria-live="polite"></div>
-          </div>
-
-          <!-- Landing sub-step (shown after a non-fumble throw) -->
-          <div id="throw-landing-section" hidden class="wizard-sub-section">
-            <hr class="wizard-divider">
-            <p class="panel-intro" id="throw-landing-intro">The thrown player must make a Landing roll.</p>
-            <div class="injury-inputs">
-              <label class="input-label">Landing Modifiers</label>
-              <div class="mod-toggles">
-                <button class="mod-toggle" id="throw-land-tz" title="Each opposing tackle zone the player lands in = −1">Opp. Tackle Zone (−1)</button>
-                <button class="mod-toggle" id="throw-land-skill" title="Landing skill gives +1 to the landing roll">Landing Skill (+1)</button>
-              </div>
-            </div>
-            <div class="dice-tray single">
-              <div class="die" id="throw-land-d1" data-value="1" aria-label="Landing die"><div class="die-face"></div></div>
-            </div>
-            <button class="roll-btn" id="throw-land-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Landing (need 4+)
-            </button>
-            <div class="roll-result" id="throw-land-result" hidden aria-live="polite"></div>
-          </div>
-        </div>
+        <!-- Throw panel body rebuilt by initThrowWizard() in wizards.js -->
+        <div class="panel-body" id="panel-throw-body"></div>
       </div>
 
       <!-- FOUL PANEL (wizard placeholder for Phase 3) -->
-      <div class="bb-panel" id="panel-foul" hidden aria-label="Foul">
+      <div class="bb-panel" id="panel-foul" data-wizard="foul" hidden aria-label="Foul">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -553,6 +427,7 @@
           <button class="panel-close" aria-label="Close foul panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-foul-body">
+          <div class="weather-chip-slot" id="wchip-foul" hidden></div>
           <p class="panel-intro">Select fouler and prone/stunned target from the rosters. Each assist adds +1. A natural double on Armour means the ref spots the foul.</p>
 
           <!-- Player selection (populated by wizards.js) -->
@@ -629,7 +504,7 @@
       </div>
 
       <!-- INJURY PANEL -->
-      <div class="bb-panel" id="panel-injury" hidden aria-label="Injury roller">
+      <div class="bb-panel" id="panel-injury" data-wizard="injury" hidden aria-label="Injury roller">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -640,6 +515,7 @@
           <button class="panel-close" aria-label="Close injury panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-injury-body">
+          <div class="weather-chip-slot" id="wchip-injury" hidden></div>
           <p class="panel-intro">Roll armour and injury for any knocked-down player. Enter the target's AV and any modifiers.</p>
 
           <div class="injury-inputs">
@@ -668,6 +544,7 @@
             <span class="roll-btn-icon">🎲</span> Roll Armour Check
           </button>
           <div class="roll-result" id="injury-result" hidden aria-live="polite"></div>
+          <div class="roll-result" id="injury-inj-result" hidden aria-live="polite"></div>
 
           <!-- Casualty D16 tray — revealed only when a Casualty! result is rolled -->
           <div class="dice-tray single" id="casualty-dice-tray" hidden>
@@ -740,9 +617,12 @@
     </div>
   </footer>
 
-  <!-- JS — load order: dice → state → panels → wizards → app -->
+  <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
   <script src="js/dice.js"></script>
   <script src="js/state.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/physical-dice.js"></script>
+  <script src="js/pitch.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js"></script>
   <script src="script.js"></script>

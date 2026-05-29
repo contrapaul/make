@@ -2,23 +2,10 @@
 
 /* ═══════════════════════════════════════════════════════
    Blood Bowl Companion — js/panels.js
-
-   Responsibilities
-   ────────────────
-   • Module button grid → panel open / close / toggle
-   • Sub-tab switching within panels
-   • Roster accordion expand / collapse
-   • Game bar: score, turn, re-roll tracking
-   • Automation modules: kickoff, weather, prayers,
-     scatter (deviation / bounce / throw-in), injury
    ═══════════════════════════════════════════════════════ */
 
-/* ────────────────────────────────────────────────────────
-   JSON DATA  — populated by loadModuleData() on startup
-   ──────────────────────────────────────────────────────── */
-
-const DATA = {};   /* { kickoff[], weather[], prayers[], injury{} } */
-window.BBData = DATA;   /* exposed for wizards.js cross-module access */
+const DATA = {};
+window.BBData = DATA;
 
 async function loadModuleData() {
   const sources = {
@@ -27,7 +14,6 @@ async function loadModuleData() {
     prayers: 'data/prayers.json',
     injury:  'data/injury.json',
   };
-
   await Promise.all(
     Object.entries(sources).map(async ([key, path]) => {
       try {
@@ -35,7 +21,7 @@ async function loadModuleData() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         DATA[key] = await res.json();
       } catch (err) {
-        console.warn(`[BB Companion] Could not load ${path}:`, err);
+        console.warn(`[BB] Could not load ${path}:`, err);
       }
     })
   );
@@ -43,19 +29,21 @@ async function loadModuleData() {
 
 /* ── Lookup helpers ── */
 
-/* Exact roll match — for kickoff-events.json and prayers.json (each entry has a `roll` field) */
 function exactLookup(table, roll) {
-  return (table ?? []).find(e => e.roll === roll) ?? null;
+  if (!table) { console.error('[BB] exactLookup: table is null'); return null; }
+  const r = table.find(e => e.roll === roll) ?? null;
+  if (!r) console.error(`[BB] exactLookup: no entry for roll=${roll}`);
+  return r;
 }
 
-/* Range match — for weather.json (rollMin/rollMax) and injury tables (min/max) */
 function rangeLookup(table, roll, minKey = 'min', maxKey = 'max') {
-  return (table ?? []).find(e => roll >= e[minKey] && roll <= e[maxKey]) ?? null;
+  if (!table) { console.error('[BB] rangeLookup: table is null'); return null; }
+  const r = table.find(e => roll >= e[minKey] && roll <= e[maxKey]) ?? null;
+  if (!r) console.error(`[BB] rangeLookup: no entry roll=${roll} (${minKey}/${maxKey})`);
+  return r;
 }
 
-/* ────────────────────────────────────────────────────────
-   DIRECTION LABELS  (D8 throw-in template)
-   ──────────────────────────────────────────────────────── */
+/* ── Direction labels ── */
 
 const DIRECTION_LABELS = {
   1: '↖ Up-Left',   2: '↑ Up',    3: '↗ Up-Right',
@@ -63,16 +51,113 @@ const DIRECTION_LABELS = {
   6: '↙ Down-Left', 7: '↓ Down',  8: '↘ Down-Right',
 };
 
-/* ────────────────────────────────────────────────────────
-   GAME BAR STATE
-   ──────────────────────────────────────────────────────── */
+/* ── Game bar local state ── */
 const gbState = {
-  half:          1,
-  currentTurn:   0,
-  scores:        { home: 0, away: 0 },
-  rerolls:       { home: 0, away: 0 },
-  rerollsTotal:  { home: 0, away: 0 },
+  half:        1,
+  currentTurn: 0,
+  scores:      { home: 0, away: 0 },
 };
+
+/* ════════════════════════════════════════════════════════
+   DICE MODE TOGGLE
+   Injects a ⚄ Digital / 🎲 Physical pill into every
+   [data-wizard] panel header. Persists per-wizard.
+   ════════════════════════════════════════════════════════ */
+
+function initDiceModeToggles() {
+  document.querySelectorAll('.bb-panel[data-wizard]').forEach(panel => {
+    const wizKey  = panel.dataset.wizard;
+    const header  = panel.querySelector('.panel-header');
+    const closeBtn = header?.querySelector('.panel-close');
+    if (!header) return;
+
+    const pill = document.createElement('div');
+    pill.className = 'dmt-pill';
+
+    ['digital', 'physical'].forEach(mode => {
+      const btn = document.createElement('button');
+      btn.type      = 'button';
+      btn.className = 'dmt-btn';
+      btn.dataset.mode = mode;
+      btn.textContent  = mode === 'digital' ? '⚄ Digital' : '🎲 Physical';
+      if (window.BBSettings.getWizardDiceMode(wizKey) === mode) btn.classList.add('active');
+
+      btn.addEventListener('click', () => {
+        pill.querySelectorAll('.dmt-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const s = window.BBSettings.getSettings();
+        s.diceModeOverrides[wizKey] = mode;
+        window.BBSettings.saveSetting('diceModeOverrides', s.diceModeOverrides);
+        panel.dispatchEvent(new CustomEvent('bb:diceMode', { detail: { mode }, bubbles: false }));
+      });
+      pill.appendChild(btn);
+    });
+
+    if (closeBtn) header.insertBefore(pill, closeBtn);
+    else header.appendChild(pill);
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   WEATHER CHIP SYSTEM
+   ════════════════════════════════════════════════════════ */
+
+const WEATHER_CHIP_WIZARDS = ['pass', 'foul', 'injury'];
+
+function refreshWeatherChips() {
+  const w = window.GameState?.currentWeather ?? null;
+
+  WEATHER_CHIP_WIZARDS.forEach(key => {
+    const slot = document.getElementById(`wchip-${key}`);
+    if (!slot) return;
+
+    if (!w) { slot.innerHTML = ''; slot.hidden = true; return; }
+
+    const isPerfect = !w.effect || w.effect === 'No effect';
+    slot.innerHTML = '';
+
+    const chip = document.createElement('button');
+    chip.type      = 'button';
+    chip.className = `weather-chip${isPerfect ? ' weather-chip-perfect' : ''}`;
+    chip.innerHTML = `${h(w.emoji)} <strong>${h(w.name)}</strong>: ${h(w.effect || 'No effect')} <span class="wchip-expand">ⓘ</span>`;
+    slot.hidden = false;
+
+    /* Toggle full description on tap */
+    chip.addEventListener('click', () => {
+      let desc = slot.querySelector('.weather-chip-desc');
+      if (desc) { desc.remove(); return; }
+      desc = document.createElement('div');
+      desc.className   = 'weather-chip-desc';
+      desc.textContent = w.desc;
+      slot.appendChild(desc);
+    });
+    slot.appendChild(chip);
+  });
+
+  /* Auto-apply weather modifiers to the pass wizard */
+  autoApplyWeatherToPass(w);
+}
+
+function autoApplyWeatherToPass(_w) {
+  /* Pass wizard (Sprint 3) manages its own modifier state — no static toggles to click. */
+}
+
+/* ════════════════════════════════════════════════════════
+   PHYSICAL ZONE HELPERS
+   ════════════════════════════════════════════════════════ */
+
+/* Creates (or finds) a .physical-zone div inserted right after refEl */
+function ensurePhysZone(refEl, id) {
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('div');
+    el.id        = id;
+    el.className = 'physical-zone';
+    el.hidden    = true;
+    refEl.insertAdjacentElement('afterend', el);
+  }
+  return el;
+}
 
 /* ════════════════════════════════════════════════════════
    PANEL OPEN / CLOSE / TOGGLE
@@ -87,74 +172,49 @@ function openPanel(id) {
   if (!panel) return;
   panel.classList.remove('panel-closing');
   panel.removeAttribute('hidden');
-  const btn = getModuleBtn(id);
-  if (btn) btn.setAttribute('aria-expanded', 'true');
-  /* Show backdrop */
+  getModuleBtn(id)?.setAttribute('aria-expanded', 'true');
   document.getElementById('panel-backdrop')?.classList.add('active');
 }
 
 function closePanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   if (!panel || panel.hasAttribute('hidden')) return;
-
   panel.classList.add('panel-closing');
   panel.addEventListener('animationend', () => {
-    /* Guard: if openPanel() removed 'panel-closing' mid-animation, abort */
     if (!panel.classList.contains('panel-closing')) return;
     panel.classList.remove('panel-closing');
     panel.setAttribute('hidden', '');
-    /* Hide backdrop only when no panels remain open */
     const anyOpen = document.querySelectorAll('.bb-panel:not([hidden])').length > 0;
-    if (!anyOpen) {
-      document.getElementById('panel-backdrop')?.classList.remove('active');
-    }
+    if (!anyOpen) document.getElementById('panel-backdrop')?.classList.remove('active');
   }, { once: true });
-
-  const btn = getModuleBtn(id);
-  if (btn) btn.setAttribute('aria-expanded', 'false');
+  getModuleBtn(id)?.setAttribute('aria-expanded', 'false');
 }
 
 function togglePanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   if (!panel) return;
-
-  /* If this panel is already open, just close it */
-  if (!panel.hasAttribute('hidden')) {
-    closePanel(id);
-    return;
-  }
-
-  /* Mutual exclusion — close any other open panels first */
-  document.querySelectorAll('.bb-panel:not([hidden])').forEach(openEl => {
-    const openId = openEl.id.replace('panel-', '');
-    if (openId !== id) closePanel(openId);
+  if (!panel.hasAttribute('hidden')) { closePanel(id); return; }
+  document.querySelectorAll('.bb-panel:not([hidden])').forEach(el => {
+    closePanel(el.id.replace('panel-', ''));
   });
-
   openPanel(id);
 }
 
 function initPanels() {
-  /* Module buttons */
   document.querySelectorAll('.module-btn').forEach(btn => {
     btn.addEventListener('click', () => togglePanel(btn.dataset.panel));
   });
-
-  /* Panel close buttons */
   document.querySelectorAll('.panel-close').forEach(btn => {
     btn.addEventListener('click', () => {
       const panel = btn.closest('.bb-panel');
       if (panel) closePanel(panel.id.replace('panel-', ''));
     });
   });
-
-  /* Backdrop click — close any open panel */
   document.getElementById('panel-backdrop')?.addEventListener('click', () => {
-    document.querySelectorAll('.bb-panel:not([hidden])').forEach(openEl => {
-      closePanel(openEl.id.replace('panel-', ''));
+    document.querySelectorAll('.bb-panel:not([hidden])').forEach(el => {
+      closePanel(el.id.replace('panel-', ''));
     });
   });
-
-  /* Escape: close last open panel */
   document.addEventListener('keydown', e => {
     if (e.key !== 'Escape') return;
     const open = [...document.querySelectorAll('.bb-panel:not([hidden])')];
@@ -172,18 +232,13 @@ function initSubTabs() {
       tab.addEventListener('click', () => {
         const targetId = `tab-${tab.dataset.tab}`;
         const body     = tab.closest('.panel-body');
-
         tabGroup.querySelectorAll('.sub-tab').forEach(t => {
           t.classList.remove('active');
           t.setAttribute('aria-selected', 'false');
         });
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
-
-        body.querySelectorAll('.sub-tab-panel').forEach(p => {
-          p.classList.remove('active');
-          p.hidden = true;
-        });
+        body.querySelectorAll('.sub-tab-panel').forEach(p => { p.classList.remove('active'); p.hidden = true; });
         const target = document.getElementById(targetId);
         if (target) { target.classList.add('active'); target.hidden = false; }
       });
@@ -198,17 +253,14 @@ function initSubTabs() {
 function initAccordions() {
   document.querySelectorAll('.accordion-toggle').forEach(toggle => {
     toggle.addEventListener('click', () => {
-      const bodyId = toggle.getAttribute('aria-controls');
-      const body   = document.getElementById(bodyId);
+      const body   = document.getElementById(toggle.getAttribute('aria-controls'));
       const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-
       toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
       body.classList.toggle('is-open', !isOpen);
     });
   });
 }
 
-/* Called by script.js after a team loads */
 function openAccordion(side) {
   const toggle = document.getElementById(`accord-${side}`);
   const body   = document.getElementById(`accord-${side}-body`);
@@ -228,17 +280,11 @@ function setAccordionLabel(side, name) {
 
 function initGameBar() {
   ['home', 'away'].forEach(side => {
-    document.getElementById(`gb-${side}-plus`)
-      ?.addEventListener('click', () => adjustScore(side, +1));
-    document.getElementById(`gb-${side}-minus`)
-      ?.addEventListener('click', () => adjustScore(side, -1));
+    document.getElementById(`gb-${side}-plus`)?.addEventListener('click',  () => adjustScore(side, +1));
+    document.getElementById(`gb-${side}-minus`)?.addEventListener('click', () => adjustScore(side, -1));
   });
-
-  document.getElementById('gb-next-turn')
-    ?.addEventListener('click', () => advanceTurn(+1));
-  document.getElementById('gb-prev-turn')
-    ?.addEventListener('click', () => advanceTurn(-1));
-
+  document.getElementById('gb-next-turn')?.addEventListener('click', () => advanceTurn(+1));
+  document.getElementById('gb-prev-turn')?.addEventListener('click', () => advanceTurn(-1));
   buildTurnPips();
   renderTurn();
 }
@@ -275,17 +321,12 @@ function renderTurn() {
     pip.classList.toggle('current', turn === gbState.currentTurn);
   });
   const label = document.getElementById('gb-turn-label');
-  if (label) {
-    label.textContent = gbState.currentTurn === 0
-      ? 'PRE-GAME'
-      : `TURN ${gbState.currentTurn}`;
-  }
+  if (label) label.textContent = gbState.currentTurn === 0 ? 'PRE-GAME' : `TURN ${gbState.currentTurn}`;
 }
 
-/* Called from script.js after team load */
 function setRerolls(side, count) {
-  gbState.rerollsTotal[side] = count;
-  gbState.rerolls[side]      = count;
+  window.GameState.rerollsTotal[side] = count;
+  window.GameState.rerolls[side]      = count;
   renderRerollPips(side);
 }
 
@@ -293,9 +334,8 @@ function renderRerollPips(side) {
   const container = document.getElementById(`gb-${side}-rr-pips`);
   if (!container) return;
   container.innerHTML = '';
-  const total = gbState.rerollsTotal[side];
-  const used  = total - gbState.rerolls[side];
-
+  const total = window.GameState.rerollsTotal[side];
+  const used  = total - window.GameState.rerolls[side];
   for (let i = 0; i < total; i++) {
     const isUsed = i < used;
     const pip    = document.createElement('span');
@@ -304,9 +344,9 @@ function renderRerollPips(side) {
     pip.setAttribute('role', 'button');
     pip.setAttribute('tabindex', '0');
     pip.addEventListener('click', () => {
-      gbState.rerolls[side] = isUsed
-        ? Math.min(total, gbState.rerolls[side] + 1)
-        : Math.max(0,     gbState.rerolls[side] - 1);
+      window.GameState.rerolls[side] = isUsed
+        ? Math.min(total, window.GameState.rerolls[side] + 1)
+        : Math.max(0,     window.GameState.rerolls[side] - 1);
       renderRerollPips(side);
     });
     container.appendChild(pip);
@@ -314,22 +354,26 @@ function renderRerollPips(side) {
 }
 
 /* ════════════════════════════════════════════════════════
+   RE-ROLL BUTTON HELPER
+   ════════════════════════════════════════════════════════ */
+
+function addRerollBtn(resultEl, onReroll) {
+  resultEl.querySelectorAll('.reroll-btn').forEach(b => b.remove());
+  const btn = document.createElement('button');
+  btn.className   = 'reroll-btn';
+  btn.textContent = '↺ Re-roll';
+  btn.addEventListener('click', () => { btn.remove(); onReroll(); }, { once: true });
+  resultEl.appendChild(btn);
+}
+
+/* ════════════════════════════════════════════════════════
    MODULE: KICKOFF EVENT
    ════════════════════════════════════════════════════════ */
 
-/* Which team is primarily affected by each kickoff event */
 const KICKOFF_AFFECTS = {
-  2:  'both',       /* Get the Ref     — both receive a Bribe */
-  3:  'both',       /* Time-Out!       — both Turn Markers move */
-  4:  'kicking',    /* Solid Defence   — kicking team repositions */
-  5:  'receiving',  /* High Kick       — receiving team places player */
-  6:  'both',       /* Cheering Fans   — both roll, winner gets assist */
-  7:  'both',       /* Brilliant Coaching — both roll, winner gets re-roll */
-  8:  'both',       /* Changing Weather — reroll weather for everyone */
-  9:  'receiving',  /* Quick Snap!     — receiving team gets free move */
-  10: 'kicking',    /* Charge!         — kicking team gets free moves */
-  11: 'both',       /* Dodgy Snack     — both roll, loser takes penalty */
-  12: 'both',       /* Pitch Invasion! — both roll, loser gets D3 stunned */
+  2: 'both', 3: 'both', 4: 'kicking', 5: 'receiving',
+  6: 'both', 7: 'both', 8: 'both',    9: 'receiving',
+  10: 'kicking', 11: 'both', 12: 'both',
 };
 
 function buildKickoffChip(affects) {
@@ -339,32 +383,70 @@ function buildKickoffChip(affects) {
 }
 
 function initKickoffModule() {
+  const panel    = document.getElementById('panel-kickoff');
   const rollBtn  = document.getElementById('kickoff-roll-btn');
   const resultEl = document.getElementById('kickoff-result');
+  const diceTray = document.getElementById('kickoff-dice-tray');
   const d1El     = document.getElementById('kickoff-d1');
   const d2El     = document.getElementById('kickoff-d2');
   if (!rollBtn) return;
 
-  rollBtn.addEventListener('click', async () => {
-    rollBtn.disabled = true;
-    resultEl.hidden  = true;
+  const physZone = ensurePhysZone(diceTray, 'kickoff-phys');
 
-    const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
-    const ev      = exactLookup(DATA.kickoff, total)
-                 ?? { name: 'Unknown Event', desc: 'No entry for this roll.' };
+  function processRoll(total, d1, d2) {
+    const ev      = exactLookup(DATA.kickoff, total) ?? { name: 'Unknown Event', desc: 'No entry.' };
     const affects = KICKOFF_AFFECTS[total] ?? 'both';
-
+    const breakdownHtml = d1 !== undefined
+      ? `<div class="result-roll-breakdown">${d1} + ${d2}</div>`
+      : '';
     resultEl.innerHTML = `
       <div class="result-roll-num">${total}</div>
-      <div class="result-roll-breakdown">${d1} + ${d2}</div>
+      ${breakdownHtml}
       <div class="result-divider"></div>
       <div class="result-name">${h(ev.name)}</div>
       ${buildKickoffChip(affects)}
       <p class="result-desc">${h(ev.desc)}</p>
     `;
-    resultEl.hidden  = false;
+    resultEl.hidden = false;
+    addRerollBtn(resultEl, doRoll);
+  }
+
+  async function doRoll() {
+    rollBtn.disabled = true;
+    resultEl.hidden  = true;
+    const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
+    processRoll(total, d1, d2);
     rollBtn.disabled = false;
-  });
+  }
+
+  function buildPhysButtons() {
+    return Array.from({ length: 11 }, (_, i) => {
+      const total = i + 2;
+      const ev = exactLookup(DATA.kickoff, total);
+      return { value: total, label: ev?.name ?? '?' };
+    });
+  }
+
+  function showPhys() {
+    diceTray.hidden = true;
+    rollBtn.hidden  = true;
+    window.PhysicalDice.showPhysicalButtons(physZone, {
+      buttons: buildPhysButtons(), columns: 4,
+      onSelect(total) { resultEl.hidden = true; processRoll(total); },
+    });
+    physZone.hidden = false;
+  }
+
+  function showDigital() {
+    physZone.hidden  = true;
+    diceTray.hidden  = false;
+    rollBtn.hidden   = false;
+  }
+
+  panel?.addEventListener('bb:diceMode', e => e.detail.mode === 'physical' ? showPhys() : showDigital());
+  rollBtn.addEventListener('click', doRoll);
+
+  if (window.BBSettings.getWizardDiceMode('kickoff') === 'physical') showPhys();
 }
 
 /* ════════════════════════════════════════════════════════
@@ -372,41 +454,85 @@ function initKickoffModule() {
    ════════════════════════════════════════════════════════ */
 
 function initWeatherModule() {
+  const panel    = document.getElementById('panel-weather');
   const rollBtn  = document.getElementById('weather-roll-btn');
   const resultEl = document.getElementById('weather-result');
+  const diceTray = document.getElementById('weather-dice-tray');
   const d1El     = document.getElementById('weather-d1');
   const d2El     = document.getElementById('weather-d2');
   if (!rollBtn) return;
 
-  rollBtn.addEventListener('click', async () => {
-    rollBtn.disabled = true;
-    resultEl.hidden  = true;
+  const physZone = ensurePhysZone(diceTray, 'weather-phys');
 
-    const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
+  function processRoll(total, d1, d2) {
     const w = rangeLookup(DATA.weather, total, 'rollMin', 'rollMax')
-           ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '' };
+           ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '', rollMin: total, rollMax: total };
 
-    const isPerfect  = (w.effect === 'No effect' || !w.effect);
+    window.GameState.currentWeather = w;
+    refreshWeatherChips();
+
+    const isPerfect  = !w.effect || w.effect === 'No effect';
     const effectHtml = isPerfect
       ? `<span class="result-chip result-chip-ok">✓ No mechanical effect</span>`
       : `<span class="result-chip result-chip-warn">⚠ ${h(w.effect)}</span>`;
-
-    /* Roll range label: e.g. "2–2" or "4–10" */
-    const rangeLabel = (w.rollMin === w.rollMax)
-      ? `rolls ${w.rollMin}`
-      : `rolls ${w.rollMin}–${w.rollMax}`;
+    const rangeLabel = w.rollMin === w.rollMax ? `rolls ${w.rollMin}` : `rolls ${w.rollMin}–${w.rollMax}`;
+    const breakdownHtml = d1 !== undefined
+      ? `<div class="result-roll-breakdown">${d1} + ${d2} &ensp;·&ensp; <em>${rangeLabel}</em></div>`
+      : `<div class="result-roll-breakdown"><em>${rangeLabel}</em></div>`;
 
     resultEl.innerHTML = `
       <div class="result-roll-num">${total}</div>
-      <div class="result-roll-breakdown">${d1} + ${d2} &ensp;·&ensp; <em>${rangeLabel}</em></div>
+      ${breakdownHtml}
       <div class="result-divider"></div>
       <div class="result-name">${w.emoji} ${h(w.name)}</div>
       ${effectHtml}
       <p class="result-desc">${h(w.desc)}</p>
     `;
-    resultEl.hidden  = false;
+    resultEl.hidden = false;
+    addRerollBtn(resultEl, doRoll);
+  }
+
+  async function doRoll() {
+    rollBtn.disabled = true;
+    resultEl.hidden  = true;
+    const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
+    processRoll(total, d1, d2);
     rollBtn.disabled = false;
-  });
+  }
+
+  function buildPhysButtons() {
+    return Array.from({ length: 11 }, (_, i) => {
+      const total = i + 2;
+      const w = rangeLookup(DATA.weather, total, 'rollMin', 'rollMax');
+      const hasEffect = w && w.effect && w.effect !== 'No effect';
+      return {
+        value: total,
+        label: w ? `${w.emoji} ${w.name}` : '?',
+        cls:   hasEffect ? 'phys-warn' : 'phys-neutral',
+      };
+    });
+  }
+
+  function showPhys() {
+    diceTray.hidden = true;
+    rollBtn.hidden  = true;
+    window.PhysicalDice.showPhysicalButtons(physZone, {
+      buttons: buildPhysButtons(), columns: 4,
+      onSelect(total) { resultEl.hidden = true; processRoll(total); },
+    });
+    physZone.hidden = false;
+  }
+
+  function showDigital() {
+    physZone.hidden = true;
+    diceTray.hidden = false;
+    rollBtn.hidden  = false;
+  }
+
+  panel?.addEventListener('bb:diceMode', e => e.detail.mode === 'physical' ? showPhys() : showDigital());
+  rollBtn.addEventListener('click', doRoll);
+
+  if (window.BBSettings.getWizardDiceMode('weather') === 'physical') showPhys();
 }
 
 /* ════════════════════════════════════════════════════════
@@ -414,32 +540,67 @@ function initWeatherModule() {
    ════════════════════════════════════════════════════════ */
 
 function initPrayersModule() {
+  const panel    = document.getElementById('panel-prayers');
   const rollBtn  = document.getElementById('prayers-roll-btn');
   const resultEl = document.getElementById('prayers-result');
-  const d1El     = document.getElementById('prayers-d1');  /* data-sides="16" in HTML */
+  const diceTray = document.getElementById('prayers-dice-tray');
+  const d1El     = document.getElementById('prayers-d1');
   if (!rollBtn) return;
 
-  rollBtn.addEventListener('click', async () => {
-    rollBtn.disabled = true;
-    resultEl.hidden  = true;
+  const physZone = ensurePhysZone(diceTray, 'prayers-phys');
 
-    /* rollDieElement reads data-sides="16" → rolls 1–16 */
-    const val    = await Dice.rollDieElement(d1El);
-    const prayer = exactLookup(DATA.prayers, val)
-                ?? { name: 'Unknown Blessing', desc: '' };
-
+  function processRoll(val) {
+    const prayer = exactLookup(DATA.prayers, val) ?? { name: 'Unknown Blessing', desc: '' };
     resultEl.innerHTML = `
       <div class="result-roll-num">${val}</div>
       <div class="result-name">✦ ${h(prayer.name)}</div>
       <p class="result-desc">${h(prayer.desc)}</p>
     `;
-    resultEl.hidden  = false;
+    resultEl.hidden = false;
+    addRerollBtn(resultEl, doRoll);
+  }
+
+  async function doRoll() {
+    rollBtn.disabled = true;
+    resultEl.hidden  = true;
+    const val = await Dice.rollDieElement(d1El);
+    processRoll(val);
     rollBtn.disabled = false;
-  });
+  }
+
+  function buildPhysButtons() {
+    return Array.from({ length: 16 }, (_, i) => {
+      const val = i + 1;
+      const p   = exactLookup(DATA.prayers, val);
+      return { value: val, label: p?.name ?? '?' };
+    });
+  }
+
+  function showPhys() {
+    diceTray.hidden = true;
+    rollBtn.hidden  = true;
+    window.PhysicalDice.showPhysicalButtons(physZone, {
+      buttons: buildPhysButtons(), columns: 4,
+      onSelect(val) { resultEl.hidden = true; processRoll(val); },
+    });
+    physZone.hidden = false;
+  }
+
+  function showDigital() {
+    physZone.hidden = true;
+    diceTray.hidden = false;
+    rollBtn.hidden  = false;
+  }
+
+  panel?.addEventListener('bb:diceMode', e => e.detail.mode === 'physical' ? showPhys() : showDigital());
+  rollBtn.addEventListener('click', doRoll);
+
+  if (window.BBSettings.getWizardDiceMode('prayers') === 'physical') showPhys();
 }
 
 /* ════════════════════════════════════════════════════════
    MODULE: BALL SCATTER / BOUNCE / THROW-IN
+   Physical mode adds compass buttons for each D8.
    ════════════════════════════════════════════════════════ */
 
 function initScatterModule() {
@@ -470,6 +631,8 @@ function initScatterModule() {
       return `<div class="result-name">Thrown in ${dist} square${dist !== 1 ? 's' : ''}</div>
               <div class="result-direction">${DIRECTION_LABELS[dir] ?? dir}</div>`;
     });
+
+  initScatterPhysical();
 }
 
 function bindScatterRoll(prefix, dieIds, resultId, buildHtml) {
@@ -477,17 +640,17 @@ function bindScatterRoll(prefix, dieIds, resultId, buildHtml) {
   const resultEl = document.getElementById(resultId);
   if (!btn) return;
 
-  btn.addEventListener('click', async () => {
-    btn.disabled      = true;
-    resultEl.hidden   = true;
-
+  async function doRoll() {
+    btn.disabled    = true;
+    resultEl.hidden = true;
     const dies = dieIds.map(id => document.getElementById(id));
     const vals = await Promise.all(dies.map(d => Dice.rollDieElement(d)));
-
     resultEl.innerHTML = buildHtml({ vals });
-    resultEl.hidden  = false;
-    btn.disabled     = false;
-  });
+    resultEl.hidden = false;
+    addRerollBtn(resultEl, doRoll);
+    btn.disabled = false;
+  }
+  btn.addEventListener('click', doRoll);
 }
 
 function highlightCompass(compassId, activeDir) {
@@ -496,107 +659,322 @@ function highlightCompass(compassId, activeDir) {
   });
 }
 
+function initScatterPhysical() {
+  const panel = document.getElementById('panel-scatter');
+  if (!panel) return;
+
+  /* Build physical zones for each sub-tab */
+  function setupSubTab(prefix, hasDist, resultId, buildResultHtml) {
+    const trayId   = `${prefix}-dice-tray`;
+    const rollBtnId = `${prefix}-roll-btn`;
+    const diceTray  = document.getElementById(trayId);
+    const rollBtn   = document.getElementById(rollBtnId);
+    const resultEl  = document.getElementById(resultId);
+    if (!diceTray || !rollBtn) return;
+
+    const physZone = ensurePhysZone(diceTray, `${prefix}-phys`);
+
+    let selectedDist = null;
+    let selectedDir  = null;
+
+    function tryShowResult() {
+      if (hasDist && selectedDist === null) return;
+      if (selectedDir === null) return;
+      const dist = selectedDist ?? 1;
+      const dir  = selectedDir;
+      resultEl.innerHTML = buildResultHtml(dist, dir);
+      resultEl.hidden = false;
+      if (prefix === 'bounce') highlightCompass('bounce-compass', dir);
+    }
+
+    function buildPhysUI() {
+      physZone.innerHTML = '';
+      selectedDist = null;
+      selectedDir  = null;
+      if (resultEl) resultEl.hidden = true;
+
+      if (hasDist) {
+        const distLabel = document.createElement('div');
+        distLabel.className   = 'input-label';
+        distLabel.style.marginBottom = '0.3rem';
+        distLabel.textContent = 'Distance (D6)';
+        physZone.appendChild(distLabel);
+
+        const distZone = document.createElement('div');
+        physZone.appendChild(distZone);
+
+        window.PhysicalDice.showPhysicalButtons(distZone, {
+          buttons: Array.from({ length: 6 }, (_, i) => ({ value: i + 1, label: `${i + 1} sq` })),
+          columns: 6,
+          onSelect(val) { selectedDist = val; tryShowResult(); },
+        });
+
+        const dirLabel = document.createElement('div');
+        dirLabel.className   = 'input-label';
+        dirLabel.style.margin = '0.5rem 0 0.2rem';
+        dirLabel.textContent = 'Direction (D8)';
+        physZone.appendChild(dirLabel);
+      }
+
+      const compassZone = document.createElement('div');
+      physZone.appendChild(compassZone);
+
+      window.PhysicalDice.showCompassButtons(compassZone, val => {
+        selectedDir = val;
+        tryShowResult();
+      });
+    }
+
+    return { showPhys() { diceTray.hidden = true; rollBtn.hidden = true; physZone.hidden = false; buildPhysUI(); },
+             showDigital() { physZone.hidden = true; diceTray.hidden = false; rollBtn.hidden = false; } };
+  }
+
+  const deviationHandlers = setupSubTab('deviation', true, 'deviation-result',
+    (dist, dir) => `<div class="result-name">Deviates ${dist} square${dist !== 1 ? 's' : ''}</div>
+                    <div class="result-direction">${DIRECTION_LABELS[dir] ?? dir}</div>`);
+
+  const bounceHandlers = setupSubTab('bounce', false, 'bounce-result',
+    (_dist, dir) => `<div class="result-name">Ball bounces 1 square</div>
+                     <div class="result-direction">${DIRECTION_LABELS[dir] ?? dir}</div>`);
+
+  const throwinHandlers = setupSubTab('throwin', true, 'throwin-result',
+    (dist, dir) => `<div class="result-name">Thrown in ${dist} square${dist !== 1 ? 's' : ''}</div>
+                    <div class="result-direction">${DIRECTION_LABELS[dir] ?? dir}</div>`);
+
+  function applyMode(mode) {
+    const isPhys = mode === 'physical';
+    deviationHandlers?.[isPhys ? 'showPhys' : 'showDigital']?.();
+    bounceHandlers   ?.[isPhys ? 'showPhys' : 'showDigital']?.();
+    throwinHandlers  ?.[isPhys ? 'showPhys' : 'showDigital']?.();
+  }
+
+  panel.addEventListener('bb:diceMode', e => applyMode(e.detail.mode));
+  if (window.BBSettings.getWizardDiceMode('scatter') === 'physical') applyMode('physical');
+}
+
 /* ════════════════════════════════════════════════════════
-   MODULE: ARMOUR & INJURY  (3-step: AV → Injury → Casualty)
+   MODULE: ARMOUR & INJURY
+   Three results shown simultaneously (never replaced):
+     #injury-result     — armour check
+     #injury-inj-result — injury table
+     #casualty-result   — casualty D16
+
+   Physical mode:
+     • Armour physical buttons rebuild when AV or mods change
+     • After armour breaks → injury physical buttons appear
+     • After Casualty! → casualty physical buttons appear
+
+   Re-roll buttons:
+     • Armour holds → re-roll restarts full sequence
+     • Injury shown → re-roll re-rolls injury only (not armour)
+     • Casualty → no re-roll
    ════════════════════════════════════════════════════════ */
 
 function initInjuryModule() {
   let selectedAV = 8;
-  const mods     = { 'mighty-blow': false, 'dirty-player': false, stunty: false };
+  const mods = { 'mighty-blow': false, 'dirty-player': false, stunty: false };
 
-  /* AV picker */
-  document.getElementById('injury-av-picker')
-    ?.addEventListener('click', e => {
-      const btn = e.target.closest('.av-btn');
-      if (!btn) return;
-      document.querySelectorAll('.av-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedAV = parseInt(btn.dataset.av, 10);
-    });
+  const panel       = document.getElementById('panel-injury');
+  const avPicker    = document.getElementById('injury-av-picker');
+  const rollBtn     = document.getElementById('injury-roll-btn');
+  const avResultEl  = document.getElementById('injury-result');
+  const injResultEl = document.getElementById('injury-inj-result');
+  const casResultEl = document.getElementById('casualty-result');
+  const casTrayEl   = document.getElementById('casualty-dice-tray');
+  const diceTray    = document.getElementById('injury-dice-tray');
+  const d1El        = document.getElementById('injury-d1');
+  const d2El        = document.getElementById('injury-d2');
+  const casDieEl    = document.getElementById('injury-cas-d1');
+  if (!rollBtn) return;
 
-  /* Modifier toggles */
-  document.querySelectorAll('.mod-toggle').forEach(btn => {
+  /* Physical zones, inserted right after their digital counterparts */
+  const armourPhysZone = ensurePhysZone(diceTray,    'injury-armour-phys');
+  const injPhysZone    = ensurePhysZone(injResultEl,  'injury-inj-phys');
+  const casPhysZone    = ensurePhysZone(casTrayEl,    'injury-cas-phys');
+
+  avPicker?.addEventListener('click', e => {
+    const btn = e.target.closest('.av-btn');
+    if (!btn) return;
+    avPicker.querySelectorAll('.av-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedAV = parseInt(btn.dataset.av, 10);
+    if (currentMode() === 'physical') buildArmourPhysUI();
+  });
+
+  document.getElementById('panel-injury')?.querySelectorAll('.mod-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const key = btn.dataset.mod;
+      if (key === undefined) return;
       mods[key] = !mods[key];
       btn.classList.toggle('active', mods[key]);
+      if (currentMode() === 'physical') buildArmourPhysUI();
     });
   });
 
-  const rollBtn     = document.getElementById('injury-roll-btn');
-  const resultEl    = document.getElementById('injury-result');
-  const casResultEl = document.getElementById('casualty-result');
-  const casTrayEl   = document.getElementById('casualty-dice-tray');
-  const d1El        = document.getElementById('injury-d1');
-  const d2El        = document.getElementById('injury-d2');
-  const casDieEl    = document.getElementById('injury-cas-d1');  /* data-sides="16" */
-  if (!rollBtn) return;
+  function currentMode() { return window.BBSettings.getWizardDiceMode('injury'); }
+  function avMod()       { return (mods['mighty-blow'] ? 1 : 0) + (mods['dirty-player'] ? 1 : 0); }
 
-  rollBtn.addEventListener('click', async () => {
-    rollBtn.disabled = true;
-    resultEl.hidden  = true;
-    if (casResultEl) casResultEl.hidden = true;
-    if (casTrayEl)   casTrayEl.hidden   = true;
+  /* ── Physical button builders ── */
 
-    /* ── Step 1: Armour roll (2D6) ── */
-    const { d1, d2, total: avTotal } = await Dice.roll2D6(d1El, d2El);
-    const avMod    = (mods['mighty-blow'] ? 1 : 0) + (mods['dirty-player'] ? 1 : 0);
-    const avModded = avTotal + avMod;
-    const modNote  = avMod ? ` (+${avMod})` : '';
+  function armourPhysButtons() {
+    const mod = avMod();
+    return Array.from({ length: 11 }, (_, i) => {
+      const roll   = i + 2;
+      const modded = roll + mod;
+      const breaks = modded >= selectedAV;
+      return {
+        value: roll,
+        label: breaks ? `Breaks! (${modded})` : `Holds (${modded})`,
+        cls:   breaks ? 'phys-bad' : 'phys-muted',
+      };
+    });
+  }
 
-    if (avModded < selectedAV) {
-      /* Armour holds — no injury */
-      resultEl.innerHTML = `
-        <div class="result-roll-num">${avTotal}${modNote}</div>
-        <div class="result-roll-breakdown">${d1} + ${d2}${avMod ? ` + ${avMod} modifier` : ''} vs AV${selectedAV}+</div>
+  function injuryPhysButtons() {
+    const mod   = avMod();
+    const table = mods.stunty ? DATA.injury?.stunty : DATA.injury?.injury;
+    const CLS   = { 'result-ok': 'phys-neutral', 'result-ko': 'phys-warn', 'result-cas': 'phys-bad' };
+    return Array.from({ length: 11 }, (_, i) => {
+      const roll   = i + 2;
+      const modded = Math.min(12, roll + mod);
+      const entry  = rangeLookup(table, modded);
+      return { value: roll, label: entry?.result ?? '?', cls: CLS[entry?.['class']] ?? 'phys-neutral' };
+    });
+  }
+
+  function casualtyPhysButtons() {
+    const CLS = { 'result-ok': 'phys-neutral', 'result-ko': 'phys-warn', 'result-cas': 'phys-bad' };
+    return Array.from({ length: 16 }, (_, i) => {
+      const val   = i + 1;
+      const entry = rangeLookup(DATA.injury?.casualty, val);
+      return { value: val, label: entry?.result ?? '?', cls: CLS[entry?.['class']] ?? 'phys-neutral' };
+    });
+  }
+
+  /* ── Physical UI builders ── */
+
+  function buildArmourPhysUI() {
+    armourPhysZone.hidden = false;
+    injPhysZone.hidden    = true;
+    casPhysZone.hidden    = true;
+    injResultEl.hidden    = true;
+    casResultEl.hidden    = true;
+    casTrayEl.hidden      = true;
+
+    window.PhysicalDice.showPhysicalButtons(armourPhysZone, {
+      buttons: armourPhysButtons(), columns: 4,
+      onSelect(roll) { onPhysArmourSelect(roll); },
+    });
+  }
+
+  function onPhysArmourSelect(roll) {
+    const mod    = avMod();
+    const modded = roll + mod;
+    const modNote = mod ? ` (+${mod})` : '';
+
+    if (modded < selectedAV) {
+      avResultEl.innerHTML = `
+        <div class="result-roll-num">${roll}${modNote}</div>
+        <div class="result-roll-breakdown">Physical roll vs AV${selectedAV}+</div>
         <div class="result-name" style="color:var(--bb-gold,#D4AF37);">Armour Holds</div>
-        <p class="result-desc">Total ${avModded} is below AV ${selectedAV}+. No injury.</p>
+        <p class="result-desc">Total ${modded} is below AV ${selectedAV}+. No injury.</p>
       `;
-      resultEl.hidden  = false;
-      rollBtn.disabled = false;
+      avResultEl.hidden = false;
       return;
     }
 
-    /* ── Step 2: Armour broken — show interim, then roll injury ── */
-    resultEl.innerHTML = `
-      <div class="result-roll-num">${avTotal}${modNote}</div>
-      <div class="result-roll-breakdown">${d1} + ${d2}${avMod ? ` + ${avMod} mod` : ''} vs AV${selectedAV}+</div>
+    avResultEl.innerHTML = `
+      <div class="result-roll-num">${roll}${modNote}</div>
+      <div class="result-roll-breakdown">Physical roll vs AV${selectedAV}+</div>
       <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
-      <p class="result-desc">Rolling on the Injury table…</p>
     `;
-    resultEl.hidden = false;
+    avResultEl.hidden = false;
 
-    await delay(450);
+    /* Show injury physical buttons below armour result */
+    buildInjuryPhysUI();
+  }
 
-    const { d1: i1, d2: i2, total: injTotal } = await Dice.roll2D6(d1El, d2El);
-    const injMod    = avMod;   /* Mighty Blow / Dirty Player apply to either Armour OR Injury — player chooses; here we apply to injury */
-    const injModded = Math.min(12, injTotal + injMod);
+  function buildInjuryPhysUI() {
+    injPhysZone.hidden = false;
+    window.PhysicalDice.showPhysicalButtons(injPhysZone, {
+      buttons: injuryPhysButtons(), columns: 4,
+      onSelect(roll) { onPhysInjurySelect(roll); },
+    });
+  }
 
-    const injTable = mods.stunty ? DATA.injury?.stunty : DATA.injury?.injury;
-    const inj      = rangeLookup(injTable, injModded)
-                  ?? { result: 'Unknown', 'class': '', desc: 'No entry for this roll.' };
+  function onPhysInjurySelect(roll) {
+    const mod    = avMod();
+    const modded = Math.min(12, roll + mod);
+    const table  = mods.stunty ? DATA.injury?.stunty : DATA.injury?.injury;
+    const inj    = rangeLookup(table, modded) ?? { result: 'Unknown', 'class': '', desc: '' };
 
-    resultEl.innerHTML = `
-      <div class="result-roll-num">${injTotal}${injMod ? ` (+${injMod})` : ''}</div>
-      <div class="result-roll-breakdown">${i1} + ${i2} — Injury table${injMod ? ` +${injMod}` : ''}${mods.stunty ? ' (Stunty)' : ''}</div>
+    injResultEl.innerHTML = `
+      <div class="result-roll-num">${roll}${mod ? ` (+${mod})` : ''}</div>
+      <div class="result-roll-breakdown">Physical — Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
       <div class="result-name ${inj['class']}">${h(inj.result)}</div>
       <p class="result-desc">${h(inj.desc)}</p>
     `;
+    injResultEl.hidden = false;
 
-    /* ── Step 3: Casualty roll (D16) — only for a Casualty! result ── */
-    if (inj.result === 'Casualty!' && casResultEl && casDieEl) {
+    if (inj.result !== 'Casualty!') {
+      addRerollBtn(injResultEl, buildInjuryPhysUI);
+    } else {
+      buildCasualtyPhysUI();
+    }
+  }
+
+  function buildCasualtyPhysUI() {
+    casPhysZone.hidden = false;
+    window.PhysicalDice.showPhysicalButtons(casPhysZone, {
+      buttons: casualtyPhysButtons(), columns: 4,
+      onSelect(val) { onPhysCasualtySelect(val); },
+    });
+  }
+
+  function onPhysCasualtySelect(val) {
+    const cas = rangeLookup(DATA.injury?.casualty, val) ?? { result: 'Unknown', 'class': '', desc: '' };
+    casResultEl.innerHTML = `
+      <div class="result-roll-num">${val}</div>
+      <div class="result-roll-breakdown">Physical — Casualty Table (D16)</div>
+      <div class="result-name ${cas['class']}">${h(cas.result)}</div>
+      <p class="result-desc">${h(cas.desc)}</p>
+    `;
+    casResultEl.hidden = false;
+    casTrayEl.hidden   = true;
+  }
+
+  /* ── Digital cascade ── */
+
+  async function doInjuryRoll(mod) {
+    injResultEl.hidden = true;
+    injPhysZone.hidden = true;
+    casResultEl.hidden = true;
+    casPhysZone.hidden = true;
+    casTrayEl.hidden   = true;
+
+    const { d1: i1, d2: i2, total: injTotal } = await Dice.roll2D6(d1El, d2El);
+    const injModded = Math.min(12, injTotal + mod);
+    const injTable  = mods.stunty ? DATA.injury?.stunty : DATA.injury?.injury;
+    const inj       = rangeLookup(injTable, injModded) ?? { result: 'Unknown', 'class': '', desc: '' };
+
+    injResultEl.innerHTML = `
+      <div class="result-roll-num">${injTotal}${mod ? ` (+${mod})` : ''}</div>
+      <div class="result-roll-breakdown">${i1} + ${i2} — Injury table${mod ? ` +${mod}` : ''}${mods.stunty ? ' (Stunty)' : ''}</div>
+      <div class="result-name ${inj['class']}">${h(inj.result)}</div>
+      <p class="result-desc">${h(inj.desc)}</p>
+    `;
+    injResultEl.hidden = false;
+
+    if (inj.result !== 'Casualty!') {
+      addRerollBtn(injResultEl, () => doInjuryRoll(mod));
+    } else if (casResultEl && casDieEl) {
       await delay(500);
-
-      if (casTrayEl) casTrayEl.hidden = false;
-      casResultEl.innerHTML = `<p class="result-desc" style="margin:0;">Rolling on the Casualty table (D16)…</p>`;
+      casTrayEl.hidden   = false;
+      casResultEl.innerHTML = `<p class="result-desc" style="margin:0;">Rolling Casualty table (D16)…</p>`;
       casResultEl.hidden = false;
-
       await delay(300);
-
       const casVal = await Dice.rollDieElement(casDieEl);
-      const cas    = rangeLookup(DATA.injury?.casualty, casVal)
-                  ?? { result: 'Unknown', 'class': '', desc: 'No entry for this roll.' };
-
+      const cas    = rangeLookup(DATA.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
       casResultEl.innerHTML = `
         <div class="result-roll-num">${casVal}</div>
         <div class="result-roll-breakdown">Casualty Table (D16)</div>
@@ -604,9 +982,72 @@ function initInjuryModule() {
         <p class="result-desc">${h(cas.desc)}</p>
       `;
     }
+  }
 
+  async function doArmourRoll() {
+    rollBtn.disabled    = true;
+    avResultEl.hidden   = true;
+    injResultEl.hidden  = true;
+    casResultEl.hidden  = true;
+    casTrayEl.hidden    = true;
+    injPhysZone.hidden  = true;
+    casPhysZone.hidden  = true;
+
+    const { d1, d2, total: avTotal } = await Dice.roll2D6(d1El, d2El);
+    const mod     = avMod();
+    const avModded = avTotal + mod;
+    const modNote  = mod ? ` (+${mod})` : '';
+
+    if (avModded < selectedAV) {
+      avResultEl.innerHTML = `
+        <div class="result-roll-num">${avTotal}${modNote}</div>
+        <div class="result-roll-breakdown">${d1} + ${d2}${mod ? ` + ${mod} modifier` : ''} vs AV${selectedAV}+</div>
+        <div class="result-name" style="color:var(--bb-gold,#D4AF37);">Armour Holds</div>
+        <p class="result-desc">Total ${avModded} is below AV ${selectedAV}+. No injury.</p>
+      `;
+      avResultEl.hidden = false;
+      addRerollBtn(avResultEl, doArmourRoll);
+      rollBtn.disabled = false;
+      return;
+    }
+
+    avResultEl.innerHTML = `
+      <div class="result-roll-num">${avTotal}${modNote}</div>
+      <div class="result-roll-breakdown">${d1} + ${d2}${mod ? ` + ${mod} mod` : ''} vs AV${selectedAV}+</div>
+      <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
+      <p class="result-desc">Rolling on the Injury table…</p>
+    `;
+    avResultEl.hidden = false;
+
+    await delay(450);
+    await doInjuryRoll(mod);
     rollBtn.disabled = false;
-  });
+  }
+
+  /* ── Mode switch ── */
+
+  function showPhys() {
+    diceTray.hidden  = true;
+    rollBtn.hidden   = true;
+    avResultEl.hidden  = true;
+    injResultEl.hidden = true;
+    casResultEl.hidden = true;
+    casTrayEl.hidden   = true;
+    buildArmourPhysUI();
+  }
+
+  function showDigital() {
+    armourPhysZone.hidden = true;
+    injPhysZone.hidden    = true;
+    casPhysZone.hidden    = true;
+    diceTray.hidden       = false;
+    rollBtn.hidden        = false;
+  }
+
+  panel?.addEventListener('bb:diceMode', e => e.detail.mode === 'physical' ? showPhys() : showDigital());
+  rollBtn.addEventListener('click', doArmourRoll);
+
+  if (currentMode() === 'physical') showPhys();
 }
 
 /* ════════════════════════════════════════════════════════
@@ -615,35 +1056,26 @@ function initInjuryModule() {
 
 function h(str) {
   return String(str ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function delay(ms) {
-  return new Promise(r => setTimeout(r, ms));
-}
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 /* ════════════════════════════════════════════════════════
    PUBLIC API
    ════════════════════════════════════════════════════════ */
 
 window.Panels = {
-  openPanel,
-  closePanel,
-  togglePanel,
-  openAccordion,
-  setAccordionLabel,
-  setRerolls,
+  openPanel, closePanel, togglePanel,
+  openAccordion, setAccordionLabel, setRerolls,
+  refreshWeatherChips,
 };
 
 /* ════════════════════════════════════════════════════════
-   BOOT — load JSON data, then initialise all modules
+   BOOT
    ════════════════════════════════════════════════════════ */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  /* Fetch all JSON data files before wiring up the modules */
   await loadModuleData();
 
   Dice.initAllDice();
@@ -651,6 +1083,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSubTabs();
   initAccordions();
   initGameBar();
+  initDiceModeToggles();
   initKickoffModule();
   initWeatherModule();
   initPrayersModule();
