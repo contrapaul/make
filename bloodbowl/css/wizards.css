@@ -33,7 +33,7 @@
 .stepper-btn:active { background: rgba(80, 130, 220, 0.6); }
 
 .stepper-val {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
   font-size:   1rem;
   color:       var(--bb-gold, #D4AF37);
@@ -65,7 +65,7 @@
 }
 
 .wizard-info-num {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
   font-size:   1.5rem;
   color:       var(--bb-gold, #D4AF37);
@@ -74,7 +74,7 @@
 }
 
 .wizard-info-note {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 500;
   font-size:   0.76rem;
   color:       rgba(150, 185, 255, 0.55);
@@ -108,7 +108,7 @@
 }
 
 .vs-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    800;
   font-size:      0.85rem;
   color:          rgba(120, 160, 230, 0.4);
@@ -143,7 +143,7 @@
 
 .block-face-sym   { font-size: 1.55rem; line-height: 1; }
 .block-face-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
   font-size:      0.44rem;
   text-transform: uppercase;
@@ -188,7 +188,7 @@
 }
 
 .block-result-row {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-size:   1rem;
   display:     flex;
   align-items: center;
