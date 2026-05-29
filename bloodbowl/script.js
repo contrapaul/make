@@ -64,9 +64,13 @@ async function init() {
       skillsList.map(s => [s.name.toLowerCase(), s])
     );
 
+    /* Expose teams data for TeamBuilder and DriveWizard */
+    window.BBTeamsData = teams;
+
     populateSelects();
     bindSelectListeners();
     bindGlobalListeners();
+    bindMyTeamsButtons();
   } catch (err) {
     console.error('[BB] Init failed:', err);
   }
@@ -125,6 +129,53 @@ async function loadTeam(side, teamId) {
   } catch (err) {
     console.error(`[BB] Failed to load team "${teamId}":`, err);
   }
+}
+
+/* ────────────────────────────────────────────────────────
+   CUSTOM TEAM LOADING (from TeamBuilder saved teams)
+   ──────────────────────────────────────────────────────── */
+
+async function loadCustomTeam(side, savedTeam) {
+  /* Find the base team entry for colors */
+  const baseEntry = state.teams.find(t => t.id === savedTeam.baseTeamId);
+
+  /* Build player objects in the same shape renderRoster expects */
+  const players = savedTeam.players.map(p => ({
+    id:          p.rosterSlotId ?? p.id,
+    name:        p.name,
+    position:    p.position,
+    ma:          p.ma, st: p.st, ag: p.ag, pa: p.pa, av: p.av,
+    skills:      [p.skills, ...(p.learnedSkills ?? [])].filter(Boolean).join(', '),
+    value:       p.value ?? 0,
+    qty:         null,
+    jerseyNumber: p.jerseyNumber,
+    isStarPlayer: false,
+  }));
+
+  state[side].team    = baseEntry ?? { id: savedTeam.baseTeamId, name: savedTeam.name, colors: {} };
+  state[side].players = players;
+
+  applyTeamColors(side, baseEntry?.colors ?? {});
+  renderRoster(side, players);
+
+  /* Sync companion UI with saved team data */
+  if (window.Panels) {
+    const gbSide = side === 'left' ? 'home' : 'away';
+    Panels.openAccordion(side);
+    Panels.setAccordionLabel(side, savedTeam.name);
+    Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
+  }
+}
+
+window.loadCustomTeam = loadCustomTeam;
+
+function bindMyTeamsButtons() {
+  ['left', 'right'].forEach(side => {
+    document.getElementById(`my-teams-${side}`)
+      ?.addEventListener('click', () => window.TeamBuilder?.openPicker(side));
+  });
+  document.getElementById('my-teams-nav')
+    ?.addEventListener('click', () => window.TeamBuilder?.open('list'));
 }
 
 function clearSide(side) {

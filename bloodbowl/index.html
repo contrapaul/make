@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/wizards.css">
   <link rel="stylesheet" href="css/pitch.css">
   <link rel="stylesheet" href="css/drive-wizard.css">
+  <link rel="stylesheet" href="css/team-builder.css">
 </head>
 <body>
 
@@ -23,6 +24,7 @@
         <a href="/#projects">Projects</a>
         <a href="/#files">Files</a>
         <a href="/#collab">Collaborate</a>
+        <button class="my-teams-nav-btn" id="my-teams-nav" style="background:transparent;border:none;cursor:pointer;color:inherit;font-size:inherit;font-family:inherit;padding:0;" title="Team Builder">My Teams</button>
         <a href="https://contrapaul.com" class="nav-home">← contrapaul.com</a>
       </nav>
     </div>
@@ -38,6 +40,7 @@
           <select class="team-select gb-select" id="select-left" aria-label="Select home team">
             <option value="">— Select Home Team —</option>
           </select>
+          <button class="my-teams-btn" id="my-teams-left" title="Load from My Teams">👥</button>
           <div class="gb-score-block">
             <span class="gb-score-label">TD</span>
             <button class="gb-score-btn" id="gb-home-minus" aria-label="Subtract home touchdown">−</button>
@@ -68,6 +71,7 @@
           <select class="team-select gb-select" id="select-right" aria-label="Select away team">
             <option value="">— Select Away Team —</option>
           </select>
+          <button class="my-teams-btn" id="my-teams-right" title="Load from My Teams">👥</button>
           <div class="gb-score-block">
             <span class="gb-score-label">TD</span>
             <button class="gb-score-btn" id="gb-away-minus" aria-label="Subtract away touchdown">−</button>
@@ -644,6 +648,13 @@
     <div class="skill-card" id="skill-card"></div>
   </div>
 
+  <!-- ═══════════════ TEAM BUILDER OVERLAY ═══════════════ -->
+  <div class="tb-overlay" id="tb-overlay" hidden aria-label="Team Builder" role="dialog" aria-modal="true">
+    <div class="tb-container" id="tb-container">
+      <!-- Built dynamically by team-builder.js -->
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <span class="footer-brand">contrapaul / make</span>
@@ -662,6 +673,7 @@
   <script src="js/physical-dice.js"></script>
   <script src="js/pitch.js"></script>
   <script src="js/drive-wizard.js"></script>
+  <script src="js/team-builder.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js"></script>
   <script src="script.js"></script>
