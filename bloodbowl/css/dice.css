@@ -74,7 +74,7 @@
   justify-content: center;
   grid-column: 1 / -1;
   grid-row: 1 / -1;
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
   font-size: 1.5rem;
   color: #0D0D0D;
@@ -83,7 +83,7 @@
 
 /* ── Die sub-label (e.g. "Squares", "Direction") ── */
 .die-sub-label {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 500;
   font-size: 0.55rem;
   color: #888;

@@ -1,17 +1,40 @@
 /* ============================================================
    Blood Bowl Companion — css/panels.css
-   Glass-blue game UI: module grid, panels, inputs, results.
+   Glass-blue game UI. Panels are FIXED MODALS — they float
+   above the page as overlays, not inline flow cards.
+   Font: JetBrains Mono throughout.
    ============================================================ */
 
 /* ────────────────────────────────────────────────────────
-   GAME TIMELINE (between game bar and module grid)
+   PANEL BACKDROP (dims page when any panel is open)
+   ──────────────────────────────────────────────────────── */
+
+.panel-backdrop {
+  position:                fixed;
+  inset:                   0;
+  z-index:                 350;
+  background:              rgba(0, 5, 20, 0.6);
+  backdrop-filter:         blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity:                 0;
+  pointer-events:          none;
+  transition:              opacity 0.22s ease;
+}
+
+.panel-backdrop.active {
+  opacity:        1;
+  pointer-events: auto;
+}
+
+/* ────────────────────────────────────────────────────────
+   GAME TIMELINE
    ──────────────────────────────────────────────────────── */
 
 .game-timeline-wrap {
   display:          flex;
   align-items:      center;
   gap:              0.6rem;
-  padding:          0.55rem 1.1rem;
+  padding:          0.5rem 1.1rem;
   background:       rgba(4, 10, 28, 0.75);
   border-bottom:    1px solid rgba(80, 130, 255, 0.18);
   overflow-x:       auto;
@@ -32,12 +55,13 @@
   flex-direction:  column;
   align-items:     center;
   gap:             0.18rem;
-  padding:         0.35rem 0.7rem;
+  padding:         0.32rem 0.65rem;
   background:      none;
   border:          1px solid transparent;
   border-radius:   6px;
   cursor:          pointer;
-  color:           rgba(180, 200, 240, 0.45);
+  color:           rgba(180, 200, 240, 0.4);
+  font-family:     'JetBrains Mono', monospace;
   transition:      color 0.2s, background 0.2s, border-color 0.2s, opacity 0.2s;
   flex-shrink:     0;
 }
@@ -55,42 +79,35 @@
   box-shadow:    0 0 12px rgba(60, 120, 255, 0.25);
 }
 
-.timeline-step.tl-done {
-  opacity: 0.38;
-  color:   rgba(140, 170, 220, 0.45);
-}
-
-.timeline-step.tl-future {
-  color: rgba(140, 170, 220, 0.38);
-}
+.timeline-step.tl-done    { opacity: 0.35; }
+.timeline-step.tl-future  { color: rgba(140, 170, 220, 0.35); }
 
 .tl-icon  { font-size: 1rem; line-height: 1; }
 .tl-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.52rem;
+  font-size:      0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   white-space:    nowrap;
 }
 
 .tl-sep {
-  font-size:  0.95rem;
-  color:      rgba(80, 120, 200, 0.25);
+  font-size:   0.9rem;
+  color:       rgba(80, 120, 200, 0.22);
   flex-shrink: 0;
-  padding:    0 0.1rem;
+  padding:     0 0.05rem;
   user-select: none;
 }
 
-/* ── Next-phase button ── */
 .timeline-next-btn {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.65rem;
+  font-size:      0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding:        0.35rem 0.8rem;
-  background:     rgba(212, 175, 55, 0.15);
+  padding:        0.32rem 0.75rem;
+  background:     rgba(212, 175, 55, 0.12);
   border:         1px solid rgba(212, 175, 55, 0.35);
   border-radius:  4px;
   color:          var(--bb-gold, #D4AF37);
@@ -101,7 +118,7 @@
 }
 
 .timeline-next-btn:hover {
-  background: rgba(212, 175, 55, 0.28);
+  background: rgba(212, 175, 55, 0.25);
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
@@ -111,14 +128,13 @@
 
 .module-section {
   background:    rgba(6, 14, 40, 0.85);
-  border-bottom: 1px solid rgba(60, 100, 200, 0.2);
-  padding:       0.9rem 1rem 0.85rem;
+  border-bottom: 1px solid rgba(60, 100, 200, 0.18);
+  padding:       0.85rem 1rem 0.8rem;
 }
 
-/* ── Module button grid ── */
 .module-grid {
   display:               grid;
-  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
   gap:                   0.5rem;
   max-width:             900px;
   margin:                0 auto;
@@ -129,148 +145,140 @@
   display:         flex;
   flex-direction:  column;
   align-items:     center;
-  gap:             0.35rem;
-  padding:         0.65rem 0.3rem 0.55rem;
+  gap:             0.32rem;
+  padding:         0.6rem 0.3rem 0.5rem;
   background:      rgba(10, 22, 65, 0.65);
-  border:          1px solid rgba(70, 110, 200, 0.22);
+  border:          1px solid rgba(70, 110, 200, 0.2);
   border-radius:   8px;
-  color:           rgba(190, 215, 255, 0.72);
+  color:           rgba(180, 210, 255, 0.65);
   cursor:          pointer;
   position:        relative;
   outline:         none;
-  transition:
-    background   0.18s ease,
-    border-color 0.18s ease,
-    color        0.18s ease,
-    transform    0.15s ease,
-    box-shadow   0.18s ease,
-    opacity      0.25s ease;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  transition:      background 0.16s, border-color 0.16s, color 0.16s,
+                   transform 0.14s, box-shadow 0.16s, opacity 0.25s;
 }
 
 .module-btn:hover {
-  background:    rgba(30, 70, 160, 0.55);
-  border-color:  rgba(100, 160, 255, 0.5);
-  color:         #fff;
-  transform:     translateY(-3px);
-  box-shadow:    0 6px 20px rgba(40, 90, 220, 0.35),
-                 0 0 0 1px rgba(80, 140, 255, 0.25);
+  background:   rgba(30, 70, 160, 0.55);
+  border-color: rgba(100, 160, 255, 0.5);
+  color:        #fff;
+  transform:    translateY(-2px);
+  box-shadow:   0 5px 16px rgba(40, 90, 220, 0.3);
 }
 
 .module-btn:focus-visible {
   border-color: var(--bb-gold, #D4AF37);
-  box-shadow:   0 0 0 2px rgba(212, 175, 55, 0.5);
+  box-shadow:   0 0 0 2px rgba(212, 175, 55, 0.45);
 }
 
-/* Active / open state — gold accent */
 .module-btn[aria-expanded="true"] {
-  background:    rgba(212, 175, 55, 0.18);
-  border-color:  rgba(212, 175, 55, 0.55);
-  color:         var(--bb-gold, #D4AF37);
-  box-shadow:    0 0 18px rgba(212, 175, 55, 0.25),
-                 inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transform:     translateY(-1px);
+  background:   rgba(212, 175, 55, 0.16);
+  border-color: rgba(212, 175, 55, 0.55);
+  color:        var(--bb-gold, #D4AF37);
+  box-shadow:   0 0 16px rgba(212, 175, 55, 0.22);
+  transform:    translateY(-1px);
 }
 
-/* Pointer triangle below active button */
 .module-btn[aria-expanded="true"]::after {
   content:      '';
   position:     absolute;
-  bottom:       -8px;
+  bottom:       -7px;
   left:         50%;
   transform:    translateX(-50%);
-  width:        0;
-  height:       0;
-  border-left:  7px solid transparent;
-  border-right: 7px solid transparent;
-  border-top:   7px solid rgba(212, 175, 55, 0.6);
+  width:        0; height: 0;
+  border-left:  6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top:   6px solid rgba(212, 175, 55, 0.55);
 }
 
-/* Dimmed state — module not available in current phase (soft hint only — still clickable) */
-.module-btn.module-dimmed {
-  opacity: 0.3;
-  filter: grayscale(0.5);
-}
-.module-btn.module-dimmed:hover {
-  opacity:    0.55;
-  filter:     none;
-  transform:  translateY(-1px);
-  box-shadow: 0 3px 10px rgba(80, 120, 200, 0.2);
-}
+/* Soft dimming for out-of-phase modules */
+.module-btn.module-dimmed { opacity: 0.28; filter: grayscale(0.5); }
+.module-btn.module-dimmed:hover { opacity: 0.55; filter: none; transform: translateY(-1px); }
 
-/* ── Module icon ── */
-.module-icon {
-  display:         flex;
-  align-items:     center;
-  justify-content: center;
-  width:           34px;
-  height:          34px;
-}
+.module-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
+.module-icon svg { width: 24px; height: 24px; }
 
-.module-icon svg {
-  width:  26px;
-  height: 26px;
-}
-
-/* ── Module label ── */
 .module-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.58rem;
+  font-size:      0.55rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   white-space:    nowrap;
 }
 
 /* ────────────────────────────────────────────────────────
-   PANELS ZONE
+   PANELS — FIXED MODAL OVERLAYS
+   Each panel floats above the page, centered.
+   No flow layout, no push-down, no slide.
    ──────────────────────────────────────────────────────── */
 
-.panels-zone {
-  display:        flex;
-  flex-direction: column;
-  gap:            0;
-}
-
-/* ── Individual panel — glass card ── */
-.bb-panel {
-  background:              rgba(8, 18, 52, 0.78);
-  backdrop-filter:         blur(18px) saturate(1.3);
-  -webkit-backdrop-filter: blur(18px) saturate(1.3);
-  border-bottom:           1px solid rgba(70, 115, 220, 0.22);
-  overflow:                hidden;
-  animation:               panelSlideIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes panelSlideIn {
-  0%   { opacity: 0; transform: translateX(36px); filter: blur(8px); }
-  60%  { filter: blur(1px); }
-  100% { opacity: 1; transform: translateX(0);    filter: blur(0); }
-}
-
+/* Hidden state — fully removed from layout */
 .bb-panel[hidden] { display: none; }
 
-/* Closing — slides LEFT with blur */
-.bb-panel.panel-closing {
-  display:   block !important;
-  animation: panelSlideOut 0.24s cubic-bezier(0.4, 0, 1, 1) both;
+/* Visible panel — fixed, centered, glass card */
+.bb-panel {
+  position:                fixed;
+  top:                     50%;
+  left:                    50%;
+  transform:               translate(-50%, -50%) scale(0.97);
+  z-index:                 400;
+  width:                   calc(100vw - 2rem);
+  max-width:               660px;
+  max-height:              86vh;
+  overflow-y:              auto;
+  scrollbar-width:         thin;
+  scrollbar-color:         rgba(80, 120, 200, 0.35) transparent;
+
+  background:              rgba(6, 14, 46, 0.94);
+  backdrop-filter:         blur(22px) saturate(1.4);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  border:                  1px solid rgba(80, 130, 255, 0.28);
+  border-radius:           12px;
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.75),
+    0  0  0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* Open animation */
+  animation: panelOpen 0.24s cubic-bezier(0.34, 1.45, 0.64, 1) both;
 }
 
-@keyframes panelSlideOut {
-  0%   { opacity: 1; transform: translateX(0);     filter: blur(0); }
-  100% { opacity: 0; transform: translateX(-40px); filter: blur(8px); }
+@keyframes panelOpen {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
+
+/* Closing */
+.bb-panel.panel-closing {
+  display:   block !important;
+  animation: panelClose 0.16s ease-in both;
+}
+
+@keyframes panelClose {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }
+}
+
+/* Scrollbar */
+.bb-panel::-webkit-scrollbar       { width: 5px; }
+.bb-panel::-webkit-scrollbar-track { background: transparent; }
+.bb-panel::-webkit-scrollbar-thumb { background: rgba(80, 120, 200, 0.35); border-radius: 3px; }
 
 /* ── Panel header ── */
 .panel-header {
   display:         flex;
   align-items:     center;
   justify-content: space-between;
-  padding:         0.6rem 1rem 0.6rem 0.85rem;
-  background:      rgba(4, 10, 30, 0.6);
-  border-bottom:   2px solid rgba(80, 140, 255, 0.2);
-  border-left:     3px solid rgba(212, 175, 55, 0.6);
+  padding:         0.75rem 1rem 0.75rem 1rem;
+  background:      rgba(4, 10, 30, 0.55);
+  border-bottom:   1px solid rgba(80, 140, 255, 0.18);
+  border-radius:   12px 12px 0 0;
+  position:        sticky;
+  top:             0;
+  z-index:         1;
+  /* Left accent stripe */
+  border-left:     3px solid rgba(212, 175, 55, 0.55);
 }
 
 .panel-header-left {
@@ -279,60 +287,50 @@
   gap:         0.6rem;
 }
 
-.panel-icon {
-  display:     flex;
-  align-items: center;
-  color:       rgba(180, 210, 255, 0.65);
-}
-
-.panel-icon svg { width: 20px; height: 20px; }
+.panel-icon { display: flex; align-items: center; color: rgba(180, 210, 255, 0.6); }
+.panel-icon svg { width: 18px; height: 18px; }
 
 .panel-title {
-  font-family:  'Bespoke Slab', Georgia, serif;
+  font-family:  'JetBrains Mono', monospace;
   font-weight:  800;
   font-style:   italic;
-  font-size:    1.05rem;
+  font-size:    1rem;
   color:        rgba(220, 235, 255, 0.92);
   margin:       0;
   line-height:  1.1;
-  letter-spacing: 0.01em;
-  text-shadow:  0 1px 8px rgba(60, 120, 255, 0.25);
+  letter-spacing: -0.01em;
+  text-shadow:  0 1px 10px rgba(60, 120, 255, 0.22);
 }
 
 .panel-close {
-  background:   rgba(255, 255, 255, 0.08);
-  border:       1px solid rgba(255, 255, 255, 0.12);
-  color:        rgba(200, 220, 255, 0.7);
-  width:        28px;
-  height:       28px;
+  background:    rgba(255, 255, 255, 0.07);
+  border:        1px solid rgba(255, 255, 255, 0.1);
+  color:         rgba(180, 210, 255, 0.65);
+  width:         28px;
+  height:        28px;
   border-radius: 50%;
-  font-size:    1.1rem;
-  cursor:       pointer;
-  display:      flex;
-  align-items:  center;
+  font-size:     1rem;
+  cursor:        pointer;
+  display:       flex;
+  align-items:   center;
   justify-content: center;
-  transition:   background 0.13s, color 0.13s;
-  flex-shrink:  0;
+  transition:    background 0.13s, color 0.13s;
+  flex-shrink:   0;
 }
 
-.panel-close:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color:      #fff;
-}
+.panel-close:hover { background: rgba(255, 80, 80, 0.25); color: #fff; }
 
 /* ── Panel body ── */
 .panel-body {
-  padding:    1.1rem 1.25rem 1.35rem;
-  max-width:  720px;
-  margin:     0 auto;
-  width:      100%;
+  padding:   1rem 1.2rem 1.3rem;
+  max-width: 100%;
 }
 
 .panel-intro {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 400;
-  font-size:   0.86rem;
-  color:       rgba(180, 205, 250, 0.65);
+  font-size:   0.78rem;
+  color:       rgba(160, 190, 245, 0.6);
   line-height: 1.7;
   margin:      0 0 1rem;
 }
@@ -342,14 +340,14 @@
   display:       flex;
   gap:           0;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(80, 120, 220, 0.22);
+  border-bottom: 1px solid rgba(80, 120, 220, 0.2);
 }
 
 .sub-tab {
-  font-family:    'Bespoke Slab', Georgia, serif;
-  font-weight:    600;
-  font-size:      0.7rem;
-  color:          rgba(150, 180, 240, 0.55);
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      0.65rem;
+  color:          rgba(130, 170, 230, 0.5);
   background:     none;
   border:         none;
   border-bottom:  2px solid transparent;
@@ -357,13 +355,13 @@
   padding:        0.4rem 0.75rem;
   cursor:         pointer;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
+  letter-spacing: 0.1em;
   transition:     color 0.13s, border-color 0.13s;
 }
 
 .sub-tab:hover  { color: rgba(200, 225, 255, 0.85); }
 .sub-tab.active {
-  color:        var(--bb-gold, #D4AF37);
+  color:              var(--bb-gold, #D4AF37);
   border-bottom-color: var(--bb-gold, #D4AF37);
 }
 
@@ -378,76 +376,68 @@
 
 .input-label {
   display:        block;
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.6rem;
-  color:          rgba(140, 175, 240, 0.6);
+  font-size:      0.58rem;
+  color:          rgba(130, 165, 235, 0.55);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom:  0.3rem;
-  margin-top:     0.65rem;
+  letter-spacing: 0.14em;
+  margin-bottom:  0.28rem;
+  margin-top:     0.6rem;
 }
 
-.av-picker {
-  display:   flex;
-  gap:       0.3rem;
-  flex-wrap: wrap;
-}
+.av-picker { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
 .av-btn {
-  font-family:  'Bespoke Slab', Georgia, serif;
+  font-family:  'JetBrains Mono', monospace;
   font-weight:  700;
-  font-size:    0.76rem;
-  padding:      0.28rem 0.6rem;
-  background:   rgba(20, 40, 100, 0.55);
-  border:       1px solid rgba(70, 110, 200, 0.35);
+  font-size:    0.73rem;
+  padding:      0.26rem 0.55rem;
+  background:   rgba(15, 30, 90, 0.55);
+  border:       1px solid rgba(65, 105, 195, 0.3);
   border-radius: 4px;
   cursor:       pointer;
-  color:        rgba(170, 200, 255, 0.75);
+  color:        rgba(160, 195, 255, 0.7);
   transition:   background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s;
 }
 
 .av-btn:hover {
-  background:   rgba(40, 80, 180, 0.55);
+  background:   rgba(40, 80, 175, 0.5);
   border-color: rgba(100, 155, 255, 0.55);
   color:        #fff;
 }
 
 .av-btn.active {
-  background:   rgba(212, 175, 55, 0.22);
-  border-color: rgba(212, 175, 55, 0.65);
+  background:   rgba(212, 175, 55, 0.18);
+  border-color: rgba(212, 175, 55, 0.6);
   color:        var(--bb-gold, #D4AF37);
-  box-shadow:   0 0 8px rgba(212, 175, 55, 0.2);
+  box-shadow:   0 0 8px rgba(212, 175, 55, 0.18);
 }
 
-.mod-toggles {
-  display:   flex;
-  gap:       0.35rem;
-  flex-wrap: wrap;
-}
+.mod-toggles { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 
 .mod-toggle {
-  font-family:  'Bespoke Slab', Georgia, serif;
-  font-weight:  600;
-  font-size:    0.7rem;
-  padding:      0.26rem 0.55rem;
-  background:   rgba(20, 40, 100, 0.55);
-  border:       1px solid rgba(70, 110, 200, 0.3);
+  font-family:  'JetBrains Mono', monospace;
+  font-weight:  700;
+  font-size:    0.65rem;
+  padding:      0.24rem 0.5rem;
+  background:   rgba(15, 30, 90, 0.55);
+  border:       1px solid rgba(65, 105, 195, 0.28);
   border-radius: 4px;
   cursor:       pointer;
-  color:        rgba(160, 190, 255, 0.65);
+  color:        rgba(150, 185, 255, 0.6);
   transition:   background 0.12s, border-color 0.12s, color 0.12s;
 }
 
 .mod-toggle:hover {
-  background:   rgba(40, 80, 180, 0.5);
+  background:   rgba(40, 80, 175, 0.48);
   border-color: rgba(100, 155, 255, 0.5);
   color:        #fff;
 }
 
 .mod-toggle.active {
-  background:   rgba(200, 16, 46, 0.3);
-  border-color: rgba(200, 16, 46, 0.7);
+  background:   rgba(200, 16, 46, 0.28);
+  border-color: rgba(200, 16, 46, 0.65);
   color:        #ff8fa0;
 }
 
@@ -459,129 +449,159 @@
   display:        flex;
   align-items:    center;
   gap:            0.5rem;
-  padding:        0.7rem 1.4rem;
-  background:     rgba(212, 175, 55, 0.15);
-  border:         1px solid rgba(212, 175, 55, 0.45);
+  padding:        0.65rem 1.3rem;
+  background:     rgba(212, 175, 55, 0.13);
+  border:         1px solid rgba(212, 175, 55, 0.42);
   border-radius:  6px;
   color:          var(--bb-gold, #D4AF37);
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    800;
-  font-size:      0.85rem;
+  font-size:      0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   cursor:         pointer;
-  margin:         0.85rem 0 0;
+  margin:         0.8rem 0 0;
   transition:     background 0.15s, box-shadow 0.15s, transform 0.12s, border-color 0.15s;
-  box-shadow:     0 0 12px rgba(212, 175, 55, 0.08);
+  box-shadow:     0 0 10px rgba(212, 175, 55, 0.06);
 }
 
 .roll-btn:hover {
-  background:   rgba(212, 175, 55, 0.28);
+  background:   rgba(212, 175, 55, 0.25);
   border-color: rgba(212, 175, 55, 0.7);
-  box-shadow:   0 0 22px rgba(212, 175, 55, 0.3),
-                0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow:   0 0 20px rgba(212, 175, 55, 0.28), 0 4px 16px rgba(0,0,0,0.35);
   transform:    translateY(-2px);
 }
 
-.roll-btn:active { transform: translateY(0); }
-
-.roll-btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.roll-btn-icon { font-size: 1.1rem; }
+.roll-btn:active  { transform: translateY(0); }
+.roll-btn:disabled { opacity: 0.42; cursor: not-allowed; transform: none; }
+.roll-btn-icon    { font-size: 1.05rem; }
 
 /* ────────────────────────────────────────────────────────
-   ROLL RESULT
+   ROLL RESULT — styled as a rule card
    ──────────────────────────────────────────────────────── */
 
 .roll-result {
-  margin-top:  0.9rem;
-  background:  rgba(4, 10, 32, 0.72);
-  border:      1px solid rgba(80, 130, 255, 0.2);
+  margin-top:  0.85rem;
+  background:  rgba(3, 8, 28, 0.7);
+  border:      1px solid rgba(80, 130, 255, 0.18);
   border-left: 3px solid rgba(212, 175, 55, 0.5);
   border-radius: 6px;
-  padding:     0.9rem 1.1rem;
+  padding:     0.9rem 1.05rem;
   color:       #fff;
   animation:   resultIn 0.2s ease both;
 }
 
 @keyframes resultIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Large dice total */
 .result-roll-num {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
-  font-size:   2rem;
+  font-size:   2.2rem;
   color:       var(--bb-gold, #D4AF37);
   line-height: 1;
-  margin-bottom: 0.15rem;
-  text-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+  margin-bottom: 0.1rem;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  letter-spacing: -0.02em;
 }
 
+/* e.g. "4 + 3" breakdown */
 .result-roll-breakdown {
-  font-family:    'Bespoke Slab', Georgia, serif;
-  font-size:      0.7rem;
-  color:          rgba(150, 180, 240, 0.5);
-  letter-spacing: 0.06em;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.68rem;
+  color:          rgba(140, 175, 235, 0.45);
+  letter-spacing: 0.04em;
   margin-bottom:  0.5rem;
 }
 
+/* Event/weather name */
 .result-name {
-  font-family:  'Bespoke Slab', Georgia, serif;
+  font-family:  'JetBrains Mono', monospace;
   font-weight:  800;
   font-style:   italic;
-  font-size:    1.2rem;
+  font-size:    1.15rem;
   color:        rgba(220, 235, 255, 0.95);
   margin-bottom: 0.35rem;
   line-height:  1.2;
+  letter-spacing: -0.01em;
 }
 
+/* Full description text */
 .result-desc {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 400;
-  font-size:   0.84rem;
-  color:       rgba(170, 200, 255, 0.72);
-  line-height: 1.75;
+  font-size:   0.77rem;
+  color:       rgba(165, 195, 250, 0.7);
+  line-height: 1.8;
   margin:      0;
 }
 
+/* Direction arrow for bounce/scatter */
 .result-direction {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
-  font-size:   1.1rem;
+  font-size:   1.05rem;
   color:       var(--bb-gold, #D4AF37);
   margin-top:  0.3rem;
 }
 
+/* Short mechanical effect label */
 .result-effect {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  display:        inline-block;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.73rem;
+  font-size:      0.68rem;
   color:          #FF8C00;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom:  0.4rem;
-  padding:        0.2rem 0.5rem;
+  letter-spacing: 0.08em;
+  margin-bottom:  0.45rem;
+  padding:        0.2rem 0.55rem;
   background:     rgba(255, 140, 0, 0.1);
   border:         1px solid rgba(255, 140, 0, 0.3);
   border-radius:  3px;
-  display:        inline-block;
 }
+
+/* Result header line — separator above description */
+.result-divider {
+  border:     none;
+  border-top: 1px solid rgba(80, 120, 220, 0.18);
+  margin:     0.55rem 0;
+}
+
+/* Emoji display in weather/kickoff results */
+.result-emoji {
+  font-size:   2rem;
+  line-height: 1;
+  display:     block;
+  margin-bottom: 0.3rem;
+}
+
+/* Label chips used inside results */
+.result-chip {
+  display:        inline-block;
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding:        0.15rem 0.45rem;
+  border-radius:  3px;
+  margin-bottom:  0.35rem;
+}
+
+.result-chip-ok   { background: rgba(212, 175, 55, 0.12); color: var(--bb-gold, #D4AF37); border: 1px solid rgba(212, 175, 55, 0.35); }
+.result-chip-warn { background: rgba(255, 140, 0, 0.12);  color: #FF8C00;                  border: 1px solid rgba(255, 140, 0, 0.35); }
+.result-chip-bad  { background: rgba(200, 16, 46, 0.15);  color: #ff8fa0;                  border: 1px solid rgba(200, 16, 46, 0.4); }
+.result-chip-info { background: rgba(80, 130, 255, 0.12); color: rgba(160, 200, 255, 0.85); border: 1px solid rgba(80, 130, 255, 0.3); }
 
 /* ────────────────────────────────────────────────────────
-   COMPASS (Bounce direction)
+   COMPASS (bounce direction)
    ──────────────────────────────────────────────────────── */
 
-.compass-wrap {
-  display:         flex;
-  justify-content: center;
-  padding:         0.5rem 0 0.25rem;
-}
+.compass-wrap { display: flex; justify-content: center; padding: 0.5rem 0 0.25rem; }
 
 .compass {
   display:               grid;
@@ -594,53 +614,46 @@
   display:         flex;
   align-items:     center;
   justify-content: center;
-  font-size:       1.4rem;
+  font-size:       1.35rem;
   border-radius:   4px;
-  background:      rgba(20, 40, 100, 0.45);
-  border:          1px solid rgba(70, 110, 200, 0.3);
-  color:           rgba(120, 160, 240, 0.5);
+  background:      rgba(15, 30, 90, 0.45);
+  border:          1px solid rgba(65, 105, 195, 0.28);
+  color:           rgba(100, 150, 230, 0.45);
   transition:      background 0.15s, color 0.15s;
 }
 
 .compass-dir.active {
-  background:   rgba(212, 175, 55, 0.25);
-  border-color: rgba(212, 175, 55, 0.65);
+  background:   rgba(212, 175, 55, 0.22);
+  border-color: rgba(212, 175, 55, 0.6);
   color:        var(--bb-gold, #D4AF37);
-  font-size:    1.8rem;
-  box-shadow:   0 0 10px rgba(212, 175, 55, 0.25);
+  font-size:    1.7rem;
+  box-shadow:   0 0 10px rgba(212, 175, 55, 0.22);
 }
 
-.compass-center {
-  display:         flex;
-  align-items:     center;
-  justify-content: center;
-  font-size:       1rem;
-}
+.compass-center { display: flex; align-items: center; justify-content: center; font-size: 0.95rem; }
 
 /* ────────────────────────────────────────────────────────
-   ROSTER SECTION
+   ROSTER SECTION (below the module grid, always visible)
    ──────────────────────────────────────────────────────── */
 
 .roster-section {
   display:               grid;
   grid-template-columns: 1fr 1fr;
   gap:                   0;
-  background:            rgba(4, 10, 28, 0.9);
-  border-top:            1px solid rgba(60, 100, 200, 0.2);
+  background:            rgba(4, 10, 28, 0.88);
+  border-top:            1px solid rgba(60, 100, 200, 0.18);
 }
 
 .roster-accordion {
-  border-right: 1px solid rgba(40, 70, 160, 0.25);
-  /* --tc-* custom properties set by applyTeamColors() */
-  --tc-bg:           #1a1a2e;
+  border-right:   1px solid rgba(40, 70, 160, 0.22);
+  --tc-bg:           #12152e;
   --tc-primary:      #555;
-  --tc-primary-dark: #222;
+  --tc-primary-dark: #1a1d38;
   --tc-accent:       #333;
   --tc-gold:         #888;
   --tc-gold-dark:    #666;
-  --tc-header-bg:    #0d0d1f;
+  --tc-header-bg:    #0a0d20;
 }
-
 .roster-accordion:last-child { border-right: none; }
 
 .accordion-toggle {
@@ -648,7 +661,7 @@
   align-items:     center;
   justify-content: space-between;
   width:           100%;
-  padding:         0.65rem 1rem;
+  padding:         0.6rem 1rem;
   background:      var(--tc-header-bg);
   border:          none;
   cursor:          pointer;
@@ -656,39 +669,36 @@
   border-bottom:   1px solid var(--tc-primary);
   transition:      background 0.15s;
 }
-
 .accordion-toggle:hover { background: var(--tc-primary-dark); }
 
 .accord-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.7rem;
-  color:          rgba(200, 220, 255, 0.65);
+  font-size:      0.65rem;
+  color:          rgba(190, 215, 255, 0.6);
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
 }
 
 .accord-arrow {
-  font-size:  0.8rem;
-  color:      rgba(150, 180, 240, 0.4);
+  font-size:  0.78rem;
+  color:      rgba(140, 175, 235, 0.38);
   transition: transform 0.18s ease;
 }
-
 .accordion-toggle[aria-expanded="true"] .accord-arrow { transform: rotate(180deg); }
 
 .accordion-body {
-  background:            var(--tc-bg);
-  display:               grid;
-  grid-template-rows:    0fr;
-  transition:            grid-template-rows 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background:         var(--tc-bg);
+  display:            grid;
+  grid-template-rows: 0fr;
+  transition:         grid-template-rows 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .accordion-body.is-open { grid-template-rows: 1fr; }
 
 .accordion-body > .roster-grid {
   overflow:   hidden;
   min-height: 0;
-  padding:    0.65rem;
+  padding:    0.6rem;
 }
 
 /* ────────────────────────────────────────────────────────
@@ -696,21 +706,16 @@
    ──────────────────────────────────────────────────────── */
 
 @media (max-width: 700px) {
-  .module-grid {
-    grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
-    gap:                   0.4rem;
-  }
-
+  .module-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 0.38rem; }
   .module-icon svg { width: 22px; height: 22px; }
-  .module-label    { font-size: 0.54rem; }
-
+  .module-label { font-size: 0.52rem; }
   .roster-section { grid-template-columns: 1fr; }
-  .roster-accordion { border-right: none; border-bottom: 1px solid rgba(40, 70, 160, 0.25); }
+  .roster-accordion { border-right: none; border-bottom: 1px solid rgba(40,70,160,0.22); }
 }
 
 @media (max-width: 480px) {
-  .panel-body { padding: 0.85rem 0.9rem 1rem; }
-  .game-timeline-wrap { padding: 0.45rem 0.65rem; }
-  .tl-label   { display: none; }
-  .tl-icon    { font-size: 1.2rem; }
+  .bb-panel     { max-height: 90vh; }
+  .panel-body   { padding: 0.8rem 0.85rem 1rem; }
+  .tl-label     { display: none; }
+  .tl-icon      { font-size: 1.15rem; }
 }

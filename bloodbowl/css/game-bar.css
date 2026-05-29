@@ -41,7 +41,7 @@
 
 /* ── Team select dropdown ── */
 .gb-select {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
   font-size:      0.7rem;
   color:          rgba(200, 220, 255, 0.8);
@@ -73,7 +73,7 @@
 }
 
 .gb-score-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    500;
   font-size:      0.54rem;
   color:          rgba(140, 175, 240, 0.5);
@@ -102,7 +102,7 @@
 .gb-score-btn:hover { background: rgba(100, 140, 220, 0.22); }
 
 .gb-score {
-  font-family: 'Bespoke Slab', Georgia, serif;
+  font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
   font-size:   1.55rem;
   color:       var(--bb-gold, #D4AF37);
@@ -121,7 +121,7 @@
 }
 
 .gb-rr-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    500;
   font-size:      0.5rem;
   color:          rgba(120, 160, 230, 0.45);
@@ -166,7 +166,7 @@
 }
 
 .gb-half-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    800;
   font-size:      0.56rem;
   color:          rgba(140, 175, 240, 0.55);
@@ -221,7 +221,7 @@
 .gb-turn-btn:hover { background: rgba(100, 140, 220, 0.22); }
 
 .gb-turn-label {
-  font-family:    'Bespoke Slab', Georgia, serif;
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
   font-size:      0.62rem;
   color:          rgba(200, 220, 255, 0.8);

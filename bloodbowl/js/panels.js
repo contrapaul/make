@@ -89,9 +89,8 @@ function openPanel(id) {
   panel.removeAttribute('hidden');
   const btn = getModuleBtn(id);
   if (btn) btn.setAttribute('aria-expanded', 'true');
-  requestAnimationFrame(() => {
-    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
+  /* Show backdrop */
+  document.getElementById('panel-backdrop')?.classList.add('active');
 }
 
 function closePanel(id) {
@@ -104,6 +103,11 @@ function closePanel(id) {
     if (!panel.classList.contains('panel-closing')) return;
     panel.classList.remove('panel-closing');
     panel.setAttribute('hidden', '');
+    /* Hide backdrop only when no panels remain open */
+    const anyOpen = document.querySelectorAll('.bb-panel:not([hidden])').length > 0;
+    if (!anyOpen) {
+      document.getElementById('panel-backdrop')?.classList.remove('active');
+    }
   }, { once: true });
 
   const btn = getModuleBtn(id);
@@ -140,6 +144,13 @@ function initPanels() {
     btn.addEventListener('click', () => {
       const panel = btn.closest('.bb-panel');
       if (panel) closePanel(panel.id.replace('panel-', ''));
+    });
+  });
+
+  /* Backdrop click — close any open panel */
+  document.getElementById('panel-backdrop')?.addEventListener('click', () => {
+    document.querySelectorAll('.bb-panel:not([hidden])').forEach(openEl => {
+      closePanel(openEl.id.replace('panel-', ''));
     });
   });
 
@@ -306,6 +317,27 @@ function renderRerollPips(side) {
    MODULE: KICKOFF EVENT
    ════════════════════════════════════════════════════════ */
 
+/* Which team is primarily affected by each kickoff event */
+const KICKOFF_AFFECTS = {
+  2:  'both',       /* Get the Ref     — both receive a Bribe */
+  3:  'both',       /* Time-Out!       — both Turn Markers move */
+  4:  'kicking',    /* Solid Defence   — kicking team repositions */
+  5:  'receiving',  /* High Kick       — receiving team places player */
+  6:  'both',       /* Cheering Fans   — both roll, winner gets assist */
+  7:  'both',       /* Brilliant Coaching — both roll, winner gets re-roll */
+  8:  'both',       /* Changing Weather — reroll weather for everyone */
+  9:  'receiving',  /* Quick Snap!     — receiving team gets free move */
+  10: 'kicking',    /* Charge!         — kicking team gets free moves */
+  11: 'both',       /* Dodgy Snack     — both roll, loser takes penalty */
+  12: 'both',       /* Pitch Invasion! — both roll, loser gets D3 stunned */
+};
+
+function buildKickoffChip(affects) {
+  if (affects === 'kicking')   return '<span class="result-chip result-chip-warn">⚽ Kicking Team</span>';
+  if (affects === 'receiving') return '<span class="result-chip result-chip-ok">🏆 Receiving Team</span>';
+  return '<span class="result-chip result-chip-info">⚖️ Both Teams</span>';
+}
+
 function initKickoffModule() {
   const rollBtn  = document.getElementById('kickoff-roll-btn');
   const resultEl = document.getElementById('kickoff-result');
@@ -318,13 +350,16 @@ function initKickoffModule() {
     resultEl.hidden  = true;
 
     const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
-    const ev = exactLookup(DATA.kickoff, total)
-            ?? { name: 'Unknown Event', desc: 'No entry for this roll.' };
+    const ev      = exactLookup(DATA.kickoff, total)
+                 ?? { name: 'Unknown Event', desc: 'No entry for this roll.' };
+    const affects = KICKOFF_AFFECTS[total] ?? 'both';
 
     resultEl.innerHTML = `
       <div class="result-roll-num">${total}</div>
       <div class="result-roll-breakdown">${d1} + ${d2}</div>
+      <div class="result-divider"></div>
       <div class="result-name">${h(ev.name)}</div>
+      ${buildKickoffChip(affects)}
       <p class="result-desc">${h(ev.desc)}</p>
     `;
     resultEl.hidden  = false;
@@ -349,15 +384,22 @@ function initWeatherModule() {
 
     const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
     const w = rangeLookup(DATA.weather, total, 'rollMin', 'rollMax')
-           ?? { name: 'Unknown', emoji: '?', effect: '', desc: '' };
+           ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '' };
 
-    const effectHtml = (w.effect && w.effect !== 'No effect')
-      ? `<div class="result-effect">${h(w.effect)}</div>`
-      : '';
+    const isPerfect  = (w.effect === 'No effect' || !w.effect);
+    const effectHtml = isPerfect
+      ? `<span class="result-chip result-chip-ok">✓ No mechanical effect</span>`
+      : `<span class="result-chip result-chip-warn">⚠ ${h(w.effect)}</span>`;
+
+    /* Roll range label: e.g. "2–2" or "4–10" */
+    const rangeLabel = (w.rollMin === w.rollMax)
+      ? `rolls ${w.rollMin}`
+      : `rolls ${w.rollMin}–${w.rollMax}`;
 
     resultEl.innerHTML = `
       <div class="result-roll-num">${total}</div>
-      <div class="result-roll-breakdown">${d1} + ${d2}</div>
+      <div class="result-roll-breakdown">${d1} + ${d2} &ensp;·&ensp; <em>${rangeLabel}</em></div>
+      <div class="result-divider"></div>
       <div class="result-name">${w.emoji} ${h(w.name)}</div>
       ${effectHtml}
       <p class="result-desc">${h(w.desc)}</p>
