@@ -66,11 +66,14 @@ async function init() {
 
     /* Expose teams data for TeamBuilder and DriveWizard */
     window.BBTeamsData = teams;
+    /* Expose full skills list for SPP level-up picker */
+    window.BBSkillsList = skillsList;
 
     populateSelects();
     bindSelectListeners();
     bindGlobalListeners();
     bindMyTeamsButtons();
+    bindEndGameButton();
   } catch (err) {
     console.error('[BB] Init failed:', err);
   }
@@ -142,6 +145,7 @@ async function loadCustomTeam(side, savedTeam) {
   /* Build player objects in the same shape renderRoster expects */
   const players = savedTeam.players.map(p => ({
     id:          p.rosterSlotId ?? p.id,
+    savedId:     p.id,     /* UUID for SPP tracking */
     name:        p.name,
     position:    p.position,
     ma:          p.ma, st: p.st, ag: p.ag, pa: p.pa, av: p.av,
@@ -158,9 +162,12 @@ async function loadCustomTeam(side, savedTeam) {
   applyTeamColors(side, baseEntry?.colors ?? {});
   renderRoster(side, players);
 
+  /* Track which saved team is loaded for SPP/post-game */
+  const gbSide = side === 'left' ? 'home' : 'away';
+  if (window.GameState) window.GameState.activeTeamIds[gbSide] = savedTeam.id;
+
   /* Sync companion UI with saved team data */
   if (window.Panels) {
-    const gbSide = side === 'left' ? 'home' : 'away';
     Panels.openAccordion(side);
     Panels.setAccordionLabel(side, savedTeam.name);
     Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
@@ -168,6 +175,11 @@ async function loadCustomTeam(side, savedTeam) {
 }
 
 window.loadCustomTeam = loadCustomTeam;
+
+function bindEndGameButton() {
+  document.getElementById('gb-end-game-btn')
+    ?.addEventListener('click', () => window.SPPTracker?.showPostGame());
+}
 
 function bindMyTeamsButtons() {
   ['left', 'right'].forEach(side => {

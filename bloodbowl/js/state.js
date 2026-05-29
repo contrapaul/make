@@ -102,6 +102,9 @@ const GameState = {
   currentWeather: null,   /* set to a weather.json entry when weather is rolled */
   ballCarrier:    null,   /* { side: 'left'|'right', idx } — set when ball possession is tracked */
   kickingTeam:    null,   /* 'home' | 'away' — set by drive wizard */
+  scores:         { home: 0, away: 0 },     /* mirrored from gbState by adjustScore() */
+  sppEvents:      [],     /* [{ side, playerIdx, savedId, amount, reason, timestamp }] */
+  activeTeamIds:  { home: null, away: null },  /* saved team UUIDs when custom teams loaded */
 };
 
 window.GameState = GameState;

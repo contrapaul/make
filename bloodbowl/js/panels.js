@@ -293,6 +293,12 @@ function adjustScore(side, delta) {
   gbState.scores[side] = Math.max(0, gbState.scores[side] + delta);
   const el = document.getElementById(`gb-${side}-score`);
   if (el) el.textContent = gbState.scores[side];
+  /* Mirror scores to GameState for post-game screen */
+  if (window.GameState) window.GameState.scores = { ...gbState.scores };
+  /* Auto-open TD SPP prompt when scoring */
+  if (delta > 0 && window.SPPTracker) {
+    window.SPPTracker.openTDPrompt(side === 'home' ? 'left' : 'right');
+  }
 }
 
 function advanceTurn(delta) {
@@ -356,6 +362,27 @@ function renderRerollPips(side) {
 /* ════════════════════════════════════════════════════════
    RE-ROLL BUTTON HELPER
    ════════════════════════════════════════════════════════ */
+
+/* Appends a "Log SPP" button to a result element for injury SPP tracking.
+   type = 'cas' (Casualty = +2) | 'ko' (Knocked Out = +1)
+   The button prompts user to pick the injuring player from the opposing side. */
+function addLogSPPBtn(resultEl, type) {
+  resultEl.querySelectorAll('.log-spp-btn').forEach(b => b.remove());
+  const amount = type === 'cas' ? 2 : 1;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'log-spp-btn';
+  btn.textContent = `⭐ Log ${type === 'cas' ? 'CAS' : 'KO'} SPP (+${amount})`;
+  btn.addEventListener('click', () => {
+    btn.remove();
+    /* Ask which side caused the injury — assume the opposing team */
+    /* We show both sides so user can pick correctly */
+    const side = document.querySelector('.spp-modal') ? null : 'left';
+    window.SPPTracker?.openInjuryPrompt('left', type);
+    /* A future improvement: know which panel is open to set injurerSide correctly */
+  }, { once: true });
+  resultEl.appendChild(btn);
+}
 
 function addRerollBtn(resultEl, onReroll) {
   resultEl.querySelectorAll('.reroll-btn').forEach(b => b.remove());
@@ -966,9 +993,13 @@ function initInjuryModule() {
     `;
     injResultEl.hidden = false;
 
-    if (inj.result !== 'Casualty!') {
+    if (inj.result === 'Knocked Out') {
+      addRerollBtn(injResultEl, () => doInjuryRoll(mod));
+      addLogSPPBtn(injResultEl, 'ko');
+    } else if (inj.result !== 'Casualty!') {
       addRerollBtn(injResultEl, () => doInjuryRoll(mod));
     } else if (casResultEl && casDieEl) {
+      addLogSPPBtn(injResultEl, 'cas');
       await delay(500);
       casTrayEl.hidden   = false;
       casResultEl.innerHTML = `<p class="result-desc" style="margin:0;">Rolling Casualty table (D16)…</p>`;
@@ -1296,6 +1327,9 @@ function refreshDiceModeToggles() {
 /* ════════════════════════════════════════════════════════
    PUBLIC API
    ════════════════════════════════════════════════════════ */
+
+/* Expose gbState for SPP post-game screen to read scores */
+window.gbState = gbState;
 
 window.Panels = {
   openPanel, closePanel, togglePanel,
