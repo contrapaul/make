@@ -1,0 +1,340 @@
+/* ============================================================
+   Blood Bowl Companion — css/spp.css
+   SPP prompts, post-game screen, level-up modal
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════
+   SPP PLAYER PICKER MODAL
+   ════════════════════════════════════════════════════════ */
+
+.spp-backdrop {
+  position:       fixed;
+  inset:          0;
+  z-index:        820;
+  background:     rgba(0, 5, 20, 0.55);
+}
+
+.spp-modal {
+  position:      fixed;
+  z-index:       821;
+  top:           50%;
+  left:          50%;
+  transform:     translate(-50%, -50%);
+  width:         min(440px, 92vw);
+  max-height:    68vh;
+  overflow-y:    auto;
+  background:    rgba(4, 10, 30, 0.98);
+  border:        1px solid rgba(80, 130, 255, 0.22);
+  border-radius: 10px;
+  padding:       1rem;
+  box-shadow:    0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+.spp-modal-title {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.88rem;
+  font-weight:   800;
+  font-style:    italic;
+  color:         rgba(220, 235, 255, 0.9);
+  margin-bottom: 0.55rem;
+}
+
+.spp-modal-sub {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  color:         rgba(140, 170, 220, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+/* Player list inside pickers */
+.spp-player-list { display: flex; flex-direction: column; gap: 0.22rem; }
+
+.spp-player-btn {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.38rem 0.55rem;
+  background:    rgba(4, 10, 28, 0.65);
+  border:        1px solid rgba(80, 130, 255, 0.14);
+  border-radius: 4px;
+  cursor:        pointer;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  color:         rgba(200, 220, 255, 0.82);
+  font-weight:   700;
+  text-align:    left;
+  transition:    background 0.09s, border-color 0.09s;
+}
+.spp-player-btn:hover { background: rgba(80, 130, 255, 0.1); border-color: rgba(80, 130, 255, 0.3); }
+
+.spp-player-pos {
+  font-size:  0.6rem;
+  color:      rgba(130, 160, 210, 0.45);
+  font-weight: 400;
+  flex:       1;
+}
+
+.spp-modal-skip {
+  margin-top:    0.55rem;
+  width:         100%;
+  padding:       0.32rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  font-weight:   600;
+  background:    transparent;
+  border:        1px solid rgba(80, 130, 255, 0.15);
+  border-radius: 4px;
+  color:         rgba(130, 160, 210, 0.42);
+  cursor:        pointer;
+  transition:    background 0.09s;
+}
+.spp-modal-skip:hover { background: rgba(80, 130, 255, 0.07); color: rgba(160, 195, 255, 0.7); }
+
+/* ════════════════════════════════════════════════════════
+   POST-GAME OVERLAY
+   ════════════════════════════════════════════════════════ */
+
+.postgame-overlay {
+  position:        fixed;
+  inset:           0;
+  z-index:         800;
+  background:      rgba(2, 6, 20, 0.98);
+  overflow-y:      auto;
+  backdrop-filter: blur(6px);
+}
+.postgame-overlay[hidden] { display: none; }
+
+.postgame-container {
+  max-width: 580px;
+  margin:    0 auto;
+  padding:   1.5rem 1rem 3rem;
+}
+
+.postgame-header {
+  text-align:    center;
+  margin-bottom: 1.5rem;
+}
+
+.postgame-score {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     3.5rem;
+  font-weight:   800;
+  color:         var(--bb-gold, #D4AF37);
+  line-height:   1;
+  letter-spacing: -0.03em;
+}
+
+.postgame-label {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.62rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color:          rgba(130, 160, 210, 0.4);
+  margin-top:     0.3rem;
+}
+
+.postgame-section { margin-bottom: 1.2rem; }
+
+.postgame-section-title {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.6rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color:          rgba(120, 155, 210, 0.42);
+  margin-bottom:  0.4rem;
+  padding-bottom: 0.28rem;
+  border-bottom:  1px solid rgba(80, 130, 255, 0.09);
+}
+
+/* SPP event rows */
+.spp-event-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.3rem 0.5rem;
+  background:    rgba(4, 10, 28, 0.5);
+  border-radius: 3px;
+  margin-bottom: 0.2rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+}
+.spp-event-name   { flex: 1; color: rgba(200, 220, 255, 0.82); font-weight: 700; }
+.spp-event-reason { color: rgba(140, 170, 220, 0.5); font-size: 0.62rem; }
+.spp-event-amount {
+  font-weight: 800;
+  font-size:   0.82rem;
+  color:       var(--bb-gold, #D4AF37);
+  min-width:   32px;
+  text-align:  right;
+}
+
+/* Injury summary rows */
+.postgame-inj-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.45rem;
+  padding:       0.28rem 0.5rem;
+  background:    rgba(4, 10, 28, 0.5);
+  border-radius: 3px;
+  margin-bottom: 0.18rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+}
+.postgame-inj-name   { flex: 1; color: rgba(200, 220, 255, 0.8); font-weight: 700; }
+.postgame-inj-status { font-size: 0.65rem; font-weight: 600; padding: 0.1rem 0.35rem; border-radius: 2px; }
+.postgame-inj-status.ko  { background: rgba(255, 140, 0, 0.12); color: #FF8C00; }
+.postgame-inj-status.mng { background: rgba(200, 16, 46, 0.12); color: #ff8fa0; }
+.postgame-inj-status.dead { background: rgba(60, 0, 80, 0.2); color: #cc88ff; }
+
+/* ════════════════════════════════════════════════════════
+   LEVEL-UP MODAL
+   ════════════════════════════════════════════════════════ */
+
+.levelup-backdrop {
+  position: fixed; inset: 0; z-index: 830;
+  background: rgba(0, 5, 20, 0.65);
+}
+
+.levelup-modal {
+  position:      fixed;
+  z-index:       831;
+  top:           50%;
+  left:          50%;
+  transform:     translate(-50%, -50%);
+  width:         min(460px, 92vw);
+  max-height:    78vh;
+  overflow-y:    auto;
+  background:    rgba(4, 10, 30, 0.98);
+  border:        1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+  padding:       1rem;
+  box-shadow:    0 8px 40px rgba(0, 0, 0, 0.7);
+}
+
+.levelup-header {
+  text-align:    center;
+  margin-bottom: 0.6rem;
+}
+
+.levelup-star {
+  font-size:   2rem;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.levelup-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.95rem;
+  font-weight: 800;
+  font-style:  italic;
+  color:       var(--bb-gold, #D4AF37);
+}
+
+.levelup-spp {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.65rem;
+  color:       rgba(160, 200, 255, 0.5);
+  margin-top:  0.1rem;
+}
+
+.levelup-desc {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  color:         rgba(180, 210, 255, 0.6);
+  text-align:    center;
+  margin-bottom: 0.6rem;
+}
+
+/* Skill category group */
+.skill-cat-label {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.58rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color:          rgba(120, 155, 210, 0.4);
+  margin:         0.55rem 0 0.25rem;
+}
+
+.skill-btn {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0.45rem;
+  padding:       0.38rem 0.5rem;
+  background:    rgba(4, 10, 28, 0.65);
+  border:        1px solid rgba(80, 130, 255, 0.14);
+  border-radius: 4px;
+  cursor:        pointer;
+  margin-bottom: 0.2rem;
+  text-align:    left;
+  font-family:   'JetBrains Mono', monospace;
+  transition:    background 0.09s, border-color 0.09s;
+  width:         100%;
+}
+.skill-btn:hover { background: rgba(80, 130, 255, 0.1); border-color: rgba(80, 130, 255, 0.3); }
+
+.skill-btn-name {
+  font-size:  0.72rem;
+  font-weight: 700;
+  color:      rgba(200, 220, 255, 0.88);
+  flex-shrink: 0;
+  min-width:  90px;
+}
+.skill-btn-desc {
+  font-size:  0.6rem;
+  color:      rgba(130, 160, 210, 0.48);
+  line-height: 1.45;
+}
+
+/* Random skill option */
+.skill-btn-random {
+  border-color: rgba(212, 175, 55, 0.28);
+  background:   rgba(212, 175, 55, 0.06);
+}
+.skill-btn-random .skill-btn-name { color: var(--bb-gold, #D4AF37); }
+.skill-btn-random:hover { background: rgba(212, 175, 55, 0.12); }
+
+/* ════════════════════════════════════════════════════════
+   GAME BAR: End Game button + SPP quick-log
+   ════════════════════════════════════════════════════════ */
+
+.gb-end-game-btn {
+  padding:       0.25rem 0.5rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.62rem;
+  font-weight:   700;
+  border:        1px solid rgba(200, 16, 46, 0.25);
+  border-radius: 4px;
+  background:    rgba(200, 16, 46, 0.06);
+  color:         rgba(255, 140, 160, 0.55);
+  cursor:        pointer;
+  transition:    background 0.12s, color 0.12s;
+  flex-shrink:   0;
+}
+.gb-end-game-btn:hover { background: rgba(200, 16, 46, 0.14); color: #ff8fa0; }
+
+/* SPP floating toast */
+#spp-toast {
+  transition: opacity 0.35s;
+}
+
+/* Injury result: log SPP mini-button */
+.log-spp-btn {
+  display:       inline-flex;
+  align-items:   center;
+  gap:           0.25rem;
+  padding:       0.2rem 0.5rem;
+  margin-top:    0.4rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+  font-weight:   700;
+  border:        1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 3px;
+  background:    rgba(212, 175, 55, 0.07);
+  color:         rgba(212, 175, 55, 0.65);
+  cursor:        pointer;
+  transition:    background 0.1s, color 0.1s;
+}
+.log-spp-btn:hover { background: rgba(212, 175, 55, 0.16); color: var(--bb-gold, #D4AF37); }
