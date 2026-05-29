@@ -97,6 +97,10 @@ const GameState = {
   half:           1,
   /* side → { idx: PlayerStatus } */
   playerStatuses: { left: {}, right: {} },
+  rerolls:        { home: 0, away: 0 },
+  rerollsTotal:   { home: 0, away: 0 },
+  currentWeather: null,   /* set to a weather.json entry when weather is rolled */
+  ballCarrier:    null,   /* { side: 'left'|'right', idx } — set when ball possession is tracked */
 };
 
 window.GameState = GameState;
