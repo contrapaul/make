@@ -470,6 +470,7 @@ function initWeatherModule() {
 
     window.GameState.currentWeather = w;
     refreshWeatherChips();
+    updateGameBarWeather(w);
 
     const isPerfect  = !w.effect || w.effect === 'No effect';
     const effectHtml = isPerfect
@@ -1062,13 +1063,245 @@ function h(str) {
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 /* ════════════════════════════════════════════════════════
+   SETTINGS PANEL + GAME MODE
+   ════════════════════════════════════════════════════════ */
+
+function initSettings() {
+  document.getElementById('gb-settings-btn')
+    ?.addEventListener('click', openSettings);
+  document.getElementById('settings-close')
+    ?.addEventListener('click', closeSettings);
+  document.getElementById('settings-backdrop')
+    ?.addEventListener('click', closeSettings);
+
+  /* Drive wizard triggers */
+  document.getElementById('start-drive-inline')
+    ?.addEventListener('click', () => window.DriveWizard?.open('half-start'));
+  document.getElementById('start-drive-beginner')
+    ?.addEventListener('click', () => window.DriveWizard?.open('half-start'));
+
+  /* Apply saved mode on load */
+  const savedMode = window.BBSettings?.getSettings().mode ?? 'veteran';
+  applyMode(savedMode, false /* don't re-save */);
+}
+
+function openSettings() {
+  const drawer = document.getElementById('settings-drawer');
+  if (!drawer) return;
+  drawer.hidden = false;
+  buildSettingsContent();
+  requestAnimationFrame(() => drawer.classList.add('open'));
+  document.getElementById('settings-backdrop')?.classList.add('active');
+}
+
+function closeSettings() {
+  const drawer = document.getElementById('settings-drawer');
+  if (!drawer) return;
+  drawer.classList.remove('open');
+  document.getElementById('settings-backdrop')?.classList.remove('active');
+  setTimeout(() => { drawer.hidden = true; }, 290);
+}
+
+function applyMode(mode, save = true) {
+  document.body.classList.remove('mode-beginner', 'mode-veteran', 'mode-pro');
+  document.body.classList.add(`mode-${mode}`);
+  if (save) window.BBSettings?.saveSetting('mode', mode);
+
+  /* Pro mode: lift all module dimming */
+  if (mode === 'pro') {
+    document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('module-dimmed'));
+  } else if (mode === 'veteran' || mode === 'beginner') {
+    /* Re-apply phase-based dimming (defined in state.js) */
+    const phase = window.GameState?.phase;
+    if (phase) window.setPhase?.(phase);
+  }
+}
+
+function updateGameBarWeather(w) {
+  const chip = document.getElementById('gb-weather-chip');
+  if (!chip) return;
+  if (!w) { chip.hidden = true; return; }
+  chip.hidden   = false;
+  chip.textContent = `${w.emoji} ${w.name}`;
+}
+
+function buildSettingsContent() {
+  const body = document.getElementById('settings-body');
+  if (!body) return;
+  body.innerHTML = '';
+
+  const s = window.BBSettings?.getSettings() ?? { mode: 'veteran', diceMode: 'digital', diceModeOverrides: {} };
+
+  /* ── Play mode ── */
+  const modeSec = document.createElement('div');
+  modeSec.className = 'settings-section';
+  modeSec.innerHTML = '<div class="settings-section-title">Play Mode</div>';
+
+  const selector = document.createElement('div');
+  selector.className = 'mode-selector';
+
+  const MODES = [
+    { id: 'beginner', name: 'Beginner', desc: 'Step-by-step drive wizard, auto-prompted at each phase' },
+    { id: 'veteran',  name: 'Veteran',  desc: 'Full control with helpful prompts and optional drive wizard' },
+    { id: 'pro',      name: 'Pro',      desc: 'Minimal UI — no tips, no dimming, no wizard prompts' },
+  ];
+
+  MODES.forEach(m => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = `mode-btn${s.mode === m.id ? ' active' : ''}`;
+    btn.innerHTML = `
+      <div class="mode-btn-radio"></div>
+      <div class="mode-btn-text">
+        <span class="mode-btn-name">${m.name}</span>
+        <span class="mode-btn-desc">${m.desc}</span>
+      </div>
+    `;
+    btn.addEventListener('click', () => {
+      selector.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyMode(m.id);
+    });
+    selector.appendChild(btn);
+  });
+
+  modeSec.appendChild(selector);
+  body.appendChild(modeSec);
+
+  /* ── Dice mode ── */
+  const diceSec = document.createElement('div');
+  diceSec.className = 'settings-section';
+  diceSec.innerHTML = '<div class="settings-section-title">Dice Mode</div>';
+
+  const globalRow = document.createElement('div');
+  globalRow.className = 'dg-global-row';
+  globalRow.innerHTML = '<span class="dg-label">Default for all wizards</span>';
+
+  const globalToggle = document.createElement('div');
+  globalToggle.className = 'dg-toggle';
+  const wizardList = document.createElement('div');
+  wizardList.className = 'dg-wizard-list';
+
+  ['digital', 'physical'].forEach(mode => {
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'dg-toggle-btn';
+    btn.textContent = mode === 'digital' ? '⚄ Digital' : '🎲 Physical';
+    if (s.diceMode === mode) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+      globalToggle.querySelectorAll('.dg-toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      window.BBSettings?.saveSetting('diceMode', mode);
+      refreshDiceModeToggles();
+      _buildOverridesList(wizardList);
+    });
+    globalToggle.appendChild(btn);
+  });
+
+  globalRow.appendChild(globalToggle);
+  diceSec.appendChild(globalRow);
+
+  const overrideLbl = document.createElement('div');
+  overrideLbl.className = 'dg-label';
+  overrideLbl.style.cssText = 'margin:0.4rem 0 0.25rem;display:block;';
+  overrideLbl.textContent = 'Per-wizard overrides';
+  diceSec.appendChild(overrideLbl);
+  _buildOverridesList(wizardList);
+  diceSec.appendChild(wizardList);
+  body.appendChild(diceSec);
+
+  /* ── Drive wizard shortcuts ── */
+  const driveSec = document.createElement('div');
+  driveSec.className = 'settings-section';
+  driveSec.innerHTML = '<div class="settings-section-title">Drive Wizard</div>';
+
+  const driveHalfBtn = document.createElement('button');
+  driveHalfBtn.type = 'button'; driveHalfBtn.className = 'roll-btn';
+  driveHalfBtn.style.cssText = 'width:100%;margin-bottom:0.4rem;';
+  driveHalfBtn.innerHTML = '<span class="roll-btn-icon">▸</span> Start Half (full wizard)';
+  driveHalfBtn.addEventListener('click', () => { closeSettings(); setTimeout(() => window.DriveWizard?.open('half-start'), 300); });
+
+  const driveOnlyBtn = document.createElement('button');
+  driveOnlyBtn.type = 'button'; driveOnlyBtn.className = 'pass-nav-btn';
+  driveOnlyBtn.style.cssText = 'width:100%;margin-bottom:0.35rem;';
+  driveOnlyBtn.textContent = '↺ Drive Only (skip half-start)';
+  driveOnlyBtn.addEventListener('click', () => { closeSettings(); setTimeout(() => window.DriveWizard?.open('drive-only'), 300); });
+
+  const driveEndBtn = document.createElement('button');
+  driveEndBtn.type = 'button'; driveEndBtn.className = 'pass-nav-btn';
+  driveEndBtn.style.cssText = 'width:100%;';
+  driveEndBtn.textContent = '⬛ End of Drive';
+  driveEndBtn.addEventListener('click', () => { closeSettings(); setTimeout(() => window.DriveWizard?.open('drive-end'), 300); });
+
+  driveSec.appendChild(driveHalfBtn);
+  driveSec.appendChild(driveOnlyBtn);
+  driveSec.appendChild(driveEndBtn);
+  body.appendChild(driveSec);
+}
+
+function _buildOverridesList(container) {
+  container.innerHTML = '';
+  const s = window.BBSettings?.getSettings() ?? {};
+  const overrides = s.diceModeOverrides ?? {};
+
+  const WIZARD_NAMES = {
+    kickoff: 'Kickoff',  weather: 'Weather',   prayers: 'Prayers',
+    scatter: 'Ball',     block:   'Block',      pass:    'Pass',
+    throw:   'Throw TM', foul:    'Foul',       injury:  'Injury',
+  };
+
+  Object.entries(WIZARD_NAMES).forEach(([key, name]) => {
+    const current = overrides[key] ?? null;
+    const row = document.createElement('div');
+    row.className = 'dg-wizard-row';
+
+    const nameEl = document.createElement('span');
+    nameEl.className = 'dg-wizard-name'; nameEl.textContent = name;
+    row.appendChild(nameEl);
+
+    const tog = document.createElement('div'); tog.className = 'dg-toggle';
+
+    [{ v: null, l: 'Global' }, { v: 'digital', l: '⚄' }, { v: 'physical', l: '🎲' }].forEach(opt => {
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'dg-toggle-btn';
+      btn.textContent = opt.l; btn.style.fontSize = '0.62rem';
+      if (current === opt.v || (opt.v === null && !current)) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        tog.querySelectorAll('.dg-toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const fresh = window.BBSettings?.getSettings() ?? {};
+        const overMap = fresh.diceModeOverrides ?? {};
+        if (opt.v === null) delete overMap[key];
+        else overMap[key] = opt.v;
+        window.BBSettings?.saveSetting('diceModeOverrides', overMap);
+        refreshDiceModeToggles();
+      });
+      tog.appendChild(btn);
+    });
+
+    row.appendChild(tog);
+    container.appendChild(row);
+  });
+}
+
+function refreshDiceModeToggles() {
+  document.querySelectorAll('.bb-panel[data-wizard]').forEach(panel => {
+    const key  = panel.dataset.wizard;
+    const mode = window.BBSettings?.getWizardDiceMode(key) ?? 'digital';
+    panel.querySelectorAll('.dmt-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+  });
+}
+
+/* ════════════════════════════════════════════════════════
    PUBLIC API
    ════════════════════════════════════════════════════════ */
 
 window.Panels = {
   openPanel, closePanel, togglePanel,
   openAccordion, setAccordionLabel, setRerolls,
-  refreshWeatherChips,
+  refreshWeatherChips, updateGameBarWeather,
+  applyMode, openSettings, closeSettings,
 };
 
 /* ════════════════════════════════════════════════════════
@@ -1089,4 +1322,5 @@ document.addEventListener('DOMContentLoaded', async () => {
   initPrayersModule();
   initScatterModule();
   initInjuryModule();
+  initSettings();
 });

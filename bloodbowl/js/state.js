@@ -101,6 +101,7 @@ const GameState = {
   rerollsTotal:   { home: 0, away: 0 },
   currentWeather: null,   /* set to a weather.json entry when weather is rolled */
   ballCarrier:    null,   /* { side: 'left'|'right', idx } — set when ball possession is tracked */
+  kickingTeam:    null,   /* 'home' | 'away' — set by drive wizard */
 };
 
 window.GameState = GameState;

@@ -1,0 +1,492 @@
+/* ============================================================
+   Blood Bowl Companion — css/drive-wizard.css
+   Drive wizard modal, settings drawer, game mode overrides
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════
+   DRIVE WIZARD — bottom-sheet on mobile, modal on desktop
+   ════════════════════════════════════════════════════════ */
+
+.drive-wizard {
+  position:        fixed;
+  left:            0;
+  right:           0;
+  bottom:          0;
+  z-index:         600;
+  background:      rgba(4, 10, 30, 0.97);
+  border:          1px solid rgba(80, 130, 255, 0.22);
+  border-radius:   16px 16px 0 0;
+  padding:         1rem 1rem 1.5rem;
+  max-height:      78vh;
+  overflow-y:      auto;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:      0 -4px 32px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 600px) {
+  .drive-wizard {
+    left:          50%;
+    right:         auto;
+    bottom:        auto;
+    top:           50%;
+    transform:     translate(-50%, -50%);
+    width:         min(480px, 92vw);
+    max-height:    84vh;
+    border-radius: 12px;
+    box-shadow:    0 8px 40px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.drive-wizard[hidden] { display: none; }
+
+/* ── Header row (dots + minimise button) ── */
+.dw-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   0.75rem;
+}
+
+.dw-step-dots {
+  display:     flex;
+  gap:         0.28rem;
+  align-items: center;
+  flex-wrap:   wrap;
+}
+
+.dw-dot {
+  width:         8px;
+  height:        8px;
+  border-radius: 50%;
+  background:    rgba(80, 130, 255, 0.18);
+  border:        1px solid rgba(80, 130, 255, 0.28);
+  transition:    background 0.18s, transform 0.18s;
+  flex-shrink:   0;
+}
+.dw-dot.dw-dot-done    { background: rgba(212, 175, 55, 0.5); border-color: rgba(212, 175, 55, 0.4); }
+.dw-dot.dw-dot-current { background: var(--bb-gold, #D4AF37); border-color: var(--bb-gold, #D4AF37); transform: scale(1.35); }
+
+.dw-minimise {
+  background:    transparent;
+  border:        1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 3px;
+  color:         rgba(140, 170, 220, 0.5);
+  cursor:        pointer;
+  padding:       0.1rem 0.5rem;
+  font-size:     0.9rem;
+  line-height:   1.2;
+  transition:    background 0.12s, color 0.12s;
+}
+.dw-minimise:hover { background: rgba(80, 130, 255, 0.1); color: rgba(200, 220, 255, 0.8); }
+
+/* ── Step title ── */
+.dw-step-title {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     1rem;
+  font-weight:   800;
+  font-style:    italic;
+  color:         rgba(220, 235, 255, 0.9);
+  margin-bottom: 0.5rem;
+}
+
+/* ── Content area ── */
+.dw-content { min-height: 7rem; }
+
+/* ── Navigation row ── */
+.dw-nav {
+  display:    flex;
+  gap:        0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap:  wrap;
+}
+
+.dw-nav-btn {
+  padding:       0.4rem 0.9rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.75rem;
+  font-weight:   700;
+  border:        1px solid rgba(80, 130, 255, 0.28);
+  border-radius: 4px;
+  background:    rgba(80, 130, 255, 0.1);
+  color:         rgba(160, 200, 255, 0.8);
+  cursor:        pointer;
+  transition:    background 0.12s, color 0.12s;
+}
+.dw-nav-btn:hover:not(:disabled) { background: rgba(80, 130, 255, 0.22); color: #fff; }
+.dw-nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+.dw-primary {
+  background:   rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  color:        var(--bb-gold, #D4AF37);
+}
+.dw-primary:hover:not(:disabled) { background: rgba(212, 175, 55, 0.22); }
+
+/* ── Floating minimised pill ── */
+.dw-pill {
+  position:      fixed;
+  bottom:        1.2rem;
+  right:         1.2rem;
+  z-index:       599;
+  padding:       0.45rem 1rem;
+  background:    rgba(4, 10, 30, 0.93);
+  border:        1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 24px;
+  color:         var(--bb-gold, #D4AF37);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.73rem;
+  font-weight:   700;
+  cursor:        pointer;
+  backdrop-filter: blur(4px);
+  box-shadow:    0 2px 12px rgba(0, 0, 0, 0.4);
+  transition:    background 0.12s;
+}
+.dw-pill:hover { background: rgba(212, 175, 55, 0.1); }
+.dw-pill[hidden] { display: none; }
+
+/* ── Drive wizard backdrop ── */
+.dw-backdrop {
+  position:       fixed;
+  inset:          0;
+  z-index:        598;
+  background:     rgba(0, 5, 20, 0.55);
+  opacity:        0;
+  pointer-events: none;
+  transition:     opacity 0.22s;
+}
+.dw-backdrop.active { opacity: 1; pointer-events: auto; }
+
+/* ── Kicking team selector ── */
+.dw-team-select {
+  display: flex;
+  gap:     0.5rem;
+  margin:  0.5rem 0;
+}
+
+.dw-team-btn {
+  flex:          1;
+  padding:       0.55rem;
+  border:        1px solid rgba(80, 130, 255, 0.22);
+  border-radius: 6px;
+  background:    rgba(4, 10, 28, 0.7);
+  color:         rgba(170, 200, 255, 0.65);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.82rem;
+  font-weight:   700;
+  cursor:        pointer;
+  transition:    background 0.12s, border-color 0.12s, color 0.12s;
+}
+.dw-team-btn:hover  { background: rgba(80, 130, 255, 0.12); border-color: rgba(80, 130, 255, 0.4); }
+.dw-team-btn.active {
+  background:   rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.45);
+  color:        var(--bb-gold, #D4AF37);
+}
+
+/* ── KO recovery rows ── */
+.dw-ko-player {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.35rem 0.55rem;
+  background:    rgba(4, 10, 28, 0.6);
+  border:        1px solid rgba(80, 130, 255, 0.14);
+  border-radius: 4px;
+  margin-bottom: 0.25rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  flex-wrap:     wrap;
+}
+.dw-ko-name   { color: rgba(200, 220, 255, 0.82); font-weight: 700; flex: 1; min-width: 100px; }
+.dw-ko-result { font-weight: 700; font-size: 0.78rem; flex-shrink: 0; }
+.dw-ko-result.ok  { color: #81c784; }
+.dw-ko-result.bad { color: #ff8fa0; }
+
+/* ════════════════════════════════════════════════════════
+   SETTINGS DRAWER — slide in from right
+   ════════════════════════════════════════════════════════ */
+
+.settings-drawer {
+  position:        fixed;
+  top:             0;
+  right:           0;
+  bottom:          0;
+  z-index:         700;
+  width:           min(360px, 90vw);
+  background:      rgba(4, 10, 30, 0.97);
+  border-left:     1px solid rgba(80, 130, 255, 0.18);
+  overflow-y:      auto;
+  transform:       translateX(100%);
+  transition:      transform 0.28s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.settings-drawer.open  { transform: translateX(0); }
+.settings-drawer[hidden] { display: none; }
+
+.settings-drawer-header {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0.75rem 1rem;
+  border-bottom:   1px solid rgba(80, 130, 255, 0.15);
+  background:      rgba(4, 10, 30, 0.7);
+  position:        sticky;
+  top:             0;
+  z-index:         1;
+}
+
+.settings-drawer-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.92rem;
+  font-weight: 800;
+  font-style:  italic;
+  color:       rgba(220, 235, 255, 0.9);
+  margin:      0;
+}
+
+.settings-close {
+  background:  transparent;
+  border:      none;
+  color:       rgba(160, 200, 255, 0.55);
+  cursor:      pointer;
+  font-size:   1.2rem;
+  line-height: 1;
+  padding:     0.2rem;
+  transition:  color 0.1s;
+}
+.settings-close:hover { color: #fff; }
+
+.settings-backdrop {
+  position:       fixed;
+  inset:          0;
+  z-index:        699;
+  background:     rgba(0, 5, 20, 0.48);
+  opacity:        0;
+  pointer-events: none;
+  transition:     opacity 0.22s;
+}
+.settings-backdrop.active { opacity: 1; pointer-events: auto; }
+
+.settings-body { padding: 0.75rem 1rem 2rem; }
+
+.settings-section { margin-bottom: 1.3rem; }
+
+.settings-section-title {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.6rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color:          rgba(130, 160, 210, 0.45);
+  margin-bottom:  0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom:  1px solid rgba(80, 130, 255, 0.1);
+}
+
+/* Mode selector */
+.mode-selector { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.mode-btn {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0.5rem;
+  padding:       0.5rem 0.65rem;
+  border:        1px solid rgba(80, 130, 255, 0.16);
+  border-radius: 5px;
+  background:    rgba(4, 10, 28, 0.7);
+  cursor:        pointer;
+  text-align:    left;
+  transition:    background 0.12s, border-color 0.12s;
+  width:         100%;
+}
+.mode-btn:hover { background: rgba(80, 130, 255, 0.08); }
+.mode-btn.active {
+  background:   rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.38);
+}
+
+.mode-btn-radio {
+  width:         13px;
+  height:        13px;
+  border-radius: 50%;
+  border:        2px solid rgba(80, 130, 255, 0.3);
+  margin-top:    3px;
+  flex-shrink:   0;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  transition:    border-color 0.12s;
+}
+.mode-btn.active .mode-btn-radio { border-color: var(--bb-gold, #D4AF37); }
+.mode-btn.active .mode-btn-radio::after {
+  content:       '';
+  width:         5px;
+  height:        5px;
+  border-radius: 50%;
+  background:    var(--bb-gold, #D4AF37);
+}
+
+.mode-btn-text { flex: 1; }
+.mode-btn-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.76rem;
+  font-weight: 700;
+  color:       rgba(190, 215, 255, 0.82);
+  display:     block;
+  margin-bottom: 0.1rem;
+}
+.mode-btn.active .mode-btn-name { color: var(--bb-gold, #D4AF37); }
+.mode-btn-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.6rem;
+  color:       rgba(120, 155, 210, 0.48);
+  display:     block;
+  line-height: 1.4;
+}
+
+/* Dice section: global toggle */
+.dg-global-row {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  margin-bottom:   0.55rem;
+}
+.dg-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.68rem;
+  color:       rgba(170, 200, 255, 0.6);
+}
+.dg-toggle {
+  display:       flex;
+  gap:           0;
+  border:        1px solid rgba(80, 130, 255, 0.22);
+  border-radius: 4px;
+  overflow:      hidden;
+}
+.dg-toggle-btn {
+  padding:     0.22rem 0.5rem;
+  background:  transparent;
+  border:      none;
+  color:       rgba(130, 160, 220, 0.42);
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.62rem;
+  font-weight: 700;
+  cursor:      pointer;
+  transition:  background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.dg-toggle-btn.active {
+  background: rgba(80, 130, 255, 0.18);
+  color:      rgba(160, 200, 255, 0.95);
+}
+
+/* Per-wizard override list */
+.dg-wizard-list { display: flex; flex-direction: column; }
+.dg-wizard-row {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0.28rem 0;
+  border-bottom:   1px solid rgba(80, 130, 255, 0.06);
+}
+.dg-wizard-name {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.67rem;
+  color:          rgba(170, 200, 255, 0.6);
+  text-transform: capitalize;
+}
+
+/* ════════════════════════════════════════════════════════
+   GAME BAR ADDITIONS
+   ════════════════════════════════════════════════════════ */
+
+.gb-settings-btn {
+  background:    transparent;
+  border:        1px solid rgba(80, 130, 255, 0.18);
+  border-radius: 5px;
+  color:         rgba(140, 170, 220, 0.45);
+  cursor:        pointer;
+  padding:       0.25rem 0.45rem;
+  font-size:     0.9rem;
+  line-height:   1;
+  transition:    background 0.12s, color 0.12s;
+  margin-left:   0.4rem;
+  flex-shrink:   0;
+}
+.gb-settings-btn:hover { background: rgba(80, 130, 255, 0.14); color: rgba(200, 225, 255, 0.8); }
+
+.gb-weather-chip {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  font-weight:   600;
+  color:         rgba(170, 205, 255, 0.55);
+  text-align:    center;
+  margin-top:    0.2rem;
+  letter-spacing: 0.02em;
+}
+
+/* Start Drive inline button (visible in timeline / Veteran mode) */
+.start-drive-inline-btn {
+  padding:       0.25rem 0.65rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  font-weight:   700;
+  background:    rgba(212, 175, 55, 0.08);
+  border:        1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  color:         rgba(212, 175, 55, 0.75);
+  cursor:        pointer;
+  margin-left:   0.5rem;
+  flex-shrink:   0;
+  transition:    background 0.12s, color 0.12s;
+}
+.start-drive-inline-btn:hover { background: rgba(212, 175, 55, 0.16); color: var(--bb-gold, #D4AF37); }
+
+/* Beginner CTA section (hidden unless mode-beginner) */
+.beginner-cta-section {
+  display:         none;
+  justify-content: center;
+  padding:         1.5rem 1rem;
+}
+.start-drive-btn-big {
+  padding:       0.7rem 2rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.95rem;
+  font-weight:   800;
+  background:    rgba(212, 175, 55, 0.1);
+  border:        2px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  color:         var(--bb-gold, #D4AF37);
+  cursor:        pointer;
+  transition:    background 0.15s;
+  letter-spacing: 0.02em;
+}
+.start-drive-btn-big:hover { background: rgba(212, 175, 55, 0.2); }
+
+/* ════════════════════════════════════════════════════════
+   GAME MODE CSS OVERRIDES
+   Applied via body.mode-beginner / .mode-veteran / .mode-pro
+   ════════════════════════════════════════════════════════ */
+
+/* ── BEGINNER MODE ── */
+body.mode-beginner .module-section       { display: none !important; }
+body.mode-beginner .beginner-cta-section { display: flex !important; }
+body.mode-beginner .timeline-next-btn   { display: none !important; }
+body.mode-beginner .start-drive-inline-btn { display: none !important; }
+
+/* ── VETERAN MODE (default, minimal overrides) ── */
+body.mode-veteran .beginner-cta-section  { display: none !important; }
+
+/* ── PRO MODE ── */
+body.mode-pro .tl-label              { display: none !important; }
+body.mode-pro .timeline-next-btn     { display: none !important; }
+body.mode-pro .panel-intro           { display: none !important; }
+body.mode-pro .beginner-cta-section  { display: none !important; }
+body.mode-pro .module-btn.module-dimmed {
+  opacity:        1 !important;
+  filter:         none !important;
+  pointer-events: auto !important;
+  color:          inherit !important;
+}
