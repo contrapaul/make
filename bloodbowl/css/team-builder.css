@@ -1,0 +1,424 @@
+/* ============================================================
+   Blood Bowl Companion — css/team-builder.css
+   Full-screen team builder overlay + compact team picker
+   ============================================================ */
+
+/* ════════════════════════════════════════════════════════
+   FULL-SCREEN OVERLAY
+   ════════════════════════════════════════════════════════ */
+
+.tb-overlay {
+  position:        fixed;
+  inset:           0;
+  z-index:         800;
+  background:      rgba(2, 6, 20, 0.98);
+  overflow-y:      auto;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.tb-overlay[hidden] { display: none; }
+
+.tb-container {
+  max-width: 680px;
+  margin:    0 auto;
+  padding:   0 0 4rem;
+}
+
+/* Header */
+.tb-header {
+  display:         flex;
+  align-items:     center;
+  gap:             0.7rem;
+  padding:         0.72rem 1rem;
+  background:      rgba(4, 10, 30, 0.85);
+  border-bottom:   1px solid rgba(80, 130, 255, 0.18);
+  position:        sticky;
+  top:             0;
+  z-index:         2;
+}
+
+.tb-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.95rem;
+  font-weight: 800;
+  font-style:  italic;
+  color:       rgba(220, 235, 255, 0.9);
+  flex:        1;
+}
+
+.tb-close {
+  background:  transparent;
+  border:      none;
+  color:       rgba(140, 170, 220, 0.5);
+  cursor:      pointer;
+  font-size:   1.25rem;
+  line-height: 1;
+  padding:     0.2rem;
+  transition:  color 0.1s;
+}
+.tb-close:hover { color: #fff; }
+
+/* View tabs */
+.tb-tabs {
+  display:       flex;
+  gap:           0;
+  padding:       0 1rem;
+  border-bottom: 1px solid rgba(80, 130, 255, 0.1);
+  background:    rgba(4, 10, 30, 0.6);
+}
+
+.tb-tab {
+  padding:       0.42rem 0.85rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  font-weight:   700;
+  background:    transparent;
+  border:        none;
+  color:         rgba(130, 160, 210, 0.38);
+  cursor:        pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition:    color 0.12s, border-color 0.12s;
+}
+.tb-tab.active {
+  color:               rgba(212, 175, 55, 0.9);
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+
+.tb-body { padding: 0.9rem 1rem; }
+
+/* ════════════════════════════════════════════════════════
+   MY TEAMS LIST
+   ════════════════════════════════════════════════════════ */
+
+.tb-team-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap:                   0.6rem;
+  margin-bottom:         0.8rem;
+}
+
+.tb-team-card {
+  background:    rgba(4, 10, 28, 0.72);
+  border:        1px solid rgba(80, 130, 255, 0.16);
+  border-radius: 6px;
+  padding:       0.7rem;
+  transition:    border-color 0.12s;
+}
+.tb-team-card:hover { border-color: rgba(80, 130, 255, 0.3); }
+
+.tb-team-card-name {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.8rem;
+  font-weight:   800;
+  color:         rgba(220, 235, 255, 0.9);
+  margin-bottom: 0.12rem;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+.tb-team-card-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.6rem;
+  color:       rgba(130, 160, 210, 0.48);
+}
+
+.tb-team-card-actions {
+  display:    flex;
+  gap:        0.28rem;
+  margin-top: 0.5rem;
+  flex-wrap:  wrap;
+}
+
+.tb-action-btn {
+  padding:       0.2rem 0.45rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  font-weight:   700;
+  border:        1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 3px;
+  background:    rgba(80, 130, 255, 0.07);
+  color:         rgba(150, 190, 255, 0.65);
+  cursor:        pointer;
+  transition:    background 0.09s;
+}
+.tb-action-btn:hover { background: rgba(80, 130, 255, 0.18); color: #fff; }
+.tb-action-btn.load { background: rgba(212, 175, 55, 0.07); border-color: rgba(212, 175, 55, 0.28); color: rgba(212, 175, 55, 0.8); }
+.tb-action-btn.load:hover { background: rgba(212, 175, 55, 0.18); color: var(--bb-gold, #D4AF37); }
+.tb-action-btn.del  { background: rgba(200, 16, 46, 0.07); border-color: rgba(200, 16, 46, 0.22); color: #ff8fa0; }
+
+/* ════════════════════════════════════════════════════════
+   BUILDER VIEW
+   ════════════════════════════════════════════════════════ */
+
+.tb-section { margin-bottom: 1.1rem; }
+
+.tb-section-title {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.59rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color:          rgba(120, 155, 210, 0.42);
+  margin-bottom:  0.45rem;
+  padding-bottom: 0.28rem;
+  border-bottom:  1px solid rgba(80, 130, 255, 0.09);
+}
+
+/* Name input */
+.tb-name-field {
+  width:         100%;
+  background:    rgba(4, 10, 28, 0.72);
+  border:        1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 4px;
+  color:         rgba(200, 220, 255, 0.9);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.88rem;
+  font-weight:   700;
+  padding:       0.42rem 0.6rem;
+  outline:       none;
+  transition:    border-color 0.12s;
+}
+.tb-name-field:focus { border-color: rgba(80, 130, 255, 0.5); }
+.tb-name-field::placeholder { color: rgba(140, 170, 220, 0.3); }
+
+/* Race grid */
+.tb-race-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+  gap:                   0.35rem;
+}
+
+.tb-race-btn {
+  padding:       0.38rem 0.5rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+  font-weight:   700;
+  border:        1px solid rgba(80, 130, 255, 0.16);
+  border-radius: 4px;
+  background:    rgba(4, 10, 28, 0.65);
+  color:         rgba(160, 195, 255, 0.55);
+  cursor:        pointer;
+  text-align:    center;
+  transition:    background 0.09s, border-color 0.09s, color 0.09s;
+}
+.tb-race-btn:hover { background: rgba(80, 130, 255, 0.1); color: rgba(200, 225, 255, 0.8); }
+.tb-race-btn.active {
+  background:   rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.4);
+  color:        var(--bb-gold, #D4AF37);
+}
+
+/* Treasury bar */
+.tb-treasury {
+  display:       flex;
+  align-items:   baseline;
+  gap:           0.45rem;
+  padding:       0.38rem 0.65rem;
+  background:    rgba(3, 8, 28, 0.6);
+  border:        1px solid rgba(80, 130, 255, 0.13);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  font-family:   'JetBrains Mono', monospace;
+}
+.tb-treasury-num {
+  font-size:   1.25rem;
+  font-weight: 800;
+  color:       var(--bb-gold, #D4AF37);
+  line-height: 1;
+}
+.tb-treasury-num.over   { color: #ff8fa0 !important; }
+.tb-treasury-label      { font-size: 0.63rem; color: rgba(170, 200, 255, 0.45); }
+.tb-treasury-spent      { font-size: 0.63rem; color: rgba(170, 200, 255, 0.4); margin-left: auto; }
+
+/* Position roster row */
+.tb-pos-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.4rem;
+  padding:       0.32rem 0.5rem;
+  background:    rgba(4, 10, 28, 0.5);
+  border:        1px solid rgba(80, 130, 255, 0.1);
+  border-radius: 4px;
+  margin-bottom: 0.22rem;
+  font-family:   'JetBrains Mono', monospace;
+}
+.tb-pos-name  { flex: 1; font-size: 0.72rem; font-weight: 700; color: rgba(200, 220, 255, 0.8); }
+.tb-pos-count { min-width: 22px; text-align: center; font-size: 0.78rem; font-weight: 800; color: var(--bb-gold, #D4AF37); }
+.tb-pos-max   { font-size: 0.6rem; color: rgba(130, 160, 210, 0.4); }
+.tb-pos-cost  { font-size: 0.63rem; color: rgba(170, 200, 255, 0.4); width: 52px; text-align: right; }
+
+.tb-qty-btn {
+  width:         22px;
+  height:        22px;
+  border:        1px solid rgba(80, 130, 255, 0.22);
+  border-radius: 3px;
+  background:    rgba(80, 130, 255, 0.08);
+  color:         rgba(150, 190, 255, 0.7);
+  font-size:     0.9rem;
+  line-height:   1;
+  cursor:        pointer;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  transition:    background 0.08s;
+  flex-shrink:   0;
+}
+.tb-qty-btn:hover:not(:disabled) { background: rgba(80, 130, 255, 0.2); color: #fff; }
+.tb-qty-btn:disabled { opacity: 0.22; cursor: default; }
+
+/* Staff row */
+.tb-staff-row {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         0.3rem 0;
+  border-bottom:   1px solid rgba(80, 130, 255, 0.07);
+  font-family:     'JetBrains Mono', monospace;
+  font-size:       0.72rem;
+}
+.tb-staff-info  { display: flex; flex-direction: column; }
+.tb-staff-label { color: rgba(180, 210, 255, 0.62); font-weight: 600; }
+.tb-staff-cost  { font-size: 0.6rem; color: rgba(130, 160, 210, 0.38); margin-top: 0.05rem; }
+.tb-staff-ctrl  { display: flex; align-items: center; gap: 0.4rem; }
+.tb-staff-val   { min-width: 22px; text-align: center; font-weight: 800; color: var(--bb-gold, #D4AF37); }
+
+/* Player name list */
+.tb-players-list { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.tb-player-row {
+  display:     flex;
+  gap:         0.3rem;
+  align-items: center;
+}
+.tb-jersey-inp {
+  width:         44px;
+  flex-shrink:   0;
+  background:    rgba(4, 10, 28, 0.72);
+  border:        1px solid rgba(80, 130, 255, 0.18);
+  border-radius: 3px;
+  color:         rgba(200, 220, 255, 0.85);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  padding:       0.25rem 0.35rem;
+  text-align:    center;
+  outline:       none;
+}
+.tb-pname-inp {
+  flex:          1;
+  background:    rgba(4, 10, 28, 0.72);
+  border:        1px solid rgba(80, 130, 255, 0.18);
+  border-radius: 3px;
+  color:         rgba(200, 220, 255, 0.85);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  padding:       0.25rem 0.38rem;
+  outline:       none;
+}
+.tb-jersey-inp:focus,
+.tb-pname-inp:focus { border-color: rgba(80, 130, 255, 0.45); }
+.tb-pos-pill {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.57rem;
+  color:         rgba(120, 155, 210, 0.42);
+  flex-shrink:   0;
+  width:         68px;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+
+/* Import area */
+.tb-import-zone {
+  border:        2px dashed rgba(80, 130, 255, 0.22);
+  border-radius: 6px;
+  background:    rgba(4, 10, 28, 0.5);
+  padding:       0.85rem;
+  cursor:        pointer;
+  text-align:    center;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.7rem;
+  color:         rgba(140, 170, 220, 0.42);
+  transition:    background 0.12s, border-color 0.12s;
+}
+.tb-import-zone:hover { background: rgba(80, 130, 255, 0.07); border-color: rgba(80, 130, 255, 0.38); color: rgba(190, 220, 255, 0.7); }
+
+/* ════════════════════════════════════════════════════════
+   COMPACT TEAM PICKER MODAL (for "Load from My Teams")
+   ════════════════════════════════════════════════════════ */
+
+.tb-picker-backdrop {
+  position:       fixed;
+  inset:          0;
+  z-index:        850;
+  background:     rgba(0, 5, 20, 0.5);
+}
+
+.tb-picker-modal {
+  position:      fixed;
+  z-index:       851;
+  top:           50%;
+  left:          50%;
+  transform:     translate(-50%, -50%);
+  width:         min(420px, 92vw);
+  max-height:    65vh;
+  overflow-y:    auto;
+  background:    rgba(4, 10, 30, 0.98);
+  border:        1px solid rgba(80, 130, 255, 0.22);
+  border-radius: 10px;
+  padding:       1rem;
+  box-shadow:    0 8px 40px rgba(0, 0, 0, 0.6);
+}
+
+.tb-picker-title {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.85rem;
+  font-weight:   800;
+  font-style:    italic;
+  color:         rgba(220, 235, 255, 0.9);
+  margin-bottom: 0.6rem;
+}
+
+.tb-picker-item {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.42rem 0.55rem;
+  background:    rgba(4, 10, 28, 0.65);
+  border:        1px solid rgba(80, 130, 255, 0.14);
+  border-radius: 4px;
+  margin-bottom: 0.28rem;
+  cursor:        pointer;
+  transition:    background 0.1s;
+}
+.tb-picker-item:hover { background: rgba(80, 130, 255, 0.1); border-color: rgba(80, 130, 255, 0.3); }
+
+.tb-picker-item-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.75rem;
+  font-weight: 700;
+  color:       rgba(215, 235, 255, 0.85);
+  flex:        1;
+}
+.tb-picker-item-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.6rem;
+  color:       rgba(130, 160, 210, 0.45);
+}
+
+/* My Teams button next to team selects */
+.my-teams-btn {
+  padding:       0.25rem 0.45rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+  font-weight:   700;
+  border:        1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 4px;
+  background:    rgba(212, 175, 55, 0.06);
+  color:         rgba(212, 175, 55, 0.55);
+  cursor:        pointer;
+  flex-shrink:   0;
+  transition:    background 0.12s, color 0.12s;
+  white-space:   nowrap;
+}
+.my-teams-btn:hover { background: rgba(212, 175, 55, 0.14); color: var(--bb-gold, #D4AF37); }
