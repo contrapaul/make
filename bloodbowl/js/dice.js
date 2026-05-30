@@ -9,8 +9,10 @@
 
 /* Number of pip spans for each D6 face value */
 const PIP_COUNT = { 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6 };
+const ALL_PIP_CLASSES = ['pips-1','pips-2','pips-3','pips-4','pips-5','pips-6'];
 
-/* ── Build pip DOM inside a .die-face element ── */
+/* ── Build pip DOM inside a .die-face element ──
+   Uses classList so animation classes (rolling, settled) are preserved. */
 function buildPips(faceEl, value, isD8) {
   faceEl.innerHTML = '';
 
@@ -24,7 +26,9 @@ function buildPips(faceEl, value, isD8) {
   }
 
   const count = PIP_COUNT[Math.max(1, Math.min(6, value))] ?? 1;
-  faceEl.className = `die-face pips-${count}`;
+  /* Swap only the pips-N class; leave rolling/settled/d8-face classes intact */
+  faceEl.classList.remove(...ALL_PIP_CLASSES);
+  faceEl.classList.add(`pips-${count}`);
 
   for (let i = 0; i < count; i++) {
     const pip = document.createElement('span');
@@ -53,7 +57,7 @@ function rollDieElement(dieEl) {
 
   /* Cycle random faces during the shake */
   let cycleCount = 0;
-  const MAX_CYCLES = 9;
+  const MAX_CYCLES = 5;
   const cycleInterval = setInterval(() => {
     if (cycleCount++ >= MAX_CYCLES) { clearInterval(cycleInterval); return; }
     const fake = Math.floor(Math.random() * sides) + 1;
@@ -74,12 +78,14 @@ function rollDieElement(dieEl) {
       buildPips(faceEl, result, sides > 6);
       dieEl.dataset.value = result;
 
-      /* Brief gold-flash settle animation */
+      /* Resolve immediately — don't block on the cosmetic settle flash */
+      resolve(result);
+
+      /* Brief gold-flash settle animation (non-blocking) */
       void faceEl.offsetWidth;
       faceEl.classList.add('settled');
       faceEl.addEventListener('animationend', () => {
         faceEl.classList.remove('settled');
-        resolve(result);
       }, { once: true });
 
     }, { once: true });

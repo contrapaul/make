@@ -28,9 +28,11 @@ class PitchGrid {
     this.throwerPos  = { col: 7, row: 7 };  /* default: centre */
     this.catcherPos  = null;
     this._blizzard   = false;
+    this._mode       = 'catcher';  /* 'thrower' | 'catcher' */
     this._cells      = [];
     this._gridEl     = null;
     this._svgEl      = null;
+    this._modeBtns   = null;
     this.onCatcherSelect = null;
     this._build();
   }
@@ -42,6 +44,11 @@ class PitchGrid {
                         row: Math.max(1, Math.min(this.ROWS, row)) };
     this.catcherPos = null;
     this._render();
+  }
+
+  setPlacementMode(mode) {
+    this._mode = mode === 'thrower' ? 'thrower' : 'catcher';
+    this._updateModeBtns();
   }
 
   setCatcher(col, row) {
@@ -91,10 +98,43 @@ class PitchGrid {
     );
   }
 
+  /* Euclidean radius cutoff for pixelated-circle zone shape.
+     Cells whose Euclidean distance exceeds this are corner-trimmed. */
+  _circularCutoff(chebyshevDist) {
+    if (chebyshevDist <= 3)  return 3.5;   /* Quick: trims 3 cells per corner */
+    if (chebyshevDist <= 6)  return 6.8;   /* Short: trims ~6 cells per corner */
+    if (chebyshevDist <= 10) return 10.8;  /* Long: more rounded */
+    return 14.5;                            /* Bomb: generous (grid is small) */
+  }
+
+  _updateModeBtns() {
+    if (!this._modeBtns) return;
+    const [tBtn, cBtn] = this._modeBtns;
+    tBtn.classList.toggle('active', this._mode === 'thrower');
+    cBtn.classList.toggle('active', this._mode === 'catcher');
+  }
+
   _build() {
     this.container.innerHTML = '';
     const wrap = document.createElement('div');
     wrap.className = 'pitch-wrap';
+
+    /* Mode toggle row */
+    const modeRow = document.createElement('div');
+    modeRow.className = 'pitch-mode-row';
+    const tBtn = document.createElement('button');
+    const cBtn = document.createElement('button');
+    tBtn.type = cBtn.type = 'button';
+    tBtn.className = 'pitch-mode-btn' + (this._mode === 'thrower' ? ' active' : '');
+    cBtn.className = 'pitch-mode-btn' + (this._mode === 'catcher' ? ' active' : '');
+    tBtn.textContent = '🏃 Move Thrower';
+    cBtn.textContent = '🎯 Move Catcher';
+    tBtn.addEventListener('click', () => this.setPlacementMode('thrower'));
+    cBtn.addEventListener('click', () => this.setPlacementMode('catcher'));
+    this._modeBtns = [tBtn, cBtn];
+    modeRow.appendChild(tBtn);
+    modeRow.appendChild(cBtn);
+    this.container.appendChild(modeRow);
 
     /* Grid */
     this._gridEl = document.createElement('div');
@@ -138,11 +178,18 @@ class PitchGrid {
   }
 
   _onCellClick(col, row) {
-    /* Can't select the thrower's own square */
-    if (this.throwerPos && col === this.throwerPos.col && row === this.throwerPos.row) return;
-    this.catcherPos = { col, row };
-    this._render();
-    this.onCatcherSelect?.(this.getDistance(), this.getRange());
+    if (this._mode === 'thrower') {
+      this.throwerPos = { col, row };
+      this.catcherPos = null;
+      this._render();
+      this.onCatcherSelect?.(null, null);
+    } else {
+      /* Can't select the thrower's own square */
+      if (this.throwerPos && col === this.throwerPos.col && row === this.throwerPos.row) return;
+      this.catcherPos = { col, row };
+      this._render();
+      this.onCatcherSelect?.(this.getDistance(), this.getRange());
+    }
   }
 
   _render() {
@@ -159,9 +206,15 @@ class PitchGrid {
       } else {
         const rng = this._rangeForDist(dist);
         if (rng) {
-          el.classList.add(rng.cls);
-          if (this._blizzard && (rng.cls === 'range-long' || rng.cls === 'range-bomb')) {
-            el.classList.add('blizzard-blocked');
+          /* Circular zone mask: trim corners using Euclidean distance */
+          const dx = col - (this.throwerPos?.col ?? 7);
+          const dy = row - (this.throwerPos?.row ?? 7);
+          const euclidean = Math.sqrt(dx * dx + dy * dy);
+          if (euclidean <= this._circularCutoff(dist)) {
+            el.classList.add(rng.cls);
+            if (this._blizzard && (rng.cls === 'range-long' || rng.cls === 'range-bomb')) {
+              el.classList.add('blizzard-blocked');
+            }
           }
         }
       }
