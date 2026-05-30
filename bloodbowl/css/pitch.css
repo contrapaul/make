@@ -3,34 +3,6 @@
    PitchGrid pass-distance selector + Pass wizard step UI
    ============================================================ */
 
-/* ── Placement mode toggle ── */
-
-.pitch-mode-row {
-  display:       flex;
-  gap:           0.4rem;
-  margin-bottom: 0.45rem;
-}
-
-.pitch-mode-btn {
-  flex:          1;
-  padding:       0.28rem 0.5rem;
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.65rem;
-  font-weight:   700;
-  border:        1px solid rgba(80, 130, 255, 0.25);
-  border-radius: 4px;
-  background:    rgba(80, 130, 255, 0.07);
-  color:         rgba(140, 170, 220, 0.5);
-  cursor:        pointer;
-  transition:    background 0.1s, color 0.1s, border-color 0.1s;
-}
-
-.pitch-mode-btn.active {
-  background:    rgba(212, 175, 55, 0.12);
-  border-color:  rgba(212, 175, 55, 0.45);
-  color:         var(--bb-gold, #D4AF37);
-}
-
 /* ── Pitch grid ── */
 
 .pitch-wrap {
@@ -113,6 +85,44 @@
   background:   transparent;
   border:       2px solid var(--bb-gold, #D4AF37);
   box-shadow:   0 0 6px rgba(212, 175, 55, 0.45);
+}
+
+.pitch-token-catcher.dim {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow:   none;
+}
+
+/* Catcher number label */
+.pitch-catcher-label {
+  position:       absolute;
+  bottom:         1px;
+  right:          2px;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.45rem;
+  font-weight:    900;
+  color:          var(--bb-gold, #D4AF37);
+  pointer-events: none;
+  line-height:    1;
+}
+
+/* Thrower "moving" state — pulse to indicate awaiting destination tap */
+@keyframes throwerPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(212, 175, 55, 0.7); }
+  50%      { box-shadow: 0 0 18px rgba(212, 175, 55, 1), 0 0 6px rgba(212, 175, 55, 0.9); }
+}
+.is-thrower-moving .pitch-token-thrower {
+  animation: throwerPulse 0.6s ease-in-out infinite;
+}
+.is-thrower-moving {
+  cursor: crosshair !important;
+}
+
+/* Scatter path overlay */
+.scatter-target { background: rgba(255, 193,   7, 0.28) !important; }
+.scatter-path   { background: rgba(200, 140,  50, 0.20) !important; }
+.scatter-land   {
+  background: rgba(200,  16,  46, 0.32) !important;
+  box-shadow:  inset 0 0 0 1.5px rgba(200, 16, 46, 0.75);
 }
 
 /* SVG pass line */
@@ -365,6 +375,62 @@
 .pwiz-team-tab.active {
   color:         rgba(212, 175, 55, 0.9);
   border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+
+/* ── Pre-pass roll summary strip ── */
+
+.prepass-strip {
+  display:       flex;
+  align-items:   center;
+  flex-wrap:     wrap;
+  gap:           0.3rem;
+  padding:       0.45rem 0.7rem;
+  background:    rgba(3, 8, 24, 0.7);
+  border:        1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 5px;
+  margin-bottom: 0.7rem;
+  font-family:   'JetBrains Mono', monospace;
+}
+
+.prepass-arrow {
+  color:       rgba(140, 170, 220, 0.4);
+  font-size:   0.75rem;
+  font-weight: 700;
+}
+
+.prepass-chip {
+  display:       inline-flex;
+  align-items:   baseline;
+  gap:           0.3rem;
+  padding:       0.22rem 0.55rem;
+  border-radius: 4px;
+  font-size:     0.72rem;
+  font-weight:   800;
+  border:        1px solid transparent;
+}
+
+.throw-chip {
+  background:   rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.3);
+  color:        var(--bb-gold, #D4AF37);
+}
+
+.int-chip {
+  background:   rgba(200, 16, 46, 0.1);
+  border-color: rgba(200, 16, 46, 0.3);
+  color:        #ff8fa0;
+}
+
+.catch-chip {
+  background:   rgba(76, 175, 80, 0.1);
+  border-color: rgba(76, 175, 80, 0.3);
+  color:        #81c784;
+}
+
+.prepass-sub {
+  font-size:   0.58rem;
+  font-weight: 600;
+  opacity:     0.7;
 }
 
 /* ════════════════════════════════════════════════════════

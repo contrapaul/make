@@ -57,7 +57,7 @@ function rollDieElement(dieEl) {
 
   /* Cycle random faces during the shake */
   let cycleCount = 0;
-  const MAX_CYCLES = 5;
+  const MAX_CYCLES = 8;
   const cycleInterval = setInterval(() => {
     if (cycleCount++ >= MAX_CYCLES) { clearInterval(cycleInterval); return; }
     const fake = Math.floor(Math.random() * sides) + 1;

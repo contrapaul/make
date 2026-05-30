@@ -326,6 +326,10 @@ function initPassWizard() {
     tz:          0,      /* thrower tackle zones */
     catcherTZ:   0,
     intercept:   false,
+    interceptor:     null,   /* player obj — potential interceptor */
+    interceptorSide: 'right',
+    interceptAG:     null,   /* parsed AG of interceptor */
+    interceptTarget: null,   /* d6 target to intercept */
     pitchGrid:   null,   /* PitchGrid instance (kept alive between step re-renders) */
     passResult:  null,   /* 'accurate'|'inaccurate'|'fumble' */
     scatterDirs: [],     /* D8 values for 3 scatter rolls */
@@ -633,7 +637,7 @@ function initPassWizard() {
      STEP 3: RANGE GRID
      ──────────────────────────────────────────────────── */
   function renderRange(el) {
-    el.innerHTML = '<div class="pwiz-step-title">Tap the Catcher\'s Square</div>';
+    el.innerHTML = '<div class="pwiz-step-title">Tap to Place Catchers — Tap Thrower to Move</div>';
 
     const gridContainer = document.createElement('div');
     el.appendChild(gridContainer);
@@ -649,6 +653,7 @@ function initPassWizard() {
     } else {
       /* Re-insert existing grid DOM into new container */
       ws.pitchGrid.container = gridContainer;
+      ws.pitchGrid.clearScatter?.();
       ws.pitchGrid._build();
     }
 
@@ -656,7 +661,7 @@ function initPassWizard() {
     const w = window.GameState?.currentWeather;
     ws.pitchGrid.setBlizzard(w?.name === 'Blizzard');
 
-    /* Restore catcher position if already set */
+    /* Show range for current active catcher if set */
     if (ws.range) {
       resultDisplay.hidden = false;
       showRangeResult(resultDisplay, ws.range);
@@ -777,29 +782,120 @@ function initPassWizard() {
   }
 
   /* ─────────────────────────────────────────────────────
-     STEP 5: INTERCEPT TOGGLE
+     STEP 5: INTERCEPT — player selection + target
      ──────────────────────────────────────────────────── */
   function renderIntercept(el) {
     el.innerHTML = `<div class="pwiz-step-title">Interception?</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">Is there an opposition player with a chance to intercept in the passing lane? If yes, they roll D6 vs their AG before the pass lands.</p>`;
+      <p class="panel-intro" style="margin-bottom:0.5rem;">Is there an opposition player in the passing lane who could intercept?</p>`;
 
-    const tog = document.createElement('button');
-    tog.type = 'button';
-    tog.className = `mod-toggle${ws.intercept ? ' active' : ''}`;
-    tog.textContent = 'Potential Interceptor';
-    tog.addEventListener('click', () => {
-      ws.intercept = !ws.intercept;
-      tog.classList.toggle('active', ws.intercept);
-    });
-    el.appendChild(tog);
+    /* Yes / No toggle */
+    const togRow = document.createElement('div');
+    togRow.style.cssText = 'display:flex;gap:0.4rem;margin-bottom:0.6rem;';
 
-    if (ws.intercept) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.style.marginTop = '0.5rem';
-      note.textContent = 'The interceptor rolls D6 + AG. On 6+ (modified) they catch it — Turnover!';
-      el.appendChild(note);
+    const noBtn  = document.createElement('button');
+    const yesBtn = document.createElement('button');
+    noBtn.type = yesBtn.type = 'button';
+
+    function setIntercept(val) {
+      ws.intercept = val;
+      noBtn.className  = `pass-nav-btn${!val ? ' nav-primary' : ''}`;
+      yesBtn.className = `pass-nav-btn${val  ? ' nav-primary' : ''}`;
+      rosterWrap.hidden = !val;
+      if (!val) {
+        ws.interceptor    = null;
+        ws.interceptAG    = null;
+        ws.interceptTarget = null;
+      }
     }
+
+    noBtn.textContent  = 'No interceptor';
+    yesBtn.textContent = 'Yes — select player';
+    noBtn.addEventListener('click',  () => setIntercept(false));
+    yesBtn.addEventListener('click', () => setIntercept(true));
+    togRow.appendChild(noBtn);
+    togRow.appendChild(yesBtn);
+    el.appendChild(togRow);
+
+    /* Roster selector (opposing team) */
+    const rosterWrap = document.createElement('div');
+    rosterWrap.hidden = !ws.intercept;
+    el.appendChild(rosterWrap);
+
+    /* Opposing side = opposite of thrower's side */
+    const oppSide = ws.throwerSide === 'left' ? 'right' : 'left';
+    const oppLabel = oppSide === 'left' ? 'Home' : 'Away';
+
+    const listTitle = document.createElement('div');
+    listTitle.className = 'input-label';
+    listTitle.style.marginBottom = '0.3rem';
+    listTitle.textContent = `${oppLabel} team — tap interceptor:`;
+    rosterWrap.appendChild(listTitle);
+
+    buildListIn(rosterWrap, oppSide, p => !window.STATUS_META?.[p.status]?.dim, (p) => {
+      ws.interceptor    = { ...p };
+      ws.interceptorSide = oppSide;
+      ws.interceptAG    = parseStat(p.statsText, 'AG') ?? 4;
+      /* Intercept target: same AG-based check as catching */
+      ws.interceptTarget = Math.min(6, Math.max(2, ws.interceptAG));
+      showInterceptSummary();
+    });
+
+    const summaryEl = document.createElement('div');
+    summaryEl.style.cssText = 'margin-top:0.5rem;';
+    rosterWrap.appendChild(summaryEl);
+
+    function showInterceptSummary() {
+      if (!ws.interceptor) { summaryEl.innerHTML = ''; return; }
+      summaryEl.innerHTML = `
+        <div class="pwiz-target-bar" style="margin-top:0.4rem;">
+          <span class="pwiz-target-num">${ws.interceptTarget}+</span>
+          <span class="pwiz-target-note"> to intercept — ${esc(ws.interceptor.name)}, AG${ws.interceptAG}+</span>
+        </div>
+        <p class="panel-intro" style="font-size:0.68rem;margin-top:0.35rem;color:rgba(255,160,160,0.75);">On success: ball caught — Turnover!</p>
+      `;
+    }
+
+    if (ws.interceptor) showInterceptSummary();
+
+    /* Apply initial state */
+    setIntercept(ws.intercept);
+  }
+
+  /* ─────────────────────────────────────────────────────
+     PRE-PASS STRIP — horizontal roll summary
+     ──────────────────────────────────────────────────── */
+  function renderPrePassStrip(el) {
+    const weather    = window.GameState?.currentWeather;
+    const weatherMod = (weather && weather.effect && weather.effect !== 'No effect' && weather.name !== 'Blizzard') ? -1 : 0;
+    const accurateMod = (ws.modAccurate && (ws.range?.cls === 'range-quick' || ws.range?.cls === 'range-short')) ? 1 : 0;
+    const tzMod      = ws.modNerves ? 0 : -ws.tz;
+    const totalMod   = (ws.range?.mod ?? 0) + tzMod + weatherMod + accurateMod;
+    ws._totalMod     = totalMod; /* keep in sync */
+
+    let throwStr;
+    if (ws.paTarget === 99) {
+      throwStr = '— (No PA)';
+    } else {
+      const thresh = Math.min(6, Math.max(2, ws.paTarget - totalMod));
+      throwStr = `${thresh}+`;
+    }
+
+    const catchMod    = -ws.catcherTZ + ((weather?.name === 'Pouring Rain' || weather?.name === 'Blizzard') ? -1 : 0) + (ws.modCatch ? 1 : 0);
+    const catchThresh = Math.min(6, Math.max(2, ws.catchAG - catchMod));
+    const catchStr    = ws.catcher ? `${catchThresh}+` : '—';
+
+    const strip = document.createElement('div');
+    strip.className = 'prepass-strip';
+    strip.innerHTML = `
+      <span class="prepass-chip throw-chip">🎯 Throw ${throwStr}</span>
+      ${ws.interceptor
+        ? `<span class="prepass-arrow">→</span>
+           <span class="prepass-chip int-chip">⚡ Intercept ${ws.interceptTarget}+ <span class="prepass-sub">${esc(ws.interceptor.name)}, AG${ws.interceptAG}</span></span>`
+        : ''}
+      <span class="prepass-arrow">→</span>
+      <span class="prepass-chip catch-chip">🤲 Catch ${catchStr}</span>
+    `;
+    el.appendChild(strip);
   }
 
   /* ─────────────────────────────────────────────────────
@@ -807,6 +903,7 @@ function initPassWizard() {
      ──────────────────────────────────────────────────── */
   function renderThrow(el) {
     el.innerHTML = `<div class="pwiz-step-title">Throw Roll</div>`;
+    renderPrePassStrip(el);
 
     const mod        = ws._totalMod ?? 0;
     const paTarget   = ws.paTarget;
@@ -920,10 +1017,27 @@ function initPassWizard() {
       <p class="panel-intro" style="margin-bottom:0.5rem;">Ball scatters 1 square in a random direction, 3 times from the target square.</p>`;
 
     ws.scatterDirs = [];
+
     const DIR_LABELS = { 1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘' };
     const DIR_NAMES  = { 1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right' };
     const resultsEl  = document.createElement('div');
     const isPhys     = wizardMode('pass') === 'physical';
+
+    /* Grid container — reuse ws.pitchGrid if available */
+    const gridWrap = document.createElement('div');
+    gridWrap.style.marginTop = '0.6rem';
+    const gridLabel = document.createElement('div');
+    gridLabel.className = 'input-label';
+    gridLabel.textContent = 'Ball location:';
+    gridLabel.style.marginBottom = '0.25rem';
+
+    /* Scatter target: active catcher's grid position */
+    const activeCatcher = ws.pitchGrid?.getActiveCatcher?.() ?? null;
+
+    function updateScatterGrid() {
+      if (!ws.pitchGrid || !activeCatcher) return;
+      ws.pitchGrid.showScatterPath(activeCatcher, ws.scatterDirs);
+    }
 
     function addScatterResult(dir) {
       ws.scatterDirs.push(dir);
@@ -931,6 +1045,8 @@ function initPassWizard() {
       row.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.85rem;margin:0.2rem 0;color:rgba(200,220,255,0.8);';
       row.textContent = `${ws.scatterDirs.length}. ${DIR_LABELS[dir]} ${DIR_NAMES[dir]}`;
       resultsEl.appendChild(row);
+
+      updateScatterGrid();
 
       if (ws.scatterDirs.length >= 3) {
         setTimeout(() => go(8), 700);
@@ -987,6 +1103,21 @@ function initPassWizard() {
     }
 
     el.appendChild(resultsEl);
+
+    /* Show pitch grid if we have one with an active catcher */
+    if (ws.pitchGrid && activeCatcher) {
+      gridWrap.appendChild(gridLabel);
+      /* Build grid into a fresh container inside gridWrap */
+      const innerContainer = document.createElement('div');
+      gridWrap.appendChild(innerContainer);
+      ws.pitchGrid.container = innerContainer;
+      ws.pitchGrid.clearScatter?.();
+      ws.pitchGrid._build();
+      ws.pitchGrid.onCatcherSelect = null; /* read-only in scatter view */
+      el.appendChild(gridWrap);
+      updateScatterGrid();
+    }
+
     buildNextScatter();
   }
 
@@ -1129,10 +1260,15 @@ function initPassWizard() {
   /* Re-initialize when panel opens */
   onPanelOpen('panel-pass', () => {
     /* Reset state for a fresh pass */
-    ws.step       = 1;
-    ws.passResult = null;
-    ws.catchResult = null;
-    ws.scatterDirs = [];
+    ws.step            = 1;
+    ws.passResult      = null;
+    ws.catchResult     = null;
+    ws.scatterDirs     = [];
+    ws.intercept       = false;
+    ws.interceptor     = null;
+    ws.interceptAG     = null;
+    ws.interceptTarget = null;
+    if (ws.pitchGrid) ws.pitchGrid.clearScatter?.();
     buildShell();
     render();
     window.Panels?.refreshWeatherChips?.();
