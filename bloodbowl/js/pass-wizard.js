@@ -33,19 +33,22 @@ function initPassWizard() {
 
   /* Wizard state */
   const ws = {
-    activeSide:  'left',
-    thrower:     null,
-    catcher:     null,
-    throwerPos:  null,
-    catcherPos:  null,
-    tz:          0,
-    catcherTZ:   0,
-    intercept:   false,
-    zonesOn:     false,
-    passResult:  null,
-    scatterDirs: [],
-    catchResult: null,
-    pitch:       null,
+    activeSide:      'left',
+    thrower:         null,
+    catcher:         null,
+    throwerPos:      null,
+    catcherPos:      null,
+    tz:              0,
+    catcherTZ:       0,
+    intercept:       false,
+    interceptor:     null,   /* player obj from opposing team */
+    interceptAG:     4,      /* parsed AG of interceptor */
+    interceptTarget: 4,      /* d6 target to intercept */
+    zonesOn:         false,
+    passResult:      null,
+    scatterDirs:     [],
+    catchResult:     null,
+    pitch:           null,
   };
 
   function getStat(p, key) { return parsePassStat(p?.statsText, key); }
@@ -301,19 +304,87 @@ function initPassWizard() {
     addTZ('Thrower TZ:', () => ws.tz,        v => { ws.tz = v; });
     addTZ('Catcher TZ:', () => ws.catcherTZ, v => { ws.catcherTZ = v; });
 
-    /* Interception toggle */
+    /* Interception section */
+    const intHeader = document.createElement('div');
+    intHeader.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(180,210,255,0.4);margin:0.5rem 0 0.25rem;';
+    intHeader.textContent = 'Interception';
+    el.appendChild(intHeader);
+
     const intRow = document.createElement('div');
-    intRow.className = 'pwiz-mod-row'; intRow.style.marginTop = '0.3rem';
-    const intBtn = document.createElement('button');
-    intBtn.type = 'button'; intBtn.className = 'mod-toggle' + (ws.intercept ? ' active' : '');
-    intBtn.textContent = 'Include Interception';
-    intBtn.addEventListener('click', () => {
-      ws.intercept = !ws.intercept;
-      intBtn.classList.toggle('active', ws.intercept);
+    intRow.className = 'pwiz-mod-row';
+    const noIntBtn  = document.createElement('button');
+    const yesIntBtn = document.createElement('button');
+    noIntBtn.type = yesIntBtn.type = 'button';
+
+    const intListWrap = document.createElement('div');
+    intListWrap.id = 'pwiz-int-list';
+    intListWrap.hidden = !ws.intercept;
+
+    function setIntercept(val) {
+      ws.intercept = val;
+      noIntBtn.className  = 'pass-nav-btn' + (!val ? ' nav-primary' : '');
+      yesIntBtn.className = 'pass-nav-btn' + (val  ? ' nav-primary' : '');
+      intListWrap.hidden  = !val;
+      if (!val) {
+        ws.interceptor = null;
+        ws.interceptAG = 4;
+        ws.interceptTarget = 4;
+      }
       updateReqs();
-    });
-    intRow.appendChild(intBtn);
+    }
+    noIntBtn.textContent  = 'No';
+    yesIntBtn.textContent = 'Yes';
+    noIntBtn.addEventListener('click',  () => setIntercept(false));
+    yesIntBtn.addEventListener('click', () => setIntercept(true));
+    intRow.appendChild(noIntBtn);
+    intRow.appendChild(yesIntBtn);
     el.appendChild(intRow);
+
+    /* Interceptor roster — opposing team */
+    const oppSide  = ws.activeSide === 'left' ? 'right' : 'left';
+    const intPlayers = window.getPlayerList?.(oppSide) ?? [];
+    if (intPlayers.length) {
+      const intLabel = document.createElement('div');
+      intLabel.style.cssText = 'font-size:0.6rem;color:rgba(180,210,255,0.4);font-family:JetBrains Mono,monospace;margin-bottom:0.2rem;';
+      intLabel.textContent = (oppSide === 'left' ? 'Home' : 'Away') + ' — tap interceptor:';
+      intListWrap.appendChild(intLabel);
+
+      const intSummaryEl = document.createElement('div');
+
+      intPlayers.filter(p => !window.STATUS_META?.[p.status]?.dim).forEach(p => {
+        const ag  = parsePassStat(p.statsText, 'AG');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isSel = ws.interceptor?.idx === p.idx;
+        btn.className = 'pwiz-player-row' + (isSel ? ' selected' : '');
+        btn.innerHTML = `<span class="pwiz-row-name">${esc(p.name || p.pos || `#${p.idx+1}`)}</span>` +
+          (p.pos && p.name ? `<span class="pwiz-row-pos">${esc(p.pos)}</span>` : '') +
+          `<span class="pwiz-row-stat">${ag >= 99 ? '—' : ag+'+'}</span>`;
+        btn.addEventListener('click', () => {
+          ws.interceptor     = p;
+          ws.interceptAG     = ag >= 99 ? 4 : ag;
+          ws.interceptTarget = Math.min(6, Math.max(2, ws.interceptAG));
+          intListWrap.querySelectorAll('.pwiz-player-row').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          intSummaryEl.innerHTML = `<div class="pwiz-target-bar" style="margin:0.25rem 0;">
+            <span class="pwiz-target-num">${ws.interceptTarget}+</span>
+            <span class="pwiz-target-note"> ${esc(p.name || p.pos)}, AG${ws.interceptAG}+</span>
+          </div>`;
+          updateReqs();
+        });
+        intListWrap.appendChild(btn);
+      });
+      intListWrap.appendChild(intSummaryEl);
+      if (ws.interceptor) {
+        intSummaryEl.innerHTML = `<div class="pwiz-target-bar" style="margin:0.25rem 0;">
+          <span class="pwiz-target-num">${ws.interceptTarget}+</span>
+          <span class="pwiz-target-note"> ${esc(ws.interceptor.name || ws.interceptor.pos)}, AG${ws.interceptAG}+</span>
+        </div>`;
+      }
+    }
+    el.appendChild(intListWrap);
+
+    setIntercept(ws.intercept);
   }
 
   /* ─────────────────────────────────────────────────────
@@ -326,273 +397,264 @@ function initPassWizard() {
     if (!reqEl) return;
 
     reqEl.innerHTML = '';
+    if (rollEl) { rollEl.innerHTML = ''; rollEl.hidden = true; }
 
     if (!ws.thrower || !ws.catcher) {
       reqEl.innerHTML = '<p class="panel-intro" style="margin:0.4rem 0;">Select a thrower and catcher to see requirements.</p>';
-      if (rollEl) rollEl.hidden = true;
       return;
     }
 
-    /* Compute range from pitch positions */
+    /* Compute targets */
     let range = null;
     if (ws.throwerPos && ws.catcherPos && ws.pitch) {
       range = ws.pitch.getPassRange(ws.throwerPos.col, ws.throwerPos.row, ws.catcherPos.col, ws.catcherPos.row);
     }
-
     const paBase  = getStat(ws.thrower, 'PA');
     const agBase  = getStat(ws.catcher, 'AG');
     const skills  = typeof getPlayerSkills === 'function' ? getPlayerSkills(ws.thrower) : [];
     const hasSk   = (name) => skills.some(s => s.toLowerCase() === name.toLowerCase());
+    const rangeMod     = range?.mod ?? 0;
+    const tzMod        = hasSk('Nerves of Steel') ? 0 : -ws.tz;
+    const accurateMod  = (hasSk('Accurate') && range && range.distance <= 6) ? 1 : 0;
+    const cannoneerMod = (hasSk('Cannoneer') && range && range.distance > 6)  ? 1 : 0;
+    const paFinal      = paBase >= 99 ? 99 : Math.min(6, Math.max(2, paBase - rangeMod - tzMod - accurateMod - cannoneerMod));
+    const w            = window.GameState?.currentWeather;
+    const isBlizzard   = w?.name === 'Blizzard';
+    const blizzardFumble = isBlizzard && range && (range.rangeKey === 'long' || range.rangeKey === 'bomb');
+    const wCatchMod    = (w?.name === 'Pouring Rain' || isBlizzard) ? -1 : 0;
+    const agFinal      = Math.min(6, Math.max(2, agBase + wCatchMod - ws.catcherTZ));
 
-    const rangeMod      = range?.mod ?? 0;
-    const nervesOnThr   = hasSk('Nerves of Steel');
-    const tzMod         = nervesOnThr ? 0 : -ws.tz;
-    const accurateMod   = (hasSk('Accurate') && range && range.distance <= 6) ? 1 : 0;
-    const cannoneerMod  = (hasSk('Cannoneer') && range && range.distance > 6)  ? 1 : 0;
-    const paFinal       = paBase >= 99 ? 99 : paBase - rangeMod - tzMod - accurateMod - cannoneerMod;
-
-    const w               = window.GameState?.currentWeather;
-    const isBlizzard      = w?.name === 'Blizzard';
-    const blizzardFumble  = isBlizzard && range && (range.rangeKey === 'long' || range.rangeKey === 'bomb');
-    const wCatchMod       = (w?.name === 'Pouring Rain' || w?.name === 'Blizzard') ? -1 : 0;
-    const catchTZMod      = -ws.catcherTZ;
-    const agFinal         = agBase + wCatchMod + catchTZMod;
-
-    const RANGE_C = { quick: '#81c784', short: '#FFD54F', long: '#FF8C00', bomb: '#ff8fa0' };
-    let html = '<div style="font-size:0.72rem;font-family:JetBrains Mono,monospace;line-height:2;">';
-
-    if (blizzardFumble) html += `<div style="color:#ff8fa0;font-weight:700;">⚠ BLIZZARD: Long/Long Bomb auto-fumble!</div>`;
-
-    if (range) {
-      const rc   = RANGE_C[range.rangeKey] ?? '#ccc';
-      const mods = [];
-      if (rangeMod)     mods.push(`range ${rangeMod}`);
-      if (tzMod)        mods.push(`TZ ${tzMod}`);
-      if (accurateMod)  mods.push('Accurate +1');
-      if (cannoneerMod) mods.push('Cannoneer +1');
-      html += `<div><strong>PASS:</strong> <span style="color:${rc};">${range.rangeLabel}</span> (${range.distance} sq) — <strong>${paFinal >= 99 ? 'No PA' : paFinal + '+'}</strong>`;
-      if (mods.length) html += ` <span style="opacity:0.5;">(${mods.join(', ')})</span>`;
-      html += '</div>';
-    }
-
-    const cm = [];
-    if (wCatchMod)  cm.push(`weather ${wCatchMod}`);
-    if (catchTZMod) cm.push(`TZ ${catchTZMod}`);
-    html += `<div><strong>CATCH:</strong> Need <strong>${agFinal >= 99 ? '—' : agFinal + '+'}</strong>`;
-    if (cm.length) html += ` <span style="opacity:0.5;">(${cm.join(', ')})</span>`;
-    html += '</div>';
-
-    if (w?.name === 'Pouring Rain') html += '<div style="opacity:0.65;">🌧 Pouring Rain: −1 to catch</div>';
-    if (isBlizzard)                 html += '<div style="opacity:0.65;">❄️ Blizzard: −1 to catch</div>';
-
-    html += '</div>';
-    reqEl.innerHTML = html;
-
-    /* Show roll section once — don't rebuild it if already built */
-    if (rollEl && rollEl.hidden) {
+    /* Horizontal action row */
+    if (rollEl) {
       rollEl.hidden = false;
-      buildRollSection(rollEl, paFinal, agFinal, blizzardFumble);
+      buildActionRow(rollEl, paFinal, agFinal, blizzardFumble, range);
     }
   }
 
   /* ─────────────────────────────────────────────────────
-     ROLL SEQUENCE
+     HORIZONTAL ACTION ROW
      ──────────────────────────────────────────────────── */
 
-  function buildRollSection(el, paTarget, agTarget, blizzardFumble) {
+  function buildActionRow(el, paTarget, agTarget, blizzardFumble, range) {
     el.innerHTML = '';
 
-    const divEl = document.createElement('div');
-    divEl.style.cssText = 'border-top:1px solid rgba(80,130,255,0.18);margin:0.5rem 0 0.4rem;padding-top:0.4rem;font-family:JetBrains Mono,monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.45);';
-    divEl.textContent = 'Roll Sequence';
-    el.appendChild(divEl);
+    const RANGE_C = { quick:'#81c784', short:'#FFD54F', long:'#FF8C00', bomb:'#ff8fa0' };
+    const rangeStr = range
+      ? `<span style="color:${RANGE_C[range.rangeKey]??'#ccc'};font-size:0.6rem;">${range.rangeLabel} (${range.distance}sq)</span>`
+      : '';
 
+    /* Header separator */
+    const sep = document.createElement('div');
+    sep.style.cssText = 'border-top:1px solid rgba(80,130,255,0.18);margin:0.5rem 0 0.4rem;padding-top:0.35rem;font-family:JetBrains Mono,monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.4);display:flex;align-items:center;gap:0.4rem;';
+    sep.innerHTML = `Roll Sequence ${rangeStr}`;
+    el.appendChild(sep);
+
+    /* Three-column row */
+    const row = document.createElement('div');
+    row.className = 'pwiz-action-row';
+    el.appendChild(row);
+
+    /* Scatter area (below row, shown if inaccurate) */
+    const scatterEl = document.createElement('div');
+    scatterEl.id = 'pwiz-scatter-area';
+    el.appendChild(scatterEl);
+
+    /* ── Column factory ── */
+    function makeCol(icon, label, targetStr, chipCls) {
+      const col = document.createElement('div');
+      col.className = 'pwiz-action-col';
+      col.innerHTML = `
+        <div class="pwiz-action-chip ${chipCls}">${icon} ${label}<br><span class="pwiz-action-target">${targetStr}</span></div>
+      `;
+      const dieWrap = document.createElement('div');
+      dieWrap.className = 'pwiz-action-die';
+      const resEl = document.createElement('div');
+      resEl.className = 'pwiz-action-result';
+      col.appendChild(dieWrap);
+      col.appendChild(resEl);
+      return { col, dieWrap, resEl };
+    }
+
+    /* ── THROW column ── */
+    const throwTarget = paTarget >= 99 ? '— (No PA)' : `${paTarget}+`;
+    const { col: throwCol, dieWrap: throwDie, resEl: throwRes } = makeCol('🎯', 'Throw', throwTarget, 'chip-throw');
     const throwBtn = document.createElement('button');
-    throwBtn.type = 'button'; throwBtn.className = 'roll-btn';
-    throwBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Pass';
-    el.appendChild(throwBtn);
+    throwBtn.type = 'button'; throwBtn.className = 'roll-btn'; throwBtn.style.marginTop = '0.3rem';
+    throwBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
+    throwCol.appendChild(throwBtn);
+    row.appendChild(throwCol);
 
-    const throwResEl = document.createElement('div');
-    throwResEl.className = 'roll-result'; throwResEl.hidden = true;
-    el.appendChild(throwResEl);
+    /* ── INTERCEPT column (if toggled) ── */
+    let intCol = null, intDie = null, intRes = null, intBtn = null;
+    if (ws.intercept) {
+      const intTarget = ws.interceptor ? `${ws.interceptTarget}+` : '?+';
+      const sub = ws.interceptor ? `<div class="pwiz-action-sub">${esc(ws.interceptor.name || ws.interceptor.pos)}</div>` : '';
+      const arrow1 = document.createElement('div');
+      arrow1.className = 'pwiz-action-arrow'; arrow1.textContent = '→';
+      row.appendChild(arrow1);
+      const built = makeCol('⚡', 'Intercept', intTarget, 'chip-int');
+      intCol = built.col; intDie = built.dieWrap; intRes = built.resEl;
+      if (sub) intCol.querySelector('.pwiz-action-chip').insertAdjacentHTML('beforeend', sub);
+      intBtn = document.createElement('button');
+      intBtn.type = 'button'; intBtn.className = 'roll-btn'; intBtn.style.marginTop = '0.3rem';
+      intBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
+      intBtn.disabled = true;
+      intCol.appendChild(intBtn);
+      row.appendChild(intCol);
+    }
 
-    throwBtn.addEventListener('click', async () => {
-      if (blizzardFumble) {
-        throwResEl.innerHTML = '<div class="result-name" style="color:#ff8fa0;">❌ Auto-Fumble</div><p class="result-desc">Blizzard: Long and Long Bomb passes are automatically fumbled.</p>';
-        throwResEl.hidden = false; throwBtn.disabled = true;
-        return;
-      }
-      throwBtn.disabled = true;
+    /* ── CATCH column ── */
+    const arrow2 = document.createElement('div');
+    arrow2.className = 'pwiz-action-arrow'; arrow2.textContent = '→';
+    row.appendChild(arrow2);
+    const catchTarget = agTarget >= 99 ? '—' : `${agTarget}+`;
+    const { col: catchCol, dieWrap: catchDie, resEl: catchRes } = makeCol('🤲', 'Catch', catchTarget, 'chip-catch');
+    const catchBtn = document.createElement('button');
+    catchBtn.type = 'button'; catchBtn.className = 'roll-btn'; catchBtn.style.marginTop = '0.3rem';
+    catchBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
+    catchBtn.disabled = true;
+    catchCol.appendChild(catchBtn);
+    row.appendChild(catchCol);
 
+    /* ── Helper: roll a D6 in a dieWrap ── */
+    async function rollInWrap(wrap) {
       const dieEl = document.createElement('div');
       dieEl.className = 'die'; dieEl.dataset.value = '1';
       dieEl.innerHTML = '<div class="die-face"></div>';
-      dieEl.style.cssText = 'width:36px;height:36px;display:inline-block;margin-bottom:0.4rem;';
-      el.insertBefore(dieEl, throwResEl);
-      const roll = await Dice.rollDieElement(dieEl);
-      dieEl.remove();
+      wrap.innerHTML = '';
+      wrap.appendChild(dieEl);
+      const v = await Dice.rollDieElement(dieEl);
+      return v;
+    }
 
-      let outcome, cls, desc;
-      if (roll === 1) {
-        outcome = 'Fumble!'; cls = 'result-chip-bad';
-        desc = `Rolled ${roll} — fumble! Ball bounces. Turnover!`;
-      } else if (paTarget >= 99 || roll >= paTarget) {
-        outcome = '✓ Accurate'; cls = 'result-chip-ok';
-        desc = paTarget >= 99 ? 'No PA required — accurate.' : `Rolled ${roll} vs ${paTarget}+ — accurate!`;
-      } else {
-        outcome = '⚠ Inaccurate'; cls = 'result-chip-warn';
-        desc = `Rolled ${roll} vs ${paTarget}+ — inaccurate, ball scatters.`;
+    /* ── THROW roll ── */
+    throwBtn.addEventListener('click', async () => {
+      if (blizzardFumble) {
+        throwRes.innerHTML = `<span class="result-chip result-chip-bad">❌ Auto-Fumble</span><p class="result-desc" style="font-size:0.65rem;">Blizzard: Long/Bomb auto-fumble.</p>`;
+        throwBtn.disabled = true; return;
       }
+      throwBtn.disabled = true;
+      const roll = await rollInWrap(throwDie);
+      const isAccurate = paTarget >= 99 || roll >= paTarget;
+      const isFumble   = roll === 1;
+      ws.passResult = isFumble ? 'fumble' : (isAccurate ? 'accurate' : 'inaccurate');
 
-      throwResEl.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${cls}">${outcome}</span><p class="result-desc">${desc}</p>`;
-      throwResEl.hidden = false;
-      ws.passResult = roll === 1 ? 'fumble' : ((paTarget >= 99 || roll >= paTarget) ? 'accurate' : 'inaccurate');
-      if (ws.passResult === 'fumble') return;
+      if (isFumble) {
+        throwRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip result-chip-bad">💀 Fumble!</span><p class="result-desc" style="font-size:0.65rem;">Turnover!</p>`;
+        return;
+      }
+      const cls = isAccurate ? 'result-chip-ok' : 'result-chip-warn';
+      throwRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${cls}">${isAccurate ? '✓ Accurate' : '⚠ Inaccurate'}</span>`;
 
-      if (ws.intercept) { buildInterceptStep(el, agTarget); return; }
-      if (ws.passResult === 'inaccurate') buildScatterStep(el, agTarget);
-      else buildCatchStep(el, agTarget);
+      if (!isAccurate) {
+        /* Show scatter section, then arm catch */
+        buildScatterSection(scatterEl, agTarget, () => { catchBtn.disabled = false; });
+        return;
+      }
+      /* Accurate: arm intercept or catch */
+      if (ws.intercept && intBtn) intBtn.disabled = false;
+      else catchBtn.disabled = false;
+    });
+
+    /* ── INTERCEPT roll ── */
+    if (intBtn) {
+      intBtn.addEventListener('click', async () => {
+        intBtn.disabled = true;
+        const roll = await rollInWrap(intDie);
+        const tgt    = ws.interceptTarget ?? agTarget;
+        const caught = roll >= tgt;
+        const cls    = caught ? 'result-chip-bad' : 'result-chip-ok';
+        intRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${cls}">${caught ? '⚔ Intercepted!' : '✓ Not Int.'}</span>`;
+        if (!caught) {
+          if (ws.passResult === 'inaccurate') buildScatterSection(scatterEl, agTarget, () => { catchBtn.disabled = false; });
+          else catchBtn.disabled = false;
+        }
+      });
+    }
+
+    /* ── CATCH roll ── */
+    catchBtn.addEventListener('click', async () => {
+      catchBtn.disabled = true;
+      const roll   = await rollInWrap(catchDie);
+      const caught = roll !== 1 && roll >= agTarget;
+      ws.catchResult = caught ? 'caught' : 'dropped';
+      const cls = caught ? 'result-chip-ok' : 'result-chip-bad';
+      catchRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${cls}">${caught ? '✓ Caught!' : '✗ Dropped'}</span>`;
+
+      if (caught && ws.catcher && window.GameState) {
+        window.GameState.ballCarrier = { side: ws.activeSide, idx: ws.catcher.idx };
+        const closeBtn = document.createElement('button');
+        closeBtn.type = 'button'; closeBtn.className = 'roll-btn';
+        closeBtn.style.cssText = 'margin-top:0.35rem;background:rgba(76,175,80,0.15);border-color:rgba(76,175,80,0.4);color:#81c784;';
+        closeBtn.innerHTML = '✓ Complete Pass — Close';
+        closeBtn.addEventListener('click', () => window.Panels?.closePanel?.('pass'));
+        catchRes.appendChild(closeBtn);
+      } else if (!caught) {
+        const bBtn = document.createElement('button');
+        bBtn.type = 'button'; bBtn.className = 'pass-nav-btn'; bBtn.style.marginTop = '0.3rem';
+        bBtn.textContent = '→ Ball Bounces (D8)';
+        bBtn.addEventListener('click', () => buildScatterSection(scatterEl, agTarget, () => {}));
+        catchRes.appendChild(bBtn);
+      }
     });
   }
 
   const D8A = {1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘'};
   const D8N = {1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right'};
 
-  function subSection(el, title) {
+  /* Scatter section: 3 sequential D8 rolls, updates pitch overlay, calls onDone when complete */
+  function buildScatterSection(el, agTarget, onDone) {
+    el.innerHTML = '';
     const sec = document.createElement('div');
-    sec.style.marginTop = '0.5rem';
+    sec.style.cssText = 'margin-top:0.5rem;padding:0.4rem 0.6rem;background:rgba(3,8,24,0.5);border:1px solid rgba(80,130,255,0.15);border-radius:4px;font-family:JetBrains Mono,monospace;';
     const h = document.createElement('div');
-    h.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.68rem;font-weight:700;color:rgba(180,210,255,0.6);margin-bottom:0.25rem;';
-    h.textContent = title; sec.appendChild(h);
+    h.style.cssText = 'font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(180,210,255,0.45);margin-bottom:0.35rem;';
+    h.textContent = '↗ Scatter — 3 × D8';
+    sec.appendChild(h);
     el.appendChild(sec);
-    return sec;
-  }
 
-  async function rollSingleDie(container, sides) {
-    const die = document.createElement('div');
-    die.className = 'die'; die.dataset.value = '1';
-    if (sides !== 6) die.dataset.sides = sides;
-    die.innerHTML = `<div class="die-face${sides > 6 ? ' d8-face' : ''}"></div>`;
-    die.style.cssText = 'width:32px;height:32px;display:inline-block;margin-bottom:0.25rem;';
-    container.appendChild(die);
-    const v = await Dice.rollDieElement(die);
-    die.remove();
-    return v;
-  }
+    const dirsCollected = [];
+    const listEl = document.createElement('div');
+    sec.appendChild(listEl);
 
-  function buildInterceptStep(el, agTarget) {
-    const sec = subSection(el, '⚔ INTERCEPTION CHECK');
-    const p   = document.createElement('p');
-    p.className = 'panel-intro'; p.style.margin = '0 0 0.3rem';
-    p.textContent = 'Intercepting player needs this+ to intercept:';
-    sec.appendChild(p);
+    function rollNextScatter() {
+      const n      = dirsCollected.length + 1;
+      const dieEl  = document.createElement('div');
+      dieEl.className = 'die'; dieEl.dataset.value = '1'; dieEl.dataset.sides = '8';
+      dieEl.innerHTML = '<div class="die-face d8-face"></div>';
+      dieEl.style.cssText = 'width:32px;height:32px;display:inline-block;vertical-align:middle;margin-right:0.4rem;';
+      const rb = document.createElement('button');
+      rb.type = 'button'; rb.className = 'roll-btn';
+      rb.style.cssText = 'margin:0.2rem 0;padding:0.25rem 0.6rem;font-size:0.7rem;';
+      rb.innerHTML = `<span class="roll-btn-icon">🎲</span> Scatter ${n}`;
+      const rowEl = document.createElement('div');
+      rowEl.style.cssText = 'display:flex;align-items:center;gap:0.4rem;margin-bottom:0.25rem;';
+      rowEl.appendChild(dieEl);
+      rowEl.appendChild(rb);
+      listEl.appendChild(rowEl);
 
-    let intAG = 4;
-    const agSel = document.createElement('div');
-    agSel.className = 'av-picker';
-    [2,3,4,5,6].forEach(n => {
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'av-btn' + (n === 4 ? ' active' : '');
-      btn.textContent = `${n}+`; btn.dataset.ag = n;
-      btn.addEventListener('click', () => {
-        agSel.querySelectorAll('.av-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active'); intAG = n;
+      rb.addEventListener('click', async () => {
+        rb.disabled = true;
+        const d = await Dice.rollDieElement(dieEl);
+        dirsCollected.push(d);
+        ws.scatterDirs.push(d);
+
+        const lbl = document.createElement('span');
+        lbl.style.cssText = 'font-size:0.85rem;color:rgba(200,220,255,0.8);';
+        lbl.textContent = ` ${D8A[d]} ${D8N[d]}`;
+        rowEl.appendChild(lbl);
+
+        /* Update pitch scatter overlay after each roll */
+        if (ws.catcherPos && ws.pitch) {
+          ws.pitch.showScatterPath(ws.catcherPos.col, ws.catcherPos.row, dirsCollected);
+        }
+
+        if (dirsCollected.length < 3) rollNextScatter();
+        else onDone();
       });
-      agSel.appendChild(btn);
-    });
-    sec.appendChild(agSel);
+    }
 
-    const rb = document.createElement('button');
-    rb.type = 'button'; rb.className = 'roll-btn'; rb.style.marginTop = '0.3rem';
-    rb.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Intercept';
-    const resEl = document.createElement('div');
-    resEl.className = 'roll-result'; resEl.hidden = true;
-
-    rb.addEventListener('click', async () => {
-      rb.disabled = true;
-      const roll   = await rollSingleDie(sec, 6);
-      const caught = roll >= intAG;
-      resEl.innerHTML = `<div class="result-roll-num">${roll}</div>
-        <span class="result-chip ${caught ? 'result-chip-bad' : 'result-chip-ok'}">${caught ? '⚔ Intercepted!' : '✓ Not Intercepted'}</span>
-        <p class="result-desc">${caught ? 'Intercepted!' : `Rolled ${roll} vs ${intAG}+ — not intercepted. Continue.`}</p>`;
-      resEl.hidden = false;
-      if (!caught) {
-        if (ws.passResult === 'inaccurate') buildScatterStep(el, agTarget);
-        else buildCatchStep(el, agTarget);
-      }
-    });
-    sec.appendChild(rb); sec.appendChild(resEl);
-  }
-
-  function buildScatterStep(el, agTarget) {
-    const sec    = subSection(el, '↗ SCATTER (3 × D8)');
-    const resEl  = document.createElement('div');
-    resEl.className = 'roll-result'; resEl.hidden = true;
-    const rb = document.createElement('button');
-    rb.type = 'button'; rb.className = 'roll-btn';
-    rb.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Scatter';
-
-    rb.addEventListener('click', async () => {
-      rb.disabled = true;
-      const dirs = [];
-      for (let i = 0; i < 3; i++) {
-        const d = await rollSingleDie(sec, 8);
-        dirs.push(d); ws.scatterDirs.push(d);
-      }
-      resEl.innerHTML = `<div class="result-name">Ball scatters:</div>` +
-        dirs.map(d => `<div class="result-roll-breakdown" style="font-size:1.3rem;">${D8A[d]} ${D8N[d]}</div>`).join('');
-      resEl.hidden = false;
-      buildCatchStep(el, agTarget);
-    });
-
-    sec.appendChild(rb); sec.appendChild(resEl);
-  }
-
-  function buildCatchStep(el, agTarget) {
-    const sec   = subSection(el, '🏈 CATCH');
-    const tgt   = agTarget >= 99 ? 6 : agTarget;
-    const resEl = document.createElement('div');
-    resEl.className = 'roll-result'; resEl.hidden = true;
-    const rb = document.createElement('button');
-    rb.type = 'button'; rb.className = 'roll-btn';
-    rb.innerHTML = `<span class="roll-btn-icon">🎲</span> Roll Catch (need ${tgt}+)`;
-
-    rb.addEventListener('click', async () => {
-      rb.disabled = true;
-      const roll   = await rollSingleDie(sec, 6);
-      const caught = roll >= tgt;
-      ws.catchResult = caught ? 'caught' : 'dropped';
-
-      resEl.innerHTML = `<div class="result-roll-num">${roll}</div>
-        <span class="result-chip ${caught ? 'result-chip-ok' : 'result-chip-bad'}">${caught ? '✓ Caught!' : '✗ Dropped'}</span>
-        <p class="result-desc">${caught ? `Rolled ${roll} vs ${tgt}+ — caught!` : `Rolled ${roll} vs ${tgt}+ — dropped!`}</p>`;
-      resEl.hidden = false;
-
-      if (caught) {
-        const completeBtn = document.createElement('button');
-        completeBtn.type = 'button'; completeBtn.className = 'roll-btn';
-        completeBtn.style.cssText = 'margin-top:0.4rem;background:rgba(76,175,80,0.15);border-color:rgba(76,175,80,0.4);color:#81c784;';
-        completeBtn.innerHTML = '✓ Complete Pass — Close';
-        completeBtn.addEventListener('click', () => {
-          if (ws.catcher && window.GameState) {
-            window.GameState.ballCarrier = { side: ws.activeSide, idx: ws.catcher.idx };
-          }
-          window.Panels?.closePanel?.('pass');
-        });
-        resEl.appendChild(completeBtn);
-      } else {
-        const bBtn = document.createElement('button');
-        bBtn.type = 'button'; bBtn.className = 'pass-nav-btn'; bBtn.style.marginTop = '0.35rem';
-        bBtn.textContent = '→ Ball Bounces (D8)';
-        bBtn.addEventListener('click', () => {
-          const agFinal = tgt; /* reuse same target */
-          buildScatterStep(el, agFinal);
-        });
-        resEl.appendChild(bBtn);
-      }
-    });
-
-    sec.appendChild(rb); sec.appendChild(resEl);
+    rollNextScatter();
   }
 
   /* ── Boot ── */
@@ -601,7 +663,9 @@ function initPassWizard() {
   onPanelOpen('panel-pass', () => {
     ws.thrower = null; ws.catcher = null;
     ws.throwerPos = null; ws.catcherPos = null;
-    ws.intercept = false; ws.zonesOn = false;
+    ws.intercept = false; ws.interceptor = null;
+    ws.interceptAG = 4; ws.interceptTarget = 4;
+    ws.zonesOn = false;
     resetRoll();
     buildLayout();
   });

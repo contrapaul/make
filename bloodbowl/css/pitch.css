@@ -433,6 +433,82 @@
   opacity:     0.7;
 }
 
+/* ── Horizontal action row (throw / intercept / catch side-by-side) ── */
+
+.pwiz-action-row {
+  display:       flex;
+  align-items:   flex-start;
+  gap:           0;
+  margin-top:    0.15rem;
+  flex-wrap:     wrap;
+}
+
+.pwiz-action-arrow {
+  align-self:    center;
+  padding:       0 0.25rem;
+  color:         rgba(140, 170, 220, 0.35);
+  font-size:     0.9rem;
+  font-weight:   700;
+  flex-shrink:   0;
+}
+
+.pwiz-action-col {
+  flex:          1;
+  min-width:     80px;
+  display:       flex;
+  flex-direction: column;
+  align-items:   center;
+  text-align:    center;
+  gap:           0.2rem;
+  padding:       0.35rem 0.25rem;
+  background:    rgba(3, 8, 24, 0.45);
+  border:        1px solid rgba(80, 130, 255, 0.14);
+  border-radius: 5px;
+}
+
+.pwiz-action-chip {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.62rem;
+  font-weight:   700;
+  padding:       0.2rem 0.4rem;
+  border-radius: 3px;
+  line-height:   1.4;
+  width:         100%;
+}
+
+.pwiz-action-target {
+  font-size:   1rem;
+  font-weight: 900;
+  display:     block;
+  line-height: 1.1;
+  margin-top:  0.1rem;
+}
+
+.pwiz-action-sub {
+  font-size:   0.52rem;
+  font-weight: 500;
+  opacity:     0.65;
+  display:     block;
+}
+
+.chip-throw  { background: rgba(212,175,55,0.1);  color: var(--bb-gold,#D4AF37); border: 1px solid rgba(212,175,55,0.3); }
+.chip-int    { background: rgba(200,16,46,0.1);   color: #ff8fa0;               border: 1px solid rgba(200,16,46,0.3); }
+.chip-catch  { background: rgba(76,175,80,0.1);   color: #81c784;               border: 1px solid rgba(76,175,80,0.3); }
+
+.pwiz-action-die  { min-height: 24px; display: flex; align-items: center; justify-content: center; }
+.pwiz-action-result {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.62rem;
+  text-align:    center;
+  width:         100%;
+}
+.pwiz-action-result .result-roll-num {
+  font-size:   1.3rem;
+  font-weight: 900;
+  color:       var(--bb-gold, #D4AF37);
+  line-height: 1;
+}
+
 /* ════════════════════════════════════════════════════════
    PASS WIZARD 3B — Single-screen two-column layout
    ════════════════════════════════════════════════════════ */
