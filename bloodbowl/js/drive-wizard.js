@@ -633,9 +633,10 @@ const DriveWizard = (() => {
     const w    = data.find(e => total >= e.rollMin && total <= e.rollMax)
               ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '', rollMin: total, rollMax: total };
 
+    /* Store state — but do NOT call refreshWeatherChips/updateGameBarWeather here.
+       Those functions can trigger setPhase/updateModuleAvailability which applies
+       module-dimmed styles and locks the UI. Defer to after unlock. */
     if (window.GameState) window.GameState.currentWeather = w;
-    window.Panels?.refreshWeatherChips?.();
-    window.Panels?.updateGameBarWeather?.(w);
 
     const isPerfect    = !w.effect || w.effect === 'No effect';
     const breakdownHtml = d1 != null ? `<div class="result-roll-breakdown">${d1} + ${d2}</div>` : '';
@@ -651,6 +652,12 @@ const DriveWizard = (() => {
     resultEl.hidden = false;
     _state.weather = w;
     _unlockNext();
+
+    /* Deferred cosmetic updates — safe after unlock */
+    setTimeout(() => {
+      window.Panels?.refreshWeatherChips?.();
+      window.Panels?.updateGameBarWeather?.(w);
+    }, 0);
   }
 
   function _applyPrayer(val, resultEl) {
