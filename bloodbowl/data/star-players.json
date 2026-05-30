@@ -1,0 +1,515 @@
+[
+  {
+    "id": "akhorne-the-squirrel",
+    "name": "Akhorne the Squirrel",
+    "ma": 7, "st": 1, "ag": "2+", "pa": "-", "av": "6+",
+    "skills": "Blind Rage, Claws, Dauntless, Dodge, Frenzy, Jump Up, Loner (4+), No Ball, Sidestep, Stunty, Titchy",
+    "value": 80000,
+    "eligibleTeams": ["amazon","black-orc","bretonnian","chaos-chosen","chaos-dwarf","chaos-renegades","dark-elf","dwarf","elven-union","gnome","goblin","halfling","high-elf","human","imperial-nobility","khorne","lizardmen","necromantic-horror","norse","nurgle","ogre","old-world-alliance","orc","shambling-undead","skaven","snotling","tomb-kings","underworld-denizens","vampire","wood-elf"]
+  },
+  {
+    "id": "anqi-panqi",
+    "name": "Anqi Panqi",
+    "ma": 7, "st": 4, "ag": "5+", "pa": "6+", "av": "10+",
+    "skills": "Block, Grab, Loner (4+), Savage Blow, Stand Firm, Unsteady",
+    "value": 190000,
+    "eligibleTeams": ["amazon","lizardmen"]
+  },
+  {
+    "id": "barik-farblast",
+    "name": "Barik Farblast",
+    "ma": 6, "st": 3, "ag": "4+", "pa": "3+", "av": "9+",
+    "skills": "Blast It!, Cannoneer, Hail Mary Pass, Loner (4+), Pass, Secret Weapon, Sure Hands, Thick Skull",
+    "value": 80000,
+    "eligibleTeams": ["bretonnian","dwarf","human","imperial-nobility","norse","ogre","old-world-alliance"]
+  },
+  {
+    "id": "bilerot-vomitflesh",
+    "name": "Bilerot Vomitflesh",
+    "ma": 4, "st": 5, "ag": "4+", "pa": "6+", "av": "10+",
+    "skills": "Dirty Player, Disturbing Presence, Foul Appearance, Lone Fouler, Loner (4+), Putrid Regurgitation, Regeneration, Unsteady",
+    "value": 180000,
+    "eligibleTeams": ["chaos-chosen","chaos-renegades","nurgle"]
+  },
+  {
+    "id": "boa-konssstriktr",
+    "name": "Boa Kon'ssstriktr",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+",
+    "skills": "Dodge, Fend, Hypnotic Gaze, Loner (4+), Look Into My Eyes, Prehensile Tail, Safe Pair of Hands, Sidestep",
+    "value": 180000,
+    "eligibleTeams": ["amazon","lizardmen"]
+  },
+  {
+    "id": "bomber-dribblesnot",
+    "name": "Bomber Dribblesnot",
+    "ma": 6, "st": 2, "ag": "3+", "pa": "3+", "av": "8+",
+    "skills": "Accurate, Bombardier, Dodge, Kaboom!, Loner (4+), Right Stuff, Secret Weapon, Stunty",
+    "value": 80000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "captain-karina-von-riesz",
+    "name": "Captain Karina von Riesz",
+    "ma": 7, "st": 4, "ag": "2+", "pa": "3+", "av": "9+",
+    "skills": "Bloodlust (2+), Dodge, Hypnotic Gaze, Jump Up, Loner (4+), Regeneration, Tasty Morsel",
+    "value": 230000,
+    "eligibleTeams": ["necromantic-horror","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "cindy-piewhistle",
+    "name": "Cindy Piewhistle",
+    "ma": 5, "st": 2, "ag": "3+", "pa": "3+", "av": "7+",
+    "skills": "Accurate, All You Can Eat, Bombardier, Dodge, Loner (4+), Secret Weapon, Stunty",
+    "value": 100000,
+    "eligibleTeams": ["bretonnian","gnome","halfling","human","imperial-nobility","norse","old-world-alliance"]
+  },
+  {
+    "id": "count-luthor-von-drakenborg",
+    "name": "Count Luthor von Drakenborg",
+    "ma": 6, "st": 5, "ag": "2+", "pa": "3+", "av": "10+",
+    "skills": "Block, Hypnotic Gaze, Loner (4+), Regeneration, Sidestep, Star of the Show",
+    "value": 300000,
+    "eligibleTeams": ["necromantic-horror","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "deeproot-strongbranch",
+    "name": "Deeproot Strongbranch",
+    "ma": 2, "st": 7, "ag": "5+", "pa": "4+", "av": "11+",
+    "skills": "Block, Bullseye, Loner (4+), Mighty Blow, Reliable, Stand Firm, Strong Arm, Thick Skull, Throw Team-mate, Timmm-ber!",
+    "value": 280000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "dribl-and-drull",
+    "name": "Dribl and Drull",
+    "isPair": true,
+    "value": 230000,
+    "eligibleTeams": ["amazon","lizardmen"],
+    "players": [
+      { "name": "Dribl", "ma": 8, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "A Sneaky Pair, Dirty Player, Dodge, Loner (4+), Quick Foul, Sidestep, Sneaky Git, Stunty" },
+      { "name": "Drull", "ma": 8, "st": 2, "ag": "3+", "pa": "4+", "av": "8+", "skills": "A Sneaky Pair, Dodge, Loner (4+), Sidestep, Stab, Stunty" }
+    ]
+  },
+  {
+    "id": "eldril-sidewinder",
+    "name": "Eldril Sidewinder",
+    "ma": 8, "st": 3, "ag": "2+", "pa": "3+", "av": "8+",
+    "skills": "Catch, Dodge, Hypnotic Gaze, Loner (4+), Mesmerising Dance, Nerves of Steel, On the Ball",
+    "value": 220000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"]
+  },
+  {
+    "id": "estelle-la-veneaux",
+    "name": "Estelle la Veneaux",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+",
+    "skills": "Baleful Hex, Disturbing Presence, Dodge, Guard, Loner (4+), Sidestep",
+    "value": 190000,
+    "eligibleTeams": ["amazon","lizardmen"]
+  },
+  {
+    "id": "fungus-the-loon",
+    "name": "Fungus the Loon",
+    "ma": 4, "st": 7, "ag": "3+", "pa": "-", "av": "8+",
+    "skills": "Ball & Chain, Loner (4+), Mighty Blow, No Ball, Secret Weapon, Stunty, Whirling Dervish",
+    "value": 80000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "glart-smashrip",
+    "name": "Glart Smashrip",
+    "ma": 5, "st": 4, "ag": "4+", "pa": "6+", "av": "9+",
+    "skills": "Block, Claws, Frenzied Rush, Grab, Juggernaut, Loner (4+), Stand Firm",
+    "value": 175000,
+    "eligibleTeams": ["goblin","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "gloriel-summerbloom",
+    "name": "Gloriel Summerbloom",
+    "ma": 7, "st": 2, "ag": "2+", "pa": "2+", "av": "8+",
+    "skills": "Accurate, Dodge, Loner (3+), Pass, Shot to Nothing, Sidestep, Sure Hands",
+    "value": 150000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"]
+  },
+  {
+    "id": "glotl-stop",
+    "name": "Glotl Stop",
+    "ma": 6, "st": 6, "ag": "5+", "pa": "6+", "av": "10+",
+    "skills": "Animal Savagery, Frenzy, Loner (4+), Mighty Blow, Prehensile Tail, Primal Savagery, Stand Firm, Thick Skull",
+    "value": 260000,
+    "eligibleTeams": ["amazon","lizardmen"]
+  },
+  {
+    "id": "grak-and-crumbleberry",
+    "name": "Grak and Crumbleberry",
+    "isPair": true,
+    "value": 250000,
+    "eligibleTeams": ["amazon","black-orc","bretonnian","chaos-chosen","chaos-dwarf","chaos-renegades","dark-elf","dwarf","elven-union","gnome","goblin","halfling","high-elf","human","imperial-nobility","khorne","lizardmen","necromantic-horror","norse","nurgle","ogre","old-world-alliance","orc","shambling-undead","skaven","snotling","tomb-kings","underworld-denizens","vampire","wood-elf"],
+    "players": [
+      { "name": "Grak", "ma": 5, "st": 5, "ag": "4+", "pa": "4+", "av": "10+", "skills": "Bone Head, I'll Carry You, Kick Team-mate, Loner (4+), Mighty Blow, Thick Skull" },
+      { "name": "Crumbleberry", "ma": 5, "st": 2, "ag": "3+", "pa": "5+", "av": "7+", "skills": "Dodge, I'll Carry You, Lethal Flight, Loner (4+), Right Stuff, Stunty, Sure Hands" }
+    ]
+  },
+  {
+    "id": "grashnak-blackhoof",
+    "name": "Grashnak Blackhoof",
+    "ma": 6, "st": 6, "ag": "4+", "pa": "6+", "av": "9+",
+    "skills": "Frenzy, Gored by the Bull, Horns, Loner (4+), Mighty Blow, Thick Skull, Unchannelled Fury",
+    "value": 240000,
+    "eligibleTeams": ["chaos-chosen","chaos-dwarf","chaos-renegades","khorne","norse","nurgle"]
+  },
+  {
+    "id": "gretchen-wachter",
+    "name": "Gretchen Wächter",
+    "ma": 7, "st": 3, "ag": "2+", "pa": "-", "av": "9+",
+    "skills": "Disturbing Presence, Dodge, Foul Appearance, Incorporeal, Jump Up, Loner (4+), No Ball, Regeneration, Shadowing, Sidestep",
+    "value": 180000,
+    "eligibleTeams": ["necromantic-horror","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "griff-oberwald",
+    "name": "Griff Oberwald",
+    "ma": 7, "st": 4, "ag": "2+", "pa": "3+", "av": "9+",
+    "skills": "Block, Consummate Professional, Dodge, Fend, Loner (3+), Sprint, Sure Feet",
+    "value": 300000,
+    "eligibleTeams": ["bretonnian","human","imperial-nobility","norse","old-world-alliance"]
+  },
+  {
+    "id": "grim-ironjaw",
+    "name": "Grim Ironjaw",
+    "ma": 5, "st": 4, "ag": "3+", "pa": "6+", "av": "9+",
+    "skills": "Block, Dauntless, Frenzy, Hatred (Big Guy), Loner (4+), Multiple Block, Slayer, Thick Skull",
+    "value": 190000,
+    "eligibleTeams": ["dwarf","ogre"]
+  },
+  {
+    "id": "grombrindal",
+    "name": "Grombrindal",
+    "ma": 5, "st": 3, "ag": "3+", "pa": "4+", "av": "10+",
+    "skills": "Block, Break Tackle, Dauntless, Loner (4+), Mighty Blow, Stand Firm, Sure Feet, Thick Skull, Wisdom of the White Dwarf",
+    "value": 170000,
+    "eligibleTeams": ["bretonnian","dwarf","gnome","halfling","human","imperial-nobility","norse","ogre","old-world-alliance"]
+  },
+  {
+    "id": "guffle-pusmaw",
+    "name": "Guffle Pusmaw",
+    "ma": 5, "st": 4, "ag": "4+", "pa": "6+", "av": "10+",
+    "skills": "Foul Appearance, Loner (4+), Monstrous Mouth, Nerves of Steel, On the Ball, Plague Ridden, Quick Bite",
+    "value": 150000,
+    "eligibleTeams": ["chaos-chosen","chaos-renegades","nurgle"]
+  },
+  {
+    "id": "hakflem-skuttlespike",
+    "name": "Hakflem Skuttlespike",
+    "ma": 8, "st": 3, "ag": "2+", "pa": "3+", "av": "8+",
+    "skills": "Dodge, Extra Arms, Loner (4+), Prehensile Tail, Treacherous, Two Heads",
+    "value": 200000,
+    "eligibleTeams": ["goblin","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "helmut-wulf",
+    "name": "Helmut Wulf",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "-", "av": "9+",
+    "skills": "Chainsaw, Loner (4+), No Ball, Old Pro, Pro, Secret Weapon, Stand Firm",
+    "value": 140000,
+    "eligibleTeams": ["bretonnian","human","imperial-nobility","norse","old-world-alliance"]
+  },
+  {
+    "id": "hthark-the-unstoppable",
+    "name": "H'thark the Unstoppable",
+    "ma": 6, "st": 6, "ag": "4+", "pa": "6+", "av": "10+",
+    "skills": "Block, Break Tackle, Defensive, Juggernaut, Loner (4+), Sprint, Sure Feet, Thick Skull, Unsteady, Unstoppable Momentum",
+    "value": 300000,
+    "eligibleTeams": ["black-orc","chaos-chosen","chaos-dwarf","goblin","ogre","orc"]
+  },
+  {
+    "id": "ivan-the-animal-deathshroud",
+    "name": "Ivan 'the Animal' Deathshroud",
+    "ma": 6, "st": 4, "ag": "4+", "pa": "5+", "av": "9+",
+    "skills": "Block, Disturbing Presence, Dwarven Scourge, Hatred (Dwarf), Juggernaut, Loner (4+), Regeneration, Strip Ball, Tackle",
+    "value": 210000,
+    "eligibleTeams": ["necromantic-horror","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "ivar-eriksson",
+    "name": "Ivar Eriksson",
+    "ma": 6, "st": 4, "ag": "3+", "pa": "4+", "av": "9+",
+    "skills": "Block, Guard, Loner (4+), Raiding Party, Tackle",
+    "value": 215000,
+    "eligibleTeams": ["bretonnian","human","imperial-nobility","norse","old-world-alliance"]
+  },
+  {
+    "id": "jeremiah-kool",
+    "name": "Jeremiah Kool",
+    "ma": 8, "st": 3, "ag": "1+", "pa": "2+", "av": "9+",
+    "skills": "Block, Diving Catch, Dodge, Dump-off, Loner (4+), Nerves of Steel, On the Ball, Pass, Sidestep, The Flashing Blade",
+    "value": 300000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"]
+  },
+  {
+    "id": "jordell-freshbreeze",
+    "name": "Jordell Freshbreeze",
+    "ma": 8, "st": 3, "ag": "1+", "pa": "3+", "av": "8+",
+    "skills": "Block, Diving Catch, Dodge, Leap, Loner (4+), Sidestep, Steady Footing, Swift as the Breeze",
+    "value": 280000,
+    "eligibleTeams": ["dark-elf","elven-union","gnome","halfling","high-elf","wood-elf"]
+  },
+  {
+    "id": "josef-bugman",
+    "name": "Josef Bugman",
+    "ma": 5, "st": 3, "ag": "3+", "pa": "4+", "av": "9+",
+    "skills": "Block, Drunkard, Dwarfen Grit, Fend, Loner (3+), Tackle, Taunt, Thick Skull",
+    "value": 180000,
+    "eligibleTeams": ["bretonnian","dwarf","human","imperial-nobility","norse","ogre","old-world-alliance"]
+  },
+  {
+    "id": "karla-von-kill",
+    "name": "Karla von Kill",
+    "ma": 6, "st": 4, "ag": "3+", "pa": "3+", "av": "9+",
+    "skills": "Block, Dauntless, Dodge, Indomitable, Jump Up, Loner (4+)",
+    "value": 210000,
+    "eligibleTeams": ["amazon","bretonnian","human","imperial-nobility","lizardmen","norse","old-world-alliance"]
+  },
+  {
+    "id": "kiroth-krakeneye",
+    "name": "Kiroth Krakeneye",
+    "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "8+",
+    "skills": "Black Ink, Disturbing Presence, Foul Appearance, Loner (4+), On the Ball, Tackle, Tentacles",
+    "value": 160000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"]
+  },
+  {
+    "id": "kreek-rustgouger",
+    "name": "Kreek Rustgouger",
+    "ma": 4, "st": 7, "ag": "4+", "pa": "-", "av": "10+",
+    "skills": "Ball & Chain, I'll Be Back!, Loner (4+), Mighty Blow, No Ball, Prehensile Tail, Secret Weapon",
+    "value": 180000,
+    "eligibleTeams": ["goblin","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "lord-borak-the-despoiler",
+    "name": "Lord Borak the Despoiler",
+    "ma": 5, "st": 5, "ag": "3+", "pa": "5+", "av": "10+",
+    "skills": "Block, Dirty Player, Leader, Loner (3+), Lord of Chaos, Mighty Blow, Put the Boot In, Sneaky Git",
+    "value": 270000,
+    "eligibleTeams": ["chaos-chosen","chaos-dwarf","chaos-renegades","khorne","norse","nurgle"]
+  },
+  {
+    "id": "maple-highgrove",
+    "name": "Maple Highgrove",
+    "ma": 3, "st": 5, "ag": "5+", "pa": "5+", "av": "11+",
+    "skills": "Brawler, Grab, Loner (4+), Mighty Blow, Stand Firm, Tentacles, Thick Skull, Vicious Vines",
+    "value": 210000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "max-spleenripper",
+    "name": "Max Spleenripper",
+    "ma": 5, "st": 4, "ag": "4+", "pa": "-", "av": "9+",
+    "skills": "Chainsaw, Loner (4+), Maximum Carnage, No Ball, Secret Weapon",
+    "value": 130000,
+    "eligibleTeams": ["chaos-chosen","chaos-renegades","khorne","norse"]
+  },
+  {
+    "id": "morg-n-thorg",
+    "name": "Morg 'n' Thorg",
+    "ma": 6, "st": 6, "ag": "3+", "pa": "4+", "av": "11+",
+    "skills": "Block, Bullseye, Hatred (Undead), Loner (4+), Mighty Blow, The Ballista, Thick Skull, Throw Team-mate",
+    "value": 340000,
+    "eligibleTeams": ["amazon","black-orc","bretonnian","chaos-chosen","chaos-dwarf","chaos-renegades","dark-elf","dwarf","elven-union","goblin","halfling","high-elf","human","imperial-nobility","khorne","lizardmen","norse","nurgle","ogre","old-world-alliance","orc","skaven","snotling","underworld-denizens","wood-elf"]
+  },
+  {
+    "id": "nobbla-blackwart",
+    "name": "Nobbla Blackwart",
+    "ma": 6, "st": 2, "ag": "3+", "pa": "-", "av": "8+",
+    "skills": "Block, Chainsaw, Dodge, Kick 'em While They're Down!, Loner (4+), No Ball, Saboteur, Secret Weapon, Stunty",
+    "value": 120000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "puggy-baconbreath",
+    "name": "Puggy Baconbreath",
+    "ma": 5, "st": 3, "ag": "3+", "pa": "3+", "av": "8+",
+    "skills": "Block, Dodge, Halfling Luck, Loner (3+), Nerves of Steel, Right Stuff, Stunty",
+    "value": 130000,
+    "eligibleTeams": ["bretonnian","gnome","halfling","human","imperial-nobility","norse","old-world-alliance"]
+  },
+  {
+    "id": "rashnak-backstabber",
+    "name": "Rashnak Backstabber",
+    "ma": 7, "st": 3, "ag": "3+", "pa": "5+", "av": "8+",
+    "skills": "Loner (4+), Shadowing, Sidestep, Sneaky Git, Stab, Toxin Connoisseur",
+    "value": 130000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc"]
+  },
+  {
+    "id": "ripper-bolgrot",
+    "name": "Ripper Bolgrot",
+    "ma": 5, "st": 6, "ag": "5+", "pa": "4+", "av": "10+",
+    "skills": "Bullseye, Grab, Loner (4+), Mighty Blow, Regeneration, Thinking Man's Troll, Throw Team-mate",
+    "value": 250000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "rodney-roachbait",
+    "name": "Rodney Roachbait",
+    "ma": 6, "st": 2, "ag": "3+", "pa": "4+", "av": "7+",
+    "skills": "Catch, Catch of the Day, Diving Catch, Jump Up, Loner (4+), On the Ball, Sidestep, Stunty, Wrestle",
+    "value": 70000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "rowana-forestfoot",
+    "name": "Rowana Forestfoot",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "8+",
+    "skills": "Bounding Leap, Dodge, Dump-off, Guard, Horns, Jump Up, Leap, Loner (4+)",
+    "value": 160000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "roxanna-darknail",
+    "name": "Roxanna Darknail",
+    "ma": 8, "st": 3, "ag": "1+", "pa": "3+", "av": "8+",
+    "skills": "Dodge, Frenzy, Jump Up, Juggernaut, Leap, Loner (4+), Slashing Nails",
+    "value": 270000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"]
+  },
+  {
+    "id": "rumbelow-sheepskin",
+    "name": "Rumbelow Sheepskin",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "5+", "av": "8+",
+    "skills": "Block, Horns, Juggernaut, Loner (4+), Ram, Tackle, Thick Skull",
+    "value": 170000,
+    "eligibleTeams": ["gnome","halfling"]
+  },
+  {
+    "id": "scrappa-sorehead",
+    "name": "Scrappa Sorehead",
+    "ma": 7, "st": 2, "ag": "3+", "pa": "4+", "av": "8+",
+    "skills": "Dirty Player, Dodge, Loner (4+), Pogo, Right Stuff, Sprint, Stunty, Sure Feet, Yoink!",
+    "value": 120000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "scyla-anfingrimm",
+    "name": "Scyla Anfingrimm",
+    "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "10+",
+    "skills": "Claws, Frenzy, Fury of the Blood God, Loner (4+), Mighty Blow, Prehensile Tail, Thick Skull, Unchannelled Fury",
+    "value": 200000,
+    "eligibleTeams": ["chaos-chosen","chaos-renegades","khorne","norse"]
+  },
+  {
+    "id": "skitter-stab-stab",
+    "name": "Skitter Stab-stab",
+    "ma": 9, "st": 2, "ag": "2+", "pa": "4+", "av": "8+",
+    "skills": "Dodge, Loner (4+), Master Assassin, Prehensile Tail, Shadowing, Stab",
+    "value": 170000,
+    "eligibleTeams": ["goblin","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "skrorg-snowpelt",
+    "name": "Skrorg Snowpelt",
+    "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "9+",
+    "skills": "Block, Claws, Disturbing Presence, Juggernaut, Loner (4+), Mighty Blow, Pump Up the Crowd",
+    "value": 240000,
+    "eligibleTeams": ["bretonnian","dwarf","halfling","human","imperial-nobility","norse","ogre","old-world-alliance"]
+  },
+  {
+    "id": "skrull-halfheight",
+    "name": "Skrull Halfheight",
+    "ma": 6, "st": 3, "ag": "4+", "pa": "3+", "av": "9+",
+    "skills": "Accurate, Loner (4+), Nerves of Steel, Pass, Regeneration, Strong Passing Game, Sure Hands, Thick Skull",
+    "value": 150000,
+    "eligibleTeams": ["dwarf","necromantic-horror","ogre","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "swiftvine-glimmershard",
+    "name": "Swiftvine Glimmershard",
+    "ma": 7, "st": 2, "ag": "3+", "pa": "5+", "av": "7+",
+    "skills": "Disturbing Presence, Fend, Furious Outburst, Loner (4+), Sidestep, Stab, Stunty",
+    "value": 110000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "the-black-gobbo",
+    "name": "The Black Gobbo",
+    "ma": 6, "st": 2, "ag": "3+", "pa": "3+", "av": "8+",
+    "skills": "Bombardier, Disturbing Presence, Dodge, Loner (3+), Sidestep, Sneakiest of the Lot, Sneaky Git, Stab",
+    "value": 210000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc","skaven","snotling","underworld-denizens"]
+  },
+  {
+    "id": "the-mighty-zug",
+    "name": "The Mighty Zug",
+    "ma": 5, "st": 5, "ag": "4+", "pa": "6+", "av": "10+",
+    "skills": "Block, Crushing Blow, Loner (4+), Mighty Blow, Unsteady",
+    "value": 220000,
+    "eligibleTeams": ["amazon","bretonnian","human","imperial-nobility","lizardmen","norse","old-world-alliance"]
+  },
+  {
+    "id": "the-swift-twins",
+    "name": "The Swift Twins",
+    "isPair": true,
+    "value": 300000,
+    "eligibleTeams": ["dark-elf","elven-union","high-elf","wood-elf"],
+    "players": [
+      { "name": "Lucien Swift", "ma": 7, "st": 3, "ag": "2+", "pa": "3+", "av": "9+", "skills": "Block, Loner (4+), Mighty Blow, Tackle, Working In Tandem" },
+      { "name": "Valen Swift", "ma": 7, "st": 3, "ag": "2+", "pa": "2+", "av": "9+", "skills": "Accurate, Loner (4+), Nerves of Steel, Pass, Safe Pass, Sure Hands, Working In Tandem" }
+    ]
+  },
+  {
+    "id": "thorsson-stoutmead",
+    "name": "Thorsson Stoutmead",
+    "ma": 6, "st": 3, "ag": "4+", "pa": "3+", "av": "8+",
+    "skills": "Beer Barrel Bash, Block, Drunkard, Loner (4+), Thick Skull",
+    "value": 170000,
+    "eligibleTeams": ["bretonnian","dwarf","human","imperial-nobility","norse","ogre","old-world-alliance"]
+  },
+  {
+    "id": "varag-ghoul-chewer",
+    "name": "Varag Ghoul-Chewer",
+    "ma": 6, "st": 5, "ag": "3+", "pa": "5+", "av": "10+",
+    "skills": "Block, Hatred (Undead), Jump Up, Krump and Smash, Loner (4+), Mighty Blow, Thick Skull, Unsteady",
+    "value": 260000,
+    "eligibleTeams": ["black-orc","chaos-dwarf","goblin","ogre","orc"]
+  },
+  {
+    "id": "wilhelm-chaney",
+    "name": "Wilhelm Chaney",
+    "ma": 8, "st": 4, "ag": "3+", "pa": "4+", "av": "9+",
+    "skills": "Catch, Claws, Frenzy, Loner (4+), Regeneration, Savage Mauling, Wrestle",
+    "value": 220000,
+    "eligibleTeams": ["necromantic-horror","shambling-undead","tomb-kings","vampire"]
+  },
+  {
+    "id": "willow-rosebark",
+    "name": "Willow Rosebark",
+    "ma": 6, "st": 4, "ag": "3+", "pa": "5+", "av": "9+",
+    "skills": "Dauntless, Loner (4+), Sidestep, Thick Skull, Woodland Fury",
+    "value": 160000,
+    "eligibleTeams": ["gnome","halfling","wood-elf"]
+  },
+  {
+    "id": "withergrasp-doubledrool",
+    "name": "Withergrasp Doubledrool",
+    "ma": 6, "st": 3, "ag": "3+", "pa": "4+", "av": "9+",
+    "skills": "Foul Appearance, Loner (4+), Prehensile Tail, Tackle, Tentacles, Two Heads, Watch Out!, Wrestle",
+    "value": 170000,
+    "eligibleTeams": ["chaos-chosen","chaos-renegades","nurgle"]
+  },
+  {
+    "id": "zolcath-the-zoat",
+    "name": "Zolcath the Zoat",
+    "ma": 5, "st": 5, "ag": "4+", "pa": "5+", "av": "10+",
+    "skills": "Disturbing Presence, Excuse me are you a Zoat?, Juggernaut, Loner (4+), Mighty Blow, Prehensile Tail, Regeneration, Sure Feet",
+    "value": 220000,
+    "eligibleTeams": ["amazon","dark-elf","elven-union","high-elf","lizardmen","wood-elf"]
+  },
+  {
+    "id": "zzharg-madeye",
+    "name": "Zzharg Madeye",
+    "ma": 4, "st": 4, "ag": "4+", "pa": "3+", "av": "10+",
+    "skills": "Blastin' Solves Everything, Cannoneer, Hail Mary Pass, Loner (4+), Nerves of Steel, Secret Weapon, Thick Skull",
+    "value": 130000,
+    "eligibleTeams": ["chaos-chosen","chaos-dwarf"]
+  }
+]

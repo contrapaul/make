@@ -406,6 +406,100 @@
   color:       rgba(130, 160, 210, 0.45);
 }
 
+/* ── Box team banner ─────────────────────────────────── */
+.tb-box-banner {
+  display:       flex;
+  align-items:   center;
+  justify-content: space-between;
+  gap:           0.5rem;
+  padding:       0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background:    rgba(212, 175, 55, 0.07);
+  border:        1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 6px;
+}
+.tb-box-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.7rem;
+  color:       rgba(212, 175, 55, 0.8);
+}
+.tb-box-btn {
+  padding:       0.25rem 0.65rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+  font-weight:   700;
+  background:    rgba(212, 175, 55, 0.15);
+  border:        1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 4px;
+  color:         #D4AF37;
+  cursor:        pointer;
+  white-space:   nowrap;
+  flex-shrink:   0;
+}
+.tb-box-btn:hover { background: rgba(212, 175, 55, 0.28); }
+
+/* ── Star Players section ────────────────────────────── */
+.tb-star-section { margin-top: 0.75rem; }
+.tb-star-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.6rem;
+  color:       rgba(130, 160, 210, 0.5);
+  margin:      0 0 0.4rem;
+}
+.tb-star-list { display: flex; flex-direction: column; gap: 0.3rem; }
+.tb-star-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.4rem 0.5rem;
+  background:    rgba(212, 175, 55, 0.04);
+  border:        1px solid rgba(212, 175, 55, 0.12);
+  border-radius: 5px;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+}
+.tb-star-row.hired {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+.tb-star-name {
+  flex: 1;
+  color: rgba(215, 235, 255, 0.85);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.tb-star-badge {
+  color:      #D4AF37;
+  font-size:  0.6rem;
+  flex-shrink: 0;
+}
+.tb-star-stats {
+  color:       rgba(130, 160, 210, 0.55);
+  font-size:   0.58rem;
+  white-space: nowrap;
+}
+.tb-star-cost {
+  color:       rgba(212, 175, 55, 0.7);
+  white-space: nowrap;
+}
+.tb-star-release { border-color: rgba(255, 100, 100, 0.4) !important; color: #ff8080 !important; }
+.tb-star-release:hover { background: rgba(255, 100, 100, 0.12) !important; }
+
+/* Star player rows in Names section */
+.tb-player-row.star-player-row {
+  background: rgba(212, 175, 55, 0.05);
+  border-left: 2px solid rgba(212, 175, 55, 0.3);
+}
+.star-pill { background: rgba(212, 175, 55, 0.15) !important; color: #D4AF37 !important; }
+.tb-pname-static {
+  flex: 1;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.7rem;
+  color:       rgba(212, 175, 55, 0.8);
+  font-style:  italic;
+}
+
 /* My Teams button next to team selects */
 .my-teams-btn {
   padding:       0.25rem 0.45rem;

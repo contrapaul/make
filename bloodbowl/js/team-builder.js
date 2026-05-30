@@ -117,8 +117,10 @@ const TeamBuilder = (() => {
 
   let _view      = 'list';    /* 'list' | 'builder' */
   let _draft     = null;      /* team being built */
-  let _rosterData = null;     /* fetched roster positions for selected race */
-  let _teamsData  = null;     /* cache of data/teams.json */
+  let _rosterData    = null;  /* fetched roster positions for selected race */
+  let _teamsData     = null;  /* cache of data/teams.json */
+  let _boxTeamsData  = null;  /* cache of data/box-teams.json */
+  let _starPlayersData = null; /* cache of data/star-players.json */
 
   async function _getTeamsData() {
     if (_teamsData) return _teamsData;
@@ -127,6 +129,24 @@ const TeamBuilder = (() => {
       _teamsData = await res.json();
     } catch { _teamsData = []; }
     return _teamsData;
+  }
+
+  async function _getBoxTeamsData() {
+    if (_boxTeamsData) return _boxTeamsData;
+    try {
+      const res = await fetch('data/box-teams.json');
+      _boxTeamsData = await res.json();
+    } catch { _boxTeamsData = {}; }
+    return _boxTeamsData;
+  }
+
+  async function _getStarPlayersData() {
+    if (_starPlayersData) return _starPlayersData;
+    try {
+      const res = await fetch('data/star-players.json');
+      _starPlayersData = await res.json();
+    } catch { _starPlayersData = []; }
+    return _starPlayersData;
   }
 
   async function _fetchRoster(fileUrl) {
@@ -319,7 +339,7 @@ const TeamBuilder = (() => {
         name:             '',
         baseTeamId:       null,
         rerolls:          0,
-        fanFactor:        1,
+        fanFactor:        0,
         assistantCoaches: 0,
         cheerleaders:     0,
         apothecary:       false,
@@ -336,6 +356,7 @@ const TeamBuilder = (() => {
       const base = all.find(t => t.id === _draft.baseTeamId);
       if (base) _rosterData = await _fetchRoster(base.file);
     }
+    await Promise.all([_getBoxTeamsData(), _getStarPlayersData()]);
     _render();
   }
 
@@ -377,9 +398,12 @@ const TeamBuilder = (() => {
           _draft.baseTeamId = team.id;
           _draft.rerolls    = 0;
           _draft.players    = [];
-          _rosterData = await _fetchRoster(team.file);
+          [_rosterData] = await Promise.all([
+            _fetchRoster(team.file),
+            _getBoxTeamsData(),
+            _getStarPlayersData(),
+          ]);
 
-          /* Re-render roster section without full re-render */
           _render();
         });
 
@@ -403,6 +427,20 @@ const TeamBuilder = (() => {
     _refreshTreasury(body);
 
     if (!_rosterData || !_draft.baseTeamId) return;
+
+    /* ── Box team banner ── */
+    const boxEntry = _boxTeamsData?.[ _draft.baseTeamId];
+    if (boxEntry && _draft.players.filter(p => !p.isStarPlayer).length === 0) {
+      const banner = document.createElement('div');
+      banner.className = 'tb-box-banner';
+      banner.innerHTML = `<span class="tb-box-label">📦 ${h(boxEntry.label)}</span>`;
+      const useBtn = document.createElement('button');
+      useBtn.type = 'button'; useBtn.className = 'tb-box-btn';
+      useBtn.textContent = 'Use Starter Roster';
+      useBtn.addEventListener('click', () => _loadBoxTeam(boxEntry));
+      banner.appendChild(useBtn);
+      body.appendChild(banner);
+    }
 
     /* ── Roster ── */
     const rosterSec = document.createElement('div');
@@ -496,27 +534,43 @@ const TeamBuilder = (() => {
 
       _draft.players.forEach((p, i) => {
         const row = document.createElement('div');
-        row.className = 'tb-player-row';
+        row.className = `tb-player-row${p.isStarPlayer ? ' star-player-row' : ''}`;
 
-        const jInp = document.createElement('input');
-        jInp.type = 'text'; jInp.className = 'tb-jersey-inp';
-        jInp.value = p.jerseyNumber; jInp.placeholder = '#';
-        jInp.addEventListener('change', () => { p.jerseyNumber = parseInt(jInp.value, 10) || (i + 1); });
+        if (p.isStarPlayer) {
+          /* Star players: read-only name badge, no jersey edit */
+          const badge = document.createElement('span');
+          badge.className = 'tb-pos-pill star-pill';
+          badge.textContent = '★';
+          const nameEl = document.createElement('span');
+          nameEl.className = 'tb-pname-static';
+          nameEl.textContent = p.name;
+          const pos = document.createElement('span');
+          pos.className = 'tb-pos-pill'; pos.textContent = 'Star Player';
+          row.appendChild(badge); row.appendChild(nameEl); row.appendChild(pos);
+        } else {
+          const jInp = document.createElement('input');
+          jInp.type = 'text'; jInp.className = 'tb-jersey-inp';
+          jInp.value = p.jerseyNumber; jInp.placeholder = '#';
+          jInp.addEventListener('change', () => { p.jerseyNumber = parseInt(jInp.value, 10) || (i + 1); });
 
-        const nInp = document.createElement('input');
-        nInp.type = 'text'; nInp.className = 'tb-pname-inp';
-        nInp.value = p.name; nInp.placeholder = 'Player name';
-        nInp.addEventListener('input', () => { p.name = nInp.value; });
+          const nInp = document.createElement('input');
+          nInp.type = 'text'; nInp.className = 'tb-pname-inp';
+          nInp.value = p.name; nInp.placeholder = 'Player name';
+          nInp.addEventListener('input', () => { p.name = nInp.value; });
 
-        const pos = document.createElement('span');
-        pos.className = 'tb-pos-pill'; pos.textContent = p.position;
+          const pos = document.createElement('span');
+          pos.className = 'tb-pos-pill'; pos.textContent = p.position;
 
-        row.appendChild(jInp); row.appendChild(nInp); row.appendChild(pos);
+          row.appendChild(jInp); row.appendChild(nInp); row.appendChild(pos);
+        }
         list.appendChild(row);
       });
       playersSec.appendChild(list);
       body.appendChild(playersSec);
     }
+
+    /* ── Star Players ── */
+    _renderStarPlayerSection(body);
 
     /* ── Staff & Extras ── */
     _renderStaffSection(body);
@@ -551,6 +605,149 @@ const TeamBuilder = (() => {
     body.appendChild(saveBtn);
   }
 
+  function _loadBoxTeam(boxEntry) {
+    if (!_rosterData || !boxEntry) return;
+    _draft.players = _draft.players.filter(p => p.isStarPlayer);
+    boxEntry.positions.forEach(({ positionId, count }) => {
+      const pos = _rosterData.find(r => r.id === positionId);
+      if (!pos) return;
+      for (let i = 0; i < count; i++) {
+        const num = _draft.players.filter(p => !p.isStarPlayer && p.rosterSlotId === pos.id).length + i + 1;
+        _draft.players.push({
+          id:               uuid(),
+          rosterSlotId:     pos.id,
+          name:             `${pos.position} ${num}`,
+          jerseyNumber:     _draft.players.length + 1,
+          position:         pos.position,
+          ma: pos.ma, st: pos.st, ag: pos.ag, pa: pos.pa, av: pos.av,
+          skills:           pos.skills ?? '',
+          value:            pos.value ?? 0,
+          spp:              0,
+          learnedSkills:    [],
+          nigglingInjuries: 0,
+          missingNextGame:  false,
+          dead:             false,
+          statModifiers:    {},
+          isStarPlayer:     false,
+        });
+      }
+    });
+    _render();
+  }
+
+  function _renderStarPlayerSection(body) {
+    if (!_starPlayersData || !_draft.baseTeamId) return;
+
+    const eligible = _starPlayersData.filter(sp => sp.eligibleTeams.includes(_draft.baseTeamId));
+    if (eligible.length === 0) return;
+
+    const hiredStars = _draft.players.filter(p => p.isStarPlayer);
+    const starSlotsFilled = hiredStars.length;
+
+    const sec = document.createElement('div');
+    sec.className = 'tb-section tb-star-section';
+    sec.innerHTML = '<div class="tb-section-title">★ Star Players</div>';
+
+    const note = document.createElement('p');
+    note.className = 'tb-star-note';
+    note.textContent = `${starSlotsFilled}/2 slots filled · Stars use Loner and cannot be renamed`;
+    sec.appendChild(note);
+
+    const list = document.createElement('div');
+    list.className = 'tb-star-list';
+
+    eligible.forEach(sp => {
+      const isHired = hiredStars.some(p => p.starPlayerId === sp.id);
+      const isPair  = sp.isPair === true;
+      const slotsNeeded = isPair ? 2 : 1;
+      const canHire = !isHired && (starSlotsFilled + slotsNeeded <= 2);
+
+      const row = document.createElement('div');
+      row.className = `tb-star-row${isHired ? ' hired' : ''}`;
+
+      const namePart = document.createElement('div');
+      namePart.className = 'tb-star-name';
+      namePart.innerHTML = `<span class="tb-star-badge">★${isPair ? '★' : ''}</span> ${h(sp.name)}`;
+
+      const statPart = document.createElement('div');
+      statPart.className = 'tb-star-stats';
+      if (isPair) {
+        statPart.textContent = sp.players.map(p => p.name).join(' + ');
+      } else {
+        statPart.textContent = `${sp.ma}/${sp.st}/${sp.ag}/${sp.pa}/${sp.av}`;
+      }
+
+      const costPart = document.createElement('span');
+      costPart.className = 'tb-star-cost';
+      costPart.textContent = fmtGP(sp.value);
+
+      const actionBtn = document.createElement('button');
+      actionBtn.type = 'button';
+
+      if (isHired) {
+        actionBtn.className = 'tb-qty-btn tb-star-release';
+        actionBtn.textContent = 'Release';
+        actionBtn.addEventListener('click', () => {
+          _draft.players = _draft.players.filter(p => p.starPlayerId !== sp.id);
+          _render();
+        });
+      } else {
+        actionBtn.className = 'tb-qty-btn';
+        actionBtn.textContent = 'Hire';
+        actionBtn.disabled = !canHire;
+        if (canHire) {
+          actionBtn.addEventListener('click', () => {
+            const { remaining } = _calcDraftTreasury();
+            if (remaining < sp.value) { _showToast('✗ Not enough gold!', true); return; }
+            if (isPair) {
+              sp.players.forEach((pp, idx) => {
+                _draft.players.push({
+                  id:           uuid(),
+                  rosterSlotId: null,
+                  starPlayerId: sp.id,
+                  name:         pp.name,
+                  jerseyNumber: _draft.players.length + 1,
+                  position:     'Star Player',
+                  ma: pp.ma, st: pp.st, ag: pp.ag, pa: pp.pa, av: pp.av,
+                  skills:       pp.skills ?? '',
+                  value:        idx === 0 ? sp.value : 0,
+                  spp: 0, learnedSkills: [], nigglingInjuries: 0,
+                  missingNextGame: false, dead: false, statModifiers: {},
+                  isStarPlayer: true,
+                });
+              });
+            } else {
+              _draft.players.push({
+                id:           uuid(),
+                rosterSlotId: null,
+                starPlayerId: sp.id,
+                name:         sp.name,
+                jerseyNumber: _draft.players.length + 1,
+                position:     'Star Player',
+                ma: sp.ma, st: sp.st, ag: sp.ag, pa: sp.pa, av: sp.av,
+                skills:       sp.skills ?? '',
+                value:        sp.value,
+                spp: 0, learnedSkills: [], nigglingInjuries: 0,
+                missingNextGame: false, dead: false, statModifiers: {},
+                isStarPlayer: true,
+              });
+            }
+            _render();
+          });
+        }
+      }
+
+      row.appendChild(namePart);
+      row.appendChild(statPart);
+      row.appendChild(costPart);
+      row.appendChild(actionBtn);
+      list.appendChild(row);
+    });
+
+    sec.appendChild(list);
+    body.appendChild(sec);
+  }
+
   function _renderStaffSection(body) {
     const allTeams = _teamsData ?? [];
     const baseTeam = allTeams.find(t => t.id === _draft.baseTeamId);
@@ -562,7 +759,7 @@ const TeamBuilder = (() => {
 
     const staffDefs = [
       { key: 'rerolls',          label: 'Team Re-rolls',    cost: rrCost,    min: 0, max: 8 },
-      { key: 'fanFactor',        label: 'Fan Factor',        cost: 10_000,   min: 1, max: 6 },
+      { key: 'fanFactor',        label: 'Fan Factor',        cost: 10_000,   min: 0, max: 6 },
       { key: 'assistantCoaches', label: 'Assistant Coaches', cost: 10_000,   min: 0, max: 6 },
       { key: 'cheerleaders',     label: 'Cheerleaders',      cost: 10_000,   min: 0, max: 12 },
     ];

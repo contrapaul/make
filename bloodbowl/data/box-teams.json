@@ -1,0 +1,255 @@
+{
+  "amazon": {
+    "label": "Amazon Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 }
+    ]
+  },
+  "black-orc": {
+    "label": "Black Orc Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 2, "count": 6 }
+    ]
+  },
+  "bretonnian": {
+    "label": "Bretonnian Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "chaos-chosen": {
+    "label": "Chaos Chosen Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 4 }
+    ]
+  },
+  "chaos-dwarf": {
+    "label": "Chaos Dwarf Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 3, "count": 4 },
+      { "positionId": 5, "count": 2 }
+    ]
+  },
+  "chaos-renegades": {
+    "label": "Chaos Renegades Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 2, "count": 1 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 4, "count": 1 },
+      { "positionId": 6, "count": 1 },
+      { "positionId": 7, "count": 1 }
+    ]
+  },
+  "dark-elf": {
+    "label": "Dark Elf Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "dwarf": {
+    "label": "Dwarf Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 }
+    ]
+  },
+  "elven-union": {
+    "label": "Elven Union Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "gnome": {
+    "label": "Gnome Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "goblin": {
+    "label": "Goblin Starter",
+    "positions": [
+      { "positionId": 1, "count": 10 },
+      { "positionId": 2, "count": 1 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 6, "count": 1 }
+    ]
+  },
+  "halfling": {
+    "label": "Halfling Starter",
+    "positions": [
+      { "positionId": 1, "count": 10 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "high-elf": {
+    "label": "High Elf Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 }
+    ]
+  },
+  "human": {
+    "label": "Human Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 },
+      { "positionId": 5, "count": 2 }
+    ]
+  },
+  "imperial-nobility": {
+    "label": "Imperial Nobility Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "khorne": {
+    "label": "Khorne Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 4 }
+    ]
+  },
+  "lizardmen": {
+    "label": "Lizardmen Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 3, "count": 6 }
+    ]
+  },
+  "necromantic-horror": {
+    "label": "Necromantic Horror Starter",
+    "positions": [
+      { "positionId": 1, "count": 3 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 },
+      { "positionId": 5, "count": 2 }
+    ]
+  },
+  "norse": {
+    "label": "Norse Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "nurgle": {
+    "label": "Nurgle Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 4 }
+    ]
+  },
+  "ogre": {
+    "label": "Ogre Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 2, "count": 5 }
+    ]
+  },
+  "old-world-alliance": {
+    "label": "Old World Alliance Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 4, "count": 1 },
+      { "positionId": 5, "count": 1 }
+    ]
+  },
+  "orc": {
+    "label": "Orc Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "shambling-undead": {
+    "label": "Shambling Undead Starter",
+    "positions": [
+      { "positionId": 1, "count": 3 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 },
+      { "positionId": 5, "count": 2 }
+    ]
+  },
+  "skaven": {
+    "label": "Skaven Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 1 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "snotling": {
+    "label": "Snotling Starter",
+    "positions": [
+      { "positionId": 1, "count": 10 },
+      { "positionId": 2, "count": 1 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 5, "count": 1 },
+      { "positionId": 6, "count": 1 }
+    ]
+  },
+  "tomb-kings": {
+    "label": "Tomb Kings Starter",
+    "positions": [
+      { "positionId": 1, "count": 5 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "underworld-denizens": {
+    "label": "Underworld Denizens Starter",
+    "positions": [
+      { "positionId": 1, "count": 6 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 3, "count": 1 },
+      { "positionId": 5, "count": 1 },
+      { "positionId": 7, "count": 1 }
+    ]
+  },
+  "vampire": {
+    "label": "Vampire Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 2, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  },
+  "wood-elf": {
+    "label": "Wood Elf Starter",
+    "positions": [
+      { "positionId": 1, "count": 7 },
+      { "positionId": 3, "count": 2 },
+      { "positionId": 4, "count": 2 }
+    ]
+  }
+}
