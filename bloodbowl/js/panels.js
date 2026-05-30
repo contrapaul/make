@@ -25,6 +25,7 @@ async function loadModuleData() {
       }
     })
   );
+  console.log('[BB] Data loaded:', Object.keys(DATA));
 }
 
 /* ── Lookup helpers ── */
@@ -421,6 +422,12 @@ function initKickoffModule() {
   const physZone = ensurePhysZone(diceTray, 'kickoff-phys');
 
   function processRoll(total, d1, d2) {
+    if (!DATA.kickoff) {
+      resultEl.innerHTML = '⚠ Data not loaded — check console';
+      resultEl.hidden = false;
+      console.error('[BB] DATA.kickoff is null — loadModuleData may have failed');
+      return;
+    }
     const ev      = exactLookup(DATA.kickoff, total) ?? { name: 'Unknown Event', desc: 'No entry.' };
     const affects = KICKOFF_AFFECTS[total] ?? 'both';
     const breakdownHtml = d1 !== undefined
@@ -492,6 +499,12 @@ function initWeatherModule() {
   const physZone = ensurePhysZone(diceTray, 'weather-phys');
 
   function processRoll(total, d1, d2) {
+    if (!DATA.weather) {
+      resultEl.innerHTML = '⚠ Data not loaded — check console';
+      resultEl.hidden = false;
+      console.error('[BB] DATA.weather is null — loadModuleData may have failed');
+      return;
+    }
     const w = rangeLookup(DATA.weather, total, 'rollMin', 'rollMax')
            ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '', rollMin: total, rollMax: total };
 
@@ -578,6 +591,12 @@ function initPrayersModule() {
   const physZone = ensurePhysZone(diceTray, 'prayers-phys');
 
   function processRoll(val) {
+    if (!DATA.prayers) {
+      resultEl.innerHTML = '⚠ Data not loaded — check console';
+      resultEl.hidden = false;
+      console.error('[BB] DATA.prayers is null — loadModuleData may have failed');
+      return;
+    }
     const prayer = exactLookup(DATA.prayers, val) ?? { name: 'Unknown Blessing', desc: '' };
     resultEl.innerHTML = `
       <div class="result-roll-num">${val}</div>

@@ -37,6 +37,16 @@ const DriveWizard = (() => {
   let _step  = 0;
   let _state = {};  /* { weather, kickingTeam, prayer, deviation, kickoff } */
 
+  /* ── Next-button lock (for roll-required steps) ── */
+  function _lockNext() {
+    const btn = document.getElementById('dw-next');
+    if (btn) { btn.disabled = true; btn.title = 'Roll first to continue'; }
+  }
+  function _unlockNext() {
+    const btn = document.getElementById('dw-next');
+    if (btn) { btn.disabled = false; btn.title = ''; }
+  }
+
   /* ── Utilities ── */
   function h(str) {
     return String(str ?? '')
@@ -238,6 +248,7 @@ const DriveWizard = (() => {
         el.appendChild(zone);
       }
       el.appendChild(resultEl);
+      _lockNext();
     },
 
     /* ── KICKING TEAM ── */
@@ -247,28 +258,60 @@ const DriveWizard = (() => {
       note.textContent = 'Which team is kicking off this drive?';
       el.appendChild(note);
 
+      const resultEl = document.createElement('div');
+      resultEl.className = 'roll-result'; resultEl.hidden = true;
+
+      function setKicker(key) {
+        const label = key === 'home' ? 'Home' : 'Away';
+        sel.querySelectorAll('.dw-team-btn').forEach(b => b.classList.toggle('active', b.dataset.team === key));
+        _state.kickingTeam = key;
+        if (window.GameState) window.GameState.kickingTeam = key;
+        resultEl.innerHTML = `<div class="result-name">⚽ ${h(label)} team kicks off!</div>`;
+        resultEl.hidden = false;
+      }
+
       const sel = document.createElement('div'); sel.className = 'dw-team-select';
       ['Home', 'Away'].forEach(team => {
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'dw-team-btn';
-        btn.textContent = team;
-        const key = team.toLowerCase();
-        if (_state.kickingTeam === key) btn.classList.add('active');
-        btn.addEventListener('click', () => {
-          sel.querySelectorAll('.dw-team-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          _state.kickingTeam = key;
-          if (window.GameState) window.GameState.kickingTeam = key;
-        });
+        btn.dataset.team = team.toLowerCase();
+        btn.textContent = team === 'Home' ? '🏠 We kick' : '✈️ They kick';
+        if (_state.kickingTeam === team.toLowerCase()) btn.classList.add('active');
+        btn.addEventListener('click', () => setKicker(team.toLowerCase()));
         sel.appendChild(btn);
       });
       el.appendChild(sel);
 
+      /* Coin flip row */
+      const flipRow = document.createElement('div');
+      flipRow.style.cssText = 'display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem;';
+
+      const flipDieEl = mkDie('dw-kick-flip-die');
+      flipDieEl.style.cssText = 'width:36px;height:36px;flex-shrink:0;';
+
+      const flipBtn = document.createElement('button');
+      flipBtn.type = 'button'; flipBtn.className = 'dmt-btn';
+      flipBtn.style.cssText = 'padding:0.3rem 0.85rem;font-size:0.72rem;';
+      flipBtn.textContent = '🪙 Coin Flip (D6: 1–3 = Home, 4–6 = Away)';
+      flipBtn.addEventListener('click', async () => {
+        flipBtn.disabled = true;
+        const roll = await Dice.rollDieElement(flipDieEl);
+        const key = roll <= 3 ? 'home' : 'away';
+        setKicker(key);
+        /* Auto-advance after 1.5 s */
+        setTimeout(() => _go(1), 1500);
+      });
+
+      flipRow.appendChild(flipDieEl);
+      flipRow.appendChild(flipBtn);
+      el.appendChild(flipRow);
+
       const hint = document.createElement('p');
       hint.className = 'panel-intro';
-      hint.style.marginTop = '0.4rem';
+      hint.style.marginTop = '0.5rem';
       hint.textContent = 'The kicking team places the ball on the pitch. The receiving team receives first.';
       el.appendChild(hint);
+      el.appendChild(resultEl);
     },
 
     /* ── PRAYERS ── */
@@ -316,9 +359,10 @@ const DriveWizard = (() => {
       skipBtn.type = 'button'; skipBtn.className = 'dw-nav-btn';
       skipBtn.style.marginTop = '0.45rem';
       skipBtn.textContent = 'Skip — no prayers needed';
-      skipBtn.addEventListener('click', () => _go(1));
+      skipBtn.addEventListener('click', () => { _unlockNext(); _go(1); });
       el.appendChild(skipBtn);
       el.appendChild(resultEl);
+      _lockNext();
     },
 
     /* ── SETUP REMINDER ── */
@@ -371,6 +415,7 @@ const DriveWizard = (() => {
           resultEl.innerHTML = `<div class="result-name">Deviates ${dist} square${dist !== 1 ? 's' : ''}</div><div class="result-direction">${DIR[dir] ?? dir}</div>`;
           resultEl.hidden = false;
           _state.deviation = { dist, dir };
+          _unlockNext();
           btn.disabled = false;
         });
         el.appendChild(btn);
@@ -407,10 +452,12 @@ const DriveWizard = (() => {
           resultEl.innerHTML = `<div class="result-name">Deviates ${selDist} square${selDist !== 1 ? 's' : ''}</div><div class="result-direction">${DIR[dir] ?? dir}</div>`;
           resultEl.hidden = false;
           _state.deviation = { dist: selDist, dir };
+          _unlockNext();
         });
         el.appendChild(dirZone);
       }
       el.appendChild(resultEl);
+      _lockNext();
     },
 
     /* ── KICKOFF EVENT ── */
@@ -455,6 +502,7 @@ const DriveWizard = (() => {
         el.appendChild(zone);
       }
       el.appendChild(resultEl);
+      _lockNext();
     },
 
     /* ── DRIVE READY ── */
@@ -602,6 +650,7 @@ const DriveWizard = (() => {
     `;
     resultEl.hidden = false;
     _state.weather = w;
+    _unlockNext();
   }
 
   function _applyPrayer(val, resultEl) {
@@ -614,6 +663,7 @@ const DriveWizard = (() => {
     `;
     resultEl.hidden = false;
     _state.prayer = prayer;
+    _unlockNext();
   }
 
   function _applyKickoff(total, resultEl, d1, d2, AFFECTS) {
@@ -636,6 +686,7 @@ const DriveWizard = (() => {
     `;
     resultEl.hidden = false;
     _state.kickoff = ev;
+    _unlockNext();
   }
 
   function _applyKORecovery(player, roll, resultSpan) {
