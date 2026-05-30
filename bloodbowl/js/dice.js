@@ -70,7 +70,25 @@ function rollDieElement(dieEl) {
   faceEl.classList.add('rolling');
 
   return new Promise(resolve => {
+    let settled = false;
+
+    /* Fallback: if animationend never fires (CSS animations disabled,
+       reduced-motion, headless browser), resolve after 1.5 s anyway. */
+    const FALLBACK_MS = 1500;
+    const fallbackId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      clearInterval(cycleInterval);
+      faceEl.classList.remove('rolling', 'settled');
+      buildPips(faceEl, result, sides > 6);
+      dieEl.dataset.value = result;
+      resolve(result);
+    }, FALLBACK_MS);
+
     faceEl.addEventListener('animationend', () => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(fallbackId);
       clearInterval(cycleInterval);
       faceEl.classList.remove('rolling');
 

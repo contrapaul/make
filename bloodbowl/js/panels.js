@@ -9,23 +9,24 @@ window.BBData = DATA;
 
 async function loadModuleData() {
   const sources = {
-    kickoff: 'data/kickoff-events.json',
-    weather: 'data/weather.json',
-    prayers: 'data/prayers.json',
-    injury:  'data/injury.json',
+    kickoff: './data/kickoff-events.json',
+    weather: './data/weather.json',
+    prayers: './data/prayers.json',
+    injury:  './data/injury.json',
   };
-  await Promise.all(
+  const results = await Promise.allSettled(
     Object.entries(sources).map(async ([key, path]) => {
-      try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        DATA[key] = await res.json();
-      } catch (err) {
-        console.warn(`[BB] Could not load ${path}:`, err);
-      }
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${path}`);
+      DATA[key] = await res.json();
+      const count = Array.isArray(DATA[key]) ? DATA[key].length : Object.keys(DATA[key]).length;
+      console.log(`[BB] Loaded ${key}: ${count} entries`);
     })
   );
-  console.log('[BB] Data loaded:', Object.keys(DATA));
+  results.forEach(r => {
+    if (r.status === 'rejected') console.error('[BB] FAILED to load data:', r.reason);
+  });
+  console.log('[BB] Data ready. Keys:', Object.keys(DATA));
 }
 
 /* ── Lookup helpers ── */
@@ -601,10 +602,27 @@ function initPrayersModule() {
     resultEl.innerHTML = `
       <div class="result-roll-num">${val}</div>
       <div class="result-name">✦ ${h(prayer.name)}</div>
+      <hr class="result-divider">
       <p class="result-desc">${h(prayer.desc)}</p>
     `;
     resultEl.hidden = false;
     addRerollBtn(resultEl, doRoll);
+
+    /* Persist prayer to main-screen banner */
+    if (window.GameState) window.GameState.activePrayer = prayer;
+    const banner   = document.getElementById('active-prayer-banner');
+    const bannerTx = document.getElementById('active-prayer-text');
+    const dismiss  = document.getElementById('active-prayer-dismiss');
+    if (banner && bannerTx) {
+      bannerTx.textContent = `✦ ${prayer.name}: ${prayer.desc.substring(0, 80)}…`;
+      banner.removeAttribute('hidden');
+      if (dismiss) {
+        dismiss.onclick = () => {
+          banner.setAttribute('hidden', '');
+          if (window.GameState) window.GameState.activePrayer = null;
+        };
+      }
+    }
   }
 
   async function doRoll() {
@@ -651,13 +669,20 @@ function initPrayersModule() {
    ════════════════════════════════════════════════════════ */
 
 function initScatterModule() {
+  const DEV_ARROWS = {1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘'};
+  const DEV_NAMES  = {1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right'};
+
   bindScatterRoll('deviation',
     ['deviation-d6', 'deviation-d8'],
     'deviation-result',
     ({ vals }) => {
       const [dist, dir] = vals;
-      return `<div class="result-name">Deviates ${dist} square${dist !== 1 ? 's' : ''}</div>
-              <div class="result-direction">${DIRECTION_LABELS[dir] ?? dir}</div>`;
+      return `
+        <div class="result-roll-num" style="font-size:3rem;line-height:1;">${DEV_ARROWS[dir] ?? dir}</div>
+        <div class="result-name">${DEV_NAMES[dir] ?? dir}</div>
+        <div class="result-roll-breakdown">${dist} square${dist !== 1 ? 's' : ''}</div>
+        <p class="result-desc">The ball deviates <strong>${dist}</strong> square${dist !== 1 ? 's' : ''} to the <strong>${DEV_NAMES[dir] ?? dir}</strong>.</p>
+      `;
     });
 
   bindScatterRoll('bounce',

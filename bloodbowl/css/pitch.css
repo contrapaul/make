@@ -366,3 +366,120 @@
   color:         rgba(212, 175, 55, 0.9);
   border-bottom-color: rgba(212, 175, 55, 0.5);
 }
+
+/* ════════════════════════════════════════════════════════
+   PASS WIZARD 3B — Single-screen two-column layout
+   ════════════════════════════════════════════════════════ */
+
+.bb-panel--wide {
+  max-width: 900px;
+  width: calc(100vw - 2rem);
+}
+
+@media (max-width: 900px) {
+  .bb-panel--wide { max-width: 100%; }
+}
+
+/* Two-column layout */
+.pwiz-layout {
+  display:   flex;
+  gap:       0.75rem;
+  align-items: flex-start;
+}
+
+.pwiz-col-left {
+  flex:      0 0 200px;
+  min-width: 0;
+}
+
+.pwiz-col-right {
+  flex:    1;
+  min-width: 0;
+}
+
+@media (max-width: 599px) {
+  .pwiz-layout { flex-direction: column; }
+  .pwiz-col-left { flex: none; width: 100%; }
+}
+
+/* Player list section */
+.pwiz-list-sec { margin-bottom: 0.5rem; }
+
+.pwiz-list-hdr {
+  display:        flex;
+  justify-content: space-between;
+  align-items:    center;
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color:          rgba(130, 165, 235, 0.55);
+  margin-bottom:  0.25rem;
+}
+
+.pwiz-stat-lbl {
+  color:       var(--bb-gold, #D4AF37);
+  font-weight: 800;
+}
+
+.pwiz-player-list { display: flex; flex-direction: column; gap: 2px; }
+
+.pwiz-player-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.35rem;
+  padding:       0.28rem 0.5rem;
+  background:    rgba(10, 22, 65, 0.45);
+  border:        1px solid rgba(70, 110, 200, 0.2);
+  border-radius: 4px;
+  text-align:    left;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  color:         rgba(180, 210, 255, 0.75);
+  cursor:        pointer;
+  transition:    background 0.1s, border-color 0.1s;
+  width:         100%;
+}
+
+.pwiz-player-row:hover {
+  background:   rgba(40, 80, 175, 0.4);
+  border-color: rgba(100, 155, 255, 0.5);
+}
+
+.pwiz-player-row.selected {
+  background:   rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.55);
+  color:        var(--bb-gold, #D4AF37);
+}
+
+.pwiz-player-row.dimmed { opacity: 0.4; }
+
+.pwiz-row-name { flex: 1; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pwiz-row-pos  { font-size: 0.58rem; color: rgba(140, 175, 235, 0.45); flex-shrink: 0; }
+.pwiz-row-stat {
+  flex-shrink:  0;
+  font-weight:  800;
+  color:        var(--bb-gold, #D4AF37);
+  min-width:    2rem;
+  text-align:   right;
+}
+.pwiz-row-stat.pwiz-stat-none { color: rgba(150, 170, 220, 0.4); }
+
+/* Requirements block */
+.pwiz-requirements {
+  margin-top:   0.4rem;
+  padding:      0.5rem 0.7rem;
+  background:   rgba(3, 8, 28, 0.6);
+  border:       1px solid rgba(80, 130, 255, 0.15);
+  border-radius: 5px;
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    0.72rem;
+  min-height:   2.5rem;
+}
+
+/* Pitch wrapper — constrain width so pitch fits */
+.pwiz-pitch-wrap {
+  max-width: 100%;
+  overflow:  hidden;
+}

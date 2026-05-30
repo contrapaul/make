@@ -173,6 +173,13 @@
       <button class="start-drive-btn-big" id="start-drive-beginner">▸ Start Drive</button>
     </section>
 
+    <!-- Active prayer indicator — shown after Prayers to Nuffle is rolled -->
+    <div id="active-prayer-banner" hidden class="active-prayer-banner">
+      <span class="apb-icon">✦</span>
+      <span class="apb-text" id="active-prayer-text"></span>
+      <button class="apb-dismiss" id="active-prayer-dismiss" title="Dismiss — effect has ended">✕</button>
+    </div>
+
     <!-- ═══════════════ PANELS ZONE ═══════════════ -->
     <div class="panels-zone" id="panels-zone">
 
@@ -316,8 +323,8 @@
         </div>
       </div>
 
-      <!-- PASS PANEL (wizard placeholder for Phase 3) -->
-      <div class="bb-panel" id="panel-pass" data-wizard="pass" hidden aria-label="Make a Pass">
+      <!-- PASS PANEL -->
+      <div class="bb-panel bb-panel--wide" id="panel-pass" data-wizard="pass" hidden aria-label="Make a Pass">
         <div class="panel-header">
           <div class="panel-header-left">
             <span class="panel-icon" aria-hidden="true">
@@ -679,6 +686,7 @@
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js"></script>
+  <script src="js/pass-wizard.js"></script>
   <script src="script.js"></script>
 
 </body>
