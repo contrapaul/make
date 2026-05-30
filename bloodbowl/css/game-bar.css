@@ -251,3 +251,17 @@
   .gb-away { border-left: none; }
   .gb-score { font-size: 1.3rem; }
 }
+
+@media (max-width: 479px) {
+  .gb-center {
+    padding:         0.4rem 0.75rem;
+    flex-wrap:       wrap;
+    gap:             0.3rem;
+    justify-content: space-between;
+  }
+  .gb-score        { font-size: 1.2rem; }
+  .gb-rr-label     { display: none; }
+  .gb-select       { font-size: 0.62rem; padding: 0.22rem 1.4rem 0.22rem 0.4rem; }
+  .gb-score-btn    { min-height: 28px; min-width: 28px; }
+  .gb-turn-btn     { min-height: 28px; min-width: 28px; }
+}
