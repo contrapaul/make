@@ -465,6 +465,10 @@ class BloodBowlPitch {
     this._sqPx          = Math.round(28 * this._scale);
     this._placementMode = null;   // { data, callback } for two-step placement
     this.onPlayerMoved  = null;   // fn(fc, fr, tc, tr, data)
+    /* Sprint 9: zoom transform state */
+    this._tx            = 0;      // translate X (px) applied before scale
+    this._ty            = 0;      // translate Y (px)
+    this._tz            = 1;      // scale factor (1 = base scale)
     this._build();
     if (this._interactive) this._setupZoom();
   }
@@ -499,17 +503,26 @@ class BloodBowlPitch {
 
         const startRect = tok.getBoundingClientRect();
         const bg = data.side === 'away' ? '#1a3a8a' : '#8a1a1a';
+
+        /* Sprint 10: ghost positioned via transform (compositor-only, no layout).
+           left:0;top:0 is the document origin; translate moves it to the right place. */
         const ghost = document.createElement('div');
         ghost.style.cssText = `position:fixed;z-index:9999;pointer-events:none;border-radius:50%;
-          left:${startRect.left}px;top:${startRect.top}px;
+          left:0;top:0;will-change:transform;
           width:${startRect.width}px;height:${startRect.height}px;
           background:${bg};display:flex;align-items:center;justify-content:center;
           font-family:'JetBrains Mono',monospace;font-weight:800;font-size:${fs}px;
-          color:#fff;opacity:0;transition:none;`;
+          color:#fff;opacity:0;transition:opacity 0.08s;`;
+        ghost.style.transform = `translate(${startRect.left}px,${startRect.top}px)`;
         ghost.textContent = lbl;
         document.body.appendChild(ghost);
         tok.style.opacity = '0.25';
         tok.style.cursor = 'grabbing';
+
+        /* RAF batching — only one pending frame update at a time */
+        let rafId   = null;
+        let pendingX = startRect.left;
+        let pendingY = startRect.top;
 
         const onMove = ev => {
           const dx = ev.clientX - e.clientX;
@@ -519,14 +532,21 @@ class BloodBowlPitch {
             ghost.style.opacity = '0.85';
           }
           if (moved) {
-            ghost.style.left = (startRect.left + dx) + 'px';
-            ghost.style.top  = (startRect.top  + dy) + 'px';
+            pendingX = startRect.left + dx;
+            pendingY = startRect.top  + dy;
+            if (rafId === null) {
+              rafId = requestAnimationFrame(() => {
+                ghost.style.transform = `translate(${pendingX}px,${pendingY}px)`;
+                rafId = null;
+              });
+            }
           }
         };
 
         const onUp = ev => {
           tok.removeEventListener('pointermove', onMove);
           tok.removeEventListener('pointerup',   onUp);
+          if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
           ghost.remove();
           tok.style.opacity = '';
           tok.style.cursor = 'grab';
@@ -672,10 +692,37 @@ class BloodBowlPitch {
   }
 
   setScale(s) {
-    this._curScale = Math.max(0.4, Math.min(2.5, s));
+    /* Programmatic scale change — zoom from current translate position. */
+    this._tz       = Math.max(0.4, Math.min(2.5, s)) / this._scale;
+    this._curScale = this._tz * this._scale;
+    this._applyTransform();
+  }
+
+  /* Apply current _tx/_ty/_tz to the outer element. */
+  _applyTransform() {
     if (this._outerEl) {
-      this._outerEl.style.transform = `scale(${this._curScale / this._scale})`;
+      this._outerEl.style.transform =
+        `translate(${this._tx}px,${this._ty}px) scale(${this._tz})`;
     }
+  }
+
+  /* Zoom toward a specific viewport point (cx, cy) — Sprint 9.
+     newTz is the target scale factor. */
+  _zoomAt(newTz, cx, cy) {
+    const scrollEl = this._outerEl?.parentElement;
+    if (!scrollEl) return;
+    const rect = scrollEl.getBoundingClientRect();
+    /* Cursor position in scroll-container coordinate space */
+    const sx = cx - rect.left + scrollEl.scrollLeft;
+    const sy = cy - rect.top  + scrollEl.scrollTop;
+    /* Adjust translate so the point under the cursor stays fixed:
+       newTx = sx*(1-f) + tx*f  where f = newTz/oldTz             */
+    const f = newTz / this._tz;
+    this._tx = sx * (1 - f) + this._tx * f;
+    this._ty = sy * (1 - f) + this._ty * f;
+    this._tz       = newTz;
+    this._curScale = newTz * this._scale;
+    this._applyTransform();
   }
 
   /* ── Build ── */
@@ -690,7 +737,9 @@ class BloodBowlPitch {
     this.container.appendChild(scrollEl);
 
     this._outerEl = document.createElement('div');
-    this._outerEl.style.cssText = 'transform-origin:top left;transition:transform 0.12s;display:inline-block;position:relative;';
+    /* Sprint 9: transform-origin:0 0 pairs with translate(tx,ty) scale(tz).
+       No CSS transition — zoom is driven frame-by-frame in _zoomAt(). */
+    this._outerEl.style.cssText = 'transform-origin:0 0;display:inline-block;position:relative;';
     scrollEl.appendChild(this._outerEl);
 
     /* Grid */
@@ -847,13 +896,19 @@ class BloodBowlPitch {
   }
 
   _setupZoom() {
-    const scroll = this._outerEl.parentElement;
-    const ptrs   = new Map();
-    let lastDist = null;
+    /* Sprint 9: zoom centred on cursor (wheel) or pinch midpoint (touch). */
+    const scroll    = this._outerEl.parentElement;
+    const ptrs      = new Map();
+    let   lastDist  = null;
+    const MIN_TZ    = 0.4 / this._scale;
+    const MAX_TZ    = 2.5 / this._scale;
 
     scroll.addEventListener('wheel', e => {
       e.preventDefault();
-      this.setScale(this._curScale + (e.deltaY > 0 ? -0.1 : 0.1));
+      /* Step ±0.1 in _curScale terms → ±0.1/_scale in _tz terms */
+      const step  = (e.deltaY > 0 ? -0.1 : 0.1) / this._scale;
+      const newTz = Math.max(MIN_TZ, Math.min(MAX_TZ, this._tz + step));
+      this._zoomAt(newTz, e.clientX, e.clientY);
     }, { passive: false });
 
     scroll.addEventListener('pointerdown', e => ptrs.set(e.pointerId, e));
@@ -861,8 +916,14 @@ class BloodBowlPitch {
       ptrs.set(e.pointerId, e);
       if (ptrs.size === 2) {
         const [p1, p2] = [...ptrs.values()];
-        const d = Math.hypot(p2.clientX - p1.clientX, p2.clientY - p1.clientY);
-        if (lastDist !== null) this.setScale(this._curScale + (d - lastDist) * 0.004);
+        const d    = Math.hypot(p2.clientX - p1.clientX, p2.clientY - p1.clientY);
+        const midX = (p1.clientX + p2.clientX) / 2;
+        const midY = (p1.clientY + p2.clientY) / 2;
+        if (lastDist !== null) {
+          const step  = (d - lastDist) * 0.004 / this._scale;
+          const newTz = Math.max(MIN_TZ, Math.min(MAX_TZ, this._tz + step));
+          this._zoomAt(newTz, midX, midY);
+        }
         lastDist = d;
       }
     });
