@@ -25,6 +25,44 @@
      onCatcherSelect              — fn(distance, rangeObj) on active-catcher change
    ═══════════════════════════════════════════════════════ */
 
+/* ─────────────────────────────────────────────────────────
+   PASS ZONE LOOKUP TABLE  (Sprint 1)
+   One quadrant of the rulebook 14×14 grid (thrower at origin,
+   positive dx = right, positive dy = upward rows).
+   Indexed as ZONE_TABLE[ady][adx]; null = thrower's own square.
+   Mirror with Math.abs(dx) / Math.abs(dy) for all four quadrants.
+   ───────────────────────────────────────────────────────── */
+const ZONE_TABLE = [
+  /* dy=0  thrower row */
+  [null,'Q','Q','Q','S','S','S','L','L','L','L','LB','LB','LB'],
+  /* dy=1  */
+  ['Q','Q','Q','Q','S','S','S','L','L','L','L','LB','LB','LB'],
+  /* dy=2  */
+  ['Q','Q','Q','S','S','S','S','L','L','L','L','LB','LB','LB'],
+  /* dy=3  */
+  ['Q','Q','S','S','S','S','S','L','L','L','LB','LB','LB'],
+  /* dy=4  */
+  ['S','S','S','S','S','S','L','L','L','L','LB','LB','LB'],
+  /* dy=5  */
+  ['S','S','S','S','S','L','L','L','L','LB','LB','LB'],
+  /* dy=6  */
+  ['S','S','S','S','L','L','L','L','L','LB','LB','LB'],
+  /* dy=7  */
+  ['L','L','L','L','L','L','L','L','LB','LB','LB'],
+  /* dy=8  */
+  ['L','L','L','L','L','L','L','LB','LB','LB','LB'],
+  /* dy=9  */
+  ['L','L','L','L','L','LB','LB','LB','LB','LB'],
+  /* dy=10 */
+  ['L','L','L','LB','LB','LB','LB','LB','LB'],
+  /* dy=11 */
+  ['LB','LB','LB','LB','LB','LB','LB'],
+  /* dy=12 */
+  ['LB','LB','LB','LB','LB'],
+  /* dy=13 */
+  ['LB','LB','LB'],
+];
+
 /* D8 direction → [dcol, drow] */
 const DIR_VECTORS = {
   1: [-1, -1], 2: [0, -1], 3: [1, -1],
@@ -553,12 +591,29 @@ class BloodBowlPitch {
     Array.from(this._svgEl.children).forEach(c => { if (c.tagName !== 'defs') c.remove(); });
   }
 
+  /* Look up the pass zone for absolute offsets (adx, ady). Returns 'Q','S','L','LB', or null. */
+  static getZoneKey(adx, ady) {
+    if (ady >= ZONE_TABLE.length) return null;
+    const row = ZONE_TABLE[ady];
+    if (adx >= row.length) return null;
+    return row[adx] ?? null;
+  }
+
   getPassRange(fc, fr, tc, tr) {
-    const d = Math.max(Math.abs(tc - fc), Math.abs(tr - fr));
-    if (d <= 3)  return { distance: d, rangeLabel: 'Quick Pass', rangeKey: 'quick', mod:  0 };
-    if (d <= 6)  return { distance: d, rangeLabel: 'Short Pass', rangeKey: 'short', mod: -1 };
-    if (d <= 10) return { distance: d, rangeLabel: 'Long Pass',  rangeKey: 'long',  mod: -1 };
-    return             { distance: d, rangeLabel: 'Long Bomb',   rangeKey: 'bomb',  mod: -2 };
+    const adx  = Math.abs(tc - fc);
+    const ady  = Math.abs(tr - fr);
+    const zone = BloodBowlPitch.getZoneKey(adx, ady);
+    if (!zone) return null;
+    const d = Math.max(adx, ady);
+    /* mod is the change applied to the die roll (negative = harder).
+       Subtracting a negative mod in the wizard raises the target number. */
+    const META = {
+      'Q':  { rangeLabel: 'Quick Pass', rangeKey: 'quick', mod:  0 },
+      'S':  { rangeLabel: 'Short Pass', rangeKey: 'short', mod: -1 },
+      'L':  { rangeLabel: 'Long Pass',  rangeKey: 'long',  mod: -2 },
+      'LB': { rangeLabel: 'Long Bomb',  rangeKey: 'bomb',  mod: -3 },
+    };
+    return { distance: d, ...META[zone] };
   }
 
   onSquareTap(cb) { this._onTapCb = cb; }
@@ -743,27 +798,23 @@ class BloodBowlPitch {
     if (!this._throwerPos) return;
     const { col: tc, row: tr } = this._throwerPos;
     const isBliz = window.GameState?.currentWeather?.name === 'Blizzard';
-    /* Zone color assigned purely by Euclidean distance — eliminates "corner holes"
-       where Chebyshev says Quick but Euclidean says Short, etc. */
+    const COLORS = {
+      'Q':  'rgba(40,180,40,0.35)',
+      'S':  'rgba(200,200,40,0.35)',
+      'L':  'rgba(220,140,20,0.35)',
+      'LB': 'rgba(200,40,40,0.35)',
+    };
     for (let r = 1; r <= 15; r++) {
       for (let c = 2; c <= 27; c++) {
         if (c === tc && r === tr) continue;
-        const dx   = c - tc, dy = r - tr;
-        const eucl = Math.sqrt(dx * dx + dy * dy);
-        if (eucl > 14.5) continue;   // beyond Long Bomb range — no overlay
-
-        let color, isLong = false;
-        if      (eucl <= 3.5)  color = 'rgba(40,180,40,0.35)';
-        else if (eucl <= 6.8)  color = 'rgba(200,200,40,0.35)';
-        else if (eucl <= 10.8) { color = 'rgba(220,140,20,0.35)'; isLong = true; }
-        else                   { color = 'rgba(200,40,40,0.35)';  isLong = true; }
-
+        const zone = BloodBowlPitch.getZoneKey(Math.abs(c - tc), Math.abs(r - tr));
+        if (!zone) continue;
         const cell = this._cell(c, r);
         if (!cell) continue;
         const ov = document.createElement('div');
         ov.className = 'bbp-zone';
-        ov.style.cssText = `position:absolute;inset:0;background:${color};pointer-events:none;z-index:1;`;
-        if (isBliz && isLong) {
+        ov.style.cssText = `position:absolute;inset:0;background:${COLORS[zone]};pointer-events:none;z-index:1;`;
+        if (isBliz && (zone === 'L' || zone === 'LB')) {
           const x = document.createElement('span');
           x.textContent = '✕';
           x.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(140,190,255,0.7);font-size:0.55rem;font-weight:900;';

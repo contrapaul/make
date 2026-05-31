@@ -292,26 +292,32 @@ function initPassWizard() {
     addOppBtn.addEventListener('click', () => openPicker('opposing'));
     container.appendChild(addOppBtn);
 
-    /* Skill chips */
+    /* Skill chips — thrower/catcher skills shown as hoverable chips.
+       Skills that affect the roll are displayed inline in the roll area (Sprint 3);
+       here we show informational skills that don't modify the math directly. */
     if (ws.thrower) {
-      const sk = ['Accurate','Cannoneer','Nerves of Steel','Cloud Burster','Hail Mary Pass'];
-      const chips = sk.filter(s => hasSk(ws.thrower, s));
+      const infoSkills = ['Pass','Cloud Burster','Dump-Off','Hail Mary Pass','Consummate Professional'];
+      const chips = infoSkills.filter(s => hasSk(ws.thrower, s));
       if (chips.length) {
         const wrap = document.createElement('div');
         wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:0.2rem;margin-top:0.4rem;';
         chips.forEach(s => {
-          const c = document.createElement('div');
-          c.className = 'pwiz-skill-chip pos'; c.textContent = `✦ ${s}`;
+          const c = makeSkillChip(s);
+          c.style.setProperty('--chip-prefix', '✦ ');
           wrap.appendChild(c);
         });
         container.appendChild(wrap);
       }
     }
-    if (ws.catcher && hasSk(ws.catcher, 'Catch')) {
-      const c = document.createElement('div');
-      c.className = 'pwiz-skill-chip pos'; c.textContent = '✦ Catch';
-      c.style.marginTop = '0.2rem';
-      container.appendChild(c);
+    if (ws.catcher) {
+      const catcherInfoSkills = ['Diving Catch','Sure Hands','Extra Arms'];
+      const chips = catcherInfoSkills.filter(s => hasSk(ws.catcher, s));
+      if (chips.length) {
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'display:flex;flex-wrap:wrap;gap:0.2rem;margin-top:0.4rem;';
+        chips.forEach(s => wrap.appendChild(makeSkillChip(s)));
+        container.appendChild(wrap);
+      }
     }
 
     /* Weather */
@@ -481,23 +487,46 @@ function initPassWizard() {
 
     const paBase  = getStat(ws.thrower, 'PA');
     const agBase  = getStat(ws.catcher, 'AG');
-    /* rangeMod is negative (e.g. -1 for Short). Subtracting a negative increases
-       the target, making the pass harder — which is the correct Blood Bowl mechanic. */
-    const rangePenalty  = range?.mod ?? 0;           // ≤0
-    const tzPenalty     = hasSk(ws.thrower, 'Nerves of Steel') ? 0 : ws.tz;  // ≥0, harder
-    const accurateBonus = (hasSk(ws.thrower, 'Accurate')  && range && range.distance <= 6) ? 1 : 0;
-    const cannoneerBonus= (hasSk(ws.thrower, 'Cannoneer') && range && range.distance >  6) ? 1 : 0;
-    // paBase − penalty (negative mod → subtracting negative = higher target = harder)
-    const paFinal       = paBase >= 99 ? 99 : Math.min(6, Math.max(2,
-      paBase - rangePenalty + tzPenalty - accurateBonus - cannoneerBonus));
-
     const w            = window.GameState?.currentWeather;
     const isBlizzard   = w?.name === 'Blizzard';
+
+    /* ── Throw modifiers ─────────────────────────────────────
+       All mods are penalty values (positive = harder, added to target).
+       rangeMod comes from getPassRange as a negative number;
+       subtracting it raises the target. */
+    const nosThrow    = hasSk(ws.thrower, 'Nerves of Steel');
+    const hasAccurate = hasSk(ws.thrower, 'Accurate');
+    const hasCannoneer= hasSk(ws.thrower, 'Cannoneer');
+    const hasHailMary = hasSk(ws.thrower, 'Hail Mary Pass');
+
+    const rangePenalty   = range?.mod ?? 0;   // ≤0; negating it adds to target
+    const tzPenalty      = nosThrow ? 0 : ws.tz;
+    /* Accurate: +1 to PA roll on Quick/Short (reduces target by 1) */
+    const accurateBonus  = (hasAccurate && range &&
+      (range.rangeKey === 'quick' || range.rangeKey === 'short')) ? 1 : 0;
+    /* Cannoneer: +1 to PA roll on Long/Long Bomb (reduces target by 1) */
+    const cannoneerBonus = (hasCannoneer && range &&
+      (range.rangeKey === 'long' || range.rangeKey === 'bomb')) ? 1 : 0;
+    /* Very Sunny: -1 to all PA tests (raises target by 1) */
+    const verySunnyPenalty = w?.name === 'Very Sunny' ? 1 : 0;
+
+    const paFinal = paBase >= 99 ? 99 : Math.min(6, Math.max(2,
+      paBase - rangePenalty + tzPenalty + verySunnyPenalty - accurateBonus - cannoneerBonus));
+
+    /* Hail Mary: treat as Long Bomb but accurate = inaccurate, cannot intercept */
     const blizzFumble  = isBlizzard && range && (range.rangeKey === 'long' || range.rangeKey === 'bomb');
-    const wCatchPenalty  = (w?.name === 'Pouring Rain' || isBlizzard) ? 1 : 0;  // harder
+
+    /* ── Catch modifiers ─────────────────────────────────────
+       Pouring Rain: -1 to Catch roll (raises target by 1).
+       Blizzard does NOT affect catching per rulebook. */
+    const wCatchPenalty  = w?.name === 'Pouring Rain' ? 1 : 0;
     const catchTZPenalty = hasSk(ws.catcher, 'Nerves of Steel') ? 0 : ws.catcherTZ;
     const catchSkBonus   = hasSk(ws.catcher, 'Catch') ? 1 : 0;
     const agFinal        = Math.min(6, Math.max(2, agBase + wCatchPenalty + catchTZPenalty - catchSkBonus));
+
+    /* ── Intercept modifier ──────────────────────────────────
+       Pouring Rain also applies -1 to Intercept rolls. */
+    const intWeatherPenalty = w?.name === 'Pouring Rain' ? 1 : 0;
 
     /* TZ / interceptor info strip */
     const interceptors = getInterceptors();
@@ -514,7 +543,12 @@ function initPassWizard() {
 
     if (rollEl) {
       rollEl.hidden = false;
-      buildActionRow(rollEl, paFinal, agFinal, blizzFumble, range, interceptors);
+      buildActionRow(rollEl, paFinal, agFinal, blizzFumble, range, interceptors, {
+        paBase, rangePenalty, tzPenalty, verySunnyPenalty, accurateBonus, cannoneerBonus,
+        nosThrow, hasAccurate, hasCannoneer, hasHailMary,
+        agBase, wCatchPenalty, catchTZPenalty, catchSkBonus,
+        intWeatherPenalty,
+      });
     }
   }
 
@@ -522,7 +556,70 @@ function initPassWizard() {
      ACTION ROW
      ──────────────────────────────────────────────────── */
 
-  function buildActionRow(el, paTarget, agTarget, blizzardFumble, range, interceptors) {
+  /* Appends a Close/Complete button to the given container. */
+  function addCompleteButton(container, label) {
+    if (container.querySelector('.pwiz-complete-btn')) return; // idempotent
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'roll-btn pwiz-complete-btn';
+    btn.style.cssText = 'margin-top:0.5rem;background:rgba(76,175,80,0.1);border-color:rgba(76,175,80,0.35);color:#81c784;display:block;width:100%;';
+    btn.textContent = label ?? '✓ Complete — Close';
+    btn.addEventListener('click', () => window.Panels?.closePanel?.('pass'));
+    container.appendChild(btn);
+  }
+
+  /* ── Skill tooltip chip ─────────────────────────────────────
+     Creates a small clickable/hoverable chip that shows the skill
+     description from skills.json on interaction. */
+  function makeSkillChip(skillName, extraClass) {
+    const entry = typeof lookupSkill === 'function' ? lookupSkill(skillName) : null;
+    const chip  = document.createElement('span');
+    chip.className = 'pwiz-skill-chip pos pwiz-skill-inline' + (extraClass ? ` ${extraClass}` : '');
+    chip.textContent = skillName;
+    if (entry?.description) {
+      chip.title = entry.description;
+      chip.style.cursor = 'help';
+      chip.addEventListener('click', e => {
+        e.stopPropagation();
+        let tip = chip.querySelector('.pwiz-skill-tooltip');
+        if (tip) { tip.remove(); return; }
+        tip = document.createElement('div');
+        tip.className = 'pwiz-skill-tooltip';
+        tip.textContent = entry.description;
+        chip.appendChild(tip);
+        const off = e => { if (!chip.contains(e.target)) { tip.remove(); document.removeEventListener('click', off, true); } };
+        setTimeout(() => document.addEventListener('click', off, true), 0);
+      });
+    }
+    return chip;
+  }
+
+  /* ── Modifier breakdown element ─────────────────────────────
+     Returns a <div> listing every factor that contributed to a
+     target number. Used under both the throw and catch columns. */
+  function buildModBreakdown(rows) {
+    const wrap = document.createElement('div');
+    wrap.className = 'pwiz-mod-breakdown';
+    rows.forEach(({ label, value, chip: chipName, cls }) => {
+      const row = document.createElement('div');
+      row.className = 'pwiz-mod-row' + (cls ? ` ${cls}` : '');
+      const lbl = document.createElement('span');
+      lbl.className = 'pwiz-mod-label';
+      if (chipName) {
+        lbl.appendChild(makeSkillChip(chipName));
+      } else {
+        lbl.textContent = label;
+      }
+      const val = document.createElement('span');
+      val.className = 'pwiz-mod-value';
+      val.textContent = value;
+      row.appendChild(lbl);
+      row.appendChild(val);
+      wrap.appendChild(row);
+    });
+    return wrap;
+  }
+
+  function buildActionRow(el, paTarget, agTarget, blizzardFumble, range, interceptors, mods) {
     el.innerHTML = '';
 
     const RANGE_C = { quick:'#81c784', short:'#FFD54F', long:'#FF8C00', bomb:'#ff8fa0' };
@@ -534,6 +631,21 @@ function initPassWizard() {
     sep.style.cssText = 'border-top:1px solid rgba(80,130,255,0.18);margin:0.5rem 0 0.4rem;padding-top:0.35rem;font-family:JetBrains Mono,monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.4);display:flex;align-items:center;gap:0.4rem;';
     sep.innerHTML = `Roll Sequence ${rangeStr}`;
     el.appendChild(sep);
+
+    /* ── Throw modifier breakdown (Sprint 3) ─────────── */
+    if (mods && paTarget < 99) {
+      const modRows = [];
+      modRows.push({ label: `PA ${mods.paBase}+`, value: 'base' });
+      if (range?.mod) modRows.push({ label: range.rangeLabel, value: `+${-range.mod}`, cls: 'neg' });
+      if (mods.tzPenalty)        modRows.push({ label: `${mods.tzPenalty} Tackle Zone${mods.tzPenalty > 1 ? 's' : ''}`, value: `+${mods.tzPenalty}`, cls: 'neg' });
+      if (mods.verySunnyPenalty) modRows.push({ label: '☀ Very Sunny', value: '+1', cls: 'neg' });
+      if (mods.nosThrow)         modRows.push({ chip: 'Nerves of Steel', value: '(TZ ignored)', cls: 'pos' });
+      if (mods.accurateBonus)    modRows.push({ chip: 'Accurate',        value: '−1', cls: 'pos' });
+      if (mods.cannoneerBonus)   modRows.push({ chip: 'Cannoneer',       value: '−1', cls: 'pos' });
+      if (mods.hasHailMary)      modRows.push({ chip: 'Hail Mary Pass',  value: '(LB range, no intercept)', cls: 'pos' });
+      modRows.push({ label: `Final: ${paTarget}+`, value: '', cls: 'final' });
+      el.appendChild(buildModBreakdown(modRows));
+    }
 
     const row = document.createElement('div');
     row.className = 'pwiz-action-row';
@@ -573,24 +685,56 @@ function initPassWizard() {
       return await Dice.rollDieElement(die);
     }
 
-    /* Offer re-roll — returns Promise<bool> (true = reroll accepted) */
+    /* Offer the Pass skill re-roll (Sprint 4).
+       Only for failed PA tests (not fumbles). Returns Promise<bool>. */
+    function offerPassSkillReroll(resEl) {
+      if (!hasSk(ws.thrower, 'Pass')) return Promise.resolve(false);
+      return new Promise(resolve => {
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.className = 'pass-nav-btn';
+        btn.style.cssText = 'margin-top:0.2rem;margin-right:0.25rem;background:rgba(212,175,55,0.12);border-color:rgba(212,175,55,0.4);';
+        btn.appendChild(makeSkillChip('Pass'));
+        btn.insertAdjacentText('beforeend', ' Re-roll');
+        const skipBtn = document.createElement('button');
+        skipBtn.type = 'button'; skipBtn.className = 'pass-nav-btn';
+        skipBtn.style.marginTop = '0.2rem';
+        skipBtn.textContent = '→ Skip';
+        btn.addEventListener('click', () => { btn.remove(); skipBtn.remove(); resolve(true); });
+        skipBtn.addEventListener('click', () => { btn.remove(); skipBtn.remove(); resolve(false); });
+        resEl.appendChild(btn); resEl.appendChild(skipBtn);
+      });
+    }
+
+    /* Offer a team re-roll — returns Promise<bool> (true = re-roll accepted).
+       Consummate Professional: thrower uses re-roll without removing it from pool. */
     function offerReroll(resEl, label) {
       return new Promise(resolve => {
-        const side    = ws.activeSide;
-        const rerolls = window.GameState?.rerolls?.[side] ?? 0;
+        const side       = ws.activeSide;
+        const rerolls    = window.GameState?.rerolls?.[side] ?? 0;
+        const isConsProf = hasSk(ws.thrower, 'Consummate Professional');
+        if (rerolls <= 0 && !isConsProf) { resolve(false); return; }
         if (rerolls <= 0) { resolve(false); return; }
+
         const rrBtn = document.createElement('button');
         rrBtn.type = 'button'; rrBtn.className = 'pass-nav-btn';
         rrBtn.style.cssText = 'margin-top:0.2rem;margin-right:0.25rem;';
-        rrBtn.textContent = `↺ Re-roll (${rerolls})`;
+        if (isConsProf) {
+          rrBtn.appendChild(makeSkillChip('Consummate Professional'));
+          rrBtn.insertAdjacentText('beforeend', ` Re-roll (${rerolls}, not spent)`);
+        } else {
+          rrBtn.textContent = `↺ Team Re-roll (${rerolls})`;
+        }
         const skipBtn = document.createElement('button');
         skipBtn.type = 'button'; skipBtn.className = 'pass-nav-btn';
         skipBtn.style.marginTop = '0.2rem';
         skipBtn.textContent = label ?? '→ Continue';
         rrBtn.addEventListener('click', () => {
           rrBtn.remove(); skipBtn.remove();
-          if (window.GameState?.rerolls) window.GameState.rerolls[side] = Math.max(0, rerolls - 1);
-          window.Panels?.renderRerollPips?.(side);
+          /* Consummate Professional: do NOT decrement the re-roll pool */
+          if (!isConsProf && window.GameState?.rerolls) {
+            window.GameState.rerolls[side] = Math.max(0, rerolls - 1);
+            window.Panels?.renderRerollPips?.(side);
+          }
           resolve(true);
         });
         skipBtn.addEventListener('click', () => { rrBtn.remove(); skipBtn.remove(); resolve(false); });
@@ -612,7 +756,8 @@ function initPassWizard() {
     interceptors.forEach(op => {
       addArrow();
       const ag = getStat(op.player, 'AG');
-      const intTarget = Math.min(6, Math.max(2, ag >= 99 ? 4 : ag));
+      /* Pouring Rain: -1 to intercept roll (raises target by 1) */
+      const intTarget = Math.min(6, Math.max(2, (ag >= 99 ? 4 : ag) + (mods?.intWeatherPenalty ?? 0)));
       const { col: ic, dieWrap: id_, resEl: ir } = makeCol('⚡', 'Intercept', `${intTarget}+`, 'chip-int');
       ic.querySelector('.pwiz-action-chip').insertAdjacentHTML('beforeend',
         `<div class="pwiz-action-sub">${esc(op.player.name || op.player.pos || '?')}</div>`);
@@ -647,6 +792,7 @@ function initPassWizard() {
         ws.passResult = 'fumble';
         catchBtn.disabled = true;
         await autoScatter(scatterEl, ws.throwerPos, 3, '💀 Fumble — Ball Scatters from Thrower');
+        addCompleteButton(resultSummary, '💀 Fumble — Close');
         return;
       }
 
@@ -667,6 +813,7 @@ function initPassWizard() {
           if (proOk) { throwRes.innerHTML = ''; await doThrow(); return; }
         }
         await autoScatter(scatterEl, ws.throwerPos, 3, '💀 Fumble — Ball Scatters from Thrower');
+        addCompleteButton(resultSummary, '💀 Fumble — Close');
         return;
       }
 
@@ -676,6 +823,9 @@ function initPassWizard() {
 
       if (!isAccurate) {
         catchBtn.disabled = true;
+        /* Pass skill re-roll first (Sprint 4) */
+        const usePassSkill = await offerPassSkillReroll(throwRes);
+        if (usePassSkill) { throwRes.innerHTML = ''; await doThrow(); return; }
         /* Pro skill check before team re-roll */
         if (typeof promptSkillUse === 'function' && hasSkill(ws.thrower, 'Pro')) {
           const proOk = await promptSkillUse(ws.thrower, 'Pro', throwRes, rollD6);
@@ -688,6 +838,7 @@ function initPassWizard() {
           return;
         }
         await autoScatter(scatterEl, ws.catcherPos, 3, '⚠ Inaccurate — Scatter');
+        addCompleteButton(resultSummary, '⚠ Inaccurate — Close');
         return;
       }
 
@@ -706,6 +857,7 @@ function initPassWizard() {
         if (caught) {
           ws.passResult = 'intercepted';
           resultSummary.innerHTML = `<div style="margin-top:0.5rem;padding:0.4rem 0.6rem;background:rgba(200,16,46,0.1);border:1px solid rgba(200,16,46,0.3);border-radius:4px;font-family:JetBrains Mono,monospace;font-size:0.72rem;color:#ff8fa0;">⚔ Intercepted — Turnover!</div>`;
+          addCompleteButton(resultSummary, '⚔ Intercepted — Close');
         } else {
           if (i + 1 < intCols.length) intCols[i + 1].btn.disabled = false;
           else catchBtn.disabled = false;
@@ -752,6 +904,7 @@ function initPassWizard() {
         return;
       }
       await autoScatter(scatterEl, ws.catcherPos, 1, 'Dropped — Ball Bounces (D8)');
+      addCompleteButton(resultSummary, '✗ Dropped — Close');
     }
   }
 
@@ -831,13 +984,17 @@ function initPassWizard() {
   function buildThrowExplain(target, range) {
     if (!ws.thrower || target >= 99) return '';
     const parts = [];
-    if (range?.mod) parts.push(`${range.rangeLabel}: ${range.mod < 0 ? '' : '+'}${range.mod} to roll`);
+    if (range?.mod) parts.push(`${range.rangeLabel}: +${-range.mod} to target`);
     if (ws.tz > 0) {
       if (hasSk(ws.thrower, 'Nerves of Steel')) parts.push(`${ws.tz} TZ (Nerves of Steel: ignored)`);
-      else parts.push(`${ws.tz} TZ penalty`);
+      else parts.push(`${ws.tz} TZ: +${ws.tz} to target`);
     }
-    if (hasSk(ws.thrower, 'Accurate') && range && range.distance <= 6) parts.push('Accurate: −1 target');
-    if (hasSk(ws.thrower, 'Cannoneer') && range && range.distance > 6)  parts.push('Cannoneer: −1 target');
+    const w = window.GameState?.currentWeather;
+    if (w?.name === 'Very Sunny') parts.push('Very Sunny: +1 to target');
+    if (hasSk(ws.thrower, 'Accurate') && range &&
+        (range.rangeKey === 'quick' || range.rangeKey === 'short')) parts.push('Accurate: −1 target');
+    if (hasSk(ws.thrower, 'Cannoneer') && range &&
+        (range.rangeKey === 'long'  || range.rangeKey === 'bomb'))  parts.push('Cannoneer: −1 target');
     return parts.join(' · ');
   }
 
