@@ -325,40 +325,44 @@
 }
 
 /* ════════════════════════════════════════════════════════
-   PASS WIZARD v2 — Sprint 11-14
+   PASS WIZARD v2 — Sprint 11-14 + resize pass
    Console TV layout: left panel | center pitch | right panel
+   All child sizes in em so they scale with this root font-size.
    ════════════════════════════════════════════════════════ */
 
-/* ── Root container ── */
+/* ── Root container — scaling origin ── */
 .pwiz-v2 {
   display:        flex;
   flex-direction: column;
-  gap:            0.4rem;
+  gap:            0.5em;
+  /* Scale all em-based children with viewport width.
+     At 1920px → 26px (1.625× base), at 768px → 14px (floor). */
+  font-size:      clamp(14px, 2.2vw, 26px);
 }
 
 /* ── Header: variant buttons + team tabs ── */
 .pwiz-v2-header {
   display:        flex;
   flex-direction: column;
-  gap:            0.3rem;
-  padding-bottom: 0.4rem;
+  gap:            0.35em;
+  padding-bottom: 0.45em;
   border-bottom:  1px solid rgba(80,130,255,0.15);
 }
 
 .pwiz-variant-row {
-  display:  flex;
-  gap:      0.3rem;
+  display:   flex;
+  gap:       0.3em;
   flex-wrap: wrap;
 }
 
 .pwiz-variant-btn {
-  padding:       0.2rem 0.55rem;
+  padding:       0.22em 0.6em;
   background:    rgba(20,40,100,0.4);
   border:        1px solid rgba(80,130,255,0.2);
   border-radius: 4px;
   color:         rgba(140,180,255,0.55);
   font-family:   'JetBrains Mono', monospace;
-  font-size:     0.6rem;
+  font-size:     0.65em;
   font-weight:   700;
   cursor:        pointer;
   transition:    background 0.12s, color 0.12s, border-color 0.12s;
@@ -376,55 +380,60 @@
 
 /* ── 3-column body ── */
 .pwiz-v2-body {
-  display:   flex;
-  gap:       0.6rem;
+  display:     flex;
+  gap:         clamp(0.4rem, 0.7vw, 1rem);
   align-items: flex-start;
 }
 
 .pwiz-v2-left {
-  flex:       0 0 140px;
-  min-width:  120px;
+  flex:      0 0 clamp(110px, 13vw, 210px);
+  min-width: 0;
+  overflow:  hidden;
 }
 
 .pwiz-v2-center {
-  flex:     1 1 auto;
-  min-width: 0;
-  display:  flex;
+  flex:           1 1 auto;
+  min-width:      0;
+  overflow:       hidden;
+  display:        flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
+  align-items:    center;
+  gap:            0.4em;
 }
 
 .pwiz-v2-right {
-  flex:      0 0 130px;
-  min-width: 110px;
+  flex:      0 0 clamp(100px, 11.5vw, 195px);
+  min-width: 0;
+  overflow:  hidden;
 }
 
 /* ── Panel section label ── */
 .pwiz-panel-label {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.55rem;
+  font-size:      0.6em;
   font-weight:    700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color:          rgba(180,210,255,0.3);
-  margin-bottom:  0.35rem;
+  margin-bottom:  0.4em;
 }
 
 /* ── Zones button ── */
 .pwiz-zones-btn {
   display:       block;
   width:         100%;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35em;
+  font-size:     0.8em;
+  padding:       0.45em 0.7em;
 }
 
 /* ── Opposing player rows in left panel ── */
 .pwiz-opp-row {
   display:       flex;
   align-items:   center;
-  gap:           0.25rem;
-  margin-bottom: 0.2rem;
-  padding:       0.18rem 0.35rem;
+  gap:           0.3em;
+  margin-bottom: 0.25em;
+  padding:       0.2em 0.4em;
   background:    rgba(200,16,46,0.08);
   border:        1px solid rgba(200,16,46,0.18);
   border-radius: 3px;
@@ -432,94 +441,94 @@
 .pwiz-opp-label {
   flex:          1;
   font-family:   'JetBrains Mono', monospace;
-  font-size:     0.6rem;
+  font-size:     0.65em;
   color:         rgba(255,150,150,0.8);
   overflow:      hidden;
   text-overflow: ellipsis;
   white-space:   nowrap;
 }
 .pwiz-opp-pos {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.52rem;
-  color:         rgba(255,150,150,0.35);
-  flex-shrink:   0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.57em;
+  color:       rgba(255,150,150,0.35);
+  flex-shrink: 0;
 }
 
 /* ── TZ summary in left panel ── */
 .pwiz-tz-summary {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.58rem;
-  color:         rgba(180,210,255,0.45);
-  margin-top:    0.4rem;
-  line-height:   1.4;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.62em;
+  color:       rgba(180,210,255,0.45);
+  margin-top:  0.45em;
+  line-height: 1.4;
 }
 
 /* ── Placement banner ── */
 .pwiz-place-banner {
-  width:          100%;
-  padding:        0.3rem 0.6rem;
-  background:     rgba(212,175,55,0.15);
-  border:         1px solid rgba(212,175,55,0.4);
-  border-radius:  4px;
-  font-family:    'JetBrains Mono', monospace;
-  font-size:      0.68rem;
-  color:          #D4AF37;
-  text-align:     center;
-  cursor:         pointer;
+  width:         100%;
+  padding:       0.35em 0.7em;
+  background:    rgba(212,175,55,0.15);
+  border:        1px solid rgba(212,175,55,0.4);
+  border-radius: 4px;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72em;
+  color:         #D4AF37;
+  text-align:    center;
+  cursor:        pointer;
 }
 
 /* ── Below-pitch: chooser areas ── */
 .pwiz-below-pitch {
-  display:       flex;
-  gap:           0.5rem;
-  width:         100%;
+  display: flex;
+  gap:     0.55em;
+  width:   100%;
 }
 
 .pwiz-chooser-area {
-  flex:          1;
-  min-width:     0;
-  padding:       0.45rem 0.55rem;
-  background:    rgba(10,20,60,0.5);
-  border:        1px dashed rgba(80,130,255,0.25);
-  border-radius: 6px;
-  display:       flex;
+  flex:           1;
+  min-width:      0;
+  padding:        0.5em 0.65em;
+  background:     rgba(10,20,60,0.5);
+  border:         1px dashed rgba(80,130,255,0.25);
+  border-radius:  6px;
+  display:        flex;
   flex-direction: column;
-  gap:           0.25rem;
-  transition:    background 0.15s, border-color 0.15s;
+  gap:            0.3em;
+  transition:     background 0.15s, border-color 0.15s;
 }
 .pwiz-chooser-area.pwiz-chooser-selected {
-  background:    rgba(212,175,55,0.07);
-  border-style:  solid;
-  border-color:  rgba(212,175,55,0.3);
+  background:   rgba(212,175,55,0.07);
+  border-style: solid;
+  border-color: rgba(212,175,55,0.3);
 }
 
 .pwiz-chooser-btn {
-  background:    transparent;
-  border:        none;
-  color:         rgba(140,180,255,0.6);
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.72rem;
-  font-weight:   700;
-  cursor:        pointer;
-  padding:       0.5rem 0.3rem;
-  text-align:    center;
-  width:         100%;
-  transition:    color 0.12s;
+  background:  transparent;
+  border:      none;
+  color:       rgba(140,180,255,0.6);
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.85em;
+  font-weight: 700;
+  cursor:      pointer;
+  padding:     0.6em 0.4em;
+  text-align:  center;
+  width:       100%;
+  transition:  color 0.12s;
 }
 .pwiz-chooser-btn:hover { color: rgba(212,175,55,0.9); }
 
 .pwiz-chooser-name {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.65rem;
-  display:       flex;
-  flex-wrap:     wrap;
-  align-items:   baseline;
-  gap:           0.3rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.75em;
+  display:     flex;
+  flex-wrap:   wrap;
+  align-items: baseline;
+  gap:         0.3em;
 }
 .pwiz-chooser-role {
-  font-size:    0.55rem;
-  color:        rgba(140,180,255,0.45);
-  font-weight:  700;
+  font-size:      0.6em;
+  color:          rgba(140,180,255,0.45);
+  font-weight:    700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -528,29 +537,29 @@
   font-weight: 800;
 }
 .pwiz-chooser-pos {
-  font-size: 0.52rem;
+  font-size: 0.58em;
   color:     rgba(212,175,55,0.4);
 }
 
 .pwiz-chooser-stats {
-  display:    flex;
-  gap:        0.3rem;
-  flex-wrap:  wrap;
+  display:   flex;
+  gap:       0.3em;
+  flex-wrap: wrap;
 }
 
 .pwiz-chooser-stat {
   display:        flex;
   flex-direction: column;
   align-items:    center;
-  padding:        0.15rem 0.3rem;
+  padding:        0.18em 0.35em;
   background:     rgba(30,60,150,0.3);
   border:         1px solid rgba(80,130,255,0.18);
   border-radius:  3px;
-  min-width:      28px;
+  min-width:      2em;
 }
 .pwiz-cs-key {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.45rem;
+  font-size:      0.5em;
   color:          rgba(150,185,255,0.45);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -559,33 +568,33 @@
 .pwiz-cs-val {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
-  font-size:   0.7rem;
+  font-size:   0.82em;
   color:       rgba(200,225,255,0.85);
-  line-height: 1.1;
+  line-height: 1.2;
 }
 
 .pwiz-chooser-skills {
-  display:  flex;
+  display:   flex;
   flex-wrap: wrap;
-  gap:      0.2rem;
+  gap:       0.25em;
 }
 
 /* ── Right panel (Sprint 14) ── */
 .pwiz-right-rr {
   text-align:    center;
-  padding:       0.5rem 0.3rem;
+  padding:       0.6em 0.4em;
   background:    rgba(10,20,60,0.5);
   border:        1px solid rgba(80,130,255,0.2);
   border-radius: 6px;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45em;
 }
 .pwiz-rr-big-num {
-  font-family:  'JetBrains Mono', monospace;
-  font-size:    2.4rem;
-  font-weight:  900;
-  color:        #D4AF37;
-  line-height:  1;
-  text-shadow:  0 0 20px rgba(212,175,55,0.35);
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   2.8em;
+  font-weight: 900;
+  color:       #D4AF37;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(212,175,55,0.35);
 }
 .pwiz-rr-big-num.zero {
   color:       rgba(200,16,46,0.7);
@@ -593,122 +602,122 @@
 }
 .pwiz-rr-big-label {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.52rem;
+  font-size:      0.57em;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color:          rgba(180,210,255,0.35);
-  margin-top:     0.15rem;
+  margin-top:     0.2em;
 }
 .pwiz-rr-used-note {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.55rem;
-  color:         rgba(255,193,7,0.65);
-  margin-top:    0.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.6em;
+  color:       rgba(255,193,7,0.65);
+  margin-top:  0.2em;
 }
 
 .pwiz-right-weather {
   text-align:    center;
-  padding:       0.4rem 0.3rem;
+  padding:       0.5em 0.4em;
   background:    rgba(10,20,60,0.4);
   border:        1px solid rgba(80,130,255,0.15);
   border-radius: 6px;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4em;
 }
 .pwiz-weather-emoji {
-  font-size:   1.4rem;
-  line-height: 1;
-  margin-bottom: 0.1rem;
+  font-size:     1.6em;
+  line-height:   1;
+  margin-bottom: 0.12em;
 }
 .pwiz-weather-name {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   0.62rem;
+  font-size:   0.7em;
   font-weight: 700;
   color:       rgba(200,225,255,0.75);
 }
 .pwiz-weather-effect {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.55rem;
-  color:         rgba(255,193,7,0.6);
-  margin-top:    0.15rem;
-  line-height:   1.35;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.62em;
+  color:       rgba(255,193,7,0.6);
+  margin-top:  0.15em;
+  line-height: 1.35;
 }
 
 .pwiz-right-game {
-  padding:       0.3rem 0.4rem;
+  padding:       0.35em 0.5em;
   background:    rgba(10,20,60,0.35);
   border:        1px solid rgba(80,130,255,0.12);
   border-radius: 5px;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.35em;
 }
 .pwiz-game-row {
-  display:     flex;
-  align-items: baseline;
+  display:         flex;
+  align-items:     baseline;
   justify-content: space-between;
-  gap:         0.3rem;
+  gap:             0.3em;
 }
 .pwiz-game-key {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.52rem;
+  font-size:      0.58em;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color:          rgba(140,180,255,0.4);
 }
 .pwiz-game-val {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   0.75rem;
+  font-size:   0.85em;
   font-weight: 800;
   color:       rgba(200,225,255,0.8);
 }
 .pwiz-right-note {
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.5rem;
-  color:         rgba(140,180,255,0.25);
-  text-align:    center;
-  margin-top:    0.2rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.55em;
+  color:       rgba(140,180,255,0.25);
+  text-align:  center;
+  margin-top:  0.25em;
 }
 
 /* ── Full-screen player picker overlay (Sprint 12) ── */
 .pwiz-full-picker-overlay {
-  position: absolute;
-  inset:    0;
-  z-index:  300;
-  background: rgba(2,6,20,0.88);
-  display:  flex;
-  align-items: flex-start;
+  position:       absolute;
+  inset:          0;
+  z-index:        300;
+  background:     rgba(2,6,20,0.88);
+  display:        flex;
+  align-items:    flex-start;
   justify-content: center;
-  padding:  0.5rem;
+  padding:        0.6em;
   backdrop-filter: blur(4px);
 }
 
 .pwiz-full-picker-card {
-  background:    rgba(4,12,40,0.98);
-  border:        1px solid rgba(80,130,255,0.4);
-  border-radius: 8px;
-  width:         100%;
-  max-height:    480px;
-  display:       flex;
+  background:     rgba(4,12,40,0.98);
+  border:         1px solid rgba(80,130,255,0.4);
+  border-radius:  8px;
+  width:          100%;
+  max-height:     80vh;
+  display:        flex;
   flex-direction: column;
-  box-shadow:    0 8px 40px rgba(0,0,0,0.7);
+  box-shadow:     0 8px 40px rgba(0,0,0,0.7);
 }
 
 .pwiz-full-picker-hdr {
-  display:       flex;
-  align-items:   center;
+  display:         flex;
+  align-items:     center;
   justify-content: space-between;
-  padding:       0.5rem 0.75rem;
-  border-bottom: 1px solid rgba(80,130,255,0.2);
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.78rem;
-  font-weight:   800;
-  color:         rgba(200,225,255,0.85);
-  flex-shrink:   0;
+  padding:         0.6em 0.85em;
+  border-bottom:   1px solid rgba(80,130,255,0.2);
+  font-family:     'JetBrains Mono', monospace;
+  font-size:       0.9em;
+  font-weight:     800;
+  color:           rgba(200,225,255,0.85);
+  flex-shrink:     0;
 }
 
 .pwiz-full-picker-grid {
   display:    grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap:        0.4rem;
-  padding:    0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 45%), 1fr));
+  gap:        0.5em;
+  padding:    0.6em;
   overflow-y: auto;
   flex:       1;
 }
@@ -717,8 +726,8 @@
 .pwiz-player-pick-card {
   display:        flex;
   flex-direction: column;
-  gap:            0.25rem;
-  padding:        0.4rem 0.5rem;
+  gap:            0.3em;
+  padding:        0.55em 0.65em;
   background:     rgba(10,22,65,0.7);
   border:         1px solid rgba(80,130,255,0.2);
   border-radius:  6px;
@@ -734,42 +743,42 @@
 .pwiz-player-pick-card:active { transform: translateY(0); }
 
 .pwiz-pick-name-row {
-  display:     flex;
-  align-items: baseline;
+  display:         flex;
+  align-items:     baseline;
   justify-content: space-between;
-  gap: 0.3rem;
+  gap:             0.35em;
 }
 .pwiz-pick-name {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   0.72rem;
+  font-size:   0.85em;
   font-weight: 800;
   color:       rgba(200,225,255,0.9);
 }
 .pwiz-pick-pos {
   font-family:   'JetBrains Mono', monospace;
-  font-size:     0.55rem;
+  font-size:     0.65em;
   color:         rgba(140,180,255,0.45);
   flex-shrink:   0;
   overflow:      hidden;
   text-overflow: ellipsis;
   white-space:   nowrap;
-  max-width:     70px;
+  max-width:     6em;
 }
 
 .pwiz-pick-stats {
-  display:  flex;
-  gap:      0.25rem;
+  display:   flex;
+  gap:       0.28em;
   flex-wrap: wrap;
 }
 .pwiz-pick-stat {
   display:        flex;
   flex-direction: column;
   align-items:    center;
-  padding:        0.12rem 0.25rem;
+  padding:        0.15em 0.3em;
   background:     rgba(20,45,120,0.4);
   border:         1px solid rgba(80,130,255,0.15);
   border-radius:  3px;
-  min-width:      26px;
+  min-width:      1.8em;
 }
 .pwiz-pick-stat.pwiz-stat-focus {
   background:   rgba(212,175,55,0.12);
@@ -777,7 +786,7 @@
 }
 .pwiz-stat-key {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.42rem;
+  font-size:      0.48em;
   color:          rgba(150,185,255,0.4);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -786,18 +795,18 @@
 .pwiz-stat-val {
   font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
-  font-size:   0.68rem;
+  font-size:   0.8em;
   color:       rgba(200,225,255,0.85);
-  line-height: 1.1;
+  line-height: 1.15;
 }
 .pwiz-pick-stat.pwiz-stat-focus .pwiz-stat-val {
   color: #D4AF37;
 }
 
 .pwiz-pick-skills {
-  display:  flex;
+  display:   flex;
   flex-wrap: wrap;
-  gap:      0.18rem;
+  gap:       0.22em;
 }
 
 /* ── Skill chip: neutral variant (Sprint 13) ── */
@@ -813,26 +822,31 @@
   color:        #D4AF37;
   font-weight:  800;
 }
+/* Base chip sizing in wizard context */
+.pwiz-v2 .pwiz-skill-chip {
+  font-size: 0.65em;
+  padding:   0.2em 0.45em;
+}
 
 /* ── Skill tooltip (Sprint 13) ── */
 .pwiz-skill-tooltip {
-  position:      absolute;
-  bottom:        calc(100% + 6px);
-  left:          50%;
-  transform:     translateX(-50%);
-  background:    rgba(4,10,30,0.97);
-  border:        1px solid rgba(80,130,255,0.4);
-  border-radius: 5px;
-  padding:       0.4rem 0.55rem;
-  font-family:   'JetBrains Mono', monospace;
-  font-size:     0.62rem;
-  color:         rgba(200,225,255,0.85);
-  white-space:   normal;
-  max-width:     240px;
-  min-width:     160px;
-  z-index:       500;
-  line-height:   1.45;
-  box-shadow:    0 4px 20px rgba(0,0,0,0.6);
+  position:       absolute;
+  bottom:         calc(100% + 6px);
+  left:           50%;
+  transform:      translateX(-50%);
+  background:     rgba(4,10,30,0.97);
+  border:         1px solid rgba(80,130,255,0.4);
+  border-radius:  5px;
+  padding:        0.4em 0.55em;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.7em;
+  color:          rgba(200,225,255,0.85);
+  white-space:    normal;
+  max-width:      min(280px, 22em);
+  min-width:      min(180px, 15em);
+  z-index:        500;
+  line-height:    1.45;
+  box-shadow:     0 4px 20px rgba(0,0,0,0.6);
   pointer-events: none;
 }
 
@@ -841,94 +855,90 @@
   position: relative;
 }
 
+/* ── Add/remove buttons in wizard context ── */
+.pwiz-v2 .pwiz-add-btn {
+  font-size:  0.7em;
+  padding:    0.35em 0.6em;
+}
+.pwiz-v2 .pwiz-rm-btn {
+  width:      1.5em;
+  height:     1.5em;
+  font-size:  0.65em;
+}
+
 /* ── Variant overrides ── */
 
-/* V2: Larger text — console-friendly */
-.pwiz-variant-2 .pwiz-chooser-btn     { font-size: 0.85rem; }
-.pwiz-variant-2 .pwiz-chooser-name    { font-size: 0.78rem; }
-.pwiz-variant-2 .pwiz-cs-val          { font-size: 0.85rem; }
-.pwiz-variant-2 .pwiz-rr-big-num      { font-size: 3rem; }
-.pwiz-variant-2 .pwiz-pick-name       { font-size: 0.85rem; }
-.pwiz-variant-2 .pwiz-stat-val        { font-size: 0.8rem; }
-.pwiz-variant-2 .pwiz-v2-left         { flex-basis: 160px; }
-.pwiz-variant-2 .pwiz-v2-right        { flex-basis: 150px; }
+/* V2: Even larger text — TV-at-distance */
+.pwiz-variant-2 { font-size: clamp(16px, 2.5vw, 30px); }
+.pwiz-variant-2 .pwiz-v2-left  { flex: 0 0 clamp(150px, 14vw, 240px); }
+.pwiz-variant-2 .pwiz-v2-right { flex: 0 0 clamp(140px, 13vw, 225px); }
 
-/* V3: Wide center — more pitch space */
-.pwiz-variant-3 .pwiz-v2-left  { flex-basis: 110px; min-width: 95px; }
-.pwiz-variant-3 .pwiz-v2-right { flex-basis: 110px; min-width: 95px; }
+/* V3: Wide center — pitch-dominant */
+.pwiz-variant-3 .pwiz-v2-left  { flex: 0 0 clamp(100px, 9vw, 160px); }
+.pwiz-variant-3 .pwiz-v2-right { flex: 0 0 clamp(100px, 9vw, 155px); }
 .pwiz-variant-3 .pwiz-panel-label { display: none; }
 
 /* V4: Gold/amber accent */
 .pwiz-variant-4 .pwiz-v2-body {
-  background: rgba(212,175,55,0.03);
+  background:    rgba(212,175,55,0.03);
   border-radius: 8px;
-  padding: 0.4rem;
-  border: 1px solid rgba(212,175,55,0.1);
+  padding:       0.4em;
+  border:        1px solid rgba(212,175,55,0.1);
 }
-.pwiz-variant-4 .pwiz-chooser-area {
-  border-color: rgba(212,175,55,0.2);
-  background:   rgba(40,30,5,0.5);
-}
-.pwiz-variant-4 .pwiz-chooser-area.pwiz-chooser-selected {
-  border-color: rgba(212,175,55,0.5);
-  background:   rgba(60,50,10,0.5);
-}
-.pwiz-variant-4 .pwiz-right-rr {
-  border-color: rgba(212,175,55,0.3);
-  background:   rgba(40,30,5,0.5);
-}
-.pwiz-variant-4 .pwiz-rr-big-num      { color: #FFD700; }
-.pwiz-variant-4 .pwiz-variant-btn.active { color: #FFD700; border-color: rgba(255,215,0,0.5); }
+.pwiz-variant-4 .pwiz-chooser-area              { border-color: rgba(212,175,55,0.2); background: rgba(40,30,5,0.5); }
+.pwiz-variant-4 .pwiz-chooser-area.pwiz-chooser-selected { border-color: rgba(212,175,55,0.5); background: rgba(60,50,10,0.5); }
+.pwiz-variant-4 .pwiz-right-rr                  { border-color: rgba(212,175,55,0.3); background: rgba(40,30,5,0.5); }
+.pwiz-variant-4 .pwiz-rr-big-num                { color: #FFD700; }
+.pwiz-variant-4 .pwiz-variant-btn.active        { color: #FFD700; border-color: rgba(255,215,0,0.5); }
 
-/* V5: Compact */
-.pwiz-variant-5 .pwiz-v2-body       { gap: 0.35rem; }
-.pwiz-variant-5 .pwiz-chooser-area  { padding: 0.25rem 0.35rem; }
-.pwiz-variant-5 .pwiz-chooser-name  { font-size: 0.58rem; }
-.pwiz-variant-5 .pwiz-cs-val        { font-size: 0.62rem; }
-.pwiz-variant-5 .pwiz-rr-big-num    { font-size: 1.8rem; }
-.pwiz-variant-5 .pwiz-right-weather { padding: 0.25rem 0.2rem; }
-.pwiz-variant-5 .pwiz-weather-emoji { font-size: 1rem; }
-.pwiz-variant-5 .pwiz-right-game    { padding: 0.2rem 0.3rem; }
-.pwiz-variant-5 .pwiz-v2-left       { flex-basis: 120px; min-width: 100px; }
-.pwiz-variant-5 .pwiz-v2-right      { flex-basis: 110px; min-width: 95px; }
+/* V5: Compact — information-dense */
+.pwiz-variant-5 { font-size: clamp(12px, 1.6vw, 20px); }
+.pwiz-variant-5 .pwiz-v2-left  { flex: 0 0 clamp(110px, 11vw, 175px); }
+.pwiz-variant-5 .pwiz-v2-right { flex: 0 0 clamp(100px, 10vw, 160px); }
+.pwiz-variant-5 .pwiz-v2-body  { gap: 0.3em; }
+.pwiz-variant-5 .pwiz-chooser-area  { padding: 0.28em 0.4em; }
+.pwiz-variant-5 .pwiz-rr-big-num    { font-size: 2.2em; }
 
 /* ── Responsive: collapse to single column on narrow panels ── */
-@media (max-width: 560px) {
-  .pwiz-v2-body {
-    flex-direction: column;
+@media (max-width: 600px) {
+  #panel-pass {
+    width:         100vw;
+    height:        auto;
+    max-height:    92vh;
+    aspect-ratio:  unset;
+    border-radius: 16px 16px 0 0;
   }
-  .pwiz-v2-left, .pwiz-v2-right {
-    flex-basis: auto;
-  }
-  .pwiz-full-picker-grid {
-    grid-template-columns: 1fr;
-  }
+  #panel-pass .panel-body { height: auto; }
+  .pwiz-v2-body { flex-direction: column; }
+  .pwiz-v2-left, .pwiz-v2-right { flex: none; width: 100%; }
+  .pwiz-full-picker-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Roll area below body ── */
 .pwiz-v2 .pwiz-requirements,
 .pwiz-v2 #pwiz-roll {
-  width: 100%;
+  width:      100%;
+  box-sizing: border-box;  /* neutralise pitch.css padding on .pwiz-requirements */
 }
 
-/* ── Existing action row / chip styles (kept, ensure no conflicts) ── */
+/* ── Action row / roll sequence ── */
 .pwiz-action-row {
   display:     flex;
   flex-wrap:   wrap;
-  gap:         0.35rem;
+  gap:         0.5em;
   align-items: flex-start;
 }
 .pwiz-action-col {
   display:        flex;
   flex-direction: column;
   align-items:    center;
-  min-width:      70px;
+  min-width:      4.5em;
 }
 .pwiz-action-chip {
-  padding:       0.2rem 0.5rem;
+  padding:       0.22em 0.55em;
   border-radius: 4px;
   font-family:   'JetBrains Mono', monospace;
-  font-size:     0.62rem;
+  font-size:     0.7em;
   font-weight:   800;
   text-align:    center;
   line-height:   1.3;
@@ -937,20 +947,20 @@
   color:         rgba(200,225,255,0.8);
 }
 .pwiz-action-target {
-  font-size:   0.8rem;
+  font-size:   0.9em;
   font-weight: 900;
   color:       #D4AF37;
   display:     block;
 }
 .pwiz-action-arrow {
   color:       rgba(180,210,255,0.35);
-  font-size:   1.1rem;
+  font-size:   1.25em;
   align-self:  center;
-  padding-top: 0.6rem;
+  padding-top: 0.6em;
 }
-.pwiz-action-die   { min-height: 44px; display: flex; align-items: center; justify-content: center; }
-.pwiz-action-result { font-size: 0.68rem; text-align: center; min-height: 18px; }
-.pwiz-action-sub   { font-size: 0.5rem; opacity: 0.6; font-weight: 400; }
+.pwiz-action-die    { min-height: 2.8em; display: flex; align-items: center; justify-content: center; }
+.pwiz-action-result { font-size: 0.75em; text-align: center; min-height: 1.2em; }
+.pwiz-action-sub    { font-size: 0.55em; opacity: 0.6; font-weight: 400; }
 
 .chip-throw   { border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.08); color: #D4AF37; }
 .chip-catch   { border-color: rgba(76,175,80,0.4);  background: rgba(76,175,80,0.08);  color: #81c784; }
@@ -958,15 +968,15 @@
 .chip-scatter { border-color: rgba(80,130,255,0.35);background: rgba(80,130,255,0.08); color: rgba(180,210,255,0.8); }
 
 .pwiz-mod-breakdown {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.4em;
   font-family:   'JetBrains Mono', monospace;
-  font-size:     0.6rem;
+  font-size:     0.7em;
 }
 .pwiz-mod-row {
   display:     flex;
-  gap:         0.4rem;
+  gap:         0.45em;
   align-items: center;
-  padding:     0.06rem 0;
+  padding:     0.07em 0;
 }
 .pwiz-mod-row.neg   .pwiz-mod-value { color: #ff8fa0; }
 .pwiz-mod-row.pos   .pwiz-mod-value { color: #81c784; }
@@ -977,10 +987,10 @@
 
 .result-roll-num {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   1.4rem;
+  font-size:   1.6em;
   font-weight: 900;
   color:       rgba(200,225,255,0.9);
   line-height: 1;
 }
 
-.pwiz-reroll-counter { display:none; } /* moved to right panel in v2 */
+.pwiz-reroll-counter { display: none; } /* moved to right panel in v2 */

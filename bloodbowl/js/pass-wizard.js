@@ -126,6 +126,20 @@ function initPassWizard() {
 
   const delay = ms => new Promise(r => setTimeout(r, ms));
 
+  /* Compute pitch scale so it fills ~95% of the center column.
+     Panel = min(82vw,1600px). Side panels match the CSS clamp values.
+     Pitch at scale s ≈ s × 784px wide (28 cols × round(28s) px each). */
+  function _pitchScale() {
+    const vw      = window.innerWidth;
+    const panelW  = Math.min(vw * 0.82, 1600);
+    const leftW   = Math.max(110, Math.min(210, vw * 0.13));
+    const rightW  = Math.max(100, Math.min(195, vw * 0.115));
+    const gaps    = 60; // body padding + two flex gaps
+    const centerW = Math.max(200, panelW - leftW - rightW - gaps);
+    // No hard minimum — let tiny viewports shrink the pitch naturally
+    return Math.max(0.35, Math.min(1.55, (centerW * 0.95) / 784));
+  }
+
   /* ── Skill tooltip chip (Sprint 13) ── */
   const RELEVANT_SKILLS = new Set([
     'Accurate','Strong Arm','Pass','Nerves of Steel','Cannoneer',
@@ -237,7 +251,7 @@ function initPassWizard() {
     centerEl.appendChild(pitchWrap);
 
     if (typeof window.BloodBowlPitch !== 'undefined') {
-      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: 0.85 });
+      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: _pitchScale() });
       ws.pitch.onPlayerMoved = (fc, fr, tc, tr, data) => {
         if (data.id === 'thrower') {
           ws.throwerPos = { col: tc, row: tr };
