@@ -48,7 +48,12 @@ function initPassWizard() {
     passResult:      null,
     catchResult:     null,
     pitch:           null,
+    passSkillUsed:   false,  // Pass skill re-roll used this throw
+    teamRRUsed:      false,  // team re-roll used this throw
   };
+
+  /* Convert wizard side ('left'/'right') to GameState key ('home'/'away') */
+  function gbSide() { return ws.activeSide === 'left' ? 'home' : 'away'; }
 
   function getStat(p, key) { return parsePassStat(p?.statsText, key); }
 
@@ -58,7 +63,12 @@ function initPassWizard() {
     return sk.some(s => s.toLowerCase() === name.toLowerCase());
   }
 
-  function resetRoll() { ws.passResult = null; ws.catchResult = null; }
+  function resetRoll() {
+    ws.passResult    = null;
+    ws.catchResult   = null;
+    ws.passSkillUsed = false;
+    ws.teamRRUsed    = false;
+  }
 
   /* Player number / label helpers */
   function playerNum(p) { return p?.number != null ? String(p.number) : String((p?.idx ?? 0) + 1); }
@@ -237,6 +247,20 @@ function initPassWizard() {
 
   function buildLeftCol(container) {
     container.innerHTML = '';
+
+    /* ── Team Re-roll counter (Sprint 5) ── */
+    const rrCount = window.GameState?.rerolls?.[gbSide()] ?? 0;
+    const rrRow = document.createElement('div');
+    rrRow.className = 'pwiz-reroll-counter';
+    rrRow.innerHTML = `<span class="pwiz-rr-label">Team Re-rolls</span>`
+      + `<span class="pwiz-rr-num${rrCount === 0 ? ' pwiz-rr-none' : ''}">${rrCount}</span>`;
+    if (ws.teamRRUsed) {
+      const used = document.createElement('span');
+      used.className = 'pwiz-rr-used';
+      used.textContent = ' (used this roll)';
+      rrRow.appendChild(used);
+    }
+    container.appendChild(rrRow);
 
     /* Thrower */
     buildPlayerSlot(container, 'Thrower', ws.thrower, ws.throwerPos,
@@ -685,10 +709,10 @@ function initPassWizard() {
       return await Dice.rollDieElement(die);
     }
 
-    /* Offer the Pass skill re-roll (Sprint 4).
-       Only for failed PA tests (not fumbles). Returns Promise<bool>. */
+    /* Offer the Pass skill re-roll (Sprint 4 / 5).
+       Only for failed PA tests (not fumbles), once per throw. Returns Promise<bool>. */
     function offerPassSkillReroll(resEl) {
-      if (!hasSk(ws.thrower, 'Pass')) return Promise.resolve(false);
+      if (!hasSk(ws.thrower, 'Pass') || ws.passSkillUsed) return Promise.resolve(false);
       return new Promise(resolve => {
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'pass-nav-btn';
@@ -699,21 +723,31 @@ function initPassWizard() {
         skipBtn.type = 'button'; skipBtn.className = 'pass-nav-btn';
         skipBtn.style.marginTop = '0.2rem';
         skipBtn.textContent = '→ Skip';
-        btn.addEventListener('click', () => { btn.remove(); skipBtn.remove(); resolve(true); });
+        btn.addEventListener('click', () => {
+          btn.remove(); skipBtn.remove();
+          ws.passSkillUsed = true;
+          ws.teamRRUsed    = true; // player skill re-roll blocks team re-roll on same roll
+          rebuildLeft();           // refresh re-roll count display
+          resolve(true);
+        });
         skipBtn.addEventListener('click', () => { btn.remove(); skipBtn.remove(); resolve(false); });
         resEl.appendChild(btn); resEl.appendChild(skipBtn);
       });
     }
 
     /* Offer a team re-roll — returns Promise<bool> (true = re-roll accepted).
-       Consummate Professional: thrower uses re-roll without removing it from pool. */
+       Consummate Professional: thrower uses re-roll without removing it from pool.
+       Rules: cannot use a team re-roll if a player skill re-roll was already used
+       on the same roll (ws.teamRRUsed). */
     function offerReroll(resEl, label) {
       return new Promise(resolve => {
-        const side       = ws.activeSide;
-        const rerolls    = window.GameState?.rerolls?.[side] ?? 0;
+        const gs      = window.GameState?.rerolls;
+        const key     = gbSide();
+        const rerolls = gs?.[key] ?? 0;
+        /* Block if player skill already used on this roll, or no re-rolls left */
+        if (ws.teamRRUsed || rerolls <= 0) { resolve(false); return; }
+
         const isConsProf = hasSk(ws.thrower, 'Consummate Professional');
-        if (rerolls <= 0 && !isConsProf) { resolve(false); return; }
-        if (rerolls <= 0) { resolve(false); return; }
 
         const rrBtn = document.createElement('button');
         rrBtn.type = 'button'; rrBtn.className = 'pass-nav-btn';
@@ -730,11 +764,13 @@ function initPassWizard() {
         skipBtn.textContent = label ?? '→ Continue';
         rrBtn.addEventListener('click', () => {
           rrBtn.remove(); skipBtn.remove();
+          ws.teamRRUsed = true;
           /* Consummate Professional: do NOT decrement the re-roll pool */
-          if (!isConsProf && window.GameState?.rerolls) {
-            window.GameState.rerolls[side] = Math.max(0, rerolls - 1);
-            window.Panels?.renderRerollPips?.(side);
+          if (!isConsProf && gs) {
+            gs[key] = Math.max(0, rerolls - 1);
+            window.Panels?.renderRerollPips?.(key);
           }
+          rebuildLeft(); // refresh re-roll count in left column
           resolve(true);
         });
         skipBtn.addEventListener('click', () => { rrBtn.remove(); skipBtn.remove(); resolve(false); });
@@ -787,6 +823,9 @@ function initPassWizard() {
     });
 
     async function doThrow() {
+      /* Each fresh throw attempt resets the per-roll re-roll tracking.
+         passSkillUsed stays true for the whole action (can only use once). */
+      ws.teamRRUsed = false;
       if (blizzardFumble) {
         throwRes.innerHTML = `<span class="result-chip result-chip-bad">❌ Auto-Fumble</span><p class="result-desc" style="font-size:0.65rem;">Blizzard blocks Long/Bomb passes.</p>`;
         ws.passResult = 'fumble';
@@ -872,6 +911,7 @@ function initPassWizard() {
     });
 
     async function doCatch() {
+      ws.teamRRUsed = false; // reset per-roll tracking for the catch roll
       const roll   = await rollD6(catchDie);
       const caught = roll !== 1 && roll >= agTarget;
       ws.catchResult = caught ? 'caught' : 'dropped';
