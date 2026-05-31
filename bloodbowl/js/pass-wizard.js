@@ -50,10 +50,25 @@ function initPassWizard() {
     pitch:           null,
     passSkillUsed:   false,  // Pass skill re-roll used this throw
     teamRRUsed:      false,  // team re-roll used this throw
+    _built:          false,  // true once buildLayout() has run
   };
 
   /* Convert wizard side ('left'/'right') to GameState key ('home'/'away') */
   function gbSide() { return ws.activeSide === 'left' ? 'home' : 'away'; }
+
+  /* Fully clear wizard state and mark as needing a rebuild on next open.
+     Called by ✕ close, Complete buttons, and other-wizard module buttons. */
+  function resetWizardState() {
+    ws.pitch?.clear();
+    ws.thrower         = null;
+    ws.catcher         = null;
+    ws.throwerPos      = null;
+    ws.catcherPos      = null;
+    ws.opposingPlayers = [];
+    ws.zonesOn         = false;
+    ws._built          = false;
+    resetRoll();
+  }
 
   function getStat(p, key) { return parsePassStat(p?.statsText, key); }
 
@@ -580,14 +595,18 @@ function initPassWizard() {
      ACTION ROW
      ──────────────────────────────────────────────────── */
 
-  /* Appends a Close/Complete button to the given container. */
+  /* Appends a Close/Complete button to the given container.
+     Resets wizard state before closing so the next open is fresh. */
   function addCompleteButton(container, label) {
     if (container.querySelector('.pwiz-complete-btn')) return; // idempotent
     const btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'roll-btn pwiz-complete-btn';
     btn.style.cssText = 'margin-top:0.5rem;background:rgba(76,175,80,0.1);border-color:rgba(76,175,80,0.35);color:#81c784;display:block;width:100%;';
     btn.textContent = label ?? '✓ Complete — Close';
-    btn.addEventListener('click', () => window.Panels?.closePanel?.('pass'));
+    btn.addEventListener('click', () => {
+      resetWizardState();
+      window.Panels?.closePanel?.('pass');
+    });
     container.appendChild(btn);
   }
 
@@ -927,7 +946,10 @@ function initPassWizard() {
         closeBtn.type = 'button'; closeBtn.className = 'roll-btn';
         closeBtn.style.cssText = 'margin-top:0.5rem;background:rgba(76,175,80,0.15);border-color:rgba(76,175,80,0.4);color:#81c784;';
         closeBtn.innerHTML = '✓ Complete Pass — Close';
-        closeBtn.addEventListener('click', () => window.Panels?.closePanel?.('pass'));
+        closeBtn.addEventListener('click', () => {
+          resetWizardState();
+          window.Panels?.closePanel?.('pass');
+        });
         resultSummary.appendChild(closeBtn);
         return;
       }
@@ -1050,14 +1072,34 @@ function initPassWizard() {
 
   /* ── Boot ── */
   buildLayout();
+  ws._built = true;
 
+  /* ── Panel open: restore state if already built, full rebuild only after reset ── */
   onPanelOpen('panel-pass', () => {
-    ws.thrower = null; ws.catcher = null;
-    ws.throwerPos = null; ws.catcherPos = null;
-    ws.opposingPlayers = [];
-    ws.zonesOn = false;
-    resetRoll();
-    buildLayout();
+    if (ws._built) {
+      /* Panel was re-opened after backdrop/away click — state intact, just refresh */
+      rebuildLeft();
+      window.Panels?.refreshWeatherChips?.();
+    } else {
+      /* Fresh open (after reset or first load) */
+      buildLayout();
+      ws._built = true;
+    }
+  });
+
+  /* ── Other-wizard module buttons clear pass state (Sprint 7) ── */
+  document.querySelectorAll('.module-btn[data-panel]').forEach(btn => {
+    if (btn.dataset.panel === 'pass') return;
+    btn.addEventListener('click', () => {
+      if (ws.thrower || ws.catcher || ws.opposingPlayers.length) {
+        resetWizardState();
+      }
+    });
+  });
+
+  /* ── Panel ✕ close button clears state (Sprint 7) ── */
+  panel.querySelector('.panel-close')?.addEventListener('click', () => {
+    resetWizardState();
   });
 
   panel.addEventListener('bb:diceMode', () => {
