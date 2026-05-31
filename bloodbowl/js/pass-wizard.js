@@ -1087,21 +1087,6 @@ function initPassWizard() {
     }
   });
 
-  /* ── Other-wizard module buttons clear pass state (Sprint 7) ── */
-  document.querySelectorAll('.module-btn[data-panel]').forEach(btn => {
-    if (btn.dataset.panel === 'pass') return;
-    btn.addEventListener('click', () => {
-      if (ws.thrower || ws.catcher || ws.opposingPlayers.length) {
-        resetWizardState();
-      }
-    });
-  });
-
-  /* ── Panel ✕ close button clears state (Sprint 7) ── */
-  panel.querySelector('.panel-close')?.addEventListener('click', () => {
-    resetWizardState();
-  });
-
   panel.addEventListener('bb:diceMode', () => {
     window.Panels?.refreshWeatherChips?.();
   });

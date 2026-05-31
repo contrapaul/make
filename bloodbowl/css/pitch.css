@@ -627,26 +627,6 @@
   overflow:  hidden;
 }
 
-/* ── Sprint 8: Fixed pass wizard window — never resizes ─────
-   Panel has a fixed height; its body scrolls instead of the
-   outer container growing/shrinking as content changes.      */
-#panel-pass {
-  height:           min(86vh, 700px);
-  display:          flex;
-  flex-direction:   column;
-  overflow-y:       hidden; /* suppress outer scroll; body scrolls instead */
-}
-
-#panel-pass .panel-header {
-  flex-shrink: 0;  /* header never squishes */
-}
-
-#panel-pass .panel-body {
-  flex:         1;
-  overflow-y:   auto;
-  min-height:   0; /* allows flex child to shrink below content height */
-}
-
 /* ── Sprint 5: Re-roll counter in left column ────────────── */
 .pwiz-reroll-counter {
   display:        flex;
