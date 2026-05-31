@@ -13,6 +13,7 @@ async function loadModuleData() {
     weather: './data/weather.json',
     prayers: './data/prayers.json',
     injury:  './data/injury.json',
+    skills:  './data/skills.json',
   };
   const results = await Promise.allSettled(
     Object.entries(sources).map(async ([key, path]) => {
@@ -28,6 +29,12 @@ async function loadModuleData() {
   });
   console.log('[BB] Data ready. Keys:', Object.keys(DATA));
 }
+
+/* ── Skill lookup (Sprint 13) ── */
+window.lookupSkill = function(name) {
+  const skills = window.BBData?.skills ?? [];
+  return skills.find(s => s.name.toLowerCase() === name.toLowerCase()) ?? null;
+};
 
 /* ── Lookup helpers ── */
 

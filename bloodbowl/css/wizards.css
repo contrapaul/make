@@ -323,3 +323,664 @@
 .bbp-placement-mode > div:hover {
   background-color: rgba(212,175,55,0.18) !important;
 }
+
+/* ════════════════════════════════════════════════════════
+   PASS WIZARD v2 — Sprint 11-14
+   Console TV layout: left panel | center pitch | right panel
+   ════════════════════════════════════════════════════════ */
+
+/* ── Root container ── */
+.pwiz-v2 {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.4rem;
+}
+
+/* ── Header: variant buttons + team tabs ── */
+.pwiz-v2-header {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.3rem;
+  padding-bottom: 0.4rem;
+  border-bottom:  1px solid rgba(80,130,255,0.15);
+}
+
+.pwiz-variant-row {
+  display:  flex;
+  gap:      0.3rem;
+  flex-wrap: wrap;
+}
+
+.pwiz-variant-btn {
+  padding:       0.2rem 0.55rem;
+  background:    rgba(20,40,100,0.4);
+  border:        1px solid rgba(80,130,255,0.2);
+  border-radius: 4px;
+  color:         rgba(140,180,255,0.55);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  font-weight:   700;
+  cursor:        pointer;
+  transition:    background 0.12s, color 0.12s, border-color 0.12s;
+}
+.pwiz-variant-btn:hover {
+  background:   rgba(60,100,200,0.35);
+  color:        rgba(200,225,255,0.9);
+  border-color: rgba(80,130,255,0.45);
+}
+.pwiz-variant-btn.active {
+  background:   rgba(212,175,55,0.15);
+  border-color: rgba(212,175,55,0.5);
+  color:        #D4AF37;
+}
+
+/* ── 3-column body ── */
+.pwiz-v2-body {
+  display:   flex;
+  gap:       0.6rem;
+  align-items: flex-start;
+}
+
+.pwiz-v2-left {
+  flex:       0 0 140px;
+  min-width:  120px;
+}
+
+.pwiz-v2-center {
+  flex:     1 1 auto;
+  min-width: 0;
+  display:  flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pwiz-v2-right {
+  flex:      0 0 130px;
+  min-width: 110px;
+}
+
+/* ── Panel section label ── */
+.pwiz-panel-label {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.55rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          rgba(180,210,255,0.3);
+  margin-bottom:  0.35rem;
+}
+
+/* ── Zones button ── */
+.pwiz-zones-btn {
+  display:       block;
+  width:         100%;
+  margin-bottom: 0.3rem;
+}
+
+/* ── Opposing player rows in left panel ── */
+.pwiz-opp-row {
+  display:       flex;
+  align-items:   center;
+  gap:           0.25rem;
+  margin-bottom: 0.2rem;
+  padding:       0.18rem 0.35rem;
+  background:    rgba(200,16,46,0.08);
+  border:        1px solid rgba(200,16,46,0.18);
+  border-radius: 3px;
+}
+.pwiz-opp-label {
+  flex:          1;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  color:         rgba(255,150,150,0.8);
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+}
+.pwiz-opp-pos {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.52rem;
+  color:         rgba(255,150,150,0.35);
+  flex-shrink:   0;
+}
+
+/* ── TZ summary in left panel ── */
+.pwiz-tz-summary {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.58rem;
+  color:         rgba(180,210,255,0.45);
+  margin-top:    0.4rem;
+  line-height:   1.4;
+}
+
+/* ── Placement banner ── */
+.pwiz-place-banner {
+  width:          100%;
+  padding:        0.3rem 0.6rem;
+  background:     rgba(212,175,55,0.15);
+  border:         1px solid rgba(212,175,55,0.4);
+  border-radius:  4px;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.68rem;
+  color:          #D4AF37;
+  text-align:     center;
+  cursor:         pointer;
+}
+
+/* ── Below-pitch: chooser areas ── */
+.pwiz-below-pitch {
+  display:       flex;
+  gap:           0.5rem;
+  width:         100%;
+}
+
+.pwiz-chooser-area {
+  flex:          1;
+  min-width:     0;
+  padding:       0.45rem 0.55rem;
+  background:    rgba(10,20,60,0.5);
+  border:        1px dashed rgba(80,130,255,0.25);
+  border-radius: 6px;
+  display:       flex;
+  flex-direction: column;
+  gap:           0.25rem;
+  transition:    background 0.15s, border-color 0.15s;
+}
+.pwiz-chooser-area.pwiz-chooser-selected {
+  background:    rgba(212,175,55,0.07);
+  border-style:  solid;
+  border-color:  rgba(212,175,55,0.3);
+}
+
+.pwiz-chooser-btn {
+  background:    transparent;
+  border:        none;
+  color:         rgba(140,180,255,0.6);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  font-weight:   700;
+  cursor:        pointer;
+  padding:       0.5rem 0.3rem;
+  text-align:    center;
+  width:         100%;
+  transition:    color 0.12s;
+}
+.pwiz-chooser-btn:hover { color: rgba(212,175,55,0.9); }
+
+.pwiz-chooser-name {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.65rem;
+  display:       flex;
+  flex-wrap:     wrap;
+  align-items:   baseline;
+  gap:           0.3rem;
+}
+.pwiz-chooser-role {
+  font-size:    0.55rem;
+  color:        rgba(140,180,255,0.45);
+  font-weight:  700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.pwiz-chooser-player-name {
+  color:       #D4AF37;
+  font-weight: 800;
+}
+.pwiz-chooser-pos {
+  font-size: 0.52rem;
+  color:     rgba(212,175,55,0.4);
+}
+
+.pwiz-chooser-stats {
+  display:    flex;
+  gap:        0.3rem;
+  flex-wrap:  wrap;
+}
+
+.pwiz-chooser-stat {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  padding:        0.15rem 0.3rem;
+  background:     rgba(30,60,150,0.3);
+  border:         1px solid rgba(80,130,255,0.18);
+  border-radius:  3px;
+  min-width:      28px;
+}
+.pwiz-cs-key {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.45rem;
+  color:          rgba(150,185,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height:    1;
+}
+.pwiz-cs-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size:   0.7rem;
+  color:       rgba(200,225,255,0.85);
+  line-height: 1.1;
+}
+
+.pwiz-chooser-skills {
+  display:  flex;
+  flex-wrap: wrap;
+  gap:      0.2rem;
+}
+
+/* ── Right panel (Sprint 14) ── */
+.pwiz-right-rr {
+  text-align:    center;
+  padding:       0.5rem 0.3rem;
+  background:    rgba(10,20,60,0.5);
+  border:        1px solid rgba(80,130,255,0.2);
+  border-radius: 6px;
+  margin-bottom: 0.4rem;
+}
+.pwiz-rr-big-num {
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    2.4rem;
+  font-weight:  900;
+  color:        #D4AF37;
+  line-height:  1;
+  text-shadow:  0 0 20px rgba(212,175,55,0.35);
+}
+.pwiz-rr-big-num.zero {
+  color:       rgba(200,16,46,0.7);
+  text-shadow: 0 0 20px rgba(200,16,46,0.2);
+}
+.pwiz-rr-big-label {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          rgba(180,210,255,0.35);
+  margin-top:     0.15rem;
+}
+.pwiz-rr-used-note {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.55rem;
+  color:         rgba(255,193,7,0.65);
+  margin-top:    0.2rem;
+}
+
+.pwiz-right-weather {
+  text-align:    center;
+  padding:       0.4rem 0.3rem;
+  background:    rgba(10,20,60,0.4);
+  border:        1px solid rgba(80,130,255,0.15);
+  border-radius: 6px;
+  margin-bottom: 0.3rem;
+}
+.pwiz-weather-emoji {
+  font-size:   1.4rem;
+  line-height: 1;
+  margin-bottom: 0.1rem;
+}
+.pwiz-weather-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.62rem;
+  font-weight: 700;
+  color:       rgba(200,225,255,0.75);
+}
+.pwiz-weather-effect {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.55rem;
+  color:         rgba(255,193,7,0.6);
+  margin-top:    0.15rem;
+  line-height:   1.35;
+}
+
+.pwiz-right-game {
+  padding:       0.3rem 0.4rem;
+  background:    rgba(10,20,60,0.35);
+  border:        1px solid rgba(80,130,255,0.12);
+  border-radius: 5px;
+  margin-bottom: 0.3rem;
+}
+.pwiz-game-row {
+  display:     flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap:         0.3rem;
+}
+.pwiz-game-key {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:          rgba(140,180,255,0.4);
+}
+.pwiz-game-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.75rem;
+  font-weight: 800;
+  color:       rgba(200,225,255,0.8);
+}
+.pwiz-right-note {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.5rem;
+  color:         rgba(140,180,255,0.25);
+  text-align:    center;
+  margin-top:    0.2rem;
+}
+
+/* ── Full-screen player picker overlay (Sprint 12) ── */
+.pwiz-full-picker-overlay {
+  position: absolute;
+  inset:    0;
+  z-index:  300;
+  background: rgba(2,6,20,0.88);
+  display:  flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding:  0.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.pwiz-full-picker-card {
+  background:    rgba(4,12,40,0.98);
+  border:        1px solid rgba(80,130,255,0.4);
+  border-radius: 8px;
+  width:         100%;
+  max-height:    480px;
+  display:       flex;
+  flex-direction: column;
+  box-shadow:    0 8px 40px rgba(0,0,0,0.7);
+}
+
+.pwiz-full-picker-hdr {
+  display:       flex;
+  align-items:   center;
+  justify-content: space-between;
+  padding:       0.5rem 0.75rem;
+  border-bottom: 1px solid rgba(80,130,255,0.2);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.78rem;
+  font-weight:   800;
+  color:         rgba(200,225,255,0.85);
+  flex-shrink:   0;
+}
+
+.pwiz-full-picker-grid {
+  display:    grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap:        0.4rem;
+  padding:    0.5rem;
+  overflow-y: auto;
+  flex:       1;
+}
+
+/* ── Individual player card in picker ── */
+.pwiz-player-pick-card {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.25rem;
+  padding:        0.4rem 0.5rem;
+  background:     rgba(10,22,65,0.7);
+  border:         1px solid rgba(80,130,255,0.2);
+  border-radius:  6px;
+  cursor:         pointer;
+  text-align:     left;
+  transition:     background 0.12s, border-color 0.12s, transform 0.1s;
+}
+.pwiz-player-pick-card:hover {
+  background:   rgba(40,80,200,0.25);
+  border-color: rgba(212,175,55,0.45);
+  transform:    translateY(-1px);
+}
+.pwiz-player-pick-card:active { transform: translateY(0); }
+
+.pwiz-pick-name-row {
+  display:     flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+.pwiz-pick-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.72rem;
+  font-weight: 800;
+  color:       rgba(200,225,255,0.9);
+}
+.pwiz-pick-pos {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.55rem;
+  color:         rgba(140,180,255,0.45);
+  flex-shrink:   0;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  white-space:   nowrap;
+  max-width:     70px;
+}
+
+.pwiz-pick-stats {
+  display:  flex;
+  gap:      0.25rem;
+  flex-wrap: wrap;
+}
+.pwiz-pick-stat {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  padding:        0.12rem 0.25rem;
+  background:     rgba(20,45,120,0.4);
+  border:         1px solid rgba(80,130,255,0.15);
+  border-radius:  3px;
+  min-width:      26px;
+}
+.pwiz-pick-stat.pwiz-stat-focus {
+  background:   rgba(212,175,55,0.12);
+  border-color: rgba(212,175,55,0.35);
+}
+.pwiz-stat-key {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.42rem;
+  color:          rgba(150,185,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height:    1;
+}
+.pwiz-stat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size:   0.68rem;
+  color:       rgba(200,225,255,0.85);
+  line-height: 1.1;
+}
+.pwiz-pick-stat.pwiz-stat-focus .pwiz-stat-val {
+  color: #D4AF37;
+}
+
+.pwiz-pick-skills {
+  display:  flex;
+  flex-wrap: wrap;
+  gap:      0.18rem;
+}
+
+/* ── Skill chip: neutral variant (Sprint 13) ── */
+.pwiz-skill-chip.neutral {
+  background:   rgba(50,70,130,0.2);
+  border-color: rgba(80,130,255,0.2);
+  color:        rgba(160,195,255,0.55);
+}
+/* Highlighted skill in picker */
+.pwiz-skill-chip.highlight {
+  background:   rgba(212,175,55,0.18);
+  border-color: rgba(212,175,55,0.5);
+  color:        #D4AF37;
+  font-weight:  800;
+}
+
+/* ── Skill tooltip (Sprint 13) ── */
+.pwiz-skill-tooltip {
+  position:      absolute;
+  bottom:        calc(100% + 6px);
+  left:          50%;
+  transform:     translateX(-50%);
+  background:    rgba(4,10,30,0.97);
+  border:        1px solid rgba(80,130,255,0.4);
+  border-radius: 5px;
+  padding:       0.4rem 0.55rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.62rem;
+  color:         rgba(200,225,255,0.85);
+  white-space:   normal;
+  max-width:     240px;
+  min-width:     160px;
+  z-index:       500;
+  line-height:   1.45;
+  box-shadow:    0 4px 20px rgba(0,0,0,0.6);
+  pointer-events: none;
+}
+
+/* Ensure skill chip has position context for tooltip */
+.pwiz-skill-chip {
+  position: relative;
+}
+
+/* ── Variant overrides ── */
+
+/* V2: Larger text — console-friendly */
+.pwiz-variant-2 .pwiz-chooser-btn     { font-size: 0.85rem; }
+.pwiz-variant-2 .pwiz-chooser-name    { font-size: 0.78rem; }
+.pwiz-variant-2 .pwiz-cs-val          { font-size: 0.85rem; }
+.pwiz-variant-2 .pwiz-rr-big-num      { font-size: 3rem; }
+.pwiz-variant-2 .pwiz-pick-name       { font-size: 0.85rem; }
+.pwiz-variant-2 .pwiz-stat-val        { font-size: 0.8rem; }
+.pwiz-variant-2 .pwiz-v2-left         { flex-basis: 160px; }
+.pwiz-variant-2 .pwiz-v2-right        { flex-basis: 150px; }
+
+/* V3: Wide center — more pitch space */
+.pwiz-variant-3 .pwiz-v2-left  { flex-basis: 110px; min-width: 95px; }
+.pwiz-variant-3 .pwiz-v2-right { flex-basis: 110px; min-width: 95px; }
+.pwiz-variant-3 .pwiz-panel-label { display: none; }
+
+/* V4: Gold/amber accent */
+.pwiz-variant-4 .pwiz-v2-body {
+  background: rgba(212,175,55,0.03);
+  border-radius: 8px;
+  padding: 0.4rem;
+  border: 1px solid rgba(212,175,55,0.1);
+}
+.pwiz-variant-4 .pwiz-chooser-area {
+  border-color: rgba(212,175,55,0.2);
+  background:   rgba(40,30,5,0.5);
+}
+.pwiz-variant-4 .pwiz-chooser-area.pwiz-chooser-selected {
+  border-color: rgba(212,175,55,0.5);
+  background:   rgba(60,50,10,0.5);
+}
+.pwiz-variant-4 .pwiz-right-rr {
+  border-color: rgba(212,175,55,0.3);
+  background:   rgba(40,30,5,0.5);
+}
+.pwiz-variant-4 .pwiz-rr-big-num      { color: #FFD700; }
+.pwiz-variant-4 .pwiz-variant-btn.active { color: #FFD700; border-color: rgba(255,215,0,0.5); }
+
+/* V5: Compact */
+.pwiz-variant-5 .pwiz-v2-body       { gap: 0.35rem; }
+.pwiz-variant-5 .pwiz-chooser-area  { padding: 0.25rem 0.35rem; }
+.pwiz-variant-5 .pwiz-chooser-name  { font-size: 0.58rem; }
+.pwiz-variant-5 .pwiz-cs-val        { font-size: 0.62rem; }
+.pwiz-variant-5 .pwiz-rr-big-num    { font-size: 1.8rem; }
+.pwiz-variant-5 .pwiz-right-weather { padding: 0.25rem 0.2rem; }
+.pwiz-variant-5 .pwiz-weather-emoji { font-size: 1rem; }
+.pwiz-variant-5 .pwiz-right-game    { padding: 0.2rem 0.3rem; }
+.pwiz-variant-5 .pwiz-v2-left       { flex-basis: 120px; min-width: 100px; }
+.pwiz-variant-5 .pwiz-v2-right      { flex-basis: 110px; min-width: 95px; }
+
+/* ── Responsive: collapse to single column on narrow panels ── */
+@media (max-width: 560px) {
+  .pwiz-v2-body {
+    flex-direction: column;
+  }
+  .pwiz-v2-left, .pwiz-v2-right {
+    flex-basis: auto;
+  }
+  .pwiz-full-picker-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Roll area below body ── */
+.pwiz-v2 .pwiz-requirements,
+.pwiz-v2 #pwiz-roll {
+  width: 100%;
+}
+
+/* ── Existing action row / chip styles (kept, ensure no conflicts) ── */
+.pwiz-action-row {
+  display:     flex;
+  flex-wrap:   wrap;
+  gap:         0.35rem;
+  align-items: flex-start;
+}
+.pwiz-action-col {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  min-width:      70px;
+}
+.pwiz-action-chip {
+  padding:       0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.62rem;
+  font-weight:   800;
+  text-align:    center;
+  line-height:   1.3;
+  border:        1px solid rgba(80,130,255,0.25);
+  background:    rgba(20,45,120,0.4);
+  color:         rgba(200,225,255,0.8);
+}
+.pwiz-action-target {
+  font-size:   0.8rem;
+  font-weight: 900;
+  color:       #D4AF37;
+  display:     block;
+}
+.pwiz-action-arrow {
+  color:       rgba(180,210,255,0.35);
+  font-size:   1.1rem;
+  align-self:  center;
+  padding-top: 0.6rem;
+}
+.pwiz-action-die   { min-height: 44px; display: flex; align-items: center; justify-content: center; }
+.pwiz-action-result { font-size: 0.68rem; text-align: center; min-height: 18px; }
+.pwiz-action-sub   { font-size: 0.5rem; opacity: 0.6; font-weight: 400; }
+
+.chip-throw   { border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.08); color: #D4AF37; }
+.chip-catch   { border-color: rgba(76,175,80,0.4);  background: rgba(76,175,80,0.08);  color: #81c784; }
+.chip-int     { border-color: rgba(200,16,46,0.4);  background: rgba(200,16,46,0.08);  color: #ff8fa0; }
+.chip-scatter { border-color: rgba(80,130,255,0.35);background: rgba(80,130,255,0.08); color: rgba(180,210,255,0.8); }
+
+.pwiz-mod-breakdown {
+  margin-bottom: 0.35rem;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+}
+.pwiz-mod-row {
+  display:     flex;
+  gap:         0.4rem;
+  align-items: center;
+  padding:     0.06rem 0;
+}
+.pwiz-mod-row.neg   .pwiz-mod-value { color: #ff8fa0; }
+.pwiz-mod-row.pos   .pwiz-mod-value { color: #81c784; }
+.pwiz-mod-row.final .pwiz-mod-label { font-weight: 800; color: #D4AF37; }
+.pwiz-mod-row.final .pwiz-mod-value { display: none; }
+.pwiz-mod-label { flex: 1; color: rgba(180,210,255,0.6); }
+.pwiz-mod-value { color: rgba(180,210,255,0.5); }
+
+.result-roll-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   1.4rem;
+  font-weight: 900;
+  color:       rgba(200,225,255,0.9);
+  line-height: 1;
+}
+
+.pwiz-reroll-counter { display:none; } /* moved to right panel in v2 */
