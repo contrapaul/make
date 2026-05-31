@@ -218,3 +218,108 @@
   .block-setup-grid { grid-template-columns: 1fr auto 1fr; gap: 0.5rem; }
   .block-face       { width: 56px; height: 56px; }
 }
+
+/* ── Result chips (pass wizard rolls) ── */
+.result-chip {
+  display:       inline-block;
+  padding:       0.15rem 0.45rem;
+  border-radius: 3px;
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  font-weight:   800;
+  border:        1px solid transparent;
+}
+.result-chip-ok   { background: rgba(76,175,80,0.15);  border-color: rgba(76,175,80,0.4);  color: #81c784; }
+.result-chip-bad  { background: rgba(200,16,46,0.15);  border-color: rgba(200,16,46,0.4);  color: #ff8fa0; }
+.result-chip-warn { background: rgba(255,193,7,0.12);  border-color: rgba(255,193,7,0.35); color: #FFD54F; }
+
+.result-desc {
+  margin:      0.15rem 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.62rem;
+  color:       rgba(180,210,255,0.55);
+  line-height: 1.4;
+}
+
+/* ── Add / remove buttons in pass wizard ── */
+.pwiz-add-btn {
+  display:       block;
+  width:         100%;
+  padding:       0.3rem 0.55rem;
+  background:    rgba(80,130,255,0.08);
+  border:        1px dashed rgba(80,130,255,0.28);
+  border-radius: 4px;
+  color:         rgba(160,200,255,0.65);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  font-weight:   700;
+  cursor:        pointer;
+  margin-bottom: 0.25rem;
+  text-align:    left;
+  transition:    background 0.12s, border-color 0.12s, color 0.12s;
+}
+.pwiz-add-btn:hover {
+  background:   rgba(80,130,255,0.18);
+  border-color: rgba(80,130,255,0.5);
+  color:        rgba(200,225,255,0.9);
+}
+
+.pwiz-rm-btn {
+  flex-shrink:   0;
+  background:    transparent;
+  border:        1px solid rgba(200,16,46,0.3);
+  border-radius: 3px;
+  color:         rgba(255,100,120,0.55);
+  width:         18px;
+  height:        18px;
+  font-size:     0.6rem;
+  line-height:   1;
+  cursor:        pointer;
+  padding:       0;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  transition:    background 0.1s, color 0.1s;
+}
+.pwiz-rm-btn:hover { background: rgba(200,16,46,0.15); color: #ff8fa0; }
+
+/* ── Roster picker overlay ── */
+.pwiz-picker-overlay {
+  position: relative;
+  z-index:  50;
+}
+.pwiz-picker-card {
+  position:   absolute;
+  left: 0; right: 0;
+  top:        0;
+  background: rgba(4,10,30,0.97);
+  border:     1px solid rgba(80,130,255,0.35);
+  border-radius: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  z-index:    200;
+  padding:    0.25rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+.pwiz-picker-hdr {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.57rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          rgba(130,165,235,0.5);
+  padding:        0.18rem 0.3rem 0.25rem;
+  border-bottom:  1px solid rgba(80,130,255,0.12);
+  margin-bottom:  0.2rem;
+}
+
+/* ── Pitch placement mode highlight ── */
+.bbp-placement-mode {
+  cursor: crosshair !important;
+}
+.bbp-placement-mode > div {
+  cursor: crosshair !important;
+}
+.bbp-placement-mode > div:hover {
+  background-color: rgba(212,175,55,0.18) !important;
+}

@@ -425,6 +425,8 @@ class BloodBowlPitch {
     this._outerEl       = null;
     this._curScale      = this._scale;
     this._sqPx          = Math.round(28 * this._scale);
+    this._placementMode = null;   // { data, callback } for two-step placement
+    this.onPlayerMoved  = null;   // fn(fc, fr, tc, tr, data)
     this._build();
     if (this._interactive) this._setupZoom();
   }
@@ -437,21 +439,81 @@ class BloodBowlPitch {
     if (!cell) return;
     const sq = this._sqPx;
     const r  = Math.max(4, sq - 4);
+    const lbl = String(data.label ?? '').substring(0, 3) || '●';
+    const fs  = lbl.length > 1 ? Math.max(5, r * 0.3) : Math.max(5, r * 0.38);
     const tok = document.createElement('div');
     tok.className = 'bbp-token bbp-token-' + (data.side ?? 'home');
     tok.style.cssText = `width:${r}px;height:${r}px;border-radius:50%;
       position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
       display:flex;align-items:center;justify-content:center;
-      font-family:'JetBrains Mono',monospace;font-size:${Math.max(5,r*0.38)}px;
+      font-family:'JetBrains Mono',monospace;font-size:${fs}px;
       font-weight:800;color:#fff;pointer-events:${this._interactive?'auto':'none'};
-      cursor:pointer;transition:box-shadow 0.15s;z-index:3;`;
-    tok.textContent = (data.label ?? '').charAt(0).toUpperCase() || '●';
+      cursor:grab;transition:box-shadow 0.15s;z-index:3;`;
+    tok.textContent = lbl;
     tok.title = data.label ?? '';
     if (this._interactive) {
-      tok.addEventListener('click', e => {
+      const DRAG_THRESHOLD = 5;
+      tok.addEventListener('pointerdown', e => {
+        if (e.button !== 0) return;
         e.stopPropagation();
-        this._highlightTok(tok, true);
-        this._onTapCb?.(col, row, data);
+        tok.setPointerCapture(e.pointerId);
+        let moved = false;
+
+        const startRect = tok.getBoundingClientRect();
+        const bg = data.side === 'away' ? '#1a3a8a' : '#8a1a1a';
+        const ghost = document.createElement('div');
+        ghost.style.cssText = `position:fixed;z-index:9999;pointer-events:none;border-radius:50%;
+          left:${startRect.left}px;top:${startRect.top}px;
+          width:${startRect.width}px;height:${startRect.height}px;
+          background:${bg};display:flex;align-items:center;justify-content:center;
+          font-family:'JetBrains Mono',monospace;font-weight:800;font-size:${fs}px;
+          color:#fff;opacity:0;transition:none;`;
+        ghost.textContent = lbl;
+        document.body.appendChild(ghost);
+        tok.style.opacity = '0.25';
+        tok.style.cursor = 'grabbing';
+
+        const onMove = ev => {
+          const dx = ev.clientX - e.clientX;
+          const dy = ev.clientY - e.clientY;
+          if (!moved && Math.hypot(dx, dy) > DRAG_THRESHOLD) {
+            moved = true;
+            ghost.style.opacity = '0.85';
+          }
+          if (moved) {
+            ghost.style.left = (startRect.left + dx) + 'px';
+            ghost.style.top  = (startRect.top  + dy) + 'px';
+          }
+        };
+
+        const onUp = ev => {
+          tok.removeEventListener('pointermove', onMove);
+          tok.removeEventListener('pointerup',   onUp);
+          ghost.remove();
+          tok.style.opacity = '';
+          tok.style.cursor = 'grab';
+
+          if (!moved) {
+            this._highlightTok(tok, true);
+            this._onTapCb?.(col, row, data);
+            return;
+          }
+
+          const target = document.elementFromPoint(ev.clientX, ev.clientY);
+          const cellEl = target?.closest?.('[data-col][data-row]');
+          const newCol = cellEl ? parseInt(cellEl.dataset.col) : col;
+          const newRow = cellEl ? parseInt(cellEl.dataset.row) : row;
+
+          if (newCol !== col || newRow !== row) {
+            const d = this._players.get(`${col},${row}`)?.data ?? data;
+            this._removeAt(col, row);
+            this.placePlayer(newCol, newRow, d);
+            this.onPlayerMoved?.(col, row, newCol, newRow, d);
+          }
+        };
+
+        tok.addEventListener('pointermove', onMove);
+        tok.addEventListener('pointerup',   onUp);
       });
     }
     cell.appendChild(tok);
@@ -500,6 +562,17 @@ class BloodBowlPitch {
   }
 
   onSquareTap(cb) { this._onTapCb = cb; }
+
+  /* Enter two-step placement mode. Next cell tap places data and fires callback(col,row). */
+  startPlacement(data, callback) {
+    this._placementMode = { data, callback };
+    this._gridEl?.classList.add('bbp-placement-mode');
+  }
+
+  cancelPlacement() {
+    this._placementMode = null;
+    this._gridEl?.classList.remove('bbp-placement-mode');
+  }
 
   /* Scatter path overlay on the full pitch */
   showScatterPath(startCol, startRow, dirs) {
@@ -636,6 +709,14 @@ class BloodBowlPitch {
 
     if (this._interactive) {
       cell.addEventListener('click', () => {
+        if (this._placementMode) {
+          const { data, callback } = this._placementMode;
+          this._placementMode = null;
+          this._gridEl?.classList.remove('bbp-placement-mode');
+          this.placePlayer(col, row, data);
+          callback(col, row);
+          return;
+        }
         const existing = this._players.get(`${col},${row}`)?.data ?? null;
         this._onTapCb?.(col, row, existing);
       });
@@ -662,15 +743,21 @@ class BloodBowlPitch {
     if (!this._throwerPos) return;
     const { col: tc, row: tr } = this._throwerPos;
     const isBliz = window.GameState?.currentWeather?.name === 'Blizzard';
+    /* Euclidean radius cutoff per Chebyshev band — matches PitchGrid circular zones */
+    const euCutoff = d => { if (d <= 3) return 3.5; if (d <= 6) return 6.8; if (d <= 10) return 10.8; return 14.5; };
     for (let r = 1; r <= 15; r++) {
       for (let c = 2; c <= 27; c++) {
         if (c === tc && r === tr) continue;
-        const d = Math.max(Math.abs(c - tc), Math.abs(r - tr));
+        const dx    = c - tc, dy = r - tr;
+        const cheby = Math.max(Math.abs(dx), Math.abs(dy));
+        const eucl  = Math.sqrt(dx * dx + dy * dy);
+        if (eucl > euCutoff(cheby)) continue;   // outside circular band — skip
+
         let color, isLong = false;
-        if      (d <= 3)  color = 'rgba(40,180,40,0.35)';
-        else if (d <= 6)  color = 'rgba(200,200,40,0.35)';
-        else if (d <= 10) { color = 'rgba(220,140,20,0.35)'; isLong = true; }
-        else              { color = 'rgba(200,40,40,0.35)';  isLong = true; }
+        if      (cheby <= 3)  color = 'rgba(40,180,40,0.35)';
+        else if (cheby <= 6)  color = 'rgba(200,200,40,0.35)';
+        else if (cheby <= 10) { color = 'rgba(220,140,20,0.35)'; isLong = true; }
+        else                  { color = 'rgba(200,40,40,0.35)';  isLong = true; }
 
         const cell = this._cell(c, r);
         if (!cell) continue;
