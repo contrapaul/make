@@ -661,6 +661,11 @@ function initPassWizard() {
         throwRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip result-chip-bad">💀 Fumble!</span>`;
         if (explain) throwRes.insertAdjacentHTML('beforeend', `<p class="result-desc" style="font-size:0.6rem;opacity:0.65;">${explain}</p>`);
         catchBtn.disabled = true;
+        /* Pro can re-roll a fumble; team re-roll cannot */
+        if (typeof promptSkillUse === 'function' && hasSkill(ws.thrower, 'Pro')) {
+          const proOk = await promptSkillUse(ws.thrower, 'Pro', throwRes, rollD6);
+          if (proOk) { throwRes.innerHTML = ''; await doThrow(); return; }
+        }
         await autoScatter(scatterEl, ws.throwerPos, 3, '💀 Fumble — Ball Scatters from Thrower');
         return;
       }
@@ -671,6 +676,11 @@ function initPassWizard() {
 
       if (!isAccurate) {
         catchBtn.disabled = true;
+        /* Pro skill check before team re-roll */
+        if (typeof promptSkillUse === 'function' && hasSkill(ws.thrower, 'Pro')) {
+          const proOk = await promptSkillUse(ws.thrower, 'Pro', throwRes, rollD6);
+          if (proOk) { throwRes.innerHTML = ''; await doThrow(); return; }
+        }
         const useReroll = await offerReroll(throwRes, '→ Scatter');
         if (useReroll) {
           throwRes.innerHTML = '';
@@ -730,6 +740,11 @@ function initPassWizard() {
         return;
       }
 
+      /* Pro skill check before team re-roll */
+      if (typeof promptSkillUse === 'function' && hasSkill(ws.catcher, 'Pro')) {
+        const proOk = await promptSkillUse(ws.catcher, 'Pro', catchRes, rollD6);
+        if (proOk) { catchRes.innerHTML = ''; await doCatch(); return; }
+      }
       const useReroll = await offerReroll(catchRes, '→ Ball Bounces');
       if (useReroll) {
         catchRes.innerHTML = '';
@@ -749,44 +764,59 @@ function initPassWizard() {
 
   async function autoScatter(el, originPos, numDice, title) {
     el.innerHTML = '';
+
+    /* Section wrapper */
     const sec = document.createElement('div');
-    sec.style.cssText = 'margin-top:0.5rem;padding:0.4rem 0.6rem;background:rgba(3,8,24,0.5);border:1px solid rgba(80,130,255,0.15);border-radius:4px;font-family:JetBrains Mono,monospace;';
+    sec.style.cssText = 'margin-top:0.5rem;border-top:1px solid rgba(80,130,255,0.18);padding-top:0.4rem;';
     const h = document.createElement('div');
-    h.style.cssText = 'font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(180,210,255,0.45);margin-bottom:0.4rem;';
+    h.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.4);margin-bottom:0.4rem;';
     h.textContent = title || `↗ Scatter — ${numDice} × D8`;
     sec.appendChild(h);
 
-    const diceRow = document.createElement('div');
-    diceRow.style.cssText = 'display:flex;align-items:flex-start;gap:0.35rem;flex-wrap:wrap;';
-    sec.appendChild(diceRow);
+    /* Cards row — same flex container as pwiz-action-row */
+    const cardsRow = document.createElement('div');
+    cardsRow.className = 'pwiz-action-row';
+    sec.appendChild(cardsRow);
     el.appendChild(sec);
 
     const dirsCollected = [];
 
     for (let i = 0; i < numDice; i++) {
+      /* Arrow separator between cards */
       if (i > 0) {
-        const arr = document.createElement('span');
-        arr.textContent = '→';
-        arr.style.cssText = 'color:rgba(140,170,220,0.35);font-size:0.9rem;align-self:center;';
-        diceRow.appendChild(arr);
+        const arr = document.createElement('div');
+        arr.className = 'pwiz-action-arrow'; arr.textContent = '→';
+        cardsRow.appendChild(arr);
         await delay(250);
       }
 
+      /* Card — same structure as Throw/Catch columns */
+      const card = document.createElement('div');
+      card.className = 'pwiz-action-col';
+
+      const chip = document.createElement('div');
+      chip.className = 'pwiz-action-chip chip-scatter';
+      chip.innerHTML = `↗ Scatter ${i + 1}<br><span class="pwiz-action-target">D8</span>`;
+      card.appendChild(chip);
+
       const dieWrap = document.createElement('div');
-      dieWrap.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:0.1rem;';
+      dieWrap.className = 'pwiz-action-die';
       const dieEl = document.createElement('div');
       dieEl.className = 'die'; dieEl.dataset.value = '1'; dieEl.dataset.sides = '8';
       dieEl.innerHTML = '<div class="die-face d8-face"></div>';
-      dieEl.style.cssText = 'width:32px;height:32px;display:inline-block;';
       dieWrap.appendChild(dieEl);
-      const dirLbl = document.createElement('div');
-      dirLbl.style.cssText = 'font-size:0.65rem;color:rgba(200,220,255,0.65);text-align:center;';
-      dieWrap.appendChild(dirLbl);
-      diceRow.appendChild(dieWrap);
+      card.appendChild(dieWrap);
 
+      const resEl = document.createElement('div');
+      resEl.className = 'pwiz-action-result';
+      card.appendChild(resEl);
+
+      cardsRow.appendChild(card);
+
+      /* Roll this die */
       const d = await Dice.rollDieElement(dieEl);
       dirsCollected.push(d);
-      dirLbl.textContent = `${D8A[d]} ${D8N[d]}`;
+      resEl.innerHTML = `<div class="result-roll-num" style="font-size:1rem;">${d}</div><div style="font-size:0.65rem;color:rgba(200,220,255,0.7);margin-top:0.1rem;">${D8A[d]} ${D8N[d]}</div>`;
 
       if (originPos && ws.pitch) {
         ws.pitch.showScatterPath(originPos.col, originPos.row, dirsCollected);

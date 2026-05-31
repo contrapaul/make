@@ -258,6 +258,74 @@ function hasSkill(playerObj, name) {
   return getPlayerSkills(playerObj).some(s => s.toLowerCase() === lc);
 }
 
+/* ── Shared skill-use prompt — returns Promise<boolean>
+   Renders inline Yes/No buttons in `containerEl`.
+   Resolves true if the user chooses to use the skill, false otherwise.
+
+   Example: const used = await promptSkillUse(ws.thrower, 'Pro', throwRes, rollD6);
+   If used: caller should re-roll the original die and handle new result.
+
+   For Pro specifically: on click "Use Pro", roll D6 automatically.
+   If result >= 4 → resolve true (caller may re-roll).
+   If result < 4  → resolve false (Pro failed, proceed to failure path). */
+function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
+  return new Promise(resolve => {
+    if (!hasSkill(playerObj, skillName)) { resolve(false); return; }
+
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;align-items:center;gap:0.3rem;flex-wrap:wrap;margin-top:0.25rem;';
+
+    const lbl = document.createElement('span');
+    lbl.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.65rem;color:rgba(180,210,255,0.6);';
+
+    if (skillName === 'Pro') {
+      lbl.textContent = 'Use Pro? (roll 4+ to re-roll)';
+      const yesBtn = document.createElement('button');
+      yesBtn.type = 'button'; yesBtn.className = 'pass-nav-btn nav-primary';
+      yesBtn.style.cssText = 'padding:0.2rem 0.5rem;font-size:0.65rem;';
+      yesBtn.textContent = 'Use Pro';
+      const noBtn = document.createElement('button');
+      noBtn.type = 'button'; noBtn.className = 'pass-nav-btn';
+      noBtn.style.cssText = 'padding:0.2rem 0.5rem;font-size:0.65rem;';
+      noBtn.textContent = 'Skip';
+
+      yesBtn.addEventListener('click', async () => {
+        yesBtn.disabled = true; noBtn.disabled = true;
+        /* Roll Pro check D6 inline */
+        const proRollEl = document.createElement('div');
+        proRollEl.style.cssText = 'display:inline-block;vertical-align:middle;';
+        wrap.appendChild(proRollEl);
+        const proVal = await rollD6Fn(proRollEl);
+        const proOk = proVal >= 4;
+        const proRes = document.createElement('span');
+        proRes.style.cssText = `font-family:JetBrains Mono,monospace;font-size:0.65rem;font-weight:700;color:${proOk ? '#81c784' : '#ff8fa0'};margin-left:0.25rem;`;
+        proRes.textContent = proOk ? `${proVal} ✓ Pro succeeds — re-roll!` : `${proVal} ✗ Pro failed.`;
+        wrap.appendChild(proRes);
+        resolve(proOk);
+      });
+      noBtn.addEventListener('click', () => { wrap.remove(); resolve(false); });
+
+      wrap.appendChild(lbl); wrap.appendChild(yesBtn); wrap.appendChild(noBtn);
+    } else {
+      /* Generic skill-use prompt (Sure Hands, etc.) */
+      lbl.textContent = `Use ${skillName}?`;
+      const yesBtn = document.createElement('button');
+      yesBtn.type = 'button'; yesBtn.className = 'pass-nav-btn nav-primary';
+      yesBtn.style.cssText = 'padding:0.2rem 0.5rem;font-size:0.65rem;';
+      yesBtn.textContent = 'Yes';
+      const noBtn = document.createElement('button');
+      noBtn.type = 'button'; noBtn.className = 'pass-nav-btn';
+      noBtn.style.cssText = 'padding:0.2rem 0.5rem;font-size:0.65rem;';
+      noBtn.textContent = 'No';
+      yesBtn.addEventListener('click', () => { resolve(true); });
+      noBtn.addEventListener('click', () => { wrap.remove(); resolve(false); });
+      wrap.appendChild(lbl); wrap.appendChild(yesBtn); wrap.appendChild(noBtn);
+    }
+
+    containerEl.appendChild(wrap);
+  });
+}
+
 /* Parse a stat value from the card stats text (e.g. "AG3+" → 3, "PA—" → null) */
 function parseStat(statsText, key) {
   const m = statsText.match(new RegExp(`\\b${key}\\s*(\\d+)`, 'i'));

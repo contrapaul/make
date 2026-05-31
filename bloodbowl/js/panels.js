@@ -1377,7 +1377,7 @@ window.gbState = gbState;
 
 window.Panels = {
   openPanel, closePanel, togglePanel,
-  openAccordion, setAccordionLabel, setRerolls,
+  openAccordion, setAccordionLabel, setRerolls, renderRerollPips,
   refreshWeatherChips, updateGameBarWeather,
   applyMode, openSettings, closeSettings,
 };

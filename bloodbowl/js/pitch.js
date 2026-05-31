@@ -743,21 +743,20 @@ class BloodBowlPitch {
     if (!this._throwerPos) return;
     const { col: tc, row: tr } = this._throwerPos;
     const isBliz = window.GameState?.currentWeather?.name === 'Blizzard';
-    /* Euclidean radius cutoff per Chebyshev band — matches PitchGrid circular zones */
-    const euCutoff = d => { if (d <= 3) return 3.5; if (d <= 6) return 6.8; if (d <= 10) return 10.8; return 14.5; };
+    /* Zone color assigned purely by Euclidean distance — eliminates "corner holes"
+       where Chebyshev says Quick but Euclidean says Short, etc. */
     for (let r = 1; r <= 15; r++) {
       for (let c = 2; c <= 27; c++) {
         if (c === tc && r === tr) continue;
-        const dx    = c - tc, dy = r - tr;
-        const cheby = Math.max(Math.abs(dx), Math.abs(dy));
-        const eucl  = Math.sqrt(dx * dx + dy * dy);
-        if (eucl > euCutoff(cheby)) continue;   // outside circular band — skip
+        const dx   = c - tc, dy = r - tr;
+        const eucl = Math.sqrt(dx * dx + dy * dy);
+        if (eucl > 14.5) continue;   // beyond Long Bomb range — no overlay
 
         let color, isLong = false;
-        if      (cheby <= 3)  color = 'rgba(40,180,40,0.35)';
-        else if (cheby <= 6)  color = 'rgba(200,200,40,0.35)';
-        else if (cheby <= 10) { color = 'rgba(220,140,20,0.35)'; isLong = true; }
-        else                  { color = 'rgba(200,40,40,0.35)';  isLong = true; }
+        if      (eucl <= 3.5)  color = 'rgba(40,180,40,0.35)';
+        else if (eucl <= 6.8)  color = 'rgba(200,200,40,0.35)';
+        else if (eucl <= 10.8) { color = 'rgba(220,140,20,0.35)'; isLong = true; }
+        else                   { color = 'rgba(200,40,40,0.35)';  isLong = true; }
 
         const cell = this._cell(c, r);
         if (!cell) continue;

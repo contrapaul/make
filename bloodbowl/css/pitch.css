@@ -491,9 +491,10 @@
   display:     block;
 }
 
-.chip-throw  { background: rgba(212,175,55,0.1);  color: var(--bb-gold,#D4AF37); border: 1px solid rgba(212,175,55,0.3); }
-.chip-int    { background: rgba(200,16,46,0.1);   color: #ff8fa0;               border: 1px solid rgba(200,16,46,0.3); }
-.chip-catch  { background: rgba(76,175,80,0.1);   color: #81c784;               border: 1px solid rgba(76,175,80,0.3); }
+.chip-throw   { background: rgba(212,175,55,0.1);  color: var(--bb-gold,#D4AF37);  border: 1px solid rgba(212,175,55,0.3); }
+.chip-int     { background: rgba(200,16,46,0.1);   color: #ff8fa0;                border: 1px solid rgba(200,16,46,0.3); }
+.chip-catch   { background: rgba(76,175,80,0.1);   color: #81c784;                border: 1px solid rgba(76,175,80,0.3); }
+.chip-scatter { background: rgba(130,90,220,0.1);  color: rgba(180,150,255,0.85); border: 1px solid rgba(130,90,220,0.3); }
 
 .pwiz-action-die  { min-height: 24px; display: flex; align-items: center; justify-content: center; }
 .pwiz-action-result {
