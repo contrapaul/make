@@ -189,13 +189,15 @@ function closePanel(id) {
   const panel = document.getElementById(`panel-${id}`);
   if (!panel || panel.hasAttribute('hidden')) return;
   panel.classList.add('panel-closing');
-  panel.addEventListener('animationend', () => {
+  function _finishClose() {
     if (!panel.classList.contains('panel-closing')) return;
     panel.classList.remove('panel-closing');
     panel.setAttribute('hidden', '');
     const anyOpen = document.querySelectorAll('.bb-panel:not([hidden])').length > 0;
     if (!anyOpen) document.getElementById('panel-backdrop')?.classList.remove('active');
-  }, { once: true });
+  }
+  panel.addEventListener('animationend', _finishClose, { once: true });
+  setTimeout(_finishClose, 300); // fallback if animationend doesn't fire
   getModuleBtn(id)?.setAttribute('aria-expanded', 'false');
 }
 

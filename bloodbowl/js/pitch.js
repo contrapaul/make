@@ -469,8 +469,9 @@ class BloodBowlPitch {
     this._tx            = 0;      // translate X (px) applied before scale
     this._ty            = 0;      // translate Y (px)
     this._tz            = 1;      // scale factor (1 = base scale)
+    this._noZoom = options.noZoom === true;
     this._build();
-    if (this._interactive) this._setupZoom();
+    if (this._interactive && !this._noZoom) this._setupZoom();
   }
 
   /* ── Public API ── */

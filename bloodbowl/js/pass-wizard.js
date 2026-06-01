@@ -126,18 +126,18 @@ function initPassWizard() {
 
   const delay = ms => new Promise(r => setTimeout(r, ms));
 
-  /* Compute pitch scale so it fills ~95% of the center column.
-     Panel = min(82vw,1600px). Side panels match the CSS clamp values.
-     Pitch at scale s ≈ s × 784px wide (28 cols × round(28s) px each). */
+  /* Pitch scale: fills center column, capped at 60vw max.
+     Panel = min(82vw,1600px). Column widths mirror CSS clamp values.
+     Pitch at scale s ≈ s × 784px wide (28 cols × round(28s) px). */
   function _pitchScale() {
-    const vw      = window.innerWidth;
-    const panelW  = Math.min(vw * 0.82, 1600);
-    const leftW   = Math.max(110, Math.min(210, vw * 0.13));
-    const rightW  = Math.max(100, Math.min(195, vw * 0.115));
-    const gaps    = 60; // body padding + two flex gaps
+    const vw     = window.innerWidth;
+    const panelW = Math.min(vw * 0.82, 1600);
+    const leftW  = Math.max(150, Math.min(240, vw * 0.17));
+    const rightW = Math.max(100, Math.min(195, vw * 0.115));
+    const gaps   = 60;
     const centerW = Math.max(200, panelW - leftW - rightW - gaps);
-    // No hard minimum — let tiny viewports shrink the pitch naturally
-    return Math.max(0.35, Math.min(1.55, (centerW * 0.95) / 784));
+    const target  = Math.min(centerW * 0.95, vw * 0.60);
+    return Math.max(0.35, target / 784);
   }
 
   /* ── Skill tooltip chip (Sprint 13) ── */
@@ -251,7 +251,7 @@ function initPassWizard() {
     centerEl.appendChild(pitchWrap);
 
     if (typeof window.BloodBowlPitch !== 'undefined') {
-      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: _pitchScale() });
+      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: _pitchScale(), noZoom: true });
       ws.pitch.onPlayerMoved = (fc, fr, tc, tr, data) => {
         if (data.id === 'thrower') {
           ws.throwerPos = { col: tc, row: tr };
@@ -266,20 +266,12 @@ function initPassWizard() {
         }
         computeTZ();
         rebuildLeft();
-        rebuildBelowPitch();
         rebuildRight();
         updateReqs();
       };
     }
 
-    /* Below-pitch: thrower + catcher choosers */
-    const belowEl = document.createElement('div');
-    belowEl.className = 'pwiz-below-pitch';
-    belowEl.id = 'pwiz-below-pitch';
-    centerEl.appendChild(belowEl);
-    _buildBelowPitch(belowEl);
-
-    /* Left panel */
+    /* Left panel (includes chooser cards at top) */
     _buildLeftPanel(leftEl);
 
     /* Right panel */
@@ -344,16 +336,23 @@ function initPassWizard() {
         ws.opposingPlayers = [];
         ws.pitch?.clear();
         teamRow.querySelectorAll('.pwiz-team-tab').forEach(b => b.classList.toggle('active', b === btn));
-        rebuildLeft(); rebuildBelowPitch(); rebuildRight(); updateReqs();
+        rebuildLeft(); rebuildRight(); updateReqs();
       });
       teamRow.appendChild(btn);
     });
     hdr.appendChild(teamRow);
   }
 
-  /* ── Left panel: zones toggle + opposing players + weather ── */
+  /* ── Left panel: chooser cards + zones toggle + opposing players + weather ── */
   function _buildLeftPanel(container) {
     container.innerHTML = '';
+
+    /* Thrower + catcher chooser cards (moved from below-pitch) */
+    const chooserWrap = document.createElement('div');
+    chooserWrap.className = 'pwiz-below-pitch';
+    chooserWrap.id = 'pwiz-below-pitch';
+    container.appendChild(chooserWrap);
+    _buildBelowPitch(chooserWrap);
 
     /* Section label */
     const lbl = document.createElement('div');
@@ -394,7 +393,7 @@ function initPassWizard() {
       rmBtn.addEventListener('click', () => {
         ws.pitch?.removePlayer(op.col, op.row);
         ws.opposingPlayers.splice(i, 1);
-        computeTZ(); rebuildLeft(); rebuildBelowPitch(); rebuildRight(); updateReqs();
+        computeTZ(); rebuildLeft(); rebuildRight(); updateReqs();
       });
       row.appendChild(lbl2); row.appendChild(pos); row.appendChild(rmBtn);
       container.appendChild(row);
@@ -493,7 +492,7 @@ function initPassWizard() {
             ws.catcher = null; ws.catcherPos = null;
             ws.pitch?.clearPassLine();
           }
-          computeTZ(); rebuildLeft(); rebuildBelowPitch(); rebuildRight(); updateReqs();
+          computeTZ(); rebuildLeft(); rebuildRight(); updateReqs();
         });
         area.appendChild(rmBtn);
 
@@ -593,8 +592,7 @@ function initPassWizard() {
   }
 
   function rebuildBelowPitch() {
-    const el = document.getElementById('pwiz-below-pitch');
-    if (el) _buildBelowPitch(el);
+    rebuildLeft(); // choosers now live inside the left panel
   }
 
   function rebuildRight() {
@@ -748,7 +746,6 @@ function initPassWizard() {
       }
       computeTZ();
       rebuildLeft();
-      rebuildBelowPitch();
       rebuildRight();
       updateReqs();
     });
@@ -1195,18 +1192,14 @@ function initPassWizard() {
   }
 
   /* ── Boot ── */
-  buildLayout();
-  ws._built = true;
-
   onPanelOpen('panel-pass', () => {
-    if (ws._built) {
-      rebuildLeft();
-      rebuildBelowPitch();
-      rebuildRight();
-      window.Panels?.refreshWeatherChips?.();
-    } else {
+    if (!ws._built) {
       buildLayout();
       ws._built = true;
+    } else {
+      rebuildLeft();
+      rebuildRight();
+      window.Panels?.refreshWeatherChips?.();
     }
   });
 
