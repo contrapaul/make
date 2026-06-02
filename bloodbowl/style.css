@@ -901,11 +901,13 @@
 .bb-site-header {
   background: rgba(4, 10, 28, 0.97);
   border-bottom: 1px solid rgba(70, 110, 220, 0.3);
+  position: relative;
 }
 
 .bb-header-inner {
   max-width: none;
   padding: 0 1.5rem;
+  justify-content: space-between;
 }
 
 .bb-wordmark {
@@ -913,9 +915,19 @@
   font-size: 0.9rem;
   color: rgba(180, 210, 255, 0.7);
   letter-spacing: 0.04em;
+  text-decoration: none;
 }
 .bb-wordmark .wordmark-slash { color: var(--bb-gold, #D4AF37); }
-.bb-wordmark:hover { color: #fff; }
+.bb-wordmark:hover { color: #fff; text-decoration: none; }
+
+/* Nav sits on the right; flex-end pushes it there */
+.bb-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0;
+  margin-left: auto;
+}
 
 .bb-nav a,
 .bb-nav .my-teams-nav-btn {
@@ -929,10 +941,66 @@
   cursor: pointer;
   padding: 0.35rem 0.65rem;
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.15s;
 }
 .bb-nav a:hover,
 .bb-nav .my-teams-nav-btn:hover { color: #fff; }
+
+/* Hamburger button — hidden on desktop */
+.bb-nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem;
+  margin-left: auto;
+}
+.bb-nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: rgba(150, 185, 255, 0.7);
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.bb-nav-toggle:hover span { background: #fff; }
+
+/* Mobile: collapse nav below header */
+@media (max-width: 640px) {
+  .bb-nav-toggle {
+    display: flex;
+  }
+
+  .bb-nav {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(4, 10, 28, 0.98);
+    border-bottom: 1px solid rgba(70, 110, 220, 0.3);
+    z-index: 300;
+    padding: 0.5rem 0;
+  }
+
+  .bb-nav.bb-nav-open {
+    display: flex;
+  }
+
+  .bb-nav a,
+  .bb-nav .my-teams-nav-btn {
+    padding: 0.65rem 1.5rem;
+    text-align: left;
+    width: 100%;
+    border-bottom: 1px solid rgba(70, 110, 220, 0.1);
+  }
+}
 
 .bb-site-footer {
   background: rgba(4, 10, 28, 0.97);

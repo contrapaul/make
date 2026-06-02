@@ -21,7 +21,10 @@
   <header class="site-header bb-site-header">
     <div class="header-inner bb-header-inner">
       <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
-      <nav class="nav bb-nav">
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav bb-nav" id="bb-nav">
         <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
         <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
         <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
@@ -96,90 +99,6 @@
       </div>
 
     </div><!-- /.game-bar -->
-
-    <!-- ═══════════════ GAME TIMELINE ═══════════════ -->
-    <nav class="game-timeline-wrap" aria-label="Game phase">
-      <div class="game-timeline" id="game-timeline">
-        <!-- Steps rendered by state.js -->
-      </div>
-      <button class="timeline-next-btn" id="timeline-next-btn" hidden>Next</button>
-      <button class="start-drive-inline-btn" id="start-drive-inline" aria-label="Start drive wizard" title="Open drive wizard">▸ Drive</button>
-    </nav>
-
-    <!-- ═══════════════ MODULE GRID ═══════════════ -->
-    <section class="module-section" aria-label="Game tools">
-      <div class="module-grid">
-
-        <button class="module-btn" data-panel="kickoff" aria-expanded="false" aria-controls="panel-kickoff">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 3L4 14h7l-2 7 9-11h-7L13 3z"/></svg>
-          </span>
-          <span class="module-label">Kickoff</span>
-        </button>
-
-        <button class="module-btn" data-panel="weather" aria-expanded="false" aria-controls="panel-weather">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 8a5 5 0 0 0-9.54-1.5A4.5 4.5 0 1 0 5 15h12a4 4 0 0 0 0-7z"/></svg>
-          </span>
-          <span class="module-label">Weather</span>
-        </button>
-
-        <button class="module-btn" data-panel="prayers" aria-expanded="false" aria-controls="panel-prayers">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6L12 2z"/></svg>
-          </span>
-          <span class="module-label">Prayers</span>
-        </button>
-
-        <button class="module-btn" data-panel="scatter" aria-expanded="false" aria-controls="panel-scatter">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-          </span>
-          <span class="module-label">Ball</span>
-        </button>
-
-        <button class="module-btn" data-panel="pass" aria-expanded="false" aria-controls="panel-pass">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 12c0-5.5 4.5-10 10-10s10 4.5 10 10-4.5 10-10 10S2 17.5 2 12z" opacity=".2"/><circle cx="8" cy="12" r="2.5"/><path d="M10 12h8M15 9l3 3-3 3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span class="module-label">Pass</span>
-        </button>
-
-        <button class="module-btn" data-panel="block" aria-expanded="false" aria-controls="panel-block">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4 6v6c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V6L12 2z"/></svg>
-          </span>
-          <span class="module-label">Block</span>
-        </button>
-
-        <button class="module-btn" data-panel="throw" aria-expanded="false" aria-controls="panel-throw">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="16" cy="5" r="3"/><path d="M14 8l-4 4 2 2-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5" cy="20" r="2.5"/></svg>
-          </span>
-          <span class="module-label">Throw</span>
-        </button>
-
-        <button class="module-btn" data-panel="foul" aria-expanded="false" aria-controls="panel-foul">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="19" rx="6" ry="2.5"/><path d="M8 19L6 8l6 3 6-3-2 11" opacity=".6"/><path d="M9 7.5c0-1.66 1.34-3 3-3s3 1.34 3 3" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="4.5" r="1.5"/></svg>
-          </span>
-          <span class="module-label">Foul</span>
-        </button>
-
-        <button class="module-btn" data-panel="injury" aria-expanded="false" aria-controls="panel-injury">
-          <span class="module-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-          </span>
-          <span class="module-label">Injury</span>
-        </button>
-
-      </div>
-    </section>
-
-    <!-- Beginner mode CTA (hidden unless mode-beginner) -->
-    <section class="beginner-cta-section" aria-label="Start drive">
-      <button class="start-drive-btn-big" id="start-drive-beginner">▸ Start Drive</button>
-    </section>
 
     <!-- Active prayer indicator — shown after Prayers to Nuffle is rolled -->
     <div id="active-prayer-banner" hidden class="active-prayer-banner">
@@ -693,6 +612,24 @@
   <script src="js/wizards.js"></script>
   <script src="js/pass-wizard.js"></script>
   <script src="script.js"></script>
+  <script>
+    (function () {
+      const toggle = document.getElementById('bb-nav-toggle');
+      const nav    = document.getElementById('bb-nav');
+      if (!toggle || !nav) return;
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = nav.classList.toggle('bb-nav-open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+      document.addEventListener('click', e => {
+        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+          nav.classList.remove('bb-nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
