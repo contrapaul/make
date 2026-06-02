@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chinese Vocab Review</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-title">汉语词汇</div>
+    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="glossary.html" class="sidebar-link tool-link">
+      <span class="icon">📖</span> Glossary
+    </a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link">
+      <span class="icon">🧩</span> Sentence Builder
+    </a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link">
+      <span class="icon">🎯</span> Tone Trainer
+    </a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download>
+      <span class="icon">⬇️</span> Download Anki Deck
+    </a>
+
+    <div class="sidebar-section-label" style="margin-top:8px">Lessons</div>
+    <!-- Lesson links injected by main.js -->
+    <div id="sidebarLessons"></div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+      <span class="topbar-title">Chinese Vocabulary Review</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <!-- Tool cards -->
+  <div class="tool-cards">
+    <a href="glossary.html" class="tool-card">
+      <div class="tool-card-icon">📖</div>
+      <div class="tool-card-title">Glossary</div>
+      <div class="tool-card-desc">Search & filter all 400 vocab entries by lesson, type, topic, or HSK level.</div>
+    </a>
+    <a href="sentence-builder.html" class="tool-card">
+      <div class="tool-card-icon">🧩</div>
+      <div class="tool-card-title">Sentence Builder</div>
+      <div class="tool-card-desc">Drag-and-drop 800 example sentences in Chinese or English mode.</div>
+    </a>
+    <a href="tone-trainer.html" class="tool-card">
+      <div class="tool-card-icon">🎯</div>
+      <div class="tool-card-title">Tone Trainer</div>
+      <div class="tool-card-desc">Fill-in-the-blank with tone marks — target the most common learner weakness.</div>
+    </a>
+    <a href="chinese_vocab_anki.apkg" class="tool-card" download>
+      <div class="tool-card-icon">⬇️</div>
+      <div class="tool-card-title">Anki Deck</div>
+      <div class="tool-card-desc">Download the pre-built Anki deck for all 400 vocabulary entries.</div>
+    </a>
+  </div>
+
+  <!-- Random sentence widget -->
+  <div class="sentence-widget">
+    <div class="sentence-widget-label">✨ Random sentence</div>
+    <div class="sentence-zh" id="randomZh">Loading…</div>
+    <div class="sentence-pinyin" id="randomPinyin"></div>
+    <div class="sentence-en" id="randomEn"></div>
+    <div class="sentence-widget-actions">
+      <button class="btn btn-ghost btn-sm" id="refreshSentence" title="New sentence">🔀 New</button>
+    </div>
+  </div>
+
+  <!-- Lesson accordions -->
+  <div class="page-section" style="margin-top:28px">
+    <h2 class="section-title">Lessons</h2>
+    <p class="section-subtitle">All vocabulary grouped by lesson. Click a header to expand. Click any column to sort.</p>
+  </div>
+  <div class="accordion-group" id="accordionGroup">
+    <!-- Accordions injected by main.js -->
+  </div>
+
+</div><!-- /.main -->
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

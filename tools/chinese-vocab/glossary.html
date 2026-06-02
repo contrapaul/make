@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary — Chinese Vocab Review</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-title">汉语词汇</div>
+    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="index.html" class="sidebar-link"><span class="icon">🏠</span> Home</a>
+    <a href="glossary.html" class="sidebar-link tool-link active"><span class="icon">📖</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="icon">🧩</span> Sentence Builder</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="icon">🎯</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="icon">⬇️</span> Download Anki Deck</a>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+      <span class="topbar-title">📖 Glossary</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <div class="page-section" style="padding-bottom:16px">
+    <h2 class="section-title">Glossary</h2>
+    <p class="section-subtitle">Search and filter all 400 vocabulary entries. Results update live.</p>
+
+    <div class="glossary-controls">
+      <input type="search" class="search-input" id="searchInput" placeholder="Search hanzi, pinyin, or definition…" autocomplete="off">
+      <select class="filter-select" id="filterLesson"><option value="">All lessons</option></select>
+      <select class="filter-select" id="filterType"><option value="">All types</option></select>
+      <select class="filter-select" id="filterTopic"><option value="">All topics</option></select>
+      <select class="filter-select" id="filterHsk"><option value="">All HSK</option></select>
+      <span class="results-count" id="resultsCount"></span>
+      <button class="btn btn-ghost btn-sm" id="clearFilters">✕ Clear</button>
+    </div>
+
+    <div style="overflow-x:auto">
+      <table class="vocab-table" id="glossaryTable">
+        <thead>
+          <tr>
+            <th data-col="hanzi">Hanzi <span class="sort-indicator">↕</span></th>
+            <th data-col="pinyin">Pinyin <span class="sort-indicator">↕</span></th>
+            <th data-col="definition">Definition <span class="sort-indicator">↕</span></th>
+            <th>Example</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody id="glossaryBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/glossary.js"></script>
+<script>
+  // Shared theme + sidebar logic
+  (function(){
+    const t = localStorage.getItem('cv-theme')||'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+  document.addEventListener('DOMContentLoaded', () => {
+    const themeBtn = document.getElementById('themeToggle');
+    const sidebar  = document.getElementById('sidebar');
+    const overlay  = document.getElementById('sidebarOverlay');
+    const toggle   = document.getElementById('sidebarToggle');
+    function applyTheme(t){
+      document.documentElement.setAttribute('data-theme',t);
+      localStorage.setItem('cv-theme',t);
+      if(themeBtn) themeBtn.textContent = t==='dark'?'☀️':'🌙';
+    }
+    applyTheme(localStorage.getItem('cv-theme')||'light');
+    themeBtn?.addEventListener('click',()=>{
+      applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+    });
+    toggle?.addEventListener('click',()=>{ sidebar?.classList.add('open'); overlay?.classList.add('open'); });
+    overlay?.addEventListener('click',()=>{ sidebar?.classList.remove('open'); overlay?.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>

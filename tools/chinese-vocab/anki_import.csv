@@ -1,0 +1,2001 @@
+Front,Back,Tags
+上课,"shàngkè (Class begins / to attend class)
+
+我们八点上课。
+Wǒmen bā diǎn shàngkè.
+We start class at 8.",type::verb lesson::lesson2 frequency::high topic::classroom hsk::1 grammar::separable
+下课,"xiàkè (Class is over)
+
+下午三点下课。
+Xiàwǔ sān diǎn xiàkè.
+Class ends at 3 PM.",type::verb lesson::lesson2 frequency::high topic::classroom hsk::1 grammar::separable
+休息一下,"xiūxi yīxià (Take a break)
+
+我们休息一下吧。
+Wǒmen xiūxi yīxià ba.
+Let’s take a break.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2 grammar::verb+一下
+请听我说,"qǐng tīng wǒ shuō (Please listen to me)
+
+请听我说完。
+Qǐng tīng wǒ shuō wán.
+Please listen to me finish.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+请跟我读,"qǐng gēn wǒ dú (Please read after me)
+
+请跟我读这个生词。
+Qǐng gēn wǒ dú zhège shēngcí.
+Please read this new word after me.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+请看白板,"qǐng kàn bái bān (Please look at the whiteboard)
+
+请看白板上的例句。
+Qǐng kàn bái bān shàng de lìjù.
+Please look at the example sentences on the whiteboard.",type::phrase lesson::lesson2 frequency::medium topic::classroom
+请看书写,"qǐng kàn shū (Please look at the book)
+
+请看书写第五页的练习。
+Qǐng kàn shū xiě dì-wǔ yè de liànxí.
+Look at the book and do the exercises on page 5.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::1
+请再说一遍,"qǐng zài shuō yī biàn (Please say it again)
+
+我没听清，请再说一遍。
+Wǒ méi tīng qīng, qǐng zài shuō yī biàn.
+I didn’t hear clearly, please say it again.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::1
+请写拼音,"qǐng xiě pīnyīn (Please write it in Pinyin)
+
+请写拼音，不要写汉字。
+Qǐng xiě pīnyīn, bú yào xiě Hànzì.
+Please write Pinyin, not characters.",type::phrase lesson::lesson2 frequency::medium topic::classroom hsk::2
+第几声,"dì jǐ shēng (Which tone?)
+
+这个字第几声？
+Zhège zì dì jǐ shēng?
+Which tone is this character?",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::1
+请慢慢说,"qǐng mànmàn shuō (Please speak slowly)
+
+请慢慢说，我在记笔记。
+Qǐng mànmàn shuō, wǒ zài jì bǐjì.
+Please speak slowly, I’m taking notes.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+我没听懂,"wǒ méi tīngdǒng (I didn’t understand)
+
+对不起，我没听懂。
+Duìbuqǐ, wǒ méi tīngdǒng.
+Sorry, I didn’t understand.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::1 grammar::resultative_complement
+把书翻到第一页,"bǎ shū fān dào dì-yī yè (Turn to page 1)
+
+请大家把书翻到第一页。
+Qǐng dàjiā bǎ shū fān dào dì-yī yè.
+Everyone, turn to page 1.",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2 grammar::把-sentence
+请问这个用汉语怎么说,"qǐngwèn zhège yòng Hànyǔ zěnme shuō (How do you say this in Chinese?)
+
+请问“computer”用汉语怎么说？
+Qǐngwèn “computer” yòng Hànyǔ zěnme shuō?
+How do you say “computer” in Chinese?",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+请问这个汉字怎么读,"qǐngwèn zhège Hànzì zěnme dú (How do you pronounce this character?)
+
+请问这个汉字怎么读？是第三声吗？
+Qǐngwèn zhège Hànzì zěnme dú? Shì dì-sān shēng ma?
+How do you read this character? Is it third tone?",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+请问这个生词是什么意思,"qǐngwèn zhège shēngcí shì shénme yìsi (What does this new word mean?)
+
+请问“方便”这个生词是什么意思？
+Qǐngwèn “fāngbiàn” zhège shēngcí shì shénme yìsi?
+What does the new word “fāngbiàn” mean?",type::phrase lesson::lesson2 frequency::high topic::classroom hsk::2
+姓,"xìng (be surnamed)
+
+我姓王。
+Wǒ xìng Wáng.
+My surname is Wang.",type::verb lesson::lesson3 frequency::high topic::personal hsk::1
+叫,"jiào (be called)
+
+她叫李芳。
+Tā jiào Lǐ Fāng.
+She is called Li Fang.",type::verb lesson::lesson3 frequency::high topic::personal hsk::1
+名字,"míngzi (name)
+
+我的名字是张伟。
+Wǒ de míngzi shì Zhāng Wěi.
+My name is Zhang Wei.",type::noun lesson::lesson3 frequency::high topic::personal hsk::1
+今年,"jīnnián (this year)
+
+今年我二十岁。
+Jīnnián wǒ èrshí suì.
+I’m 20 years old this year.",type::noun lesson::lesson3 frequency::high topic::time hsk::1
+多,"duō (how (to what extent))
+
+你多大了？
+Nǐ duō dà le?
+How old are you?",type::adverb lesson::lesson3 frequency::high topic::questions hsk::1 grammar::question_word
+大,"dà (old (of age))
+
+我哥哥比我大三岁。
+Wǒ gēge bǐ wǒ dà sān suì.
+My older brother is three years older than me.",type::adj lesson::lesson3 frequency::high topic::personal hsk::1
+哪,"nǎ (which)
+
+你是哪国人？
+Nǐ shì nǎ guó rén?
+Which country are you from?",type::pronoun lesson::lesson3 frequency::high topic::questions hsk::1 grammar::question_word
+国,"guó (country)
+
+中国很大。
+Zhōngguó hěn dà.
+China is very big.",type::noun lesson::lesson3 frequency::high topic::geography hsk::1
+泰国,"Tàiguó (Thailand)
+
+泰国有很多水果。
+Tàiguó yǒu hěn duō shuǐguǒ.
+Thailand has a lot of fruit.",type::noun lesson::lesson3 frequency::high topic::countries hsk::1
+泰国人,"Tàiguórén (Thai person)
+
+她是泰国人。
+Tā shì Tàiguórén.
+She is Thai.",type::noun lesson::lesson3 frequency::high topic::nationality hsk::1
+久,"jiǔ (for a long time)
+
+好久不见。
+Hǎo jiǔ bú jiàn.
+Long time no see.",type::adj lesson::lesson3 frequency::high topic::time hsk::2
+现在,"xiànzài (now)
+
+现在几点了？
+Xiànzài jǐ diǎn le?
+What time is it now?",type::noun lesson::lesson3 frequency::high topic::time hsk::1
+在,"zài (be at/in)
+
+我在家里。
+Wǒ zài jiā lǐ.
+I am at home.",type::verb/prep lesson::lesson3 frequency::high topic::location hsk::1
+哪儿,"nǎr (where)
+
+你去哪儿？
+Nǐ qù nǎr?
+Where are you going?",type::pronoun lesson::lesson3 frequency::high topic::questions hsk::1 grammar::question_word
+武汉,"Wǔhàn (Wuhan)
+
+武汉大学很有名。
+Wǔhàn Dàxué hěn yǒumíng.
+Wuhan University is very famous.",type::noun lesson::lesson3 frequency::high topic::cities hsk::2
+大家,"dàjiā (everybody)
+
+大家好！
+Dàjiā hǎo!
+Hello everyone!",type::pronoun lesson::lesson3 frequency::high topic::greetings hsk::1
+介绍,"jièshào (introduce)
+
+我来介绍一下我的朋友。
+Wǒ lái jièshào yīxià wǒ de péngyou.
+Let me introduce my friend.",type::verb lesson::lesson3 frequency::high topic::social hsk::2
+一下,"yīxià ((complement, an attempt))
+
+你看一下。
+Nǐ kàn yīxià.
+Take a look.",type::auxiliary lesson::lesson3 frequency::high topic::grammar hsk::2 grammar::verb+一下
+自己,"zìjǐ (oneself)
+
+我自己去。
+Wǒ zìjǐ qù.
+I’ll go myself.",type::pronoun lesson::lesson3 frequency::high topic::self hsk::2
+电脑,"diànnǎo (computer)
+
+我的电脑很快。
+Wǒ de diànnǎo hěn kuài.
+My computer is very fast.",type::noun lesson::bonus1 frequency::high topic::computers hsk::1
+组装,"zǔzhuāng (to assemble)
+
+我自己组装了一台电脑。
+Wǒ zìjǐ zǔzhuāng le yī tái diànnǎo.
+I assembled a computer myself.",type::verb lesson::bonus1 frequency::medium topic::computers
+硬件,"yìngjiàn (hardware)
+
+电脑硬件越来越便宜。
+Diànnǎo yìngjiàn yuè lái yuè piányi.
+Computer hardware is getting cheaper.",type::noun lesson::bonus1 frequency::medium topic::computers
+中央处理器,"zhōngyāng chǔlǐqì (CPU)
+
+中央处理器是电脑的大脑。
+Zhōngyāng chǔlǐqì shì diànnǎo de dànǎo.
+The CPU is the brain of the computer.",type::noun lesson::bonus1 frequency::medium topic::computers
+显卡,"xiǎnkǎ (graphics card)
+
+我的显卡坏了。
+Wǒ de xiǎnkǎ huài le.
+My graphics card is broken.","type::noun lesson::bonus1 frequency::medium topic::computers,gaming"
+主板,"zhǔbǎn (motherboard)
+
+所有零件都插在主板上。
+Suǒyǒu língjiàn dōu chā zài zhǔbǎn shàng.
+All components plug into the motherboard.",type::noun lesson::bonus1 frequency::medium topic::computers
+内存,"nèicún (RAM / memory)
+
+十六G内存就够了。
+Shíliù G nèicún jiù gòu le.
+16GB of RAM is enough.",type::noun lesson::bonus1 frequency::medium topic::computers
+硬盘,"yìngpán (hard drive)
+
+我的硬盘满了。
+Wǒ de yìngpán mǎn le.
+My hard drive is full.",type::noun lesson::bonus1 frequency::medium topic::computers
+固态硬盘,"gùtài yìngpán (SSD)
+
+固态硬盘开机很快。
+Gùtài yìngpán kāijī hěn kuài.
+An SSD boots up very fast.",type::noun lesson::bonus1 frequency::medium topic::computers
+电源,"diànyuán (power supply)
+
+电源坏了电脑就开不了机。
+Diànyuán huài le diànnǎo jiù kāi bù liǎo jī.
+If the PSU breaks, the PC won’t turn on.",type::noun lesson::bonus1 frequency::medium topic::computers
+机箱,"jīxiāng (computer case)
+
+这个机箱很漂亮。
+Zhège jīxiāng hěn piàoliang.
+This case is very pretty.",type::noun lesson::bonus1 frequency::medium topic::computers
+风扇,"fēngshàn (fan)
+
+风扇噪音很大。
+Fēngshàn zàoyīn hěn dà.
+The fan is very loud.",type::noun lesson::bonus1 frequency::high topic::computers
+散热器,"sànrèqì (heatsink / cooler)
+
+散热器上涂了硅脂。
+Sànrèqì shàng tú le guīzhī.
+Thermal paste is applied on the heatsink.",type::noun lesson::bonus1 frequency::low topic::computers
+螺丝刀,"luósīdāo (screwdriver)
+
+用螺丝刀拧螺丝。
+Yòng luósīdāo níng luósī.
+Use a screwdriver to turn the screws.",type::noun lesson::bonus1 frequency::high topic::tools
+插槽,"chācáo (slot)
+
+显卡插在PCIe插槽上。
+Xiǎnkǎ chā zài PCIe chācáo shàng.
+The graphics card plugs into the PCIe slot.",type::noun lesson::bonus1 frequency::low topic::computers
+接口,"jiēkǒu (port)
+
+USB接口很方便。
+USB jiēkǒu hěn fāngbiàn.
+USB ports are very convenient.",type::noun lesson::bonus1 frequency::medium topic::computers
+电缆,"diànlǎn (cable)
+
+电缆太短了。
+Diànlǎn tài duǎn le.
+The cable is too short.",type::noun lesson::bonus1 frequency::medium topic::computers
+开机,"kāijī (to power on)
+
+电脑开不了机。
+Diànnǎo kāi bù liǎo jī.
+The PC won’t power on.",type::verb lesson::bonus1 frequency::high topic::computers grammar::separable
+关机,"guānjī (to shut down)
+
+别忘了关机。
+Bié wàng le guānjī.
+Don’t forget to shut down.",type::verb lesson::bonus1 frequency::high topic::computers grammar::separable
+重启,"chóngqǐ (to restart)
+
+更新以后需要重启电脑。
+Gēngxīn yǐhòu xūyào chóngqǐ diànnǎo.
+You need to restart after an update.",type::verb lesson::bonus1 frequency::high topic::computers
+工作,"gōngzuò (job / to work)
+
+我的工作很忙。
+Wǒ de gōngzuò hěn máng.
+My job is very busy.",type::noun/verb lesson::lesson4 frequency::high topic::jobs hsk::1
+以后,"yǐhòu (in the future / later)
+
+以后我想当医生。
+Yǐhòu wǒ xiǎng dāng yīshēng.
+In the future I want to be a doctor.",type::noun lesson::lesson4 frequency::high topic::time hsk::1
+想,"xiǎng (want to / would like to / think)
+
+我想学汉语。
+Wǒ xiǎng xué Hànyǔ.
+I want to learn Chinese.",type::verb lesson::lesson4 frequency::high topic::desire hsk::1 grammar::modal_verb
+做,"zuò (to do / to be (a job))
+
+你做什么工作？
+Nǐ zuò shénme gōngzuò?
+What job do you do?",type::verb lesson::lesson4 frequency::high topic::actions hsk::1
+什么,"shénme (what)
+
+你叫什么名字？
+Nǐ jiào shénme míngzi?
+What is your name?",type::pronoun lesson::lesson4 frequency::high topic::questions hsk::1 grammar::question_word
+表格,"biǎogé (form / table)
+
+请填写这张表格。
+Qǐng tiánxiě zhè zhāng biǎogé.
+Please fill out this form.",type::noun lesson::lesson4 frequency::medium topic::school hsk::3
+老师,"lǎoshī (teacher)
+
+李老师教中文。
+Lǐ lǎoshī jiāo Zhōngwén.
+Teacher Li teaches Chinese.",type::noun lesson::lesson4 frequency::high topic::jobs hsk::1
+医生,"yīshēng (doctor)
+
+医生很辛苦。
+Yīshēng hěn xīnkǔ.
+Doctors work very hard.",type::noun lesson::lesson4 frequency::high topic::jobs hsk::1
+工程师,"gōngchéngshī (engineer)
+
+我爸爸是软件工程师。
+Wǒ bàba shì ruǎnjiàn gōngchéngshī.
+My dad is a software engineer.",type::noun lesson::lesson4 frequency::medium topic::jobs hsk::3
+中国,"Zhōngguó (China)
+
+中国很大。
+Zhōngguó hěn dà.
+China is very big.",type::noun lesson::lesson5 frequency::high topic::countries hsk::1
+一年,"yī nián (one year)
+
+一年有十二个月。
+Yī nián yǒu shí’èr ge yuè.
+One year has twelve months.",type::phrase lesson::lesson5 frequency::high topic::time hsk::1
+有,"yǒu (have / there is)
+
+我有一只猫。
+Wǒ yǒu yī zhī māo.
+I have a cat.",type::verb lesson::lesson5 frequency::high topic::possession hsk::1
+几个,"jǐ ge (how many (few))
+
+你有几个朋友？
+Nǐ yǒu jǐ ge péngyou?
+How many friends do you have?",type::phrase lesson::lesson5 frequency::high topic::questions hsk::1
+季节,"jìjié (season)
+
+一年有四个季节。
+Yī nián yǒu sì ge jìjié.
+There are four seasons in a year.",type::noun lesson::lesson5 frequency::medium topic::weather hsk::2
+四个,"sì ge (four (of something))
+
+四个学生迟到了。
+Sì ge xuésheng chídào le.
+Four students were late.",type::number+measure lesson::lesson5 frequency::high topic::numbers hsk::1
+春天,"chūntiān (spring)
+
+春天花开了。
+Chūntiān huā kāi le.
+Flowers bloom in spring.","type::noun lesson::lesson5 frequency::high topic::weather,seasons hsk::1"
+夏天,"xiàtiān (summer)
+
+夏天很热。
+Xiàtiān hěn rè.
+Summer is very hot.","type::noun lesson::lesson5 frequency::high topic::weather,seasons hsk::1"
+秋天,"qiūtiān (autumn)
+
+秋天树叶变黄了。
+Qiūtiān shùyè biàn huáng le.
+Leaves turn yellow in autumn.","type::noun lesson::lesson5 frequency::high topic::weather,seasons hsk::1"
+冬天,"dōngtiān (winter)
+
+冬天很冷。
+Dōngtiān hěn lěng.
+Winter is very cold.","type::noun lesson::lesson5 frequency::high topic::weather,seasons hsk::1"
+什么时候,"shénme shíhou (when)
+
+你什么时候来？
+Nǐ shénme shíhou lái?
+When are you coming?",type::phrase lesson::lesson5 frequency::high topic::questions hsk::1 grammar::question_phrase
+三月,"sānyuè (March)
+
+三月是春天。
+Sānyuè shì chūntiān.
+March is spring.","type::noun lesson::lesson5 frequency::high topic::time,months hsk::1"
+五月,"wǔyuè (May)
+
+五月一号是劳动节。
+Wǔyuè yī hào shì Láodòngjié.
+May 1st is Labor Day.","type::noun lesson::lesson5 frequency::high topic::time,months hsk::1"
+到,"dào (to / until (from … to))
+
+从周一到周五。
+Cóng Zhōuyī dào Zhōuwǔ.
+From Monday to Friday.","type::verb/prep lesson::lesson5 frequency::high topic::direction,time hsk::1"
+三维打印,"sānwéi dǎyìn (3D printing)
+
+三维打印可以制造玩具。
+Sānwéi dǎyìn kěyǐ zhìzào wánjù.
+3D printing can make toys.",type::noun lesson::bonus2 frequency::medium topic::3dprinting
+打印机,"dǎyìnjī (printer)
+
+打印机没纸了。
+Dǎyìnjī méi zhǐ le.
+The printer is out of paper.",type::noun lesson::bonus2 frequency::high topic::printing hsk::2
+熔融沉积成型,"róngróng chénjī chéngxíng (FDM)
+
+熔融沉积成型是最常见的三维打印技术。
+Róngróng chénjī chéngxíng shì zuì chángjiàn de sānwéi dǎyìn jìshù.
+FDM is the most common 3D printing technology.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+喷嘴,"pēnzuǐ (nozzle)
+
+喷嘴堵住了。
+Pēnzuǐ dǔ zhù le.
+The nozzle is clogged.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+热床,"rèchuáng (heated bed)
+
+热床可以防止翘曲。
+Rèchuáng kěyǐ fángzhǐ qiàoqū.
+The heated bed prevents warping.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+喷头,"pēntóu (extruder)
+
+喷头温度太高了。
+Pēntóu wēndù tài gāo le.
+The extruder temperature is too high.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+耗材,"hàocái (filament)
+
+我买了新的耗材。
+Wǒ mǎi le xīn de hàocái.
+I bought new filament.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+聚乳酸,"jùrǔsuān (PLA)
+
+聚乳酸是最常用的材料。
+Jùrǔsuān shì zuì chángyòng de cáiliào.
+PLA is the most commonly used material.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+丙烯腈丁二烯苯乙烯,"bǐngxījīng dīngèrxī běnyǐxī (ABS)
+
+丙烯腈丁二烯苯乙烯比聚乳酸更结实。
+Bǐngxījīng dīngèrxī běnyǐxī bǐ jùrǔsuān gèng jiēshi.
+ABS is stronger than PLA.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+层高,"cénggāo (layer height)
+
+层高越小打印越慢。
+Cénggāo yuè xiǎo dǎyìn yuè màn.
+The smaller the layer height, the slower the print.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+填充,"tiánchōng (infill)
+
+百分之二十的填充就够了。
+Bǎi fēn zhī èrshí de tiánchōng jiù gòu le.
+20% infill is enough.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+支撑,"zhīchēng (support)
+
+悬空的部分需要支撑。
+Xuánkōng de bùfen xūyào zhīchēng.
+Overhanging parts need supports.",type::noun lesson::bonus2 frequency::medium topic::3dprinting
+切片软件,"qiēpiàn ruǎnjiàn (slicer software)
+
+把模型导入切片软件。
+Bǎ móxíng dǎorù qiēpiàn ruǎnjiàn.
+Import the model into the slicer.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+打印床,"dǎyìn chuáng (print bed)
+
+打印床要干净。
+Dǎyìn chuáng yào gānjìng.
+The print bed needs to be clean.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+粘附,"zhānfù (adhesion)
+
+第一层的粘附很重要。
+Dì-yī céng de zhānfù hěn zhòngyào.
+First layer adhesion is very important.",type::noun lesson::bonus2 frequency::low topic::3dprinting
+翘曲,"qiàoqū (warping)
+
+翘曲会导致打印失败。
+Qiàoqū huì dǎozhì dǎyìn shībài.
+Warping will cause the print to fail.",type::noun/verb lesson::bonus2 frequency::low topic::3dprinting
+拉丝,"lāsī (stringing)
+
+拉丝很影响外观。
+Lāsī hěn yǐngxiǎng wàiguān.
+Stringing affects the appearance a lot.",type::noun/verb lesson::bonus2 frequency::low topic::3dprinting
+调平,"tiáopíng (leveling)
+
+打印前要先调平。
+Dǎyìn qián yào xiān tiáopíng.
+Level the bed before printing.",type::verb lesson::bonus2 frequency::low topic::3dprinting
+挤出,"jǐchū (extrusion)
+
+挤出太慢会缺料。
+Jǐchū tài màn huì quē liào.
+If extrusion is too slow, there will be under-extrusion.",type::noun/verb lesson::bonus2 frequency::low topic::3dprinting
+模型,"móxíng (model)
+
+我下载了一个玩具模型。
+Wǒ xiàzài le yí ge wánjù móxíng.
+I downloaded a toy model.",type::noun lesson::bonus2 frequency::medium topic::3dprinting
+天气,"tiānqì (weather)
+
+今天天气很好。
+Jīntiān tiānqì hěn hǎo.
+The weather is nice today.",type::noun lesson::lesson6 frequency::high topic::weather hsk::1
+预报,"yùbào (forecast)
+
+天气预报说下午有雨。
+Tiānqì yùbào shuō xiàwǔ yǒu yǔ.
+The weather forecast says rain in the afternoon.",type::noun lesson::lesson6 frequency::high topic::weather hsk::2
+晴天,"qíngtiān (sunny day)
+
+明天是晴天。
+Míngtiān shì qíngtiān.
+Tomorrow will be sunny.",type::noun lesson::lesson6 frequency::high topic::weather hsk::2
+下雨,"xià yǔ (to rain)
+
+今天会下雨。
+Jīntiān huì xià yǔ.
+It will rain today.",type::verb_phrase lesson::lesson6 frequency::high topic::weather hsk::1 grammar::separable
+了,"le (change of state / completed action)
+
+下雨了。
+Xià yǔ le.
+It's raining now (change).",type::particle lesson::lesson6 frequency::high topic::grammar hsk::1 grammar::aspect_particle
+还,"hái (still / even)
+
+他还没来。
+Tā hái méi lái.
+He still hasn't come.",type::adverb lesson::lesson6 frequency::high topic::grammar hsk::1
+出去,"chūqù (to go out)
+
+我要出去买东西。
+Wǒ yào chūqù mǎi dōngxi.
+I'm going out to buy things.",type::verb lesson::lesson6 frequency::high topic::actions hsk::1 grammar::directional_complement
+度,"dù (degree (temperature))
+
+今天三十度。
+Jīntiān sānshí dù.
+Today is 30 degrees.","type::measure lesson::lesson6 frequency::high topic::weather,measurement hsk::2"
+高,"gāo (high)
+
+温度很高。
+Wēndù hěn gāo.
+The temperature is high.",type::adj lesson::lesson6 frequency::high topic::description hsk::1
+温度,"wēndù (temperature)
+
+室内温度正好。
+Shìnèi wēndù zhènghǎo.
+The indoor temperature is just right.",type::noun lesson::lesson6 frequency::high topic::weather hsk::2
+低,"dī (low)
+
+气温很低。
+Qìwēn hěn dī.
+The temperature is very low.",type::adj lesson::lesson6 frequency::high topic::description hsk::1
+零下,"língxià (below zero)
+
+冬天零下十度。
+Dōngtiān língxià shí dù.
+In winter it's minus ten degrees.",type::noun/prefix lesson::lesson6 frequency::medium topic::weather hsk::2
+会,"huì (be likely to / can / know how to)
+
+明天会下雨。
+Míngtiān huì xià yǔ.
+It will likely rain tomorrow.",type::verb_(modal) lesson::lesson6 frequency::high topic::grammar hsk::1 grammar::modal_verb
+下雪,"xià xuě (to snow)
+
+北方冬天经常下雪。
+Běifāng dōngtiān jīngcháng xià xuě.
+Northern winters often have snow.",type::verb_phrase lesson::lesson6 frequency::medium topic::weather hsk::1 grammar::separable
+游泳,"yóuyǒng (to swim)
+
+我喜欢游泳。
+Wǒ xǐhuan yóuyǒng.
+I like swimming.",type::verb lesson::lesson6 frequency::high topic::sports hsk::1
+能,"néng (can (ability/permission))
+
+我能试试吗？
+Wǒ néng shìshi ma?
+Can I try?",type::verb_(modal) lesson::lesson6 frequency::high topic::grammar hsk::1 grammar::modal_verb
+阳光,"yángguāng (sunshine)
+
+今天阳光很好。
+Jīntiān yángguāng hěn hǎo.
+The sunshine is nice today.",type::noun lesson::lesson6 frequency::high topic::weather hsk::2
+约,"yuē (to make an appointment / to arrange)
+
+我们约个时间见面吧。
+Wǒmen yuē ge shíjiān jiànmiàn ba.
+Let's arrange a time to meet.",type::verb lesson::lesson6 frequency::high topic::social hsk::2
+散步,"sànbù (to take a walk)
+
+晚饭后我们去散步。
+Wǎnfàn hòu wǒmen qù sànbù.
+After dinner we go for a walk.",type::verb lesson::lesson6 frequency::high topic::activities hsk::1 grammar::separable
+聊天儿,"liáotiānr (to chat)
+
+朋友一起聊天儿很开心。
+Péngyou yīqǐ liáotiānr hěn kāixīn.
+Chatting with friends is very happy.",type::verb lesson::lesson6 frequency::high topic::social hsk::2 grammar::separable
+或者,"huòzhě (or)
+
+喝茶或者咖啡都可以。
+Hē chá huòzhě kāfēi dōu kěyǐ.
+Drinking tea or coffee is fine.",type::conjunction lesson::lesson6 frequency::high topic::grammar hsk::2
+骑车,"qí chē (to ride a bike)
+
+我每天骑车上班。
+Wǒ měitiān qí chē shàngbān.
+I ride a bike to work every day.",type::verb_phrase lesson::lesson6 frequency::high topic::transport hsk::1
+运动,"yùndòng (to exercise / sports)
+
+你每天运动吗？
+Nǐ měitiān yùndòng ma?
+Do you exercise every day?",type::verb/noun lesson::lesson6 frequency::high topic::sports hsk::1
+放松,"fàngsōng (to relax)
+
+听音乐可以放松心情。
+Tīng yīnyuè kěyǐ fàngsōng xīnqíng.
+Listening to music can relax your mood.",type::verb lesson::lesson6 frequency::high topic::feelings hsk::2
+可能,"kěnéng (probably / maybe / possible)
+
+他可能不来了。
+Tā kěnéng bù lái le.
+He probably isn't coming.",type::adv/adj lesson::lesson6 frequency::high topic::grammar hsk::2
+如果,"rúguǒ (if)
+
+如果明天下雨，我们就不去公园。
+Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù gōngyuán.
+If it rains tomorrow, we won't go to the park.",type::conjunction lesson::lesson6 frequency::high topic::grammar hsk::2
+只,"zhǐ (only)
+
+我只买了一个。
+Wǒ zhǐ mǎi le yí ge.
+I only bought one.",type::adverb lesson::lesson6 frequency::high topic::grammar hsk::2
+上网,"shàngwǎng (to go online)
+
+我每天晚上上网看视频。
+Wǒ měitiān wǎnshàng shàngwǎng kàn shìpín.
+I go online every night to watch videos.",type::verb lesson::lesson6 frequency::high topic::internet hsk::1 grammar::separable
+不过,"búguò (but / however)
+
+我喜欢吃辣，不过不能吃太多。
+Wǒ xǐhuan chī là, búguò bùnéng chī tài duō.
+I like spicy food, but I can't eat too much.",type::conjunction lesson::lesson6 frequency::high topic::grammar hsk::2
+教室,"jiàoshì (classroom)
+
+教室很干净。
+Jiàoshì hěn gānjìng.
+The classroom is very clean.",type::noun lesson::lesson7 frequency::high topic::classroom hsk::1
+里面,"lǐmiàn (inside)
+
+书包里面有什么？
+Shūbāo lǐmiàn yǒu shénme?
+What's inside the backpack?",type::noun_(location) lesson::lesson7 frequency::high topic::location hsk::1
+有什么,"yǒu shénme (what is there)
+
+冰箱里有什么？
+Bīngxiāng lǐ yǒu shénme?
+What's in the fridge?",type::phrase lesson::lesson7 frequency::high topic::questions hsk::1
+桌子,"zhuōzi (desk / table)
+
+桌子上有一本书。
+Zhuōzi shàng yǒu yī běn shū.
+There is a book on the desk.",type::noun lesson::lesson7 frequency::high topic::furniture hsk::1
+椅子,"yǐzi (chair)
+
+这把椅子很舒服。
+Zhè bǎ yǐzi hěn shūfu.
+This chair is very comfortable.",type::noun lesson::lesson7 frequency::high topic::furniture hsk::1
+电脑,"diànnǎo (computer)
+
+我的电脑坏了。
+Wǒ de diànnǎo huài le.
+My computer is broken.",type::noun lesson::lesson7 frequency::high topic::electronics hsk::1
+前面,"qiánmiàn (in front of)
+
+教室前面有一块黑板。
+Jiàoshì qiánmiàn yǒu yī kuài hēibǎn.
+In front of the classroom there is a blackboard.",type::noun_(location) lesson::lesson7 frequency::high topic::location hsk::1
+一块,"yī kuài (one (piece of))
+
+一块蛋糕。
+Yī kuài dàngāo.
+One piece of cake.",type::measure lesson::lesson7 frequency::high topic::measurement hsk::1
+黑板,"hēibǎn (blackboard)
+
+老师在黑板上写字。
+Lǎoshī zài hēibǎn shàng xiě zì.
+The teacher writes on the blackboard.",type::noun lesson::lesson7 frequency::high topic::classroom hsk::1
+三维建模,"sānwéi jiànmó (3D modeling)
+
+他在学三维建模。
+Tā zài xué sānwéi jiànmó.
+He is learning 3D modeling.","type::noun lesson::bonus3 frequency::medium topic::3dmodeling,cad"
+计算机辅助设计,"jìsuànjī fǔzhù shèjì (CAD)
+
+工程师用计算机辅助设计画图。
+Gōngchéngshī yòng jìsuànjī fǔzhù shèjì huà tú.
+Engineers use CAD to draw.",type::noun lesson::bonus3 frequency::low topic::cad
+融合,"rónghé (Fusion (software))
+
+我用融合软件建模。
+Wǒ yòng rónghé ruǎnjiàn jiànmó.
+I use Fusion software to model.",type::noun lesson::bonus3 frequency::low topic::cad
+草图,"cǎotú (sketch)
+
+先画一个草图。
+Xiān huà yí ge cǎotú.
+First draw a sketch.","type::noun lesson::bonus3 frequency::medium topic::design,cad"
+拉伸,"lāshēn (extrude)
+
+把这个圆拉伸成立方体。
+Bǎ zhège yuán lāshēn chéng lìfāngtǐ.
+Extrude this circle into a cube.",type::verb lesson::bonus3 frequency::low topic::cad
+旋转,"xuánzhuǎn (revolve)
+
+旋转草图可以生成圆柱。
+Xuánzhuǎn cǎotú kěyǐ shēngchéng yuánzhù.
+Revolving a sketch creates a cylinder.","type::verb lesson::bonus3 frequency::high topic::cad,movement hsk::2"
+扫掠,"sǎolüè (sweep)
+
+用扫掠功能做管道。
+Yòng sǎolüè gōngnéng zuò guǎndào.
+Use the sweep function to make a pipe.",type::verb lesson::bonus3 frequency::low topic::cad
+放样,"fàngyàng (loft)
+
+放样可以把两个形状连接起来。
+Fàngyàng kěyǐ bǎ liǎng ge xíngzhuàng liánjiē qǐlai.
+Loft connects two shapes together.",type::verb lesson::bonus3 frequency::low topic::cad
+倒角,"dàojiǎo (chamfer)
+
+给边缘倒角更安全。
+Gěi biānyuán dàojiǎo gèng ānquán.
+Chamfering the edge is safer.",type::verb/noun lesson::bonus3 frequency::low topic::cad
+圆角,"yuánjiǎo (fillet)
+
+给直角做圆角更美观。
+Gěi zhíjiǎo zuò yuánjiǎo gèng měiguān.
+Adding fillets to right angles looks better.",type::verb/noun lesson::bonus3 frequency::low topic::cad
+抽壳,"chōuké (shell)
+
+抽壳可以把实心变成空心。
+Chōuké kěyǐ bǎ shíxīn biàn chéng kōngxīn.
+Shelling turns a solid body hollow.",type::verb lesson::bonus3 frequency::low topic::cad
+布尔运算,"bù'ěr yùnsuàn (Boolean operation)
+
+布尔运算可以合并或切割物体。
+Bù'ěr yùnsuàn kěyǐ hébìng huò qiēgē wùtǐ.
+Boolean operations can combine or cut objects.",type::noun lesson::bonus3 frequency::low topic::cad
+合并,"hébìng (union)
+
+把这两个物体合并成一个。
+Bǎ zhè liǎng ge wùtǐ hébìng chéng yí ge.
+Union these two objects into one.",type::verb lesson::bonus3 frequency::medium topic::cad hsk::3
+减去,"jiǎnqù (subtract)
+
+用A减去B得到孔。
+Yòng A jiǎnqù B dédào kǒng.
+Subtract B from A to get a hole.","type::verb lesson::bonus3 frequency::medium topic::cad,math hsk::2"
+相交,"xiāngjiāo (intersect)
+
+相交运算只保留重叠部分。
+Xiāngjiāo yùnsuàn zhǐ bǎoliú chóngdié bùfen.
+Intersect keeps only the overlapping part.","type::verb lesson::bonus3 frequency::medium topic::cad,math hsk::3"
+参数,"cānshù (parameter)
+
+修改参数模型会自动更新。
+Xiūgǎi cānshù móxíng huì zìdòng gēngxīn.
+Change a parameter and the model updates automatically.",type::noun lesson::bonus3 frequency::medium topic::cad
+特征,"tèzhēng (feature)
+
+拉伸是一个特征。
+Lāshēn shì yí ge tèzhēng.
+Extrude is a feature.",type::noun lesson::bonus3 frequency::high topic::cad hsk::3
+时间轴,"shíjiān zhóu (timeline)
+
+在时间轴上删除一个特征。
+Zài shíjiān zhóu shàng shānchú yí ge tèzhēng.
+Delete a feature in the timeline.",type::noun lesson::bonus3 frequency::low topic::cad
+渲染,"xuànrǎn (render)
+
+加材质然后渲染。
+Jiā cáizhì ránhòu xuànrǎn.
+Add materials then render.","type::verb lesson::bonus3 frequency::medium topic::cad,graphics"
+导出,"dǎochū (export)
+
+把模型导出为STL文件。
+Bǎ móxíng dǎochū wéi STL wénjiàn.
+Export the model as an STL file.",type::verb lesson::bonus3 frequency::medium topic::cad hsk::3
+第,"dì (ordinal marker (prefix))
+
+第一个学生到了。
+Dì-yī ge xuésheng dào le.
+The first student arrived.","type::prefix lesson::lesson8 frequency::high topic::grammar,numbers hsk::1"
+节,"jié (section / class period (measure))
+
+今天有四节课。
+Jīntiān yǒu sì jié kè.
+There are four class periods today.","type::measure lesson::lesson8 frequency::high topic::school,time hsk::2"
+课,"kè (class / lesson)
+
+这节课很难。
+Zhè jié kè hěn nán.
+This class is very hard.",type::noun lesson::lesson8 frequency::high topic::school hsk::1
+综合,"zōnghé (comprehensive / integrated)
+
+综合课包括听说读写。
+Zōnghé kè bāokuò tīng shuō dú xiě.
+Comprehensive class includes listening, speaking, reading, and writing.",type::adj lesson::lesson8 frequency::medium topic::school hsk::3
+口语,"kǒuyǔ (spoken language)
+
+口语课要多说话。
+Kǒuyǔ kè yào duō shuōhuà.
+In spoken language class you need to talk more.",type::noun lesson::lesson8 frequency::high topic::language hsk::2
+听力,"tīnglì (listening comprehension)
+
+听力考试很难。
+Tīnglì kǎoshì hěn nán.
+The listening test is very hard.",type::noun lesson::lesson8 frequency::high topic::language hsk::2
+位,"wèi (measure for people (polite))
+
+这有一位客人。
+Zhè yǒu yí wèi kèrén.
+There is one guest (polite).",type::measure lesson::lesson8 frequency::high topic::grammar hsk::1 grammar::polite_measure
+教,"jiāo (to teach)
+
+王老师教我们汉语。
+Wáng lǎoshī jiāo wǒmen Hànyǔ.
+Teacher Wang teaches us Chinese.",type::verb lesson::lesson8 frequency::high topic::education hsk::1
+长,"cháng (long)
+
+这节课很长。
+Zhè jié kè hěn cháng.
+This class is very long.",type::adj lesson::lesson8 frequency::high topic::description hsk::1
+分钟,"fēnzhōng (minute)
+
+十分钟后开始。
+Shí fēnzhōng hòu kāishǐ.
+It starts in ten minutes.",type::noun lesson::lesson8 frequency::high topic::time hsk::1
+小时,"xiǎoshí (hour)
+
+一小时有六十分钟。
+Yī xiǎoshí yǒu liùshí fēnzhōng.
+One hour has sixty minutes.",type::noun lesson::lesson8 frequency::high topic::time hsk::1
+正在,"zhèngzài (in progress (right now))
+
+他正在上课。
+Tā zhèngzài shàngkè.
+He is in class right now.","type::adv lesson::lesson8 frequency::high topic::grammar,time hsk::2 grammar::progressive_aspect"
+开学,"kāixué (school begins)
+
+九月一号开学。
+Jiǔyuè yī hào kāixué.
+School starts on September 1st.",type::verb lesson::lesson8 frequency::high topic::school hsk::2 grammar::separable
+已经,"yǐjīng (already)
+
+他已经到了。
+Tā yǐjīng dào le.
+He has already arrived.","type::adv lesson::lesson8 frequency::high topic::grammar,time hsk::1"
+学期,"xuéqī (semester)
+
+这个学期有十六周。
+Zhège xuéqī yǒu shíliù zhōu.
+This semester has sixteen weeks.",type::noun lesson::lesson8 frequency::high topic::school hsk::2
+班,"bān (class (group of students))
+
+我们班有二十个学生。
+Wǒmen bān yǒu èrshí ge xuésheng.
+Our class has twenty students.",type::noun lesson::lesson8 frequency::high topic::school hsk::1
+周,"zhōu (week)
+
+一周有七天。
+Yī zhōu yǒu qī tiān.
+One week has seven days.",type::noun lesson::lesson8 frequency::high topic::time hsk::1
+星期一,"Xīngqī yī (Monday)
+
+星期一早上有会议。
+Xīngqī yī zǎoshang yǒu huìyì.
+There is a meeting on Monday morning.","type::noun lesson::lesson8 frequency::high topic::time,days hsk::1"
+星期二,"Xīngqī èr (Tuesday)
+
+星期二有汉语课。
+Xīngqī èr yǒu Hànyǔ kè.
+There is Chinese class on Tuesday.","type::noun lesson::lesson8 frequency::high topic::time,days hsk::1"
+星期三,"Xīngqī sān (Wednesday)
+
+星期三下午没课。
+Xīngqī sān xiàwǔ méi kè.
+There's no class on Wednesday afternoon.","type::noun lesson::lesson8 frequency::high topic::time,days hsk::1"
+星期四,"Xīngqī sì (Thursday)
+
+星期四要交作业。
+Xīngqī sì yào jiāo zuòyè.
+Homework is due on Thursday.","type::noun lesson::lesson8 frequency::high topic::time,days hsk::1"
+星期五,"Xīngqī wǔ (Friday)
+
+星期五终于到了。
+Xīngqī wǔ zhōngyú dào le.
+Friday has finally arrived.","type::noun lesson::lesson8 frequency::high topic::time,days hsk::1"
+作业,"zuòyè (homework)
+
+今天的作业很多。
+Jīntiān de zuòyè hěn duō.
+Today's homework is a lot.",type::noun lesson::lesson9 frequency::high topic::school hsk::1
+写,"xiě (to write)
+
+我在写汉字。
+Wǒ zài xiě Hànzì.
+I am writing characters.","type::verb lesson::lesson9 frequency::high topic::actions,writing hsk::1"
+写完了,"xiě wán le (finished writing)
+
+我已经写完了信。
+Wǒ yǐjīng xiě wán le xìn.
+I have already finished writing the letter.","type::verb_phrase lesson::lesson9 frequency::high topic::school,completion hsk::1 grammar::resultative_complement"
+看见,"kànjiàn (to see)
+
+你看见我的手机了吗？
+Nǐ kànjiàn wǒ de shǒujī le ma?
+Did you see my phone?",type::verb lesson::lesson9 frequency::high topic::vision hsk::1 grammar::resultative_complement
+老师,"lǎoshī (teacher)
+
+老师好！
+Lǎoshī hǎo!
+Hello teacher!","type::noun lesson::lesson9 frequency::high topic::school,people hsk::1"
+没看见,"méi kànjiàn (didn't see)
+
+对不起，我没看见你。
+Duìbuqǐ, wǒ méi kànjiàn nǐ.
+Sorry, I didn't see you.",type::verb_phrase lesson::lesson9 frequency::high topic::vision hsk::1 grammar::negative_resultative
+找到,"zhǎodào (to find (successfully))
+
+你找到钥匙了吗？
+Nǐ zhǎodào yàoshi le ma?
+Did you find the keys?",type::verb lesson::lesson9 frequency::high topic::actions hsk::1 grammar::resultative_complement
+手机,"shǒujī (cellphone)
+
+我的手机没电了。
+Wǒ de shǒujī méi diàn le.
+My phone is out of battery.",type::noun lesson::lesson9 frequency::high topic::electronics hsk::1
+找到了,"zhǎodào le (found (successfully))
+
+太好了，你找到了！
+Tài hǎo le, nǐ zhǎodào le!
+Great, you found it!","type::verb_phrase lesson::lesson9 frequency::high topic::actions,completion hsk::1 grammar::resultative+了"
+设计,"shèjì (design)
+
+他在学设计。
+Tā zài xué shèjì.
+He is studying design.",type::verb/noun lesson::bonus4 frequency::high topic::design hsk::2
+技术,"jìshù (technology)
+
+现代技术发展很快。
+Xiàndài jìshù fāzhǎn hěn kuài.
+Modern technology develops very fast.",type::noun lesson::bonus4 frequency::high topic::technology hsk::2
+教学,"jiàoxué (teaching)
+
+他的教学方法很好。
+Tā de jiàoxué fāngfǎ hěn hǎo.
+His teaching method is very good.",type::noun lesson::bonus4 frequency::high topic::education hsk::3
+学生,"xuésheng (student)
+
+这个学生很努力。
+Zhège xuésheng hěn nǔlì.
+This student is very hardworking.","type::noun lesson::bonus4 frequency::high topic::education,people hsk::1"
+项目,"xiàngmù (project)
+
+我们正在做一个项目。
+Wǒmen zhèngzài zuò yí ge xiàngmù.
+We are working on a project.","type::noun lesson::bonus4 frequency::high topic::work,school hsk::2"
+解决问题,"jiějué wèntí (to solve problems)
+
+工程师每天都要解决问题。
+Gōngchéngshī měitiān dōu yào jiějué wèntí.
+Engineers solve problems every day.",type::verb_phrase lesson::bonus4 frequency::high topic::problem-solving hsk::3
+批判性思维,"pīpànxìng sīwéi (critical thinking)
+
+批判性思维很重要。
+Pīpànxìng sīwéi hěn zhòngyào.
+Critical thinking is very important.","type::noun lesson::bonus4 frequency::low topic::education,thinking"
+创造力,"chuàngzàolì (creativity)
+
+孩子很有创造力。
+Háizi hěn yǒu chuàngzàolì.
+Children have a lot of creativity.",type::noun lesson::bonus4 frequency::medium topic::creativity
+原型,"yuánxíng (prototype)
+
+我们先做一个原型。
+Wǒmen xiān zuò yí ge yuánxíng.
+Let's make a prototype first.",type::noun lesson::bonus4 frequency::low topic::design
+迭代,"diédài (iteration)
+
+设计需要多次迭代。
+Shèjì xūyào duō cì diédài.
+Design needs many iterations.","type::noun/verb lesson::bonus4 frequency::low topic::design,process"
+反馈,"fǎnkuì (feedback)
+
+谢谢你的反馈。
+Xièxie nǐ de fǎnkuì.
+Thank you for your feedback.",type::noun lesson::bonus4 frequency::high topic::communication hsk::3
+合作,"hézuò (collaboration)
+
+团队合作很重要。
+Tuánduì hézuò hěn zhòngyào.
+Team collaboration is very important.",type::verb/noun lesson::bonus4 frequency::high topic::teamwork hsk::2
+草图,"cǎotú (rough sketch)
+
+先画一个草图。
+Xiān huà yí ge cǎotú.
+First draw a rough sketch.","type::noun lesson::bonus4 frequency::medium topic::design,drawing"
+测量,"cèliáng (measurement)
+
+先测量长度。
+Xiān cèliáng chángdù.
+First measure the length.",type::verb/noun lesson::bonus4 frequency::high topic::measurement hsk::3
+工具,"gōngjù (tool)
+
+这些工具很有用。
+Zhèxiē gōngjù hěn yǒuyòng.
+These tools are very useful.",type::noun lesson::bonus4 frequency::high topic::tools hsk::2
+材料,"cáiliào (material)
+
+我们需要买材料。
+Wǒmen xūyào mǎi cáiliào.
+We need to buy materials.",type::noun lesson::bonus4 frequency::high topic::materials hsk::2
+安全,"ānquán (safety)
+
+安全第一。
+Ānquán dì-yī.
+Safety first.",type::noun/adj lesson::bonus4 frequency::high topic::safety hsk::2
+护目镜,"hùmùjìng (safety goggles)
+
+请戴上护目镜。
+Qǐng dài shàng hùmùjìng.
+Please put on safety goggles.","type::noun lesson::bonus4 frequency::low topic::safety,tools"
+工作坊,"gōngzuòfāng (workshop)
+
+我们在工作坊做手工。
+Wǒmen zài gōngzuòfāng zuò shǒugōng.
+We do hands-on work in the workshop.",type::noun lesson::bonus4 frequency::medium topic::workshop
+作品集,"zuòpǐnjí (portfolio)
+
+学生要准备作品集。
+Xuésheng yào zhǔnbèi zuòpǐnjí.
+Students need to prepare a portfolio.","type::noun lesson::bonus4 frequency::low topic::education,design"
+葡萄,"pútáo (grape)
+
+葡萄很甜。
+Pútáo hěn tián.
+Grapes are very sweet.","type::noun lesson::lesson10 frequency::high topic::food,fruit hsk::1"
+芒果,"mángguǒ (mango)
+
+芒果是热带水果。
+Mángguǒ shì rèdài shuǐguǒ.
+Mangoes are tropical fruits.","type::noun lesson::lesson10 frequency::high topic::food,fruit hsk::2"
+西瓜,"xīguā (watermelon)
+
+夏天吃西瓜很凉快。
+Xiàtiān chī xīguā hěn liángkuai.
+Eating watermelon in summer is very refreshing.","type::noun lesson::lesson10 frequency::high topic::food,fruit hsk::1"
+椰子,"yēzi (coconut)
+
+椰子汁很好喝。
+Yēzi zhī hěn hǎohē.
+Coconut water is very tasty.","type::noun lesson::lesson10 frequency::medium topic::food,fruit hsk::2"
+菠萝,"bōluó (pineapple)
+
+菠萝有点酸。
+Bōluó yǒudiǎn suān.
+Pineapples are a bit sour.","type::noun lesson::lesson10 frequency::medium topic::food,fruit hsk::2"
+橙子,"chéngzi (orange (fruit))
+
+橙子富含维生素C。
+Chéngzi fùhán wéishēngsù C.
+Oranges are rich in vitamin C.","type::noun lesson::lesson10 frequency::high topic::food,fruit hsk::1"
+买,"mǎi (to buy)
+
+我想买一杯咖啡。
+Wǒ xiǎng mǎi yī bēi kāfēi.
+I want to buy a cup of coffee.",type::verb lesson::lesson10 frequency::high topic::shopping hsk::1
+怎么卖,"zěnme mài (how much (how sold))
+
+这个苹果怎么卖？
+Zhège píngguǒ zěnme mài?
+How much are these apples?",type::phrase lesson::lesson10 frequency::high topic::shopping hsk::1
+多少,"duōshao (how much / how many)
+
+这个多少钱？
+Zhège duōshao qián?
+How much is this?",type::pronoun lesson::lesson10 frequency::high topic::questions hsk::1 grammar::question_word
+还要别的吗,"hái yào bié de ma (anything else?)
+
+还要别的吗？不用了，谢谢。
+Hái yào bié de ma? Bú yòng le, xièxie.
+Anything else? No, thanks.",type::phrase lesson::lesson10 frequency::high topic::shopping hsk::2
+一共,"yīgòng (total)
+
+一共多少钱？
+Yīgòng duōshao qián?
+How much in total?","type::adv lesson::lesson10 frequency::high topic::shopping,numbers hsk::1"
+便宜点儿吧,"piányi diǎnr ba (cheaper please)
+
+太贵了，便宜点儿吧。
+Tài guì le, piányi diǎnr ba.
+Too expensive, make it cheaper please.","type::phrase lesson::lesson10 frequency::high topic::shopping,bargaining hsk::2"
+请问您几位,"qǐngwèn nín jǐ wèi (How many people (polite))
+
+请问您几位？两位。
+Qǐngwèn nín jǐ wèi? Liǎng wèi.
+How many in your party? Two.",type::phrase lesson::lesson11 frequency::high topic::restaurant hsk::2
+两位,"liǎng wèi (two people (polite))
+
+我们有两位。
+Wǒmen yǒu liǎng wèi.
+We have two people.","type::phrase lesson::lesson11 frequency::high topic::restaurant,numbers hsk::1"
+您吃点儿什么,"nín chī diǎnr shénme (What would you like to eat? (polite))
+
+您吃点儿什么？给我看看菜单。
+Nín chī diǎnr shénme? Gěi wǒ kànkan càidān.
+What would you like to eat? Let me see the menu.",type::phrase lesson::lesson11 frequency::high topic::restaurant hsk::2
+菜单,"càidān (menu)
+
+请给我菜单。
+Qǐng gěi wǒ càidān.
+Please give me the menu.",type::noun lesson::lesson11 frequency::high topic::restaurant hsk::1
+给我们看一下菜单吧,"gěi wǒmen kàn yīxià càidān ba (Let us see the menu)
+
+给我们看一下菜单吧。
+Gěi wǒmen kàn yīxià càidān ba.
+Let us take a look at the menu.",type::phrase lesson::lesson11 frequency::high topic::restaurant hsk::2
+您喝点儿什么,"nín hē diǎnr shénme (What would you like to drink? (polite))
+
+您喝点儿什么？水就行。
+Nín hē diǎnr shénme? Shuǐ jiù xíng.
+What would you like to drink? Water is fine.",type::phrase lesson::lesson11 frequency::high topic::restaurant hsk::2
+一杯果汁,"yī bēi guǒzhī (one glass of juice)
+
+我要一杯果汁。
+Wǒ yào yī bēi guǒzhī.
+I want a glass of juice.","type::phrase lesson::lesson11 frequency::high topic::food,drinks hsk::1"
+一杯奶茶,"yī bēi nǎichá (one cup of milk tea)
+
+奶茶很好喝。
+Nǎichá hěn hǎohē.
+Milk tea is very tasty.","type::phrase lesson::lesson11 frequency::high topic::food,drinks hsk::2"
+微控制器,"wēi kòngzhìqì (microcontroller)
+
+微控制器很小但功能强大。
+Wēi kòngzhìqì hěn xiǎo dàn gōngnéng qiángdà.
+Microcontrollers are small but powerful.",type::noun lesson::bonus5 frequency::low topic::electronics
+电子,"diànzǐ (electronics)
+
+我喜欢学电子。
+Wǒ xǐhuan xué diànzǐ.
+I like learning electronics.",type::noun lesson::bonus5 frequency::high topic::electronics hsk::2
+电路,"diànlù (circuit)
+
+这个电路很简单。
+Zhège diànlù hěn jiǎndān.
+This circuit is very simple.",type::noun lesson::bonus5 frequency::medium topic::electronics
+传感器,"chuángǎnqì (sensor)
+
+传感器可以检测温度。
+Chuángǎnqì kěyǐ jiǎncè wēndù.
+Sensors can detect temperature.",type::noun lesson::bonus5 frequency::low topic::electronics
+执行器,"zhíxíngqì (actuator)
+
+执行器让机器动起来。
+Zhíxíngqì ràng jīqì dòng qǐlai.
+Actuators make machines move.",type::noun lesson::bonus5 frequency::low topic::electronics
+电压,"diànyā (voltage)
+
+电压不能太高。
+Diànyā bùnéng tài gāo.
+Voltage can't be too high.",type::noun lesson::bonus5 frequency::medium topic::electronics
+电流,"diànliú (current)
+
+电流太大可能会烧坏元件。
+Diànliú tài dà kěnéng huì shāohuài yuánjiàn.
+If the current is too high, it might burn components.",type::noun lesson::bonus5 frequency::medium topic::electronics
+电阻,"diànzǔ (resistor)
+
+电阻限制电流。
+Diànzǔ xiànzhì diànliú.
+Resistors limit current.",type::noun lesson::bonus5 frequency::medium topic::electronics
+电容,"diànróng (capacitor)
+
+电容可以储存电能。
+Diànróng kěyǐ chǔcún diànnéng.
+Capacitors can store electrical energy.",type::noun lesson::bonus5 frequency::low topic::electronics
+发光二极管,"fāguāng èrjíguǎn (LED)
+
+发光二极管很省电。
+Fāguāng èrjíguǎn hěn shěng diàn.
+LEDs are very energy-efficient.",type::noun lesson::bonus5 frequency::medium topic::electronics
+面包板,"miànbāobǎn (breadboard)
+
+先在面包板上测试电路。
+Xiān zài miànbāobǎn shàng cèshì diànlù.
+First test the circuit on the breadboard.",type::noun lesson::bonus5 frequency::low topic::electronics
+跳线,"tiàoxiàn (jumper wire)
+
+用跳线连接面包板上的元件。
+Yòng tiàoxiàn liánjiē miànbāobǎn shàng de yuánjiàn.
+Use jumper wires to connect components on the breadboard.",type::noun lesson::bonus5 frequency::low topic::electronics
+焊接,"hànjiē (soldering)
+
+焊接需要练习。
+Hànjiē xūyào liànxí.
+Soldering takes practice.",type::verb lesson::bonus5 frequency::low topic::electronics
+烙铁,"làotiě (soldering iron)
+
+烙铁温度很高。
+Làotiě wēndù hěn gāo.
+The soldering iron is very hot.","type::noun lesson::bonus5 frequency::low topic::electronics,tools"
+代码,"dàimǎ (code)
+
+我写了一段代码控制LED灯。
+Wǒ xiě le yī duàn dàimǎ kòngzhì LED dēng.
+I wrote some code to control an LED.",type::noun lesson::bonus5 frequency::high topic::programming hsk::2
+上传,"shàngchuán (to upload)
+
+把代码上传到开发板。
+Bǎ dàimǎ shàngchuán dào kāifā bǎn.
+Upload the code to the development board.",type::verb lesson::bonus5 frequency::high topic::programming hsk::3
+引脚,"yǐnjiǎo (pin)
+
+这个引脚是正极。
+Zhège yǐnjiǎo shì zhèngjí.
+This pin is positive.",type::noun lesson::bonus5 frequency::low topic::electronics
+接地,"jiēdì (ground)
+
+黑线一般接地。
+Hēi xiàn yībān jiēdì.
+The black wire is usually ground.",type::verb/noun lesson::bonus5 frequency::medium topic::electronics
+数字,"shùzì (digital)
+
+数字信号只有0和1。
+Shùzì xìnhào zhǐ yǒu 0 hé 1.
+Digital signals are only 0 and 1.","type::adj/noun lesson::bonus5 frequency::high topic::electronics,math hsk::1"
+模拟,"mónǐ (analog)
+
+模拟信号可以是任何值。
+Mónǐ xìnhào kěyǐ shì rènhé zhí.
+Analog signals can be any value.",type::adj/noun lesson::bonus5 frequency::high topic::electronics hsk::3
+脉冲宽度调制,"màichōng kuāndù tiáozhì (PWM)
+
+脉冲宽度调制可以控制电机速度。
+Màichōng kuāndù tiáozhì kěyǐ kòngzhì diànjī sùdù.
+PWM can control motor speed.",type::noun lesson::bonus5 frequency::low topic::electronics
+这件衣服,"zhè jiàn yīfu (this piece of clothing)
+
+这件衣服很漂亮。
+Zhè jiàn yīfu hěn piàoliang.
+This piece of clothing is very pretty.","type::phrase lesson::lesson12 frequency::high topic::clothing,shopping hsk::1"
+怎么样,"zěnme yàng (how is it)
+
+你觉得这件衣服怎么样？
+Nǐ juéde zhè jiàn yīfu zěnme yàng?
+What do you think of this clothing?",type::phrase lesson::lesson12 frequency::high topic::questions hsk::1
+不大不小,"bù dà bù xiǎo (not too big, not too small)
+
+这双鞋不大不小，正合适。
+Zhè shuāng xié bù dà bù xiǎo, zhèng héshì.
+These shoes are neither too big nor too small — just right.","type::phrase lesson::lesson12 frequency::medium topic::clothing,description hsk::2"
+很合适,"hěn héshì (very suitable / fitting)
+
+这条裤子很合适。
+Zhè tiáo kùzi hěn héshì.
+These pants fit very well.",type::phrase lesson::lesson12 frequency::high topic::clothing hsk::2
+毛衣,"máoyī (sweater)
+
+冬天穿毛衣很暖和。
+Dōngtiān chuān máoyī hěn nuǎnhuo.
+Wearing a sweater in winter is very warm.",type::noun lesson::lesson12 frequency::high topic::clothing hsk::1
+红色,"hóngsè (red)
+
+红色很喜庆。
+Hóngsè hěn xǐqìng.
+Red is very festive.",type::noun/adj lesson::lesson12 frequency::high topic::colors hsk::1
+裙子,"qúnzi (skirt / dress)
+
+这条裙子很优雅。
+Zhè tiáo qúnzi hěn yōuyǎ.
+This skirt/dress is very elegant.",type::noun lesson::lesson12 frequency::high topic::clothing hsk::1
+绿色,"lǜsè (green)
+
+绿色代表自然。
+Lǜsè dàibiǎo zìrán.
+Green represents nature.",type::noun/adj lesson::lesson12 frequency::high topic::colors hsk::1
+这条裤子,"zhè tiáo kùzi (these pants)
+
+这条裤子太长了。
+Zhè tiáo kùzi tài cháng le.
+These pants are too long.",type::phrase lesson::lesson12 frequency::high topic::clothing hsk::1
+这双鞋子,"zhè shuāng xiézi (these shoes)
+
+这双鞋子很舒服。
+Zhè shuāng xiézi hěn shūfu.
+These shoes are very comfortable.",type::phrase lesson::lesson12 frequency::high topic::clothing hsk::1
+有点儿,"yǒudiǎnr (a little)
+
+这件衣服有点儿贵。
+Zhè jiàn yīfu yǒudiǎnr guì.
+This clothing is a little expensive.",type::adv lesson::lesson12 frequency::high topic::description hsk::1
+你穿多大码,"nǐ chuān duō dà mǎ (what size do you wear)
+
+你穿多大码？我穿中号。
+Nǐ chuān duō dà mǎ? Wǒ chuān zhōng hào.
+What size do you wear? I wear medium.","type::phrase lesson::lesson12 frequency::high topic::clothing,shopping hsk::2"
+能试一下吗,"néng shì yīxià ma (can I try it on)
+
+能试一下这件衣服吗？
+Néng shì yīxià zhè jiàn yīfu ma?
+Can I try on this piece of clothing?","type::phrase lesson::lesson12 frequency::high topic::clothing,shopping hsk::2"
+打折吗,"dǎzhé ma (discount?)
+
+这个有打折吗？
+Zhège yǒu dǎzhé ma?
+Is there a discount on this?",type::phrase lesson::lesson12 frequency::high topic::shopping hsk::2
+能用手机支付吗,"néng yòng shǒujī zhīfù ma (can I pay by phone)
+
+能用手机支付吗？可以，扫码就行。
+Néng yòng shǒujī zhīfù ma? Kěyǐ, sǎo mǎ jiù xíng.
+Can I pay by phone? Yes, just scan the code.","type::phrase lesson::lesson12 frequency::high topic::shopping,technology hsk::3"
+如果,"rúguǒ (if)
+
+如果明天下雨，我就不去了。
+Rúguǒ míngtiān xià yǔ, wǒ jiù bú qù le.
+If it rains tomorrow, I won't go.",type::conjunction lesson::lesson13 frequency::high topic::grammar hsk::2
+旅行,"lǚxíng (travel)
+
+我喜欢旅行。
+Wǒ xǐhuan lǚxíng.
+I like to travel.",type::verb/noun lesson::lesson13 frequency::high topic::travel hsk::1
+喜欢,"xǐhuan (like)
+
+我喜欢吃中餐。
+Wǒ xǐhuan chī Zhōngcān.
+I like eating Chinese food.","type::verb lesson::lesson13 frequency::high topic::emotions,preferences hsk::1"
+坐飞机,"zuò fēijī (take a plane)
+
+去美国要坐飞机。
+Qù Měiguó yào zuò fēijī.
+Going to the US requires taking a plane.","type::verb_phrase lesson::lesson13 frequency::high topic::transport,travel hsk::1"
+坐火车,"zuò huǒchē (take a train)
+
+坐火车比坐飞机便宜。
+Zuò huǒchē bǐ zuò fēijī piányi.
+Taking a train is cheaper than taking a plane.","type::verb_phrase lesson::lesson13 frequency::high topic::transport,travel hsk::1"
+虽然…但是…,"suīrán…dànshì… (although…but…)
+
+虽然很贵，但是我想买。
+Suīrán hěn guì, dànshì wǒ xiǎng mǎi.
+Although it's expensive, I want to buy it.",type::conjunction lesson::lesson13 frequency::high topic::grammar hsk::2 grammar::contrasting_conjunction
+快,"kuài (fast)
+
+飞机很快。
+Fēijī hěn kuài.
+The plane is very fast.","type::adj lesson::lesson13 frequency::high topic::description,speed hsk::1"
+慢,"màn (slow)
+
+火车比飞机慢。
+Huǒchē bǐ fēijī màn.
+Trains are slower than planes.","type::adj lesson::lesson13 frequency::high topic::description,speed hsk::1"
+舒服,"shūfu (comfortable)
+
+这双鞋很舒服。
+Zhè shuāng xié hěn shūfu.
+These shoes are very comfortable.",type::adj lesson::lesson13 frequency::high topic::feelings hsk::1
+上飞机,"shàng fēijī (board the plane)
+
+我们提前两小时上飞机。
+Wǒmen tíqián liǎng xiǎoshí shàng fēijī.
+We board the plane two hours early.",type::verb_phrase lesson::lesson13 frequency::high topic::travel hsk::2
+下飞机,"xià fēijī (get off the plane)
+
+下飞机后给我打电话。
+Xià fēijī hòu gěi wǒ dǎ diànhuà.
+Call me after you get off the plane.",type::verb_phrase lesson::lesson13 frequency::high topic::travel hsk::2
+给,"gěi (to give / to (someone))
+
+请给我一杯水。
+Qǐng gěi wǒ yī bēi shuǐ.
+Please give me a glass of water.","type::verb/prep lesson::lesson13 frequency::high topic::actions,grammar hsk::1"
+打电话,"dǎ diànhuà (make a phone call)
+
+我晚上给你打电话。
+Wǒ wǎnshàng gěi nǐ dǎ diànhuà.
+I'll call you in the evening.",type::verb_phrase lesson::lesson13 frequency::high topic::communication hsk::1 grammar::separable
+编程,"biānchéng (programming)
+
+我在学习编程。
+Wǒ zài xuéxí biānchéng.
+I am learning programming.",type::noun/verb lesson::bonus6 frequency::high topic::programming hsk::3
+网站,"wǎngzhàn (website)
+
+这个网站很有用。
+Zhège wǎngzhàn hěn yǒuyòng.
+This website is very useful.",type::noun lesson::bonus6 frequency::high topic::internet hsk::2
+前端,"qiánduān (front-end)
+
+前端开发负责用户界面。
+Qiánduān kāifā fùzé yònghù jièmiàn.
+Front-end development is responsible for the user interface.",type::noun lesson::bonus6 frequency::medium topic::webdev
+后端,"hòuduān (back-end)
+
+后端处理服务器和数据库。
+Hòuduān chǔlǐ fúwùqì hé shùjùkù.
+Back-end handles servers and databases.",type::noun lesson::bonus6 frequency::medium topic::webdev
+超文本标记语言,"chāowénběn biāojì yǔyán (HTML)
+
+超文本标记语言是网页的基础。
+Chāowénběn biāojì yǔyán shì wǎngyè de jīchǔ.
+HTML is the foundation of web pages.",type::noun lesson::bonus6 frequency::low topic::webdev
+层叠样式表,"céngdié yàngshì biǎo (CSS)
+
+层叠样式表控制网页的样式。
+Céngdié yàngshì biǎo kòngzhì wǎngyè de yàngshì.
+CSS controls the style of web pages.",type::noun lesson::bonus6 frequency::low topic::webdev
+脚本语言,"jiǎoběn yǔyán (JavaScript)
+
+脚本语言让网页动起来。
+Jiǎoběn yǔyán ràng wǎngyè dòng qǐlai.
+JavaScript makes web pages interactive.",type::noun lesson::bonus6 frequency::low topic::webdev
+框架,"kuàngjià (framework)
+
+使用框架可以加快开发速度。
+Shǐyòng kuàngjià kěyǐ jiākuài kāifā sùdù.
+Using a framework speeds up development.",type::noun lesson::bonus6 frequency::medium topic::webdev hsk::3
+响应式,"xiǎngyìng shì (responsive)
+
+响应式设计适配手机和电脑。
+Xiǎngyìng shì shèjì shìpèi shǒujī hé diànnǎo.
+Responsive design adapts to phones and computers.",type::adj lesson::bonus6 frequency::medium topic::webdev
+服务器,"fúwùqì (server)
+
+服务器不能停机。
+Fúwùqì bùnéng tíngjī.
+The server cannot go down.","type::noun lesson::bonus6 frequency::high topic::internet,computers hsk::2"
+数据库,"shùjùkù (database)
+
+数据库里存储了用户信息。
+Shùjùkù lǐ cúnchǔ le yònghù xìnxī.
+User information is stored in the database.",type::noun lesson::bonus6 frequency::medium topic::computers hsk::3
+域名,"yùmíng (domain name)
+
+我买了一个新域名。
+Wǒ mǎi le yí ge xīn yùmíng.
+I bought a new domain name.",type::noun lesson::bonus6 frequency::medium topic::internet
+托管,"tuōguǎn (hosting)
+
+网站需要托管。
+Wǎngzhàn xūyào tuōguǎn.
+Websites need hosting.",type::verb/noun lesson::bonus6 frequency::low topic::webdev
+版本控制,"bǎnběn kòngzhì (version control)
+
+版本控制帮助团队合作。
+Bǎnběn kòngzhì bāngzhù tuánduì hézuò.
+Version control helps teams collaborate.",type::noun lesson::bonus6 frequency::low topic::programming
+仓库,"cāngkù (repository)
+
+把代码推送到远程仓库。
+Bǎ dàimǎ tuīsòng dào yuǎnchéng cāngkù.
+Push the code to the remote repository.",type::noun lesson::bonus6 frequency::medium topic::programming hsk::3
+部署,"bùshǔ (to deploy)
+
+代码写好后要部署到服务器。
+Dàimǎ xiě hǎo hòu yào bùshǔ dào fúwùqì.
+After writing the code, deploy it to the server.",type::verb lesson::bonus6 frequency::medium topic::programming
+调试,"tiáoshì (to debug)
+
+这个bug很难调试。
+Zhège bug hěn nán tiáoshì.
+This bug is very hard to debug.",type::verb lesson::bonus6 frequency::medium topic::programming
+变量,"biànliàng (variable)
+
+变量可以存储数据。
+Biànliàng kěyǐ cúnchǔ shùjù.
+Variables can store data.",type::noun lesson::bonus6 frequency::high topic::programming hsk::3
+函数,"hánshù (function)
+
+把重复的代码写成函数。
+Bǎ chóngfù de dàimǎ xiě chéng hánshù.
+Write repeated code as a function.",type::noun lesson::bonus6 frequency::high topic::programming hsk::3
+循环,"xúnhuán (loop)
+
+循环可以重复执行代码。
+Xúnhuán kěyǐ chóngfù zhíxíng dàimǎ.
+Loops can execute code repeatedly.",type::noun/verb lesson::bonus6 frequency::high topic::programming hsk::3
+数组,"shùzǔ (array)
+
+数组可以存储多个值。
+Shùzǔ kěyǐ cúnchǔ duō ge zhí.
+An array can store multiple values.",type::noun lesson::bonus6 frequency::medium topic::programming
+听说,"tīngshuō (hear about / be told)
+
+听说你要去北京旅行？
+Tīngshuō nǐ yào qù Běijīng lǚxíng?
+I heard you're going to Beijing?",type::verb lesson::lesson14 frequency::high topic::communication hsk::2
+过,"guò (past experience (particle))
+
+我去过上海。
+Wǒ qù guo Shànghǎi.
+I have been to Shanghai.",type::particle lesson::lesson14 frequency::high topic::grammar hsk::1 grammar::experience_particle
+黄鹤楼,"Huánghè Lóu (Yellow Crane Tower)
+
+黄鹤楼在武汉。
+Huánghè Lóu zài Wǔhàn.
+Yellow Crane Tower is in Wuhan.","type::noun lesson::lesson14 frequency::medium topic::landmarks,travel hsk::3"
+北京,"Běijīng (Beijing)
+
+北京是中国的首都。
+Běijīng shì Zhōngguó de shǒudū.
+Beijing is the capital of China.","type::noun lesson::lesson14 frequency::high topic::cities,travel hsk::1"
+有名,"yǒumíng (famous)
+
+长城很有名。
+Chángchéng hěn yǒumíng.
+The Great Wall is very famous.",type::adj lesson::lesson14 frequency::high topic::description hsk::2
+天安门,"Tiān'ānmén (Tian'anmen)
+
+天安门广场很大。
+Tiān'ānmén Guǎngchǎng hěn dà.
+Tian'anmen Square is very large.","type::noun lesson::lesson14 frequency::high topic::landmarks,travel hsk::2"
+故宫,"Gùgōng (Forbidden City / Imperial Palace)
+
+故宫有六百年历史。
+Gùgōng yǒu liù bǎi nián lìshǐ.
+The Forbidden City has 600 years of history.","type::noun lesson::lesson14 frequency::high topic::landmarks,travel hsk::2"
+长城,"Chángchéng (Great Wall)
+
+长城非常壮观。
+Chángchéng fēicháng zhuàngguān.
+The Great Wall is very magnificent.","type::noun lesson::lesson14 frequency::high topic::landmarks,travel hsk::2"
+美食,"měishí (delicious food / cuisine)
+
+成都是美食之都。
+Chéngdū shì měishí zhī dū.
+Chengdu is the capital of delicious food.",type::noun lesson::lesson14 frequency::high topic::food hsk::2
+火锅,"huǒguō (hotpot)
+
+冬天吃火锅很暖和。
+Dōngtiān chī huǒguō hěn nuǎnhuo.
+Eating hotpot in winter is very warming.",type::noun lesson::lesson14 frequency::high topic::food hsk::2
+暑假,"shǔjià (summer vacation)
+
+暑假你去哪儿了？
+Shǔjià nǐ qù nǎr le?
+Where did you go for summer vacation?","type::noun lesson::lesson14 frequency::high topic::time,school hsk::1"
+城市,"chéngshì (city)
+
+上海是个大城市。
+Shànghǎi shì ge dà chéngshì.
+Shanghai is a big city.",type::noun lesson::lesson14 frequency::high topic::places hsk::1
+旅游,"lǚyóu (travel)
+
+我喜欢旅游。
+Wǒ xǐhuan lǚyóu.
+I like to travel.",type::verb/noun lesson::lesson14 frequency::high topic::travel hsk::1
+上海,"Shànghǎi (Shanghai)
+
+上海很现代化。
+Shànghǎi hěn xiàndàihuà.
+Shanghai is very modern.","type::noun lesson::lesson14 frequency::high topic::cities,travel hsk::1"
+西安,"Xī'ān (Xi'an)
+
+西安有兵马俑。
+Xī'ān yǒu bīngmǎyǒng.
+Xi'an has the Terracotta Warriors.","type::noun lesson::lesson14 frequency::high topic::cities,travel hsk::2"
+首都,"shǒudū (capital)
+
+北京是中国的首都。
+Běijīng shì Zhōngguó de shǒudū.
+Beijing is the capital of China.",type::noun lesson::lesson14 frequency::high topic::places hsk::2
+一定,"yídìng (certainly / surely)
+
+我一定努力学习。
+Wǒ yídìng nǔlì xuéxí.
+I will certainly study hard.",type::adv lesson::lesson14 frequency::high topic::grammar hsk::1
+所,"suǒ (measure for schools, hospitals, etc.)
+
+这是一所大学。
+Zhè shì yī suǒ dàxué.
+This is a university.",type::measure lesson::lesson14 frequency::medium topic::grammar hsk::2
+大学,"dàxué (university / college)
+
+我明年上大学。
+Wǒ míngnián shàng dàxué.
+I will go to university next year.",type::noun lesson::lesson14 frequency::high topic::education hsk::1
+举办,"jǔbàn (to conduct / hold (event))
+
+北京举办了2008年奥运会。
+Běijīng jǔbàn le 2008 nián Àoyùnhuì.
+Beijing hosted the 2008 Olympics.",type::verb lesson::lesson14 frequency::high topic::events hsk::3
+奥运会,"Àoyùnhuì (Olympic Games)
+
+奥运会四年一次。
+Àoyùnhuì sì nián yī cì.
+The Olympics happen once every four years.","type::noun lesson::lesson14 frequency::medium topic::sports,events hsk::2"
+除了,"chúle (except / besides)
+
+除了北京，我还去过上海。
+Chúle Běijīng, wǒ hái qù guo Shànghǎi.
+Besides Beijing, I have also been to Shanghai.",type::prep lesson::lesson14 frequency::high topic::grammar hsk::2
+奥林匹克,"Àolínpǐkè (Olympic)
+
+奥林匹克公园很大。
+Àolínpǐkè Gōngyuán hěn dà.
+Olympic Park is very large.",type::adj/noun lesson::lesson14 frequency::medium topic::sports hsk::3
+公园,"gōngyuán (park)
+
+我们去公园散步吧。
+Wǒmen qù gōngyuán sànbù ba.
+Let's go for a walk in the park.",type::noun lesson::lesson14 frequency::high topic::places hsk::1
+鸟巢,"Niǎocháo (Bird's Nest (National Stadium))
+
+鸟巢在北京奥林匹克公园。
+Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.
+The Bird's Nest is in Beijing Olympic Park.","type::noun lesson::lesson14 frequency::medium topic::landmarks,sports hsk::3"
+水立方,"Shuǐlìfāng (Water Cube (National Aquatics Center))
+
+水立方是游泳比赛场馆。
+Shuǐlìfāng shì yóuyǒng bǐsài chǎngguǎn.
+The Water Cube is a swimming competition venue.","type::noun lesson::lesson14 frequency::medium topic::landmarks,sports hsk::3"
+北京烤鸭,"Běijīng kǎoyā (Peking duck)
+
+来北京一定要吃北京烤鸭。
+Lái Běijīng yídìng yào chī Běijīng kǎoyā.
+When you come to Beijing, you must eat Peking duck.","type::noun lesson::lesson14 frequency::high topic::food,travel hsk::2"
+生日,"shēngrì (birthday)
+
+祝你生日快乐！
+Zhù nǐ shēngrì kuàilè!
+Happy birthday to you!",type::noun lesson::lesson15 frequency::high topic::celebrations hsk::1
+参加,"cānjiā (to join / participate in)
+
+你想参加我的生日聚会吗？
+Nǐ xiǎng cānjiā wǒ de shēngrì jùhuì ma?
+Do you want to come to my birthday party?","type::verb lesson::lesson15 frequency::high topic::social,activities hsk::1"
+聚会,"jùhuì (party / gathering)
+
+周末有一个聚会。
+Zhōumò yǒu yí ge jùhuì.
+There's a party on the weekend.",type::noun lesson::lesson15 frequency::high topic::social hsk::2
+当然,"dāngrán (certainly / of course)
+
+当然可以！
+Dāngrán kěyǐ!
+Of course you can!",type::adv lesson::lesson15 frequency::high topic::grammar hsk::1
+地址,"dìzhǐ (address)
+
+请把你的地址发给我。
+Qǐng bǎ nǐ de dìzhǐ fā gěi wǒ.
+Please send me your address.","type::noun lesson::lesson15 frequency::high topic::communication,location hsk::1"
+发,"fā (to send out)
+
+我给你发了一条信息。
+Wǒ gěi nǐ fā le yī tiáo xìnxī.
+I sent you a message.",type::verb lesson::lesson15 frequency::high topic::communication hsk::1
+送,"sòng (to give (as a gift))
+
+我送了你一个礼物。
+Wǒ sòng le nǐ yí ge lǐwù.
+I gave you a gift.","type::verb lesson::lesson15 frequency::high topic::gifts,social hsk::1"
+礼物,"lǐwù (gift / present)
+
+谢谢你的礼物。
+Xièxie nǐ de lǐwù.
+Thank you for your gift.",type::noun lesson::lesson15 frequency::high topic::gifts hsk::1
+电梯,"diàntī (elevator / lift)
+
+电梯在右边。
+Diàntī zài yòubiān.
+The elevator is on the right.",type::noun lesson::lesson15 frequency::high topic::buildings hsk::2
+上去,"shàngqù (to go up)
+
+我们坐电梯上去。
+Wǒmen zuò diàntī shàngqù.
+Let's take the elevator up.",type::verb lesson::lesson15 frequency::high topic::movement hsk::2 grammar::directional_complement
+把,"bǎ (object marker (disposal))
+
+把门关上。
+Bǎ mén guān shàng.
+Close the door.",type::prep lesson::lesson15 frequency::high topic::grammar hsk::2 grammar::把-sentence
+蛋糕,"dàngāo (cake)
+
+这个蛋糕很好吃。
+Zhège dàngāo hěn hǎochī.
+This cake is very tasty.","type::noun lesson::lesson15 frequency::high topic::food,celebrations hsk::1"
+放,"fàng (to put / place)
+
+请把书放在桌子上。
+Qǐng bǎ shū fàng zài zhuōzi shàng.
+Please put the book on the desk.",type::verb lesson::lesson15 frequency::high topic::actions hsk::1
+冰箱,"bīngxiāng (refrigerator)
+
+冰箱里有牛奶。
+Bīngxiāng lǐ yǒu niúnǎi.
+There's milk in the refrigerator.","type::noun lesson::lesson15 frequency::high topic::home,appliances hsk::1"
+邀请,"yāoqǐng (to invite)
+
+他邀请我去他的生日聚会。
+Tā yāoqǐng wǒ qù tā de shēngrì jùhuì.
+He invited me to his birthday party.",type::verb lesson::lesson15 frequency::high topic::social hsk::2
+小区,"xiǎoqū (residential area / community)
+
+我住在一个安静的小区。
+Wǒ zhù zài yí ge ānjìng de xiǎoqū.
+I live in a quiet residential area.","type::noun lesson::lesson15 frequency::high topic::places,home hsk::2"
+门口,"ménkǒu (doorway / entrance)
+
+我在门口等你。
+Wǒ zài ménkǒu děng nǐ.
+I'll wait for you at the entrance.",type::noun lesson::lesson15 frequency::high topic::location hsk::1
+栋,"dòng (measure for buildings)
+
+我们住在一栋楼里。
+Wǒmen zhù zài yī dòng lóu lǐ.
+We live in one building.",type::measure lesson::lesson15 frequency::medium topic::grammar hsk::2
+马上,"mǎshàng (at once / immediately)
+
+我马上到。
+Wǒ mǎshàng dào.
+I'll be there right away.",type::adv lesson::lesson15 frequency::high topic::time hsk::1
+下来,"xiàlái (to come down)
+
+你快下来吧。
+Nǐ kuài xiàlái ba.
+Come down quickly.",type::verb lesson::lesson15 frequency::high topic::movement hsk::2 grammar::directional_complement
+才,"cái (not until / only then)
+
+他十点才来。
+Tā shí diǎn cái lái.
+He didn't come until ten o'clock.","type::adv lesson::lesson15 frequency::high topic::grammar,time hsk::2"
+发现,"fāxiàn (to discover / find)
+
+我发现了一个秘密。
+Wǒ fāxiàn le yí ge mìmì.
+I discovered a secret.",type::verb lesson::lesson15 frequency::high topic::perception hsk::2
+热情,"rèqíng (enthusiastic / warm)
+
+他很热情地欢迎我们。
+Tā hěn rèqíng de huānyíng wǒmen.
+He welcomed us warmly.",type::adj lesson::lesson15 frequency::high topic::personality hsk::2
+欢迎,"huānyíng (to welcome / greet)
+
+欢迎来我家！
+Huānyíng lái wǒ jiā!
+Welcome to my home!",type::verb lesson::lesson15 frequency::high topic::social hsk::1
+点,"diǎn (to light (candle))
+
+点蜡烛。
+Diǎn làzhú.
+Light the candles.",type::verb lesson::lesson15 frequency::high topic::actions hsk::1
+蜡烛,"làzhú (candle)
+
+生日蜡烛吹灭了。
+Shēngrì làzhú chuī miè le.
+The birthday candles were blown out.","type::noun lesson::lesson15 frequency::medium topic::celebrations,home hsk::2"
+祝,"zhù (to express good wishes)
+
+祝你成功！
+Zhù nǐ chénggōng!
+Wishing you success!",type::verb lesson::lesson15 frequency::high topic::greetings hsk::1
+感动,"gǎndòng (to be moved / touched)
+
+他的故事让我很感动。
+Tā de gùshi ràng wǒ hěn gǎndòng.
+His story moved me deeply.",type::verb/adj lesson::lesson15 frequency::high topic::emotions hsk::2
+感谢,"gǎnxiè (to thank / be grateful)
+
+感谢你的帮助。
+Gǎnxiè nǐ de bāngzhù.
+Thank you for your help.","type::verb lesson::lesson15 frequency::high topic::emotions,social hsk::2"
+心里,"xīnli (in one's heart / mind)
+
+我心里很开心。
+Wǒ xīnli hěn kāixīn.
+I am very happy in my heart.",type::noun_(location) lesson::lesson15 frequency::high topic::feelings hsk::2
+游戏,"yóuxì (game)
+
+我喜欢玩电脑游戏。
+Wǒ xǐhuan wán diànnǎo yóuxì.
+I like playing computer games.",type::noun lesson::bonus7 frequency::high topic::gaming hsk::1
+玩家,"wánjiā (player (gamer))
+
+他是一个资深玩家。
+Tā shì yí ge zīshēn wánjiā.
+He is an experienced gamer.",type::noun lesson::bonus7 frequency::medium topic::gaming
+帧率,"zhēnlǜ (frame rate)
+
+帧率太低会卡顿。
+Zhēnlǜ tài dī huì kǎdùn.
+If the frame rate is too low, it will stutter.","type::noun lesson::bonus7 frequency::low topic::gaming,computers"
+分辨率,"fēnbiànlǜ (resolution)
+
+4K分辨率很清晰。
+4K fēnbiànlǜ hěn qīngxī.
+4K resolution is very clear.","type::noun lesson::bonus7 frequency::medium topic::computers,gaming hsk::3"
+延迟,"yánchí (lag / latency)
+
+网络延迟很高。
+Wǎngluò yánchí hěn gāo.
+The network latency is very high.","type::noun lesson::bonus7 frequency::medium topic::gaming,internet"
+键盘,"jiànpán (keyboard)
+
+我的键盘坏了。
+Wǒ de jiànpán huài le.
+My keyboard is broken.",type::noun lesson::bonus7 frequency::high topic::computers hsk::2
+鼠标,"shǔbiāo (mouse)
+
+无线鼠标很方便。
+Wúxiàn shǔbiāo hěn fāngbiàn.
+A wireless mouse is very convenient.",type::noun lesson::bonus7 frequency::high topic::computers hsk::2
+显示器,"xiǎnshìqì (monitor)
+
+这个显示器色彩很好。
+Zhège xiǎnshìqì sècǎi hěn hǎo.
+This monitor has good colors.",type::noun lesson::bonus7 frequency::medium topic::computers
+刷新率,"shuāxīnlǜ (refresh rate)
+
+144Hz刷新率玩游戏很爽。
+Yībǎi sìshísì Hz shuāxīnlǜ wán yóuxì hěn shuǎng.
+144Hz refresh rate is great for gaming.","type::noun lesson::bonus7 frequency::low topic::gaming,computers"
+机械键盘,"jīxiè jiànpán (mechanical keyboard)
+
+机械键盘手感很好。
+Jīxiè jiànpán shǒugǎn hěn hǎo.
+Mechanical keyboards feel very good.","type::noun lesson::bonus7 frequency::low topic::gaming,computers"
+游戏手柄,"yóuxì shǒubǐng (game controller)
+
+用游戏手柄玩赛车游戏更好。
+Yòng yóuxì shǒubǐng wán sàichē yóuxì gèng hǎo.
+Using a game controller is better for racing games.",type::noun lesson::bonus7 frequency::medium topic::gaming
+耳机,"ěrjī (headset / headphones)
+
+玩游戏需要好的耳机。
+Wán yóuxì xūyào hǎo de ěrjī.
+Playing games requires good headphones.","type::noun lesson::bonus7 frequency::high topic::electronics,gaming hsk::2"
+麦克风,"màikèfēng (microphone)
+
+麦克风坏了，听不见我说话。
+Màikèfēng huài le, tīng bú jiàn wǒ shuōhuà.
+The microphone is broken, you can't hear me.","type::noun lesson::bonus7 frequency::medium topic::electronics,gaming"
+流媒体,"liú méitǐ (streaming)
+
+他在做游戏流媒体直播。
+Tā zài zuò yóuxì liú méitǐ zhíbō.
+He is doing game streaming.","type::noun lesson::bonus7 frequency::medium topic::internet,gaming"
+直播,"zhíbō (live stream)
+
+我晚上八点开直播。
+Wǒ wǎnshàng bā diǎn kāi zhíbō.
+I start my live stream at 8 PM.","type::noun/verb lesson::bonus7 frequency::high topic::internet,gaming hsk::3"
+下载,"xiàzài (to download)
+
+我在下载一个新游戏。
+Wǒ zài xiàzài yí ge xīn yóuxì.
+I am downloading a new game.","type::verb lesson::bonus7 frequency::high topic::computers,internet hsk::2"
+更新,"gēngxīn (to update)
+
+游戏需要更新。
+Yóuxì xūyào gēngxīn.
+The game needs to update.","type::verb/noun lesson::bonus7 frequency::high topic::computers,gaming hsk::2"
+补丁,"bǔdīng (patch)
+
+新补丁修复了很多bug。
+Xīn bǔdīng xiūfù le hěn duō bug.
+The new patch fixed many bugs.","type::noun lesson::bonus7 frequency::low topic::gaming,computers"
+成就,"chéngjiù (achievement)
+
+我解锁了一个新成就。
+Wǒ jiěsuǒ le yí ge xīn chéngjiù.
+I unlocked a new achievement.",type::noun lesson::bonus7 frequency::high topic::gaming hsk::3
+多人,"duōrén (multiplayer)
+
+这个游戏支持多人模式。
+Zhège yóuxì zhīchí duōrén móshì.
+This game supports multiplayer mode.",type::adj/noun lesson::bonus7 frequency::high topic::gaming
+单人,"dānrén (single player)
+
+单人游戏可以慢慢玩。
+Dānrén yóuxì kěyǐ mànmàn wán.
+Single-player games can be played slowly.",type::adj/noun lesson::bonus7 frequency::high topic::gaming
+微缩模型,"wēisuō móxíng (miniature)
+
+我喜欢涂装微缩模型。
+Wǒ xǐhuan túzhuāng wēisuō móxíng.
+I like painting miniatures.","type::noun lesson::bonus8 frequency::low topic::miniatures,painting"
+涂装,"túzhuāng (painting (miniatures))
+
+微缩模型涂装需要耐心。
+Wēisuō móxíng túzhuāng xūyào nàixīn.
+Painting miniatures requires patience.","type::verb/noun lesson::bonus8 frequency::low topic::miniatures,painting"
+底漆,"dǐqī (primer)
+
+涂装前先喷底漆。
+Túzhuāng qián xiān pēn dǐqī.
+Spray primer before painting.","type::noun lesson::bonus8 frequency::low topic::miniatures,painting"
+丙烯酸颜料,"bǐngxīsuān yánliào (acrylic paint)
+
+微缩模型常用丙烯酸颜料。
+Wēisuō móxíng cháng yòng bǐngxīsuān yánliào.
+Acrylic paint is commonly used for miniatures.","type::noun lesson::bonus8 frequency::low topic::painting,art"
+画笔,"huàbǐ (paintbrush)
+
+用小号画笔涂细节。
+Yòng xiǎo hào huàbǐ tú xìjié.
+Use a small brush for details.","type::noun lesson::bonus8 frequency::high topic::art,drawing hsk::2"
+干扫,"gānsǎo (dry brushing)
+
+干扫可以让边缘更突出。
+Gānsǎo kěyǐ ràng biānyuán gèng tūchū.
+Dry brushing makes edges stand out more.","type::verb/noun lesson::bonus8 frequency::low topic::miniatures,painting"
+渍洗,"zìxǐ (wash)
+
+渍洗可以加深阴影。
+Zìxǐ kěyǐ jiāshēn yīnyǐng.
+Wash can deepen shadows.","type::verb/noun lesson::bonus8 frequency::low topic::miniatures,painting"
+高光,"gāoguāng (highlight)
+
+给边缘加上高光。
+Gěi biānyuán jiā shàng gāoguāng.
+Add highlights to the edges.","type::noun lesson::bonus8 frequency::medium topic::art,painting"
+阴影,"yīnyǐng (shadow)
+
+阴影让颜色更有层次。
+Yīnyǐng ràng yánsè gèng yǒu céngcì.
+Shadows give colors more depth.","type::noun lesson::bonus8 frequency::high topic::art,lighting hsk::2"
+调色板,"tiáosèbǎn (palette)
+
+把颜料挤在调色板上。
+Bǎ yánliào jǐ zài tiáosèbǎn shàng.
+Squeeze the paint onto the palette.","type::noun lesson::bonus8 frequency::low topic::art,painting"
+湿盘,"shīpán (wet palette)
+
+湿盘很适合长时间涂装。
+Shīpán hěn shìhé cháng shíjiān túzhuāng.
+A wet palette is great for long painting sessions.","type::noun lesson::bonus8 frequency::low topic::miniatures,painting"
+喷笔,"pēnbǐ (airbrush)
+
+用喷笔可以快速上底漆。
+Yòng pēnbǐ kěyǐ kuàisù shàng dǐqī.
+Using an airbrush can apply primer quickly.","type::noun lesson::bonus8 frequency::low topic::miniatures,painting,tools"
+遮盖,"zhēgài (masking)
+
+用遮盖带保护不想涂的区域。
+Yòng zhēgài dài bǎohù bù xiǎng tú de qūyù.
+Use masking tape to protect areas you don't want to paint.",type::verb/noun lesson::bonus8 frequency::low topic::painting
+清漆,"qīngqī (varnish)
+
+最后喷一层清漆保护模型。
+Zuìhòu pēn yī céng qīngqī bǎohù móxíng.
+Finally spray a layer of varnish to protect the model.","type::noun lesson::bonus8 frequency::low topic::miniatures,painting"
+血碗,"Xuè Wǎn (Blood Bowl)
+
+血碗是一款桌上游戏。
+Xuè Wǎn shì yī kuǎn zhuōshàng yóuxì.
+Blood Bowl is a board game.","type::noun lesson::bonus8 frequency::low topic::bloodbowl,gaming"
+桌上游戏,"zhuōshàng yóuxì (board game)
+
+周末和朋友一起玩桌上游戏。
+Zhōumò hé péngyou yīqǐ wán zhuōshàng yóuxì.
+Play board games with friends on the weekend.",type::noun lesson::bonus8 frequency::medium topic::gaming
+骰子,"tóuzi (dice)
+
+血碗需要使用很多骰子。
+Xuè Wǎn xūyào shǐyòng hěn duō tóuzi.
+Blood Bowl requires using many dice.",type::noun lesson::bonus8 frequency::medium topic::games hsk::3
+球员,"qiúyuán (player (sports))
+
+每个球员都有不同的技能。
+Měi ge qiúyuán dōu yǒu bùtóng de jìnéng.
+Each player has different skills.","type::noun lesson::bonus8 frequency::high topic::sports,gaming hsk::1"
+队伍,"duìwǔ (team)
+
+你选哪个队伍？
+Nǐ xuǎn nǎ ge duìwǔ?
+Which team do you choose?","type::noun lesson::bonus8 frequency::high topic::sports,groups hsk::1"
+教练,"jiàoliàn (coach)
+
+教练负责制定战术。
+Jiàoliàn fùzé zhìdìng zhànshù.
+The coach is responsible for making tactics.",type::noun lesson::bonus8 frequency::high topic::sports hsk::1
+联赛,"liánsài (league)
+
+我在参加一个血碗联赛。
+Wǒ zài cānjiā yí ge Xuè Wǎn liánsài.
+I am participating in a Blood Bowl league.","type::noun lesson::bonus8 frequency::medium topic::sports,gaming"
+触底得分,"chùdǐ défēn (touchdown)
+
+他跑进对方禁区触底得分。
+Tā pǎo jìn duìfāng jìnqū chùdǐ défēn.
+He ran into the opponent's end zone for a touchdown.","type::verb_phrase lesson::bonus8 frequency::low topic::bloodbowl,sports"
+阻挡,"zǔdǎng (to block)
+
+用球员阻挡对方的进攻。
+Yòng qiúyuán zǔdǎng duìfāng de jìngōng.
+Use players to block the opponent's attack.","type::verb lesson::bonus8 frequency::high topic::actions,sports hsk::3"
+传球,"chuánqiú (to pass)
+
+把球传给队友。
+Bǎ qiú chuán gěi duìyǒu.
+Pass the ball to a teammate.","type::verb lesson::bonus8 frequency::medium topic::sports,gaming hsk::2"
+冲刺,"chōngcì (to rush)
+
+球员可以冲刺突破防线。
+Qiúyuán kěyǐ chōngcì tūpò fángxiàn.
+Players can rush to break through the defense.","type::verb lesson::bonus8 frequency::medium topic::actions,sports"

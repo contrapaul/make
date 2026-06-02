@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tone Trainer — Chinese Vocab Review</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-title">汉语词汇</div>
+    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="index.html" class="sidebar-link"><span class="icon">🏠</span> Home</a>
+    <a href="glossary.html" class="sidebar-link tool-link"><span class="icon">📖</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="icon">🧩</span> Sentence Builder</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link active"><span class="icon">🎯</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="icon">⬇️</span> Download Anki Deck</a>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+      <span class="topbar-title">🎯 Tone Trainer</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <div class="trainer-page">
+    <div class="builder-header">
+      <h2 class="section-title">Tone Trainer</h2>
+      <p class="section-subtitle">A word is blanked from the sentence. Choose the correct Pinyin with tone marks.</p>
+    </div>
+
+    <!-- Score -->
+    <div class="trainer-score" id="trainerScore">Score: 0 / 0</div>
+
+    <!-- Sentence display -->
+    <div class="trainer-sentence" id="trainerSentence">Loading…</div>
+
+    <!-- Pinyin hint -->
+    <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:16px" id="trainerPinyinHint"></p>
+
+    <!-- Options -->
+    <div class="trainer-options" id="trainerOptions"></div>
+
+    <!-- Feedback -->
+    <div class="trainer-feedback" id="trainerFeedback"></div>
+
+    <!-- Controls -->
+    <div class="trainer-controls">
+      <button class="btn btn-primary" id="trainerNext">→ Next question</button>
+      <button class="btn btn-ghost" id="trainerReset">↺ Reset score</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/tone-trainer.js"></script>
+<script>
+  (function(){ const t=localStorage.getItem('cv-theme')||'light'; document.documentElement.setAttribute('data-theme',t); })();
+  document.addEventListener('DOMContentLoaded',()=>{
+    const themeBtn=document.getElementById('themeToggle');
+    const sidebar=document.getElementById('sidebar');
+    const overlay=document.getElementById('sidebarOverlay');
+    const toggle=document.getElementById('sidebarToggle');
+    function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('cv-theme',t); if(themeBtn) themeBtn.textContent=t==='dark'?'☀️':'🌙'; }
+    applyTheme(localStorage.getItem('cv-theme')||'light');
+    themeBtn?.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+    toggle?.addEventListener('click',()=>{ sidebar?.classList.add('open'); overlay?.classList.add('open'); });
+    overlay?.addEventListener('click',()=>{ sidebar?.classList.remove('open'); overlay?.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>

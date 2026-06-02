@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sentence Builder — Chinese Vocab Review</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-title">汉语词汇</div>
+    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="index.html" class="sidebar-link"><span class="icon">🏠</span> Home</a>
+    <a href="glossary.html" class="sidebar-link tool-link"><span class="icon">📖</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link active"><span class="icon">🧩</span> Sentence Builder</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="icon">🎯</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="icon">⬇️</span> Download Anki Deck</a>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+      <span class="topbar-title">🧩 Sentence Builder</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <div class="builder-page">
+    <div class="builder-header">
+      <h2 class="section-title">Sentence Builder</h2>
+      <p class="section-subtitle">Drag words into the correct order. Tap to insert on mobile.</p>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tabZh" data-mode="zh">🇨🇳 Chinese → arrange Chinese</button>
+      <button class="mode-tab" id="tabEn" data-mode="en">🇬🇧 English → arrange English</button>
+    </div>
+
+    <!-- Sentence prompt -->
+    <div class="sentence-display">
+      <div class="sentence-prompt-label" id="promptLabel">Arrange the Chinese words to match:</div>
+      <div class="sentence-prompt-text" id="promptText">Loading…</div>
+      <div class="sentence-prompt-pinyin" id="promptPinyin"></div>
+    </div>
+
+    <!-- Answer slots -->
+    <div>
+      <div class="word-bank-label">Your answer — drag words here:</div>
+      <div class="slots-area" id="slotsArea"></div>
+    </div>
+
+    <!-- Feedback -->
+    <div class="feedback-bar" id="feedbackBar"></div>
+
+    <!-- Word bank -->
+    <div>
+      <div class="word-bank-label">Word bank — drag from here:</div>
+      <div class="word-bank" id="wordBank"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="builder-controls">
+      <button class="btn btn-primary" id="checkBtn">✔ Check</button>
+      <button class="btn btn-secondary" id="clearBtn">✕ Clear all</button>
+      <button class="btn btn-secondary" id="nextBtn">→ Next sentence</button>
+      <button class="btn btn-ghost" id="revealBtn">👁 Reveal answer</button>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-row">
+      <span id="progressText">0 / 0 correct</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="resetProgress">Reset</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/sentence-builder.js"></script>
+<script>
+  (function(){ const t=localStorage.getItem('cv-theme')||'light'; document.documentElement.setAttribute('data-theme',t); })();
+  document.addEventListener('DOMContentLoaded',()=>{
+    const themeBtn=document.getElementById('themeToggle');
+    const sidebar=document.getElementById('sidebar');
+    const overlay=document.getElementById('sidebarOverlay');
+    const toggle=document.getElementById('sidebarToggle');
+    function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('cv-theme',t); if(themeBtn) themeBtn.textContent=t==='dark'?'☀️':'🌙'; }
+    applyTheme(localStorage.getItem('cv-theme')||'light');
+    themeBtn?.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+    toggle?.addEventListener('click',()=>{ sidebar?.classList.add('open'); overlay?.classList.add('open'); });
+    overlay?.addEventListener('click',()=>{ sidebar?.classList.remove('open'); overlay?.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>
