@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav bb-nav" id="bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/rules/">Rules</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-app">
+
+    <div class="bb-page-title" aria-label="About">
+      <span class="bb-title-sub">placeholder top</span>
+      <span class="bb-title-main">ABOUT</span>
+      <span class="bb-title-sub">placeholder bottom</span>
+    </div>
+
+    <div class="bb-page-content">
+      <!-- About content goes here -->
+    </div>
+
+  </main>
+
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+      <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
+    </div>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
+  </footer>
+
+  <script>
+    (function () {
+      const toggle = document.getElementById('bb-nav-toggle');
+      const nav    = document.getElementById('bb-nav');
+      if (!toggle || !nav) return;
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = nav.classList.toggle('bb-nav-open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+      document.addEventListener('click', e => {
+        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+          nav.classList.remove('bb-nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
