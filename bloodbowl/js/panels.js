@@ -320,6 +320,14 @@ function advanceTurn(delta) {
 function buildTurnPips() {
   const container = document.getElementById('gb-turn-pips');
   if (!container) return;
+  const existing = container.querySelectorAll('.turn-pip');
+  if (existing.length === 8) {
+    existing.forEach((pip, i) => {
+      const turn = i + 1;
+      pip.addEventListener('click', () => { gbState.currentTurn = turn; renderTurn(); });
+    });
+    return;
+  }
   container.innerHTML = '';
   for (let i = 1; i <= 8; i++) {
     const pip = document.createElement('span');
@@ -1410,4 +1418,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   initScatterModule();
   initInjuryModule();
   initSettings();
+
+  window.bbSignalReady?.();
 });

@@ -4,6 +4,14 @@
    Glass navy aesthetic — sticky header.
    ============================================================ */
 
+/* ── Loading veil: hide app content until JS init completes ── */
+.bb-app {
+  transition: opacity 0.2s ease;
+}
+body.app-loading .bb-app {
+  opacity: 0;
+}
+
 /* ── Bar container ── */
 .game-bar {
   display:               grid;

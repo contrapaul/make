@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="css/team-builder.css">
   <link rel="stylesheet" href="css/spp.css">
 </head>
-<body>
+<body class="app-loading">
 
   <header class="site-header">
     <div class="header-inner">
@@ -39,7 +39,7 @@
       <div class="gb-team gb-home" id="gb-home-team">
         <div class="gb-team-inner">
           <select class="team-select gb-select" id="select-left" aria-label="Select home team">
-            <option value="">— Select Home Team —</option>
+            <option value="">— Select a team —</option>
           </select>
           <button class="my-teams-btn" id="my-teams-left" title="Load from My Teams">👥</button>
           <div class="gb-score-block">
@@ -57,10 +57,10 @@
 
       <div class="gb-center">
         <div class="gb-half-label" id="gb-half-label">HALF 1</div>
-        <div class="gb-turn-pips" id="gb-turn-pips" aria-label="Turn tracker"></div>
+        <div class="gb-turn-pips" id="gb-turn-pips" aria-label="Turn tracker"><span class="turn-pip" data-turn="1" title="Turn 1"></span><span class="turn-pip" data-turn="2" title="Turn 2"></span><span class="turn-pip" data-turn="3" title="Turn 3"></span><span class="turn-pip" data-turn="4" title="Turn 4"></span><span class="turn-pip" data-turn="5" title="Turn 5"></span><span class="turn-pip" data-turn="6" title="Turn 6"></span><span class="turn-pip" data-turn="7" title="Turn 7"></span><span class="turn-pip" data-turn="8" title="Turn 8"></span></div>
         <div class="gb-turn-controls">
           <button class="gb-turn-btn" id="gb-prev-turn" aria-label="Previous turn">◂</button>
-          <span class="gb-turn-label" id="gb-turn-label">TURN 1</span>
+          <span class="gb-turn-label" id="gb-turn-label">PRE-GAME</span>
           <button class="gb-turn-btn" id="gb-next-turn" aria-label="Next turn">▸</button>
           <button class="gb-settings-btn" id="gb-settings-btn" aria-label="Open settings" title="Settings">⚙</button>
           <button class="gb-end-game-btn" id="gb-end-game-btn" aria-label="End game / post-game" title="End Game">End</button>
@@ -71,7 +71,7 @@
       <div class="gb-team gb-away" id="gb-away-team">
         <div class="gb-team-inner">
           <select class="team-select gb-select" id="select-right" aria-label="Select away team">
-            <option value="">— Select Away Team —</option>
+            <option value="">— Select a team —</option>
           </select>
           <button class="my-teams-btn" id="my-teams-right" title="Load from My Teams">👥</button>
           <div class="gb-score-block">

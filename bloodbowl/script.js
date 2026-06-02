@@ -27,6 +27,13 @@
 
 const STAT_KEYS = ['ma', 'st', 'ag', 'pa', 'av'];
 
+/* Removes app-loading veil once both script.js and panels.js have finished init */
+function bbSignalReady() {
+  window._bbReadyCount = (window._bbReadyCount || 0) + 1;
+  if (window._bbReadyCount >= 2) document.body.classList.remove('app-loading');
+}
+window.bbSignalReady = bbSignalReady;
+
 /* Position-colour map for the image placeholder background */
 const POSITION_COLORS = {
   'Star Player': '#8B6914',
@@ -76,6 +83,8 @@ async function init() {
     bindEndGameButton();
   } catch (err) {
     console.error('[BB] Init failed:', err);
+  } finally {
+    bbSignalReady();
   }
 }
 
