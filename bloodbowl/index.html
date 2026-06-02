@@ -508,6 +508,31 @@
 
     </div><!-- /.panels-zone -->
 
+    <!-- ═══════════════ ACTION CARDS ═══════════════ -->
+    <div class="bb-action-cards" aria-label="Game action wizards">
+      <button class="bb-action-card" data-panel="block">
+        <span class="bb-action-card-name">Block</span>
+      </button>
+      <button class="bb-action-card" data-panel="pass">
+        <span class="bb-action-card-name">Pass</span>
+      </button>
+      <button class="bb-action-card" data-panel="foul">
+        <span class="bb-action-card-name">Foul</span>
+      </button>
+      <button class="bb-action-card bb-action-card--more" id="bb-more-card">
+        <span class="bb-action-card-name">More</span>
+      </button>
+      <!-- More actions dropdown — inside cards div so position:absolute works off position:relative parent -->
+      <div class="bb-more-menu" id="bb-more-menu" hidden>
+        <button class="bb-more-item" data-panel="throw">Throw Team-Mate</button>
+        <button class="bb-more-item" data-panel="injury">Injury</button>
+        <button class="bb-more-item" data-panel="scatter">Scatter</button>
+        <button class="bb-more-item" data-panel="kickoff">Kickoff</button>
+        <button class="bb-more-item" data-panel="weather">Weather</button>
+        <button class="bb-more-item" data-panel="prayers">Prayers</button>
+      </div>
+    </div>
+
     <!-- ═══════════════ ROSTER SECTION ═══════════════ -->
     <div class="roster-section">
 
@@ -619,6 +644,32 @@
       const toggle = document.getElementById('bb-nav-toggle');
       const nav    = document.getElementById('bb-nav');
       if (!toggle || !nav) return;
+      document.querySelectorAll('.bb-action-card[data-panel]').forEach(btn => {
+        btn.addEventListener('click', () => window.Panels?.togglePanel?.(btn.dataset.panel));
+      });
+
+      const moreCard = document.getElementById('bb-more-card');
+      const moreMenu = document.getElementById('bb-more-menu');
+      if (moreCard && moreMenu) {
+        moreCard.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = moreMenu.hidden;
+          moreMenu.hidden = !open;
+          moreCard.classList.toggle('bb-action-card--active', open);
+        });
+        moreMenu.querySelectorAll('.bb-more-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            window.Panels?.togglePanel?.(btn.dataset.panel);
+            moreMenu.hidden = true;
+            moreCard.classList.remove('bb-action-card--active');
+          });
+        });
+        document.addEventListener('click', () => {
+          moreMenu.hidden = true;
+          moreCard.classList.remove('bb-action-card--active');
+        });
+      }
+
       toggle.addEventListener('click', (e) => {
         e.stopPropagation();
         const open = nav.classList.toggle('bb-nav-open');

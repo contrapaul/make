@@ -295,30 +295,6 @@ function initPassWizard() {
     hdr.className = 'pwiz-v2-header';
     root.appendChild(hdr);
 
-    /* Variant buttons */
-    const variantRow = document.createElement('div');
-    variantRow.className = 'pwiz-variant-row';
-    const variantLabels = ['① Default', '② Large', '③ Wide', '④ Gold', '⑤ Compact'];
-    variantLabels.forEach((label, i) => {
-      const n = i + 1;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'pwiz-variant-btn' + (ws.variant === n ? ' active' : '');
-      btn.textContent = label;
-      btn.addEventListener('click', () => {
-        ws.variant = n;
-        localStorage.setItem('pwiz-variant', String(n));
-        const rootEl = document.getElementById('pwiz-v2-root');
-        if (rootEl) {
-          rootEl.className = `pwiz-v2 pwiz-variant-${n}`;
-        }
-        variantRow.querySelectorAll('.pwiz-variant-btn').forEach((b, j) =>
-          b.classList.toggle('active', j + 1 === n));
-      });
-      variantRow.appendChild(btn);
-    });
-    hdr.appendChild(variantRow);
-
     /* Team tabs */
     const teamRow = document.createElement('div');
     teamRow.className = 'pwiz-team-tabs';
