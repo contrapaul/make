@@ -11,6 +11,31 @@
    ============================================ */
 
 /* ─────────────────────────────────────────────
+   0. CUSTOM FONTS
+   ───────────────────────────────────────────── */
+@font-face {
+  font-family: 'Nuffle';
+  src: url('Nuffle.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nuffle Italic';
+  src: url('Nuffle Italic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nuffle Dice';
+  src: url('Nuffle Dice.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─────────────────────────────────────────────
    1. BB PALETTE TOKENS
    ───────────────────────────────────────────── */
 :root {
@@ -868,6 +893,119 @@
 @media (max-width: 500px) {
   .wps-panel { grid-template-columns: 1fr 1fr; }
   .wps-divider { display: none; }
+}
+
+/* ─────────────────────────────────────────────
+   BB HEADER / FOOTER OVERRIDES
+   ───────────────────────────────────────────── */
+.bb-site-header {
+  background: rgba(4, 10, 28, 0.97);
+  border-bottom: 1px solid rgba(70, 110, 220, 0.3);
+}
+
+.bb-header-inner {
+  max-width: none;
+  padding: 0 1.5rem;
+}
+
+.bb-wordmark {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: rgba(180, 210, 255, 0.7);
+  letter-spacing: 0.04em;
+}
+.bb-wordmark .wordmark-slash { color: var(--bb-gold, #D4AF37); }
+.bb-wordmark:hover { color: #fff; }
+
+.bb-nav a,
+.bb-nav .my-teams-nav-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(150, 185, 255, 0.6);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.35rem 0.65rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.bb-nav a:hover,
+.bb-nav .my-teams-nav-btn:hover { color: #fff; }
+
+.bb-site-footer {
+  background: rgba(4, 10, 28, 0.97);
+  border-top: 1px solid rgba(70, 110, 220, 0.3);
+  padding: 1rem 1.5rem 0.75rem;
+}
+
+.bb-footer-inner {
+  max-width: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.bb-footer-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: rgba(150, 185, 255, 0.5);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+.bb-footer-brand:hover { color: rgba(150, 185, 255, 0.9); }
+
+.bb-footer-about {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: rgba(150, 185, 255, 0.5);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.bb-footer-about:hover { color: rgba(150, 185, 255, 0.9); }
+
+.bb-footer-disclaimer {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(100, 130, 180, 0.4);
+  text-align: center;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0 2rem 0.25rem;
+}
+
+/* ─────────────────────────────────────────────
+   PAGE TITLE
+   ───────────────────────────────────────────── */
+.bb-page-title {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  text-align:     center;
+  padding:        1.5rem 1rem 1rem;
+  line-height:    1.1;
+  user-select:    none;
+}
+
+.bb-title-sub {
+  font-family:  'Nuffle Italic', serif;
+  font-size:    clamp(0.75rem, 1.8vw, 1.1rem);
+  color:        #fff;
+  -webkit-text-stroke: 1px #333;
+  text-stroke:         1px #333;
+  letter-spacing: 0.05em;
+}
+
+.bb-title-main {
+  font-family:  'Nuffle', serif;
+  font-size:    clamp(2.2rem, 7vw, 5.5rem);
+  color:        #fff;
+  -webkit-text-stroke: 2px #333;
+  text-stroke:         2px #333;
+  letter-spacing: 0.02em;
 }
 
 /* ─────────────────────────────────────────────

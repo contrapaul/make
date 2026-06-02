@@ -18,20 +18,28 @@
 </head>
 <body class="app-loading">
 
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="/" class="wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
-      <nav class="nav">
-        <a href="/#projects">Projects</a>
-        <a href="/#files">Files</a>
-        <a href="/#collab">Collaborate</a>
-        <button class="my-teams-nav-btn" id="my-teams-nav" style="background:transparent;border:none;cursor:pointer;color:inherit;font-size:inherit;font-family:inherit;padding:0;" title="Team Builder">My Teams</button>
-        <a href="https://contrapaul.com" class="nav-home">← contrapaul.com</a>
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <nav class="nav bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/rules/">Rules</a>
+        <button class="my-teams-nav-btn" id="my-teams-nav" title="Team Builder">My Teams</button>
       </nav>
     </div>
   </header>
 
   <main class="bb-app">
+
+    <!-- ═══════════════ PAGE TITLE ═══════════════ -->
+    <div class="bb-page-title" aria-label="Yeah so it's kind of like Fantasy Football Chess">
+      <span class="bb-title-sub">YEAH SO IT'S KIND OF LIKE</span>
+      <span class="bb-title-main">FANTASY FOOTBALL CHESS</span>
+      <span class="bb-title-sub">BUT NOT LIKE "FANTASY FOOTBALL", THERE'S ORCS AND STUFF</span>
+    </div>
 
     <!-- ═══════════════ GAME BAR ═══════════════ -->
     <div class="game-bar" id="game-bar">
@@ -664,15 +672,12 @@
     </div>
   </div>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <span class="footer-brand">contrapaul / make</span>
-      <div class="footer-links">
-        <a href="https://contrapaul.com">Main site</a>
-        <a href="https://edu.contrapaul.com">Edu</a>
-        <a href="mailto:hello@contrapaul.com">Email</a>
-      </div>
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+      <a href="https://make.contrapaul.com/bloodbowl/about" class="bb-footer-about">About this Site</a>
     </div>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
   <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
