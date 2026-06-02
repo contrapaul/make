@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <!-- Category filters -->
+    <!-- Category + team filters -->
     <div class="skills-filters" id="skills-filters" role="group" aria-label="Filter by category"></div>
 
     <!-- Count -->
@@ -103,7 +103,6 @@
 
     const COLOR_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c.color]));
 
-    /* Short label for the badge on each card */
     const BADGE_LABEL = {
       'General Skill':     'General',
       'Agility Skill':     'Agility',
@@ -115,25 +114,41 @@
       'Star Player Trait': 'Star Player',
     };
 
+    /* ── localStorage team data ── */
+    function loadTeamSkills(side) {
+      /* side: 'home' | 'away' */
+      try {
+        const raw = localStorage.getItem(`bb_${side}_team_skills`);
+        return raw ? new Set(JSON.parse(raw)) : null;
+      } catch (_) { return null; }
+    }
+
+    function loadTeamName(side) {
+      try { return localStorage.getItem(`bb_${side}_team_name`) || null; }
+      catch (_) { return null; }
+    }
+
     /* ── State ── */
     let allSkills    = [];
-    let activeFilter = 'All';
+    let activeFilter = 'All';   /* 'All' | category key | 'home' | 'away' */
     let searchQuery  = '';
 
-    /* ── Escape for regex ── */
+    /* ── Helpers ── */
     function escRe(s) {
       return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
-    /* ── Highlight matching text ── */
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;');
+    }
+
     function highlight(text, query) {
       if (!query) return escHtml(text);
       const re = new RegExp(`(${escRe(query)})`, 'gi');
       return escHtml(text).replace(re, '<mark>$1</mark>');
-    }
-
-    function escHtml(s) {
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
     /* ── Render ── */
@@ -142,19 +157,44 @@
       const count = document.getElementById('skills-count');
       const q     = searchQuery.trim().toLowerCase();
 
+      /* Resolve team skill set if a team filter is active */
+      let teamSkillSet = null;
+      if (activeFilter === 'home' || activeFilter === 'away') {
+        teamSkillSet = loadTeamSkills(activeFilter);
+      }
+
       const visible = allSkills.filter(skill => {
-        const catMatch = activeFilter === 'All' || skill.category === activeFilter;
-        if (!catMatch) return false;
+        /* Team filter */
+        if (teamSkillSet !== null) {
+          if (!teamSkillSet.has(skill.name)) return false;
+        } else if (activeFilter !== 'All') {
+          if (skill.category !== activeFilter) return false;
+        }
+        /* Search */
         if (!q) return true;
         return skill.name.toLowerCase().includes(q) || skill.description.toLowerCase().includes(q);
       });
 
-      count.textContent = visible.length === allSkills.length
-        ? `${allSkills.length} skills`
-        : `${visible.length} of ${allSkills.length} skills`;
+      /* Count label */
+      if (activeFilter === 'home' || activeFilter === 'away') {
+        const teamName = loadTeamName(activeFilter) || (activeFilter === 'home' ? 'Home Team' : 'Away Team');
+        const totalForTeam = teamSkillSet ? allSkills.filter(s => teamSkillSet.has(s.name)).length : 0;
+        count.textContent = q
+          ? `${visible.length} of ${totalForTeam} skills for ${teamName}`
+          : `${visible.length} skills for ${teamName}`;
+      } else {
+        count.textContent = visible.length === allSkills.length
+          ? `${allSkills.length} skills`
+          : `${visible.length} of ${allSkills.length} skills`;
+      }
 
       if (visible.length === 0) {
-        grid.innerHTML = '<p class="skills-empty">No skills match your search.</p>';
+        if ((activeFilter === 'home' || activeFilter === 'away') && !teamSkillSet) {
+          const side = activeFilter === 'home' ? 'Home' : 'Away';
+          grid.innerHTML = `<p class="skills-empty">No ${side} team loaded — select a team on the <a href="../" style="color:rgba(212,175,55,0.8)">main page</a> first.</p>`;
+        } else {
+          grid.innerHTML = '<p class="skills-empty">No skills match your search.</p>';
+        }
         return;
       }
 
@@ -163,12 +203,12 @@
         const badge     = BADGE_LABEL[skill.category] || skill.category;
         const mandatory = skill.description.startsWith('Mandatory');
 
-        return `<article class="skill-card" style="--card-color:${color}">
-  <div class="skill-card-header">
-    <span class="skill-card-name">${highlight(skill.name, searchQuery.trim())}</span>
-    <span class="skill-card-badge">${badge}</span>
-  </div>${mandatory ? '\n  <div class="skill-card-mandatory">⚠ Mandatory</div>' : ''}
-  <p class="skill-card-desc">${highlight(skill.description, searchQuery.trim())}</p>
+        return `<article class="sk-card" style="--card-color:${color}">
+  <div class="sk-card-header">
+    <span class="sk-card-name">${highlight(skill.name, searchQuery.trim())}</span>
+    <span class="sk-card-badge">${badge}</span>
+  </div>${mandatory ? '\n  <div class="sk-card-mandatory">⚠ Mandatory</div>' : ''}
+  <p class="sk-card-desc">${highlight(skill.description, searchQuery.trim())}</p>
 </article>`;
       }).join('\n');
     }
@@ -179,7 +219,9 @@
       skills.forEach(s => { counts[s.category] = (counts[s.category] || 0) + 1; });
 
       const wrap = document.getElementById('skills-filters');
-      wrap.innerHTML = CATEGORIES
+
+      /* Category buttons */
+      const catButtons = CATEGORIES
         .filter(c => c.key === 'All' || counts[c.key])
         .map(c => {
           const n = c.key === 'All' ? skills.length : (counts[c.key] || 0);
@@ -190,6 +232,26 @@
   aria-pressed="${c.key === 'All'}"
 >${c.label} <span style="opacity:.55">(${n})</span></button>`;
         }).join('\n');
+
+      /* Team buttons */
+      const homeName  = loadTeamName('home');
+      const awayName  = loadTeamName('away');
+      const homeSkills = loadTeamSkills('home');
+      const awaySkills = loadTeamSkills('away');
+      const homeCount  = homeSkills ? skills.filter(s => homeSkills.has(s.name)).length : null;
+      const awayCount  = awaySkills ? skills.filter(s => awaySkills.has(s.name)).length : null;
+
+      const homeLabel = homeName ? escHtml(homeName) : 'My Team';
+      const awayLabel = awayName ? escHtml(awayName) : 'Away Team';
+      const homeSuffix = homeCount !== null ? ` <span style="opacity:.55">(${homeCount})</span>` : ' <span style="opacity:.35">—</span>';
+      const awaySuffix = awayCount !== null ? ` <span style="opacity:.55">(${awayCount})</span>` : ' <span style="opacity:.35">—</span>';
+
+      const teamButtons = `
+<span class="skills-filter-divider" aria-hidden="true"></span>
+<button class="skills-filter-btn skills-filter-btn--team" style="--filter-color:#10B981" data-cat="home" aria-pressed="false">${homeLabel}${homeSuffix}</button>
+<button class="skills-filter-btn skills-filter-btn--team" style="--filter-color:#F59E0B" data-cat="away" aria-pressed="false">${awayLabel}${awaySuffix}</button>`;
+
+      wrap.innerHTML = catButtons + teamButtons;
 
       wrap.addEventListener('click', e => {
         const btn = e.target.closest('.skills-filter-btn');

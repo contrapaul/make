@@ -114,7 +114,7 @@
 /* ── Cards grid ── */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   padding: 1rem 1.5rem 3rem;
   max-width: 1400px;
@@ -125,7 +125,7 @@
 }
 
 /* ── Individual skill card ── */
-.skill-card {
+.sk-card {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.1);
   border-top: 3px solid var(--card-color, rgba(255,255,255,0.2));
@@ -137,21 +137,21 @@
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
   cursor: default;
 }
-.skill-card:hover {
+.sk-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(0,0,0,0.4),
               0 0 0 1px var(--card-color, rgba(255,255,255,0.15));
   background: rgba(255,255,255,0.06);
 }
 
-.skill-card-header {
+.sk-card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
 }
 
-.skill-card-name {
+.sk-card-name {
   font-family: 'Nuffle', serif;
   font-size: 1.15rem;
   color: #fff;
@@ -160,7 +160,7 @@
   letter-spacing: 0.03em;
 }
 
-.skill-card-badge {
+.sk-card-badge {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem;
   letter-spacing: 0.08em;
@@ -175,7 +175,7 @@
   margin-top: 0.15rem;
 }
 
-.skill-card-mandatory {
+.sk-card-mandatory {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.62rem;
   color: var(--bb-gold);
@@ -184,7 +184,7 @@
   opacity: 0.8;
 }
 
-.skill-card-desc {
+.sk-card-desc {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.75rem;
   line-height: 1.65;
@@ -192,8 +192,8 @@
 }
 
 /* highlight matched search text */
-.skill-card-desc mark,
-.skill-card-name mark {
+.sk-card-desc mark,
+.sk-card-name mark {
   background: rgba(212,175,55,0.3);
   color: #fff;
   border-radius: 2px;
@@ -211,8 +211,28 @@
   padding: 3rem 1rem;
 }
 
+/* ── Filter group dividers ── */
+.skills-filter-divider {
+  width: 1px;
+  height: 1.2rem;
+  background: rgba(255,255,255,0.15);
+  align-self: center;
+  flex-shrink: 0;
+}
+
+/* Team filter buttons get a slightly different shape to stand out */
+.skills-filter-btn--team {
+  border-style: dashed;
+}
+
 /* ── Responsive ── */
-@media (max-width: 600px) {
+@media (max-width: 1100px) {
+  .skills-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 780px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
   .skills-controls,
   .skills-filters,
   .skills-count,
@@ -220,7 +240,5 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  .skills-grid {
-    grid-template-columns: 1fr;
-  }
+  .skills-grid { grid-template-columns: 1fr; }
 }

@@ -130,6 +130,7 @@ async function loadTeam(side, teamId) {
     state[side].players = players;
     applyTeamColors(side, team.colors);
     renderRoster(side, players);
+    syncTeamSkills(side, players, team.name);
 
     /* Update companion UI */
     if (window.Panels) {
@@ -170,6 +171,7 @@ async function loadCustomTeam(side, savedTeam) {
 
   applyTeamColors(side, baseEntry?.colors ?? {});
   renderRoster(side, players);
+  syncTeamSkills(side, players, savedTeam.name);
 
   /* Track which saved team is loaded for SPP/post-game */
   const gbSide = side === 'left' ? 'home' : 'away';
@@ -199,9 +201,37 @@ function bindMyTeamsButtons() {
     ?.addEventListener('click', () => window.TeamBuilder?.open('list'));
 }
 
+/* ────────────────────────────────────────────────────────
+   TEAM SKILLS → localStorage  (consumed by skills page)
+   ──────────────────────────────────────────────────────── */
+
+function syncTeamSkills(side, players, teamName) {
+  const gbSide = side === 'left' ? 'home' : 'away';
+  const skillSet = new Set();
+  players.forEach(p => {
+    (p.skills || '').split(',').forEach(s => {
+      const trimmed = s.trim();
+      /* Strip parenthetical variants like "Loner (3+)" → "Loner" */
+      const base = trimmed.replace(/\s*\(.*\)$/, '').trim();
+      if (base) skillSet.add(base);
+    });
+  });
+  try {
+    localStorage.setItem(`bb_${gbSide}_team_name`,   teamName);
+    localStorage.setItem(`bb_${gbSide}_team_skills`,  JSON.stringify([...skillSet]));
+  } catch (_) { /* private-browsing or storage full — silently skip */ }
+}
+
 function clearSide(side) {
   state[side].team    = null;
   state[side].players = [];
+
+  /* Clear localStorage team skills for this side */
+  const gbSide = side === 'left' ? 'home' : 'away';
+  try {
+    localStorage.removeItem(`bb_${gbSide}_team_name`);
+    localStorage.removeItem(`bb_${gbSide}_team_skills`);
+  } catch (_) {}
 
   /* Remove all inline --tc-* overrides from roster accordion AND modal */
   document.getElementById(`side-${side}`)?.removeAttribute('style');
@@ -211,7 +241,6 @@ function clearSide(side) {
 
   /* Reset companion UI */
   if (window.Panels) {
-    const gbSide = side === 'left' ? 'home' : 'away';
     Panels.setAccordionLabel(side, null);
     Panels.setRerolls(gbSide, 0);
   }
