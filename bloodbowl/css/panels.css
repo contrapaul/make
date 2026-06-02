@@ -255,6 +255,69 @@
   animation: panelClose 0.16s ease-in both;
 }
 
+/* ── All wizards: large-format 16:10 panel ── */
+#panel-pass[hidden],
+#panel-block[hidden],
+#panel-foul[hidden],
+#panel-throw[hidden],
+#panel-kickoff[hidden],
+#panel-weather[hidden],
+#panel-prayers[hidden],
+#panel-injury[hidden],
+#panel-scatter[hidden] { display: none; }
+
+#panel-block.panel-closing,
+#panel-foul.panel-closing,
+#panel-throw.panel-closing,
+#panel-kickoff.panel-closing,
+#panel-weather.panel-closing,
+#panel-prayers.panel-closing,
+#panel-injury.panel-closing,
+#panel-scatter.panel-closing {
+  display: flex !important;
+}
+
+#panel-block,
+#panel-foul,
+#panel-throw,
+#panel-kickoff,
+#panel-weather,
+#panel-prayers,
+#panel-injury,
+#panel-scatter {
+  width:          min(82vw, 1600px);
+  max-width:      none;
+  height:         min(51.25vw, 1000px, 88vh);
+  max-height:     none;
+  overflow:       hidden;
+  display:        flex;
+  flex-direction: column;
+}
+
+#panel-block .panel-header,
+#panel-foul .panel-header,
+#panel-throw .panel-header,
+#panel-kickoff .panel-header,
+#panel-weather .panel-header,
+#panel-prayers .panel-header,
+#panel-injury .panel-header,
+#panel-scatter .panel-header { flex-shrink: 0; }
+
+#panel-block .panel-body,
+#panel-foul .panel-body,
+#panel-throw .panel-body,
+#panel-kickoff .panel-body,
+#panel-weather .panel-body,
+#panel-prayers .panel-body,
+#panel-injury .panel-body,
+#panel-scatter .panel-body {
+  flex:       1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding:    1rem 1.5rem;
+  box-sizing: border-box;
+}
+
 /* ── Pass wizard: large-format 16:10 panel ── */
 #panel-pass[hidden] { display: none; }
 

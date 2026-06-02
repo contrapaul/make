@@ -276,74 +276,76 @@
           </div>
           <button class="panel-close" aria-label="Close block panel">&#215;</button>
         </div>
-        <div class="panel-body" id="panel-block-body">
-          <p class="panel-intro">Select attacker and defender from your rosters, or set Strength manually. Count assists, then roll.</p>
+        <div class="panel-body bwiz-panel-body" id="panel-block-body">
+          <div class="bwiz-layout">
 
-          <!-- Player selection (populated by wizards.js when rosters are loaded) -->
-          <div class="wps-panel" id="block-player-select">
-            <div class="wps-side">
-              <div class="wps-heading">Attacker</div>
-              <div class="wps-list" id="block-attacker-list">
-                <p class="wps-empty">Load a roster first</p>
+            <!-- LEFT: controls -->
+            <div class="bwiz-controls">
+              <p class="panel-intro" style="margin-top:0">Select attacker and defender, set Strength &amp; assists, then roll.</p>
+
+              <div class="wps-panel" id="block-player-select">
+                <div class="wps-side">
+                  <div class="wps-heading">Attacker</div>
+                  <div class="wps-list" id="block-attacker-list"><p class="wps-empty">Load a roster first</p></div>
+                </div>
+                <div class="wps-divider">🛡</div>
+                <div class="wps-side">
+                  <div class="wps-heading">Defender</div>
+                  <div class="wps-list" id="block-defender-list"><p class="wps-empty">Load a roster first</p></div>
+                </div>
               </div>
+
+              <div class="block-setup-grid">
+                <div class="block-side">
+                  <span class="input-label">Attacker ST</span>
+                  <div class="stat-stepper" id="block-att-st">
+                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
+                    <span class="stepper-val">3</span>
+                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
+                  </div>
+                  <span class="input-label">Att. Assists</span>
+                  <div class="stat-stepper" id="block-att-assists">
+                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
+                    <span class="stepper-val">0</span>
+                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
+                  </div>
+                </div>
+                <div class="block-vs"><span class="vs-label">vs</span></div>
+                <div class="block-side right">
+                  <span class="input-label">Defender ST</span>
+                  <div class="stat-stepper" id="block-def-st">
+                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
+                    <span class="stepper-val">3</span>
+                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
+                  </div>
+                  <span class="input-label">Def. Assists</span>
+                  <div class="stat-stepper" id="block-def-assists">
+                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
+                    <span class="stepper-val">0</span>
+                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="wizard-info-bar" id="block-dice-bar">
+                <span class="wizard-info-num" id="block-dice-count">1</span>
+                <span class="wizard-info-note" id="block-dice-note">block die — equal strength</span>
+              </div>
+
+              <div class="block-dice-tray" id="block-dice-tray" aria-live="polite"></div>
+
+              <button class="roll-btn" id="block-roll-btn">
+                <span class="roll-btn-icon">🎲</span> Roll Block
+              </button>
+              <div class="roll-result" id="block-result" hidden aria-live="polite"></div>
+            </div><!-- /.bwiz-controls -->
+
+            <!-- RIGHT: roll log checklist -->
+            <div class="bwiz-log" id="block-roll-log" aria-live="polite">
+              <div class="bwiz-log-empty">Roll results will appear here as a checklist.</div>
             </div>
-            <div class="wps-divider">🛡</div>
-            <div class="wps-side">
-              <div class="wps-heading">Defender</div>
-              <div class="wps-list" id="block-defender-list">
-                <p class="wps-empty">Load a roster first</p>
-              </div>
-            </div>
-          </div>
 
-          <div class="block-setup-grid">
-            <!-- Attacker -->
-            <div class="block-side">
-              <span class="input-label">Attacker ST</span>
-              <div class="stat-stepper" id="block-att-st">
-                <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                <span class="stepper-val">3</span>
-                <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-              </div>
-              <span class="input-label">Att. Assists</span>
-              <div class="stat-stepper" id="block-att-assists">
-                <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                <span class="stepper-val">0</span>
-                <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-              </div>
-            </div>
-            <!-- VS -->
-            <div class="block-vs"><span class="vs-label">vs</span></div>
-            <!-- Defender -->
-            <div class="block-side right">
-              <span class="input-label">Defender ST</span>
-              <div class="stat-stepper" id="block-def-st">
-                <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                <span class="stepper-val">3</span>
-                <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-              </div>
-              <span class="input-label">Def. Assists</span>
-              <div class="stat-stepper" id="block-def-assists">
-                <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                <span class="stepper-val">0</span>
-                <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dice count indicator (updates live) -->
-          <div class="wizard-info-bar" id="block-dice-bar">
-            <span class="wizard-info-num" id="block-dice-count">1</span>
-            <span class="wizard-info-note" id="block-dice-note">block die — equal strength</span>
-          </div>
-
-          <!-- Block dice tray (rendered by JS) -->
-          <div class="block-dice-tray" id="block-dice-tray" aria-live="polite"></div>
-
-          <button class="roll-btn" id="block-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Block
-          </button>
-          <div class="roll-result" id="block-result" hidden aria-live="polite"></div>
+          </div><!-- /.bwiz-layout -->
         </div>
       </div>
 

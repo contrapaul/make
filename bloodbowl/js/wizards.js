@@ -10,14 +10,20 @@
    BLOCK DIE
    ──────────────────────────────────────────────────────── */
 
+/* Nuffle Dice font character map (see Nuffle Dice.woff2):
+   J=push arrow, K=attacker down skull, L=both down burst,
+   M=stumble burst, N=defender down skull, O-T=weather icons */
+const NUFFLE_NUM  = n => String.fromCharCode(64 + n); // A=1 … I=9
+const NUFFLE_WEATHER = { verySunny:'O', nice:'P', pouringRain:'Q', blizzard:'R', sweltering:'S', heavyRain:'T' };
+
 const BLOCK_FACES = [
   null,
-  { key: 'att-down',  label: 'Attacker Down', sym: '💀', cls: 'att-down',  colour: 'var(--bb-red,#C8102E)' },
-  { key: 'both-down', label: 'Both Down',      sym: '⚡', cls: 'both-down', colour: '#BB4400' },
-  { key: 'push',      label: 'Push',           sym: '→',  cls: 'push',      colour: '#555' },
-  { key: 'push',      label: 'Push',           sym: '→',  cls: 'push',      colour: '#555' },
-  { key: 'stumble',   label: 'Stumble',        sym: '↗',  cls: 'stumble',   colour: '#774400' },
-  { key: 'def-down',  label: 'Defender Down',  sym: '★',  cls: 'def-down',  colour: '#1B5E20' },
+  { key: 'att-down',  label: 'Attacker Down', sym: 'K', cls: 'att-down',  colour: 'var(--bb-red,#C8102E)' },
+  { key: 'both-down', label: 'Both Down',      sym: 'L', cls: 'both-down', colour: '#BB4400' },
+  { key: 'push',      label: 'Push',           sym: 'J', cls: 'push',      colour: '#888' },
+  { key: 'push',      label: 'Push',           sym: 'J', cls: 'push',      colour: '#888' },
+  { key: 'stumble',   label: 'Stumble',        sym: 'M', cls: 'stumble',   colour: '#774400' },
+  { key: 'def-down',  label: 'Defender Down',  sym: 'N', cls: 'def-down',  colour: '#1B5E20' },
 ];
 
 function buildBlockFace(el, idx) {
@@ -172,36 +178,59 @@ function initBlockWizard() {
   function processBlockResult(rolls) {
     const results = rolls.map(r => BLOCK_FACES[r]);
     const { count, who } = calcBlock();
-    const picker = who
-      ? `<span style="color:var(--bb-gold,#D4AF37);">${who.charAt(0).toUpperCase() + who.slice(1)}</span>`
-      : 'No choice';
 
-    let html = `
-      <div class="result-roll-breakdown">
-        ${count} block ${count > 1 ? 'dice' : 'die'}${who ? ` — ${picker} selects the result` : ''}
-      </div>
-      <div class="block-results-list">
-    `;
-    results.forEach(r => {
-      html += `<div class="block-result-row" style="color:${r.colour}; font-weight:800; font-size:1.05rem;">${r.sym} ${r.label}</div>`;
-    });
-    html += '</div>';
+    /* ── Build checklist entry for the roll log ── */
+    const log = document.getElementById('block-roll-log');
+    if (log) {
+      log.querySelector('.bwiz-log-empty')?.remove();
 
-    const keys  = new Set(results.map(r => r.key));
-    const notes = [];
-    if (keys.has('att-down'))  notes.push('💀 <strong>Attacker Down</strong>: attacker is knocked down — Turnover!');
-    if (keys.has('both-down')) notes.push('⚡ <strong>Both Down</strong>: both fall, unless attacker has <em>Block</em> or <em>Wrestle</em>.');
-    if (keys.has('stumble'))   notes.push('↗ <strong>Stumble</strong>: defender is knocked down unless they use <em>Dodge</em> to treat it as Push.');
-    if (keys.has('def-down'))  notes.push('★ <strong>Defender Down</strong>: defender is knocked down — roll Armour!');
+      const entry = document.createElement('div');
+      entry.className = 'bwiz-log-entry';
 
-    if (notes.length) {
-      html += `<div class="result-notes"><ul style="margin:0.3rem 0 0;padding-left:1.1rem;font-size:0.79rem;color:rgba(255,255,255,0.72);">`;
-      notes.forEach(n => { html += `<li style="margin-bottom:0.3rem;">${n}</li>`; });
-      html += '</ul></div>';
+      /* Header: dice count + who picks */
+      const hdr = document.createElement('div');
+      hdr.className = 'bwiz-log-hdr';
+      hdr.innerHTML = `<span class="bwiz-log-label">${count} Block ${count > 1 ? 'Dice' : 'Die'}</span>`
+        + (who ? `<span class="bwiz-log-picker">${who}</span>` : '');
+      entry.appendChild(hdr);
+
+      /* Die results row using Nuffle Dice font */
+      const diceRow = document.createElement('div');
+      diceRow.className = 'bwiz-log-dice-row';
+      results.forEach(r => {
+        const chip = document.createElement('span');
+        chip.className = `bwiz-log-die bwiz-die-${r.cls}`;
+        chip.innerHTML = `<span class="bwiz-die-glyph">${r.sym}</span><span class="bwiz-die-label">${r.label}</span>`;
+        diceRow.appendChild(chip);
+      });
+      entry.appendChild(diceRow);
+
+      /* Rule notes */
+      const keys  = new Set(results.map(r => r.key));
+      const notes = [];
+      if (keys.has('att-down'))  notes.push({ g:'K', t:'Attacker Down', note:'Attacker knocked down — Turnover!',    bad: true });
+      if (keys.has('both-down')) notes.push({ g:'L', t:'Both Down',     note:'Both fall unless attacker has Block/Wrestle.', bad: true });
+      if (keys.has('stumble'))   notes.push({ g:'M', t:'Stumble',       note:'Defender down unless they use Dodge.',  bad: false });
+      if (keys.has('def-down'))  notes.push({ g:'N', t:'Defender Down', note:'Defender knocked down — roll Armour!', bad: false });
+
+      if (notes.length) {
+        const nl = document.createElement('ul');
+        nl.className = 'bwiz-log-notes';
+        notes.forEach(n => {
+          const li = document.createElement('li');
+          li.className = n.bad ? 'bwiz-note-bad' : 'bwiz-note-good';
+          li.innerHTML = `<span class="bwiz-note-glyph">${n.g}</span><strong>${n.t}</strong> — ${n.note}`;
+          nl.appendChild(li);
+        });
+        entry.appendChild(nl);
+      }
+
+      /* Prepend so newest is at top */
+      log.prepend(entry);
     }
 
-    resultEl.innerHTML = html;
-    resultEl.hidden    = false;
+    /* Keep inline result for backward compat */
+    resultEl.hidden = true;
   }
 
   async function doRoll() {
