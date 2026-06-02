@@ -256,6 +256,8 @@
 }
 
 /* ── Pass wizard: large-format 16:10 panel ── */
+#panel-pass[hidden] { display: none; }
+
 #panel-pass.panel-closing {
   display: flex !important; /* keep flex so animationend fires; block !important from .panel-closing would abort the animation */
 }

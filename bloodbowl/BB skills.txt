@@ -1,0 +1,138 @@
+I ran sprint 1b, but we're somehow in a worse state now. When I click 'start drive' in beginner mode there is no physical dice toggle, and once we roll for weather all options are greyed out and nothing happens. The only 2 things you can click are minimize/hide wizard, and > Drive: Step 1/7 at the bottom, which brings back the locked wizard. Pro mode doesn't lock us down this way, but weather is still broken. 
+
+Kickoff is still doing the same thing, no conclusion, just 'next'. 
+
+Prayers to nuffle still works- but the result isn't saved or displayed on the page, and it needs to be- especially if the prayer results in a player buff or debuff. 
+
+Ball bounce works, but we should add numbers for each direction same as on the Blood Bowl reference. Kick deviation only shows the dice, it should definitely show the same kind of details that bounce shows. Heck throw-in works, why not kick deviation? Note that none of the bounce results have to be stored/displayed anywhere for now. We aren't implementing a full game log, at least not in the near future. 
+
+Notable- but we need to be able to click a button to lock in the physical dice result. This will allow players to playthrough a bug, or to track a game with a mix of physical and digital rolls. 
+
+In the pass wizard players should be automatically sorted by highest PA to throw, then the catcher options sorted by AG, removing the chosen passing player. Also, instead of a step by step wizard we should see all options and watch the equation/requirements build/populate as we select players, distance, interceptions, etc. The home team defaults to loading, but away must continue to be an option. At present we can actually toggle between the teams when choosing a catcher, meaning the wizard lets players decide to throw to the other team. This is happening because it's breaking things into discrete, disconnected steps instead of loading it all as a comprehensive tool. In the revision the home team loads on the right and left side of the wizard. On the left side we see the player position (or number, name, and position if a custom team!) and their PA stat. On the right we see the same list but with AG stat. (right now we're loading the ST stat for some reason, and it's understanded when it should be highlighted, this is literally PA's only time to shine!) 
+
+When I tap my thrower on the left he should be grayed out on the right, with the same happening with catcher choice. This can happen in any order, and the players should be grayed out/visually unselectable in one side if chosen on the other. We still need to see their stats and place in the team hierarchy in case we change our mind- or are just gaming out potential winning combos when not playing a game. 
+
+The distance tool provides a text reference at the bottom, and a 13 x 13 grid with the center being the passing player. The original vision was not this, and was us placing 2 players on the pitch and having the distance calculated. I want to expand on the original vision for this with the following process:
+
+This wizard must be physically larger than others, based on the size of the pitch. The pitch is 15 sqares tall and 26 wide, and we should make the grid 15 x 28 to add a 1x15 endzone on each side. Critically, there will be other times that we need to reference the full pitch, so this is likely something that will need to be created as a unique tool that can be referenced and interacted with in other contexts, not just here. For example, a player should be able to place their players on the field and save the layout as different kickoff formations, even if only for personal reference. 
+
+The current square size is too large, and while it's a good size to interact with on mobile, we can scale each space to about 60% to try and fit the entire pitch into this wizard. In fact, and of note- if we build the pitch as it's own entity, it would indeed be something players could scale/zoom/scroll independent of the wizards, which would be ideal- especially for a range of devices. 
+
+The pitch shouldn't be anything too fancy graphically. On the far left column we'd have a blue with red and white accents 'AWAY' endzone, and the far right columnn we'd have a red with blue and white accents 'home' endzone. A field customizer could perhaps be a future addon that gets saved locally. The field is a grassy green that matches our color scheme (or accents it without looking out of place.) The grid is marked out with white lines, and we have thicker lines around the entire pitch, between the endzones and the field, and in the center, between column 14 and 15. We also have these thicker lines marking the two side zones, not extending into the endzones, but separating (from top) row 4 and 5, and row 11 and 12. This gives us a pitch which is recognizably blood bowl. Moving back into how this works for passing:
+
+When a passing or catching player is selected a circle is added to the field for them. We can test the best way to differentiate them, but one way is that when we tap on the circle the corresponding player glows. We need a toggle to 'show zones'. Toggling this on will change the space colors around the passing player in a circular pattern to match the official range guide. If we move the passing player the zones display at the new location. This would let players find the best place to move their thrower before the pass attempt, and helps pros trust that the toggled off distance is accurate. 
+
+The passing player defaults to being placed on the row 8, column 8. The catcher defaults to row 5, column 14. This is flipped if the player has chosen the away team. 
+
+Once both players are on the field we have dashed, animated line connect them and are shown the dice rolls needed to make this happen. Digital dice can be rolled, and if there is a failure we are given a next button that also says we need to roll for scatter. Using the same wizard we can see where the ball goes, based on who it scatters from. (Remember to include the option to add intercepting players). 
+
+If all is a success we're able to still look at results, but have a 'complete' button to close and lock in the details. 
+
+At present, among the many other broken things- interception does nothing, and when we roll for pass nothing happens but the roll. We have a skip button, but when we skip it just refreshes the dice- we can't get to scatter and catch rolls. 
+
+I'll review others later, I realize this has grown a lot. 
+
+I'm sharing a blurb from my instructions earlier in the Blood Bowl companion project, and will note what has and has not been implemented. There have been confirmations that things have been coded, but they are not visible or functioning in the app. First blurb:
+
+When a passing or catching player is selected a circle is added to the field for them. (In)
+
+We can test the best way to differentiate them, but one way is that when we tap on the circle the corresponding player glows. (Partial. The circle glows, but the point is that we can see that the player has been selected in the sidebar roster. This is important when adding multiple players for catching, which has not yet been done.
+
+We need a toggle to 'show zones'. Toggling this on will change the space colors around the passing player in a circular pattern to match the official range guide. (Partial. Code is apparently in place for 'euclidean circles' or something similar. The live site still shows the square box zones. If it would be helpful I can share a table to specify what the zone should look like in text)
+
+If we move the passing player the zones display at the new location. This would let players find the best place to move their thrower before the pass attempt, and helps pros trust that the toggled off distance is accurate. (Only the toggle is in place. If the movement feature is coded it is not testable, because as I'll expand on below- the players can't be moved.)
+
+The passing player defaults to being placed on the row 8, column 8. The catcher defaults to row 5, column 14. This is flipped if the player has chosen the away team. (In, but to be removed- see notes for what to add below)
+
+Once both players are on the field we have dashed, animated line connect them (In) and are shown the dice rolls needed to make this happen. (In) Digital dice can be rolled, and if there is a failure we are given a next button that also says we need to roll for scatter. (In, but formatting is very messy. We are shown an octagon with no numbers or indication it's a die- and which floats a little overtop of the left of the scatter button no matter how I resize the window). 
+
+Using the same wizard we can see where the ball goes, based on who it scatters from. (In, though we need to switch it to a left-to-right display, rather than vertical, and also need to have the dice auto-roll after we first click 'Scatter'. Each roll can be 500ms, then the first square lights up and we're given a 250ms wait before repeating the process twice.)
+
+(Remember to include the option to add intercepting players). (Partial. We have an option now to choose players to intercept, but not to place them on the pitch. Further, we should be able to place multiple opposing players on the field so help map out whether there IS a chance of interception. I'll explain the desired revision for placing players shortly).)
+
+If all is a success we're able to still look at results, but have a 'complete' button to close and lock in the details. (Not correctly implemented. A successful pass leads to this, but it's tied to the catcher, with their 'roll' button changing to 'complete' if caught. If the catcher fails to catch, a scatter is not triggered, but needs to be.  Further, 'fumble' does not trigger the scatter roll, but the rules note that it needs to do so.)
+
+At present, among the many other broken things- interception does nothing, and when we roll for pass nothing happens but the roll. (Partially fixed, noted above.) We have a skip button, but when we skip it just refreshes the dice- we can't get to scatter and catch rolls. (Skip removed, good!)
+
+What to add:
+
+The callup for roster omits the player number, and this is a mistake. If a player has 5 un-named human linemen, how will they differentiate? Add the number before their name.
+
+Don't display the entire roster of players at all times. Only display roster when I click 'Add Thrower', 'Add Catcher', and 'Add Opposing Player'. The team can drop down or load as a card that goes away on choice.
+
+Instead of directly adding the player to the pitch make it a 2 step process. Users choose player, then click/tap to place them on the pitch.
+
+Players MUST be able to be picked up and moved around on the pitch, snapping to spaces when set down. 
+
+At present there is no wizard that incorporates the team re-rolls, or allows for player skills to modify results. If a thrower has the ability to re-roll, or add +1, or attempt a re-roll with 'Pro', these must be factored in to the wizards. We can start with the pass wizard as a model, then use it to correct the other wizards once pass is perfect. 
+
+Skills that are used, whether automatic or rolled-for must be displayed in the results. IE- we need a 5 for success, and roll a 4, but we see that player skill was applied to add 1 giving us the result. We should never see the dice change, but we should see the explanation for how dice that are below the requirement can be modified to make the action happen. 
+
+As soon as the thrower fails a throw the catcher 'roll' button must be grayed out. This can be unlocked if a skill or re-roll change the result, but not be clickable otherwise. At present a failed throw and scatter sequence leaves the catcher roll open, and we can still roll a successful catch after failing a throw...
+
+Remove the 'thrower TZ' and 'catcher TZ' tool, and use players placed in tackle zone by 'Add Opposing Player' to calculate this. 
+
+Remove interception button, use the same logic as TZ revision. If the animated dashed line crosses a player that could attempt to intercept or block the ball then a roll is added to the sequence wizard. 
+
+Make a plan to implement these things and address the issues with existing implementation. 
+
+
+Re-rolls are not visible. Implement re-rolls into wizard when the result is not success.  
+
+The zone display is close to correct- however the 'removed corners' of each zone must not be 'nothing' (they currently display no colors and are bugged to still register as before. A pass into one of these corner spaces is a pass into the NEXT zone, IE the former corner of 'short pass' is actually the start of the long pass zone.
+
+The scatter dice should be 3 evenly spaced cards that load in sequence. Currently the revision places the dice on top of the text, which is a far worse look than before... The card design must bne nearly identical to the other roll cards. 
+
+Player skills are still not showing in the pass wizard. A thrower with 'pro' that fails their roll should result in users being asked if they want to use their skill to attempt a re-roll. Advise whether we should create an entirely different 'skills wizard' that can be loaded into other site elements, or if the existing file structure is able to handle the dynamic use of skills across actions and wizards. 
+
+
+Create a new markdown file that plans the following requests in 8-20 sprints, to ensure tasks are targeted. I've been requesting too much at once, and while the plans have been well constructed, it appears our context window narrows and each revision makes 2 steps forward and takes 1 back. 
+
+Remaining issues to fix in the passing wizard:
+
+Passing zones are close to correct, but still not there. I'm not sure we need equations when we could just set the specific spaces based on the rules. I created a table using the 14x14 example grid from the rulebook. This would be 90 degrees of the 360 degree passing zones. Q is quick pass, S is short pass, L is long pass, and LB is long bomb. 
+
+LB	LB	LB											
+LB	LB	LB	LB	LB									
+LB	LB	LB	LB	LB	LB	LB							
+L	L	L	LB	LB	LB	LB	LB	LB					
+L	L	L	L	L	LB	LB	LB	LB	LB				
+L	L	L	L	L	L	L	LB	LB	LB	LB			
+L	L	L	L	L	L	L	L	LB	LB	LB			
+S	S	S	S	L	L	L	L	L	LB	LB	LB		
+S	S	S	S	S	L	L	L	L	LB	LB	LB		
+S	S	S	S	S	S	L	L	L	L	LB	LB	LB	
+Q	Q	S	S	S	S	S	L	L	L	LB	LB	LB	
+Q	Q	Q	S	S	S	S	L	L	L	L	LB	LB	LB
+Q	Q	Q	Q	S	S	S	L	L	L	L	LB	LB	LB
+Thrower	Q	Q	Q	S	S	S	L	L	L	L	LB	LB	LB
+
+The modifiers are not correctly applied for these zones, and no information is displayed in UI. For this wizard, and several other wizards we'll revise after- we are effectively building 'exciting math problems' or at least we're laying out all factors contributing to the potential of what could happen. It appears only up to +2 difficulty is applied. 
+
+Team re-rolls are still not available in the wizard.  
+
+Griff Oberwald's skill 'consumate professional' is not factored into the passing wizard. I tested many others and found that nearly all skills are not implemented. 'Pass' is absent completely. 
+
+The 'Accurate' skill is shown but only as a word and we cannot hover or click to see what it is. Instead of showing up on the left side all skill should be added under the pass success roll. 
+
+There is no option to close/complete when a ball scatters from the thrower. If no re-rolls remain then that would be the only option. All possible outcomes must have a conclusion. 
+
+UI changes: 
+
+The passing wizard has more elements than many others, but I've decided all wizards are currently too small. I zoomed in on the browser and was happy at 170%. I want you to create 5 aternative UI layouts after reading the rest of these requirements. While the UI must be comfortable on an iPad, I want the revised UI's for the pass wizard to follow this very specific guiding statement: Imagine the UI being used with a game controller on a TV from 3 meters away. 
+
+For this test add 1-5 buttons at the top of the wizard that allow me to choose the UI, and compare them. Remember, try to build around a modern, console video game interface.
+
+Window size should not change based on options expanding or going away. Currently the window size can grow and jump back, feeling clunky. The changing size actually makes the tool difficult to use, as the position of the buttons can change. 
+
+Zooming on the pitch must be centered on cursor or origin of pinch to zoom. At present the pitch is anchored to the top left corner, and all zooms scale the pitch to the bottom right. 
+
+In the resized UI the pitch should be roughly 200% of it's current size, and we should have UI elements on the left, right, and below it. On the left side place toggles, and the 'add opposing players' button. Under the pitch place the 'Choose thrower' on the left, and 'choose catcher' on the right. When we click either option open a card that displays all available players, with all relevant skills highlighted. On the right side of the pitch place a card showing remaining team re-rolls, which display as a number, including zero. Also include weather, and any similarly useful info. 
+
+Remove 'change thrower' and 'change catcher'- this is redundant due to the X option on the player. 
+
+Moving players on the pitch feels janky/clunky. 
+
+If we click away from the pass wizard it must not clear options. Options clear on close, complete, or opening another wizard- but we need to be able to back out and do many other things without clearing the options chosen.
+
+
