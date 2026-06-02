@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/skills.css">
 </head>
 <body>
 
@@ -17,7 +18,7 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="nav bb-nav" id="bb-nav">
-        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/skills/" class="active">Skills</a>
         <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
         <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
         <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
@@ -34,9 +35,29 @@
       <span class="bb-title-sub">placeholder bottom</span>
     </div>
 
-    <div class="bb-page-content">
-      <!-- Skills content goes here -->
+    <!-- Search -->
+    <div class="skills-controls">
+      <div class="skills-search-wrap">
+        <span class="skills-search-icon">⌕</span>
+        <input
+          type="search"
+          class="skills-search"
+          id="skills-search"
+          placeholder="Search skills…"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
     </div>
+
+    <!-- Category filters -->
+    <div class="skills-filters" id="skills-filters" role="group" aria-label="Filter by category"></div>
+
+    <!-- Count -->
+    <div class="skills-count" id="skills-count"></div>
+
+    <!-- Cards -->
+    <div class="skills-grid" id="skills-grid" aria-live="polite"></div>
 
   </main>
 
@@ -49,11 +70,12 @@
   </footer>
 
   <script>
+    /* ── Nav toggle ── */
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
       const nav    = document.getElementById('bb-nav');
       if (!toggle || !nav) return;
-      toggle.addEventListener('click', (e) => {
+      toggle.addEventListener('click', e => {
         e.stopPropagation();
         const open = nav.classList.toggle('bb-nav-open');
         toggle.setAttribute('aria-expanded', open);
@@ -65,6 +87,140 @@
         }
       });
     })();
+
+    /* ── Category config ── */
+    const CATEGORIES = [
+      { key: 'All',               label: 'All',           color: 'rgba(255,255,255,0.5)' },
+      { key: 'General Skill',     label: 'General',       color: '#2563EB' },
+      { key: 'Agility Skill',     label: 'Agility',       color: '#059669' },
+      { key: 'Passing Skill',     label: 'Passing',       color: '#D4AF37' },
+      { key: 'Strength Skill',    label: 'Strength',      color: '#C8102E' },
+      { key: 'Mutation',          label: 'Mutation',      color: '#7C3AED' },
+      { key: 'Devious Skill',     label: 'Devious',       color: '#B45309' },
+      { key: 'Trait',             label: 'Trait',         color: '#0891B2' },
+      { key: 'Star Player Trait', label: 'Star Player',   color: '#D4AF37' },
+    ];
+
+    const COLOR_MAP = Object.fromEntries(CATEGORIES.map(c => [c.key, c.color]));
+
+    /* Short label for the badge on each card */
+    const BADGE_LABEL = {
+      'General Skill':     'General',
+      'Agility Skill':     'Agility',
+      'Passing Skill':     'Passing',
+      'Strength Skill':    'Strength',
+      'Mutation':          'Mutation',
+      'Devious Skill':     'Devious',
+      'Trait':             'Trait',
+      'Star Player Trait': 'Star Player',
+    };
+
+    /* ── State ── */
+    let allSkills    = [];
+    let activeFilter = 'All';
+    let searchQuery  = '';
+
+    /* ── Escape for regex ── */
+    function escRe(s) {
+      return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    /* ── Highlight matching text ── */
+    function highlight(text, query) {
+      if (!query) return escHtml(text);
+      const re = new RegExp(`(${escRe(query)})`, 'gi');
+      return escHtml(text).replace(re, '<mark>$1</mark>');
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    /* ── Render ── */
+    function render() {
+      const grid  = document.getElementById('skills-grid');
+      const count = document.getElementById('skills-count');
+      const q     = searchQuery.trim().toLowerCase();
+
+      const visible = allSkills.filter(skill => {
+        const catMatch = activeFilter === 'All' || skill.category === activeFilter;
+        if (!catMatch) return false;
+        if (!q) return true;
+        return skill.name.toLowerCase().includes(q) || skill.description.toLowerCase().includes(q);
+      });
+
+      count.textContent = visible.length === allSkills.length
+        ? `${allSkills.length} skills`
+        : `${visible.length} of ${allSkills.length} skills`;
+
+      if (visible.length === 0) {
+        grid.innerHTML = '<p class="skills-empty">No skills match your search.</p>';
+        return;
+      }
+
+      grid.innerHTML = visible.map(skill => {
+        const color     = COLOR_MAP[skill.category] || 'rgba(255,255,255,0.3)';
+        const badge     = BADGE_LABEL[skill.category] || skill.category;
+        const mandatory = skill.description.startsWith('Mandatory');
+
+        return `<article class="skill-card" style="--card-color:${color}">
+  <div class="skill-card-header">
+    <span class="skill-card-name">${highlight(skill.name, searchQuery.trim())}</span>
+    <span class="skill-card-badge">${badge}</span>
+  </div>${mandatory ? '\n  <div class="skill-card-mandatory">⚠ Mandatory</div>' : ''}
+  <p class="skill-card-desc">${highlight(skill.description, searchQuery.trim())}</p>
+</article>`;
+      }).join('\n');
+    }
+
+    /* ── Build filter buttons ── */
+    function buildFilters(skills) {
+      const counts = {};
+      skills.forEach(s => { counts[s.category] = (counts[s.category] || 0) + 1; });
+
+      const wrap = document.getElementById('skills-filters');
+      wrap.innerHTML = CATEGORIES
+        .filter(c => c.key === 'All' || counts[c.key])
+        .map(c => {
+          const n = c.key === 'All' ? skills.length : (counts[c.key] || 0);
+          return `<button
+  class="skills-filter-btn${c.key === 'All' ? ' active' : ''}"
+  style="--filter-color:${c.color}"
+  data-cat="${c.key}"
+  aria-pressed="${c.key === 'All'}"
+>${c.label} <span style="opacity:.55">(${n})</span></button>`;
+        }).join('\n');
+
+      wrap.addEventListener('click', e => {
+        const btn = e.target.closest('.skills-filter-btn');
+        if (!btn) return;
+        activeFilter = btn.dataset.cat;
+        wrap.querySelectorAll('.skills-filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.cat === activeFilter);
+          b.setAttribute('aria-pressed', b.dataset.cat === activeFilter);
+        });
+        render();
+      });
+    }
+
+    /* ── Search input ── */
+    document.getElementById('skills-search').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    /* ── Load data ── */
+    fetch('../data/skills.json')
+      .then(r => r.json())
+      .then(data => {
+        allSkills = data.sort((a, b) => a.name.localeCompare(b.name));
+        buildFilters(allSkills);
+        render();
+      })
+      .catch(() => {
+        document.getElementById('skills-grid').innerHTML =
+          '<p class="skills-empty">Could not load skills data.</p>';
+      });
   </script>
 
 </body>
