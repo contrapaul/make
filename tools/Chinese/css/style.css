@@ -596,10 +596,11 @@ a:hover { text-decoration: underline; }
 
 .slot {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   min-width: 80px;
-  min-height: 38px;
+  min-height: 52px;
   padding: 4px 10px;
   border: 2px dashed var(--slot-border-empty);
   border-radius: var(--radius-sm);
@@ -610,6 +611,7 @@ a:hover { text-decoration: underline; }
   transition: all var(--transition);
   cursor: default;
   user-select: none;
+  gap: 2px;
 }
 
 .slot.drag-over {
@@ -680,17 +682,18 @@ a:hover { text-decoration: underline; }
 
 .word-chip {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
-  padding: 6px 14px;
+  padding: 5px 14px;
   border: 1px solid var(--border-card);
   border-radius: 20px;
   background: var(--bg);
   color: var(--text);
-  font-size: 0.95rem;
   cursor: grab;
   user-select: none;
   transition: all var(--transition);
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  line-height: 1.25;
 }
 
 .word-chip:hover {
@@ -706,6 +709,19 @@ a:hover { text-decoration: underline; }
 }
 
 .word-chip.used { opacity: 0.3; pointer-events: none; }
+
+.chip-zh { font-size: 1rem; font-weight: 500; }
+.chip-py { font-size: 0.68rem; color: var(--accent2); font-style: italic; margin-top: 1px; }
+.chip-en { font-size: 0.85rem; }
+
+/* Slots also stack zh + py vertically when filled */
+.slot {
+  flex-direction: column;
+  min-height: 52px;
+  gap: 2px;
+}
+.slot .chip-zh { font-size: 1rem; font-weight: 500; }
+.slot .chip-py { font-size: 0.65rem; color: var(--accent2); font-style: italic; }
 
 /* Builder controls */
 .builder-controls {
