@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", ".", "--no-clipboard", "-l", "5500"],
       "port": 5500
+    },
+    {
+      "name": "chinese-vocab",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese-vocab"],
+      "port": 7788
     }
   ]
 }
