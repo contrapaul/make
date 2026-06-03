@@ -1,19 +1,19 @@
-'use strict';
+﻿'use strict';
 
-/* ═══════════════════════════════════════════════════════
-   Blood Bowl Companion — js/wizards.js
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   Blood Bowl Companion â€” js/wizards.js
    Block, Pass, Foul, Throw Team-Mate wizards.
    Depends on: dice.js, panels.js (BBData), settings.js, physical-dice.js
-   ═══════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ─────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    BLOCK DIE
-   ──────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Nuffle Dice font character map (see Nuffle Dice.woff2):
    J=push arrow, K=attacker down skull, L=both down burst,
    M=stumble burst, N=defender down skull, O-T=weather icons */
-const NUFFLE_NUM  = n => String.fromCharCode(64 + n); // A=1 … I=9
+const NUFFLE_NUM  = n => String.fromCharCode(64 + n); // A=1 â€¦ I=9
 const NUFFLE_WEATHER = { verySunny:'O', nice:'P', pouringRain:'Q', blizzard:'R', sweltering:'S', heavyRain:'T' };
 
 const BLOCK_FACES = [
@@ -59,9 +59,9 @@ function rollBlockDie(faceEl) {
   });
 }
 
-/* ─────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    SHARED UTILITIES
-   ──────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 function bindStepper(el, min, max, onChange) {
   if (!el) return { get: () => min, set: () => {} };
@@ -109,9 +109,9 @@ function ensurePhysZone(refEl, id) {
   return el;
 }
 
-/* ════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BLOCK WIZARD  (full rebuild)
-   ════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 /* Skills that affect block outcomes */
 const ATT_BLOCK_SKILLS = new Set([
@@ -130,7 +130,7 @@ function initBlockWizard() {
   const defBanner  = document.getElementById('block-def-picks-banner');
   if (!rollBtn) return;
 
-  /* ── State ── */
+  /* â”€â”€ State â”€â”€ */
   let attST = 3, defST = 3, attAst = 0, defAst = 0;
   let attSkills = new Set(), defSkills = new Set();
   let attAV = 9, defAV = 9;          // armor values (parsed from statsText)
@@ -139,7 +139,7 @@ function initBlockWizard() {
   let chosenFace  = null;            // the face the user confirmed
   let rrUsed      = false;           // team re-roll consumed this action
 
-  /* ── Phase 1a fix: "over double" is strictly > not >= ── */
+  /* â”€â”€ Phase 1a fix: "over double" is strictly > not >= â”€â”€ */
   function calcBlock() {
     const a = attST + attAst;
     const d = defST + defAst;
@@ -150,7 +150,7 @@ function initBlockWizard() {
     return                 { count: 2, who: 'defender picks', attFav: false };
   }
 
-  /* ── ST compare display ── */
+  /* â”€â”€ ST compare display â”€â”€ */
   function updateStDisplay() {
     const compareEl = document.getElementById('block-st-compare');
     if (!compareEl) return;
@@ -158,13 +158,13 @@ function initBlockWizard() {
     const a = attST + attAst, d = defST + defAst;
     const attTxt = attAst ? `ST ${a} (${attST}+${attAst})` : `ST ${a}`;
     const defTxt = defAst ? `ST ${d} (${defST}+${defAst})` : `ST ${d}`;
-    const pickerTxt = who ? ` — ${who}` : '';
-    compareEl.textContent = `${attTxt} vs ${defTxt} · ${count} ${count === 1 ? 'die' : 'dice'}${pickerTxt}`;
+    const pickerTxt = who ? ` â€” ${who}` : '';
+    compareEl.textContent = `${attTxt} vs ${defTxt} Â· ${count} ${count === 1 ? 'die' : 'dice'}${pickerTxt}`;
     renderDiceTray(count);
     renderRerolls();
   }
 
-  /* ── Dice tray ── */
+  /* â”€â”€ Dice tray â”€â”€ */
   function renderDiceTray(count) {
     const tray = document.getElementById('block-dice-tray');
     if (!tray) return;
@@ -177,7 +177,7 @@ function initBlockWizard() {
     }
   }
 
-  /* ── Assist dots ── */
+  /* â”€â”€ Assist dots â”€â”€ */
   function renderAssistDots(elId, count, teamSide, onChangeFn) {
     const el = document.getElementById(elId);
     if (!el) return;
@@ -209,7 +209,7 @@ function initBlockWizard() {
     el.appendChild(row);
   }
 
-  /* ── Re-roll dots ── */
+  /* â”€â”€ Re-roll dots â”€â”€ */
   function renderRerolls() {
     const el = document.getElementById('block-rerolls');
     if (!el) return;
@@ -241,7 +241,7 @@ function initBlockWizard() {
     }
   }
 
-  /* ── Embedded trading card ── */
+  /* â”€â”€ Embedded trading card â”€â”€ */
   function buildEmbeddedCard(wrapEl, player, side) {
     wrapEl.innerHTML = '';
 
@@ -251,7 +251,7 @@ function initBlockWizard() {
     const imgDir   = team?.imageDir ?? 'images/';
     const bgColor  = (window.POSITION_COLORS ?? {})[player.position] || '#1a3a6a';
 
-    /* Parse AV from statsText: "AV 9+" → 9 */
+    /* Parse AV from statsText: "AV 9+" â†’ 9 */
     const avMatch = player.statsText?.match(/\bAV\s*(\d+)/i);
     const avVal   = avMatch ? parseInt(avMatch[1], 10) : 9;
     if (side === 'left') attAV = avVal; else defAV = avVal;
@@ -260,7 +260,7 @@ function initBlockWizard() {
     const statLabels = ['MA','ST','AG','PA','AV'];
     const statVals   = statLabels.map(k => {
       const m = player.statsText?.match(new RegExp(`\\b${k}\\s*([\\d+]+)`, 'i'));
-      return m ? m[1] : '—';
+      return m ? m[1] : 'â€”';
     });
 
     /* Skills */
@@ -301,7 +301,7 @@ function initBlockWizard() {
       </div>
       <div class="modal-skills">
         <p class="skills-label">Skills &amp; Traits</p>
-        <p class="skills-text">${skills.length ? skills.map(s => `<span class="skill-link">${esc(s)}</span>`).join('<span class="skill-sep">, </span>') : '<span class="no-skills">—</span>'}</p>
+        <p class="skills-text">${skills.length ? skills.map(s => `<span class="skill-link">${esc(s)}</span>`).join('<span class="skill-sep">, </span>') : '<span class="no-skills">â€”</span>'}</p>
       </div>
     `;
 
@@ -314,7 +314,7 @@ function initBlockWizard() {
     wrapEl.appendChild(card);
   }
 
-  /* ── Load block-relevant skills into side column ── */
+  /* â”€â”€ Load block-relevant skills into side column â”€â”€ */
   function loadBlockSkills(side, player) {
     const colId    = side === 'att' ? 'block-att-skills-col' : 'block-def-skills-col';
     const whitelist = side === 'att' ? ATT_BLOCK_SKILLS : DEF_BLOCK_SKILLS;
@@ -347,7 +347,7 @@ function initBlockWizard() {
     });
   }
 
-  /* ── Show picker for a side (hide card) ── */
+  /* â”€â”€ Show picker for a side (hide card) â”€â”€ */
   function showPicker(side) {
     const wrap   = document.getElementById(`block-${side}-card-wrap`);
     const picker = document.getElementById(`block-${side}-picker`);
@@ -381,15 +381,15 @@ function initBlockWizard() {
     );
   }
 
-  /* ── Change buttons ── */
+  /* â”€â”€ Change buttons â”€â”€ */
   document.getElementById('block-change-att')?.addEventListener('click', () => showPicker('att'));
   document.getElementById('block-change-def')?.addEventListener('click', () => showPicker('def'));
 
-  /* ── Assist dots ── */
+  /* â”€â”€ Assist dots â”€â”€ */
   renderAssistDots('block-att-assists-dots', 6, 'left',  v => { attAst = v; updateStDisplay(); });
   renderAssistDots('block-def-assists-dots', 6, 'right', v => { defAst = v; updateStDisplay(); });
 
-  /* ── Reset all roll state ── */
+  /* â”€â”€ Reset all roll state â”€â”€ */
   function resetRoll() {
     rolledFaces = [];
     chosenFace  = null;
@@ -402,54 +402,54 @@ function initBlockWizard() {
     ['block-result-panel','armor-roll-panel','injury-roll-panel'].forEach(id => {
       document.getElementById(id)?.classList.add('locked');
     });
-    document.getElementById('block-result-content').textContent  = '—';
-    document.getElementById('armor-result-content').textContent  = '—';
-    document.getElementById('injury-result-content').textContent = '—';
+    document.getElementById('block-result-content').textContent  = 'â€”';
+    document.getElementById('armor-result-content').textContent  = 'â€”';
+    document.getElementById('injury-result-content').textContent = 'â€”';
     document.getElementById('armor-roll-btn')?.setAttribute('hidden','');
     document.getElementById('injury-roll-btn')?.setAttribute('hidden','');
     renderDiceTray(calcBlock().count);
     renderRerolls();
   }
 
-  /* ── Phase 1b+1c: interpret chosen face with active skills ── */
+  /* â”€â”€ Phase 1b+1c: interpret chosen face with active skills â”€â”€ */
   function interpretResult(face) {
     const key = face.key;
     let knockedSide = null;  // 'att' | 'def' | 'both' | null
 
     if (key === 'att-down') {
       knockedSide = 'att';
-      showBlockResult(`Attacker Down — Turnover!`, 'bad');
+      showBlockResult(`Attacker Down â€” Turnover!`, 'bad');
     } else if (key === 'both-down') {
       if (attSkills.has('Block')) {
         knockedSide = 'def';
-        showBlockResult('Both Down — Block! Only defender falls.', 'ok');
+        showBlockResult('Both Down â€” Block! Only defender falls.', 'ok');
       } else if (attSkills.has('Wrestle')) {
         knockedSide = 'both';
-        showBlockResult('Both Down — Wrestle! Both fall. No armor rolls.', 'warn');
+        showBlockResult('Both Down â€” Wrestle! Both fall. No armor rolls.', 'warn');
         knockedSide = null; // Wrestle: both fall but no armor for either
       } else {
         knockedSide = 'both';
-        showBlockResult('Both Down — both players fall. Armor for both.', 'bad');
+        showBlockResult('Both Down â€” both players fall. Armor for both.', 'bad');
       }
     } else if (key === 'push') {
-      showBlockResult('Push Back — defender shoved. Attacker may follow up.', 'ok');
+      showBlockResult('Push Back â€” defender shoved. Attacker may follow up.', 'ok');
     } else if (key === 'stumble') {
       if (defSkills.has('Dodge')) {
-        showBlockResult('Stumble — Dodge! Treated as Push Back.', 'ok');
+        showBlockResult('Stumble â€” Dodge! Treated as Push Back.', 'ok');
       } else {
         knockedSide = 'def';
-        showBlockResult('Stumble — Pow! Defender knocked down.', 'ok');
+        showBlockResult('Stumble â€” Pow! Defender knocked down.', 'ok');
       }
     } else if (key === 'def-down') {
       knockedSide = 'def';
-      showBlockResult('Defender Down — roll Armor!', 'ok');
+      showBlockResult('Defender Down â€” roll Armor!', 'ok');
     }
 
     /* Unlock armor roll if someone is knocked down */
     if (knockedSide === 'def' || knockedSide === 'att') {
       unlockArmorRoll(knockedSide);
     } else if (knockedSide === 'both') {
-      /* Both down without Wrestle: armor for both — show defender's armor for now */
+      /* Both down without Wrestle: armor for both â€” show defender's armor for now */
       unlockArmorRoll('def');
     }
   }
@@ -464,7 +464,7 @@ function initBlockWizard() {
     }
   }
 
-  /* ── Armor roll ── */
+  /* â”€â”€ Armor roll â”€â”€ */
   function unlockArmorRoll(knockedSide) {
     const armorPanel = document.getElementById('armor-roll-panel');
     const armorBtn   = document.getElementById('armor-roll-btn');
@@ -511,7 +511,7 @@ function initBlockWizard() {
     if (armorBtn) armorBtn.disabled = false;
   }
 
-  /* ── Injury roll ── */
+  /* â”€â”€ Injury roll â”€â”€ */
   function unlockInjuryRoll(knockedSide) {
     const injPanel = document.getElementById('injury-roll-panel');
     const injBtn   = document.getElementById('injury-roll-btn');
@@ -544,7 +544,7 @@ function initBlockWizard() {
     else if (total <= 9)  { outcome = "KO'd";      status = window.PlayerStatus?.KO;           statusLabel = 'KO';         }
     else                  { outcome = 'Casualty';  status = window.PlayerStatus?.BADLY_HURT;   statusLabel = 'BADLY HURT'; }
 
-    const extra = total >= 10 ? ' — Pro mode has full casualty table.' : '';
+    const extra = total >= 10 ? ' â€” Pro mode has full casualty table.' : '';
     if (result) {
       result.textContent = `${outcome} (${total})${extra}`;
       result.className   = `bwiz-result-content bwiz-result-${total <= 7 ? 'warn' : 'bad'}`;
@@ -560,7 +560,7 @@ function initBlockWizard() {
     if (injBtn) injBtn.disabled = false;
   }
 
-  /* ── Main roll ── */
+  /* â”€â”€ Main roll â”€â”€ */
   async function doRoll() {
     rollBtn.disabled   = true;
     if (confirmBtn) confirmBtn.hidden = true;
@@ -611,7 +611,7 @@ function initBlockWizard() {
     interpretResult(chosenFace);
   });
 
-  /* ── Init ── */
+  /* â”€â”€ Init â”€â”€ */
   updateStDisplay();
   resetRoll();
 
@@ -627,11 +627,11 @@ function initBlockWizard() {
   rollBtn.addEventListener('click', doRoll);
 }
 
-/* ════════════════════════════════════════════════════════
-   PASS WIZARD  (Sprint 3 rebuild — 8-step sequence)
-   ════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PASS WIZARD  (Sprint 3 rebuild â€” 8-step sequence)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* ── Skill extraction from a player card DOM element ── */
+/* â”€â”€ Skill extraction from a player card DOM element â”€â”€ */
 function getPlayerSkills(playerObj) {
   if (!playerObj?.card) return [];
   return Array.from(playerObj.card.querySelectorAll('.skill-link'))
@@ -644,7 +644,7 @@ function hasSkill(playerObj, name) {
   return getPlayerSkills(playerObj).some(s => s.toLowerCase() === lc);
 }
 
-/* ── Shared skill-use prompt — returns Promise<boolean>
+/* â”€â”€ Shared skill-use prompt â€” returns Promise<boolean>
    Renders inline Yes/No buttons in `containerEl`.
    Resolves true if the user chooses to use the skill, false otherwise.
 
@@ -652,8 +652,8 @@ function hasSkill(playerObj, name) {
    If used: caller should re-roll the original die and handle new result.
 
    For Pro specifically: on click "Use Pro", roll D6 automatically.
-   If result >= 4 → resolve true (caller may re-roll).
-   If result < 4  → resolve false (Pro failed, proceed to failure path). */
+   If result >= 4 â†’ resolve true (caller may re-roll).
+   If result < 4  â†’ resolve false (Pro failed, proceed to failure path). */
 function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
   return new Promise(resolve => {
     if (!hasSkill(playerObj, skillName)) { resolve(false); return; }
@@ -685,7 +685,7 @@ function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
         const proOk = proVal >= 4;
         const proRes = document.createElement('span');
         proRes.style.cssText = `font-family:JetBrains Mono,monospace;font-size:0.65rem;font-weight:700;color:${proOk ? '#81c784' : '#ff8fa0'};margin-left:0.25rem;`;
-        proRes.textContent = proOk ? `${proVal} ✓ Pro succeeds — re-roll!` : `${proVal} ✗ Pro failed.`;
+        proRes.textContent = proOk ? `${proVal} âœ“ Pro succeeds â€” re-roll!` : `${proVal} âœ— Pro failed.`;
         wrap.appendChild(proRes);
         resolve(proOk);
       });
@@ -712,7 +712,7 @@ function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
   });
 }
 
-/* Parse a stat value from the card stats text (e.g. "AG3+" → 3, "PA—" → null) */
+/* Parse a stat value from the card stats text (e.g. "AG3+" â†’ 3, "PAâ€”" â†’ null) */
 function parseStat(statsText, key) {
   const m = statsText.match(new RegExp(`\\b${key}\\s*(\\d+)`, 'i'));
   return m ? parseInt(m[1], 10) : null;
@@ -763,979 +763,11 @@ function buildRosterTabs(el, { tabsId, initialSide = 'left', filterFn, onSelect 
   return { getActiveSide: () => activeSide };
 }
 
-function initPassWizard() {
-  const panel = document.getElementById('panel-pass');
-  if (!panel) return;
 
-  /* ── Wizard state ── */
-  const ws = {
-    step:        1,
-    thrower:     null,   /* player obj */
-    catcher:     null,
-    throwerSide: 'left',
-    catcherSide: 'right',
-    paTarget:    4,      /* PA stat parsed from card */
-    catchAG:     4,
-    range:       null,   /* { label, shortLabel, mod, cls, dist } */
-    tz:          0,      /* thrower tackle zones */
-    catcherTZ:   0,
-    intercept:   false,
-    interceptor:     null,   /* player obj — potential interceptor */
-    interceptorSide: 'right',
-    interceptAG:     null,   /* parsed AG of interceptor */
-    interceptTarget: null,   /* d6 target to intercept */
-    pitchGrid:   null,   /* PitchGrid instance (kept alive between step re-renders) */
-    passResult:  null,   /* 'accurate'|'inaccurate'|'fumble' */
-    scatterDirs: [],     /* D8 values for 3 scatter rolls */
-    catchResult: null,
-    /* auto-detected skill mods */
-    modAccurate:   false,
-    modNerves:     false,
-    modCatch:      false,
-    modHailMary:   false,
-  };
 
-  /* ── Panel body rebuild ── */
-  const body = panel.querySelector('.panel-body');
-
-  function buildShell() {
-    body.innerHTML = '';
-
-    /* Weather chip slot (recreate since body was cleared) */
-    const wChip = document.createElement('div');
-    wChip.className = 'weather-chip-slot';
-    wChip.id = 'wchip-pass';
-    wChip.hidden = true;
-    body.appendChild(wChip);
-
-    /* Summary strip */
-    const sumEl = document.createElement('div');
-    sumEl.className = 'pass-summary-strip';
-    sumEl.id = 'pwiz-summary';
-    body.appendChild(sumEl);
-
-    /* Step indicator */
-    const indEl = document.createElement('div');
-    indEl.className = 'pass-step-indicator';
-    indEl.id = 'pwiz-ind';
-    body.appendChild(indEl);
-
-    /* Step content */
-    const contentEl = document.createElement('div');
-    contentEl.id = 'pwiz-content';
-    body.appendChild(contentEl);
-
-    /* Nav row */
-    const navEl = document.createElement('div');
-    navEl.className = 'pass-nav';
-    navEl.innerHTML = `
-      <button class="pass-nav-btn" id="pwiz-back">← Back</button>
-      <button class="pass-nav-btn nav-primary" id="pwiz-next">Next →</button>
-    `;
-    body.appendChild(navEl);
-
-    document.getElementById('pwiz-back').addEventListener('click', () => go(ws.step - 1));
-    document.getElementById('pwiz-next').addEventListener('click', () => go(ws.step + 1));
-  }
-
-  /* ── Step definitions ── */
-  const STEPS = [
-    { id: 1, label: 'Thrower' },
-    { id: 2, label: 'Catcher' },
-    { id: 3, label: 'Range'   },
-    { id: 4, label: 'Mods'    },
-    { id: 5, label: 'Int.'    },
-    { id: 6, label: 'Throw'   },
-    { id: 7, label: 'Scatter' },
-    { id: 8, label: 'Catch'   },
-  ];
-
-  /* ── Navigation ── */
-  function go(n) {
-    /* Skip scatter step if pass was accurate or not yet rolled */
-    if (n === 7 && ws.passResult !== 'inaccurate') n = ws.passResult === 'accurate' ? 8 : 6;
-    ws.step = Math.max(1, Math.min(8, n));
-    render();
-  }
-
-  /* ── Render cycle ── */
-  function render() {
-    /* Step indicator */
-    const indEl = document.getElementById('pwiz-ind');
-    if (indEl) {
-      indEl.innerHTML = '';
-      STEPS.forEach(s => {
-        const pip = document.createElement('div');
-        pip.className = 'pass-step-pip';
-        pip.textContent = `${s.id} ${s.label}`;
-        if (s.id < ws.step)  pip.classList.add('pip-done');
-        if (s.id === ws.step) pip.classList.add('pip-current');
-        indEl.appendChild(pip);
-      });
-    }
-
-    /* Nav buttons */
-    const backBtn = document.getElementById('pwiz-back');
-    const nextBtn = document.getElementById('pwiz-next');
-    if (backBtn) backBtn.disabled = ws.step === 1;
-    if (nextBtn) {
-      nextBtn.textContent = ws.step === 8 ? 'Done ✓' : 'Next →';
-      nextBtn.disabled = ws.step === 8 && !ws.catchResult;
-      if (ws.step === 6) { nextBtn.textContent = 'Skip'; nextBtn.disabled = false; }
-    }
-
-    /* Step content */
-    const contentEl = document.getElementById('pwiz-content');
-    if (!contentEl) return;
-    contentEl.innerHTML = '';
-
-    switch (ws.step) {
-      case 1: renderThrower(contentEl); break;
-      case 2: renderCatcher(contentEl); break;
-      case 3: renderRange(contentEl);   break;
-      case 4: renderMods(contentEl);    break;
-      case 5: renderIntercept(contentEl); break;
-      case 6: renderThrow(contentEl);   break;
-      case 7: renderScatter(contentEl); break;
-      case 8: renderCatch(contentEl);   break;
-    }
-
-    updateSummary();
-    /* Refresh weather chip (slot was recreated in buildShell) */
-    window.Panels?.refreshWeatherChips?.();
-  }
-
-  /* ── Summary strip ── */
-  function updateSummary() {
-    const el = document.getElementById('pwiz-summary');
-    if (!el) return;
-    const tName     = ws.thrower?.name ?? '—';
-    const cName     = ws.catcher?.name ?? '—';
-    const rangeStr  = ws.range
-      ? `${ws.range.shortLabel}${ws.range.mod !== 0 ? ` (${ws.range.mod})` : ''}`
-      : '—';
-    const resultStr = ws.passResult ?? '—';
-    const resCls    = ws.passResult === 'accurate' ? 'ok' : ws.passResult === 'fumble' ? 'bad' : '';
-
-    el.innerHTML = `
-      <span class="pass-sum-name">${esc(tName)}</span>
-      <span class="pass-sum-sep">→</span>
-      <span class="pass-sum-name">${esc(cName)}</span>
-      <span class="pass-sum-sep">|</span>
-      <span class="pass-sum-range">${esc(rangeStr)}</span>
-      <span class="pass-sum-sep">|</span>
-      <span class="pass-sum-result ${resCls}">${esc(resultStr)}</span>
-    `;
-  }
-
-  /* ── Roster list helper ── */
-  function renderRosterTabs(container, { leftLabel, rightLabel, filterLeft, filterRight, onSelect }) {
-    const tabs = document.createElement('div');
-    tabs.className = 'pwiz-team-tabs';
-
-    let activeSide = 'left';
-
-    const leftTab  = document.createElement('button');
-    const rightTab = document.createElement('button');
-    leftTab.type  = rightTab.type = 'button';
-    leftTab.className  = 'pwiz-team-tab active';
-    rightTab.className = 'pwiz-team-tab';
-    leftTab.textContent  = leftLabel;
-    rightTab.textContent = rightLabel;
-
-    const listWrap = document.createElement('div');
-
-    function showSide(side) {
-      activeSide = side;
-      leftTab.classList.toggle('active',  side === 'left');
-      rightTab.classList.toggle('active', side === 'right');
-      listWrap.innerHTML = '';
-      const filter = side === 'left' ? filterLeft : filterRight;
-      const { getSelected } = buildWizardPlayerList(`_pwiz-list-${side}`, side, filter ?? (() => true), onSelect);
-      const innerList = document.createElement('div');
-      innerList.className = 'wps-list';
-      innerList.id = `_pwiz-list-${side}`;
-      listWrap.appendChild(innerList);
-      buildWizardPlayerList(innerList.id, side, filter ?? (() => true), onSelect);
-    }
-
-    leftTab.addEventListener('click',  () => showSide('left'));
-    rightTab.addEventListener('click', () => showSide('right'));
-    tabs.appendChild(leftTab);
-    tabs.appendChild(rightTab);
-    container.appendChild(tabs);
-    container.appendChild(listWrap);
-
-    showSide('left');
-    return { getActiveSide: () => activeSide };
-  }
-
-  /* buildListIn is now a module-level helper */
-
-  /* ─────────────────────────────────────────────────────
-     STEP 1: THROWER SELECTION
-     ──────────────────────────────────────────────────── */
-  function renderThrower(el) {
-    el.innerHTML = '<div class="pwiz-step-title">Select Thrower</div>';
-
-    /* Pre-select ball carrier if tracked */
-    const bc = window.GameState?.ballCarrier;
-
-    const tabs = document.createElement('div');
-    tabs.className = 'pwiz-team-tabs';
-    const lBtn = document.createElement('button');
-    const rBtn = document.createElement('button');
-    lBtn.type = rBtn.type = 'button';
-    lBtn.className = 'pwiz-team-tab' + (ws.throwerSide === 'left'  ? ' active' : '');
-    rBtn.className = 'pwiz-team-tab' + (ws.throwerSide === 'right' ? ' active' : '');
-    lBtn.textContent = 'Home';
-    rBtn.textContent = 'Away';
-
-    const listWrap = document.createElement('div');
-
-    function showThrowerSide(side) {
-      ws.throwerSide = side;
-      lBtn.classList.toggle('active', side === 'left');
-      rBtn.classList.toggle('active', side === 'right');
-      listWrap.innerHTML = '';
-      buildListIn(listWrap, side, p => !window.STATUS_META?.[p.status]?.dim, (p) => {
-        ws.thrower = { ...p, skills: getPlayerSkills(p) };
-        ws.paTarget = parseStat(p.statsText, 'PA') ?? 99;
-        ws.throwerSide = side;
-        /* Auto-detect skills */
-        ws.modAccurate = hasSkill(p, 'Accurate');
-        ws.modNerves   = hasSkill(p, 'Nerves of Steel');
-        ws.modHailMary = hasSkill(p, 'Hail Mary Pass');
-        updateSummary();
-      });
-
-      /* Pre-select ball carrier */
-      if (bc && bc.side === side) {
-        setTimeout(() => {
-          const btn = listWrap.querySelector(`[data-player-idx="${bc.idx}"]`);
-          btn?.click();
-        }, 50);
-      }
-    }
-
-    lBtn.addEventListener('click', () => showThrowerSide('left'));
-    rBtn.addEventListener('click', () => showThrowerSide('right'));
-
-    tabs.appendChild(lBtn);
-    tabs.appendChild(rBtn);
-    el.appendChild(tabs);
-    el.appendChild(listWrap);
-
-    showThrowerSide(ws.throwerSide);
-
-    if (ws.thrower?.name) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.style.marginTop = '0.4rem';
-      note.textContent = `Current: ${ws.thrower.name} (PA ${ws.paTarget === 99 ? '—' : ws.paTarget + '+'})`;
-      el.appendChild(note);
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 2: CATCHER SELECTION
-     ──────────────────────────────────────────────────── */
-  function renderCatcher(el) {
-    el.innerHTML = '<div class="pwiz-step-title">Select Catcher</div>';
-
-    const tabs = document.createElement('div');
-    tabs.className = 'pwiz-team-tabs';
-    const lBtn = document.createElement('button');
-    const rBtn = document.createElement('button');
-    lBtn.type = rBtn.type = 'button';
-    lBtn.className = 'pwiz-team-tab' + (ws.catcherSide === 'left'  ? ' active' : '');
-    rBtn.className = 'pwiz-team-tab' + (ws.catcherSide === 'right' ? ' active' : '');
-    lBtn.textContent = 'Home';
-    rBtn.textContent = 'Away';
-
-    const listWrap = document.createElement('div');
-
-    function showCatcherSide(side) {
-      ws.catcherSide = side;
-      lBtn.classList.toggle('active', side === 'left');
-      rBtn.classList.toggle('active', side === 'right');
-      listWrap.innerHTML = '';
-      buildListIn(listWrap, side, p => !window.STATUS_META?.[p.status]?.dim, (p) => {
-        ws.catcher = { ...p, skills: getPlayerSkills(p) };
-        ws.catchAG = parseStat(p.statsText, 'AG') ?? 4;
-        ws.catcherSide = side;
-        ws.modCatch = hasSkill(p, 'Catch');
-        updateSummary();
-      });
-    }
-
-    lBtn.addEventListener('click', () => showCatcherSide('left'));
-    rBtn.addEventListener('click', () => showCatcherSide('right'));
-    tabs.appendChild(lBtn);
-    tabs.appendChild(rBtn);
-    el.appendChild(tabs);
-    el.appendChild(listWrap);
-
-    showCatcherSide(ws.catcherSide);
-
-    if (ws.catcher?.name) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.style.marginTop = '0.4rem';
-      note.textContent = `Current: ${ws.catcher.name} (AG ${ws.catchAG}+)`;
-      el.appendChild(note);
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 3: RANGE GRID
-     ──────────────────────────────────────────────────── */
-  function renderRange(el) {
-    el.innerHTML = '<div class="pwiz-step-title">Tap to Place Catchers — Tap Thrower to Move</div>';
-
-    const gridContainer = document.createElement('div');
-    el.appendChild(gridContainer);
-
-    const resultDisplay = document.createElement('div');
-    resultDisplay.className = 'range-result-display';
-    resultDisplay.hidden    = true;
-    el.appendChild(resultDisplay);
-
-    /* Reuse or create PitchGrid */
-    if (!ws.pitchGrid) {
-      ws.pitchGrid = new window.PitchGrid(gridContainer);
-    } else {
-      /* Re-insert existing grid DOM into new container */
-      ws.pitchGrid.container = gridContainer;
-      ws.pitchGrid.clearScatter?.();
-      ws.pitchGrid._build();
-    }
-
-    /* Blizzard mode */
-    const w = window.GameState?.currentWeather;
-    ws.pitchGrid.setBlizzard(w?.name === 'Blizzard');
-
-    /* Show range for current active catcher if set */
-    if (ws.range) {
-      resultDisplay.hidden = false;
-      showRangeResult(resultDisplay, ws.range);
-    }
-
-    ws.pitchGrid.onCatcherSelect = (dist, range) => {
-      ws.range = range;
-      if (range) {
-        resultDisplay.hidden = false;
-        showRangeResult(resultDisplay, range);
-      } else {
-        resultDisplay.hidden = true;
-      }
-      updateSummary();
-    };
-  }
-
-  function showRangeResult(el, range) {
-    el.innerHTML = `
-      <div class="range-num">${range.dist}</div>
-      <div class="range-label-text ${range.cls}">${esc(range.label)}
-        ${range.mod !== 0 ? ` <span style="font-weight:400;color:rgba(200,220,255,0.6);">(${range.mod} modifier)</span>` : ''}
-      </div>
-      ${range.cls === 'range-long' || range.cls === 'range-bomb'
-        ? window.GameState?.currentWeather?.name === 'Blizzard'
-          ? '<div style="color:#ff8fa0;font-size:0.7rem;margin-top:0.3rem;">⚠ Blizzard: this range is not allowed</div>'
-          : ''
-        : ''}
-    `;
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 4: MODIFIERS
-     ──────────────────────────────────────────────────── */
-  function renderMods(el) {
-    el.innerHTML = '<div class="pwiz-step-title">Modifiers</div>';
-
-    /* TZ counter */
-    const tzRow = document.createElement('div');
-    tzRow.className = 'pwiz-mod-row';
-    tzRow.innerHTML = '<span class="input-label" style="margin:0;">Thrower Tackle Zones:</span>';
-
-    const tzMinus = document.createElement('button');
-    tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = '−';
-    const tzVal   = document.createElement('span');
-    tzVal.className = 'tz-val'; tzVal.textContent = ws.tz;
-    const tzPlus  = document.createElement('button');
-    tzPlus.type = 'button'; tzPlus.className = 'tz-btn'; tzPlus.textContent = '+';
-
-    tzMinus.addEventListener('click', () => { ws.tz = Math.max(0, ws.tz - 1); tzVal.textContent = ws.tz; refreshTarget(); });
-    tzPlus.addEventListener('click',  () => { ws.tz = Math.min(6, ws.tz + 1); tzVal.textContent = ws.tz; refreshTarget(); });
-
-    tzRow.appendChild(tzMinus);
-    tzRow.appendChild(tzVal);
-    tzRow.appendChild(tzPlus);
-    el.appendChild(tzRow);
-
-    /* Auto-detected skill chips */
-    const weather = window.GameState?.currentWeather;
-    const chips   = document.createElement('div');
-    chips.className = 'pwiz-mod-row';
-    chips.style.marginTop = '0.4rem';
-
-    function chip(label, cls, title) {
-      const c = document.createElement('span');
-      c.className = `pwiz-skill-chip ${cls}`;
-      c.textContent = label;
-      if (title) c.title = title;
-      return c;
-    }
-
-    if (ws.modAccurate && (ws.range?.cls === 'range-quick' || ws.range?.cls === 'range-short')) {
-      chips.appendChild(chip('Accurate +1', 'pos', 'Accurate skill: +1 for Quick/Short passes'));
-    }
-    if (ws.modNerves) {
-      chips.appendChild(chip('Nerves of Steel', 'pos', 'Ignore Tackle Zone penalties'));
-    }
-    if (weather && weather.effect && weather.effect !== 'No effect') {
-      chips.appendChild(chip(`${weather.emoji} ${weather.name}`, 'neg', weather.effect));
-    }
-    if (ws.range?.cls === 'range-long' || ws.range?.cls === 'range-bomb') {
-      chips.appendChild(chip(`${ws.range.shortLabel} (${ws.range.mod})`, 'neg', 'Range modifier'));
-    }
-    el.appendChild(chips);
-
-    /* Live target display */
-    const targetBar = document.createElement('div');
-    targetBar.className = 'pwiz-target-bar';
-    targetBar.id = 'pwiz-target-bar';
-    el.appendChild(targetBar);
-    refreshTarget();
-
-    function refreshTarget() {
-      const bar = document.getElementById('pwiz-target-bar');
-      if (!bar) return;
-
-      const rangeMod  = ws.range?.mod ?? 0;
-      const tzMod     = ws.modNerves ? 0 : -ws.tz;
-      const weatherMod = (weather && weather.effect && weather.effect !== 'No effect' && weather.name !== 'Blizzard') ? -1 : 0;
-      const accurateMod = (ws.modAccurate && (ws.range?.cls === 'range-quick' || ws.range?.cls === 'range-short')) ? 1 : 0;
-      const totalMod  = rangeMod + tzMod + weatherMod + accurateMod;
-
-      let display;
-      if (ws.paTarget === 99) {
-        display = '—';
-        bar.innerHTML = `<span class="pwiz-target-num">—</span><span class="pwiz-target-note"> No PA — always inaccurate (fumble on 1)</span>`;
-      } else {
-        const threshold = Math.min(6, Math.max(2, ws.paTarget - totalMod));
-        bar.innerHTML = `
-          <span class="pwiz-target-num">${threshold}+</span>
-          <span class="pwiz-target-note"> on D6 (base PA${ws.paTarget}+, net modifier ${totalMod >= 0 ? '+' : ''}${totalMod})</span>
-        `;
-      }
-
-      /* Cache computed values for step 6 */
-      ws._totalMod  = totalMod;
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 5: INTERCEPT — player selection + target
-     ──────────────────────────────────────────────────── */
-  function renderIntercept(el) {
-    el.innerHTML = `<div class="pwiz-step-title">Interception?</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">Is there an opposition player in the passing lane who could intercept?</p>`;
-
-    /* Yes / No toggle */
-    const togRow = document.createElement('div');
-    togRow.style.cssText = 'display:flex;gap:0.4rem;margin-bottom:0.6rem;';
-
-    const noBtn  = document.createElement('button');
-    const yesBtn = document.createElement('button');
-    noBtn.type = yesBtn.type = 'button';
-
-    function setIntercept(val) {
-      ws.intercept = val;
-      noBtn.className  = `pass-nav-btn${!val ? ' nav-primary' : ''}`;
-      yesBtn.className = `pass-nav-btn${val  ? ' nav-primary' : ''}`;
-      rosterWrap.hidden = !val;
-      if (!val) {
-        ws.interceptor    = null;
-        ws.interceptAG    = null;
-        ws.interceptTarget = null;
-      }
-    }
-
-    noBtn.textContent  = 'No interceptor';
-    yesBtn.textContent = 'Yes — select player';
-    noBtn.addEventListener('click',  () => setIntercept(false));
-    yesBtn.addEventListener('click', () => setIntercept(true));
-    togRow.appendChild(noBtn);
-    togRow.appendChild(yesBtn);
-    el.appendChild(togRow);
-
-    /* Roster selector (opposing team) */
-    const rosterWrap = document.createElement('div');
-    rosterWrap.hidden = !ws.intercept;
-    el.appendChild(rosterWrap);
-
-    /* Opposing side = opposite of thrower's side */
-    const oppSide = ws.throwerSide === 'left' ? 'right' : 'left';
-    const oppLabel = oppSide === 'left' ? 'Home' : 'Away';
-
-    const listTitle = document.createElement('div');
-    listTitle.className = 'input-label';
-    listTitle.style.marginBottom = '0.3rem';
-    listTitle.textContent = `${oppLabel} team — tap interceptor:`;
-    rosterWrap.appendChild(listTitle);
-
-    buildListIn(rosterWrap, oppSide, p => !window.STATUS_META?.[p.status]?.dim, (p) => {
-      ws.interceptor    = { ...p };
-      ws.interceptorSide = oppSide;
-      ws.interceptAG    = parseStat(p.statsText, 'AG') ?? 4;
-      /* Intercept target: same AG-based check as catching */
-      ws.interceptTarget = Math.min(6, Math.max(2, ws.interceptAG));
-      showInterceptSummary();
-    });
-
-    const summaryEl = document.createElement('div');
-    summaryEl.style.cssText = 'margin-top:0.5rem;';
-    rosterWrap.appendChild(summaryEl);
-
-    function showInterceptSummary() {
-      if (!ws.interceptor) { summaryEl.innerHTML = ''; return; }
-      summaryEl.innerHTML = `
-        <div class="pwiz-target-bar" style="margin-top:0.4rem;">
-          <span class="pwiz-target-num">${ws.interceptTarget}+</span>
-          <span class="pwiz-target-note"> to intercept — ${esc(ws.interceptor.name)}, AG${ws.interceptAG}+</span>
-        </div>
-        <p class="panel-intro" style="font-size:0.68rem;margin-top:0.35rem;color:rgba(255,160,160,0.75);">On success: ball caught — Turnover!</p>
-      `;
-    }
-
-    if (ws.interceptor) showInterceptSummary();
-
-    /* Apply initial state */
-    setIntercept(ws.intercept);
-  }
-
-  /* ─────────────────────────────────────────────────────
-     PRE-PASS STRIP — horizontal roll summary
-     ──────────────────────────────────────────────────── */
-  function renderPrePassStrip(el) {
-    const weather    = window.GameState?.currentWeather;
-    const weatherMod = (weather && weather.effect && weather.effect !== 'No effect' && weather.name !== 'Blizzard') ? -1 : 0;
-    const accurateMod = (ws.modAccurate && (ws.range?.cls === 'range-quick' || ws.range?.cls === 'range-short')) ? 1 : 0;
-    const tzMod      = ws.modNerves ? 0 : -ws.tz;
-    const totalMod   = (ws.range?.mod ?? 0) + tzMod + weatherMod + accurateMod;
-    ws._totalMod     = totalMod; /* keep in sync */
-
-    let throwStr;
-    if (ws.paTarget === 99) {
-      throwStr = '— (No PA)';
-    } else {
-      const thresh = Math.min(6, Math.max(2, ws.paTarget - totalMod));
-      throwStr = `${thresh}+`;
-    }
-
-    const catchMod    = -ws.catcherTZ + ((weather?.name === 'Pouring Rain' || weather?.name === 'Blizzard') ? -1 : 0) + (ws.modCatch ? 1 : 0);
-    const catchThresh = Math.min(6, Math.max(2, ws.catchAG - catchMod));
-    const catchStr    = ws.catcher ? `${catchThresh}+` : '—';
-
-    const strip = document.createElement('div');
-    strip.className = 'prepass-strip';
-    strip.innerHTML = `
-      <span class="prepass-chip throw-chip">🎯 Throw ${throwStr}</span>
-      ${ws.interceptor
-        ? `<span class="prepass-arrow">→</span>
-           <span class="prepass-chip int-chip">⚡ Intercept ${ws.interceptTarget}+ <span class="prepass-sub">${esc(ws.interceptor.name)}, AG${ws.interceptAG}</span></span>`
-        : ''}
-      <span class="prepass-arrow">→</span>
-      <span class="prepass-chip catch-chip">🤲 Catch ${catchStr}</span>
-    `;
-    el.appendChild(strip);
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 6: THROW ROLL
-     ──────────────────────────────────────────────────── */
-  function renderThrow(el) {
-    el.innerHTML = `<div class="pwiz-step-title">Throw Roll</div>`;
-    renderPrePassStrip(el);
-
-    const mod        = ws._totalMod ?? 0;
-    const paTarget   = ws.paTarget;
-    const resultEl   = document.createElement('div');
-    resultEl.className = 'roll-result';
-    resultEl.hidden    = true;
-
-    function processThrow(roll) {
-      const modified = roll + mod;
-      let outcome, title, cls, desc;
-
-      if (paTarget === 99) {
-        if (roll === 1) { outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas'; desc = "Natural 1 — ball hits the ground. Scatter from thrower's square. Turnover!"; }
-        else { outcome = 'inaccurate'; title = 'Inaccurate (No PA)'; cls = 'result-ko'; desc = 'No Passing Ability — always inaccurate. Ball scatters 3× from target square.'; }
-      } else if (roll === 1) {
-        outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas'; desc = "Natural 1 — the ball is fumbled. Scatter from thrower's square. Turnover!";
-      } else if (modified >= paTarget) {
-        outcome = 'accurate'; title = 'Accurate Pass!'; cls = 'result-ok';
-        desc = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs PA${paTarget}+ — ball lands on target.`;
-      } else {
-        outcome = 'inaccurate'; title = 'Inaccurate Pass'; cls = 'result-ko';
-        desc = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs PA${paTarget}+ — ball scatters 3× from target square.`;
-      }
-
-      ws.passResult    = outcome;
-      ws.scatterDirs   = [];
-      ws.catchResult   = null;
-
-      resultEl.innerHTML = `
-        <div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (→${modified})</span>` : ''}</div>
-        <div class="result-name ${cls}">${esc(title)}</div>
-        <p class="result-desc">${esc(desc)}</p>
-      `;
-      resultEl.hidden = false;
-      updateSummary();
-
-      /* Auto-advance after short delay */
-      setTimeout(() => {
-        if (outcome === 'accurate')   go(8);
-        if (outcome === 'inaccurate') go(7);
-        /* fumble: stay on step 6 */
-      }, 900);
-    }
-
-    const isPhys = wizardMode('pass') === 'physical';
-
-    if (!isPhys) {
-      /* Digital: animated D6 */
-      const dieEl = document.createElement('div');
-      dieEl.className = 'die';
-      dieEl.id        = 'pwiz-throw-d1';
-      dieEl.dataset.value = '1';
-      dieEl.innerHTML = '<div class="die-face"></div>';
-      const tray = document.createElement('div');
-      tray.className = 'dice-tray single';
-      tray.appendChild(dieEl);
-      el.appendChild(tray);
-
-      Dice.initAllDice(); /* ensure pip rendering is initialised */
-      if (typeof Dice.setDieValue === 'function') Dice.setDieValue(dieEl, 1);
-
-      const rollBtn = document.createElement('button');
-      rollBtn.type = 'button';
-      rollBtn.className = 'roll-btn';
-      rollBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Pass';
-      rollBtn.addEventListener('click', async () => {
-        rollBtn.disabled = true;
-        resultEl.hidden  = true;
-        const roll = await Dice.rollDieElement(dieEl);
-        processThrow(roll);
-      });
-      el.appendChild(rollBtn);
-    } else {
-      /* Physical: 6 labelled buttons */
-      const physZone = document.createElement('div');
-      physZone.className = 'physical-zone';
-      const mod2 = ws._totalMod ?? 0;
-
-      window.PhysicalDice.showPhysicalButtons(physZone, {
-        columns: 3,
-        buttons: Array.from({ length: 6 }, (_, i) => {
-          const roll = i + 1;
-          const mod2 = ws._totalMod ?? 0;
-          const modified = roll + mod2;
-          let label, cls;
-          if (paTarget === 99) {
-            if (roll === 1) { label = 'Fumble!'; cls = 'phys-bad'; }
-            else            { label = 'Inaccurate'; cls = 'phys-warn'; }
-          } else if (roll === 1) {
-            label = 'Fumble!'; cls = 'phys-bad';
-          } else if (modified >= paTarget) {
-            label = 'Accurate!'; cls = 'phys-good';
-          } else {
-            label = 'Inaccurate'; cls = 'phys-warn';
-          }
-          return { value: roll, label, cls };
-        }),
-        onSelect(roll) { processThrow(roll); },
-      });
-      el.appendChild(physZone);
-    }
-
-    el.appendChild(resultEl);
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 7: SCATTER (3× D8, 1 sq each)
-     ──────────────────────────────────────────────────── */
-  function renderScatter(el) {
-    el.innerHTML = `<div class="pwiz-step-title">Scatter ×3</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">Ball scatters 1 square in a random direction, 3 times from the target square.</p>`;
-
-    ws.scatterDirs = [];
-
-    const DIR_LABELS = { 1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘' };
-    const DIR_NAMES  = { 1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right' };
-    const resultsEl  = document.createElement('div');
-    const isPhys     = wizardMode('pass') === 'physical';
-
-    /* Grid container — reuse ws.pitchGrid if available */
-    const gridWrap = document.createElement('div');
-    gridWrap.style.marginTop = '0.6rem';
-    const gridLabel = document.createElement('div');
-    gridLabel.className = 'input-label';
-    gridLabel.textContent = 'Ball location:';
-    gridLabel.style.marginBottom = '0.25rem';
-
-    /* Scatter target: active catcher's grid position */
-    const activeCatcher = ws.pitchGrid?.getActiveCatcher?.() ?? null;
-
-    function updateScatterGrid() {
-      if (!ws.pitchGrid || !activeCatcher) return;
-      ws.pitchGrid.showScatterPath(activeCatcher, ws.scatterDirs);
-    }
-
-    function addScatterResult(dir) {
-      ws.scatterDirs.push(dir);
-      const row = document.createElement('div');
-      row.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.85rem;margin:0.2rem 0;color:rgba(200,220,255,0.8);';
-      row.textContent = `${ws.scatterDirs.length}. ${DIR_LABELS[dir]} ${DIR_NAMES[dir]}`;
-      resultsEl.appendChild(row);
-
-      updateScatterGrid();
-
-      if (ws.scatterDirs.length >= 3) {
-        setTimeout(() => go(8), 700);
-      } else {
-        buildNextScatter();
-      }
-    }
-
-    function buildNextScatter() {
-      const n = ws.scatterDirs.length + 1;
-      const sectionEl = document.createElement('div');
-      sectionEl.style.marginTop = '0.5rem';
-
-      if (isPhys) {
-        const label = document.createElement('div');
-        label.className   = 'input-label';
-        label.textContent = `Scatter ${n}: direction (D8)`;
-        label.style.marginBottom = '0.25rem';
-        sectionEl.appendChild(label);
-        const compZone = document.createElement('div');
-        sectionEl.appendChild(compZone);
-        window.PhysicalDice.showCompassButtons(compZone, dir => {
-          sectionEl.remove();
-          addScatterResult(dir);
-        });
-      } else {
-        const dieEl = document.createElement('div');
-        dieEl.className = 'die';
-        dieEl.id        = `pwiz-scatter-d${n}`;
-        dieEl.dataset.value = '1';
-        dieEl.dataset.sides = '8';
-        dieEl.innerHTML = '<div class="die-face d8-face"></div>';
-        const tray = document.createElement('div');
-        tray.className = 'dice-tray single';
-        tray.appendChild(dieEl);
-
-        const btn = document.createElement('button');
-        btn.type      = 'button';
-        btn.className = 'roll-btn';
-        btn.innerHTML = `<span class="roll-btn-icon">🎲</span> Scatter ${n}`;
-
-        btn.addEventListener('click', async () => {
-          btn.disabled = true;
-          const dir = await Dice.rollDieElement(dieEl);
-          sectionEl.remove();
-          addScatterResult(dir);
-        });
-
-        sectionEl.appendChild(tray);
-        sectionEl.appendChild(btn);
-      }
-
-      el.appendChild(sectionEl);
-    }
-
-    el.appendChild(resultsEl);
-
-    /* Show pitch grid if we have one with an active catcher */
-    if (ws.pitchGrid && activeCatcher) {
-      gridWrap.appendChild(gridLabel);
-      /* Build grid into a fresh container inside gridWrap */
-      const innerContainer = document.createElement('div');
-      gridWrap.appendChild(innerContainer);
-      ws.pitchGrid.container = innerContainer;
-      ws.pitchGrid.clearScatter?.();
-      ws.pitchGrid._build();
-      ws.pitchGrid.onCatcherSelect = null; /* read-only in scatter view */
-      el.appendChild(gridWrap);
-      updateScatterGrid();
-    }
-
-    buildNextScatter();
-  }
-
-  /* ─────────────────────────────────────────────────────
-     STEP 8: CATCH ROLL
-     ──────────────────────────────────────────────────── */
-  function renderCatch(el) {
-    el.innerHTML = `<div class="pwiz-step-title">Catch Roll</div>`;
-
-    const weather      = window.GameState?.currentWeather;
-    const weatherMod   = (weather?.name === 'Pouring Rain' || weather?.name === 'Blizzard') ? -1 : 0;
-    const catchSkillM  = ws.modCatch ? 1 : 0;
-
-    /* Catcher TZ counter */
-    const tzRow = document.createElement('div');
-    tzRow.className = 'pwiz-mod-row';
-    tzRow.innerHTML = `<span class="input-label" style="margin:0;">Catcher Tackle Zones:</span>`;
-    const tzMinus = document.createElement('button'); tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = '−';
-    const tzVal   = document.createElement('span');   tzVal.className = 'tz-val'; tzVal.textContent = ws.catcherTZ;
-    const tzPlus  = document.createElement('button'); tzPlus.type = 'button'; tzPlus.className = 'tz-btn'; tzPlus.textContent = '+';
-
-    function getTotalCatchMod() {
-      return -ws.catcherTZ + weatherMod + catchSkillM;
-    }
-
-    tzMinus.addEventListener('click', () => { ws.catcherTZ = Math.max(0, ws.catcherTZ - 1); tzVal.textContent = ws.catcherTZ; refreshCatchTarget(); });
-    tzPlus.addEventListener('click',  () => { ws.catcherTZ = Math.min(6, ws.catcherTZ + 1); tzVal.textContent = ws.catcherTZ; refreshCatchTarget(); });
-    tzRow.appendChild(tzMinus); tzRow.appendChild(tzVal); tzRow.appendChild(tzPlus);
-    el.appendChild(tzRow);
-
-    /* Skill chips */
-    if (ws.modCatch || weatherMod !== 0) {
-      const chips = document.createElement('div');
-      chips.className = 'pwiz-mod-row';
-      chips.style.marginTop = '0.3rem';
-      if (ws.modCatch) chips.innerHTML += `<span class="pwiz-skill-chip pos">Catch +1</span>`;
-      if (weatherMod)  chips.innerHTML += `<span class="pwiz-skill-chip neg">${weather.emoji} ${weather.name} −1</span>`;
-      el.appendChild(chips);
-    }
-
-    /* Target display */
-    const targetBar = document.createElement('div');
-    targetBar.className = 'pwiz-target-bar';
-    targetBar.id = 'pwiz-catch-target';
-    el.appendChild(targetBar);
-
-    function refreshCatchTarget() {
-      const bar = document.getElementById('pwiz-catch-target');
-      if (!bar) return;
-      const mod = getTotalCatchMod();
-      const threshold = Math.min(6, Math.max(2, ws.catchAG - mod));
-      bar.innerHTML = `<span class="pwiz-target-num">${threshold}+</span><span class="pwiz-target-note"> AG${ws.catchAG}+, net ${mod >= 0 ? '+' : ''}${mod}</span>`;
-    }
-    refreshCatchTarget();
-
-    const resultEl = document.createElement('div');
-    resultEl.className = 'roll-result';
-    resultEl.hidden    = true;
-
-    function processCatch(roll) {
-      const mod      = getTotalCatchMod();
-      const modified = roll + mod;
-      let title, cls, desc;
-
-      if (roll === 1) {
-        title = 'Dropped!'; cls = 'result-cas';
-        desc  = 'Natural 1 — always drops. Ball scatters 1 square. Turnover!';
-      } else if (modified >= ws.catchAG) {
-        title = 'Caught!'; cls = 'result-ok';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs AG${ws.catchAG}+ — the ball is caught!`;
-      } else {
-        title = 'Dropped!'; cls = 'result-ko';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs AG${ws.catchAG}+ — ball hits the ground, scatters 1 square.`;
-      }
-
-      ws.catchResult = title === 'Caught!' ? 'caught' : 'dropped';
-      resultEl.innerHTML = `<div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (→${modified})</span>` : ''}</div><div class="result-name ${cls}">${esc(title)}</div><p class="result-desc">${esc(desc)}</p>`;
-      resultEl.hidden = false;
-      updateSummary();
-    }
-
-    const isPhys = wizardMode('pass') === 'physical';
-
-    if (!isPhys) {
-      const dieEl = document.createElement('div');
-      dieEl.className = 'die';
-      dieEl.id        = 'pwiz-catch-d1';
-      dieEl.dataset.value = '1';
-      dieEl.innerHTML = '<div class="die-face"></div>';
-      const tray = document.createElement('div');
-      tray.className = 'dice-tray single';
-      tray.appendChild(dieEl);
-      if (typeof Dice.setDieValue === 'function') Dice.setDieValue(dieEl, 1);
-
-      const rollBtn = document.createElement('button');
-      rollBtn.type      = 'button';
-      rollBtn.className = 'roll-btn';
-      rollBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Catch';
-      rollBtn.addEventListener('click', async () => {
-        rollBtn.disabled = true;
-        resultEl.hidden  = true;
-        const roll = await Dice.rollDieElement(dieEl);
-        processCatch(roll);
-      });
-
-      el.appendChild(tray);
-      el.appendChild(rollBtn);
-    } else {
-      const physZone = document.createElement('div');
-      physZone.className = 'physical-zone';
-
-      function buildCatchPhysButtons() {
-        const mod = getTotalCatchMod();
-        return Array.from({ length: 6 }, (_, i) => {
-          const roll     = i + 1;
-          const modified = roll + mod;
-          let label, cls;
-          if (roll === 1)            { label = 'Dropped!'; cls = 'phys-bad'; }
-          else if (modified >= ws.catchAG) { label = 'Caught!';  cls = 'phys-good'; }
-          else                       { label = 'Dropped!'; cls = 'phys-warn'; }
-          return { value: roll, label, cls };
-        });
-      }
-
-      window.PhysicalDice.showPhysicalButtons(physZone, {
-        columns: 3,
-        buttons: buildCatchPhysButtons(),
-        onSelect(roll) { processCatch(roll); },
-      });
-      el.appendChild(physZone);
-    }
-
-    el.appendChild(resultEl);
-  }
-
-  /* ── Boot ── */
-  buildShell();
-  render();
-
-  /* Re-initialize when panel opens */
-  onPanelOpen('panel-pass', () => {
-    /* Reset state for a fresh pass */
-    ws.step            = 1;
-    ws.passResult      = null;
-    ws.catchResult     = null;
-    ws.scatterDirs     = [];
-    ws.intercept       = false;
-    ws.interceptor     = null;
-    ws.interceptAG     = null;
-    ws.interceptTarget = null;
-    if (ws.pitchGrid) ws.pitchGrid.clearScatter?.();
-    buildShell();
-    render();
-    window.Panels?.refreshWeatherChips?.();
-  });
-
-  /* Dice mode toggle */
-  panel.addEventListener('bb:diceMode', () => render());
-}
-
-
-/* ════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    FOUL WIZARD
-   ════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function initFoulWizard() {
   const panel   = document.getElementById('panel-foul');
@@ -1794,13 +826,13 @@ function initFoulWizard() {
 
   function bonus() { return assists + (mods['dirty-player'] ? 1 : 0); }
 
-  /* phys=true → no doubles check, no per-die breakdown */
+  /* phys=true â†’ no doubles check, no per-die breakdown */
   function processFoulArmourRoll(d1, d2, total, phys = false) {
     const bon        = bonus();
     const modded     = total + bon;
     const isDoubles  = !phys && d1 !== null && d1 === d2;
     const bonusNote  = bon > 0 ? ` + ${bon} (assists${mods['dirty-player'] ? ' + Dirty Player' : ''})` : '';
-    const doubleFlag = isDoubles ? `<div class="result-effect">⚠️ Natural Double — referee may have spotted it!</div>` : '';
+    const doubleFlag = isDoubles ? `<div class="result-effect">âš ï¸ Natural Double â€” referee may have spotted it!</div>` : '';
     const breakdown  = phys
       ? `<div class="result-roll-breakdown">Physical roll vs AV${selectedAV}+</div>`
       : `<div class="result-roll-breakdown">${d1} + ${d2}${bonusNote} vs AV${selectedAV}+</div>`;
@@ -1820,15 +852,15 @@ function initFoulWizard() {
         ${breakdown}
         ${doubleFlag}
         <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
-        <p class="result-desc">Rolling Injury table…</p>
+        <p class="result-desc">Rolling Injury tableâ€¦</p>
       `;
       avResEl.hidden = false;
     }
 
     if (isDoubles && refResEl) {
       refResEl.innerHTML = `
-        <div class="result-name" style="color:#FF8C00;">⚠️ Referee Spots the Foul!</div>
-        <p class="result-desc">A natural double — the fouling player is Sent Off! <strong>Argue the Call</strong>: D6 — on 6 player stays; on 1 Head Coach ejected; 2–5 call stands. A <em>Bribe</em> avoids ejection entirely (2+ succeeds).</p>
+        <div class="result-name" style="color:#FF8C00;">âš ï¸ Referee Spots the Foul!</div>
+        <p class="result-desc">A natural double â€” the fouling player is Sent Off! <strong>Argue the Call</strong>: D6 â€” on 6 player stays; on 1 Head Coach ejected; 2â€“5 call stands. A <em>Bribe</em> avoids ejection entirely (2+ succeeds).</p>
       `;
       refResEl.hidden = false;
     } else if (refResEl) {
@@ -1861,7 +893,7 @@ function initFoulWizard() {
       if (injResEl) {
         injResEl.innerHTML = `
           <div class="result-roll-num">${injTotal}${bon ? ` (+${bon})` : ''}</div>
-          <div class="result-roll-breakdown">${i1} + ${i2} — Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
+          <div class="result-roll-breakdown">${i1} + ${i2} â€” Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
           <div class="result-name ${inj['class']}">${esc(inj.result)}</div>
           <p class="result-desc">${esc(inj.desc)}</p>
         `;
@@ -1874,7 +906,7 @@ function initFoulWizard() {
         const casD1    = document.getElementById('foul-cas-d1');
         const casResEl = document.getElementById('foul-cas-result');
         if (casTray) casTray.hidden = false;
-        if (casResEl) { casResEl.innerHTML = `<p class="result-desc" style="margin:0">Rolling Casualty table (D16)…</p>`; casResEl.hidden = false; }
+        if (casResEl) { casResEl.innerHTML = `<p class="result-desc" style="margin:0">Rolling Casualty table (D16)â€¦</p>`; casResEl.hidden = false; }
         await pause(300);
         const casVal = await Dice.rollDieElement(casD1);
         const cas    = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
@@ -1892,7 +924,7 @@ function initFoulWizard() {
     rollBtn.disabled = false;
   }
 
-  /* ── Physical foul armour buttons ── */
+  /* â”€â”€ Physical foul armour buttons â”€â”€ */
   function buildFoulPhysUI() {
     const bon = bonus();
     window.PhysicalDice.showPhysicalButtons(physZone, {
@@ -1907,7 +939,7 @@ function initFoulWizard() {
         avResEl.hidden = true;
         if (refResEl)   refResEl.hidden   = true;
         if (injSection) injSection.hidden = true;
-        /* For physical mode doubles detection is not possible — skip referee check */
+        /* For physical mode doubles detection is not possible â€” skip referee check */
         const broke = processFoulArmourRoll(null, null, total, true);
         if (!broke) return;
         /* Auto-show injury physical buttons */
@@ -1940,7 +972,7 @@ function initFoulWizard() {
         if (injResEl) {
           injResEl.innerHTML = `
             <div class="result-roll-num">${roll}${bon2 ? ` (+${bon2})` : ''}</div>
-            <div class="result-roll-breakdown">Physical — Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
+            <div class="result-roll-breakdown">Physical â€” Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
             <div class="result-name ${inj['class']}">${esc(inj.result)}</div>
             <p class="result-desc">${esc(inj.desc)}</p>
           `;
@@ -1974,7 +1006,7 @@ function initFoulWizard() {
         if (casResEl) {
           casResEl.innerHTML = `
             <div class="result-roll-num">${val}</div>
-            <div class="result-roll-breakdown">Physical — Casualty Table (D16)</div>
+            <div class="result-roll-breakdown">Physical â€” Casualty Table (D16)</div>
             <div class="result-name ${cas['class']}">${esc(cas.result)}</div>
             <p class="result-desc">${esc(cas.desc)}</p>
           `;
@@ -2006,15 +1038,15 @@ function initFoulWizard() {
   if (wizardMode('foul') === 'physical') showPhys();
 }
 
-/* ════════════════════════════════════════════════════════
-   THROW TEAM-MATE WIZARD  (Sprint 4 rebuild — 8-step)
-   ════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   THROW TEAM-MATE WIZARD  (Sprint 4 rebuild â€” 8-step)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function initThrowWizard() {
   const panel = document.getElementById('panel-throw');
   if (!panel) return;
 
-  /* ── Wizard state ── */
+  /* â”€â”€ Wizard state â”€â”€ */
   const ws = {
     step: 1,
     thrower:     null,
@@ -2044,7 +1076,7 @@ function initThrowWizard() {
 
   const body = panel.querySelector('.panel-body');
 
-  /* ── Shell builder ── */
+  /* â”€â”€ Shell builder â”€â”€ */
   function buildShell() {
     body.innerHTML = '';
     const sumEl = document.createElement('div');
@@ -2058,18 +1090,18 @@ function initThrowWizard() {
     body.appendChild(contentEl);
     const navEl = document.createElement('div');
     navEl.className = 'pass-nav';
-    navEl.innerHTML = `<button class="pass-nav-btn" id="twiz-back">← Back</button><button class="pass-nav-btn nav-primary" id="twiz-next">Next →</button>`;
+    navEl.innerHTML = `<button class="pass-nav-btn" id="twiz-back">â† Back</button><button class="pass-nav-btn nav-primary" id="twiz-next">Next â†’</button>`;
     body.appendChild(navEl);
     document.getElementById('twiz-back').addEventListener('click', () => go(ws.step - 1));
     document.getElementById('twiz-next').addEventListener('click', () => go(ws.step + 1));
   }
 
-  /* ── Step definitions ── */
+  /* â”€â”€ Step definitions â”€â”€ */
   const ALL_STEPS = [
     { id: 1, label: 'Thrower'  },
     { id: 2, label: 'Thrown'   },
     { id: 3, label: 'Range'    },
-    { id: 4, label: '🍖 Hungry' },
+    { id: 4, label: 'ðŸ– Hungry' },
     { id: 5, label: 'Throw'    },
     { id: 6, label: 'Scatter'  },
     { id: 7, label: 'Land'     },
@@ -2098,7 +1130,7 @@ function initThrowWizard() {
     render();
   }
 
-  /* ── Render ── */
+  /* â”€â”€ Render â”€â”€ */
   function render() {
     const active = activeSteps();
 
@@ -2122,7 +1154,7 @@ function initThrowWizard() {
     const lastStep = active[active.length - 1];
     if (backBtn) backBtn.disabled = ws.step === active[0];
     if (nextBtn) {
-      nextBtn.textContent = ws.step === lastStep ? 'Done ✓' : 'Next →';
+      nextBtn.textContent = ws.step === lastStep ? 'Done âœ“' : 'Next â†’';
       nextBtn.disabled = ws.step === lastStep;
     }
 
@@ -2143,19 +1175,19 @@ function initThrowWizard() {
     updateSummary();
   }
 
-  /* ── Summary strip ── */
+  /* â”€â”€ Summary strip â”€â”€ */
   function updateSummary() {
     const el = document.getElementById('twiz-summary');
     if (!el) return;
-    const thrName  = ws.thrower?.name ?? '—';
-    const thnName  = ws.thrown?.name  ?? '—';
+    const thrName  = ws.thrower?.name ?? 'â€”';
+    const thnName  = ws.thrown?.name  ?? 'â€”';
     const rng      = ws.rangeTarget === 4 ? 'Short' : 'Long';
-    const res      = ws.throwResult ?? (ws.hungryResult === 'eaten' ? '🍖 Eaten!' : '—');
+    const res      = ws.throwResult ?? (ws.hungryResult === 'eaten' ? 'ðŸ– Eaten!' : 'â€”');
     const resCls   = ws.throwResult === 'superb' || ws.throwResult === 'accurate' ? 'ok'
                    : (ws.throwResult === 'fumble' || ws.hungryResult === 'eaten') ? 'bad' : '';
     el.innerHTML = `
       <span class="pass-sum-name">${esc(thrName)}</span>
-      <span class="pass-sum-sep">⇒</span>
+      <span class="pass-sum-sep">â‡’</span>
       <span class="pass-sum-name">${esc(thnName)}</span>
       <span class="pass-sum-sep">|</span>
       <span class="pass-sum-range">${rng} (${ws.rangeTarget}+)</span>
@@ -2164,9 +1196,9 @@ function initThrowWizard() {
     `;
   }
 
-  /* ─────────────────────────────────────────────────────
-     STEP 1: THROWER — must have Throw Team-Mate trait
-     ──────────────────────────────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     STEP 1: THROWER â€” must have Throw Team-Mate trait
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderThrower(el) {
     el.innerHTML = '<div class="pwiz-step-title">Select Thrower</div>';
     const note = document.createElement('p');
@@ -2194,18 +1226,18 @@ function initThrowWizard() {
         const chips = document.createElement('div');
         chips.className = 'pwiz-mod-row twiz-skill-chips';
         chips.style.marginTop = '0.5rem';
-        if (ws.hasAlwaysHungry) chips.innerHTML += `<span class="pwiz-skill-chip neg">🍖 Always Hungry</span>`;
-        if (ws.hasStrongArm)    chips.innerHTML += `<span class="pwiz-skill-chip pos">💪 Strong Arm +1</span>`;
+        if (ws.hasAlwaysHungry) chips.innerHTML += `<span class="pwiz-skill-chip neg">ðŸ– Always Hungry</span>`;
+        if (ws.hasStrongArm)    chips.innerHTML += `<span class="pwiz-skill-chip pos">ðŸ’ª Strong Arm +1</span>`;
         if (ws.hasHailMary)     chips.innerHTML += `<span class="pwiz-skill-chip pos">Hail Mary Pass</span>`;
-        if (ws.hasBullseye)     chips.innerHTML += `<span class="pwiz-skill-chip pos">🎯 Bullseye</span>`;
+        if (ws.hasBullseye)     chips.innerHTML += `<span class="pwiz-skill-chip pos">ðŸŽ¯ Bullseye</span>`;
         if (chips.innerHTML) el.appendChild(chips);
       },
     });
   }
 
-  /* ─────────────────────────────────────────────────────
-     STEP 2: THROWN PLAYER — must have Right Stuff trait
-     ──────────────────────────────────────────────────── */
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+     STEP 2: THROWN PLAYER â€” must have Right Stuff trait
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderThrown(el) {
     el.innerHTML = '<div class="pwiz-step-title">Select Thrown Player</div>';
     const note = document.createElement('p');
@@ -2238,9 +1270,9 @@ function initThrowWizard() {
     });
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 3: RANGE & OPTIONS
-     ──────────────────────────────────────────────────── */
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderRange(el) {
     el.innerHTML = `<div class="pwiz-step-title">Range &amp; Options</div>`;
 
@@ -2254,7 +1286,7 @@ function initThrowWizard() {
     rangePicker.style.marginBottom = '0.5rem';
 
     [{ label: 'Short (4+)', target: 4, desc: 'Up to 3 squares' },
-     { label: 'Long (5+)',  target: 5, desc: '4–6 squares' }].forEach(opt => {
+     { label: 'Long (5+)',  target: 5, desc: '4â€“6 squares' }].forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'av-btn';
       btn.textContent = opt.label; btn.title = opt.desc;
@@ -2291,7 +1323,7 @@ function initThrowWizard() {
     if (ws.hasStrongArm) {
       const chipRow = document.createElement('div');
       chipRow.className = 'pwiz-mod-row'; chipRow.style.marginTop = '0.4rem';
-      chipRow.innerHTML = `<span class="pwiz-skill-chip pos">💪 Strong Arm: +1 to throw roll</span>`;
+      chipRow.innerHTML = `<span class="pwiz-skill-chip pos">ðŸ’ª Strong Arm: +1 to throw roll</span>`;
       el.appendChild(chipRow);
     }
 
@@ -2304,7 +1336,7 @@ function initThrowWizard() {
       const bar = document.getElementById('twiz-target-bar');
       if (!bar) return;
       if (ws.useHailMary) {
-        bar.innerHTML = `<span class="pwiz-target-num">—</span><span class="pwiz-target-note"> Hail Mary — always inaccurate (fumble on 1)</span>`;
+        bar.innerHTML = `<span class="pwiz-target-num">â€”</span><span class="pwiz-target-note"> Hail Mary â€” always inaccurate (fumble on 1)</span>`;
       } else {
         const eff = Math.max(2, ws.rangeTarget - ws.strongArmMod);
         bar.innerHTML = `<span class="pwiz-target-num">${eff}+</span><span class="pwiz-target-note"> on D6${ws.strongArmMod ? ` (base ${ws.rangeTarget}+, Strong Arm +1)` : ''}</span>`;
@@ -2313,12 +1345,12 @@ function initThrowWizard() {
     refreshTargetDisplay();
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 4: ALWAYS HUNGRY (conditional)
-     ──────────────────────────────────────────────────── */
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderHungry(el) {
-    el.innerHTML = `<div class="pwiz-step-title">🍖 Always Hungry Check</div>
-      <p class="panel-intro" style="margin-bottom:0.6rem;">The thrower has <strong>Always Hungry</strong>. Roll D6 — on a 2+ the throw proceeds. On a 1, the thrower can't resist and devours the team-mate!</p>`;
+    el.innerHTML = `<div class="pwiz-step-title">ðŸ– Always Hungry Check</div>
+      <p class="panel-intro" style="margin-bottom:0.6rem;">The thrower has <strong>Always Hungry</strong>. Roll D6 â€” on a 2+ the throw proceeds. On a 1, the thrower can't resist and devours the team-mate!</p>`;
 
     const resultEl = document.createElement('div');
     resultEl.className = 'roll-result'; resultEl.hidden = true;
@@ -2328,8 +1360,8 @@ function initThrowWizard() {
       if (roll === 1) {
         resultEl.innerHTML = `
           <div class="result-roll-num">1</div>
-          <div class="result-name result-cas">🍖 Teammate Eaten!</div>
-          <p class="result-desc">The thrower couldn't resist! The thrown player is removed from the pitch as a Casualty — they suffer a <strong>Badly Hurt</strong> result (no Casualty roll). The action ends immediately.</p>
+          <div class="result-name result-cas">ðŸ– Teammate Eaten!</div>
+          <p class="result-desc">The thrower couldn't resist! The thrown player is removed from the pitch as a Casualty â€” they suffer a <strong>Badly Hurt</strong> result (no Casualty roll). The action ends immediately.</p>
         `;
       } else {
         resultEl.innerHTML = `
@@ -2353,7 +1385,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Always Hungry (need 2+)';
+      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Always Hungry (need 2+)';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2367,7 +1399,7 @@ function initThrowWizard() {
         buttons: Array.from({ length: 6 }, (_, i) => {
           const r = i + 1;
           return r === 1
-            ? { value: 1, label: '🍖 Eaten!', cls: 'phys-bad' }
+            ? { value: 1, label: 'ðŸ– Eaten!', cls: 'phys-bad' }
             : { value: r, label: 'Proceed',   cls: 'phys-good' };
         }),
         onSelect(r) { processHungry(r); },
@@ -2378,11 +1410,11 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 5: THROW ROLL
      Outcomes: Natural 1 = Fumble, Natural 6 = Superb,
-     ≥ target = Accurate, < target = Inaccurate
-     ──────────────────────────────────────────────────── */
+     â‰¥ target = Accurate, < target = Inaccurate
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderThrow(el) {
     el.innerHTML = `<div class="pwiz-step-title">Throw Roll</div>`;
 
@@ -2396,27 +1428,27 @@ function initThrowWizard() {
       if (ws.useHailMary) {
         if (roll === 1) {
           outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas';
-          desc = "Natural 1 — Hail Mary fails! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt).";
+          desc = "Natural 1 â€” Hail Mary fails! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt).";
         } else {
-          outcome = 'inaccurate'; title = 'Hail Mary — Inaccurate'; cls = 'result-ko';
-          desc = `Roll ${roll}. Hail Mary always scatters — the team-mate deviates once from the intended landing square. They must still make a Landing roll wherever they land.`;
+          outcome = 'inaccurate'; title = 'Hail Mary â€” Inaccurate'; cls = 'result-ko';
+          desc = `Roll ${roll}. Hail Mary always scatters â€” the team-mate deviates once from the intended landing square. They must still make a Landing roll wherever they land.`;
         }
       } else if (roll === 1) {
         outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas';
-        desc = "Natural 1 — the throw fails catastrophically! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt). Turnover!";
+        desc = "Natural 1 â€” the throw fails catastrophically! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt). Turnover!";
       } else if (roll === 6) {
-        outcome = 'superb'; title = '★ Superb Throw!'; cls = 'result-ok';
+        outcome = 'superb'; title = 'â˜… Superb Throw!'; cls = 'result-ok';
         if (ws.hasBullseye) {
-          desc = `Natural 6 — Superb! The team-mate lands precisely on target. With the Bullseye trait, no Landing roll is required!`;
+          desc = `Natural 6 â€” Superb! The team-mate lands precisely on target. With the Bullseye trait, no Landing roll is required!`;
         } else {
-          desc = `Natural 6 — Superb throw! The team-mate lands precisely on target. Make a Landing roll now.`;
+          desc = `Natural 6 â€” Superb throw! The team-mate lands precisely on target. Make a Landing roll now.`;
         }
       } else if (roll >= effTarget) {
         outcome = 'accurate'; title = 'Accurate Throw!'; cls = 'result-ok';
-        desc = `Roll ${roll} vs ${effTarget}+ — the team-mate lands on target. Make a Landing roll.`;
+        desc = `Roll ${roll} vs ${effTarget}+ â€” the team-mate lands on target. Make a Landing roll.`;
       } else {
         outcome = 'inaccurate'; title = 'Inaccurate Throw'; cls = 'result-ko';
-        desc = `Roll ${roll} vs ${effTarget}+ — the team-mate scatters 3 times from the intended square. Make a Landing roll in their final position.`;
+        desc = `Roll ${roll} vs ${effTarget}+ â€” the team-mate scatters 3 times from the intended square. Make a Landing roll in their final position.`;
       }
 
       ws.throwResult  = outcome;
@@ -2434,7 +1466,7 @@ function initThrowWizard() {
       setTimeout(() => {
         if (outcome === 'fumble') return; /* stay on step 5 */
         if (outcome === 'inaccurate') go(6);
-        else go(7); /* superb/accurate → landing (or skip if Bullseye) */
+        else go(7); /* superb/accurate â†’ landing (or skip if Bullseye) */
       }, 850);
     }
 
@@ -2448,7 +1480,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Throw';
+      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Throw';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2468,7 +1500,7 @@ function initThrowWizard() {
           } else if (roll === 1) {
             label = 'Fumble!'; cls = 'phys-bad';
           } else if (roll === 6) {
-            label = '★ Superb!'; cls = 'phys-good';
+            label = 'â˜… Superb!'; cls = 'phys-good';
           } else if (roll >= effTarget) {
             label = 'Accurate!'; cls = 'phys-good';
           } else {
@@ -2484,19 +1516,19 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 6: SCATTER
-     Inaccurate → 3×D8   |   Hail Mary → 1×D8
-     ──────────────────────────────────────────────────── */
+     Inaccurate â†’ 3Ã—D8   |   Hail Mary â†’ 1Ã—D8
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderScatter(el) {
     const scatterCount = ws.useHailMary ? 1 : 3;
-    el.innerHTML = `<div class="pwiz-step-title">Scatter ×${scatterCount}</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">The team-mate scatters ${scatterCount === 1 ? 'once' : '3 times'} from the intended landing square. Roll D8 for direction each time — they move 1 square per roll.</p>`;
+    el.innerHTML = `<div class="pwiz-step-title">Scatter Ã—${scatterCount}</div>
+      <p class="panel-intro" style="margin-bottom:0.5rem;">The team-mate scatters ${scatterCount === 1 ? 'once' : '3 times'} from the intended landing square. Roll D8 for direction each time â€” they move 1 square per roll.</p>`;
 
     ws.scatterDirs = [];
     const resultsEl = document.createElement('div');
-    const DIR_LABEL = { 1:'↖ Up-Left',2:'↑ Up',3:'↗ Up-Right',4:'← Left',5:'→ Right',6:'↙ Down-Left',7:'↓ Down',8:'↘ Down-Right' };
-    const DIR_SYM   = { 1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘' };
+    const DIR_LABEL = { 1:'â†– Up-Left',2:'â†‘ Up',3:'â†— Up-Right',4:'â† Left',5:'â†’ Right',6:'â†™ Down-Left',7:'â†“ Down',8:'â†˜ Down-Right' };
+    const DIR_SYM   = { 1:'â†–',2:'â†‘',3:'â†—',4:'â†',5:'â†’',6:'â†™',7:'â†“',8:'â†˜' };
     const isPhys    = wizardMode('throw') === 'physical';
 
     function addScatter(dir) {
@@ -2534,7 +1566,7 @@ function initThrowWizard() {
         tray.className = 'dice-tray single'; tray.appendChild(dieEl);
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'roll-btn';
-        btn.innerHTML = `<span class="roll-btn-icon">🎲</span> Scatter ${n}`;
+        btn.innerHTML = `<span class="roll-btn-icon">ðŸŽ²</span> Scatter ${n}`;
         btn.addEventListener('click', async () => {
           btn.disabled = true;
           const dir = await Dice.rollDieElement(dieEl);
@@ -2549,11 +1581,11 @@ function initThrowWizard() {
     buildNextScatter();
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 7: LANDING ROLL
      Need 4+ (modified by TZ, Landing skill)
-     Superb + Bullseye → this step is skipped entirely
-     ──────────────────────────────────────────────────── */
+     Superb + Bullseye â†’ this step is skipped entirely
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderLanding(el) {
     el.innerHTML = `<div class="pwiz-step-title">Landing Roll</div>`;
 
@@ -2563,7 +1595,7 @@ function initThrowWizard() {
       const banner = document.createElement('p');
       banner.className = 'panel-intro';
       banner.style.color = '#81c784';
-      banner.textContent = '★ Superb throw — no Landing roll needed! The team-mate touches down perfectly.';
+      banner.textContent = 'â˜… Superb throw â€” no Landing roll needed! The team-mate touches down perfectly.';
       el.appendChild(banner);
       /* This branch only reached if Bullseye is absent */
     }
@@ -2572,7 +1604,7 @@ function initThrowWizard() {
     const tzRow = document.createElement('div');
     tzRow.className = 'pwiz-mod-row';
     tzRow.innerHTML = '<span class="input-label" style="margin:0;">Tackle Zones in Landing Square:</span>';
-    const tzMinus = document.createElement('button'); tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = '−';
+    const tzMinus = document.createElement('button'); tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = 'âˆ’';
     const tzVal   = document.createElement('span');   tzVal.className = 'tz-val'; tzVal.textContent = ws.landingTZ;
     const tzPlus  = document.createElement('button'); tzPlus.type = 'button'; tzPlus.className = 'tz-btn'; tzPlus.textContent = '+';
     function getLandMod() { return -ws.landingTZ + (ws.hasLandingSkill ? 1 : 0); }
@@ -2601,7 +1633,7 @@ function initThrowWizard() {
     const occupiedNote = document.createElement('p');
     occupiedNote.className = 'panel-intro';
     occupiedNote.style.cssText = 'font-size:0.68rem;color:rgba(255,200,80,0.75);margin-top:0.4rem;';
-    occupiedNote.textContent = '⚠ If the landing square is occupied: both players are knocked down and must roll Armour.';
+    occupiedNote.textContent = 'âš  If the landing square is occupied: both players are knocked down and must roll Armour.';
     el.appendChild(occupiedNote);
 
     const resultEl = document.createElement('div');
@@ -2615,19 +1647,19 @@ function initThrowWizard() {
       if (modified >= 4) {
         ws.landingResult = 'safe';
         title = 'Safe Landing!'; cls = 'result-ok';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs 4+ — the team-mate sticks the landing! They are placed on the pitch and may act normally (if not yet activated this turn).`;
+        desc  = `Roll ${roll}${mod !== 0 ? ` (â†’ ${modified})` : ''} vs 4+ â€” the team-mate sticks the landing! They are placed on the pitch and may act normally (if not yet activated this turn).`;
       } else if (roll === 1) {
         ws.landingResult = 'crash';
         title = 'Crash Landing!'; cls = 'result-cas';
-        desc  = 'Natural 1 — always fails. The team-mate is knocked down in their landing square. Roll Armour on step 8.';
+        desc  = 'Natural 1 â€” always fails. The team-mate is knocked down in their landing square. Roll Armour on step 8.';
       } else {
         ws.landingResult = 'crash';
         title = 'Crash Landing!'; cls = 'result-cas';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs 4+ — the team-mate crashes down! They are knocked down. Roll Armour on step 8.`;
+        desc  = `Roll ${roll}${mod !== 0 ? ` (â†’ ${modified})` : ''} vs 4+ â€” the team-mate crashes down! They are knocked down. Roll Armour on step 8.`;
       }
 
       resultEl.innerHTML = `
-        <div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (→${modified})</span>` : ''}</div>
+        <div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (â†’${modified})</span>` : ''}</div>
         <div class="result-name ${cls}">${esc(title)}</div>
         <p class="result-desc">${esc(desc)}</p>
       `;
@@ -2646,7 +1678,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Landing (need 4+)';
+      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Landing (need 4+)';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2675,14 +1707,14 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* ─────────────────────────────────────────────────────
+  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
      STEP 8: ARMOUR ROLL (Crash Landing)
      Pre-loaded with thrown player's AV
-     ──────────────────────────────────────────────────── */
+     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   function renderArmour(el) {
     const av = ws.thrownAV;
     el.innerHTML = `<div class="pwiz-step-title">Armour Roll</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">Crash landing! Roll 2D6 vs the thrown player's AV${av}+. If broken, the player is injured — use the Injury panel for the injury table.</p>`;
+      <p class="panel-intro" style="margin-bottom:0.5rem;">Crash landing! Roll 2D6 vs the thrown player's AV${av}+. If broken, the player is injured â€” use the Injury panel for the injury table.</p>`;
 
     const avChip = document.createElement('div');
     avChip.className = 'pwiz-mod-row';
@@ -2704,14 +1736,14 @@ function initThrowWizard() {
           <div class="result-roll-num">${total}</div>
           ${breakdownHtml}
           <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
-          <p class="result-desc">Total ${total} ≥ AV${av}. The thrown player's armour is broken — open the <strong>Injury panel</strong> and roll the Injury table. Apply any relevant modifiers.</p>
+          <p class="result-desc">Total ${total} â‰¥ AV${av}. The thrown player's armour is broken â€” open the <strong>Injury panel</strong> and roll the Injury table. Apply any relevant modifiers.</p>
         `;
       } else {
         resultEl.innerHTML = `
           <div class="result-roll-num">${total}</div>
           ${breakdownHtml}
           <div class="result-name" style="color:var(--bb-gold,#D4AF37);">Armour Holds</div>
-          <p class="result-desc">Total ${total} &lt; AV${av}. The armour held — the player is Prone but not injured. They will be turned face-up at the start of your next turn.</p>
+          <p class="result-desc">Total ${total} &lt; AV${av}. The armour held â€” the player is Prone but not injured. They will be turned face-up at the start of your next turn.</p>
         `;
       }
       resultEl.hidden = false;
@@ -2730,7 +1762,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray'; tray.appendChild(d1El); tray.appendChild(d2El);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = `<span class="roll-btn-icon">🎲</span> Roll Armour Check (vs AV${av}+)`;
+      btn.innerHTML = `<span class="roll-btn-icon">ðŸŽ²</span> Roll Armour Check (vs AV${av}+)`;
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
@@ -2754,7 +1786,7 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* ── Boot ── */
+  /* â”€â”€ Boot â”€â”€ */
   buildShell();
   render();
 
@@ -2771,10 +1803,10 @@ function initThrowWizard() {
   panel.addEventListener('bb:diceMode', () => render());
 }
 
-/* ════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    PLAYER SELECTION PANELS (shared utility)
-   Event delegation — one listener on container.
-   ════════════════════════════════════════════════════════ */
+   Event delegation â€” one listener on container.
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function buildWizardPlayerList(listId, side, filterFn, onSelect) {
   const container = document.getElementById(listId);
@@ -2865,11 +1897,11 @@ function onPanelOpen(panelId, fn) {
   }).observe(panel, { attributes: true });
 }
 
-/* initBlockPlayerSelect removed — integrated into initBlockWizard() */
+/* initBlockPlayerSelect removed â€” integrated into initBlockWizard() */
 
-/* ════════════════════════════════════════════════════════
-   FOUL WIZARD — player selection
-   ════════════════════════════════════════════════════════ */
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   FOUL WIZARD â€” player selection
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 function initFoulPlayerSelect(avPickerUpdate) {
   const PS = window.PlayerStatus;
@@ -2890,9 +1922,9 @@ function initFoulPlayerSelect(avPickerUpdate) {
   onPanelOpen('panel-foul', refreshFoulLists);
 }
 
-/* ════════════════════════════════════════════════════════
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BOOT
-   ════════════════════════════════════════════════════════ */
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
 document.addEventListener('DOMContentLoaded', () => {
   initBlockWizard();

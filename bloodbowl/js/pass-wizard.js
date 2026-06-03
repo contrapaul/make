@@ -283,7 +283,7 @@ function initPassWizard() {
     root.appendChild(reqEl);
 
     const rollEl = document.createElement('div');
-    rollEl.id = 'pwiz-roll'; rollEl.hidden = true;
+    rollEl.id = 'pwiz-roll';
     root.appendChild(rollEl);
 
     updateReqs();
@@ -736,10 +736,23 @@ function initPassWizard() {
     const rollEl = document.getElementById('pwiz-roll');
     if (!reqEl) return;
     reqEl.innerHTML = '';
-    if (rollEl) { rollEl.innerHTML = ''; rollEl.hidden = true; }
+    if (rollEl) rollEl.innerHTML = '';
 
     if (!ws.thrower || !ws.catcher) {
-      reqEl.innerHTML = '<p class="panel-intro" style="margin:0.4rem 0;">Select a thrower and catcher to see requirements.</p>';
+      /* Show a visible waiting state so the roll section is always present */
+      if (rollEl) {
+        const wait = document.createElement('div');
+        wait.className = 'pwiz-roll-waiting';
+        const steps = [];
+        if (!ws.thrower) steps.push('🎯 Select and place a Thrower');
+        else if (!ws.throwerPos) steps.push('🎯 Place the Thrower on the pitch');
+        if (!ws.catcher) steps.push('🤲 Select and place a Catcher');
+        else if (!ws.catcherPos) steps.push('🤲 Place the Catcher on the pitch');
+        wait.innerHTML = steps.map(s =>
+          `<div class="pwiz-wait-step">${s}</div>`
+        ).join('');
+        rollEl.appendChild(wait);
+      }
       return;
     }
 
@@ -791,7 +804,6 @@ function initPassWizard() {
     }
 
     if (rollEl) {
-      rollEl.hidden = false;
       buildActionRow(rollEl, paFinal, agFinal, blizzFumble, range, interceptors, {
         paBase, rangePenalty, tzPenalty, verySunnyPenalty, accurateBonus, cannoneerBonus,
         nosThrow, hasAccurate, hasCannoneer, hasHailMary,
