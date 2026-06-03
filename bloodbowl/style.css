@@ -348,8 +348,8 @@
 /* Jersey number circle */
 .modal-jersey-circle {
   flex-shrink: 0;
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   background: #fff;
   border: 2px solid #000;
@@ -358,7 +358,8 @@
   justify-content: center;
   font-family: 'JetBrains Mono', monospace;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-style: italic;
+  font-size: 2rem;
   color: #000;
   line-height: 1;
 }
