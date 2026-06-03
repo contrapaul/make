@@ -50,6 +50,9 @@ const state = {
   left:   { team: null, players: [] },
   right:  { team: null, players: [] },
 };
+/* Expose for embedded card rendering in wizards */
+window.state            = state;
+window.POSITION_COLORS  = POSITION_COLORS;
 
 /* Timers for skill-link hover/close grace period */
 let hoverTimer = null;

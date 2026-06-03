@@ -276,75 +276,83 @@
           <button class="panel-close" aria-label="Close block panel">&#215;</button>
         </div>
         <div class="panel-body bwiz-panel-body" id="panel-block-body">
-          <div class="bwiz-layout">
 
-            <!-- LEFT: controls -->
-            <div class="bwiz-controls">
-              <p class="panel-intro" style="margin-top:0">Select attacker and defender, set Strength &amp; assists, then roll.</p>
+          <!-- ═══ Main wizard row ═══ -->
+          <div class="bwiz-outer">
 
-              <div class="wps-panel" id="block-player-select">
-                <div class="wps-side">
-                  <div class="wps-heading">Attacker</div>
+            <!-- Attacker block-relevant skills -->
+            <div class="bwiz-skills-col" id="block-att-skills-col">
+              <div class="bwiz-skills-heading">Attacker Skills</div>
+            </div>
+
+            <!-- Attacker card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="block-change-att">Change Attacker</button>
+              <div class="bwiz-card-wrap" id="block-att-card-wrap">
+                <div class="bwiz-picker" id="block-att-picker">
+                  <div class="bwiz-picker-label">Select Attacker</div>
                   <div class="wps-list" id="block-attacker-list"><p class="wps-empty">Load a roster first</p></div>
                 </div>
-                <div class="wps-divider">🛡</div>
-                <div class="wps-side">
-                  <div class="wps-heading">Defender</div>
+              </div>
+              <div class="bwiz-assists" id="block-att-assists-dots"></div>
+            </div>
+
+            <!-- Center: re-rolls, ST compare, dice, roll button -->
+            <div class="bwiz-center">
+              <div class="bwiz-rerolls-wrap">
+                <div class="bwiz-rerolls-label">Team Re-rolls</div>
+                <div class="bwiz-rerolls" id="block-rerolls"></div>
+              </div>
+              <div class="bwiz-st-compare" id="block-st-compare">Select players to begin</div>
+              <div class="block-dice-tray bwiz-dice-tray" id="block-dice-tray" aria-live="polite"></div>
+              <div class="bwiz-def-picks-banner" id="block-def-picks-banner" hidden>Defender Chooses</div>
+              <button class="roll-btn" id="block-roll-btn"><span class="roll-btn-icon">🎲</span> Roll Block</button>
+              <button class="bwiz-confirm-btn" id="block-confirm-btn" hidden>Confirm Result</button>
+            </div>
+
+            <!-- Defender card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="block-change-def">Change Defender</button>
+              <div class="bwiz-card-wrap" id="block-def-card-wrap">
+                <div class="bwiz-picker" id="block-def-picker">
+                  <div class="bwiz-picker-label">Select Defender</div>
                   <div class="wps-list" id="block-defender-list"><p class="wps-empty">Load a roster first</p></div>
                 </div>
               </div>
-
-              <div class="block-setup-grid">
-                <div class="block-side">
-                  <span class="input-label">Attacker ST</span>
-                  <div class="stat-stepper" id="block-att-st">
-                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                    <span class="stepper-val">3</span>
-                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-                  </div>
-                  <span class="input-label">Att. Assists</span>
-                  <div class="stat-stepper" id="block-att-assists">
-                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                    <span class="stepper-val">0</span>
-                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-                  </div>
-                </div>
-                <div class="block-vs"><span class="vs-label">vs</span></div>
-                <div class="block-side right">
-                  <span class="input-label">Defender ST</span>
-                  <div class="stat-stepper" id="block-def-st">
-                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                    <span class="stepper-val">3</span>
-                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-                  </div>
-                  <span class="input-label">Def. Assists</span>
-                  <div class="stat-stepper" id="block-def-assists">
-                    <button class="stepper-btn" data-dir="-1" aria-label="Decrease">−</button>
-                    <span class="stepper-val">0</span>
-                    <button class="stepper-btn" data-dir="+1" aria-label="Increase">+</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="wizard-info-bar" id="block-dice-bar">
-                <span class="wizard-info-num" id="block-dice-count">1</span>
-                <span class="wizard-info-note" id="block-dice-note">block die — equal strength</span>
-              </div>
-
-              <div class="block-dice-tray" id="block-dice-tray" aria-live="polite"></div>
-
-              <button class="roll-btn" id="block-roll-btn">
-                <span class="roll-btn-icon">🎲</span> Roll Block
-              </button>
-              <div class="roll-result" id="block-result" hidden aria-live="polite"></div>
-            </div><!-- /.bwiz-controls -->
-
-            <!-- RIGHT: roll log checklist -->
-            <div class="bwiz-log" id="block-roll-log" aria-live="polite">
-              <div class="bwiz-log-empty">Roll results will appear here as a checklist.</div>
+              <div class="bwiz-assists" id="block-def-assists-dots"></div>
             </div>
 
-          </div><!-- /.bwiz-layout -->
+            <!-- Defender block-relevant skills -->
+            <div class="bwiz-skills-col" id="block-def-skills-col">
+              <div class="bwiz-skills-heading">Defender Skills</div>
+            </div>
+
+          </div><!-- /.bwiz-outer -->
+
+          <!-- ═══ Results strip ═══ -->
+          <div class="bwiz-results-strip">
+
+            <div class="bwiz-result-panel locked" id="block-result-panel">
+              <div class="bwiz-result-label">Block Result</div>
+              <div class="bwiz-result-content" id="block-result-content" aria-live="polite">—</div>
+            </div>
+
+            <div class="bwiz-result-panel locked" id="armor-roll-panel">
+              <div class="bwiz-result-label">Armor Roll</div>
+              <div class="bwiz-result-content" id="armor-result-content" aria-live="polite">—</div>
+              <div class="bwiz-armor-dice-tray" id="armor-dice-tray"></div>
+              <button class="roll-btn bwiz-roll-btn-sm" id="armor-roll-btn" hidden>Roll Armor</button>
+            </div>
+
+            <div class="bwiz-result-panel locked" id="injury-roll-panel">
+              <div class="bwiz-result-label">Injury Roll</div>
+              <div class="bwiz-result-content" id="injury-result-content" aria-live="polite">—</div>
+              <div class="bwiz-armor-dice-tray" id="injury-dice-tray"></div>
+              <button class="roll-btn bwiz-roll-btn-sm" id="injury-roll-btn" hidden>Roll Injury</button>
+            </div>
+
+          </div><!-- /.bwiz-results-strip -->
+
         </div>
       </div>
 

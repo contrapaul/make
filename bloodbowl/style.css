@@ -502,6 +502,9 @@
 .modal-skills {
   padding: 0.85rem 1rem;
   border-bottom: 1px solid #D8D8D8;
+  max-height: 9rem;
+  overflow-y: auto;
+  min-height: 4.5rem;
 }
 
 .skills-label {
