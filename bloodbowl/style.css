@@ -316,7 +316,7 @@
 /* ── Image overlay: name / number / position ── */
 .modal-card-overlay {
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 3;
@@ -324,16 +324,16 @@
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.6rem;
 }
 
-/* 30% opaque background via pseudo, so text stays 100% opaque */
+/* 50% opaque background via pseudo, so text stays 100% opaque */
 .modal-card-overlay::before {
   content: '';
   position: absolute;
   inset: 0;
   background: var(--tc-accent);
-  opacity: 0.3;
+  opacity: 0.5;
   z-index: -1;
 }
 
@@ -342,7 +342,7 @@
     var(--tc-gold-dark) 0%,
     var(--tc-gold)      50%,
     var(--tc-gold-dark) 100%);
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 /* Jersey number circle */
