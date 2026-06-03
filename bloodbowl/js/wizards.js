@@ -243,7 +243,8 @@ function initBlockWizard() {
 
   /* â”€â”€ Embedded trading card â”€â”€ */
   function buildEmbeddedCard(wrapEl, player, side) {
-    wrapEl.innerHTML = '';
+    /* Remove any existing card but leave the picker div intact */
+    wrapEl.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
 
     const team     = window.state?.[side]?.team;
     const isStar   = player.isStarPlayer;
@@ -614,6 +615,21 @@ function initBlockWizard() {
   /* â”€â”€ Init â”€â”€ */
   updateStDisplay();
   resetRoll();
+
+  /* Reset a side's card when its roster changes (team swap while panel is open) */
+  function watchRosterForReset(rosterId, side) {
+    const roster = document.getElementById(rosterId);
+    if (!roster) return;
+    new MutationObserver(() => {
+      if (panel?.hasAttribute('hidden')) return; // panel closed — ignore
+      if (side === 'att') { attPlayer = null; attST = 3; attAst = 0; attSkills.clear(); }
+      else                { defPlayer = null; defST = 3; defAst = 0; defSkills.clear(); }
+      showPicker(side);
+      updateStDisplay();
+    }).observe(roster, { childList: true });
+  }
+  watchRosterForReset('roster-left',  'att');
+  watchRosterForReset('roster-right', 'def');
 
   /* Open picker on panel open */
   onPanelOpen('panel-block', () => {
