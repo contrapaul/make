@@ -19,7 +19,7 @@
     "id": "amazon",
     "name": "Amazon",
     "file": "data/teams/amazon.json",
-    "imageDir": "images/",
+    "imageDir": "images/amazon/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0E2A14",
@@ -35,7 +35,7 @@
     "id": "black-orc",
     "name": "Black Orc",
     "file": "data/teams/black-orc.json",
-    "imageDir": "images/",
+    "imageDir": "images/black-orc/",
     "reroll": 60000,
     "colors": {
       "bg":          "#1A1A1A",
@@ -51,7 +51,7 @@
     "id": "bretonnian",
     "name": "Bretonnian",
     "file": "data/teams/bretonnian.json",
-    "imageDir": "images/",
+    "imageDir": "images/bretonnian/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0A0A2A",
@@ -67,7 +67,7 @@
     "id": "chaos-chosen",
     "name": "Chaos Chosen",
     "file": "data/teams/chaos-chosen.json",
-    "imageDir": "images/",
+    "imageDir": "images/chaos-chosen/",
     "reroll": 50000,
     "colors": {
       "bg":          "#1A0A1A",
@@ -83,7 +83,7 @@
     "id": "chaos-dwarf",
     "name": "Chaos Dwarf",
     "file": "data/teams/chaos-dwarf.json",
-    "imageDir": "images/",
+    "imageDir": "images/chaos-dwarf/",
     "reroll": 70000,
     "colors": {
       "bg":          "#1A0A00",
@@ -99,7 +99,7 @@
     "id": "chaos-renegades",
     "name": "Chaos Renegades",
     "file": "data/teams/chaos-renegades.json",
-    "imageDir": "images/",
+    "imageDir": "images/chaos-renegades/",
     "reroll": 70000,
     "colors": {
       "bg":          "#1A0A1A",
@@ -115,7 +115,7 @@
     "id": "dark-elf",
     "name": "Dark Elf",
     "file": "data/teams/dark-elf.json",
-    "imageDir": "images/",
+    "imageDir": "images/dark-elf/",
     "reroll": 50000,
     "colors": {
       "bg":          "#0A0A1E",
@@ -131,7 +131,7 @@
     "id": "dwarf",
     "name": "Dwarf",
     "file": "data/teams/dwarf.json",
-    "imageDir": "images/",
+    "imageDir": "images/dwarf/",
     "reroll": 60000,
     "colors": {
       "bg":          "#1E1A14",
@@ -147,7 +147,7 @@
     "id": "elven-union",
     "name": "Elven Union",
     "file": "data/teams/elven-union.json",
-    "imageDir": "images/",
+    "imageDir": "images/elven-union/",
     "reroll": 50000,
     "colors": {
       "bg":          "#0A1E0A",
@@ -163,7 +163,7 @@
     "id": "gnome",
     "name": "Gnome",
     "file": "data/teams/gnome.json",
-    "imageDir": "images/",
+    "imageDir": "images/gnome/",
     "reroll": 50000,
     "colors": {
       "bg":          "#0E1A0A",
@@ -179,7 +179,7 @@
     "id": "goblin",
     "name": "Goblin",
     "file": "data/teams/goblin.json",
-    "imageDir": "images/",
+    "imageDir": "images/goblin/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0A1A00",
@@ -195,7 +195,7 @@
     "id": "halfling",
     "name": "Halfling",
     "file": "data/teams/halfling.json",
-    "imageDir": "images/",
+    "imageDir": "images/halfling/",
     "reroll": 60000,
     "colors": {
       "bg":          "#1E1200",
@@ -211,7 +211,7 @@
     "id": "high-elf",
     "name": "High Elf",
     "file": "data/teams/high-elf.json",
-    "imageDir": "images/",
+    "imageDir": "images/high-elf/",
     "reroll": 50000,
     "colors": {
       "bg":          "#0A1420",
@@ -227,7 +227,7 @@
     "id": "human",
     "name": "Human",
     "file": "data/teams/human.json",
-    "imageDir": "images/",
+    "imageDir": "images/human/",
     "reroll": 50000,
     "colors": {
       "bg":          "#1A0A0A",
@@ -243,7 +243,7 @@
     "id": "imperial-nobility",
     "name": "Imperial Nobility",
     "file": "data/teams/imperial-nobility.json",
-    "imageDir": "images/",
+    "imageDir": "images/imperial-nobility/",
     "reroll": 60000,
     "colors": {
       "bg":          "#140005",
@@ -259,7 +259,7 @@
     "id": "khorne",
     "name": "Khorne",
     "file": "data/teams/khorne.json",
-    "imageDir": "images/",
+    "imageDir": "images/khorne/",
     "reroll": 60000,
     "colors": {
       "bg":          "#1A0000",
@@ -275,7 +275,7 @@
     "id": "lizardmen",
     "name": "Lizardmen",
     "file": "data/teams/lizardmen.json",
-    "imageDir": "images/",
+    "imageDir": "images/lizardmen/",
     "reroll": 70000,
     "colors": {
       "bg":          "#003A2A",
@@ -291,7 +291,7 @@
     "id": "necromantic-horror",
     "name": "Necromantic Horror",
     "file": "data/teams/necromantic-horror.json",
-    "imageDir": "images/",
+    "imageDir": "images/necromantic-horror/",
     "reroll": 70000,
     "colors": {
       "bg":          "#0A1414",
@@ -307,7 +307,7 @@
     "id": "norse",
     "name": "Norse",
     "file": "data/teams/norse.json",
-    "imageDir": "images/",
+    "imageDir": "images/norse/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0A1A2A",
@@ -323,7 +323,7 @@
     "id": "nurgle",
     "name": "Nurgle",
     "file": "data/teams/nurgle.json",
-    "imageDir": "images/",
+    "imageDir": "images/nurgle/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0E1200",
@@ -339,7 +339,7 @@
     "id": "ogre",
     "name": "Ogre",
     "file": "data/teams/ogre.json",
-    "imageDir": "images/",
+    "imageDir": "images/ogre/",
     "reroll": 70000,
     "colors": {
       "bg":          "#1A1814",
@@ -355,7 +355,7 @@
     "id": "old-world-alliance",
     "name": "Old World Alliance",
     "file": "data/teams/old-world-alliance.json",
-    "imageDir": "images/",
+    "imageDir": "images/old-world-alliance/",
     "reroll": 70000,
     "colors": {
       "bg":          "#1A0A00",
@@ -371,7 +371,7 @@
     "id": "orc",
     "name": "Orc",
     "file": "data/teams/orc.json",
-    "imageDir": "images/",
+    "imageDir": "images/orc/",
     "reroll": 60000,
     "colors": {
       "bg":          "#001A00",
@@ -387,7 +387,7 @@
     "id": "shambling-undead",
     "name": "Shambling Undead",
     "file": "data/teams/shambling-undead.json",
-    "imageDir": "images/",
+    "imageDir": "images/shambling-undead/",
     "reroll": 70000,
     "colors": {
       "bg":          "#0E0E0A",
@@ -403,7 +403,7 @@
     "id": "skaven",
     "name": "Skaven",
     "file": "data/teams/skaven.json",
-    "imageDir": "images/",
+    "imageDir": "images/skaven/",
     "reroll": 50000,
     "colors": {
       "bg":          "#1A0E0E",
@@ -419,7 +419,7 @@
     "id": "snotling",
     "name": "Snotling",
     "file": "data/teams/snotling.json",
-    "imageDir": "images/",
+    "imageDir": "images/snotling/",
     "reroll": 70000,
     "colors": {
       "bg":          "#1A1E00",
@@ -435,7 +435,7 @@
     "id": "tomb-kings",
     "name": "Tomb Kings",
     "file": "data/teams/tomb-kings.json",
-    "imageDir": "images/",
+    "imageDir": "images/tomb-kings/",
     "reroll": 60000,
     "colors": {
       "bg":          "#1E1400",
@@ -451,7 +451,7 @@
     "id": "underworld-denizens",
     "name": "Underworld Denizens",
     "file": "data/teams/underworld-denizens.json",
-    "imageDir": "images/",
+    "imageDir": "images/underworld-denizens/",
     "reroll": 70000,
     "colors": {
       "bg":          "#0A0A14",
@@ -467,7 +467,7 @@
     "id": "vampire",
     "name": "Vampire",
     "file": "data/teams/vampire.json",
-    "imageDir": "images/",
+    "imageDir": "images/vampire/",
     "reroll": 60000,
     "colors": {
       "bg":          "#0E0000",
@@ -483,7 +483,7 @@
     "id": "wood-elf",
     "name": "Wood Elf",
     "file": "data/teams/wood-elf.json",
-    "imageDir": "images/",
+    "imageDir": "images/wood-elf/",
     "reroll": 50000,
     "colors": {
       "bg":          "#001A00",
