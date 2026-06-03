@@ -910,6 +910,47 @@
   justify-content: space-between;
 }
 
+/* ── Return to Main Menu button ── */
+.bb-home-btn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  background: #062E94;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.3rem 0.85rem 0.3rem 0.65rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  white-space: nowrap;
+  pointer-events: auto;
+}
+.bb-home-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45),
+              0 0 0 1px rgba(100,160,255,0.25);
+  color: #fff;
+  text-decoration: none;
+}
+.bb-home-btn-dice {
+  font-family: 'Nuffle Dice', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.bb-home-btn-label {
+  font-family: 'Nuffle Italic', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.5px #000;
+  paint-order: stroke fill;
+}
+
 .bb-wordmark {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9rem;
