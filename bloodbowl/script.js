@@ -351,25 +351,25 @@ function openModal(side, player) {
   card.className = 'trading-card' + (isStar ? ' star-card' : '');
 
   card.innerHTML = `
-    <button class="modal-close" aria-label="Close player card">&#215;</button>
-
-    <div class="modal-player-header${isStar ? ' star-header' : ''}">
-      <span class="modal-jersey">#${player.id}</span>
-      <h2 class="modal-name">${esc(player.name)}</h2>
-      <p class="modal-position">
-        ${esc(player.position)}${player.characteristic
-          ? ` &middot; ${esc(player.characteristic)}`
-          : ''}${player.qty
-          ? ` <span class="modal-qty">(${esc(player.qty)})</span>`
-          : ''}
-      </p>
-    </div>
-
     <div class="modal-image-area" style="background:${bgColor};">
       <img class="modal-img"
            src="${imgDir}Player${player.id}.png"
            alt="${esc(player.name)}">
       <span class="img-placeholder-num" aria-hidden="true">${player.id}</span>
+
+      <div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">
+        <div class="modal-jersey-circle">${player.id}</div>
+        <div class="modal-overlay-info">
+          <h2 class="modal-name">${esc(player.name)}</h2>
+          <p class="modal-position">
+            ${esc(player.position)}${player.characteristic
+              ? ` &middot; ${esc(player.characteristic)}`
+              : ''}${player.qty
+              ? ` <span class="modal-qty">(${esc(player.qty)})</span>`
+              : ''}
+          </p>
+        </div>
+      </div>
     </div>
 
     <div class="modal-stats">
@@ -404,10 +404,6 @@ function openModal(side, player) {
   const stub = card.querySelector('.img-placeholder-num');
   img.addEventListener('load',  () => { stub.style.display = 'none'; });
   img.addEventListener('error', () => { img.style.display  = 'none'; });
-
-  /* Close button */
-  card.querySelector('.modal-close')
-    .addEventListener('click', () => closeModal(side));
 
   /* Skill links in trading card: hover + click open the anchored tooltip.
      No stopPropagation needed — modal backdrop only closes on e.target===overlay. */
