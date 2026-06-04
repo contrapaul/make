@@ -406,6 +406,7 @@ function initBlockWizard() {
         }
         resetRoll();
         updateStDisplay();
+        if (attPlayer && defPlayer) setGlow('gold');
       },
     );
   }
@@ -442,12 +443,11 @@ function initBlockWizard() {
     const injTray   = document.getElementById('injury-dice-tray');
     if (armorTray) armorTray.innerHTML = '';
     if (injTray)   injTray.innerHTML   = '';
-    /* Remove any complete-block buttons */
-    document.querySelectorAll('.bwiz-complete-btn').forEach(b => b.remove());
     document.getElementById('armor-roll-btn')?.setAttribute('hidden','');
     document.getElementById('injury-roll-btn')?.setAttribute('hidden','');
     renderDiceTray(calcBlock().count);
     renderRerolls();
+    setGlow('off');
   }
 
   /* â”€â”€ Phase 1b+1c: interpret chosen face with active skills â”€â”€ */
@@ -497,12 +497,19 @@ function initBlockWizard() {
     }
   }
 
+  /* ── Glow state helper ── */
+  function setGlow(mode) {
+    rollBtn.classList.remove('glow-gold', 'glow-green');
+    if (mode === 'gold' || mode === 'green') rollBtn.classList.add(`glow-${mode}`);
+  }
+
   /* Transform the Roll button into a green “Complete Block” closer */
   function setCompleteMode() {
     rollBtn.disabled  = false;
     rollBtn.innerHTML = 'Complete Block';
     rollBtn.classList.add('roll-btn--complete');
     rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click();
+    setGlow('green');
   }
 
   function showCompleteBlock() {
@@ -536,12 +543,14 @@ function initBlockWizard() {
     /* Single Roll button takes over for armor roll */
     rollBtn.onclick  = () => rollArmor(av, mb, claws, knockedSide);
     rollBtn.disabled = false;
+    setGlow('gold');
   }
 
   async function rollArmor(av, mightyBlowBonus, claws, knockedSide) {
     const tray     = document.getElementById('armor-dice-tray');
     const resultEl = document.getElementById('armor-result-content');
     rollBtn.disabled = true;
+    setGlow('off');
 
     /* Roll 2D6 */
     const d1 = Math.floor(Math.random() * 6) + 1;
@@ -587,12 +596,14 @@ function initBlockWizard() {
     /* Single Roll button takes over for injury roll */
     rollBtn.onclick  = () => rollInjury(knockedSide, mb);
     rollBtn.disabled = false;
+    setGlow('gold');
   }
 
   async function rollInjury(knockedSide, mightyBlowBonus) {
     const tray   = document.getElementById('injury-dice-tray');
     const result = document.getElementById('injury-result-content');
     rollBtn.disabled = true;
+    setGlow('off');
 
     const d1 = Math.floor(Math.random() * 6) + 1;
     const d2 = Math.floor(Math.random() * 6) + 1;
@@ -651,6 +662,7 @@ function initBlockWizard() {
   /* â”€â”€ Main roll â”€â”€ */
   async function doRoll() {
     rollBtn.disabled   = true;
+    setGlow('off');
     if (confirmBtn) confirmBtn.hidden = true;
     if (defBanner)  defBanner.hidden  = true;
     chosenFace = null;
