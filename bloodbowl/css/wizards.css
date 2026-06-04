@@ -1198,21 +1198,30 @@
   padding:        0 !important;
 }
 
+/* ── Unified scaling root — governs both the wizard row and results strip ── */
+.bwiz-scale-root {
+  display:        flex;
+  flex-direction: column;
+  flex:           1 1 0;
+  min-height:     0;
+  overflow:       hidden;
+  /*
+   * Single font-size drives all em-based widths in bwiz-outer children.
+   * At 1440px panel (≈1182px wide): 1182/69.5em ≈ 17px  → clamp gives 16.7px ✓
+   * At 800px  panel (≈ 656px wide): 656/69.5em  ≈  9.4px → near floor ✓
+   */
+  font-size:      clamp(7px, 1.1vw, 19px);
+}
+
 /* ── Main wizard row ── */
 .bwiz-outer {
   display:         flex;
   align-items:     flex-start;
-  /* gap and padding in em so they scale with font-size */
   gap:             0.75em;
   padding:         0.85em 0.75em 0.5em;
   overflow:        hidden;
   flex:            1 1 0;
   min-height:      0;
-  /*
-   * Scale: 5 col layout = 2×10em + 2×17.5em + 10em + 4×0.75em gap + 1.5em padding = ~69.5em total
-   * Panel = min(82vw, 1600px)  →  font-size ≈ 82vw / 69.5 ≈ 1.18vw  →  23px at 1950px cap
-   */
-  font-size:       clamp(7px, 1.18vw, 23px);
 }
 
 /* ── Skills columns (far left / right) ── */
@@ -1250,7 +1259,7 @@
   display:         flex;
   flex-direction:  column;
   gap:             0.5rem;
-  overflow-y:      auto;
+  overflow:        hidden;
   max-height:      100%;
 }
 
@@ -1481,12 +1490,11 @@
 /* ── Results strip ── */
 .bwiz-results-strip {
   display:         flex;
-  gap:             0.65rem;
-  padding:         0.65rem 0.75rem 0.75rem;
+  gap:             0.65em;
+  padding:         0.65em 0.75em 0.75em;
   border-top:      1px solid rgba(80, 130, 255, 0.15);
   background:      rgba(5, 12, 40, 0.5);
   flex-shrink:     0;
-  font-size:       clamp(9px, 1.1vw, 16px);
 }
 
 .bwiz-result-panel {
@@ -1494,10 +1502,10 @@
   background:      rgba(10, 22, 65, 0.55);
   border:          1px solid rgba(80, 130, 255, 0.2);
   border-radius:   7px;
-  padding:         0.65rem 0.75rem;
+  padding:         0.65em 0.75em;
   display:         flex;
   flex-direction:  column;
-  gap:             0.3rem;
+  gap:             0.3em;
   transition:      opacity 0.25s, border-color 0.25s;
   min-width:       0;
 }
@@ -1509,7 +1517,7 @@
 
 .bwiz-result-label {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.58rem;
+  font-size:      0.58em;
   font-weight:    700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -1518,7 +1526,7 @@
 
 .bwiz-result-content {
   font-family:    'JetBrains Mono', monospace;
-  font-size:      0.8rem;
+  font-size:      0.8em;
   font-weight:    600;
   color:          rgba(200, 225, 255, 0.85);
   line-height:    1.35;
@@ -1529,9 +1537,9 @@
 .bwiz-result-warn { color: #FFD055; }
 
 .bwiz-roll-btn-sm {
-  margin-top:     0.2rem;
-  padding:        0.3rem 0.75rem !important;
-  font-size:      0.65rem !important;
+  margin-top:     0.2em;
+  padding:        0.3em 0.75em !important;
+  font-size:      0.65em !important;
 }
 
 /* ── Skill cards in side columns — scale down sk-card to fit 10em columns ── */
@@ -1556,23 +1564,23 @@
 .bwiz-armor-dice-tray {
   display:     flex;
   align-items: center;
-  gap:         0.35rem;
+  gap:         0.35em;
   flex-wrap:   wrap;
-  min-height:  2.2rem;
-  margin-top:  0.25rem;
+  min-height:  2.2em;
+  margin-top:  0.25em;
 }
 
 .bwiz-d6-face {
   display:         inline-flex;
   align-items:     center;
   justify-content: center;
-  width:           2rem;
-  height:          2rem;
+  width:           2em;
+  height:          2em;
   background:      rgba(15, 30, 80, 0.8);
   border:          2px solid rgba(212, 175, 55, 0.5);
   border-radius:   6px;
   font-family:     'JetBrains Mono', monospace;
-  font-size:       1.1rem;
+  font-size:       1.1em;
   font-weight:     900;
   color:           #D4AF37;
   box-shadow:      2px 2px 0 rgba(0, 0, 0, 0.4);
@@ -1580,14 +1588,14 @@
 
 .bwiz-dice-op {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   0.85rem;
+  font-size:   0.85em;
   font-weight: 700;
   color:       rgba(180, 210, 255, 0.5);
 }
 
 .bwiz-dice-total {
   font-family: 'JetBrains Mono', monospace;
-  font-size:   1.3rem;
+  font-size:   1.3em;
   font-weight: 900;
   color:       #ff8fa0;
 }
@@ -1620,13 +1628,31 @@
 }
 
 /* Slow fade-out when glow class is removed; fast on hover */
-#block-roll-btn            { transition: background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s; }
-#block-roll-btn:hover      { transition: background 0.15s, box-shadow 0.15s,     transform 0.12s, border-color 0.15s; }
+#block-roll-btn {
+  transition:      background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s;
+  /* Issue 1 & 2: Nuffle Italic, larger, solid gold bg, white text, black outline */
+  font-family:     'Nuffle Italic', serif;
+  font-size:       1.5em;
+  padding:         0.55em 2em;
+  background:      rgba(212, 175, 55, 0.88);
+  border-color:    rgba(212, 175, 55, 0.95);
+  color:           #fff;
+  text-shadow:     0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+  letter-spacing:  0.06em;
+  justify-content: center;
+  margin:          0.4em 0 0;
+}
+#block-roll-btn:hover {
+  transition:   background 0.15s, box-shadow 0.15s, transform 0.12s, border-color 0.15s;
+  background:   rgba(212, 175, 55, 1);
+  border-color: rgba(212, 175, 55, 1);
+  box-shadow:   0 0 20px rgba(212, 175, 55, 0.5), 0 4px 16px rgba(0,0,0,0.35);
+}
 
 #block-roll-btn.glow-gold  { animation: bwiz-pulse-gold  2s ease-in-out infinite; }
 #block-roll-btn.glow-green { animation: bwiz-pulse-green 2s ease-in-out infinite; }
 
-/* ── Roll button — Complete Block state ── */
+/* ── Roll button — Complete Block state (solid green, white text persists) ── */
 .roll-btn--complete {
   background:   rgba(76, 175, 80, 0.15);
   border-color: rgba(76, 175, 80, 0.45);
@@ -1637,4 +1663,50 @@
   background:   rgba(76, 175, 80, 0.3);
   border-color: rgba(76, 175, 80, 0.7);
   box-shadow:   0 0 20px rgba(76, 175, 80, 0.28), 0 4px 16px rgba(0,0,0,0.35);
+}
+
+/* Block roll btn Complete state overrides with solid green + white text */
+#block-roll-btn.roll-btn--complete {
+  background:  rgba(76, 175, 80, 0.85);
+  border-color: rgba(76, 175, 80, 0.95);
+  color:        #fff;
+  text-shadow:  0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+}
+#block-roll-btn.roll-btn--complete:hover {
+  background:  rgba(76, 175, 80, 1);
+  border-color: rgba(76, 175, 80, 1);
+  box-shadow:   0 0 20px rgba(76, 175, 80, 0.5), 0 4px 16px rgba(0,0,0,0.35);
+}
+
+/* ── Team tabs inside block picker (Home / Away toggle) ── */
+.bwiz-team-tabs {
+  display:     flex;
+  gap:         0.25rem;
+  margin:      0 0 0.4rem;
+  flex-shrink: 0;
+}
+
+.bwiz-team-tab {
+  flex:           1;
+  padding:        0.2rem 0.3rem;
+  background:     rgba(20, 40, 100, 0.4);
+  border:         1px solid rgba(80, 130, 255, 0.2);
+  border-radius:  4px;
+  color:          rgba(140, 180, 255, 0.55);
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.58rem;
+  font-weight:    700;
+  cursor:         pointer;
+  text-align:     center;
+  transition:     background 0.12s, color 0.12s, border-color 0.12s;
+}
+.bwiz-team-tab:hover {
+  background:   rgba(60, 100, 200, 0.35);
+  color:        rgba(200, 225, 255, 0.9);
+  border-color: rgba(80, 130, 255, 0.45);
+}
+.bwiz-team-tab.active {
+  background:   rgba(212, 175, 55, 0.15);
+  border-color: rgba(212, 175, 55, 0.5);
+  color:        #D4AF37;
 }

@@ -411,6 +411,23 @@ function initBlockWizard() {
     );
   }
 
+  /* Restore embedded card when panel reopens without resetting state */
+  function restoreCard(side) {
+    const wrap   = document.getElementById(`block-${side}-card-wrap`);
+    const picker = document.getElementById(`block-${side}-picker`);
+    if (!wrap || !picker) return;
+    picker.hidden = true;
+    if (!wrap.querySelector('.bwiz-embedded-card')) {
+      const player     = side === 'att' ? attPlayer : defPlayer;
+      const rosterSide = side === 'att' ? 'left' : 'right';
+      if (player) {
+        const avVal = parseInt(player.statsText?.match(/\bAV\s*(\d+)/i)?.[1] ?? 9, 10);
+        if (side === 'att') attAV = avVal; else defAV = avVal;
+        buildEmbeddedCard(wrap, player, rosterSide);
+      }
+    }
+  }
+
   /* â”€â”€ Change buttons â”€â”€ */
   document.getElementById('block-change-att')?.addEventListener('click', () => showPicker('att'));
   document.getElementById('block-change-def')?.addEventListener('click', () => showPicker('def'));
@@ -425,9 +442,9 @@ function initBlockWizard() {
     chosenFace  = null;
     rrUsed      = false;
     rollBtn.hidden     = false;
-    rollBtn.disabled   = false;
+    rollBtn.disabled   = !(attPlayer && defPlayer);
     rollBtn.onclick    = doRoll;
-    rollBtn.innerHTML  = '<span class="roll-btn-icon">🎲</span> Roll';
+    rollBtn.innerHTML  = 'Roll';
     rollBtn.classList.remove('roll-btn--complete');
     if (confirmBtn) confirmBtn.hidden = true;
     if (defBanner)  defBanner.hidden  = true;
@@ -508,7 +525,7 @@ function initBlockWizard() {
     rollBtn.disabled  = false;
     rollBtn.innerHTML = 'Complete Block';
     rollBtn.classList.add('roll-btn--complete');
-    rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click();
+    rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click(); // players preserved on reopen
     setGlow('green');
   }
 
@@ -731,11 +748,11 @@ function initBlockWizard() {
   watchRosterForReset('roster-left',  'att');
   watchRosterForReset('roster-right', 'def');
 
-  /* Open picker on panel open */
+  /* Open picker on panel open — preserve player selections across close/reopen */
   onPanelOpen('panel-block', () => {
     resetRoll();
-    showPicker('att');
-    showPicker('def');
+    if (!attPlayer) showPicker('att'); else restoreCard('att');
+    if (!defPlayer) showPicker('def'); else restoreCard('def');
     updateStDisplay();
     renderRerolls();
   });
