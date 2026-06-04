@@ -45,6 +45,19 @@ function rollBlockDie(faceEl) {
   faceEl.classList.add('rolling');
 
   return new Promise(resolve => {
+    let settled = false;
+    function finish() {
+      if (settled) return;
+      settled = true;
+      clearInterval(iv);
+      faceEl.classList.remove('rolling', 'settled');
+      buildBlockFace(faceEl, result);
+      resolve(result);
+    }
+
+    /* Fallback: if animationend never fires (headless / reduced-motion), finish after 650ms */
+    const fallback = setTimeout(finish, 650);
+
     faceEl.addEventListener('animationend', () => {
       clearInterval(iv);
       faceEl.classList.remove('rolling');
@@ -52,8 +65,9 @@ function rollBlockDie(faceEl) {
       void faceEl.offsetWidth;
       faceEl.classList.add('settled');
       faceEl.addEventListener('animationend', () => {
+        clearTimeout(fallback);
         faceEl.classList.remove('settled');
-        resolve(result);
+        finish();
       }, { once: true });
     }, { once: true });
   });
@@ -135,6 +149,7 @@ function initBlockWizard() {
   let attSkills = new Set(), defSkills = new Set();
   let attAV = 9, defAV = 9;          // armor values (parsed from statsText)
   let attPlayer = null, defPlayer = null;
+  let attSide = 'left';              // which roster side the attacker is from
   let rolledFaces = [];              // array of BLOCK_FACES[n] objects from last roll
   let chosenFace  = null;            // the face the user confirmed
   let rrUsed      = false;           // team re-roll consumed this action
@@ -156,10 +171,10 @@ function initBlockWizard() {
     if (!compareEl) return;
     const { count, who } = calcBlock();
     const a = attST + attAst, d = defST + defAst;
-    const attTxt = attAst ? `ST ${a} (${attST}+${attAst})` : `ST ${a}`;
-    const defTxt = defAst ? `ST ${d} (${defST}+${defAst})` : `ST ${d}`;
-    const pickerTxt = who ? ` â€” ${who}` : '';
-    compareEl.textContent = `${attTxt} vs ${defTxt} Â· ${count} ${count === 1 ? 'die' : 'dice'}${pickerTxt}`;
+    const attTxt = attAst ? `ST ${a} (${attST} + ${attAst} assists)` : `ST ${a}`;
+    const defTxt = defAst ? `ST ${d} (${defST} + ${defAst} assist)` : `ST ${d}`;
+    const pickerTxt = who ? ` — ${who}` : '';
+    compareEl.textContent = `${attTxt} vs. ${defTxt} · ${count} ${count === 1 ? 'die' : 'dice'}${pickerTxt}`;
     renderDiceTray(count);
     renderRerolls();
   }
@@ -214,20 +229,24 @@ function initBlockWizard() {
     const el = document.getElementById('block-rerolls');
     if (!el) return;
     const gs      = window.GameState;
-    const rrTotal = gs?.rerolls?.home ?? 0;  // attacker is always left = home
+    /* Attacker is from left side = home team */
+    const rrKey   = attSide === 'right' ? 'away' : 'home';
+    const rrTotal = gs?.rerolls?.[rrKey] ?? 0;
     el.innerHTML  = '';
     for (let i = 0; i < Math.max(rrTotal, 1); i++) {
       const dot = document.createElement('button');
       dot.className = 'bwiz-rr-dot' + (i < rrTotal ? '' : ' spent') + (rrUsed ? ' used' : '');
       dot.setAttribute('aria-label', 'Use team re-roll');
-      dot.disabled = rrUsed || rrTotal === 0 || rolledFaces.length === 0 || chosenFace !== null;
+      /* Disable only when: already used, no RR remaining, or no dice have been rolled yet */
+      dot.disabled = rrUsed || rrTotal === 0 || rolledFaces.length === 0;
       dot.addEventListener('click', () => {
-        if (rrUsed || !gs || gs.rerolls.home <= 0 || rolledFaces.length === 0) return;
-        gs.rerolls.home = Math.max(0, gs.rerolls.home - 1);
+        if (rrUsed || !gs || gs.rerolls[rrKey] <= 0 || rolledFaces.length === 0) return;
+        gs.rerolls[rrKey] = Math.max(0, gs.rerolls[rrKey] - 1);
         rrUsed = true;
         /* Sync game-bar pip */
-        document.querySelectorAll('#rr-home .rr-pip').forEach((pip, idx) => {
-          pip.classList.toggle('used', idx >= gs.rerolls.home);
+        const barId = rrKey === 'home' ? '#rr-home' : '#rr-away';
+        document.querySelectorAll(`${barId} .rr-pip`).forEach((pip, idx) => {
+          pip.classList.toggle('used', idx >= gs.rerolls[rrKey]);
         });
         doRoll();
       });
@@ -317,9 +336,9 @@ function initBlockWizard() {
 
   /* â”€â”€ Load block-relevant skills into side column â”€â”€ */
   function loadBlockSkills(side, player) {
-    const colId    = side === 'att' ? 'block-att-skills-col' : 'block-def-skills-col';
+    const colId     = side === 'att' ? 'block-att-skills-col' : 'block-def-skills-col';
     const whitelist = side === 'att' ? ATT_BLOCK_SKILLS : DEF_BLOCK_SKILLS;
-    const col      = document.getElementById(colId);
+    const col       = document.getElementById(colId);
     if (!col) return;
 
     const heading = col.querySelector('.bwiz-skills-heading');
@@ -339,11 +358,16 @@ function initBlockWizard() {
       return;
     }
 
-    /* Reuse .sk-card tiles from skills page */
+    const allSkills = window.BBData?.skills ?? [];
     skills.forEach(name => {
-      const tile = document.createElement('div');
+      const entry = allSkills.find(s => s.name.toLowerCase() === name.toLowerCase());
+      const tile  = document.createElement('div');
       tile.className = 'bwiz-skill-tile';
-      tile.textContent = name;
+      tile.innerHTML = `
+        <div class=”bwiz-skill-name”>${esc(name)}</div>
+        ${entry?.category ? `<div class=”bwiz-skill-cat”>${esc(entry.category)}</div>` : ''}
+        ${entry?.description ? `<div class=”bwiz-skill-desc”>${esc(entry.description)}</div>` : ''}
+      `;
       col.appendChild(tile);
     });
   }
@@ -365,13 +389,14 @@ function initBlockWizard() {
         /* Player selected: build card, load skills, set ST */
         if (side === 'att') {
           attPlayer = player;
-          attST = stats.st ?? 3;
+          attST     = stats.st ?? 3;
+          attSide   = 'left';
           picker.hidden = true;
           buildEmbeddedCard(wrap, player, 'left');
           loadBlockSkills('att', player);
         } else {
           defPlayer = player;
-          defST = stats.st ?? 3;
+          defST     = stats.st ?? 3;
           picker.hidden = true;
           buildEmbeddedCard(wrap, player, 'right');
           loadBlockSkills('def', player);
@@ -403,9 +428,16 @@ function initBlockWizard() {
     ['block-result-panel','armor-roll-panel','injury-roll-panel'].forEach(id => {
       document.getElementById(id)?.classList.add('locked');
     });
-    document.getElementById('block-result-content').textContent  = 'â€”';
-    document.getElementById('armor-result-content').textContent  = 'â€”';
-    document.getElementById('injury-result-content').textContent = 'â€”';
+    document.getElementById('block-result-content').textContent  = '—';
+    document.getElementById('armor-result-content').textContent  = '—';
+    document.getElementById('injury-result-content').textContent = '—';
+    /* Clear dice trays */
+    const armorTray = document.getElementById('armor-dice-tray');
+    const injTray   = document.getElementById('injury-dice-tray');
+    if (armorTray) armorTray.innerHTML = '';
+    if (injTray)   injTray.innerHTML   = '';
+    /* Remove any complete-block buttons */
+    document.querySelectorAll('.bwiz-complete-btn').forEach(b => b.remove());
     document.getElementById('armor-roll-btn')?.setAttribute('hidden','');
     document.getElementById('injury-roll-btn')?.setAttribute('hidden','');
     renderDiceTray(calcBlock().count);
@@ -416,43 +448,62 @@ function initBlockWizard() {
   function interpretResult(face) {
     const key = face.key;
     let knockedSide = null;  // 'att' | 'def' | 'both' | null
+    let isPush = false;
 
     if (key === 'att-down') {
       knockedSide = 'att';
-      showBlockResult(`Attacker Down â€” Turnover!`, 'bad');
+      showBlockResult('Attacker Down — Turnover!', 'bad');
     } else if (key === 'both-down') {
       if (attSkills.has('Block')) {
         knockedSide = 'def';
-        showBlockResult('Both Down â€” Block! Only defender falls.', 'ok');
+        showBlockResult('Both Down — Block skill! Only defender falls.', 'ok');
       } else if (attSkills.has('Wrestle')) {
-        knockedSide = 'both';
-        showBlockResult('Both Down â€” Wrestle! Both fall. No armor rolls.', 'warn');
-        knockedSide = null; // Wrestle: both fall but no armor for either
+        showBlockResult('Both Down — Wrestle! Both fall, no armor rolls.', 'warn');
+        showCompleteBlock();
       } else {
         knockedSide = 'both';
-        showBlockResult('Both Down â€” both players fall. Armor for both.', 'bad');
+        showBlockResult('Both Down — both players fall. Armor for both.', 'bad');
       }
     } else if (key === 'push') {
-      showBlockResult('Push Back â€” defender shoved. Attacker may follow up.', 'ok');
+      isPush = true;
+      showBlockResult('Push Back — defender shoved. Attacker may follow up.', 'ok');
+      showCompleteBlock();
     } else if (key === 'stumble') {
       if (defSkills.has('Dodge')) {
-        showBlockResult('Stumble â€” Dodge! Treated as Push Back.', 'ok');
+        isPush = true;
+        showBlockResult('Stumble — Dodge skill! Treated as Push Back.', 'ok');
+        showCompleteBlock();
       } else {
         knockedSide = 'def';
-        showBlockResult('Stumble â€” Pow! Defender knocked down.', 'ok');
+        showBlockResult('Stumble — Pow! Defender knocked down.', 'ok');
       }
     } else if (key === 'def-down') {
       knockedSide = 'def';
-      showBlockResult('Defender Down â€” roll Armor!', 'ok');
+      showBlockResult('Defender Down — Pow! Roll Armor.', 'ok');
     }
 
     /* Unlock armor roll if someone is knocked down */
     if (knockedSide === 'def' || knockedSide === 'att') {
       unlockArmorRoll(knockedSide);
     } else if (knockedSide === 'both') {
-      /* Both down without Wrestle: armor for both â€” show defender's armor for now */
-      unlockArmorRoll('def');
+      /* Both down without Wrestle: armor for attacker then defender */
+      unlockArmorRoll('att');
     }
+  }
+
+  /* Show a “Complete Block” button in the result panel — closes the wizard */
+  function showCompleteBlock() {
+    const panel = document.getElementById('block-result-panel');
+    if (!panel) return;
+    let btn = panel.querySelector('.bwiz-complete-btn');
+    if (btn) return;
+    btn = document.createElement('button');
+    btn.className   = 'bwiz-complete-btn';
+    btn.textContent = 'Complete Block';
+    btn.addEventListener('click', () => {
+      document.querySelector('#panel-block .panel-close')?.click();
+    });
+    panel.appendChild(btn);
   }
 
   function showBlockResult(text, cls) {
@@ -496,18 +547,41 @@ function initBlockWizard() {
     let total = d1 + d2 + mightyBlowBonus;
 
     if (tray) {
-      tray.textContent = `${d1} + ${d2}${mightyBlowBonus ? ` +${mightyBlowBonus}` : ''} = ${total}`;
+      const modNote = mightyBlowBonus ? ` +${mightyBlowBonus}` : '';
+      tray.innerHTML = `
+        <span class="bwiz-d6-face">${d1}</span>
+        <span class="bwiz-dice-op">+</span>
+        <span class="bwiz-d6-face">${d2}</span>
+        ${modNote ? `<span class="bwiz-dice-op">${modNote}</span>` : ''}
+        <span class="bwiz-dice-op">=</span>
+        <span class="bwiz-dice-total">${total}</span>
+      `;
     }
 
     const breaks = claws ? (d1 + d2 >= 8) : (total >= av);
     if (resultEl) {
-      resultEl.textContent = breaks ? `Armor broken! (${total} vs ${av}+)` : `Armor holds. (${total} vs ${av}+)`;
-      resultEl.className   = `bwiz-result-content bwiz-result-${breaks ? 'ok' : 'warn'}`;
+      resultEl.textContent = breaks ? `Armor broken! (${total} vs ${av}+)` : `Armor holds! (${total} vs ${av}+)`;
+      resultEl.className   = `bwiz-result-content bwiz-result-${breaks ? 'bad' : 'warn'}`;
     }
 
     if (breaks) {
       await pause(300);
       unlockInjuryRoll(knockedSide);
+    } else {
+      /* Armor held — block sequence is done */
+      const armorPanel = document.getElementById('armor-roll-panel');
+      if (armorPanel) {
+        let doneBtn = armorPanel.querySelector('.bwiz-complete-btn');
+        if (!doneBtn) {
+          doneBtn = document.createElement('button');
+          doneBtn.className   = 'bwiz-complete-btn';
+          doneBtn.textContent = 'Complete Block';
+          doneBtn.addEventListener('click', () => {
+            document.querySelector('#panel-block .panel-close')?.click();
+          });
+          armorPanel.appendChild(doneBtn);
+        }
+      }
     }
     if (armorBtn) armorBtn.disabled = false;
   }
@@ -537,7 +611,15 @@ function initBlockWizard() {
     const total = d1 + d2 + mightyBlowBonus;
 
     if (tray) {
-      tray.textContent = `${d1} + ${d2}${mightyBlowBonus ? ` +${mightyBlowBonus}` : ''} = ${total}`;
+      const modNote = mightyBlowBonus ? ` +${mightyBlowBonus}` : '';
+      tray.innerHTML = `
+        <span class="bwiz-d6-face">${d1}</span>
+        <span class="bwiz-dice-op">+</span>
+        <span class="bwiz-d6-face">${d2}</span>
+        ${modNote ? `<span class="bwiz-dice-op">${modNote}</span>` : ''}
+        <span class="bwiz-dice-op">=</span>
+        <span class="bwiz-dice-total">${total}</span>
+      `;
     }
 
     let outcome, status, statusLabel;
@@ -545,7 +627,7 @@ function initBlockWizard() {
     else if (total <= 9)  { outcome = "KO'd";      status = window.PlayerStatus?.KO;           statusLabel = 'KO';         }
     else                  { outcome = 'Casualty';  status = window.PlayerStatus?.BADLY_HURT;   statusLabel = 'BADLY HURT'; }
 
-    const extra = total >= 10 ? ' â€” Pro mode has full casualty table.' : '';
+    const extra = total >= 10 ? ' — see Casualty table.' : '';
     if (result) {
       result.textContent = `${outcome} (${total})${extra}`;
       result.className   = `bwiz-result-content bwiz-result-${total <= 7 ? 'warn' : 'bad'}`;
@@ -556,6 +638,18 @@ function initBlockWizard() {
     const targetSide   = knockedSide === 'att' ? 'left' : 'right';
     if (targetPlayer && status !== undefined && window.GameState) {
       window.GameState.setPlayerStatus?.(targetSide, targetPlayer.idx, status);
+    }
+
+    /* Block sequence complete — offer close button */
+    const injPanel = document.getElementById('injury-roll-panel');
+    if (injPanel && !injPanel.querySelector('.bwiz-complete-btn')) {
+      const doneBtn = document.createElement('button');
+      doneBtn.className   = 'bwiz-complete-btn';
+      doneBtn.textContent = 'Complete Block';
+      doneBtn.addEventListener('click', () => {
+        document.querySelector('#panel-block .panel-close')?.click();
+      });
+      injPanel.appendChild(doneBtn);
     }
 
     if (injBtn) injBtn.disabled = false;

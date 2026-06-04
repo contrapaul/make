@@ -1507,16 +1507,107 @@
 .bwiz-result-bad  { color: #ff8fa0; }
 .bwiz-result-warn { color: #FFD055; }
 
-.bwiz-armor-dice-tray {
-  font-family:    'JetBrains Mono', monospace;
-  font-size:      0.85rem;
-  font-weight:    700;
-  color:          rgba(212, 175, 55, 0.8);
-  min-height:     1.2em;
-}
-
 .bwiz-roll-btn-sm {
   margin-top:     0.2rem;
   padding:        0.3rem 0.75rem !important;
   font-size:      0.65rem !important;
+}
+
+/* ── Skill tile: full description layout ── */
+.bwiz-skill-tile {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.2rem;
+}
+
+.bwiz-skill-name {
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    0.72rem;
+  font-weight:  700;
+  color:        rgba(200, 225, 255, 0.9);
+}
+
+.bwiz-skill-cat {
+  display:        inline-block;
+  padding:        0.05rem 0.3rem;
+  background:     rgba(80, 130, 255, 0.15);
+  border:         1px solid rgba(80, 130, 255, 0.3);
+  border-radius:  3px;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.52rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color:          rgba(140, 180, 255, 0.7);
+  width:          fit-content;
+}
+
+.bwiz-skill-desc {
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    0.6rem;
+  color:        rgba(150, 185, 255, 0.55);
+  line-height:  1.45;
+}
+
+/* ── Styled 2D6 dice display ── */
+.bwiz-armor-dice-tray {
+  display:     flex;
+  align-items: center;
+  gap:         0.35rem;
+  flex-wrap:   wrap;
+  min-height:  2.2rem;
+  margin-top:  0.25rem;
+}
+
+.bwiz-d6-face {
+  display:         inline-flex;
+  align-items:     center;
+  justify-content: center;
+  width:           2rem;
+  height:          2rem;
+  background:      rgba(15, 30, 80, 0.8);
+  border:          2px solid rgba(212, 175, 55, 0.5);
+  border-radius:   6px;
+  font-family:     'JetBrains Mono', monospace;
+  font-size:       1.1rem;
+  font-weight:     900;
+  color:           #D4AF37;
+  box-shadow:      2px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.bwiz-dice-op {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.85rem;
+  font-weight: 700;
+  color:       rgba(180, 210, 255, 0.5);
+}
+
+.bwiz-dice-total {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   1.3rem;
+  font-weight: 900;
+  color:       #ff8fa0;
+}
+.bwiz-dice-total.ok { color: #66EE88; }
+
+/* ── Complete Block button ── */
+.bwiz-complete-btn {
+  margin-top:     0.35rem;
+  padding:        0.3rem 0.8rem;
+  background:     rgba(76, 175, 80, 0.15);
+  border:         1px solid rgba(76, 175, 80, 0.45);
+  border-radius:  5px;
+  color:          #81c784;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.65rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  cursor:         pointer;
+  transition:     background 0.12s, border-color 0.12s;
+  width:          100%;
+}
+.bwiz-complete-btn:hover {
+  background:   rgba(76, 175, 80, 0.3);
+  border-color: rgba(76, 175, 80, 0.7);
 }
