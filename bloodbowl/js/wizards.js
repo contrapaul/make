@@ -426,6 +426,8 @@ function initBlockWizard() {
     rollBtn.hidden     = false;
     rollBtn.disabled   = false;
     rollBtn.onclick    = doRoll;
+    rollBtn.innerHTML  = '<span class="roll-btn-icon">🎲</span> Roll';
+    rollBtn.classList.remove('roll-btn--complete');
     if (confirmBtn) confirmBtn.hidden = true;
     if (defBanner)  defBanner.hidden  = true;
     /* Lock result panels */
@@ -495,19 +497,16 @@ function initBlockWizard() {
     }
   }
 
-  /* Show a “Complete Block” button in the result panel — closes the wizard */
+  /* Transform the Roll button into a green “Complete Block” closer */
+  function setCompleteMode() {
+    rollBtn.disabled  = false;
+    rollBtn.innerHTML = 'Complete Block';
+    rollBtn.classList.add('roll-btn--complete');
+    rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click();
+  }
+
   function showCompleteBlock() {
-    const panel = document.getElementById('block-result-panel');
-    if (!panel) return;
-    let btn = panel.querySelector('.bwiz-complete-btn');
-    if (btn) return;
-    btn = document.createElement('button');
-    btn.className   = 'bwiz-complete-btn';
-    btn.textContent = 'Complete Block';
-    btn.addEventListener('click', () => {
-      document.querySelector('#panel-block .panel-close')?.click();
-    });
-    panel.appendChild(btn);
+    setCompleteMode();
   }
 
   function showBlockResult(text, cls) {
@@ -571,20 +570,7 @@ function initBlockWizard() {
       await pause(300);
       unlockInjuryRoll(knockedSide);   /* re-enables rollBtn for injury */
     } else {
-      /* Armor held — block sequence done; keep Roll button disabled */
-      const armorPanel = document.getElementById('armor-roll-panel');
-      if (armorPanel) {
-        let doneBtn = armorPanel.querySelector('.bwiz-complete-btn');
-        if (!doneBtn) {
-          doneBtn = document.createElement('button');
-          doneBtn.className   = 'bwiz-complete-btn';
-          doneBtn.textContent = 'Complete Block';
-          doneBtn.addEventListener('click', () => {
-            document.querySelector('#panel-block .panel-close')?.click();
-          });
-          armorPanel.appendChild(doneBtn);
-        }
-      }
+      setCompleteMode();
     }
   }
 
@@ -629,9 +615,8 @@ function initBlockWizard() {
     else if (total <= 9)  { outcome = "KO'd";     status = window.PlayerStatus?.KO;         }
     else                  { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
 
-    const extra = total >= 10 ? ' — see Casualty table.' : '';
     if (result) {
-      result.textContent = `${outcome} (${total})${extra}`;
+      result.textContent = `${outcome} (${total})`;
       result.className   = `bwiz-result-content bwiz-result-${total <= 7 ? 'warn' : 'bad'}`;
     }
 
@@ -642,17 +627,25 @@ function initBlockWizard() {
       window.GameState.setPlayerStatus?.(targetSide, targetPlayer.idx, status);
     }
 
-    /* Block sequence complete — Roll button stays disabled; offer close */
-    const injPanel = document.getElementById('injury-roll-panel');
-    if (injPanel && !injPanel.querySelector('.bwiz-complete-btn')) {
-      const doneBtn = document.createElement('button');
-      doneBtn.className   = 'bwiz-complete-btn';
-      doneBtn.textContent = 'Complete Block';
-      doneBtn.addEventListener('click', () => {
-        document.querySelector('#panel-block .panel-close')?.click();
-      });
-      injPanel.appendChild(doneBtn);
+    /* Casualty: auto-roll D16 on the casualty table */
+    if (total >= 10) {
+      const injPanel = document.getElementById('injury-roll-panel');
+      if (injPanel) {
+        const casVal = Math.floor(Math.random() * 16) + 1;
+        const cas    = rangeFind(window.BBData?.injury?.casualty, casVal)
+                    ?? { result: 'Unknown', 'class': '', desc: '' };
+        const casEl = document.createElement('div');
+        casEl.className = 'bwiz-casualty-result';
+        casEl.innerHTML =
+          `<div class="bwiz-result-label">Casualty (D16: ${casVal})</div>` +
+          `<div class="bwiz-result-content bwiz-result-bad ${cas['class']}">${esc(cas.result)}</div>` +
+          (cas.desc ? `<p class="bwiz-cas-desc">${esc(cas.desc)}</p>` : '');
+        injPanel.appendChild(casEl);
+      }
     }
+
+    /* Block sequence complete */
+    setCompleteMode();
   }
 
   /* â”€â”€ Main roll â”€â”€ */

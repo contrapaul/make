@@ -1593,6 +1593,19 @@
 }
 .bwiz-dice-total.ok { color: #66EE88; }
 
+/* ── Roll button — Complete Block state ── */
+.roll-btn--complete {
+  background:   rgba(76, 175, 80, 0.15);
+  border-color: rgba(76, 175, 80, 0.45);
+  color:        #81c784;
+  box-shadow:   0 0 10px rgba(76, 175, 80, 0.06);
+}
+.roll-btn--complete:hover {
+  background:   rgba(76, 175, 80, 0.3);
+  border-color: rgba(76, 175, 80, 0.7);
+  box-shadow:   0 0 20px rgba(76, 175, 80, 0.28), 0 4px 16px rgba(0,0,0,0.35);
+}
+
 /* ── Complete Block button ── */
 .bwiz-complete-btn {
   margin-top:     0.35rem;
