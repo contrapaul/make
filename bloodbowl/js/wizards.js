@@ -425,7 +425,7 @@ function initBlockWizard() {
     rrUsed      = false;
     rollBtn.hidden     = false;
     rollBtn.disabled   = false;
-    rollBtn.onclick    = null;   // cleared so addEventListener('click', doRoll) is the handler
+    rollBtn.onclick    = doRoll;
     if (confirmBtn) confirmBtn.hidden = true;
     if (defBanner)  defBanner.hidden  = true;
     /* Lock result panels */
