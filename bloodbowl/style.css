@@ -281,7 +281,7 @@
 .trading-card {
   background: #F2F2F2;
   border: 4px solid var(--tc-primary);
-  border-radius: 6px;
+  border-radius: 16px;
   width: 100%;
   max-width: 420px;
   aspect-ratio: 5 / 7;
@@ -596,6 +596,7 @@
   line-height: 1.2;
   flex: 1;
   letter-spacing: 0.03em;
+  text-align: left;
 }
 
 .sk-card-badge {
@@ -744,30 +745,11 @@
 
 .skill-card-header {
   background: #2a2a2a;
-  padding: 0.9rem 3rem 0.9rem 1.1rem;
+  padding: 0.9rem 1.1rem;
   border-radius: 3px 3px 0 0;
 }
 
-.skill-close {
-  position: absolute;
-  top: 0.55rem;
-  right: 0.55rem;
-  background: rgba(255, 255, 255, 0.12);
-  border: none;
-  color: #fff;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.13s;
-  z-index: 10;
-}
-
-.skill-close:hover { background: rgba(255, 255, 255, 0.28); }
+.skill-close { display: none; }
 
 .skill-name {
   font-family: 'JetBrains Mono', monospace;

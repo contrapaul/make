@@ -248,7 +248,8 @@ function initBlockWizard() {
         document.querySelectorAll(`${barId} .rr-pip`).forEach((pip, idx) => {
           pip.classList.toggle('used', idx >= gs.rerolls[rrKey]);
         });
-        doRoll();
+        renderRerolls();
+        /* Roll button remains enabled with doRoll handler — user clicks to re-roll */
       });
       el.appendChild(dot);
     }
@@ -424,6 +425,7 @@ function initBlockWizard() {
     rrUsed      = false;
     rollBtn.hidden     = false;
     rollBtn.disabled   = false;
+    rollBtn.onclick    = null;   // cleared so addEventListener('click', doRoll) is the handler
     if (confirmBtn) confirmBtn.hidden = true;
     if (defBanner)  defBanner.hidden  = true;
     /* Lock result panels */
@@ -521,7 +523,6 @@ function initBlockWizard() {
   /* â”€â”€ Armor roll â”€â”€ */
   function unlockArmorRoll(knockedSide) {
     const armorPanel = document.getElementById('armor-roll-panel');
-    const armorBtn   = document.getElementById('armor-roll-btn');
     const armorNote  = document.getElementById('armor-result-content');
     if (!armorPanel) return;
 
@@ -532,16 +533,16 @@ function initBlockWizard() {
 
     armorPanel.classList.remove('locked');
     armorNote.textContent = `${who} AV ${av}+${mb ? ' (+1 Mighty Blow)' : ''}${claws ? ' (Claws: 8+ breaks)' : ''}`;
-    armorBtn.removeAttribute('hidden');
 
-    armorBtn.onclick = () => rollArmor(av, mb, claws, knockedSide);
+    /* Single Roll button takes over for armor roll */
+    rollBtn.onclick  = () => rollArmor(av, mb, claws, knockedSide);
+    rollBtn.disabled = false;
   }
 
   async function rollArmor(av, mightyBlowBonus, claws, knockedSide) {
-    const armorBtn   = document.getElementById('armor-roll-btn');
-    const tray       = document.getElementById('armor-dice-tray');
-    const resultEl   = document.getElementById('armor-result-content');
-    if (armorBtn) armorBtn.disabled = true;
+    const tray     = document.getElementById('armor-dice-tray');
+    const resultEl = document.getElementById('armor-result-content');
+    rollBtn.disabled = true;
 
     /* Roll 2D6 */
     const d1 = Math.floor(Math.random() * 6) + 1;
@@ -568,9 +569,9 @@ function initBlockWizard() {
 
     if (breaks) {
       await pause(300);
-      unlockInjuryRoll(knockedSide);
+      unlockInjuryRoll(knockedSide);   /* re-enables rollBtn for injury */
     } else {
-      /* Armor held — block sequence is done */
+      /* Armor held — block sequence done; keep Roll button disabled */
       const armorPanel = document.getElementById('armor-roll-panel');
       if (armorPanel) {
         let doneBtn = armorPanel.querySelector('.bwiz-complete-btn');
@@ -585,28 +586,27 @@ function initBlockWizard() {
         }
       }
     }
-    if (armorBtn) armorBtn.disabled = false;
   }
 
   /* â”€â”€ Injury roll â”€â”€ */
   function unlockInjuryRoll(knockedSide) {
     const injPanel = document.getElementById('injury-roll-panel');
-    const injBtn   = document.getElementById('injury-roll-btn');
     if (!injPanel) return;
 
     injPanel.classList.remove('locked');
     const mb = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
     document.getElementById('injury-result-content').textContent =
       `Ready to roll${mb ? ' (+1 Mighty Blow)' : ''}`;
-    injBtn.removeAttribute('hidden');
-    injBtn.onclick = () => rollInjury(knockedSide, mb);
+
+    /* Single Roll button takes over for injury roll */
+    rollBtn.onclick  = () => rollInjury(knockedSide, mb);
+    rollBtn.disabled = false;
   }
 
   async function rollInjury(knockedSide, mightyBlowBonus) {
-    const injBtn  = document.getElementById('injury-roll-btn');
-    const tray    = document.getElementById('injury-dice-tray');
-    const result  = document.getElementById('injury-result-content');
-    if (injBtn) injBtn.disabled = true;
+    const tray   = document.getElementById('injury-dice-tray');
+    const result = document.getElementById('injury-result-content');
+    rollBtn.disabled = true;
 
     const d1 = Math.floor(Math.random() * 6) + 1;
     const d2 = Math.floor(Math.random() * 6) + 1;
@@ -624,10 +624,10 @@ function initBlockWizard() {
       `;
     }
 
-    let outcome, status, statusLabel;
-    if (total <= 7)       { outcome = 'Stunned';   status = window.PlayerStatus?.STUNNED;      statusLabel = 'STUNNED';    }
-    else if (total <= 9)  { outcome = "KO'd";      status = window.PlayerStatus?.KO;           statusLabel = 'KO';         }
-    else                  { outcome = 'Casualty';  status = window.PlayerStatus?.BADLY_HURT;   statusLabel = 'BADLY HURT'; }
+    let outcome, status;
+    if (total <= 7)       { outcome = 'Stunned';  status = window.PlayerStatus?.STUNNED;    }
+    else if (total <= 9)  { outcome = "KO'd";     status = window.PlayerStatus?.KO;         }
+    else                  { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
 
     const extra = total >= 10 ? ' — see Casualty table.' : '';
     if (result) {
@@ -642,7 +642,7 @@ function initBlockWizard() {
       window.GameState.setPlayerStatus?.(targetSide, targetPlayer.idx, status);
     }
 
-    /* Block sequence complete — offer close button */
+    /* Block sequence complete — Roll button stays disabled; offer close */
     const injPanel = document.getElementById('injury-roll-panel');
     if (injPanel && !injPanel.querySelector('.bwiz-complete-btn')) {
       const doneBtn = document.createElement('button');
@@ -653,8 +653,6 @@ function initBlockWizard() {
       });
       injPanel.appendChild(doneBtn);
     }
-
-    if (injBtn) injBtn.disabled = false;
   }
 
   /* â”€â”€ Main roll â”€â”€ */
@@ -698,7 +696,8 @@ function initBlockWizard() {
 
   confirmBtn?.addEventListener('click', () => {
     if (!chosenFace) return;
-    confirmBtn.hidden = true;
+    confirmBtn.hidden  = true;
+    rollBtn.disabled   = true;   // locked until armor/injury sequence re-enables it
     if (defBanner) defBanner.hidden = true;
     /* Remove click listeners by cloning dice */
     document.querySelectorAll('#block-dice-tray .block-face').forEach(f => {
@@ -736,7 +735,7 @@ function initBlockWizard() {
     renderRerolls();
   });
 
-  rollBtn.addEventListener('click', doRoll);
+  rollBtn.onclick = doRoll;
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

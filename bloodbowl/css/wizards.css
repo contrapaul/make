@@ -132,6 +132,7 @@
   display:         flex;
   align-items:     center;
   justify-content: center;
+  overflow:        hidden;
   user-select:     none;
   cursor:          default;
   background:      #630d13;
@@ -152,6 +153,9 @@
   font-size:   5.5rem;
   line-height: 1;
   color:       #fee9d5;
+  display:     block;
+  width:       100%;
+  text-align:  center;
   /* Recessed: dark shadow top-left (inside), light highlight bottom-right (outside) */
   text-shadow:
     -1px -1px 2px rgba(0, 0, 0, 0.8),
@@ -1284,13 +1288,21 @@
   cursor:    default;
 }
 
-/* Picker (shown before a player is selected) */
+/* Picker (shown before a player is selected) — matches card 5:7 ratio */
 .bwiz-picker {
-  background:    rgba(10, 22, 65, 0.6);
-  border:        1px dashed rgba(80, 130, 255, 0.25);
-  border-radius: 6px;
-  padding:       0.65rem;
-  min-height:    200px;
+  background:     rgba(10, 22, 65, 0.6);
+  border:         1px dashed rgba(80, 130, 255, 0.25);
+  border-radius:  6px;
+  padding:        0.65rem;
+  aspect-ratio:   5 / 7;
+  display:        flex;
+  flex-direction: column;
+  overflow:       hidden;
+}
+.bwiz-picker .wps-list {
+  max-height: none;
+  flex:       1 1 0;
+  min-height: 0;
 }
 
 .bwiz-picker-label {
@@ -1529,7 +1541,14 @@
   cursor:    default;
 }
 .bwiz-skills-col .sk-card:hover { transform: none; }
-.bwiz-skills-col .sk-card-name  { font-size: 0.72rem; }
+.bwiz-skills-col .sk-card-name {
+  font-size:   0.72rem;
+  border:      none;
+  background:  none;
+  padding:     0;
+  cursor:      default;
+}
+.bwiz-skills-col .sk-card-name:hover { border: none; color: #fff; }
 .bwiz-skills-col .sk-card-badge { font-size: 0.5rem; padding: 0.15rem 0.35rem; }
 .bwiz-skills-col .sk-card-desc  { font-size: 0.58rem; line-height: 1.5; }
 
