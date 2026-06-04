@@ -357,15 +357,41 @@ function initBlockWizard() {
       return;
     }
 
+    const SKILL_COLORS = {
+      'General Skill':     '#2563EB',
+      'Agility Skill':     '#059669',
+      'Passing Skill':     '#D4AF37',
+      'Strength Skill':    '#C8102E',
+      'Mutation':          '#7C3AED',
+      'Devious Skill':     '#B45309',
+      'Trait':             '#0891B2',
+      'Star Player Trait': '#D4AF37',
+    };
+    const SKILL_BADGE = {
+      'General Skill':     'General',
+      'Agility Skill':     'Agility',
+      'Passing Skill':     'Passing',
+      'Strength Skill':    'Strength',
+      'Mutation':          'Mutation',
+      'Devious Skill':     'Devious',
+      'Trait':             'Trait',
+      'Star Player Trait': 'Star Player',
+    };
+
     const allSkills = window.BBData?.skills ?? [];
     skills.forEach(name => {
       const entry = allSkills.find(s => s.name.toLowerCase() === name.toLowerCase());
-      const tile  = document.createElement('div');
-      tile.className = 'bwiz-skill-tile';
+      const color = (entry?.category && SKILL_COLORS[entry.category]) || 'rgba(255,255,255,0.3)';
+      const badge = (entry?.category && SKILL_BADGE[entry.category]) || entry?.category || '';
+      const tile  = document.createElement('article');
+      tile.className = 'sk-card';
+      tile.style.setProperty('--card-color', color);
       tile.innerHTML = `
-        <div class=”bwiz-skill-name”>${esc(name)}</div>
-        ${entry?.category ? `<div class=”bwiz-skill-cat”>${esc(entry.category)}</div>` : ''}
-        ${entry?.description ? `<div class=”bwiz-skill-desc”>${esc(entry.description)}</div>` : ''}
+        <div class=”sk-card-header”>
+          <span class=”sk-card-name”>${esc(name)}</span>
+          ${badge ? `<span class=”sk-card-badge”>${esc(badge)}</span>` : ''}
+        </div>
+        ${entry?.description ? `<p class=”sk-card-desc”>${esc(entry.description)}</p>` : ''}
       `;
       col.appendChild(tile);
     });
