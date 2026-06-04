@@ -324,6 +324,9 @@ function buildCard(player, side) {
       : ''}
   `;
 
+  /* Store full player data on the DOM element so wizards can access it */
+  card._playerData = player;
+
   card.addEventListener('click', () => openModal(side, player));
   card.addEventListener('keydown', e => {
     if (e.target.closest('.skill-link')) return; /* skill-link handles its own activation */
@@ -467,6 +470,10 @@ function attachSkillEvents(container, stopClick) {
     });
   });
 }
+
+/* Expose for use in wizards */
+window.attachSkillEvents  = attachSkillEvents;
+window.renderSkillLinks   = renderSkillLinks;
 
 function scheduleClose() {
   clearTimeout(closeTimer);

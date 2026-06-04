@@ -325,10 +325,12 @@ function getPlayerList(side) {
   const cards   = document.querySelectorAll(`#roster-${sideKey} .player-card`);
   return Array.from(cards).map((card, idx) => ({
     idx,
-    name:      card.querySelector('.player-name')?.textContent?.trim() ?? `#${idx + 1}`,
-    pos:       card.querySelector('.player-pos')?.textContent?.trim()  ?? '',
-    statsText: card.querySelector('.card-stats')?.textContent?.trim()  ?? '',
-    status:    getPlayerStatus(sideKey, idx),
+    id:         card.querySelector('.card-num')?.textContent?.replace('#', '').trim() ?? String(idx + 1),
+    name:       card.querySelector('.player-name')?.textContent?.trim() ?? `#${idx + 1}`,
+    pos:        card.querySelector('.player-pos')?.textContent?.trim()  ?? '',
+    statsText:  card.querySelector('.card-stats')?.textContent?.trim()  ?? '',
+    status:     getPlayerStatus(sideKey, idx),
+    playerData: card._playerData ?? null,
     card,
   }));
 }

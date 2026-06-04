@@ -134,42 +134,42 @@
   justify-content: center;
   user-select:     none;
   cursor:          default;
-  background:      #fee9d5;
-  /* Item 6: highlight on top+left edges, shadow on bottom+right edges (raised convex look) */
-  border-top:      2px solid rgba(255, 242, 225, 0.85);
-  border-left:     2px solid rgba(255, 235, 210, 0.7);
-  border-bottom:   2px solid rgba(70, 15, 5, 0.6);
-  border-right:    2px solid rgba(70, 15, 5, 0.5);
-  box-shadow:      2px 3px 6px rgba(0, 0, 0, 0.55);
+  background:      #630d13;
+  /* Raised bevel: highlight top+left, shadow bottom+right */
+  border-top:      2px solid rgba(160, 40, 40, 0.9);
+  border-left:     2px solid rgba(140, 30, 30, 0.8);
+  border-bottom:   2px solid rgba(20, 0, 0, 0.85);
+  border-right:    2px solid rgba(25, 0, 0, 0.75);
+  box-shadow:      2px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
 /* Item 7: glyph only — no label text */
 .block-face-label { display: none; }
 
-/* Item 8: glyph fills the die; Item 4: glyph color; Item 5: recessed text-shadow */
+/* Glyph: fills die, cream color, recessed text-shadow */
 .block-face-sym {
   font-family: 'Nuffle Dice', sans-serif;
-  font-size:   4rem;
+  font-size:   5.5rem;
   line-height: 1;
-  color:       #630d13;
+  color:       #fee9d5;
   /* Recessed: dark shadow top-left (inside), light highlight bottom-right (outside) */
   text-shadow:
-    -1px -1px 1px rgba(40, 0, 0, 0.75),
-     1px  1px 1px rgba(255, 210, 170, 0.4);
+    -1px -1px 2px rgba(0, 0, 0, 0.8),
+     1px  1px 1px rgba(255, 230, 200, 0.3);
 }
 
-/* All face types share the cream die — only the glyph character differs */
+/* All face types share the dark red die — only the glyph character differs */
 .block-face.att-down,
 .block-face.both-down,
 .block-face.push,
 .block-face.stumble,
 .block-face.def-down {
-  background:    #fee9d5;
-  border-top:    2px solid rgba(255, 242, 225, 0.85);
-  border-left:   2px solid rgba(255, 235, 210, 0.7);
-  border-bottom: 2px solid rgba(70, 15, 5, 0.6);
-  border-right:  2px solid rgba(70, 15, 5, 0.5);
-  color:         #630d13;
+  background:    #630d13;
+  border-top:    2px solid rgba(160, 40, 40, 0.9);
+  border-left:   2px solid rgba(140, 30, 30, 0.8);
+  border-bottom: 2px solid rgba(20, 0, 0, 0.85);
+  border-right:  2px solid rgba(25, 0, 0, 0.75);
+  color:         #fee9d5;
 }
 
 /* Block die roll animation */

@@ -262,75 +262,74 @@ function initBlockWizard() {
 
   /* â”€â”€ Embedded trading card â”€â”€ */
   function buildEmbeddedCard(wrapEl, player, side) {
-    /* Remove any existing card but leave the picker div intact */
-    wrapEl.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+    wrapEl.querySelectorAll(".bwiz-embedded-card").forEach(function(c) { c.remove(); });
 
-    const team     = window.state?.[side]?.team;
-    const isStar   = player.isStarPlayer;
-    const colors   = team?.colors ?? {};
-    const imgDir   = team?.imageDir ?? 'images/';
-    const bgColor  = (window.POSITION_COLORS ?? {})[player.position] || '#1a3a6a';
+    var pd     = player.playerData;
+    var team   = window.state ? window.state[side] ? window.state[side].team : null : null;
+    var colors = team ? (team.colors || {}) : {};
+    var imgDir = team ? (team.imageDir || "images/") : "images/";
 
-    /* Parse AV from statsText: "AV 9+" â†’ 9 */
-    const avMatch = player.statsText?.match(/\bAV\s*(\d+)/i);
-    const avVal   = avMatch ? parseInt(avMatch[1], 10) : 9;
-    if (side === 'left') attAV = avVal; else defAV = avVal;
+    var playerId   = pd ? String(pd.id)      : (player.id   != null ? player.id   : "?");
+    var playerName = pd ? String(pd.name)     : (player.name != null ? player.name : "");
+    var position   = pd ? String(pd.position) : (player.pos  != null ? player.pos  : "");
+    var isStar     = pd ? !!pd.isStarPlayer   : !!(player.card && player.card.classList.contains("star-player"));
+    var bgColor    = (window.POSITION_COLORS || {})[position] || "#1a3a6a";
 
-    /* Parse all stats */
-    const statLabels = ['MA','ST','AG','PA','AV'];
-    const statVals   = statLabels.map(k => {
-      const m = player.statsText?.match(new RegExp(`\\b${k}\\s*([\\d+]+)`, 'i'));
-      return m ? m[1] : 'â€”';
+    var KEYS = ["MA","ST","AG","PA","AV"];
+    var statVals = KEYS.map(function(k) {
+      var lk = k.toLowerCase();
+      if (pd && pd[lk] !== undefined) return String(pd[lk]);
+      var m = player.statsText ? player.statsText.match(new RegExp("\\b" + k + "\\s*([\\d+]+)", "i")) : null;
+      return m ? m[1] : "-";
     });
 
-    /* Skills */
-    const skills = getPlayerSkills(player);
+    var avVal = parseInt(statVals[4], 10) || 9;
+    if (side === "left") { attAV = avVal; } else { defAV = avVal; }
 
-    const card = document.createElement('div');
-    card.className = 'trading-card bwiz-embedded-card' + (isStar ? ' star-card' : '');
+    var skillsHtml = window.renderSkillLinks
+      ? window.renderSkillLinks(pd ? (pd.skills || "") : "")
+      : "<span class=\"no-skills\">-</span>";
 
-    /* Apply team colors */
-    const COLOR_PROP_MAP = {
-      primary:'--tc-primary', primaryDark:'--tc-primary-dark',
-      accent:'--tc-accent', gold:'--tc-gold', goldDark:'--tc-gold-dark',
+    var card = document.createElement("div");
+    card.className = "trading-card bwiz-embedded-card" + (isStar ? " star-card" : "");
+
+    var cmap = {
+      primary: "--tc-primary", primaryDark: "--tc-primary-dark",
+      accent: "--tc-accent", gold: "--tc-gold", goldDark: "--tc-gold-dark"
     };
-    Object.entries(COLOR_PROP_MAP).forEach(([k, prop]) => {
-      if (colors[k]) card.style.setProperty(prop, colors[k]);
+    Object.keys(cmap).forEach(function(k) {
+      if (colors[k]) card.style.setProperty(cmap[k], colors[k]);
     });
 
-    card.innerHTML = `
-      <div class="modal-image-area" style="background:${bgColor};">
-        <img class="modal-img" src="${imgDir}Player${player.id}.png" alt="${esc(player.name)}">
-        <span class="img-placeholder-num" aria-hidden="true">${player.id}</span>
-        <div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">
-          <div class="modal-jersey-circle">${player.id}</div>
-          <div class="modal-overlay-info">
-            <h2 class="modal-name">${esc(player.name)}</h2>
-            <p class="modal-position">${esc(player.position)}</p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-stats">
-        <div class="modal-stats-row">
-          ${statLabels.map((l, i) => `
-            <div class="modal-stat">
-              <span class="ms-label">${l}</span>
-              <span class="ms-value">${statVals[i]}</span>
-            </div>`).join('')}
-        </div>
-      </div>
-      <div class="modal-skills">
-        <p class="skills-label">Skills &amp; Traits</p>
-        <p class="skills-text">${skills.length ? skills.map(s => `<span class="skill-link">${esc(s)}</span>`).join('<span class="skill-sep">, </span>') : '<span class="no-skills">â€”</span>'}</p>
-      </div>
-    `;
+    var statsHtml = KEYS.map(function(l, i) {
+      return "<div class=\"modal-stat\"><span class=\"ms-label\">" + l +
+             "</span><span class=\"ms-value\">" + statVals[i] + "</span></div>";
+    }).join("");
+    if (pd && pd.value) {
+      statsHtml += "<div class=\"modal-stat\"><span class=\"ms-label\">GP</span>" +
+        "<span class=\"ms-value\" style=\"font-size:0.82rem;\">" + Math.round(pd.value / 1000) + "k</span></div>";
+    }
 
-    /* Hide img if it errors */
-    const img  = card.querySelector('.modal-img');
-    const stub = card.querySelector('.img-placeholder-num');
-    img.addEventListener('load',  () => { stub.style.display = 'none'; });
-    img.addEventListener('error', () => { img.style.display  = 'none'; });
+    card.innerHTML =
+      "<div class=\"modal-image-area\" style=\"background:" + bgColor + ";\">"+
+        "<img class=\"modal-img\" src=\"" + imgDir + "Player" + playerId + ".png\" alt=\"" + esc(playerName) + "\">"+
+        "<span class=\"img-placeholder-num\" aria-hidden=\"true\">" + playerId + "</span>"+
+        "<div class=\"modal-card-overlay" + (isStar ? " star-overlay" : "") + "\">"+
+          "<div class=\"modal-jersey-circle\">" + playerId + "</div>"+
+          "<div class=\"modal-overlay-info\">"+
+            "<h2 class=\"modal-name\">" + esc(playerName) + "</h2>"+
+            "<p class=\"modal-position\">" + esc(position) + "</p>"+
+          "</div></div></div>"+
+      "<div class=\"modal-stats\"><div class=\"modal-stats-row\">" + statsHtml + "</div></div>"+
+      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p>"+
+        "<p class=\"skills-text\">" + skillsHtml + "</p></div>"+
+      (pd && pd.fact ? "<div class=\"modal-fact\">&ldquo;" + esc(pd.fact) + "&rdquo;</div>" : "");
 
+    var img  = card.querySelector(".modal-img");
+    var stub = card.querySelector(".img-placeholder-num");
+    img.addEventListener("load",  function() { stub.style.display = "none"; });
+    img.addEventListener("error", function() { img.style.display  = "none"; });
+    if (window.attachSkillEvents) window.attachSkillEvents(card, false);
     wrapEl.appendChild(card);
   }
 
