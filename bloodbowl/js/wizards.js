@@ -19,11 +19,11 @@ const NUFFLE_WEATHER = { verySunny:'O', nice:'P', pouringRain:'Q', blizzard:'R',
 const BLOCK_FACES = [
   null,
   { key: 'att-down',  label: 'Attacker Down', sym: 'K', cls: 'att-down',  colour: 'var(--bb-red,#C8102E)' },
-  { key: 'both-down', label: 'Both Down',      sym: 'L', cls: 'both-down', colour: '#BB4400' },
+  { key: 'both-down', label: 'Both Down',      sym: 'N', cls: 'both-down', colour: '#BB4400' },
   { key: 'push',      label: 'Push',           sym: 'J', cls: 'push',      colour: '#888' },
   { key: 'push',      label: 'Push',           sym: 'J', cls: 'push',      colour: '#888' },
   { key: 'stumble',   label: 'Stumble',        sym: 'M', cls: 'stumble',   colour: '#774400' },
-  { key: 'def-down',  label: 'Defender Down',  sym: 'N', cls: 'def-down',  colour: '#1B5E20' },
+  { key: 'def-down',  label: 'Defender Down',  sym: 'L', cls: 'def-down',  colour: '#1B5E20' },
 ];
 
 function buildBlockFace(el, idx) {

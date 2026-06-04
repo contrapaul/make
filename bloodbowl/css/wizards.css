@@ -126,38 +126,51 @@
 }
 
 .block-face {
-  width:           64px;
-  height:          64px;
-  border:          2px solid rgba(80, 120, 220, 0.4);
+  width:           72px;
+  height:          72px;
   border-radius:   10px;
   display:         flex;
-  flex-direction:  column;
   align-items:     center;
   justify-content: center;
-  gap:             0.1rem;
-  box-shadow:      3px 3px 0 rgba(0, 0, 0, 0.4);
   user-select:     none;
   cursor:          default;
-  background:      rgba(15, 30, 80, 0.65);
+  background:      #fee9d5;
+  /* Item 6: highlight on top+left edges, shadow on bottom+right edges (raised convex look) */
+  border-top:      2px solid rgba(255, 242, 225, 0.85);
+  border-left:     2px solid rgba(255, 235, 210, 0.7);
+  border-bottom:   2px solid rgba(70, 15, 5, 0.6);
+  border-right:    2px solid rgba(70, 15, 5, 0.5);
+  box-shadow:      2px 3px 6px rgba(0, 0, 0, 0.55);
 }
 
-.block-face-sym   { font-family: 'Nuffle Dice', sans-serif; font-size: 2.8rem; line-height: 1; }
-.block-face-label {
-  font-family:    'JetBrains Mono', monospace;
-  font-weight:    700;
-  font-size:      0.44rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color:          inherit;
-  text-align:     center;
+/* Item 7: glyph only — no label text */
+.block-face-label { display: none; }
+
+/* Item 8: glyph fills the die; Item 4: glyph color; Item 5: recessed text-shadow */
+.block-face-sym {
+  font-family: 'Nuffle Dice', sans-serif;
+  font-size:   4rem;
+  line-height: 1;
+  color:       #630d13;
+  /* Recessed: dark shadow top-left (inside), light highlight bottom-right (outside) */
+  text-shadow:
+    -1px -1px 1px rgba(40, 0, 0, 0.75),
+     1px  1px 1px rgba(255, 210, 170, 0.4);
 }
 
-/* Face colour themes */
-.block-face.att-down  { background: rgba(200, 16, 46, 0.2); border-color: var(--bb-red, #C8102E); color: #ff8fa0; }
-.block-face.both-down { background: rgba(180, 70, 0, 0.2);  border-color: #BB6600;                color: #FFAA55; }
-.block-face.push      { background: rgba(15, 30, 80, 0.65); border-color: rgba(100, 140, 220, 0.5); color: rgba(180, 210, 255, 0.75); }
-.block-face.stumble   { background: rgba(180, 140, 0, 0.18); border-color: #AA8800;               color: #FFD055; }
-.block-face.def-down  { background: rgba(0, 120, 40, 0.2);  border-color: #2E7D32;                color: #66EE88; }
+/* All face types share the cream die — only the glyph character differs */
+.block-face.att-down,
+.block-face.both-down,
+.block-face.push,
+.block-face.stumble,
+.block-face.def-down {
+  background:    #fee9d5;
+  border-top:    2px solid rgba(255, 242, 225, 0.85);
+  border-left:   2px solid rgba(255, 235, 210, 0.7);
+  border-bottom: 2px solid rgba(70, 15, 5, 0.6);
+  border-right:  2px solid rgba(70, 15, 5, 0.5);
+  color:         #630d13;
+}
 
 /* Block die roll animation */
 @keyframes blockDiceRoll {
@@ -1185,16 +1198,22 @@
 .bwiz-outer {
   display:         flex;
   align-items:     flex-start;
-  gap:             0.75rem;
-  padding:         0.85rem 0.75rem 0.5rem;
-  overflow-x:      auto;
+  /* gap and padding in em so they scale with font-size */
+  gap:             0.75em;
+  padding:         0.85em 0.75em 0.5em;
+  overflow:        hidden;
   flex:            1 1 0;
   min-height:      0;
+  /*
+   * Scale: 5 col layout = 2×10em + 2×17.5em + 10em + 4×0.75em gap + 1.5em padding = ~69.5em total
+   * Panel = min(82vw, 1600px)  →  font-size ≈ 82vw / 69.5 ≈ 1.18vw  →  23px at 1950px cap
+   */
+  font-size:       clamp(7px, 1.18vw, 23px);
 }
 
 /* ── Skills columns (far left / right) ── */
 .bwiz-skills-col {
-  width:           160px;
+  width:           10em;
   flex-shrink:     0;
   display:         flex;
   flex-direction:  column;
@@ -1233,11 +1252,13 @@
 
 /* ── Card columns ── */
 .bwiz-card-col {
-  width:           280px;
+  width:           17.5em;
   flex-shrink:     0;
   display:         flex;
   flex-direction:  column;
   gap:             0.5rem;
+  overflow-y:      auto;
+  max-height:      100%;
 }
 
 .bwiz-change-btn {
@@ -1263,14 +1284,14 @@
 
 /* Card wrap contains either the picker or the embedded card */
 .bwiz-card-wrap {
-  width:      280px;
+  width:      17.5em;
   flex-shrink: 0;
   position:   relative;
 }
 
 /* Embedded trading card — same as .trading-card but fixed width, no scroll */
 .bwiz-embedded-card {
-  max-width:   280px !important;
+  max-width:   17.5em !important;
   max-height:  none !important;
   overflow-y:  visible !important;
   cursor:      default;
@@ -1338,7 +1359,7 @@
 /* ── Center column ── */
 .bwiz-center {
   flex:            1;
-  min-width:       160px;
+  min-width:       10em;
   display:         flex;
   flex-direction:  column;
   align-items:     center;
@@ -1466,6 +1487,7 @@
   border-top:      1px solid rgba(80, 130, 255, 0.15);
   background:      rgba(5, 12, 40, 0.5);
   flex-shrink:     0;
+  font-size:       clamp(9px, 1.1vw, 16px);
 }
 
 .bwiz-result-panel {
