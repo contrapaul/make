@@ -1289,12 +1289,10 @@
   position:   relative;
 }
 
-/* Embedded trading card — same as .trading-card but fixed width, no scroll */
+/* Embedded trading card — fixed width, ratio locked by parent .trading-card rule */
 .bwiz-embedded-card {
-  max-width:   17.5em !important;
-  max-height:  none !important;
-  overflow-y:  visible !important;
-  cursor:      default;
+  max-width: 17.5em !important;
+  cursor:    default;
 }
 
 /* Picker (shown before a player is selected) */

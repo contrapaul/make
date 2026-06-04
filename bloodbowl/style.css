@@ -284,15 +284,15 @@
   border-radius: 6px;
   width: 100%;
   max-width: 420px;
-  max-height: 90vh;
-  overflow-y: auto;
+  aspect-ratio: 5 / 7;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   position: relative;
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.55),
     inset 1px 1px 0 rgba(255, 255, 255, 0.6);
   animation: cardIn 0.2s ease both;
-  scrollbar-width: thin;
-  scrollbar-color: var(--tc-primary) #eee;
 }
 
 .trading-card.star-card {
@@ -303,10 +303,6 @@
     inset 1px 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-.trading-card::-webkit-scrollbar       { width: 4px; }
-.trading-card::-webkit-scrollbar-track { background: #eee; }
-.trading-card::-webkit-scrollbar-thumb { background: var(--tc-primary); border-radius: 2px; }
-.trading-card.star-card::-webkit-scrollbar-thumb { background: var(--tc-gold-dark); }
 
 @keyframes cardIn {
   from { transform: scale(0.93) translateY(10px); opacity: 0; }
@@ -417,7 +413,8 @@
 
 .modal-image-area {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  flex: 1 1 0;
+  min-height: 0;
   position: relative;
   overflow: hidden;
 }
@@ -1276,5 +1273,4 @@
    ───────────────────────────────────────────── */
 @media (max-width: 480px) {
   .card-skills  { font-size: 0.66rem; }
-  .trading-card { max-height: 85vh; }
 }
