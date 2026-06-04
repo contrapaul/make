@@ -560,7 +560,122 @@
 }
 
 /* ─────────────────────────────────────────────
-   5. SKILL TOOLTIP
+   5. SKILL CARDS  — shared across all pages/contexts
+   ───────────────────────────────────────────── */
+
+.sk-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: 3px solid var(--card-color, rgba(255,255,255,0.2));
+  border-radius: 8px;
+  padding: 1rem 1.1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  cursor: default;
+}
+.sk-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4),
+              0 0 0 1px var(--card-color, rgba(255,255,255,0.15));
+  background: rgba(255,255,255,0.06);
+}
+
+.sk-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.sk-card-name {
+  font-family: 'Nuffle', serif;
+  font-size: 1.15rem;
+  color: #fff;
+  line-height: 1.2;
+  flex: 1;
+  letter-spacing: 0.03em;
+}
+
+.sk-card-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--card-color, #fff) 20%, transparent);
+  color: color-mix(in srgb, var(--card-color, #fff) 90%, #fff);
+  border: 1px solid color-mix(in srgb, var(--card-color, #fff) 40%, transparent);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.sk-card-mandatory {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--bb-gold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.sk-card-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.65);
+}
+
+.sk-card-desc mark,
+.sk-card-name mark {
+  background: rgba(212,175,55,0.3);
+  color: #fff;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Active/triggered state — add .sk-card--active to trigger a glow in the card's category color */
+@keyframes sk-glow {
+  0%, 100% { box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 8px 0 var(--card-color); }
+  50%       { box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 20px 5px var(--card-color); }
+}
+.sk-card--active {
+  outline: 2px solid var(--card-color, rgba(255,255,255,0.3));
+  outline-offset: 1px;
+  animation: sk-glow 1.4s ease-in-out infinite;
+}
+
+/* Compact grid of sk-cards — used in trading cards (name + badge only, no description) */
+.sk-card-grid-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.sk-card-grid-compact .sk-card {
+  padding: 0.35rem 0.55rem;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+}
+.sk-card-grid-compact .sk-card:hover { transform: none; }
+.sk-card-grid-compact .sk-card-name {
+  font-size: 0.8rem;
+  color: #0D0D0D;
+  background: none;
+  border: none;
+  border-bottom: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.2;
+}
+.sk-card-grid-compact .sk-card-name:hover { color: var(--tc-primary, #062E94); }
+.sk-card-grid-compact .sk-card-badge { font-size: 0.52rem; }
+
+/* ─────────────────────────────────────────────
+   6. SKILL TOOLTIP
    Fixed overlay, positioned by JS above/below
    the triggering .skill-link element.
    ───────────────────────────────────────────── */

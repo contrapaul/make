@@ -397,7 +397,6 @@ function openModal(side, player) {
 
     <div class="modal-skills">
       <p class="skills-label">Skills &amp; Traits</p>
-      <p class="skills-text">${renderSkillLinks(player.skills)}</p>
     </div>
 
     ${player.fact
@@ -411,8 +410,22 @@ function openModal(side, player) {
   img.addEventListener('load',  () => { stub.style.display = 'none'; });
   img.addEventListener('error', () => { img.style.display  = 'none'; });
 
-  /* Skill links in trading card: hover + click open the anchored tooltip.
-     No stopPropagation needed — modal backdrop only closes on e.target===overlay. */
+  /* Inject compact skill cards into .modal-skills */
+  const modalSkills = card.querySelector('.modal-skills');
+  const skillNames = (player.skills || '').split(', ').map(s => s.trim()).filter(Boolean);
+  if (skillNames.length) {
+    const wrap = document.createElement('div');
+    wrap.className = 'sk-card-grid-compact';
+    skillNames.forEach(name => wrap.appendChild(buildSkillCard(name, { compact: true })));
+    modalSkills.appendChild(wrap);
+  } else {
+    const none = document.createElement('span');
+    none.className = 'no-skills';
+    none.textContent = '—';
+    modalSkills.appendChild(none);
+  }
+
+  /* Skill tooltip: hover + click on .skill-link buttons inside compact cards */
   attachSkillEvents(card, false);
 
   overlay.removeAttribute('hidden');
@@ -471,9 +484,61 @@ function attachSkillEvents(container, stopClick) {
   });
 }
 
+/* ── Shared skill card builder — returns a DOM <article class="sk-card"> ──
+   compact=true  → name + badge only (for trading cards, tight spaces)
+   extraClass    → additional class string (e.g. 'sk-card--active' for glow) */
+const SKILL_COLORS = {
+  'General Skill': '#2563EB', 'Agility Skill':     '#059669',
+  'Passing Skill': '#D4AF37', 'Strength Skill':    '#C8102E',
+  'Mutation':      '#7C3AED', 'Devious Skill':     '#B45309',
+  'Trait':         '#0891B2', 'Star Player Trait': '#D4AF37',
+};
+const SKILL_BADGE = {
+  'General Skill': 'General', 'Agility Skill':     'Agility',
+  'Passing Skill': 'Passing', 'Strength Skill':    'Strength',
+  'Mutation':      'Mutation','Devious Skill':      'Devious',
+  'Trait':         'Trait',   'Star Player Trait': 'Star Player',
+};
+
+function buildSkillCard(name, { compact = false, extraClass = '' } = {}) {
+  const entry = window.lookupSkill ? window.lookupSkill(name) : null;
+  const color = (entry?.category && SKILL_COLORS[entry.category]) || 'rgba(255,255,255,0.3)';
+  const badge = (entry?.category && SKILL_BADGE[entry.category]) || entry?.category || '';
+
+  const card = document.createElement('article');
+  card.className = 'sk-card' + (extraClass ? ' ' + extraClass : '');
+  card.style.setProperty('--card-color', color);
+
+  const header = document.createElement('div');
+  header.className = 'sk-card-header';
+
+  const nameBtn = document.createElement('button');
+  nameBtn.className = 'skill-link sk-card-name';
+  nameBtn.dataset.skill = name;
+  nameBtn.textContent = name;
+  header.appendChild(nameBtn);
+
+  if (badge) {
+    const badgeEl = document.createElement('span');
+    badgeEl.className = 'sk-card-badge';
+    badgeEl.textContent = badge;
+    header.appendChild(badgeEl);
+  }
+  card.appendChild(header);
+
+  if (!compact && entry?.description) {
+    const desc = document.createElement('p');
+    desc.className = 'sk-card-desc';
+    desc.textContent = entry.description;
+    card.appendChild(desc);
+  }
+  return card;
+}
+
 /* Expose for use in wizards */
 window.attachSkillEvents  = attachSkillEvents;
 window.renderSkillLinks   = renderSkillLinks;
+window.buildSkillCard     = buildSkillCard;
 
 function scheduleClose() {
   clearTimeout(closeTimer);

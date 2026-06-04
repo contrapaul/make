@@ -1232,17 +1232,6 @@
   margin-bottom:   0.15rem;
 }
 
-.bwiz-skill-tile {
-  background:     rgba(10, 22, 65, 0.7);
-  border:         1px solid rgba(80, 130, 255, 0.25);
-  border-radius:  5px;
-  padding:        0.35rem 0.55rem;
-  font-family:    'JetBrains Mono', monospace;
-  font-size:      0.7rem;
-  font-weight:    600;
-  color:          rgba(180, 210, 255, 0.85);
-}
-
 .bwiz-skills-empty {
   font-family:    'JetBrains Mono', monospace;
   font-size:      0.65rem;
@@ -1539,20 +1528,10 @@
   gap:       0.3rem;
   cursor:    default;
 }
-.bwiz-skills-col .sk-card:hover {
-  transform: none;
-}
-.bwiz-skills-col .sk-card-name {
-  font-size: 0.72rem;
-}
-.bwiz-skills-col .sk-card-badge {
-  font-size:  0.5rem;
-  padding:    0.15rem 0.35rem;
-}
-.bwiz-skills-col .sk-card-desc {
-  font-size:   0.58rem;
-  line-height: 1.5;
-}
+.bwiz-skills-col .sk-card:hover { transform: none; }
+.bwiz-skills-col .sk-card-name  { font-size: 0.72rem; }
+.bwiz-skills-col .sk-card-badge { font-size: 0.5rem; padding: 0.15rem 0.35rem; }
+.bwiz-skills-col .sk-card-desc  { font-size: 0.58rem; line-height: 1.5; }
 
 /* ── Styled 2D6 dice display ── */
 .bwiz-armor-dice-tray {

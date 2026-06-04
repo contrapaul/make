@@ -286,9 +286,7 @@ function initBlockWizard() {
     var avVal = parseInt(statVals[4], 10) || 9;
     if (side === "left") { attAV = avVal; } else { defAV = avVal; }
 
-    var skillsHtml = window.renderSkillLinks
-      ? window.renderSkillLinks(pd ? (pd.skills || "") : "")
-      : "<span class=\"no-skills\">-</span>";
+    var skillNames = (pd ? (pd.skills || "") : "").split(", ").map(function(s) { return s.trim(); }).filter(Boolean);
 
     var card = document.createElement("div");
     card.className = "trading-card bwiz-embedded-card" + (isStar ? " star-card" : "");
@@ -321,14 +319,28 @@ function initBlockWizard() {
             "<p class=\"modal-position\">" + esc(position) + "</p>"+
           "</div></div></div>"+
       "<div class=\"modal-stats\"><div class=\"modal-stats-row\">" + statsHtml + "</div></div>"+
-      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p>"+
-        "<p class=\"skills-text\">" + skillsHtml + "</p></div>"+
+      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p></div>"+
       (pd && pd.fact ? "<div class=\"modal-fact\">&ldquo;" + esc(pd.fact) + "&rdquo;</div>" : "");
 
     var img  = card.querySelector(".modal-img");
     var stub = card.querySelector(".img-placeholder-num");
     img.addEventListener("load",  function() { stub.style.display = "none"; });
     img.addEventListener("error", function() { img.style.display  = "none"; });
+
+    var modalSkills = card.querySelector(".modal-skills");
+    if (window.buildSkillCard) {
+      if (skillNames.length) {
+        var wrap = document.createElement("div");
+        wrap.className = "sk-card-grid-compact";
+        skillNames.forEach(function(n) { wrap.appendChild(window.buildSkillCard(n, { compact: true })); });
+        modalSkills.appendChild(wrap);
+      } else {
+        var none = document.createElement("span");
+        none.className = "no-skills";
+        none.textContent = "—";
+        modalSkills.appendChild(none);
+      }
+    }
     if (window.attachSkillEvents) window.attachSkillEvents(card, false);
     wrapEl.appendChild(card);
   }
@@ -357,43 +369,8 @@ function initBlockWizard() {
       return;
     }
 
-    const SKILL_COLORS = {
-      'General Skill':     '#2563EB',
-      'Agility Skill':     '#059669',
-      'Passing Skill':     '#D4AF37',
-      'Strength Skill':    '#C8102E',
-      'Mutation':          '#7C3AED',
-      'Devious Skill':     '#B45309',
-      'Trait':             '#0891B2',
-      'Star Player Trait': '#D4AF37',
-    };
-    const SKILL_BADGE = {
-      'General Skill':     'General',
-      'Agility Skill':     'Agility',
-      'Passing Skill':     'Passing',
-      'Strength Skill':    'Strength',
-      'Mutation':          'Mutation',
-      'Devious Skill':     'Devious',
-      'Trait':             'Trait',
-      'Star Player Trait': 'Star Player',
-    };
-
-    const allSkills = window.BBData?.skills ?? [];
     skills.forEach(name => {
-      const entry = allSkills.find(s => s.name.toLowerCase() === name.toLowerCase());
-      const color = (entry?.category && SKILL_COLORS[entry.category]) || 'rgba(255,255,255,0.3)';
-      const badge = (entry?.category && SKILL_BADGE[entry.category]) || entry?.category || '';
-      const tile  = document.createElement('article');
-      tile.className = 'sk-card';
-      tile.style.setProperty('--card-color', color);
-      tile.innerHTML = `
-        <div class=”sk-card-header”>
-          <span class=”sk-card-name”>${esc(name)}</span>
-          ${badge ? `<span class=”sk-card-badge”>${esc(badge)}</span>` : ''}
-        </div>
-        ${entry?.description ? `<p class=”sk-card-desc”>${esc(entry.description)}</p>` : ''}
-      `;
-      col.appendChild(tile);
+      col.appendChild(window.buildSkillCard(name));
     });
   }
 
