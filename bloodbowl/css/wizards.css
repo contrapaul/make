@@ -1508,6 +1508,7 @@
   gap:             0.3em;
   transition:      opacity 0.25s, border-color 0.25s;
   min-width:       0;
+  min-height:      10em;
 }
 
 .bwiz-result-panel.locked {

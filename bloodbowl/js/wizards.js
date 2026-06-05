@@ -509,8 +509,8 @@ function initBlockWizard() {
     if (knockedSide === 'def' || knockedSide === 'att') {
       unlockArmorRoll(knockedSide);
     } else if (knockedSide === 'both') {
-      /* Both down without Wrestle: armor for attacker then defender */
-      unlockArmorRoll('att');
+      /* Both down without Wrestle: attacker armor first, then defender */
+      unlockArmorRoll('att', 'def');
     }
   }
 
@@ -544,7 +544,7 @@ function initBlockWizard() {
   }
 
   /* â”€â”€ Armor roll â”€â”€ */
-  function unlockArmorRoll(knockedSide) {
+  function unlockArmorRoll(knockedSide, nextSide = null) {
     const armorPanel = document.getElementById('armor-roll-panel');
     const armorNote  = document.getElementById('armor-result-content');
     if (!armorPanel) return;
@@ -556,14 +556,17 @@ function initBlockWizard() {
 
     armorPanel.classList.remove('locked');
     armorNote.textContent = `${who} AV ${av}+${mb ? ' (+1 Mighty Blow)' : ''}${claws ? ' (Claws: 8+ breaks)' : ''}`;
+    /* Clear previous dice so the panel is visually fresh for this player */
+    const armorTray = document.getElementById('armor-dice-tray');
+    if (armorTray) armorTray.innerHTML = '';
 
     /* Single Roll button takes over for armor roll */
-    rollBtn.onclick  = () => rollArmor(av, mb, claws, knockedSide);
+    rollBtn.onclick  = () => rollArmor(av, mb, claws, knockedSide, nextSide);
     rollBtn.disabled = false;
     setGlow('gold');
   }
 
-  async function rollArmor(av, mightyBlowBonus, claws, knockedSide) {
+  async function rollArmor(av, mightyBlowBonus, claws, knockedSide, nextSide = null) {
     const tray     = document.getElementById('armor-dice-tray');
     const resultEl = document.getElementById('armor-result-content');
     rollBtn.disabled = true;
@@ -577,12 +580,12 @@ function initBlockWizard() {
     if (tray) {
       const modNote = mightyBlowBonus ? ` +${mightyBlowBonus}` : '';
       tray.innerHTML = `
-        <span class="bwiz-d6-face">${d1}</span>
-        <span class="bwiz-dice-op">+</span>
-        <span class="bwiz-d6-face">${d2}</span>
-        ${modNote ? `<span class="bwiz-dice-op">${modNote}</span>` : ''}
-        <span class="bwiz-dice-op">=</span>
-        <span class="bwiz-dice-total">${total}</span>
+        <span class=”bwiz-d6-face”>${d1}</span>
+        <span class=”bwiz-dice-op”>+</span>
+        <span class=”bwiz-d6-face”>${d2}</span>
+        ${modNote ? `<span class=”bwiz-dice-op”>${modNote}</span>` : ''}
+        <span class=”bwiz-dice-op”>=</span>
+        <span class=”bwiz-dice-total”>${total}</span>
       `;
     }
 
@@ -594,29 +597,36 @@ function initBlockWizard() {
 
     if (breaks) {
       await pause(300);
-      unlockInjuryRoll(knockedSide);   /* re-enables rollBtn for injury */
+      unlockInjuryRoll(knockedSide, nextSide);
+    } else if (nextSide) {
+      await pause(300);
+      unlockArmorRoll(nextSide);
     } else {
       setCompleteMode();
     }
   }
 
   /* â”€â”€ Injury roll â”€â”€ */
-  function unlockInjuryRoll(knockedSide) {
+  function unlockInjuryRoll(knockedSide, nextSide = null) {
     const injPanel = document.getElementById('injury-roll-panel');
     if (!injPanel) return;
 
     injPanel.classList.remove('locked');
     const mb = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
+    const who = knockedSide === 'att' ? 'Attacker' : 'Defender';
     document.getElementById('injury-result-content').textContent =
-      `Ready to roll${mb ? ' (+1 Mighty Blow)' : ''}`;
+      `${who}: ready to roll${mb ? ' (+1 Mighty Blow)' : ''}`;
+    /* Clear previous injury dice */
+    const injTray = document.getElementById('injury-dice-tray');
+    if (injTray) injTray.innerHTML = '';
 
     /* Single Roll button takes over for injury roll */
-    rollBtn.onclick  = () => rollInjury(knockedSide, mb);
+    rollBtn.onclick  = () => rollInjury(knockedSide, mb, nextSide);
     rollBtn.disabled = false;
     setGlow('gold');
   }
 
-  async function rollInjury(knockedSide, mightyBlowBonus) {
+  async function rollInjury(knockedSide, mightyBlowBonus, nextSide = null) {
     const tray   = document.getElementById('injury-dice-tray');
     const result = document.getElementById('injury-result-content');
     rollBtn.disabled = true;
@@ -672,8 +682,13 @@ function initBlockWizard() {
       }
     }
 
-    /* Block sequence complete */
-    setCompleteMode();
+    /* Continue to next player's armor roll, or complete */
+    if (nextSide) {
+      await pause(400);
+      unlockArmorRoll(nextSide);
+    } else {
+      setCompleteMode();
+    }
   }
 
   /* â”€â”€ Main roll â”€â”€ */
