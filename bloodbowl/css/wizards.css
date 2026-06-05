@@ -1661,79 +1661,104 @@
 /* ── Block Roll button: state glow (matches action-card hover style) ── */
 @keyframes bwiz-pulse-gold {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(212,175,55,0.45),
-                0 0 10px 2px rgba(212,175,55,0.2),
-                0 0 18px 3px rgba(212,175,55,0.08);
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.55),
+                0 0 10px 2px rgba(212,175,55,0.30),
+                0 0 18px 3px rgba(212,175,55,0.18);
   }
   50% {
     box-shadow: 0 0 0 1px rgba(212,175,55,0.85),
                 0 0 16px 4px rgba(212,175,55,0.45),
-                0 0 28px 6px rgba(212,175,55,0.18);
+                0 0 28px 6px rgba(212,175,55,0.22);
   }
 }
 @keyframes bwiz-pulse-green {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(102,238,68,0.45),
-                0 0 10px 2px rgba(102,238,68,0.2),
-                0 0 18px 3px rgba(102,238,68,0.08);
+    box-shadow: 0 0 0 1px rgba(102,238,68,0.55),
+                0 0 10px 2px rgba(102,238,68,0.30),
+                0 0 18px 3px rgba(102,238,68,0.18);
   }
   50% {
     box-shadow: 0 0 0 1px rgba(102,238,68,0.85),
                 0 0 16px 4px rgba(102,238,68,0.45),
-                0 0 28px 6px rgba(102,238,68,0.18);
+                0 0 28px 6px rgba(102,238,68,0.22);
   }
 }
 
 @keyframes bwiz-pulse-blue {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(80,130,255,0.45),
-                0 0 10px 2px rgba(80,130,255,0.2),
-                0 0 18px 3px rgba(80,130,255,0.08);
+    box-shadow: 0 0 0 1px rgba(80,130,255,0.55),
+                0 0 10px 2px rgba(80,130,255,0.30),
+                0 0 18px 3px rgba(80,130,255,0.18);
   }
   50% {
     box-shadow: 0 0 0 1px rgba(80,130,255,0.85),
                 0 0 16px 4px rgba(80,130,255,0.45),
-                0 0 28px 6px rgba(80,130,255,0.18);
+                0 0 28px 6px rgba(80,130,255,0.22);
   }
 }
 
 @keyframes bwiz-card-pulse-green {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(76,175,80,0.4),
-                0 0 12px 3px rgba(76,175,80,0.18),
-                0 0 24px 5px rgba(76,175,80,0.07);
+    box-shadow: 0 0 0 1px rgba(76,175,80,0.50),
+                0 0 12px 3px rgba(76,175,80,0.28),
+                0 0 24px 5px rgba(76,175,80,0.16);
   }
   50% {
     box-shadow: 0 0 0 2px rgba(76,175,80,0.85),
                 0 0 18px 5px rgba(76,175,80,0.4),
-                0 0 32px 8px rgba(76,175,80,0.16);
+                0 0 32px 8px rgba(76,175,80,0.22);
   }
 }
 
 @keyframes bwiz-card-pulse-red {
   0%, 100% {
-    box-shadow: 0 0 0 1px rgba(200,16,46,0.4),
-                0 0 12px 3px rgba(200,16,46,0.18),
-                0 0 24px 5px rgba(200,16,46,0.07);
+    box-shadow: 0 0 0 1px rgba(200,16,46,0.50),
+                0 0 12px 3px rgba(200,16,46,0.28),
+                0 0 24px 5px rgba(200,16,46,0.16);
   }
   50% {
     box-shadow: 0 0 0 2px rgba(200,16,46,0.85),
                 0 0 18px 5px rgba(200,16,46,0.4),
-                0 0 32px 8px rgba(200,16,46,0.16);
+                0 0 32px 8px rgba(200,16,46,0.22);
+  }
+}
+
+@keyframes bwiz-pulse-gold-strong {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.60),
+                0 0 14px 4px rgba(212,175,55,0.35),
+                0 0 26px 6px rgba(212,175,55,0.22);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(212,175,55,1.0),
+                0 0 22px 6px rgba(212,175,55,0.65),
+                0 0 40px 10px rgba(212,175,55,0.35);
+  }
+}
+@keyframes bwiz-pulse-green-strong {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(102,238,68,0.60),
+                0 0 14px 4px rgba(102,238,68,0.35),
+                0 0 26px 6px rgba(102,238,68,0.22);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(102,238,68,1.0),
+                0 0 22px 6px rgba(102,238,68,0.65),
+                0 0 40px 10px rgba(102,238,68,0.35);
   }
 }
 
 /* Confirm button blue pulse */
 .bwiz-confirm-btn { transition: background 0.12s, border-color 0.12s, box-shadow 0.7s ease; }
-.bwiz-confirm-btn.glow-blue { animation: bwiz-pulse-blue 2s ease-in-out infinite; }
+.bwiz-confirm-btn.glow-blue { animation: bwiz-pulse-blue 1.6s ease-in-out infinite; }
 
 /* Re-roll button gold pulse */
 .bwiz-rr-action-btn { transition: background 0.12s, border-color 0.12s, box-shadow 0.7s ease; }
-.bwiz-rr-action-btn.glow-gold { animation: bwiz-pulse-gold 2s ease-in-out infinite; }
+.bwiz-rr-action-btn.glow-gold { animation: bwiz-pulse-gold 1.6s ease-in-out infinite; }
 
 /* Player card glows — applied to .bwiz-embedded-card */
-.bwiz-card-glow-att { animation: bwiz-card-pulse-green 2.2s ease-in-out infinite; border-radius: 8px; }
-.bwiz-card-glow-def { animation: bwiz-card-pulse-red   2.2s ease-in-out infinite; border-radius: 8px; }
+.bwiz-card-glow-att { animation: bwiz-card-pulse-green 1.8s ease-in-out infinite; border-radius: 8px; }
+.bwiz-card-glow-def { animation: bwiz-card-pulse-red   1.8s ease-in-out infinite; border-radius: 8px; }
 
 /* Slow fade-out when glow class is removed; fast on hover */
 #block-roll-btn {
@@ -1757,8 +1782,8 @@
   box-shadow:   0 0 20px rgba(212, 175, 55, 0.5), 0 4px 16px rgba(0,0,0,0.35);
 }
 
-#block-roll-btn.glow-gold  { animation: bwiz-pulse-gold  2s ease-in-out infinite; }
-#block-roll-btn.glow-green { animation: bwiz-pulse-green 2s ease-in-out infinite; }
+#block-roll-btn.glow-gold  { animation: bwiz-pulse-gold-strong  1.6s ease-in-out infinite; }
+#block-roll-btn.glow-green { animation: bwiz-pulse-green-strong 1.6s ease-in-out infinite; }
 
 /* ── Roll button — Complete Block state (solid green, white text persists) ── */
 .roll-btn--complete {
