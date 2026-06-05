@@ -699,14 +699,16 @@
 .skill-card {
   position: absolute;
   pointer-events: auto;
-  background: #F5F0EC;
-  border: 3px solid #4a4a4a;
-  border-radius: 6px;
+  background: #06101E;   /* skills-page backdrop so the translucent sk-card reads correctly */
+  border-radius: 8px;
   width: 300px;
   overflow: visible;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.48);
   animation: skillPopIn 0.14s ease both;
 }
+
+/* In the popup the card shouldn't lift away from its arrow on hover */
+.skill-card .sk-card:hover { transform: none; }
 
 @keyframes skillPopIn {
   from { opacity: 0; transform: translateY(5px) scale(0.97); }
@@ -725,14 +727,14 @@
 .skill-card::before {
   bottom: -12px;
   border: 12px solid transparent;
-  border-top: 12px solid #4a4a4a;
+  border-top: 12px solid #243040;
   border-bottom: none;
 }
 
 .skill-card::after {
   bottom: -8px;
   border: 8px solid transparent;
-  border-top: 8px solid #F5F0EC;
+  border-top: 8px solid #101a27;
   border-bottom: none;
 }
 
@@ -740,62 +742,14 @@
   bottom: auto;
   top: -12px;
   border-top: none;
-  border-bottom: 12px solid #4a4a4a;
+  border-bottom: 12px solid #243040;
 }
 
 .skill-card.arrow-up::after {
   bottom: auto;
   top: -8px;
   border-top: none;
-  border-bottom: 8px solid #2a2a2a;
-}
-
-.skill-card-header {
-  background: #2a2a2a;
-  padding: 0.9rem 1.1rem;
-  border-radius: 3px 3px 0 0;
-}
-
-.skill-close { display: none; }
-
-.skill-name {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 800;
-  font-size: 1.2rem;
-  color: #f0ece4;
-  margin: 0;
-  line-height: 1.1;
-}
-
-.skill-category {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 500;
-  font-size: 0.62rem;
-  color: rgba(255, 255, 255, 0.45);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-top: 0.25rem;
-}
-
-.skill-body { padding: 1rem 1.1rem; }
-
-.skill-desc {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: #1a1a1a;
-  line-height: 1.75;
-  margin: 0;
-}
-
-.skill-unknown {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 400;
-  font-style: italic;
-  font-size: 0.85rem;
-  color: #888;
-  line-height: 1.65;
-  margin: 0;
+  border-bottom: 8px solid #101a27;
 }
 
 /* Injury result colour classes used by panels.js */

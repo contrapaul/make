@@ -332,8 +332,6 @@ function initBlockWizard() {
     var avVal = parseInt(statVals[4], 10) || 9;
     if (side === "left") { attAV = avVal; } else { defAV = avVal; }
 
-    var skillNames = (pd ? (pd.skills || "") : "").split(", ").map(function(s) { return s.trim(); }).filter(Boolean);
-
     var card = document.createElement("div");
     card.className = "trading-card bwiz-embedded-card" + (isStar ? " star-card" : "");
 
@@ -365,7 +363,8 @@ function initBlockWizard() {
             "<p class=\"modal-position\">" + esc(position) + "</p>"+
           "</div></div></div>"+
       "<div class=\"modal-stats\"><div class=\"modal-stats-row\">" + statsHtml + "</div></div>"+
-      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p></div>"+
+      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p>"+
+        "<p class=\"skills-text\">" + (window.renderSkillLinks ? window.renderSkillLinks(pd ? (pd.skills || "") : "") : "") + "</p></div>"+
       (pd && pd.fact ? "<div class=\"modal-fact\">&ldquo;" + esc(pd.fact) + "&rdquo;</div>" : "");
 
     var img  = card.querySelector(".modal-img");
@@ -373,20 +372,6 @@ function initBlockWizard() {
     img.addEventListener("load",  function() { stub.style.display = "none"; });
     img.addEventListener("error", function() { img.style.display  = "none"; });
 
-    var modalSkills = card.querySelector(".modal-skills");
-    if (window.buildSkillCard) {
-      if (skillNames.length) {
-        var wrap = document.createElement("div");
-        wrap.className = "sk-card-grid-compact";
-        skillNames.forEach(function(n) { wrap.appendChild(window.buildSkillCard(n, { compact: true })); });
-        modalSkills.appendChild(wrap);
-      } else {
-        var none = document.createElement("span");
-        none.className = "no-skills";
-        none.textContent = "—";
-        modalSkills.appendChild(none);
-      }
-    }
     if (window.attachSkillEvents) window.attachSkillEvents(card, false);
     wrapEl.appendChild(card);
   }

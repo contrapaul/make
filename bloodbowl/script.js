@@ -57,6 +57,9 @@ window.POSITION_COLORS  = POSITION_COLORS;
 /* Timers for skill-link hover/close grace period */
 let hoverTimer = null;
 let closeTimer  = null;
+/* A click-opened popup is "pinned": mouse-away no longer closes it — only a
+   click outside (or Escape) does. Hover-opened popups are never pinned. */
+let pinned = false;
 
 /* ────────────────────────────────────────────────────────
    INIT
@@ -397,6 +400,7 @@ function openModal(side, player) {
 
     <div class="modal-skills">
       <p class="skills-label">Skills &amp; Traits</p>
+      <p class="skills-text">${renderSkillLinks(player.skills)}</p>
     </div>
 
     ${player.fact
@@ -410,22 +414,8 @@ function openModal(side, player) {
   img.addEventListener('load',  () => { stub.style.display = 'none'; });
   img.addEventListener('error', () => { img.style.display  = 'none'; });
 
-  /* Inject compact skill cards into .modal-skills */
-  const modalSkills = card.querySelector('.modal-skills');
-  const skillNames = (player.skills || '').split(', ').map(s => s.trim()).filter(Boolean);
-  if (skillNames.length) {
-    const wrap = document.createElement('div');
-    wrap.className = 'sk-card-grid-compact';
-    skillNames.forEach(name => wrap.appendChild(buildSkillCard(name, { compact: true })));
-    modalSkills.appendChild(wrap);
-  } else {
-    const none = document.createElement('span');
-    none.className = 'no-skills';
-    none.textContent = '—';
-    modalSkills.appendChild(none);
-  }
-
-  /* Skill tooltip: hover + click on .skill-link buttons inside compact cards */
+  /* Skill links in trading card: hover + click open the anchored tooltip.
+     No stopPropagation needed — modal backdrop only closes on e.target===overlay. */
   attachSkillEvents(card, false);
 
   overlay.removeAttribute('hidden');
@@ -467,7 +457,7 @@ function attachSkillEvents(container, stopClick) {
     btn.addEventListener('mouseenter', () => {
       cancelClose();
       clearTimeout(hoverTimer);
-      hoverTimer = setTimeout(() => openSkillPopup(name, btn), 160);
+      hoverTimer = setTimeout(() => { pinned = false; openSkillPopup(name, btn); }, 160);
     });
 
     btn.addEventListener('mouseleave', () => {
@@ -479,6 +469,7 @@ function attachSkillEvents(container, stopClick) {
       if (stopClick) e.stopPropagation();
       clearTimeout(hoverTimer);
       clearTimeout(closeTimer);
+      pinned = true;
       openSkillPopup(name, btn);
     });
   });
@@ -541,6 +532,7 @@ window.renderSkillLinks   = renderSkillLinks;
 window.buildSkillCard     = buildSkillCard;
 
 function scheduleClose() {
+  if (pinned) return;   /* a click-opened popup stays until an outside click */
   clearTimeout(closeTimer);
   closeTimer = setTimeout(closeSkillPopup, 220);
 }
@@ -569,23 +561,21 @@ function openSkillPopup(skillName, anchorEl) {
   const overlay = document.getElementById('skill-overlay');
   const card    = document.getElementById('skill-card');
   const entry   = lookupSkill(skillName);
+  const color   = (entry?.category && SKILL_COLORS[entry.category]) || 'rgba(255,255,255,0.3)';
+  const badge   = (entry?.category && SKILL_BADGE[entry.category]) || entry?.category || '';
 
+  /* Same markup as a bloodbowl/skills page card so the popup looks identical */
   card.innerHTML = `
-    <div class="skill-card-header">
-      <button class="skill-close" aria-label="Close skill reference">&#215;</button>
-      <h3 class="skill-name">${esc(skillName)}</h3>
-      ${entry?.category
-        ? `<p class="skill-category">${esc(entry.category)}</p>`
-        : ''}
-    </div>
-    <div class="skill-body">
-      ${entry
-        ? `<p class="skill-desc">${esc(entry.description)}</p>`
-        : `<p class="skill-unknown">No description on file yet for this skill.</p>`}
-    </div>
+    <article class="sk-card" style="--card-color:${color}">
+      <div class="sk-card-header">
+        <span class="sk-card-name">${esc(skillName)}</span>
+        ${badge ? `<span class="sk-card-badge">${esc(badge)}</span>` : ''}
+      </div>
+      <p class="sk-card-desc">${entry
+        ? esc(entry.description)
+        : 'No description on file yet for this skill.'}</p>
+    </article>
   `;
-
-  card.querySelector('.skill-close').addEventListener('click', closeSkillPopup);
 
   overlay.removeAttribute('hidden');
   /* Position after the card is in the render tree so getBoundingClientRect works */
@@ -626,6 +616,7 @@ function closeSkillPopup() {
   const overlay = document.getElementById('skill-overlay');
   if (overlay.hasAttribute('hidden')) return;
   overlay.setAttribute('hidden', '');
+  pinned = false;
 }
 
 /* ────────────────────────────────────────────────────────
