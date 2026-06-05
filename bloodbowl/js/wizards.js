@@ -670,8 +670,8 @@ function initBlockWizard() {
     if (resultEl) {
       resultEl.className = 'bwiz-result-content';
       resultEl.innerHTML =
-        `<div class=”bwiz-result-headline bwiz-result-${breaks ? 'bad' : 'ok'}”>${breaks ? 'Armor Broken!' : 'Armor Holds'}</div>` +
-        `<p class=”bwiz-math-row”>${mathStr}</p>`;
+        `<div class="bwiz-result-headline bwiz-result-${breaks ? 'bad' : 'ok'}">${breaks ? 'Armor Broken!' : 'Armor Holds'}</div>` +
+        `<p class="bwiz-math-row">${mathStr}</p>`;
     }
 
     if (breaks) {
