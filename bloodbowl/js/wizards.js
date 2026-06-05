@@ -32,6 +32,49 @@ function buildBlockFace(el, idx) {
   el.innerHTML = `<span class="block-face-sym">${f.sym}</span><span class="block-face-label">${f.label}</span>`;
 }
 
+function buildNumericFace(el, value) {
+  el.className = 'block-face';
+  el.innerHTML = `<span class="block-face-sym">${'abcdef'[value - 1]}</span>`;
+}
+
+function rollNumericDie(faceEl) {
+  const result = Math.floor(Math.random() * 6) + 1;
+  let cycles = 0;
+  const iv = setInterval(() => {
+    if (cycles++ >= 9) { clearInterval(iv); return; }
+    buildNumericFace(faceEl, Math.floor(Math.random() * 6) + 1);
+  }, 52);
+
+  faceEl.classList.remove('rolling', 'settled');
+  void faceEl.offsetWidth;
+  faceEl.classList.add('rolling');
+
+  return new Promise(resolve => {
+    let settled = false;
+    function finish() {
+      if (settled) return;
+      settled = true;
+      clearInterval(iv);
+      faceEl.classList.remove('rolling', 'settled');
+      buildNumericFace(faceEl, result);
+      resolve(result);
+    }
+    const fallback = setTimeout(finish, 650);
+    faceEl.addEventListener('animationend', () => {
+      clearInterval(iv);
+      faceEl.classList.remove('rolling');
+      buildNumericFace(faceEl, result);
+      void faceEl.offsetWidth;
+      faceEl.classList.add('settled');
+      faceEl.addEventListener('animationend', () => {
+        clearTimeout(fallback);
+        faceEl.classList.remove('settled');
+        finish();
+      }, { once: true });
+    }, { once: true });
+  });
+}
+
 function rollBlockDie(faceEl) {
   const result = Math.floor(Math.random() * 6) + 1;
   let cycles = 0;
@@ -185,6 +228,7 @@ function initBlockWizard() {
     const tray = document.getElementById('block-dice-tray');
     if (!tray) return;
     tray.innerHTML = '';
+    tray.classList.remove('def-picks');
     for (let i = 0; i < count; i++) {
       const face = document.createElement('div');
       face.id = `block-face-${i}`;
@@ -545,6 +589,11 @@ function initBlockWizard() {
     rollBtn.classList.add('roll-btn--complete');
     rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click(); // players preserved on reopen
     setGlow('green');
+    /* Defensive: ensure result content divs keep their styling class */
+    ['armor-result-content', 'injury-result-content'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.className = 'bwiz-result-content';
+    });
   }
 
   function showCompleteBlock() {
@@ -589,17 +638,30 @@ function initBlockWizard() {
   }
 
   async function rollArmor(av, mightyBlowBonus, claws, knockedSide, nextSide = null) {
-    const tray     = document.getElementById('armor-dice-tray');
-    const resultEl = document.getElementById('armor-result-content');
+    const armorTray = document.getElementById('armor-dice-tray');
+    const resultEl  = document.getElementById('armor-result-content');
     rollBtn.disabled = true;
     setGlow('off');
 
-    /* Roll 2D6 */
-    const d1 = Math.floor(Math.random() * 6) + 1;
-    const d2 = Math.floor(Math.random() * 6) + 1;
-    let total = d1 + d2 + mightyBlowBonus;
+    /* Swap block-dice-tray to 2 animated numeric dice */
+    const blockTray = document.getElementById('block-dice-tray');
+    if (blockTray) {
+      blockTray.innerHTML = '';
+      blockTray.classList.remove('def-picks');
+      for (let i = 0; i < 2; i++) {
+        const face = document.createElement('div');
+        buildNumericFace(face, 1);
+        blockTray.appendChild(face);
+      }
+    }
+    if (armorTray) armorTray.innerHTML = '';
 
-    if (tray) tray.innerHTML = '';
+    /* Roll 2D6 with animation */
+    const blockFaces = blockTray ? Array.from(blockTray.children) : [];
+    const [d1, d2]   = blockFaces.length === 2
+      ? await Promise.all(blockFaces.map(f => rollNumericDie(f)))
+      : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
+    let total = d1 + d2 + mightyBlowBonus;
 
     const breaks = claws ? (d1 + d2 >= 8) : (total >= av);
     const mathStr = mightyBlowBonus
@@ -646,16 +708,28 @@ function initBlockWizard() {
   }
 
   async function rollInjury(knockedSide, mightyBlowBonus, nextSide = null) {
-    const tray   = document.getElementById('injury-dice-tray');
     const result = document.getElementById('injury-result-content');
     rollBtn.disabled = true;
     setGlow('off');
 
-    const d1 = Math.floor(Math.random() * 6) + 1;
-    const d2 = Math.floor(Math.random() * 6) + 1;
-    const total = d1 + d2 + mightyBlowBonus;
+    const injTray   = document.getElementById('injury-dice-tray');
+    const blockTray = document.getElementById('block-dice-tray');
+    if (blockTray) {
+      blockTray.innerHTML = '';
+      blockTray.classList.remove('def-picks');
+      for (let i = 0; i < 2; i++) {
+        const face = document.createElement('div');
+        buildNumericFace(face, 1);
+        blockTray.appendChild(face);
+      }
+    }
+    if (injTray) injTray.innerHTML = '';
 
-    if (tray) tray.innerHTML = '';
+    const blockFaces = blockTray ? Array.from(blockTray.children) : [];
+    const [d1, d2]   = blockFaces.length === 2
+      ? await Promise.all(blockFaces.map(f => rollNumericDie(f)))
+      : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
+    const total = d1 + d2 + mightyBlowBonus;
 
     let outcome, status;
     if (total <= 7)       { outcome = 'Stunned';  status = window.PlayerStatus?.STUNNED;    }
@@ -718,6 +792,7 @@ function initBlockWizard() {
 
     const { count, attFav } = calcBlock();
     renderDiceTray(count);
+    if (attFav === false) document.getElementById('block-dice-tray').classList.add('def-picks');
 
     const faces = Array.from({ length: count }, (_, i) => document.getElementById(`block-face-${i}`));
     const rolls = await Promise.all(faces.map(f => rollBlockDie(f)));
