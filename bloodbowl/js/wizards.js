@@ -483,34 +483,34 @@ function initBlockWizard() {
 
     if (key === 'att-down') {
       knockedSide = 'att';
-      showBlockResult(`${attName} Down — Turnover!`, 'bad');
+      showBlockResult(`${attName} Down!`, 'bad', 'Turnover — the attack fails.', 'bad');
     } else if (key === 'both-down') {
       if (attSkills.has('Block')) {
         knockedSide = 'def';
-        showBlockResult(`Both Down — Block! Only ${defName} falls.`, 'ok');
+        showBlockResult(`${defName} Down!`, 'ok', `${attName} stays up (Block skill).`, 'ok');
       } else if (attSkills.has('Wrestle')) {
-        showBlockResult(`Both Down — Wrestle! ${attName} and ${defName} both fall, no armor rolls.`, 'warn');
+        showBlockResult('Both Down — Wrestle!', 'warn', `${attName} and ${defName} both fall. No armor rolls.`, 'warn');
         showCompleteBlock();
       } else {
         knockedSide = 'both';
-        showBlockResult(`Both Down — ${attName} and ${defName} both fall. Roll armor for both.`, 'bad');
+        showBlockResult('Both Down!', 'bad', `${attName} and ${defName} both fall. Roll armor for both.`, 'bad');
       }
     } else if (key === 'push') {
       isPush = true;
-      showBlockResult(`Push — ${defName} shoved back. ${attName} may follow up.`, 'ok');
+      showBlockResult('Push Back!', 'neutral', `${defName} shoved back. ${attName} may follow up.`, 'info');
       showCompleteBlock();
     } else if (key === 'stumble') {
       if (defSkills.has('Dodge')) {
         isPush = true;
-        showBlockResult(`Stumble — Dodge! ${defName} stays up (treated as Push).`, 'ok');
+        showBlockResult('Stumble — No Effect!', 'neutral', `${defName} stays up (Dodge skill). Treated as Push Back.`, 'ok');
         showCompleteBlock();
       } else {
         knockedSide = 'def';
-        showBlockResult(`Stumble — ${defName} knocked down!`, 'ok');
+        showBlockResult(`${defName} Down!`, 'bad', 'Stumble result.', 'bad');
       }
     } else if (key === 'def-down') {
       knockedSide = 'def';
-      showBlockResult(`${defName} Down — Roll Armor.`, 'ok');
+      showBlockResult(`${defName} Down!`, 'bad', 'Roll Armor.', 'info');
     }
 
     /* Unlock armor roll if someone is knocked down */
@@ -541,14 +541,15 @@ function initBlockWizard() {
     setCompleteMode();
   }
 
-  function showBlockResult(text, cls) {
+  function showBlockResult(headline, headlineCls, note = null, noteCls = 'info') {
     const panel   = document.getElementById('block-result-panel');
     const content = document.getElementById('block-result-content');
     if (panel)   panel.classList.remove('locked');
-    if (content) {
-      content.textContent  = text;
-      content.className    = `bwiz-result-content bwiz-result-${cls}`;
-    }
+    if (!content) return;
+    content.className = 'bwiz-result-content';
+    content.innerHTML =
+      `<div class="bwiz-result-headline bwiz-result-${headlineCls}">${esc(headline)}</div>` +
+      (note ? `<p class="bwiz-result-note ${noteCls}">${esc(note)}</p>` : '');
   }
 
   /* â”€â”€ Armor roll â”€â”€ */
@@ -563,8 +564,11 @@ function initBlockWizard() {
     const claws = attSkills.has('Claws') && knockedSide === 'def';
 
     armorPanel.classList.remove('locked');
-    armorNote.textContent = `${who} AV ${av}+${mb ? ' (+1 Mighty Blow)' : ''}${claws ? ' (Claws: 8+ breaks)' : ''}`;
-    /* Clear previous dice so the panel is visually fresh for this player */
+    const modNote = [mb ? '+1 Mighty Blow' : '', claws ? 'Claws (8+ breaks)' : ''].filter(Boolean).join(' · ');
+    armorNote.className = 'bwiz-result-content';
+    armorNote.innerHTML =
+      `<div class="bwiz-result-headline bwiz-result-warn">Roll Armor</div>` +
+      `<p class="bwiz-result-note info">${esc(who)} AV ${av}+${modNote ? ` · ${modNote}` : ''}</p>`;
     const armorTray = document.getElementById('armor-dice-tray');
     if (armorTray) armorTray.innerHTML = '';
 
@@ -585,22 +589,17 @@ function initBlockWizard() {
     const d2 = Math.floor(Math.random() * 6) + 1;
     let total = d1 + d2 + mightyBlowBonus;
 
-    if (tray) {
-      const modNote = mightyBlowBonus ? ` +${mightyBlowBonus}` : '';
-      tray.innerHTML = `
-        <span class=”bwiz-d6-face”>${d1}</span>
-        <span class=”bwiz-dice-op”>+</span>
-        <span class=”bwiz-d6-face”>${d2}</span>
-        ${modNote ? `<span class=”bwiz-dice-op”>${modNote}</span>` : ''}
-        <span class=”bwiz-dice-op”>=</span>
-        <span class=”bwiz-dice-total”>${total}</span>
-      `;
-    }
+    if (tray) tray.innerHTML = '';
 
     const breaks = claws ? (d1 + d2 >= 8) : (total >= av);
+    const mathStr = mightyBlowBonus
+      ? `${d1} + ${d2} + ${mightyBlowBonus} = ${total} vs AV ${av}+`
+      : `${d1} + ${d2} = ${total} vs AV ${av}+`;
     if (resultEl) {
-      resultEl.textContent = breaks ? `Armor broken! (${total} vs ${av}+)` : `Armor holds! (${total} vs ${av}+)`;
-      resultEl.className   = `bwiz-result-content bwiz-result-${breaks ? 'bad' : 'warn'}`;
+      resultEl.className = 'bwiz-result-content';
+      resultEl.innerHTML =
+        `<div class=”bwiz-result-headline bwiz-result-${breaks ? 'bad' : 'ok'}”>${breaks ? 'Armor Broken!' : 'Armor Holds'}</div>` +
+        `<p class=”bwiz-math-row”>${mathStr}</p>`;
     }
 
     if (breaks) {
@@ -622,9 +621,11 @@ function initBlockWizard() {
     injPanel.classList.remove('locked');
     const mb = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
     const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
-    document.getElementById('injury-result-content').textContent =
-      `${who}: ready to roll${mb ? ' (+1 Mighty Blow)' : ''}`;
-    /* Clear previous injury dice */
+    const injEl = document.getElementById('injury-result-content');
+    injEl.className = 'bwiz-result-content';
+    injEl.innerHTML =
+      `<div class="bwiz-result-headline bwiz-result-warn">Roll Injury</div>` +
+      `<p class="bwiz-result-note info">${esc(who)}${mb ? ' · +1 Mighty Blow' : ''}</p>`;
     const injTray = document.getElementById('injury-dice-tray');
     if (injTray) injTray.innerHTML = '';
 
@@ -644,17 +645,7 @@ function initBlockWizard() {
     const d2 = Math.floor(Math.random() * 6) + 1;
     const total = d1 + d2 + mightyBlowBonus;
 
-    if (tray) {
-      const modNote = mightyBlowBonus ? ` +${mightyBlowBonus}` : '';
-      tray.innerHTML = `
-        <span class="bwiz-d6-face">${d1}</span>
-        <span class="bwiz-dice-op">+</span>
-        <span class="bwiz-d6-face">${d2}</span>
-        ${modNote ? `<span class="bwiz-dice-op">${modNote}</span>` : ''}
-        <span class="bwiz-dice-op">=</span>
-        <span class="bwiz-dice-total">${total}</span>
-      `;
-    }
+    if (tray) tray.innerHTML = '';
 
     let outcome, status;
     if (total <= 7)       { outcome = 'Stunned';  status = window.PlayerStatus?.STUNNED;    }
@@ -662,9 +653,15 @@ function initBlockWizard() {
     else                  { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
 
     const injuredName = pName(knockedSide === 'att' ? attPlayer : defPlayer);
+    const mathStr = mightyBlowBonus
+      ? `${d1} + ${d2} + ${mightyBlowBonus} = ${total}`
+      : `${d1} + ${d2} = ${total}`;
+    const headlineCls = total <= 7 ? 'warn' : 'bad';
     if (result) {
-      result.textContent = `${injuredName} ${outcome} (${total})`;
-      result.className   = `bwiz-result-content bwiz-result-${total <= 7 ? 'warn' : 'bad'}`;
+      result.className = 'bwiz-result-content';
+      result.innerHTML =
+        `<div class="bwiz-result-headline bwiz-result-${headlineCls}">${esc(injuredName)} ${esc(outcome)}!</div>` +
+        `<p class="bwiz-math-row">${mathStr}</p>`;
     }
 
     /* Update roster status */
@@ -684,9 +681,9 @@ function initBlockWizard() {
         const casEl = document.createElement('div');
         casEl.className = 'bwiz-casualty-result';
         casEl.innerHTML =
-          `<div class="bwiz-result-label">Casualty (D16: ${casVal})</div>` +
-          `<div class="bwiz-result-content bwiz-result-bad ${cas['class']}">${esc(cas.result)}</div>` +
-          (cas.desc ? `<p class="bwiz-cas-desc">${esc(cas.desc)}</p>` : '');
+          `<div class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</div>` +
+          (cas.desc ? `<p class="bwiz-result-note bad">${esc(cas.desc)}</p>` : '') +
+          `<p class="bwiz-math-row">Casualty table · D16: ${casVal}</p>`;
         injPanel.appendChild(casEl);
       }
     }
