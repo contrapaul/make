@@ -141,6 +141,7 @@ function initBlockWizard() {
   const panel      = document.getElementById('panel-block');
   const rollBtn    = document.getElementById('block-roll-btn');
   const confirmBtn = document.getElementById('block-confirm-btn');
+  const useRrBtn   = document.getElementById('block-use-rr-btn');
   const defBanner  = document.getElementById('block-def-picks-banner');
   if (!rollBtn) return;
 
@@ -447,6 +448,7 @@ function initBlockWizard() {
     rollBtn.innerHTML  = 'Roll';
     rollBtn.classList.remove('roll-btn--complete');
     if (confirmBtn) confirmBtn.hidden = true;
+    if (useRrBtn)   useRrBtn.hidden   = true;
     if (defBanner)  defBanner.hidden  = true;
     /* Lock result panels */
     ['block-result-panel','armor-roll-panel','injury-roll-panel'].forEach(id => {
@@ -468,41 +470,47 @@ function initBlockWizard() {
   }
 
   /* â”€â”€ Phase 1b+1c: interpret chosen face with active skills â”€â”€ */
+  function pName(player) {
+    return player?.playerData?.name ?? player?.name ?? '?';
+  }
+
   function interpretResult(face) {
     const key = face.key;
     let knockedSide = null;  // 'att' | 'def' | 'both' | null
     let isPush = false;
+    const attName = pName(attPlayer);
+    const defName = pName(defPlayer);
 
     if (key === 'att-down') {
       knockedSide = 'att';
-      showBlockResult('Attacker Down — Turnover!', 'bad');
+      showBlockResult(`${attName} Down — Turnover!`, 'bad');
     } else if (key === 'both-down') {
       if (attSkills.has('Block')) {
         knockedSide = 'def';
-        showBlockResult('Both Down — Block skill! Only defender falls.', 'ok');
+        showBlockResult(`Both Down — Block! Only ${defName} falls.`, 'ok');
       } else if (attSkills.has('Wrestle')) {
-        showBlockResult('Both Down — Wrestle! Both fall, no armor rolls.', 'warn');
+        showBlockResult(`Both Down — Wrestle! ${attName} and ${defName} both fall, no armor rolls.`, 'warn');
         showCompleteBlock();
       } else {
         knockedSide = 'both';
-        showBlockResult('Both Down — both players fall. Armor for both.', 'bad');
+        showBlockResult(`Both Down — ${attName} and ${defName} both fall. Roll armor for both.`, 'bad');
       }
     } else if (key === 'push') {
       isPush = true;
-      showBlockResult('Push Back — defender shoved. Attacker may follow up.', 'ok');
+      showBlockResult(`Push — ${defName} shoved back. ${attName} may follow up.`, 'ok');
       showCompleteBlock();
     } else if (key === 'stumble') {
       if (defSkills.has('Dodge')) {
         isPush = true;
-        showBlockResult('Stumble — Dodge skill! Treated as Push Back.', 'ok');
+        showBlockResult(`Stumble — Dodge! ${defName} stays up (treated as Push).`, 'ok');
         showCompleteBlock();
       } else {
         knockedSide = 'def';
-        showBlockResult('Stumble — Pow! Defender knocked down.', 'ok');
+        showBlockResult(`Stumble — ${defName} knocked down!`, 'ok');
       }
     } else if (key === 'def-down') {
       knockedSide = 'def';
-      showBlockResult('Defender Down — Pow! Roll Armor.', 'ok');
+      showBlockResult(`${defName} Down — Roll Armor.`, 'ok');
     }
 
     /* Unlock armor roll if someone is knocked down */
@@ -550,7 +558,7 @@ function initBlockWizard() {
     if (!armorPanel) return;
 
     const av  = knockedSide === 'att' ? attAV : defAV;
-    const who = knockedSide === 'att' ? 'Attacker' : 'Defender';
+    const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
     const mb  = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
     const claws = attSkills.has('Claws') && knockedSide === 'def';
 
@@ -613,7 +621,7 @@ function initBlockWizard() {
 
     injPanel.classList.remove('locked');
     const mb = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
-    const who = knockedSide === 'att' ? 'Attacker' : 'Defender';
+    const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
     document.getElementById('injury-result-content').textContent =
       `${who}: ready to roll${mb ? ' (+1 Mighty Blow)' : ''}`;
     /* Clear previous injury dice */
@@ -653,8 +661,9 @@ function initBlockWizard() {
     else if (total <= 9)  { outcome = "KO'd";     status = window.PlayerStatus?.KO;         }
     else                  { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
 
+    const injuredName = pName(knockedSide === 'att' ? attPlayer : defPlayer);
     if (result) {
-      result.textContent = `${outcome} (${total})`;
+      result.textContent = `${injuredName} ${outcome} (${total})`;
       result.className   = `bwiz-result-content bwiz-result-${total <= 7 ? 'warn' : 'bad'}`;
     }
 
@@ -696,6 +705,7 @@ function initBlockWizard() {
     rollBtn.disabled   = true;
     setGlow('off');
     if (confirmBtn) confirmBtn.hidden = true;
+    if (useRrBtn)   useRrBtn.hidden   = true;
     if (defBanner)  defBanner.hidden  = true;
     chosenFace = null;
 
@@ -707,7 +717,7 @@ function initBlockWizard() {
     rolledFaces  = rolls.map(r => BLOCK_FACES[r]);
 
     rollBtn.disabled = false;
-    renderRerolls(); // update so re-roll btn reflects new roll state
+    renderRerolls();
 
     /* Make dice clickable for selection */
     faces.forEach((faceEl, i) => {
@@ -723,6 +733,13 @@ function initBlockWizard() {
       if (defBanner) defBanner.hidden = false;
     }
     if (confirmBtn) confirmBtn.hidden = false;
+
+    /* Show Use Re-roll if the attacker's team has re-rolls left and none used yet */
+    if (useRrBtn) {
+      const gs    = window.GameState;
+      const rrKey = attSide === 'right' ? 'away' : 'home';
+      useRrBtn.hidden = rrUsed || (gs?.rerolls?.[rrKey] ?? 0) === 0;
+    }
   }
 
   function selectDie(idx) {
@@ -731,9 +748,26 @@ function initBlockWizard() {
     chosenFace = rolledFaces[idx];
   }
 
+  useRrBtn?.addEventListener('click', () => {
+    const gs = window.GameState;
+    if (rrUsed || !gs) return;
+    const rrKey = attSide === 'right' ? 'away' : 'home';
+    if (gs.rerolls[rrKey] <= 0) return;
+    gs.rerolls[rrKey] = Math.max(0, gs.rerolls[rrKey] - 1);
+    rrUsed = true;
+    const barId = rrKey === 'home' ? '#rr-home' : '#rr-away';
+    document.querySelectorAll(`${barId} .rr-pip`).forEach((pip, idx) => {
+      pip.classList.toggle('used', idx >= gs.rerolls[rrKey]);
+    });
+    useRrBtn.hidden = true;
+    renderRerolls();
+    doRoll();
+  });
+
   confirmBtn?.addEventListener('click', () => {
     if (!chosenFace) return;
     confirmBtn.hidden  = true;
+    if (useRrBtn) useRrBtn.hidden = true;
     rollBtn.disabled   = true;   // locked until armor/injury sequence re-enables it
     if (defBanner) defBanner.hidden = true;
     /* Remove click listeners by cloning dice */

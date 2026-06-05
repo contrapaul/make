@@ -1461,6 +1461,7 @@
 
 /* Confirm button */
 .bwiz-confirm-btn {
+  width:          100%;
   padding:        0.4rem 1.2rem;
   background:     rgba(80, 130, 255, 0.15);
   border:         1px solid rgba(80, 130, 255, 0.45);
@@ -1477,6 +1478,27 @@
 .bwiz-confirm-btn:hover {
   background:     rgba(80, 130, 255, 0.3);
   border-color:   rgba(80, 130, 255, 0.7);
+}
+
+/* Use Re-roll button (gold) */
+.bwiz-rr-action-btn {
+  width:          100%;
+  padding:        0.4rem 1.2rem;
+  background:     rgba(212, 175, 55, 0.12);
+  border:         1px solid rgba(212, 175, 55, 0.5);
+  border-radius:  5px;
+  color:          var(--bb-gold, #D4AF37);
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.72rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  cursor:         pointer;
+  transition:     background 0.12s, border-color 0.12s;
+}
+.bwiz-rr-action-btn:hover {
+  background:   rgba(212, 175, 55, 0.28);
+  border-color: rgba(212, 175, 55, 0.8);
 }
 
 /* Selected die highlight */
@@ -1631,10 +1653,10 @@
 /* Slow fade-out when glow class is removed; fast on hover */
 #block-roll-btn {
   transition:      background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s;
-  /* Issue 1 & 2: Nuffle Italic, larger, solid gold bg, white text, black outline */
   font-family:     'Nuffle Italic', serif;
   font-size:       1.5em;
-  padding:         0.55em 2em;
+  width:           100%;
+  padding:         0.55em 1em;
   background:      rgba(212, 175, 55, 0.88);
   border-color:    rgba(212, 175, 55, 0.95);
   color:           #fff;
