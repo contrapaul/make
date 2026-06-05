@@ -383,6 +383,7 @@ function initBlockWizard() {
     if (!picker || !wrap) return;
     wrap.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
     picker.hidden = false;
+    updateCardGlows(); // one card removed — clear other card's glow until both are chosen again
     buildWizardPlayerList(
       side === 'att' ? 'block-attacker-list' : 'block-defender-list',
       side === 'att' ? 'left' : 'right',
@@ -408,6 +409,7 @@ function initBlockWizard() {
         resetRoll();
         updateStDisplay();
         if (attPlayer && defPlayer) setGlow('gold');
+        updateCardGlows();
       },
     );
   }
@@ -427,6 +429,14 @@ function initBlockWizard() {
         buildEmbeddedCard(wrap, player, rosterSide);
       }
     }
+  }
+
+  function updateCardGlows() {
+    const attCard = document.querySelector('#block-att-card-wrap .bwiz-embedded-card');
+    const defCard = document.querySelector('#block-def-card-wrap .bwiz-embedded-card');
+    const both    = !!(attCard && defCard);
+    attCard?.classList.toggle('bwiz-card-glow-att', both);
+    defCard?.classList.toggle('bwiz-card-glow-def', both);
   }
 
   /* â”€â”€ Change buttons â”€â”€ */
@@ -701,8 +711,8 @@ function initBlockWizard() {
   async function doRoll() {
     rollBtn.disabled   = true;
     setGlow('off');
-    if (confirmBtn) confirmBtn.hidden = true;
-    if (useRrBtn)   useRrBtn.hidden   = true;
+    if (confirmBtn) { confirmBtn.hidden = true; confirmBtn.classList.remove('glow-blue'); }
+    if (useRrBtn)   { useRrBtn.hidden   = true; useRrBtn.classList.remove('glow-gold');  }
     if (defBanner)  defBanner.hidden  = true;
     chosenFace = null;
 
@@ -713,7 +723,7 @@ function initBlockWizard() {
     const rolls = await Promise.all(faces.map(f => rollBlockDie(f)));
     rolledFaces  = rolls.map(r => BLOCK_FACES[r]);
 
-    rollBtn.disabled = false;
+    /* Roll button stays disabled — user must confirm or re-roll */
     renderRerolls();
 
     /* Make dice clickable for selection */
@@ -729,13 +739,15 @@ function initBlockWizard() {
     } else {
       if (defBanner) defBanner.hidden = false;
     }
-    if (confirmBtn) confirmBtn.hidden = false;
+    if (confirmBtn) { confirmBtn.hidden = false; confirmBtn.classList.add('glow-blue'); }
 
     /* Show Use Re-roll if the attacker's team has re-rolls left and none used yet */
     if (useRrBtn) {
       const gs    = window.GameState;
       const rrKey = attSide === 'right' ? 'away' : 'home';
-      useRrBtn.hidden = rrUsed || (gs?.rerolls?.[rrKey] ?? 0) === 0;
+      const show  = !rrUsed && (gs?.rerolls?.[rrKey] ?? 0) > 0;
+      useRrBtn.hidden = !show;
+      if (show) useRrBtn.classList.add('glow-gold');
     }
   }
 
@@ -756,6 +768,7 @@ function initBlockWizard() {
     document.querySelectorAll(`${barId} .rr-pip`).forEach((pip, idx) => {
       pip.classList.toggle('used', idx >= gs.rerolls[rrKey]);
     });
+    useRrBtn.classList.remove('glow-gold');
     useRrBtn.hidden = true;
     renderRerolls();
     doRoll();
@@ -763,8 +776,9 @@ function initBlockWizard() {
 
   confirmBtn?.addEventListener('click', () => {
     if (!chosenFace) return;
+    confirmBtn.classList.remove('glow-blue');
     confirmBtn.hidden  = true;
-    if (useRrBtn) useRrBtn.hidden = true;
+    if (useRrBtn) { useRrBtn.classList.remove('glow-gold'); useRrBtn.hidden = true; }
     rollBtn.disabled   = true;   // locked until armor/injury sequence re-enables it
     if (defBanner) defBanner.hidden = true;
     /* Remove click listeners by cloning dice */
@@ -801,6 +815,7 @@ function initBlockWizard() {
     if (!defPlayer) showPicker('def'); else restoreCard('def');
     updateStDisplay();
     renderRerolls();
+    updateCardGlows();
   });
 
   rollBtn.onclick = doRoll;
