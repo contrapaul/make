@@ -86,7 +86,7 @@ async function init() {
     bindSelectListeners();
     bindGlobalListeners();
     bindMyTeamsButtons();
-    bindEndGameButton();
+    updateStartGameGlow();
   } catch (err) {
     console.error('[BB] Init failed:', err);
   } finally {
@@ -145,6 +145,7 @@ async function loadTeam(side, teamId) {
       /* Default 3 re-rolls — will be team-builder-driven in Phase 4 */
       Panels.setRerolls(side === 'left' ? 'home' : 'away', 3);
     }
+    updateStartGameGlow();
   } catch (err) {
     console.error(`[BB] Failed to load team "${teamId}":`, err);
   }
@@ -189,13 +190,16 @@ async function loadCustomTeam(side, savedTeam) {
     Panels.setAccordionLabel(side, savedTeam.name);
     Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
   }
+  updateStartGameGlow();
 }
 
 window.loadCustomTeam = loadCustomTeam;
 
-function bindEndGameButton() {
-  document.getElementById('gb-end-game-btn')
-    ?.addEventListener('click', () => window.SPPTracker?.showPostGame());
+/* Start Game button pulses gold once both teams are selected. */
+function updateStartGameGlow() {
+  const btn = document.getElementById('gb-start-btn');
+  if (!btn) return;
+  btn.classList.toggle('glow-gold', !!(state.left.team && state.right.team));
 }
 
 function bindMyTeamsButtons() {
@@ -250,6 +254,7 @@ function clearSide(side) {
     Panels.setAccordionLabel(side, null);
     Panels.setRerolls(gbSide, 0);
   }
+  updateStartGameGlow();
 }
 
 /* ────────────────────────────────────────────────────────

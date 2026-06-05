@@ -66,16 +66,11 @@
       </div>
 
       <div class="gb-center">
-        <div class="gb-half-label" id="gb-half-label">HALF 1</div>
-        <div class="gb-turn-pips" id="gb-turn-pips" aria-label="Turn tracker"><span class="turn-pip" data-turn="1" title="Turn 1"></span><span class="turn-pip" data-turn="2" title="Turn 2"></span><span class="turn-pip" data-turn="3" title="Turn 3"></span><span class="turn-pip" data-turn="4" title="Turn 4"></span><span class="turn-pip" data-turn="5" title="Turn 5"></span><span class="turn-pip" data-turn="6" title="Turn 6"></span><span class="turn-pip" data-turn="7" title="Turn 7"></span><span class="turn-pip" data-turn="8" title="Turn 8"></span></div>
-        <div class="gb-turn-controls">
-          <button class="gb-turn-btn" id="gb-prev-turn" aria-label="Previous turn">◂</button>
-          <span class="gb-turn-label" id="gb-turn-label">PRE-GAME</span>
-          <button class="gb-turn-btn" id="gb-next-turn" aria-label="Next turn">▸</button>
-          <button class="gb-settings-btn" id="gb-settings-btn" aria-label="Open settings" title="Settings">⚙</button>
-          <button class="gb-end-game-btn" id="gb-end-game-btn" aria-label="End game / post-game" title="End Game">End</button>
+        <button class="roll-btn gb-start-btn" id="gb-start-btn" type="button">Start Game</button>
+        <div class="gb-start-sub">
+          <button class="gb-start-sub-btn" id="gb-game-settings-btn" type="button">Game Settings</button>
+          <button class="gb-start-sub-btn" id="gb-my-teams-btn" type="button">My Teams</button>
         </div>
-        <div class="gb-weather-chip" id="gb-weather-chip" hidden aria-live="polite"></div>
       </div>
 
       <div class="gb-team gb-away" id="gb-away-team">
@@ -516,6 +511,85 @@
         </div>
       </div>
 
+      <!-- START GAME — mode select -->
+      <div class="bb-panel" id="panel-startgame" hidden aria-label="Start Game">
+        <div class="wiz-header">
+          <h2 class="wiz-title">Start Game</h2>
+          <button class="panel-close" aria-label="Close">&#215;</button>
+        </div>
+        <div class="panel-body wiz-body">
+          <div class="sg-modes">
+
+            <article class="trading-card mode-card" style="--tc-primary:#1A5A2A;--tc-accent:#1A5A2A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
+              <div class="modal-image-area" style="background:#1A5A2A;">
+                <span class="img-placeholder-num" aria-hidden="true">1</span>
+                <div class="modal-card-overlay">
+                  <div class="modal-jersey-circle">1</div>
+                  <div class="modal-overlay-info">
+                    <h2 class="modal-name">First Match</h2>
+                    <p class="modal-position">Game Mode</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mode-card-body">
+                <p class="mode-card-flavor">Like it says on the tin, this mode is designed for your first time playing "Football Chess" with the companion app. (Or just first time ever!)</p>
+              </div>
+            </article>
+
+            <article class="trading-card mode-card" style="--tc-primary:#1A3A7A;--tc-accent:#1A3A7A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
+              <div class="modal-image-area" style="background:#1A3A7A;">
+                <span class="img-placeholder-num" aria-hidden="true">2</span>
+                <div class="modal-card-overlay">
+                  <div class="modal-jersey-circle">2</div>
+                  <div class="modal-overlay-info">
+                    <h2 class="modal-name">Seasoned Coach</h2>
+                    <p class="modal-position">Game Mode</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mode-card-body">
+                <p class="mode-card-flavor">This is the mode intended for most players. Lots of quality of life improvements without a lot of hand-holding.</p>
+              </div>
+            </article>
+
+            <article class="trading-card mode-card" style="--tc-primary:#8B6914;--tc-accent:#8B6914;--tc-gold:#D4AF37;--tc-gold-dark:#5A4410;">
+              <div class="modal-image-area" style="background:#8B6914;">
+                <span class="img-placeholder-num" aria-hidden="true">3</span>
+                <div class="modal-card-overlay">
+                  <div class="modal-jersey-circle">3</div>
+                  <div class="modal-overlay-info">
+                    <h2 class="modal-name">Consummate Professional</h2>
+                    <p class="modal-position">Game Mode</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mode-card-body">
+                <p class="mode-card-flavor">For players who will mostly play without the app, but who still can't remember prayers to Nuffle.</p>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME SETTINGS (content TBD) -->
+      <div class="bb-panel" id="panel-gamesettings" hidden aria-label="Game Settings">
+        <div class="wiz-header">
+          <h2 class="wiz-title">Game Settings</h2>
+          <button class="panel-close" aria-label="Close">&#215;</button>
+        </div>
+        <div class="panel-body wiz-body"></div>
+      </div>
+
+      <!-- MY TEAMS (content TBD) -->
+      <div class="bb-panel" id="panel-myteams" hidden aria-label="My Teams">
+        <div class="wiz-header">
+          <h2 class="wiz-title">My Teams</h2>
+          <button class="panel-close" aria-label="Close">&#215;</button>
+        </div>
+        <div class="panel-body wiz-body"></div>
+      </div>
+
     </div><!-- /.panels-zone -->
 
     <!-- ═══════════════ ACTION CARDS ═══════════════ -->
@@ -573,18 +647,6 @@
     </div><!-- /.roster-section -->
 
   </main>
-
-  <!-- ═══════════════ SETTINGS DRAWER ═══════════════ -->
-  <aside class="settings-drawer" id="settings-drawer" hidden aria-label="Settings">
-    <div class="settings-drawer-header">
-      <h2 class="settings-drawer-title">⚙ Settings</h2>
-      <button class="settings-close" id="settings-close" aria-label="Close settings">&#215;</button>
-    </div>
-    <div class="settings-body" id="settings-body">
-      <!-- Populated by panels.js -->
-    </div>
-  </aside>
-  <div class="settings-backdrop" id="settings-backdrop"></div>
 
   <!-- ═══════════════ DRIVE WIZARD ═══════════════ -->
   <div class="drive-wizard" id="drive-wizard" hidden aria-label="Drive wizard" role="dialog" aria-modal="true">
@@ -657,6 +719,10 @@
       document.querySelectorAll('.bb-action-card[data-panel]').forEach(btn => {
         btn.addEventListener('click', () => window.Panels?.togglePanel?.(btn.dataset.panel));
       });
+
+      document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
+      document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
+      document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('myteams'));
 
       const moreCard = document.getElementById('bb-more-card');
       const moreMenu = document.getElementById('bb-more-menu');

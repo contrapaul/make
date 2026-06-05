@@ -173,69 +173,60 @@ body.app-loading .bb-app {
   min-width:       130px;
 }
 
-.gb-half-label {
-  font-family:    'JetBrains Mono', monospace;
-  font-weight:    800;
-  font-size:      0.56rem;
-  color:          rgba(140, 175, 240, 0.55);
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-}
-
-.gb-turn-pips {
-  display: flex;
-  gap:     4px;
-}
-
-.turn-pip {
-  width:        10px;
-  height:       10px;
-  border-radius: 50%;
-  background:   rgba(70, 100, 180, 0.35);
-  border:       1px solid rgba(80, 120, 200, 0.3);
-  cursor:       pointer;
-  transition:   background 0.15s, box-shadow 0.15s;
-}
-
-.turn-pip:hover          { background: rgba(100, 150, 255, 0.5); }
-.turn-pip.done           { background: rgba(150, 185, 255, 0.7); }
-.turn-pip.current {
-  background:  var(--bb-gold, #D4AF37);
-  border-color: var(--bb-gold, #D4AF37);
-  box-shadow:  0 0 8px rgba(212, 175, 55, 0.55);
-}
-
-.gb-turn-controls {
-  display:     flex;
-  align-items: center;
-  gap:         0.35rem;
-}
-
-.gb-turn-btn {
-  background:   rgba(255, 255, 255, 0.06);
-  border:       1px solid rgba(100, 140, 220, 0.22);
-  color:        rgba(160, 195, 255, 0.65);
-  width:        20px;
-  height:       20px;
-  border-radius: 3px;
-  font-size:    0.72rem;
-  cursor:       pointer;
-  display:      flex;
-  align-items:  center;
+/* ── Start Game launcher (replaces the turn tracker) ──
+   Scoped under .gb-center so these win over the later-loaded .roll-btn base. */
+.gb-center .gb-start-btn {
+  font-family:     'Nuffle Italic', serif;
+  font-size:       1.15rem;
+  letter-spacing:  0.06em;
   justify-content: center;
-  transition:   background 0.12s;
+  margin:          0;
+  padding:         0.35em 1.4em;
+  background:      rgba(212, 175, 55, 0.88);
+  border-color:    rgba(212, 175, 55, 0.95);
+  color:           #fff;
+  text-shadow:     0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+  transition:      background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s;
+}
+.gb-center .gb-start-btn:hover {
+  transition:   background 0.15s, box-shadow 0.15s, transform 0.12s, border-color 0.15s;
+  background:   rgba(212, 175, 55, 1);
+  border-color: rgba(212, 175, 55, 1);
+  box-shadow:   0 0 20px rgba(212, 175, 55, 0.5), 0 4px 16px rgba(0,0,0,0.35);
+  transform:    translateY(-1px);
+}
+/* Pulses only once both teams are set (animation defined in css/wizards.css) */
+.gb-center .gb-start-btn.glow-gold { animation: bwiz-pulse-gold-strong 1.6s ease-in-out infinite; }
+
+.gb-start-sub {
+  display:     flex;
+  gap:         0.4rem;
+  margin-top:  0.4rem;
 }
 
-.gb-turn-btn:hover { background: rgba(100, 140, 220, 0.22); }
-
-.gb-turn-label {
+.gb-start-sub-btn {
   font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.62rem;
-  color:          rgba(200, 220, 255, 0.8);
+  font-size:      0.6rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  white-space:    nowrap;
+  letter-spacing: 0.08em;
+  color:          rgba(160, 195, 255, 0.7);
+  background:     rgba(255, 255, 255, 0.05);
+  border:         1px solid rgba(100, 140, 220, 0.25);
+  border-radius:  5px;
+  padding:        0.4rem 0.7rem;
+  cursor:         pointer;
+  transition:     color 0.15s, border-color 0.15s, box-shadow 0.15s, background 0.15s, transform 0.15s;
+}
+/* Glow on hover only */
+.gb-start-sub-btn:hover {
+  color:        #fff;
+  background:   rgba(10, 22, 65, 0.9);
+  border-color: rgba(120, 170, 255, 0.7);
+  box-shadow:   0 0 0 1px rgba(120, 170, 255, 0.35),
+                0 4px 14px rgba(60, 100, 255, 0.25),
+                0 0 14px rgba(80, 130, 255, 0.18);
+  transform:    translateY(-1px);
 }
 
 /* ── Responsive ── */
@@ -271,5 +262,4 @@ body.app-loading .bb-app {
   .gb-rr-label     { display: none; }
   .gb-select       { font-size: 0.62rem; padding: 0.22rem 1.4rem 0.22rem 0.4rem; }
   .gb-score-btn    { min-height: 28px; min-width: 28px; }
-  .gb-turn-btn     { min-height: 28px; min-width: 28px; }
 }

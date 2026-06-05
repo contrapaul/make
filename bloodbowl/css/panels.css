@@ -345,6 +345,85 @@
   box-sizing: border-box;
 }
 
+/* ── Launcher wizards (Start Game / Game Settings / My Teams) ──
+   Match the unified large-format size of the other wizards. */
+#panel-startgame[hidden],
+#panel-gamesettings[hidden],
+#panel-myteams[hidden] { display: none; }
+
+#panel-startgame.panel-closing,
+#panel-gamesettings.panel-closing,
+#panel-myteams.panel-closing { display: flex !important; }
+
+#panel-startgame,
+#panel-gamesettings,
+#panel-myteams {
+  width:          min(82vw, 1600px);
+  max-width:      none;
+  height:         min(51.25vw, 1000px, 88vh);
+  max-height:     none;
+  overflow:       hidden;
+  display:        flex;
+  flex-direction: column;
+}
+
+#panel-startgame .wiz-body,
+#panel-gamesettings .wiz-body,
+#panel-myteams .wiz-body {
+  flex:       1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding:    1.25rem 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Centered title header (styled like the wizard launcher links) */
+.wiz-header {
+  position:        relative;
+  flex-shrink:     0;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         0.9rem 3rem;
+  background:      rgba(4, 10, 30, 0.55);
+  border-bottom:   1px solid rgba(80, 140, 255, 0.18);
+  border-radius:   12px 12px 0 0;
+}
+
+.wiz-title {
+  font-family:     'Nuffle Italic', serif;
+  font-size:       clamp(1.2rem, 2.2vw, 1.8rem);
+  color:           rgba(210, 230, 255, 0.9);
+  letter-spacing:  0.03em;
+  line-height:     1.1;
+  margin:          0;
+  text-align:      center;
+  -webkit-text-stroke: 1px rgba(40, 60, 140, 0.9);
+  text-stroke:         1px rgba(40, 60, 140, 0.9);
+}
+
+.wiz-header .panel-close {
+  position:  absolute;
+  right:     0.9rem;
+  top:       50%;
+  transform: translateY(-50%);
+}
+
+/* Start Game mode cards grid */
+.sg-modes {
+  display:               grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:                   1.5rem;
+  align-items:           start;
+  justify-items:         center;
+  max-width:             1320px;
+  margin:                0 auto;
+}
+
+@media (max-width: 860px) {
+  .sg-modes { grid-template-columns: 1fr; max-width: 360px; }
+}
+
 @keyframes panelClose {
   from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   to   { opacity: 0; transform: translate(-50%, -50%) scale(0.96); }

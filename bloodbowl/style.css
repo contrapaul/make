@@ -566,6 +566,29 @@
   border-top: 1px solid #D8D8D8;
 }
 
+/* ── Start Game mode cards — reuse the trading-card look ── */
+.mode-card { cursor: default; }
+
+/* Long mode titles (e.g. "Consummate Professional") need to wrap */
+.mode-card .modal-name {
+  white-space: normal;
+  font-size:   1.1rem;
+}
+
+.mode-card-body {
+  background: #F2F2F2;
+  padding:    0.85rem 1rem 1rem;
+}
+
+.mode-card-flavor {
+  font-family: 'JetBrains Mono', monospace;
+  font-style:  italic;
+  font-size:   0.82rem;
+  line-height: 1.6;
+  color:       #444;
+  margin:      0;
+}
+
 /* ─────────────────────────────────────────────
    5. SKILL CARDS  — shared across all pages/contexts
    ───────────────────────────────────────────── */
