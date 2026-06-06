@@ -1,0 +1,158 @@
+/* ════════════════════════════════════════════════════════
+   TABLES PAGE — readable reference cards
+   ════════════════════════════════════════════════════════ */
+
+/* In-page jump nav */
+.tables-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  background: rgba(4, 8, 22, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(80, 130, 255, 0.18);
+}
+.tables-nav a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(200, 220, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(100, 140, 220, 0.28);
+  border-radius: 5px;
+  padding: 0.35rem 0.75rem;
+  text-decoration: none;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+}
+.tables-nav a:hover {
+  background: rgba(80, 130, 255, 0.18);
+  color: #fff;
+  border-color: rgba(120, 170, 255, 0.55);
+}
+
+/* Sections */
+.tb-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.4rem 1.5rem 0.5rem;
+  scroll-margin-top: 3.2rem;
+}
+.tb-section-title {
+  font-family: 'Nuffle', serif;
+  font-size: 1.9rem;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin: 0 0 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.tb-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(160, 195, 255, 0.55);
+  margin: 1.4rem 0 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.tb-dice {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(212, 175, 55, 0.9);
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+}
+.tb-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(220, 232, 255, 0.78);
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid rgba(120, 170, 255, 0.5);
+  border-radius: 0 6px 6px 0;
+  padding: 0.8rem 1rem;
+  margin: 0;
+  max-width: 1000px;
+}
+
+/* Card grid — larger cards (these are read, not opened) */
+.tb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.tb-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid var(--c, rgba(255, 255, 255, 0.3));
+  border-radius: 10px;
+  padding: 1.1rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.tb-card-hd {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.tb-roll {
+  flex-shrink: 0;
+  min-width: 2.7rem;
+  height: 2.7rem;
+  padding: 0 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--c, #fff);
+  background: color-mix(in srgb, var(--c, #fff) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--c, #fff) 42%, transparent);
+  border-radius: 8px;
+}
+.tb-name {
+  font-family: 'Nuffle', serif;
+  font-size: 1.25rem;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.tb-effect {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--c, #fff) 80%, #fff);
+}
+.tb-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 0;
+}
+
+/* Modifier cards are simpler (no roll badge) */
+.tb-card--mod .tb-name { font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; font-weight: 700; }
+
+@media (max-width: 720px) {
+  .tb-grid { grid-template-columns: 1fr; }
+  .tb-section-title { font-size: 1.5rem; }
+}

@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/tables.css">
   <script src="../js/title-quips.js" defer></script>
 </head>
 <body>
@@ -39,11 +40,112 @@
       <span class="bb-title-sub">placeholder bottom</span>
     </div>
 
-    <div class="bb-page-content">
-      <!-- Tables content goes here -->
-    </div>
+    <nav class="tables-nav" aria-label="Jump to table">
+      <a href="#kickoff">Kickoff</a>
+      <a href="#weather">Weather</a>
+      <a href="#injury">Armour &amp; Injury</a>
+      <a href="#prayers">Prayers to Nuffle</a>
+    </nav>
+
+    <section class="tb-section" id="kickoff">
+      <h2 class="tb-section-title">Kickoff Events <span class="tb-dice">2D6</span></h2>
+      <div class="tb-grid" id="grid-kickoff"></div>
+    </section>
+
+    <section class="tb-section" id="weather">
+      <h2 class="tb-section-title">Weather <span class="tb-dice">2D6</span></h2>
+      <div class="tb-grid" id="grid-weather"></div>
+    </section>
+
+    <section class="tb-section" id="injury">
+      <h2 class="tb-section-title">Armour &amp; Injury</h2>
+      <p class="tb-note" id="armour-rule"></p>
+      <h3 class="tb-subtitle">Modifiers</h3>
+      <div class="tb-grid" id="grid-mods"></div>
+      <h3 class="tb-subtitle">Injury Roll <span class="tb-dice">2D6</span></h3>
+      <div class="tb-grid" id="grid-injury"></div>
+      <h3 class="tb-subtitle">Injury Roll — Stunty Players <span class="tb-dice">2D6</span></h3>
+      <div class="tb-grid" id="grid-stunty"></div>
+      <h3 class="tb-subtitle">Casualty Table <span class="tb-dice">D16</span></h3>
+      <div class="tb-grid" id="grid-casualty"></div>
+    </section>
+
+    <section class="tb-section" id="prayers">
+      <h2 class="tb-section-title">Prayers to Nuffle <span class="tb-dice">D16</span></h2>
+      <div class="tb-grid" id="grid-prayers"></div>
+    </section>
 
   </main>
+
+  <script>
+    (function () {
+      const COL = { kickoff: '#D4AF37', weather: '#5A9CFF', injury: '#C8102E', prayers: '#9B59B6' };
+      const RESULT_C = {
+        'result-ok':  '#81c784',
+        'result-ko':  '#FFB74D',
+        'result-kas': '#ff9e57',
+        'result-cas': '#ff6b6b',
+      };
+      const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const range = (a, b) => (a === b ? String(a) : `${a}–${b}`);
+
+      function card(item, color) {
+        const c = item.cls ? (RESULT_C[item.cls] || color) : color;
+        const hasRoll = item.roll !== undefined && item.roll !== '';
+        return `<article class="tb-card${hasRoll ? '' : ' tb-card--mod'}" style="--c:${c}">
+          <div class="tb-card-hd">
+            ${hasRoll ? `<span class="tb-roll">${esc(item.roll)}</span>` : ''}
+            <span class="tb-name">${esc(item.name)}</span>
+          </div>
+          ${item.effect ? `<div class="tb-effect">${esc(item.effect)}</div>` : ''}
+          ${item.desc ? `<p class="tb-desc">${esc(item.desc)}</p>` : ''}
+        </article>`;
+      }
+
+      function fill(id, items, color) {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = items.map(it => card(it, color)).join('');
+      }
+
+      async function getJSON(path) {
+        const r = await fetch(path);
+        if (!r.ok) throw new Error(`${r.status} ${path}`);
+        return r.json();
+      }
+
+      async function load() {
+        try {
+          const [kick, weather, injury, prayers] = await Promise.all([
+            getJSON('../data/kickoff-events.json'),
+            getJSON('../data/weather.json'),
+            getJSON('../data/injury.json'),
+            getJSON('../data/prayers.json'),
+          ]);
+
+          fill('grid-kickoff', kick.map(k => ({ roll: k.roll, name: k.name, desc: k.desc })), COL.kickoff);
+
+          fill('grid-weather', weather.map(w => ({
+            roll: range(w.rollMin, w.rollMax),
+            name: `${w.emoji || ''} ${w.name}`.trim(),
+            effect: w.effect,
+            desc: w.desc,
+          })), COL.weather);
+
+          const note = document.getElementById('armour-rule');
+          if (note) note.textContent = injury.armourRule || '';
+          fill('grid-mods', (injury.modifiers || []).map(m => ({ name: m.source, desc: m.applies })), COL.injury);
+          fill('grid-injury',   (injury.injury   || []).map(x => ({ roll: range(x.min, x.max), name: x.result, desc: x.desc, cls: x.class })), COL.injury);
+          fill('grid-stunty',   (injury.stunty   || []).map(x => ({ roll: range(x.min, x.max), name: x.result, desc: x.desc, cls: x.class })), COL.injury);
+          fill('grid-casualty', (injury.casualty || []).map(x => ({ roll: range(x.min, x.max), name: x.result, desc: x.desc, cls: x.class })), COL.injury);
+
+          fill('grid-prayers', prayers.map(p => ({ roll: p.roll, name: p.name, desc: p.desc })), COL.prayers);
+        } catch (err) {
+          console.error('[Tables] Failed to load reference data:', err);
+        }
+      }
+      load();
+    })();
+  </script>
 
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">

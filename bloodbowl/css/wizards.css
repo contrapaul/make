@@ -1614,6 +1614,37 @@
   margin:         0;
 }
 
+/* Running record — one row per roll (attacker, then defender below) */
+.bwiz-result-content { max-height: 100%; overflow-y: auto; }
+.bwiz-roll-row {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.15em;
+  padding:        0.3em 0;
+  border-top:     1px solid rgba(80, 130, 255, 0.14);
+}
+.bwiz-roll-row:first-child { border-top: none; padding-top: 0; }
+.bwiz-roll-row.pending     { opacity: 0.7; }
+.bwiz-roll-who {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.58em;
+  font-weight:    700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color:          rgba(170, 205, 255, 0.6);
+}
+.bwiz-roll-detail {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.66em;
+  color:          rgba(160, 195, 255, 0.55);
+}
+.bwiz-roll-row .bwiz-casualty-result {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.15em;
+  margin-top:     0.2em;
+}
+
 .bwiz-roll-btn-sm {
   margin-top:     0.2em;
   padding:        0.3em 0.75em !important;

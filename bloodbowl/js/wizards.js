@@ -441,13 +441,16 @@ function initBlockWizard() {
   function updateStDisplay() {
     const compareEl = document.getElementById('block-st-compare');
     if (!compareEl) return;
-    const { count, who } = calcBlock();
+    const { count, who, attFav } = calcBlock();
     const a = attST + attAst, d = defST + defAst;
     const attTxt = attAst ? `ST ${a} (${attST} + ${attAst} assists)` : `ST ${a}`;
     const defTxt = defAst ? `ST ${d} (${defST} + ${defAst} assist)` : `ST ${d}`;
     const pickerTxt = who ? ` — ${who}` : '';
     compareEl.textContent = `${attTxt} vs. ${defTxt} · ${count} ${count === 1 ? 'die' : 'dice'}${pickerTxt}`;
     renderDiceTray(count);
+    /* Flag the dice as a defender-picks (bad) block as soon as the ST compare
+       establishes it — extra visual warning before the user commits to roll. */
+    document.getElementById('block-dice-tray')?.classList.toggle('def-picks', attFav === false);
     renderRerolls();
   }
 
@@ -866,6 +869,36 @@ function initBlockWizard() {
       (note ? `<p class="bwiz-result-note ${noteCls}">${esc(note)}</p>` : '');
   }
 
+  /* ── Running record helpers: append a pending row, then fill it on roll ──
+     Lets a Both Down show the attacker's armour/injury, then the defender's
+     below it, instead of overwriting. */
+  function appendRollRow(contentEl, who, detailText) {
+    if (!contentEl) return null;
+    if (contentEl.textContent.trim() === '—') contentEl.innerHTML = '';
+    const row = document.createElement('div');
+    row.className = 'bwiz-roll-row pending';
+    row.innerHTML = `<span class="bwiz-roll-who">${esc(who)}</span>` +
+      `<span class="bwiz-roll-detail">${esc(detailText)}</span>`;
+    contentEl.appendChild(row);
+    contentEl.scrollTop = contentEl.scrollHeight;
+    return row;
+  }
+  function fillRollRow(contentEl, who, html) {
+    if (!contentEl) return null;
+    let row = contentEl.querySelector('.bwiz-roll-row.pending');
+    if (row) {
+      row.classList.remove('pending');
+    } else {
+      if (contentEl.textContent.trim() === '—') contentEl.innerHTML = '';
+      row = document.createElement('div');
+      row.className = 'bwiz-roll-row';
+      contentEl.appendChild(row);
+    }
+    row.innerHTML = `<span class="bwiz-roll-who">${esc(who)}</span>` + html;
+    contentEl.scrollTop = contentEl.scrollHeight;
+    return row;
+  }
+
   /* â”€â”€ Armor roll â”€â”€ */
   function unlockArmorRoll(knockedSide, nextSide = null) {
     const armorPanel = document.getElementById('armor-roll-panel');
@@ -884,10 +917,8 @@ function initBlockWizard() {
       mbAvail ? 'Mighty Blow available' : '',
       ironHard ? 'Iron Hard Skin — no modifiers' : '',
     ].filter(Boolean).join(' · ');
-    armorNote.className = 'bwiz-result-content';
-    armorNote.innerHTML =
-      `<div class="bwiz-result-headline bwiz-result-warn">Roll Armor</div>` +
-      `<p class="bwiz-result-note info">${esc(who)} AV ${av}+${mods ? ` · ${mods}` : ''}</p>`;
+    /* Append a pending row to the running record (filled when the roll lands). */
+    appendRollRow(armorNote, who, `Roll Armor · AV ${av}+${mods ? ` · ${mods}` : ''}`);
     const armorTray = document.getElementById('armor-dice-tray');
     if (armorTray) armorTray.innerHTML = '';
 
@@ -918,12 +949,10 @@ function initBlockWizard() {
     const mathStr = mbHere
       ? `${d1} + ${d2} + 1 (Mighty Blow) = ${base + mbHere} vs AV ${av}+`
       : `${d1} + ${d2} = ${base}${claws ? ' · Claws 8+' : ''} vs AV ${av}+`;
-    if (resultEl) {
-      resultEl.className = 'bwiz-result-content';
-      resultEl.innerHTML =
-        `<div class="bwiz-result-headline bwiz-result-${breaks ? 'bad' : 'ok'}">${breaks ? 'Armor Broken!' : 'Armor Holds'}</div>` +
-        `<p class="bwiz-math-row">${mathStr}</p>`;
-    }
+    const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
+    fillRollRow(resultEl, who,
+      `<span class="bwiz-result-headline bwiz-result-${breaks ? 'bad' : 'ok'}">${breaks ? 'Armor Broken!' : 'Armor Holds'}</span>` +
+      `<span class="bwiz-math-row">${mathStr}</span>`);
 
     if (breaks) {
       await pause(300);
@@ -952,10 +981,7 @@ function initBlockWizard() {
       (knockedSide === 'def' && defHas('Decay')) ? 'Decay (+1 Casualty)' : '',
     ].filter(Boolean).join(' · ');
     const injEl = document.getElementById('injury-result-content');
-    injEl.className = 'bwiz-result-content';
-    injEl.innerHTML =
-      `<div class="bwiz-result-headline bwiz-result-warn">Roll Injury</div>` +
-      `<p class="bwiz-result-note info">${esc(who)}${mods ? ` · ${mods}` : ''}</p>`;
+    appendRollRow(injEl, who, `Roll Injury${mods ? ` · ${mods}` : ''}`);
     const injTray = document.getElementById('injury-dice-tray');
     if (injTray) injTray.innerHTML = '';
 
@@ -989,12 +1015,9 @@ function initBlockWizard() {
     const mods = [mbHere ? '+1 Mighty Blow' : '', stunty ? '+1 Stunty' : ''].filter(Boolean).join(' ');
     const mathStr = `${d1} + ${d2}${mods ? ` ${mods}` : ''} = ${total}`;
     const headlineCls = (outcome === 'Stunned') ? 'warn' : 'bad';
-    if (result) {
-      result.className = 'bwiz-result-content';
-      result.innerHTML =
-        `<div class="bwiz-result-headline bwiz-result-${headlineCls}">${esc(injuredName)} ${esc(outcome)}!</div>` +
-        `<p class="bwiz-math-row">${mathStr}</p>`;
-    }
+    const injRow = fillRollRow(result, injuredName,
+      `<span class="bwiz-result-headline bwiz-result-${headlineCls}">${esc(injuredName)} ${esc(outcome)}!</span>` +
+      `<span class="bwiz-math-row">${mathStr}</span>`);
 
     /* Update roster status */
     const targetPlayer = knockedSide === 'att' ? attPlayer : defPlayer;
@@ -1003,17 +1026,17 @@ function initBlockWizard() {
 
     /* Casualty: auto-roll D16 on the casualty table (Decay adds +1). */
     if (outcome === 'Casualty') {
-      const injPanel = document.getElementById('injury-roll-panel');
-      if (injPanel) {
+      const host = injRow ?? document.getElementById('injury-roll-panel');
+      if (host) {
         const decay = knockedSide === 'def' && defHas('Decay') ? 1 : 0;
         const { casVal, cas } = BBResolve.rollCasualty(decay);
         const casEl = document.createElement('div');
         casEl.className = 'bwiz-casualty-result';
         casEl.innerHTML =
-          `<div class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</div>` +
-          (cas.desc ? `<p class="bwiz-result-note bad">${esc(cas.desc)}</p>` : '') +
-          `<p class="bwiz-math-row">Casualty table · D16: ${casVal}${decay ? ' (+1 Decay)' : ''}</p>`;
-        injPanel.appendChild(casEl);
+          `<span class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</span>` +
+          (cas.desc ? `<span class="bwiz-result-note bad">${esc(cas.desc)}</span>` : '') +
+          `<span class="bwiz-math-row">Casualty table · D16: ${casVal}${decay ? ' (+1 Decay)' : ''}</span>`;
+        host.appendChild(casEl);
       }
     }
 
