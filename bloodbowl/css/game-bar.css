@@ -47,6 +47,27 @@ body.app-loading .bb-app {
   gap:             0.25rem;
 }
 
+/* ── Choose-team button (opens the Choose Team window) ── */
+.gb-choose-btn {
+  font-family:    'Nuffle Italic', serif;
+  font-size:      0.95rem;
+  width:          100%;
+  color:          rgba(210, 230, 255, 0.9);
+  background:     rgba(255, 255, 255, 0.06);
+  border:         1px solid rgba(100, 140, 220, 0.32);
+  border-top:     3px solid var(--gb-team-accent, rgba(100, 140, 220, 0.32));
+  border-radius:  4px;
+  padding:        0.4rem 0.7rem;
+  letter-spacing: 0.02em;
+  cursor:         pointer;
+  transition:     background-color 0.15s, border-color 0.15s;
+}
+.gb-choose-btn:hover {
+  background:   rgba(80, 130, 255, 0.16);
+  border-color: rgba(120, 170, 255, 0.55);
+}
+.gb-choose-btn.has-team { color: #fff; }
+
 /* ── Team select dropdown ── */
 .gb-select {
   font-family:    'JetBrains Mono', monospace;

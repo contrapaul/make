@@ -82,8 +82,7 @@ async function init() {
     /* Expose full skills list for SPP level-up picker */
     window.BBSkillsList = skillsList;
 
-    populateSelects();
-    bindSelectListeners();
+    bindChooseButtons();
     bindGlobalListeners();
     bindMyTeamsButtons();
     updateStartGameGlow();
@@ -103,26 +102,92 @@ async function fetchJSON(url) {
 /* ────────────────────────────────────────────────────────
    TEAM SELECTION
    ──────────────────────────────────────────────────────── */
-function populateSelects() {
-  const opts = state.teams
-    .map(t => `<option value="${esc(t.id)}">${esc(t.name)}</option>`)
-    .join('');
+/* Which side the Choose Team window is currently picking for. */
+let chooseSide = 'left';
 
+function bindChooseButtons() {
   ['left', 'right'].forEach(side => {
-    document.getElementById(`select-${side}`).innerHTML =
-      '<option value="">— Select a team —</option>' + opts;
+    document.getElementById(`choose-${side}`)
+      ?.addEventListener('click', () => openChooseTeam(side));
   });
 }
 
-function bindSelectListeners() {
-  ['left', 'right'].forEach(side => {
-    document.getElementById(`select-${side}`)
-      .addEventListener('change', async e => {
-        const id = e.target.value;
-        closeModal(side);          /* clear any open card first */
-        if (id) await loadTeam(side, id);
-        else        clearSide(side);
+function openChooseTeam(side) {
+  chooseSide = side;
+  buildChooseTeamPanel();
+  window.Panels?.togglePanel('chooseteam');
+}
+window.openChooseTeam = openChooseTeam;
+
+/* Refresh the "Choose Home/Away Team" button label after a pick. */
+function updateChooseBtn(side, name, accent) {
+  const btn = document.getElementById(`choose-${side}`);
+  if (!btn) return;
+  btn.textContent = name || (side === 'left' ? 'Choose Home Team' : 'Choose Away Team');
+  btn.classList.toggle('has-team', !!name);
+  btn.style.setProperty('--gb-team-accent', accent || '');
+}
+
+function buildChooseTeamPanel() {
+  /* ── Right 2/3 — default teams, alphabetical, skills-card styling ── */
+  const grid = document.getElementById('ct-choose-grid');
+  if (grid) {
+    const teams = [...state.teams].sort((a, b) => a.name.localeCompare(b.name));
+    grid.innerHTML = '';
+    teams.forEach(team => {
+      const accent = team.colors?.accent || team.colors?.gold || 'rgba(255,255,255,0.3)';
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'ct-card';
+      card.style.setProperty('--card-color', accent);
+      card.innerHTML = `<span class="ct-card-name">${esc(team.name)}</span>`;
+      card.addEventListener('click', async () => {
+        closeModal(chooseSide);
+        await loadTeam(chooseSide, team.id);
+        window.Panels?.closePanel('chooseteam');
       });
+      grid.appendChild(card);
+    });
+  }
+
+  /* ── Left 1/3 — Create New Team + saved teams (one column) ── */
+  const mine = document.getElementById('ct-myteams-grid');
+  if (!mine) return;
+  mine.innerHTML = '';
+
+  const create = document.createElement('button');
+  create.type = 'button';
+  create.className = 'ct-card ct-card--blueprint';
+  create.innerHTML = '<span class="ct-card-name">+ Create New Team</span>';
+  create.addEventListener('click', () => {
+    window.Panels?.closePanel('chooseteam');
+    window.TeamBuilder?.open('builder');
+  });
+  mine.appendChild(create);
+
+  const saved = window.TeamBuilder?.getTeams?.() ?? [];
+  if (saved.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'ct-empty';
+    empty.textContent = 'No saved teams yet. Create one to set its colours and roster.';
+    mine.appendChild(empty);
+    return;
+  }
+  saved.forEach(team => {
+    const accent = team.colors?.accent || team.colors?.gold || 'rgba(150,180,255,0.6)';
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'ct-card';
+    card.style.setProperty('--card-color', accent);
+    card.innerHTML = `
+      <span class="ct-card-name">${esc(team.name)}</span>
+      <span class="ct-card-meta">${team.players.length}pl · ${team.rerolls}RR</span>`;
+    card.addEventListener('click', async () => {
+      closeModal(chooseSide);
+      await window.TeamBuilder?.loadIntoGame(team.id, chooseSide);
+      window.Panels?.closePanel('chooseteam');
+    });
+    mine.appendChild(card);
   });
 }
 
@@ -147,6 +212,7 @@ async function loadTeam(side, teamId) {
       /* Default 3 re-rolls — will be team-builder-driven in Phase 4 */
       Panels.setRerolls(side === 'left' ? 'home' : 'away', 3);
     }
+    updateChooseBtn(side, team.name, team.colors?.accent);
     updateStartGameGlow();
   } catch (err) {
     console.error(`[BB] Failed to load team "${teamId}":`, err);
@@ -193,6 +259,7 @@ async function loadCustomTeam(side, savedTeam) {
     Panels.setAccordionValue(side, players.reduce((s, p) => s + (p.value || 0), 0));
     Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
   }
+  updateChooseBtn(side, savedTeam.name, baseEntry?.colors?.accent);
   updateStartGameGlow();
 }
 
@@ -258,6 +325,7 @@ function clearSide(side) {
     Panels.setAccordionValue(side, null);
     Panels.setRerolls(gbSide, 0);
   }
+  updateChooseBtn(side, null);
   updateStartGameGlow();
 }
 

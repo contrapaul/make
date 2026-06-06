@@ -48,10 +48,9 @@
 
       <div class="gb-team gb-home" id="gb-home-team">
         <div class="gb-team-inner">
-          <select class="team-select gb-select" id="select-left" aria-label="Select home team">
-            <option value="">— Select a team —</option>
-          </select>
-          <button class="my-teams-btn" id="my-teams-left" title="Load from My Teams">👥</button>
+          <button class="gb-choose-btn" id="choose-left" type="button" aria-haspopup="dialog">
+            Choose Home Team
+          </button>
         </div>
       </div>
 
@@ -65,10 +64,9 @@
 
       <div class="gb-team gb-away" id="gb-away-team">
         <div class="gb-team-inner">
-          <select class="team-select gb-select" id="select-right" aria-label="Select away team">
-            <option value="">— Select a team —</option>
-          </select>
-          <button class="my-teams-btn" id="my-teams-right" title="Load from My Teams">👥</button>
+          <button class="gb-choose-btn" id="choose-right" type="button" aria-haspopup="dialog">
+            Choose Away Team
+          </button>
         </div>
       </div>
 
@@ -568,6 +566,23 @@
           <button class="panel-close" aria-label="Close">&#215;</button>
         </div>
         <div class="panel-body wiz-body"></div>
+      </div>
+
+      <!-- CHOOSE TEAM — opened by the "Choose Home/Away Team" buttons -->
+      <div class="bb-panel" id="panel-chooseteam" hidden aria-label="Choose Team" role="dialog" aria-modal="true">
+        <div class="ct-layout">
+          <div class="ct-col ct-myteams">
+            <div class="ct-col-head"><h2 class="ct-title">My Teams</h2></div>
+            <div class="ct-col-body ct-myteams-grid" id="ct-myteams-grid"></div>
+          </div>
+          <div class="ct-col ct-choose">
+            <div class="ct-col-head">
+              <h2 class="ct-title">Choose Team</h2>
+              <button class="panel-close" aria-label="Close">&#215;</button>
+            </div>
+            <div class="ct-col-body ct-grid" id="ct-choose-grid"></div>
+          </div>
+        </div>
       </div>
 
     </div><!-- /.panels-zone -->
