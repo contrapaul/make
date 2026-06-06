@@ -61,6 +61,13 @@ const TeamBuilder = (() => {
       : Math.random().toString(36).slice(2) + Date.now().toString(36);
   }
 
+  /* Next free jersey number — one above the current highest (unique even
+     after players have been removed and re-added). */
+  function nextJersey() {
+    const used = (_draft?.players ?? []).map(p => Number(p.jerseyNumber) || 0);
+    return (used.length ? Math.max(...used) : 0) + 1;
+  }
+
   function h(str) {
     return String(str ?? '')
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -397,7 +404,7 @@ const TeamBuilder = (() => {
             id:               uuid(),
             rosterSlotId:     pos.id,
             name:             `${pos.position} ${num}`,
-            jerseyNumber:     _draft.players.length + 1,
+            jerseyNumber:     nextJersey(),
             position:         pos.position,
             ma: pos.ma, st: pos.st, ag: pos.ag, pa: pos.pa, av: pos.av,
             skills:           pos.skills ?? '',
@@ -625,7 +632,7 @@ const TeamBuilder = (() => {
           id:               uuid(),
           rosterSlotId:     pos.id,
           name:             `${pos.position} ${num}`,
-          jerseyNumber:     _draft.players.length + 1,
+          jerseyNumber:     nextJersey(),
           position:         pos.position,
           ma: pos.ma, st: pos.st, ag: pos.ag, pa: pos.pa, av: pos.av,
           skills:           pos.skills ?? '',
@@ -794,7 +801,7 @@ const TeamBuilder = (() => {
                   rosterSlotId: null,
                   starPlayerId: sp.id,
                   name:         pp.name,
-                  jerseyNumber: _draft.players.length + 1,
+                  jerseyNumber: nextJersey(),
                   position:     'Star Player',
                   ma: pp.ma, st: pp.st, ag: pp.ag, pa: pp.pa, av: pp.av,
                   skills:       pp.skills ?? '',
@@ -810,7 +817,7 @@ const TeamBuilder = (() => {
                 rosterSlotId: null,
                 starPlayerId: sp.id,
                 name:         sp.name,
-                jerseyNumber: _draft.players.length + 1,
+                jerseyNumber: nextJersey(),
                 position:     'Star Player',
                 ma: sp.ma, st: sp.st, ag: sp.ag, pa: sp.pa, av: sp.av,
                 skills:       sp.skills ?? '',

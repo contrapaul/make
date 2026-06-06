@@ -261,8 +261,8 @@ async function loadCustomTeam(side, savedTeam) {
   const baseEntry = state.teams.find(t => t.id === savedTeam.baseTeamId);
 
   /* Build player objects in the same shape renderRoster expects */
-  const players = savedTeam.players.map(p => ({
-    id:          p.rosterSlotId ?? p.id,
+  const players = savedTeam.players.map((p, i) => ({
+    id:          p.jerseyNumber ?? p.rosterSlotId ?? (i + 1),
     savedId:     p.id,     /* UUID for SPP tracking */
     name:        p.name,
     position:    p.position,
