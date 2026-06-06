@@ -1,8 +1,24 @@
 /* ════════════════════════════════════════════════════════
    PASS WIZARD v3 — trading-card players, single roll button
    ════════════════════════════════════════════════════════ */
-.pwiz3 { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+/* Panel hosts the scaled stage; FitScale (JS) scales .pwiz3 to fit both axes */
+#panel-pass .panel-body {
+  display:               grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items:         center;
+  align-items:           start;
+  overflow:              hidden !important;
+  padding:               0 !important;
+}
+.pwiz3 {
+  display: flex;
+  flex-direction: column;
+  transform-origin: top center;
+  will-change: transform;
+}
 .pwiz3 .pwiz-team-tabs { flex-shrink: 0; }
+/* Pitch sizes to its fixed design width so the stage has a natural size to fit */
+.pwiz3 .pwiz-pitch-wrap { width: max-content; max-width: none; }
 
 /* Sequence strip (top, above pitch) */
 .pwiz3-seq {
@@ -68,11 +84,11 @@
 .pwiz3-scatter-res { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: rgba(200,220,255,0.7); }
 .pwiz3-scatter-arrow { font-size: 0.85rem; }
 
-/* Stage: thrower | pitch | catcher (lowered) */
+/* Stage: thrower | pitch | catcher (lowered). Center column is the pitch's
+   natural width so .pwiz3 has a real size for FitScale to lock the ratio. */
 .pwiz3-stage {
-  flex: 1 1 0; min-height: 0;
   display: grid;
-  grid-template-columns: 13.5em 1fr 13.5em;
+  grid-template-columns: 13.5em max-content 13.5em;
   gap: 0.8rem;
   margin-top: 0.6rem;
   align-items: start;

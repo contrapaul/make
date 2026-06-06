@@ -166,6 +166,36 @@ function ensurePhysZone(refEl, id) {
   return el;
 }
 
+/* ════════════════════════════════════════════════════════
+   FIT-TO-CONTAINER SCALER
+   Scales `content` (a natural-sized element) with transform so
+   it fits `container` on BOTH axes — the whole wizard stage
+   scales as one ratio-locked unit, no clipping or scrollbars.
+   offsetWidth/Height ignore transforms, so measurement is stable.
+   ════════════════════════════════════════════════════════ */
+function FitScale(container, content, opts = {}) {
+  const max = opts.max ?? 1.5;
+  const min = opts.min ?? 0.2;
+  let raf = 0;
+
+  function fit() {
+    raf = 0;
+    const cw = container.clientWidth, ch = container.clientHeight;
+    const nw = content.offsetWidth,  nh = content.offsetHeight;
+    if (!cw || !ch || !nw || !nh) return;
+    const s = Math.max(min, Math.min(cw / nw, ch / nh, max));
+    content.style.transform = `scale(${s})`;
+  }
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(fit); };
+
+  const ro = new ResizeObserver(schedule);
+  ro.observe(container);
+  ro.observe(content);
+  schedule();
+  return { refit: schedule, disconnect: () => ro.disconnect() };
+}
+window.FitScale = FitScale;
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SHARED ARMOUR / INJURY / CASUALTY RULES
    Pure functions used by BOTH the Block wizard and the Special Actions
@@ -1231,6 +1261,10 @@ function initBlockWizard() {
   watchRosterForReset('roster-left',  'att');
   watchRosterForReset('roster-right', 'def');
 
+  /* Ratio-locked fit: scale the whole stage to fit the panel on both axes. */
+  let _blockFit = null;
+  const scaleRoot = panel.querySelector('.bwiz-scale-root');
+
   /* Open picker on panel open — preserve player selections across close/reopen */
   onPanelOpen('panel-block', () => {
     resetRoll();
@@ -1239,6 +1273,8 @@ function initBlockWizard() {
     updateStDisplay();
     renderRerolls();
     updateCardGlows();
+    if (!_blockFit && scaleRoot) _blockFit = FitScale(panel.querySelector('.bwiz-panel-body'), scaleRoot, { max: 1.6 });
+    else _blockFit?.refit();
   });
 
   rollBtn.onclick = doRoll;

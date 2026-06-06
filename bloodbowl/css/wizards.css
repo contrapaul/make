@@ -1213,27 +1213,26 @@
    BLOCK WIZARD v2 — card layout
    ════════════════════════════════════════════════════════ */
 
-/* Override panel-body to be a column flex for outer + results strip */
+/* Panel-body hosts the scaled stage; horizontally centered, top-aligned so the
+   top-origin scale always keeps the scaled content inside the panel. */
 .bwiz-panel-body {
-  display:        flex !important;
-  flex-direction: column !important;
-  overflow:       hidden !important;
-  padding:        0 !important;
+  display:               grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items:         center;
+  align-items:           start;
+  overflow:              hidden !important;
+  padding:               0 !important;
 }
 
-/* ── Unified scaling root — governs both the wizard row and results strip ── */
+/* ── Unified scaling root — natural-sized at a fixed base; JS transform-scales
+   it to fit the panel as one ratio-locked unit (no clipping/scrollbars). ── */
 .bwiz-scale-root {
-  display:        flex;
-  flex-direction: column;
-  flex:           1 1 0;
-  min-height:     0;
-  overflow:       hidden;
-  /*
-   * Single font-size drives all em-based widths in bwiz-outer children.
-   * At 1440px panel (≈1182px wide): 1182/69.5em ≈ 17px  → clamp gives 16.7px ✓
-   * At 800px  panel (≈ 656px wide): 656/69.5em  ≈  9.4px → near floor ✓
-   */
-  font-size:      clamp(7px, 1.1vw, 19px);
+  display:           flex;
+  flex-direction:    column;
+  overflow:          visible;
+  font-size:         15px;       /* fixed design base; FitScale handles fit */
+  transform-origin:  top center;
+  will-change:       transform;
 }
 
 /* ── Main wizard row ── */
@@ -1242,9 +1241,7 @@
   align-items:     flex-start;
   gap:             0.75em;
   padding:         0.85em 0.75em 0.5em;
-  overflow:        hidden;
-  flex:            1 1 0;
-  min-height:      0;
+  overflow:        visible;
 }
 
 /* ── Skills columns (far left / right) ── */
@@ -2004,58 +2001,62 @@
 #spec-actor-wrap .pwiz-team-tabs { margin-bottom: 0.4rem; }
 
 /* ════════════════════════════════════════════════════════
-   EMBEDDED CARD REDESIGN (Block + Pass wizards)
-   • Lift the card out of its frame so the glow isn't clipped.
+   EMBEDDED CARD — dynamic scaling + redesign (Block + Pass)
+   Every internal size is expressed in container-query units
+   (cqw = 1% of the card's own width), so the whole card scales
+   up or down to fit the UI instead of clipping/wrapping.
+   • Lifts out of its frame so the glow isn't clipped.
    • Stats overlap the picture on a faded backdrop.
-   • Skills as boxed tags right under the stats (no underline/commas).
-   • Flavor text always shown, clamped to ~2 lines (no auto-scaling).
+   • Skills as boxed tags under the stats (no underline/commas).
+   • Flavor always shown, clamped to 2 lines.
    ════════════════════════════════════════════════════════ */
 
 /* Let the glow/pulse bleed out of the card column */
 .bwiz-card-col { overflow: visible; }
 
-/* Content-sized card (drop the strict 5:7 lock that caused scrollbars) */
+/* Card is its own query container; drop the strict 5:7 lock */
 .bwiz-embedded-card {
   aspect-ratio: auto !important;
   display: flex;
   flex-direction: column;
+  container-type: inline-size;
 }
-.bwiz-embedded-card .modal-image-area {
-  aspect-ratio: 5 / 4;
-  flex: 0 0 auto;
-}
+
+/* Name band scales with the card */
+.bwiz-embedded-card .modal-card-overlay  { gap: 3.5cqw; padding: 1.4cqw 3cqw; }
+.bwiz-embedded-card .modal-jersey-circle { width: 19cqw; height: 19cqw; font-size: 10.5cqw; }
+.bwiz-embedded-card .modal-name          { font-size: 8cqw; -webkit-text-stroke: 0.35cqw #000; }
+.bwiz-embedded-card .modal-position      { font-size: 3.6cqw; -webkit-text-stroke: 0.25cqw #000; }
+.bwiz-embedded-card .img-placeholder-num { font-size: 30cqw; }
+
+.bwiz-embedded-card .modal-image-area { aspect-ratio: 5 / 4; flex: 0 0 auto; }
 
 /* Stats lifted over the picture on a fade-to-card gradient */
 .bwiz-embedded-card .modal-stats {
   position: relative;
   z-index: 4;
-  margin-top: -2.5rem;
-  padding: 1rem 0.5rem 0.45rem;
+  margin-top: -13cqw;
+  padding: 5.5cqw 2.2cqw 2.2cqw;
   border-bottom: none;
   background: linear-gradient(to bottom,
     rgba(16, 20, 30, 0) 0%,
     rgba(16, 20, 30, 0.45) 38%,
     rgba(242, 242, 242, 0.94) 100%);
 }
-.bwiz-embedded-card .modal-stats-row {
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-  gap: 0.25rem;
-}
+.bwiz-embedded-card .modal-stats-row { border: none; border-radius: 0; overflow: visible; gap: 1.2cqw; }
 .bwiz-embedded-card .modal-stat {
   border: none;
   background: #fff;
-  border-radius: 5px;
-  padding: 0.22rem 0.1rem;
+  border-radius: 1.4cqw;
+  padding: 1.2cqw 0.4cqw;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
-.bwiz-embedded-card .ms-label { color: #6a6a6a; }
-.bwiz-embedded-card .ms-value { font-size: 0.92rem; }
+.bwiz-embedded-card .ms-label { color: #6a6a6a; font-size: 3cqw; }
+.bwiz-embedded-card .ms-value { font-size: 5cqw; }
 
 /* Skills: boxed tags directly under stats; no heading, no underline, no commas */
 .bwiz-embedded-card .modal-skills {
-  padding: 0.1rem 0.5rem 0.45rem;
+  padding: 1cqw 2.2cqw 2.2cqw;
   border-bottom: none;
   max-height: none;
   min-height: 0;
@@ -2066,8 +2067,8 @@
 .bwiz-embedded-card .skills-text {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  font-size: 0.64rem;
+  gap: 1.2cqw;
+  font-size: 3.4cqw;
   line-height: 1.3;
 }
 .bwiz-embedded-card .skill-sep { display: none; }
@@ -2076,21 +2077,21 @@
   color: var(--tc-primary, #2a4a8a);
   background: color-mix(in srgb, var(--tc-primary, #2a4a8a) 10%, #fff);
   border: 1px solid color-mix(in srgb, var(--tc-primary, #2a4a8a) 45%, transparent);
-  border-radius: 4px;
-  padding: 0.08rem 0.35rem;
+  border-radius: 1.4cqw;
+  padding: 0.4cqw 1.6cqw;
 }
 .bwiz-embedded-card .skill-link:hover,
 .bwiz-embedded-card .skill-link:focus-visible {
   border-color: var(--tc-primary, #2a4a8a);
   background: color-mix(in srgb, var(--tc-primary, #2a4a8a) 20%, #fff);
 }
-.bwiz-embedded-card .no-skills { font-size: 0.7rem; }
+.bwiz-embedded-card .no-skills { font-size: 3.4cqw; }
 
-/* Flavor: always visible, clamp to 2 lines, fixed font size */
+/* Flavor: always visible, clamp to 2 lines, scales with the card */
 .bwiz-embedded-card .modal-fact {
   flex: 0 0 auto;
-  padding: 0.45rem 0.6rem;
-  font-size: 0.7rem;
+  padding: 2.2cqw 3cqw;
+  font-size: 3.8cqw;
   line-height: 1.4;
   border-top: 1px solid #D8D8D8;
   display: -webkit-box;
@@ -2100,9 +2101,3 @@
   overflow: hidden;
   min-height: 2.4em;
 }
-
-/* Smaller (Pass wizard) cards — trim type so tags/flavor still fit */
-.bwiz-card-small .ms-value      { font-size: 0.8rem; }
-.bwiz-card-small .skills-text   { font-size: 0.58rem; }
-.bwiz-card-small .modal-fact    { font-size: 0.62rem; }
-.bwiz-card-small .modal-stats   { margin-top: -2.1rem; }

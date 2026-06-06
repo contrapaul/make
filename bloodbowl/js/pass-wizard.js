@@ -55,7 +55,12 @@ function initPassWizard() {
     plan:            null,
     intIndex:        0,
     _built:          false,
+    _fit:            null,
   };
+
+  /* Fixed design scale for the pitch; the whole stage is then ratio-locked
+     to the panel by FitScale, so the pitch never scales twice dynamically. */
+  const PITCH_SCALE = 0.78;
 
   const gbSide = () => (ws.activeSide === 'left' ? 'home' : 'away');
   const delay  = ms => new Promise(r => setTimeout(r, ms));
@@ -202,7 +207,7 @@ function initPassWizard() {
     stage.appendChild(catcherCol);
 
     if (typeof window.BloodBowlPitch !== 'undefined') {
-      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: _pitchScale(), noZoom: true });
+      ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: PITCH_SCALE, noZoom: true });
       ws.pitch.onPlayerMoved = (fc, fr, tc, tr, data) => {
         if (data.id === 'thrower') {
           ws.throwerPos = { col: tc, row: tr };
@@ -269,6 +274,11 @@ function initPassWizard() {
     buildPlayerColumn('catcher');
     buildOppList();
     armWizard();
+
+    /* Ratio-locked fit: scale the whole stage to fit the panel on both axes. */
+    ws._fit?.disconnect?.();
+    const pbody = panel.querySelector('.panel-body');
+    if (window.FitScale && pbody) ws._fit = window.FitScale(pbody, root, { max: 1.4 });
   }
 
   /* ── Player columns ── */
