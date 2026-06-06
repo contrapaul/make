@@ -435,6 +435,58 @@
         </div>
       </div>
 
+      <!-- SPECIAL ACTIONS PANEL -->
+      <div class="bb-panel" id="panel-special" data-wizard="special" hidden aria-label="Special Actions">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <span class="panel-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.5 12.5h6L9 22l9.5-12h-6L13 2z"/></svg>
+            </span>
+            <h2 class="panel-title">Special Actions</h2>
+          </div>
+          <button class="panel-close" aria-label="Close special actions panel">&#215;</button>
+        </div>
+        <div class="panel-body bwiz-panel-body" id="panel-special-body">
+          <p class="panel-intro">Resolve attacks made <em>instead of a Block</em> — Stab, Chainsaw, Breathe Fire, Projectile Vomit, Chomp. Pick the acting player, the action, and a standing target.</p>
+          <div class="spec-outer">
+
+            <div class="spec-col">
+              <div class="spec-col-label">Acting Player</div>
+              <div class="spec-actor-wrap" id="spec-actor-wrap"></div>
+              <div class="spec-action-chips" id="spec-action-chips"></div>
+            </div>
+
+            <div class="bwiz-center spec-center">
+              <div class="spec-action-name" id="spec-action-name">Select an acting player and a target.</div>
+              <div class="block-dice-tray bwiz-dice-tray" id="spec-dice-tray" aria-live="polite"></div>
+              <button class="roll-btn" id="spec-roll-btn" disabled>Resolve</button>
+            </div>
+
+            <div class="spec-col">
+              <div class="spec-col-label">Target</div>
+              <div class="wps-list" id="spec-target-list"><p class="wps-empty">Load a roster first</p></div>
+            </div>
+
+          </div><!-- /.spec-outer -->
+
+          <div class="bwiz-results-strip">
+            <div class="bwiz-result-panel locked" id="spec-hit-panel">
+              <div class="bwiz-result-label">To-Hit</div>
+              <div class="bwiz-result-content" id="spec-hit-content" aria-live="polite">—</div>
+            </div>
+            <div class="bwiz-result-panel locked" id="spec-armor-panel">
+              <div class="bwiz-result-label">Armor Roll</div>
+              <div class="bwiz-result-content" id="spec-armor-content" aria-live="polite">—</div>
+            </div>
+            <div class="bwiz-result-panel locked" id="spec-injury-panel">
+              <div class="bwiz-result-label">Injury Roll</div>
+              <div class="bwiz-result-content" id="spec-injury-content" aria-live="polite">—</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- INJURY PANEL -->
       <div class="bb-panel" id="panel-injury" data-wizard="injury" hidden aria-label="Injury roller">
         <div class="panel-header">
@@ -603,6 +655,7 @@
       </button>
       <!-- More actions dropdown — inside cards div so position:absolute works off position:relative parent -->
       <div class="bb-more-menu" id="bb-more-menu" hidden>
+        <button class="bb-more-item" data-panel="special">Special Actions</button>
         <button class="bb-more-item" data-panel="throw">Throw Team-Mate</button>
         <button class="bb-more-item" data-panel="injury">Injury</button>
         <button class="bb-more-item" data-panel="scatter">Scatter</button>
@@ -705,7 +758,7 @@
   <script src="js/team-builder.js?v=3"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js"></script>
-  <script src="js/wizards.js?v=9"></script>
+  <script src="js/wizards.js?v=13"></script>
   <script src="js/pass-wizard.js"></script>
   <script src="script.js?v=4"></script>
   <script>

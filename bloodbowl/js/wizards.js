@@ -166,18 +166,61 @@ function ensurePhysZone(refEl, id) {
   return el;
 }
 
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   SHARED ARMOUR / INJURY / CASUALTY RULES
+   Pure functions used by BOTH the Block wizard and the Special Actions
+   wizard so the rules (Mighty Blow, Claws, Iron Hard Skin, Stunty,
+   Thick Skull, Decay, casualty table) live in one place.
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const BBResolve = {
+  /* Does 2D6 break armour? `bonus` is any +N (e.g. Mighty Blow, Chainsaw +3);
+     Claws breaks on a natural 8+; Iron Hard Skin cancels modifiers & Claws. */
+  armourBreaks(d1, d2, { av, bonus = 0, claws = false, ironHard = false } = {}) {
+    const base = d1 + d2;
+    if (claws && !ironHard) return { broke: base >= 8, shown: base, note: 'Claws 8+' };
+    const applied = ironHard ? 0 : bonus;
+    return { broke: (base + applied) >= av, shown: base + applied, note: '' };
+  },
+
+  /* Injury outcome from 2D6 plus modifiers and the target's defensive traits. */
+  injuryOutcome(d1, d2, { mb = 0, stunty = 0, thickSkull = false } = {}) {
+    const total = d1 + d2 + mb + stunty;
+    let outcome, status;
+    if (total <= 7 || (thickSkull && total === 8)) { outcome = 'Stunned';  status = window.PlayerStatus?.STUNNED; }
+    else if (total <= 9)                            { outcome = "KO'd";     status = window.PlayerStatus?.KO; }
+    else                                            { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
+    return { total, outcome, status };
+  },
+
+  /* Roll the D16 casualty table (Decay adds +1). */
+  rollCasualty(decay = 0) {
+    const casVal = Math.min(16, Math.floor(Math.random() * 16) + 1 + (decay ? 1 : 0));
+    const cas = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
+    return { casVal, cas, decay: !!decay };
+  },
+
+  applyStatus(side, idx, status) {
+    if (status !== undefined && window.GameState) window.GameState.setPlayerStatus?.(side, idx, status);
+  },
+};
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BLOCK WIZARD  (full rebuild)
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-/* Skills that affect block outcomes */
+/* Skills that affect block outcomes — referenced in the side columns and
+   consulted by the resolution engine. Attacker = the blocking player;
+   Defender = the player being blocked. */
 const ATT_BLOCK_SKILLS = new Set([
-  'Block','Wrestle','Juggernaut','Fend','Mighty Blow',
-  'Dauntless','Horns','Multiple Block','Claws',
+  'Block','Wrestle','Mighty Blow','Claws','Tackle','Dauntless','Horns',
+  'Multiple Block','Juggernaut','Frenzy','Grab','Strip Ball','Brawler',
+  'Hatred','Pro','Guard','Pile Driver','Arm Bar','Taunt','Eye Gouge','Loner',
 ]);
 const DEF_BLOCK_SKILLS = new Set([
-  'Dodge','Fend','Stand Firm','Side Step','Wrestle',
-  'Tentacles','Grab','Thick Skull',
+  'Block','Dodge','Wrestle','Fend','Stand Firm','Sidestep','Side Step','Tentacles',
+  'Thick Skull','Stunty','Decay','Foul Appearance','Dump-Off','Iron Hard Skin',
+  'Sure Hands','Steady Footing','Safe Pair of Hands','Saboteur','Trickster',
+  'Guard','Pro','Loner',
 ]);
 
 function initBlockWizard() {
@@ -198,9 +241,90 @@ function initBlockWizard() {
   let chosenFace  = null;            // the face the user confirmed
   let rrUsed      = false;           // team re-roll consumed this action
 
+  /* â”€â”€ Skill-resolution state (full simulation) â”€â”€ */
+  let isBlitz      = false;          // block is part of a Blitz action
+  let multiBlock   = false;          // attacker using Multiple Block (-2 ST)
+  let dauntlessOn  = false;          // Dauntless succeeded → treat ST as equal
+  let mbSpent      = false;          // Mighty Blow already applied this block
+  let proUsed      = false;          // Pro re-roll consumed this action
+  let preBlockDone = false;          // pre-block reactions resolved (once per action)
+  let stMods       = { att: 0 };     // transient ST modifiers from skills (Horns)
+
+  /* â”€â”€ Skill helpers â”€â”€ */
+  const attHas = n => attSkills.has(n);
+  const defHas = n => defSkills.has(n);
+
+  /* Effective strengths after skill modifiers (Horns/Multiple Block/Dauntless). */
+  function effAttST() {
+    let a = attST + stMods.att - (multiBlock ? 2 : 0);
+    if (dauntlessOn) a = Math.max(a, defST);
+    return Math.max(1, a);
+  }
+
+  /* Inline prompt zone lives in the center column under the dice. */
+  function promptZone() {
+    let z = document.getElementById('bwiz-skill-prompts');
+    if (!z) {
+      z = document.createElement('div');
+      z.id = 'bwiz-skill-prompts';
+      z.className = 'bwiz-skill-prompts';
+      const banner = document.getElementById('block-def-picks-banner');
+      const center = document.querySelector('.bwiz-center');
+      if (banner) banner.insertAdjacentElement('afterend', z);
+      else center?.appendChild(z);
+    }
+    return z;
+  }
+  function clearPrompts() { const z = document.getElementById('bwiz-skill-prompts'); if (z) z.innerHTML = ''; }
+
+  /* Render an inline choice; resolves with the chosen option's value. */
+  function askInline(labelHtml, options) {
+    return new Promise(resolve => {
+      const z   = promptZone();
+      const row = document.createElement('div');
+      row.className = 'bwiz-prompt';
+      const lbl = document.createElement('span');
+      lbl.className = 'bwiz-prompt-label';
+      lbl.innerHTML = labelHtml;
+      row.appendChild(lbl);
+      options.forEach(o => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'bwiz-prompt-btn' + (o.primary ? ' primary' : '');
+        b.textContent = o.text;
+        b.addEventListener('click', () => {
+          row.querySelectorAll('button').forEach(x => { x.disabled = true; });
+          b.classList.add('chosen');
+          resolve(o.value);
+        });
+        row.appendChild(b);
+      });
+      z.appendChild(row);
+    });
+  }
+
+  /* Roll a single inline D6 (animated) appended to the last prompt row. */
+  async function askD6(labelHtml) {
+    const z   = promptZone();
+    const row = document.createElement('div');
+    row.className = 'bwiz-prompt';
+    row.innerHTML = `<span class="bwiz-prompt-label">${labelHtml}</span>`;
+    const die = document.createElement('div');
+    die.className = 'block-face bwiz-mini-die';
+    buildNumericFace(die, 1);
+    row.appendChild(die);
+    z.appendChild(row);
+    const v = await rollNumericDie(die);
+    const res = document.createElement('span');
+    res.className = 'bwiz-prompt-res';
+    res.textContent = v;
+    row.appendChild(res);
+    return { value: v, row };
+  }
+
   /* â”€â”€ Phase 1a fix: "over double" is strictly > not >= â”€â”€ */
   function calcBlock() {
-    const a = attST + attAst;
+    const a = effAttST() + attAst;
     const d = defST + defAst;
     if (a > d * 2)  return { count: 3, who: 'attacker picks', attFav: true  };
     if (a > d)      return { count: 2, who: 'attacker picks', attFav: true  };
@@ -387,12 +511,22 @@ function initBlockWizard() {
     col.innerHTML = '';
     if (heading) col.appendChild(heading);
 
-    const skills = getPlayerSkills(player).filter(s => whitelist.has(s));
-    const store  = side === 'att' ? attSkills : defSkills;
+    /* Match on the base skill name, ignoring parenthetical suffixes such as
+       "Loner (3+)" or "Hatred (Troll)" so they're detected and referenced. */
+    const store = side === 'att' ? attSkills : defSkills;
     store.clear();
-    skills.forEach(s => store.add(s));
+    const seen   = new Set();
+    const cards  = [];
+    getPlayerSkills(player).forEach(raw => {
+      const base = raw.replace(/\s*\(.*\)$/, '').trim();
+      if (!whitelist.has(base) && !whitelist.has(raw)) return;
+      if (seen.has(base)) return;
+      seen.add(base);
+      store.add(base);
+      cards.push(base);
+    });
 
-    if (!skills.length) {
+    if (!cards.length) {
       const empty = document.createElement('div');
       empty.className = 'bwiz-skills-empty';
       empty.textContent = 'No relevant skills';
@@ -400,7 +534,7 @@ function initBlockWizard() {
       return;
     }
 
-    skills.forEach(name => {
+    cards.forEach(name => {
       col.appendChild(window.buildSkillCard(name));
     });
   }
@@ -481,6 +615,14 @@ function initBlockWizard() {
     rolledFaces = [];
     chosenFace  = null;
     rrUsed      = false;
+    isBlitz      = false;
+    multiBlock   = false;
+    dauntlessOn  = false;
+    mbSpent      = false;
+    proUsed      = false;
+    preBlockDone = false;
+    stMods.att   = 0;
+    clearPrompts();
     rollBtn.hidden     = false;
     rollBtn.disabled   = !(attPlayer && defPlayer);
     rollBtn.onclick    = doRoll;
@@ -513,41 +655,109 @@ function initBlockWizard() {
     return player?.playerData?.name ?? player?.name ?? '?';
   }
 
-  function interpretResult(face) {
-    const key = face.key;
+  /* Push-back follow-up handling (Fend / Stand Firm / Side Step / Grab /
+     Frenzy / Strip Ball / Taunt) — surfaced as notes after a Push/Stumble. */
+  function pushNotes() {
+    const notes = [];
+    if (defHas('Stand Firm'))                 notes.push(`${pName(defPlayer)} may use Stand Firm — no Push Back.`);
+    if (defHas('Side Step') || defHas('Sidestep')) notes.push(`${pName(defPlayer)} picks the push square (Side Step)${attHas('Grab') ? ' — negated by Grab' : ''}.`);
+    else if (attHas('Grab'))                  notes.push(`${pName(attPlayer)} picks the push square (Grab).`);
+    if (defHas('Fend') && !attHas('Juggernaut')) notes.push(`${pName(defPlayer)} prevents Follow-up (Fend).`);
+    if (attHas('Frenzy'))                     notes.push('Frenzy — must Follow-up and Block again.');
+    if (attHas('Strip Ball') && !defHas('Sure Hands')) notes.push('Strip Ball — ball carrier drops the ball in the push square.');
+    if (attHas('Taunt'))                      notes.push('Taunt — may force the opponent to Follow-up.');
+    return notes;
+  }
+
+  function pushNoteHtml() {
+    const n = pushNotes();
+    return n.length ? `<ul class="bwiz-skill-notes">${n.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  }
+
+  async function interpretResult(face) {
+    let key = face.key;
     let knockedSide = null;  // 'att' | 'def' | 'both' | null
-    let isPush = false;
     const attName = pName(attPlayer);
     const defName = pName(defPlayer);
 
+    /* Juggernaut: on a Blitz, Both Down is treated as a Push Back, and the
+       defender cannot use Fend / Stand Firm / Wrestle. */
+    const juggernaut = isBlitz && attHas('Juggernaut');
+
     if (key === 'att-down') {
+      /* Optional re-roll of a Player Down via Hatred (vs a hated keyword). */
+      if (attHas('Hatred') && !rrUsed) {
+        const use = await askInline(`${esc(attName)} has <b>Hatred</b> — re-roll this Player Down?`,
+          [{ text: 'Re-roll', value: true, primary: true }, { text: 'Keep', value: false }]);
+        if (use) { reRollAll('Hatred'); return; }
+      }
       knockedSide = 'att';
       showBlockResult(`${attName} Down!`, 'bad', 'Turnover — the attack fails.', 'bad');
+
     } else if (key === 'both-down') {
-      if (attSkills.has('Block')) {
-        knockedSide = 'def';
-        showBlockResult(`${defName} Down!`, 'ok', `${attName} stays up (Block skill).`, 'ok');
-      } else if (attSkills.has('Wrestle')) {
-        showBlockResult('Both Down — Wrestle!', 'warn', `${attName} and ${defName} both fall. No armor rolls.`, 'warn');
+      /* Brawler: re-roll a single Both Down once per block. */
+      if (attHas('Brawler') && !rrUsed) {
+        const use = await askInline(`${esc(attName)} has <b>Brawler</b> — re-roll this Both Down?`,
+          [{ text: 'Re-roll', value: true, primary: true }, { text: 'Keep', value: false }]);
+        if (use) { reRollAll('Brawler'); return; }
+      }
+      if (juggernaut) {
+        key = 'push';
+        showBlockResult('Both Down → Push (Juggernaut)!', 'neutral',
+          `${attName} converts Both Down to a Push Back. Fend / Stand Firm / Wrestle are ignored.`, 'ok');
         showCompleteBlock();
       } else {
-        knockedSide = 'both';
-        showBlockResult('Both Down!', 'bad', `${attName} and ${defName} both fall. Roll armor for both.`, 'bad');
+        /* Wrestle (either player) may force both to Fall Over — no armour rolls. */
+        if (attHas('Wrestle') || defHas('Wrestle')) {
+          const who = attHas('Wrestle') ? attName : defName;
+          const pick = await askInline(`Both Down — ${esc(who)} has <b>Wrestle</b>. Force both to fall?`,
+            [{ text: 'Wrestle (both fall)', value: 'wrestle', primary: true },
+             { text: 'Resolve normally', value: 'normal' }]);
+          if (pick === 'wrestle') {
+            showBlockResult('Both Down — Wrestle!', 'warn', `${attName} and ${defName} both fall. No armor rolls.`, 'warn');
+            showCompleteBlock();
+            return;
+          }
+        }
+        /* Block keeps a player standing on Both Down (each side independently). */
+        const attStays = attHas('Block');
+        const defStays = defHas('Block');
+        if (attStays && defStays) {
+          showBlockResult('Both Down — No Effect!', 'neutral', `${attName} and ${defName} both have Block.`, 'ok');
+          showCompleteBlock();
+        } else if (attStays && !defStays) {
+          knockedSide = 'def';
+          showBlockResult(`${defName} Down!`, 'ok', `${attName} stays up (Block).`, 'ok');
+        } else if (!attStays && defStays) {
+          knockedSide = 'att';
+          showBlockResult(`${attName} Down!`, 'bad', `${defName} stays up (Block). Turnover.`, 'bad');
+        } else {
+          knockedSide = 'both';
+          showBlockResult('Both Down!', 'bad', `${attName} and ${defName} both fall. Roll armor for both.`, 'bad');
+        }
       }
-    } else if (key === 'push') {
-      isPush = true;
-      showBlockResult('Push Back!', 'neutral', `${defName} shoved back. ${attName} may follow up.`, 'info');
-      showCompleteBlock();
+
     } else if (key === 'stumble') {
-      if (defSkills.has('Dodge')) {
-        isPush = true;
-        showBlockResult('Stumble — No Effect!', 'neutral', `${defName} stays up (Dodge skill). Treated as Push Back.`, 'ok');
+      /* Dodge negates a Stumble (→ push) — unless the attacker has Tackle. */
+      if (defHas('Dodge') && !attHas('Tackle')) {
+        showBlockResult('Stumble — No Effect!', 'neutral',
+          `${defName} stays up (Dodge). Treated as Push Back.`, 'ok');
+        appendPushNotes();
         showCompleteBlock();
       } else {
         knockedSide = 'def';
-        showBlockResult(`${defName} Down!`, 'bad', 'Stumble result.', 'bad');
+        const why = defHas('Dodge') && attHas('Tackle')
+          ? `${defName}'s Dodge is cancelled by ${attName}'s Tackle.` : 'Stumble result.';
+        showBlockResult(`${defName} Down!`, 'bad', why, 'bad');
       }
-    } else if (key === 'def-down') {
+
+    } else if (key === 'push') {
+      showBlockResult('Push Back!', 'neutral', `${defName} shoved back. ${attName} may follow up.`, 'info');
+      appendPushNotes();
+      showCompleteBlock();
+    }
+
+    if (key === 'def-down') {
       knockedSide = 'def';
       showBlockResult(`${defName} Down!`, 'bad', 'Roll Armor.', 'info');
     }
@@ -556,9 +766,29 @@ function initBlockWizard() {
     if (knockedSide === 'def' || knockedSide === 'att') {
       unlockArmorRoll(knockedSide);
     } else if (knockedSide === 'both') {
-      /* Both down without Wrestle: attacker armor first, then defender */
       unlockArmorRoll('att', 'def');
     }
+  }
+
+  /* Append push-skill notes under the current block result. */
+  function appendPushNotes() {
+    const html = pushNoteHtml();
+    if (!html) return;
+    const content = document.getElementById('block-result-content');
+    if (content) content.insertAdjacentHTML('beforeend', html);
+  }
+
+  /* Re-roll all block dice after a skill re-roll (Brawler/Hatred/Pro/Team). */
+  function reRollAll(label) {
+    rrUsed = true;
+    if (label) {
+      const z = promptZone();
+      const note = document.createElement('div');
+      note.className = 'bwiz-prompt-note';
+      note.textContent = `${label} re-roll`;
+      z.appendChild(note);
+    }
+    doRoll();
   }
 
   /* ── Glow state helper ── */
@@ -602,56 +832,52 @@ function initBlockWizard() {
     const armorNote  = document.getElementById('armor-result-content');
     if (!armorPanel) return;
 
-    const av  = knockedSide === 'att' ? attAV : defAV;
-    const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
-    const mb  = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
-    const claws = attSkills.has('Claws') && knockedSide === 'def';
+    const av    = knockedSide === 'att' ? attAV : defAV;
+    const who   = pName(knockedSide === 'att' ? attPlayer : defPlayer);
+    const ironHard = knockedSide === 'def' && defHas('Iron Hard Skin');
+    const claws = attHas('Claws') && knockedSide === 'def' && !ironHard;
+    const mbAvail = attHas('Mighty Blow') && knockedSide === 'def' && !mbSpent && !ironHard;
 
     armorPanel.classList.remove('locked');
-    const modNote = [mb ? '+1 Mighty Blow' : '', claws ? 'Claws (8+ breaks)' : ''].filter(Boolean).join(' · ');
+    const mods = [
+      claws ? 'Claws (8+ breaks)' : '',
+      mbAvail ? 'Mighty Blow available' : '',
+      ironHard ? 'Iron Hard Skin — no modifiers' : '',
+    ].filter(Boolean).join(' · ');
     armorNote.className = 'bwiz-result-content';
     armorNote.innerHTML =
       `<div class="bwiz-result-headline bwiz-result-warn">Roll Armor</div>` +
-      `<p class="bwiz-result-note info">${esc(who)} AV ${av}+${modNote ? ` · ${modNote}` : ''}</p>`;
+      `<p class="bwiz-result-note info">${esc(who)} AV ${av}+${mods ? ` · ${mods}` : ''}</p>`;
     const armorTray = document.getElementById('armor-dice-tray');
     if (armorTray) armorTray.innerHTML = '';
 
-    /* Single Roll button takes over for armor roll */
-    rollBtn.onclick  = () => rollArmor(av, mb, claws, knockedSide, nextSide);
+    rollBtn.onclick  = () => rollArmor(av, claws, mbAvail, knockedSide, nextSide);
     rollBtn.disabled = false;
     setGlow('gold');
   }
 
-  async function rollArmor(av, mightyBlowBonus, claws, knockedSide, nextSide = null) {
-    const armorTray = document.getElementById('armor-dice-tray');
+  async function rollArmor(av, claws, mbAvail, knockedSide, nextSide = null) {
     const resultEl  = document.getElementById('armor-result-content');
     rollBtn.disabled = true;
     setGlow('off');
 
-    /* Swap block-dice-tray to 2 animated numeric dice */
-    const blockTray = document.getElementById('block-dice-tray');
-    if (blockTray) {
-      blockTray.innerHTML = '';
-      blockTray.classList.remove('def-picks');
-      for (let i = 0; i < 2; i++) {
-        const face = document.createElement('div');
-        buildNumericFace(face, 1);
-        blockTray.appendChild(face);
-      }
+    const [d1, d2] = await rollTwoDice();
+    const base = d1 + d2;
+
+    /* Optional Mighty Blow: apply +1 here or reserve it for the Injury roll. */
+    let mbHere = 0;
+    if (mbAvail && !claws) {
+      const choice = await askInline(
+        `${esc(pName(attPlayer))} has <b>Mighty Blow</b> — apply +1 to this Armour roll?`,
+        [{ text: 'Apply to Armour', value: 'armor', primary: true },
+         { text: 'Save for Injury', value: 'save' }]);
+      if (choice === 'armor') { mbHere = 1; mbSpent = true; }
     }
-    if (armorTray) armorTray.innerHTML = '';
 
-    /* Roll 2D6 with animation */
-    const blockFaces = blockTray ? Array.from(blockTray.children) : [];
-    const [d1, d2]   = blockFaces.length === 2
-      ? await Promise.all(blockFaces.map(f => rollNumericDie(f)))
-      : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
-    let total = d1 + d2 + mightyBlowBonus;
-
-    const breaks = claws ? (d1 + d2 >= 8) : (total >= av);
-    const mathStr = mightyBlowBonus
-      ? `${d1} + ${d2} + ${mightyBlowBonus} = ${total} vs AV ${av}+`
-      : `${d1} + ${d2} = ${total} vs AV ${av}+`;
+    const { broke: breaks } = BBResolve.armourBreaks(d1, d2, { av, bonus: mbHere, claws });
+    const mathStr = mbHere
+      ? `${d1} + ${d2} + 1 (Mighty Blow) = ${base + mbHere} vs AV ${av}+`
+      : `${d1} + ${d2} = ${base}${claws ? ' · Claws 8+' : ''} vs AV ${av}+`;
     if (resultEl) {
       resultEl.className = 'bwiz-result-content';
       resultEl.innerHTML =
@@ -676,56 +902,53 @@ function initBlockWizard() {
     if (!injPanel) return;
 
     injPanel.classList.remove('locked');
-    const mb = attSkills.has('Mighty Blow') && knockedSide === 'def' ? 1 : 0;
-    const who = pName(knockedSide === 'att' ? attPlayer : defPlayer);
+    const ironHard = knockedSide === 'def' && defHas('Iron Hard Skin');
+    const mbAvail  = attHas('Mighty Blow') && knockedSide === 'def' && !mbSpent && !ironHard;
+    const who   = pName(knockedSide === 'att' ? attPlayer : defPlayer);
+    const mods  = [
+      mbAvail ? 'Mighty Blow available' : '',
+      (knockedSide === 'def' && defHas('Stunty')) ? '+1 Stunty' : '',
+      (knockedSide === 'def' && defHas('Thick Skull')) ? 'Thick Skull (KO 9+)' : '',
+      (knockedSide === 'def' && defHas('Decay')) ? 'Decay (+1 Casualty)' : '',
+    ].filter(Boolean).join(' · ');
     const injEl = document.getElementById('injury-result-content');
     injEl.className = 'bwiz-result-content';
     injEl.innerHTML =
       `<div class="bwiz-result-headline bwiz-result-warn">Roll Injury</div>` +
-      `<p class="bwiz-result-note info">${esc(who)}${mb ? ' · +1 Mighty Blow' : ''}</p>`;
+      `<p class="bwiz-result-note info">${esc(who)}${mods ? ` · ${mods}` : ''}</p>`;
     const injTray = document.getElementById('injury-dice-tray');
     if (injTray) injTray.innerHTML = '';
 
-    /* Single Roll button takes over for injury roll */
-    rollBtn.onclick  = () => rollInjury(knockedSide, mb, nextSide);
+    rollBtn.onclick  = () => rollInjury(knockedSide, mbAvail, nextSide);
     rollBtn.disabled = false;
     setGlow('gold');
   }
 
-  async function rollInjury(knockedSide, mightyBlowBonus, nextSide = null) {
+  async function rollInjury(knockedSide, mbAvail, nextSide = null) {
     const result = document.getElementById('injury-result-content');
     rollBtn.disabled = true;
     setGlow('off');
 
-    const injTray   = document.getElementById('injury-dice-tray');
-    const blockTray = document.getElementById('block-dice-tray');
-    if (blockTray) {
-      blockTray.innerHTML = '';
-      blockTray.classList.remove('def-picks');
-      for (let i = 0; i < 2; i++) {
-        const face = document.createElement('div');
-        buildNumericFace(face, 1);
-        blockTray.appendChild(face);
-      }
+    const [d1, d2] = await rollTwoDice();
+    const base = d1 + d2;
+
+    /* Optional Mighty Blow on the injury roll (if not already spent on armour). */
+    let mbHere = 0;
+    if (mbAvail) {
+      const choice = await askInline(
+        `${esc(pName(attPlayer))} has <b>Mighty Blow</b> — apply +1 to this Injury roll?`,
+        [{ text: 'Apply +1', value: 'yes', primary: true }, { text: 'Skip', value: 'no' }]);
+      if (choice === 'yes') { mbHere = 1; mbSpent = true; }
     }
-    if (injTray) injTray.innerHTML = '';
 
-    const blockFaces = blockTray ? Array.from(blockTray.children) : [];
-    const [d1, d2]   = blockFaces.length === 2
-      ? await Promise.all(blockFaces.map(f => rollNumericDie(f)))
-      : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
-    const total = d1 + d2 + mightyBlowBonus;
-
-    let outcome, status;
-    if (total <= 7)       { outcome = 'Stunned';  status = window.PlayerStatus?.STUNNED;    }
-    else if (total <= 9)  { outcome = "KO'd";     status = window.PlayerStatus?.KO;         }
-    else                  { outcome = 'Casualty'; status = window.PlayerStatus?.BADLY_HURT; }
+    const stunty     = knockedSide === 'def' && defHas('Stunty') ? 1 : 0;
+    const thickSkull = knockedSide === 'def' && defHas('Thick Skull');
+    const { total, outcome, status } = BBResolve.injuryOutcome(d1, d2, { mb: mbHere, stunty, thickSkull });
 
     const injuredName = pName(knockedSide === 'att' ? attPlayer : defPlayer);
-    const mathStr = mightyBlowBonus
-      ? `${d1} + ${d2} + ${mightyBlowBonus} = ${total}`
-      : `${d1} + ${d2} = ${total}`;
-    const headlineCls = total <= 7 ? 'warn' : 'bad';
+    const mods = [mbHere ? '+1 Mighty Blow' : '', stunty ? '+1 Stunty' : ''].filter(Boolean).join(' ');
+    const mathStr = `${d1} + ${d2}${mods ? ` ${mods}` : ''} = ${total}`;
+    const headlineCls = (outcome === 'Stunned') ? 'warn' : 'bad';
     if (result) {
       result.className = 'bwiz-result-content';
       result.innerHTML =
@@ -736,25 +959,40 @@ function initBlockWizard() {
     /* Update roster status */
     const targetPlayer = knockedSide === 'att' ? attPlayer : defPlayer;
     const targetSide   = knockedSide === 'att' ? 'left' : 'right';
-    if (targetPlayer && status !== undefined && window.GameState) {
-      window.GameState.setPlayerStatus?.(targetSide, targetPlayer.idx, status);
-    }
+    if (targetPlayer) BBResolve.applyStatus(targetSide, targetPlayer.idx, status);
 
-    /* Casualty: auto-roll D16 on the casualty table */
-    if (total >= 10) {
+    /* Casualty: auto-roll D16 on the casualty table (Decay adds +1). */
+    if (outcome === 'Casualty') {
       const injPanel = document.getElementById('injury-roll-panel');
       if (injPanel) {
-        const casVal = Math.floor(Math.random() * 16) + 1;
-        const cas    = rangeFind(window.BBData?.injury?.casualty, casVal)
-                    ?? { result: 'Unknown', 'class': '', desc: '' };
+        const decay = knockedSide === 'def' && defHas('Decay') ? 1 : 0;
+        const { casVal, cas } = BBResolve.rollCasualty(decay);
         const casEl = document.createElement('div');
         casEl.className = 'bwiz-casualty-result';
         casEl.innerHTML =
           `<div class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</div>` +
           (cas.desc ? `<p class="bwiz-result-note bad">${esc(cas.desc)}</p>` : '') +
-          `<p class="bwiz-math-row">Casualty table · D16: ${casVal}</p>`;
+          `<p class="bwiz-math-row">Casualty table · D16: ${casVal}${decay ? ' (+1 Decay)' : ''}</p>`;
         injPanel.appendChild(casEl);
       }
+    }
+
+    /* Pile Driver: after Knocking Down the defender, the attacker may make a
+       free Foul against them. Offer a shortcut to the Foul wizard. */
+    if (knockedSide === 'def' && attHas('Pile Driver')) {
+      const z = promptZone();
+      const row = document.createElement('div');
+      row.className = 'bwiz-prompt';
+      row.innerHTML = `<span class="bwiz-prompt-label">${esc(pName(attPlayer))} may <b>Pile Driver</b> (free Foul).</span>`;
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'bwiz-prompt-btn primary';
+      b.textContent = 'Open Foul';
+      b.addEventListener('click', () => {
+        document.querySelector('#panel-block .panel-close')?.click();
+        window.Panels?.openPanel?.('foul');
+      });
+      row.appendChild(b);
+      z.appendChild(row);
     }
 
     /* Continue to next player's armor roll, or complete */
@@ -766,6 +1004,96 @@ function initBlockWizard() {
     }
   }
 
+  /* Roll 2D6 using the main block tray (animated numeric dice). */
+  async function rollTwoDice() {
+    const blockTray = document.getElementById('block-dice-tray');
+    if (blockTray) {
+      blockTray.innerHTML = '';
+      blockTray.classList.remove('def-picks');
+      for (let i = 0; i < 2; i++) {
+        const face = document.createElement('div');
+        buildNumericFace(face, 1);
+        blockTray.appendChild(face);
+      }
+    }
+    const faces = blockTray ? Array.from(blockTray.children) : [];
+    return faces.length === 2
+      ? Promise.all(faces.map(f => rollNumericDie(f)))
+      : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
+  }
+
+  /* â”€â”€ Pre-block reactions (resolved once per block action) â”€â”€ */
+  async function preBlock() {
+    if (preBlockDone) return { abort: false };
+    preBlockDone = true;
+    clearPrompts();
+
+    /* Foul Appearance: blocker rolls D6; on a 1 the Block is wasted. */
+    if (defHas('Foul Appearance')) {
+      const { value } = await askD6(`${esc(pName(defPlayer))} has <b>Foul Appearance</b> — ${esc(pName(attPlayer))} rolls (1 = wasted):`);
+      if (value === 1) {
+        showBlockResult('Block Wasted!', 'bad', `${pName(attPlayer)} is put off by ${pName(defPlayer)}'s Foul Appearance.`, 'bad');
+        showCompleteBlock();
+        return { abort: true };
+      }
+    }
+
+    /* Blitz-dependent skills (Horns / Juggernaut / Frenzy). */
+    if (attHas('Horns') || attHas('Juggernaut') || attHas('Frenzy')) {
+      isBlitz = await askInline('Is this Block part of a <b>Blitz</b> action?',
+        [{ text: 'Blitz', value: true, primary: true }, { text: 'Normal Block', value: false }]);
+      if (isBlitz && attHas('Horns')) { stMods.att += 1; }
+    }
+
+    /* Multiple Block: block two marked players at −2 ST each. */
+    if (attHas('Multiple Block')) {
+      multiBlock = await askInline('Use <b>Multiple Block</b> (block two players, −2 ST each)?',
+        [{ text: 'Multiple Block', value: true, primary: true }, { text: 'Single', value: false }]);
+    }
+
+    /* Dauntless vs a stronger opponent. */
+    const baseA = attST + stMods.att - (multiBlock ? 2 : 0);
+    if (attHas('Dauntless') && baseA < defST) {
+      const { value } = await askD6(`<b>Dauntless</b> — roll D6 + ST ${baseA} vs ${esc(pName(defPlayer))} ST ${defST}:`);
+      dauntlessOn = (baseA + value) > defST;
+      const z = promptZone();
+      const n = document.createElement('div');
+      n.className = 'bwiz-prompt-note';
+      n.textContent = dauntlessOn ? `Dauntless succeeds (${baseA + value} > ${defST}) — count as equal ST.`
+                                  : `Dauntless fails (${baseA + value} ≤ ${defST}).`;
+      z.appendChild(n);
+    }
+
+    if (defHas('Dump-Off')) {
+      const z = promptZone();
+      const n = document.createElement('div');
+      n.className = 'bwiz-prompt-note';
+      n.textContent = `${pName(defPlayer)} may Dump-Off a Quick Pass before this Block resolves.`;
+      z.appendChild(n);
+    }
+
+    updateStDisplay();
+    return { abort: false };
+  }
+
+  /* Offer Pro (re-roll a die on a 3+) once the dice have landed. */
+  async function offerPro() {
+    if (proUsed || !attHas('Pro')) return;
+    const use = await askInline(`${esc(pName(attPlayer))} may use <b>Pro</b> (roll 3+ to re-roll):`,
+      [{ text: 'Use Pro', value: true, primary: true }, { text: 'Skip', value: false }]);
+    if (!use) return;
+    proUsed = true;
+    const { value } = await askD6('Pro check (3+):');
+    if (value >= 3) doRoll();
+    else {
+      const z = promptZone();
+      const n = document.createElement('div');
+      n.className = 'bwiz-prompt-note';
+      n.textContent = 'Pro failed — result stands.';
+      z.appendChild(n);
+    }
+  }
+
   /* â”€â”€ Main roll â”€â”€ */
   async function doRoll() {
     rollBtn.disabled   = true;
@@ -774,6 +1102,9 @@ function initBlockWizard() {
     if (useRrBtn)   { useRrBtn.hidden   = true; useRrBtn.classList.remove('glow-gold');  }
     if (defBanner)  defBanner.hidden  = true;
     chosenFace = null;
+
+    const pre = await preBlock();
+    if (pre.abort) { rollBtn.disabled = true; return; }
 
     const { count, attFav } = calcBlock();
     renderDiceTray(count);
@@ -809,6 +1140,9 @@ function initBlockWizard() {
       useRrBtn.hidden = !show;
       if (show) useRrBtn.classList.add('glow-gold');
     }
+
+    /* Optional Pro re-roll once dice are visible. */
+    offerPro();
   }
 
   function selectDie(idx) {
@@ -817,24 +1151,43 @@ function initBlockWizard() {
     chosenFace = rolledFaces[idx];
   }
 
-  useRrBtn?.addEventListener('click', () => {
+  useRrBtn?.addEventListener('click', async () => {
     const gs = window.GameState;
     if (rrUsed || !gs) return;
     const rrKey = attSide === 'right' ? 'away' : 'home';
     if (gs.rerolls[rrKey] <= 0) return;
-    gs.rerolls[rrKey] = Math.max(0, gs.rerolls[rrKey] - 1);
+
+    /* Loner: must roll the threshold first or the team re-roll is wasted. */
+    if (attHas('Loner')) {
+      const m = [...attSkills].map(s => s.match(/^Loner \((\d)\+\)$/)).find(Boolean);
+      const thr = m ? parseInt(m[1], 10) : 4;
+      const { value } = await askD6(`<b>Loner (${thr}+)</b> — roll to keep the team re-roll:`);
+      gs.rerolls[rrKey] = Math.max(0, gs.rerolls[rrKey] - 1);  // RR is spent either way
+      useRrBtn.classList.remove('glow-gold'); useRrBtn.hidden = true;
+      renderRerolls();
+      if (value < thr) {
+        rrUsed = true;
+        const z = promptZone();
+        const n = document.createElement('div');
+        n.className = 'bwiz-prompt-note';
+        n.textContent = `Loner failed (${value}) — re-roll wasted.`;
+        z.appendChild(n);
+        return;
+      }
+    } else {
+      gs.rerolls[rrKey] = Math.max(0, gs.rerolls[rrKey] - 1);
+      useRrBtn.classList.remove('glow-gold'); useRrBtn.hidden = true;
+    }
     rrUsed = true;
     const barId = rrKey === 'home' ? '#rr-home' : '#rr-away';
     document.querySelectorAll(`${barId} .rr-pip`).forEach((pip, idx) => {
       pip.classList.toggle('used', idx >= gs.rerolls[rrKey]);
     });
-    useRrBtn.classList.remove('glow-gold');
-    useRrBtn.hidden = true;
     renderRerolls();
     doRoll();
   });
 
-  confirmBtn?.addEventListener('click', () => {
+  confirmBtn?.addEventListener('click', async () => {
     if (!chosenFace) return;
     confirmBtn.classList.remove('glow-blue');
     confirmBtn.hidden  = true;
@@ -846,7 +1199,7 @@ function initBlockWizard() {
       const clone = f.cloneNode(true);
       f.replaceWith(clone);
     });
-    interpretResult(chosenFace);
+    await interpretResult(chosenFace);
   });
 
   /* â”€â”€ Init â”€â”€ */
@@ -2180,9 +2533,220 @@ function initFoulPlayerSelect(avPickerUpdate) {
    BOOT
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
+/* ════════════════════════════════════════════════════════
+   SPECIAL ACTIONS WIZARD
+   Alternative attacks made "instead of a block": Stab, Chainsaw,
+   Breathe Fire, Projectile Vomit, Chomp. Each rolls its own to-hit,
+   then shares the armour → injury → casualty tail via BBResolve.
+   ════════════════════════════════════════════════════════ */
+
+const SPECIAL_ACTIONS = {
+  'Stab':             { label: 'Stab',             hit: null,                                          armourBonus: 0, desc: 'Unmodified Armour roll; if broken, make an Injury roll.' },
+  'Chainsaw':         { label: 'Chainsaw',         hit: { threshold: 2, selfOn1: true },               armourBonus: 3, desc: 'D6 2+ → Armour +3. On a 1 (Kickback) the user is hit instead.' },
+  'Breathe Fire':     { label: 'Breathe Fire',     hit: { threshold: 2, selfOn1: true, vsStrong: -1 }, armourBonus: 0, desc: 'D6 (−1 vs ST5+). On a 1 the user is Knocked Down; 2+ hits the target.' },
+  'Projectile Vomit': { label: 'Projectile Vomit', hit: { threshold: 2, selfOn1: true },               armourBonus: 0, desc: 'D6 2+ → unmodified Armour roll. On a 1 the user is Knocked Down.' },
+  'Monstrous Mouth':  { label: 'Chomp',            hit: { threshold: 3 },                               armourBonus: 0, desc: 'D6 3+ → Chomp the target (Armour roll).' },
+};
+
+function specialSkillsOf(player) {
+  const seen = new Set();
+  return getPlayerSkills(player)
+    .map(s => s.replace(/\s*\(.*\)$/, '').trim())
+    .filter(s => SPECIAL_ACTIONS[s] && !seen.has(s) && seen.add(s));
+}
+
+function initSpecialWizard() {
+  const rollBtn = document.getElementById('spec-roll-btn');
+  if (!rollBtn) return;
+
+  let actor = null, actorSide = 'left';
+  let target = null, targetSide = 'right';
+  let chosenSkill = null;
+
+  const opposite = side => (side === 'left' ? 'right' : 'left');
+  const pName = p => p?.playerData?.name ?? p?.name ?? '?';
+
+  async function rollOneD6() {
+    const tray = document.getElementById('spec-dice-tray');
+    tray.innerHTML = '';
+    const die = document.createElement('div'); buildNumericFace(die, 1); tray.appendChild(die);
+    return rollNumericDie(die);
+  }
+  async function rollTwoD6() {
+    const tray = document.getElementById('spec-dice-tray');
+    tray.innerHTML = '';
+    const faces = [0, 1].map(() => { const d = document.createElement('div'); buildNumericFace(d, 1); tray.appendChild(d); return d; });
+    return Promise.all(faces.map(f => rollNumericDie(f)));
+  }
+
+  function setPanel(panelId, contentId, headline, cls, note) {
+    document.getElementById(panelId)?.classList.remove('locked');
+    const el = document.getElementById(contentId);
+    if (!el) return;
+    el.className = 'bwiz-result-content';
+    el.innerHTML = `<div class="bwiz-result-headline bwiz-result-${cls}">${esc(headline)}</div>` +
+      (note ? `<p class="bwiz-result-note info">${note}</p>` : '');
+  }
+
+  function lockPanels() {
+    ['spec-hit-panel', 'spec-armor-panel', 'spec-injury-panel'].forEach(id =>
+      document.getElementById(id)?.classList.add('locked'));
+    ['spec-hit-content', 'spec-armor-content', 'spec-injury-content'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.textContent = '—';
+    });
+    const tray = document.getElementById('spec-dice-tray'); if (tray) tray.innerHTML = '';
+  }
+
+  function complete() {
+    rollBtn.disabled = false;
+    rollBtn.textContent = 'Done';
+    rollBtn.classList.add('roll-btn--complete');
+    rollBtn.onclick = () => document.querySelector('#panel-special .panel-close')?.click();
+  }
+
+  function readyToResolve() {
+    rollBtn.disabled = !(actor && target && chosenSkill);
+  }
+
+  function skillSet(player) {
+    return new Set(getPlayerSkills(player).map(s => s.replace(/\s*\(.*\)$/, '').trim()));
+  }
+
+  async function resolve() {
+    if (!(actor && target && chosenSkill)) return;
+    const cfg = SPECIAL_ACTIONS[chosenSkill];
+    rollBtn.disabled = true;
+    rollBtn.textContent = 'Resolving…';
+    rollBtn.onclick = null;
+    lockPanels();
+
+    let victim = target, victimSide = targetSide;
+
+    /* ── To-hit ── */
+    if (cfg.hit) {
+      const targetST = parseStat(target.statsText, 'ST') ?? 3;
+      const mod = (cfg.hit.vsStrong && targetST >= 5) ? cfg.hit.vsStrong : 0;
+      const raw = await rollOneD6();
+      const val = raw + mod;
+      const rollTxt = `${raw}${mod ? ` ${mod} = ${val}` : ''}`;
+      if (cfg.hit.selfOn1 && raw === 1) {
+        victim = actor; victimSide = actorSide;
+        setPanel('spec-hit-panel', 'spec-hit-content', `${cfg.label}: Kickback!`, 'bad',
+          `${esc(pName(actor))} is hit instead (rolled 1).`);
+      } else if (val < cfg.hit.threshold) {
+        setPanel('spec-hit-panel', 'spec-hit-content', `${cfg.label} Misses`, 'ok',
+          `Rolled ${rollTxt} — needed ${cfg.hit.threshold}+.`);
+        complete(); return;
+      } else {
+        setPanel('spec-hit-panel', 'spec-hit-content', `${cfg.label} Hits!`, 'warn', `Rolled ${rollTxt}.`);
+      }
+    } else {
+      setPanel('spec-hit-panel', 'spec-hit-content', cfg.label, 'warn', 'Unmodified Armour roll.');
+    }
+
+    /* ── Armour ── */
+    const vSkills  = skillSet(victim);
+    const av       = parseStat(victim.statsText, 'AV') ?? 9;
+    const ironHard = vSkills.has('Iron Hard Skin');
+    const [a1, a2] = await rollTwoD6();
+    const armour   = BBResolve.armourBreaks(a1, a2, { av, bonus: cfg.armourBonus, ironHard });
+    const bonusTxt = (cfg.armourBonus && !ironHard) ? ` + ${cfg.armourBonus}` : '';
+    setPanel('spec-armor-panel', 'spec-armor-content',
+      armour.broke ? 'Armor Broken!' : 'Armor Holds', armour.broke ? 'bad' : 'ok',
+      `${a1} + ${a2}${bonusTxt} = ${armour.shown} vs AV ${av}+${ironHard ? ' · Iron Hard Skin' : ''}`);
+    if (!armour.broke) { complete(); return; }
+
+    /* ── Injury ── */
+    const stunty     = vSkills.has('Stunty') ? 1 : 0;
+    const thickSkull = vSkills.has('Thick Skull');
+    const [i1, i2]   = await rollTwoD6();
+    const inj        = BBResolve.injuryOutcome(i1, i2, { stunty, thickSkull });
+    setPanel('spec-injury-panel', 'spec-injury-content', `${pName(victim)} ${inj.outcome}!`,
+      inj.outcome === 'Stunned' ? 'warn' : 'bad',
+      `${i1} + ${i2}${stunty ? ' +1 Stunty' : ''} = ${inj.total}`);
+    BBResolve.applyStatus(victimSide, victim.idx, inj.status);
+
+    if (inj.outcome === 'Casualty') {
+      const decay = vSkills.has('Decay') ? 1 : 0;
+      const { casVal, cas } = BBResolve.rollCasualty(decay);
+      const panel = document.getElementById('spec-injury-panel');
+      const el = document.createElement('div');
+      el.className = 'bwiz-casualty-result';
+      el.innerHTML =
+        `<div class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</div>` +
+        (cas.desc ? `<p class="bwiz-result-note bad">${esc(cas.desc)}</p>` : '') +
+        `<p class="bwiz-math-row">Casualty table · D16: ${casVal}${decay ? ' (+1 Decay)' : ''}</p>`;
+      panel.appendChild(el);
+    }
+    complete();
+  }
+
+  function buildActionChips() {
+    const wrap = document.getElementById('spec-action-chips');
+    wrap.innerHTML = '';
+    chosenSkill = null;
+    if (!actor) return;
+    specialSkillsOf(actor).forEach(skill => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'spec-chip';
+      chip.textContent = SPECIAL_ACTIONS[skill].label;
+      chip.addEventListener('click', () => {
+        chosenSkill = skill;
+        wrap.querySelectorAll('.spec-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const n = document.getElementById('spec-action-name');
+        if (n) n.innerHTML = `<b>${esc(SPECIAL_ACTIONS[skill].label)}</b> — ${esc(SPECIAL_ACTIONS[skill].desc)}`;
+        readyToResolve();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function buildTargetList() {
+    const PS = window.PlayerStatus;
+    buildWizardPlayerList('spec-target-list', targetSide,
+      p => p.status === PS?.AVAILABLE,
+      (p) => { target = p; readyToResolve(); });
+  }
+
+  function refresh() {
+    actor = null; target = null; chosenSkill = null;
+    rollBtn.textContent = 'Resolve';
+    rollBtn.classList.remove('roll-btn--complete');
+    rollBtn.onclick = resolve;
+    rollBtn.disabled = true;
+    lockPanels();
+    document.getElementById('spec-action-chips').innerHTML = '';
+    const n = document.getElementById('spec-action-name');
+    if (n) n.textContent = 'Select an acting player and a target.';
+    document.getElementById('spec-target-list').innerHTML = '<p class="wps-empty">Choose an acting player</p>';
+
+    const wrap = document.getElementById('spec-actor-wrap');
+    if (wrap) {
+      wrap.innerHTML = '';
+      buildRosterTabs(wrap, {
+        tabsId: 'spec-actor',
+        initialSide: 'left',
+        filterFn: p => specialSkillsOf(p).length > 0,
+        onSelect: (p, _stats, side) => {
+          actor = p; actorSide = side; targetSide = opposite(side);
+          buildActionChips();
+          buildTargetList();
+          readyToResolve();
+        },
+      });
+    }
+  }
+
+  rollBtn.onclick = resolve;
+  onPanelOpen('panel-special', refresh);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initBlockWizard();
   initPassWizard();
   initFoulWizard();
   initThrowWizard();
+  initSpecialWizard();
 });

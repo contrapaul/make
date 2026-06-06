@@ -264,7 +264,8 @@
 #panel-weather[hidden],
 #panel-prayers[hidden],
 #panel-injury[hidden],
-#panel-scatter[hidden] { display: none; }
+#panel-scatter[hidden],
+#panel-special[hidden] { display: none; }
 
 #panel-block.panel-closing,
 #panel-foul.panel-closing,
@@ -273,7 +274,8 @@
 #panel-weather.panel-closing,
 #panel-prayers.panel-closing,
 #panel-injury.panel-closing,
-#panel-scatter.panel-closing {
+#panel-scatter.panel-closing,
+#panel-special.panel-closing {
   display: flex !important;
 }
 
@@ -284,7 +286,8 @@
 #panel-weather,
 #panel-prayers,
 #panel-injury,
-#panel-scatter {
+#panel-scatter,
+#panel-special {
   width:          min(82vw, 1600px);
   max-width:      none;
   height:         min(51.25vw, 1000px, 88vh);
@@ -301,7 +304,8 @@
 #panel-weather .panel-header,
 #panel-prayers .panel-header,
 #panel-injury .panel-header,
-#panel-scatter .panel-header { flex-shrink: 0; }
+#panel-scatter .panel-header,
+#panel-special .panel-header { flex-shrink: 0; }
 
 #panel-block .panel-body,
 #panel-foul .panel-body,
@@ -310,7 +314,8 @@
 #panel-weather .panel-body,
 #panel-prayers .panel-body,
 #panel-injury .panel-body,
-#panel-scatter .panel-body {
+#panel-scatter .panel-body,
+#panel-special .panel-body {
   flex:       1 1 0;
   min-height: 0;
   overflow-y: auto;
