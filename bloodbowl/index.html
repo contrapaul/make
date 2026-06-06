@@ -577,10 +577,10 @@
           </div>
           <div class="ct-col ct-choose">
             <div class="ct-col-head">
-              <h2 class="ct-title">Choose Team</h2>
+              <h2 class="ct-title" id="ct-right-title">Choose Team</h2>
               <button class="panel-close" aria-label="Close">&#215;</button>
             </div>
-            <div class="ct-col-body ct-grid" id="ct-choose-grid"></div>
+            <div class="ct-col-body" id="ct-right-body"></div>
           </div>
         </div>
       </div>
@@ -684,12 +684,8 @@
     <div class="skill-card" id="skill-card"></div>
   </div>
 
-  <!-- ═══════════════ TEAM BUILDER OVERLAY ═══════════════ -->
-  <div class="tb-overlay" id="tb-overlay" hidden aria-label="Team Builder" role="dialog" aria-modal="true">
-    <div class="tb-container" id="tb-container">
-      <!-- Built dynamically by team-builder.js -->
-    </div>
-  </div>
+  <!-- Team Builder now renders inside the Choose Team window's right pane (#ct-right-body). -->
+
 
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">
@@ -706,12 +702,12 @@
   <script src="js/physical-dice.js"></script>
   <script src="js/pitch.js"></script>
   <script src="js/drive-wizard.js"></script>
-  <script src="js/team-builder.js"></script>
+  <script src="js/team-builder.js?v=3"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js"></script>
   <script src="js/wizards.js?v=9"></script>
   <script src="js/pass-wizard.js"></script>
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=4"></script>
   <script>
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
@@ -723,7 +719,7 @@
 
       document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
       document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
-      document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('myteams'));
+      document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.openChooseTeam?.('left'));
 
       const moreCard = document.getElementById('bb-more-card');
       const moreMenu = document.getElementById('bb-more-menu');

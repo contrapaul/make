@@ -13,6 +13,21 @@ const TeamBuilder = (() => {
   const STAFF_COSTS = { fanFactor: 10_000, assistantCoaches: 10_000, cheerleaders: 10_000 };
   const APOTH_COST  = 50_000;
 
+  /* Extension hooks for future-tunable rules. */
+  const BUDGET_STEP = 50_000;                  /* gold increment for the Team Budget control */
+  const SKILL_COST  = 20_000;                  /* gold cost to buy one extra skill for a player */
+  const PURCHASABLE_SKILL_CATEGORIES = [       /* categories a coach may buy from */
+    'General Skill', 'Agility Skill', 'Strength Skill',
+    'Passing Skill', 'Mutation', 'Devious Skill',
+  ];
+
+  function teamBudget(draft) {
+    return draft?.budget ?? START_GP;
+  }
+
+  /* Default colours for a new custom team (accent feeds the My Teams cards / in-game theme). */
+  const DEFAULT_ACCENT = '#5A8CFF';
+
   /* ─── Storage ─────────────────────────────────────── */
 
   function getTeams() {
@@ -69,7 +84,7 @@ const TeamBuilder = (() => {
     spent += draft.assistantCoaches * STAFF_COSTS.assistantCoaches;
     spent += draft.cheerleaders   * STAFF_COSTS.cheerleaders;
     spent += draft.apothecary     ? APOTH_COST : 0;
-    return { remaining: START_GP - spent, spent };
+    return { remaining: teamBudget(draft) - spent, spent };
   }
 
   /* ─── Export / Import ─────────────────────────────── */
@@ -157,175 +172,66 @@ const TeamBuilder = (() => {
   }
 
   /* ══════════════════════════════════════════════════════
-     PUBLIC — open / close
+     PUBLIC — open / render into a host container
+     The builder lives inside the Choose Team window's right pane.
      ══════════════════════════════════════════════════════ */
 
+  let _builderContainer = null;   /* host element the builder renders into */
+  let _onDone           = null;   /* called after save or cancel */
+
+  /* Back-compat: external callers asking to "open" the builder are routed to
+     the Choose Team window controller in script.js. */
   function open(initialView = 'list') {
-    _view = initialView;
-    const el = document.getElementById('tb-overlay');
-    if (el) el.hidden = false;
-    _render();
+    if (initialView === 'builder' && window.showTeamBuilder) { window.showTeamBuilder(null); return; }
+    if (window.openChooseTeam) window.openChooseTeam('left');
   }
 
   function close() {
-    const el = document.getElementById('tb-overlay');
-    if (el) el.hidden = true;
+    window.Panels?.closePanel?.('chooseteam');
+  }
+
+  /* Render the full builder form for a new team (teamId null) or an edit. */
+  async function renderBuilderInto(container, { teamId = null, onDone = null } = {}) {
+    _builderContainer = container;
+    _onDone           = onDone;
+
+    if (teamId) {
+      _draft = JSON.parse(JSON.stringify(getTeam(teamId) ?? {}));
+    } else {
+      _draft = null;
+      _initDraft();
+    }
+    _ensureDraftDefaults(_draft);
+
+    /* Prime caches + roster for the draft's race. */
+    _rosterData = null;
+    await Promise.all([_getTeamsData(), _getBoxTeamsData(), _getStarPlayersData()]);
+    if (_draft.baseTeamId) {
+      const base = (_teamsData ?? []).find(t => t.id === _draft.baseTeamId);
+      if (base) _rosterData = await _fetchRoster(base.file);
+    }
+    _render();
+  }
+
+  function _ensureDraftDefaults(draft) {
+    if (!draft) return;
+    if (draft.budget == null)            draft.budget = START_GP;
+    if (!draft.colors)                   draft.colors = { accent: DEFAULT_ACCENT };
+    if (!draft.colors.accent)            draft.colors.accent = DEFAULT_ACCENT;
+    (draft.players ?? []).forEach(p => {
+      if (p.fact == null)          p.fact = '';
+      if (!Array.isArray(p.learnedSkills)) p.learnedSkills = [];
+    });
   }
 
   /* ══════════════════════════════════════════════════════
-     RENDER DISPATCHER
+     RENDER DISPATCHER — rebuilds the form into the host container
      ══════════════════════════════════════════════════════ */
 
   function _render() {
-    const container = document.getElementById('tb-container');
-    if (!container) return;
-    container.innerHTML = '';
-
-    /* Header */
-    const header = document.createElement('div');
-    header.className = 'tb-header';
-    header.innerHTML = `
-      <div class="tb-title">⬡ Team Builder</div>
-      <button class="tb-close" id="tb-close-btn" aria-label="Close team builder">&#215;</button>
-    `;
-    container.appendChild(header);
-    document.getElementById('tb-close-btn').addEventListener('click', close);
-
-    /* Tabs */
-    const tabs = document.createElement('div');
-    tabs.className = 'tb-tabs';
-    [{ id: 'list', label: 'My Teams' }, { id: 'builder', label: '+ New Team' }].forEach(t => {
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.className = `tb-tab${_view === t.id ? ' active' : ''}`;
-      btn.textContent = t.label;
-      btn.addEventListener('click', () => { _view = t.id; if (t.id === 'builder') _initDraft(); _render(); });
-      tabs.appendChild(btn);
-    });
-    container.appendChild(tabs);
-
-    /* Body */
-    const body = document.createElement('div');
-    body.className = 'tb-body';
-    container.appendChild(body);
-
-    if (_view === 'list') _renderList(body);
-    else                  _renderBuilder(body);
-  }
-
-  /* ══════════════════════════════════════════════════════
-     MY TEAMS LIST VIEW
-     ══════════════════════════════════════════════════════ */
-
-  function _renderList(body) {
-    const teams = getTeams();
-
-    /* Import zone */
-    const importZone = document.createElement('div');
-    importZone.className = 'tb-import-zone';
-    importZone.textContent = '⬆ Import team from JSON file — tap to browse';
-    importZone.addEventListener('click', () => {
-      const inp = document.createElement('input');
-      inp.type = 'file'; inp.accept = '.json,application/json';
-      inp.addEventListener('change', () => {
-        const file = inp.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = e => {
-          const result = importTeam(e.target.result);
-          if (result.ok) {
-            _showToast(`✓ Imported: ${result.team.name}`);
-            _render();
-          } else {
-            _showToast(`✗ Import failed: ${result.error}`, true);
-          }
-        };
-        reader.readAsText(file);
-      });
-      inp.click();
-    });
-    body.appendChild(importZone);
-
-    if (teams.length === 0) {
-      const empty = document.createElement('p');
-      empty.className = 'panel-intro';
-      empty.style.cssText = 'margin:1rem 0;text-align:center;opacity:0.5;';
-      empty.textContent = 'No saved teams yet. Click "+ New Team" to create one.';
-      body.appendChild(empty);
-      return;
-    }
-
-    /* Team grid */
-    const grid = document.createElement('div');
-    grid.className = 'tb-team-grid';
-    grid.style.marginTop = '0.6rem';
-
-    teams.forEach(team => {
-      const card = document.createElement('div');
-      card.className = 'tb-team-card';
-      const { remaining } = calcTreasury(team, null);
-      card.innerHTML = `
-        <div class="tb-team-card-name">${h(team.name)}</div>
-        <div class="tb-team-card-meta">${h(team.baseTeamId)} · ${team.players.length} players · ${team.rerolls} RR · ${fmtGP(remaining)} left</div>
-      `;
-
-      const actions = document.createElement('div');
-      actions.className = 'tb-team-card-actions';
-
-      /* Load Home */
-      const loadHome = document.createElement('button');
-      loadHome.type = 'button'; loadHome.className = 'tb-action-btn load';
-      loadHome.textContent = '▸ Home';
-      loadHome.title = 'Load as Home team';
-      loadHome.addEventListener('click', async () => {
-        await loadIntoGame(team.id, 'left');
-        close();
-        _showToast(`✓ ${team.name} loaded as Home`);
-      });
-
-      /* Load Away */
-      const loadAway = document.createElement('button');
-      loadAway.type = 'button'; loadAway.className = 'tb-action-btn load';
-      loadAway.textContent = '▸ Away';
-      loadAway.title = 'Load as Away team';
-      loadAway.addEventListener('click', async () => {
-        await loadIntoGame(team.id, 'right');
-        close();
-        _showToast(`✓ ${team.name} loaded as Away`);
-      });
-
-      /* Export */
-      const expBtn = document.createElement('button');
-      expBtn.type = 'button'; expBtn.className = 'tb-action-btn';
-      expBtn.textContent = '⬇ Export';
-      expBtn.addEventListener('click', () => exportTeam(team.id));
-
-      /* Edit */
-      const editBtn = document.createElement('button');
-      editBtn.type = 'button'; editBtn.className = 'tb-action-btn';
-      editBtn.textContent = '✏ Edit';
-      editBtn.addEventListener('click', () => {
-        _draft = JSON.parse(JSON.stringify(team));
-        _view = 'builder';
-        _renderBuilderWithDraft();
-      });
-
-      /* Delete */
-      const delBtn = document.createElement('button');
-      delBtn.type = 'button'; delBtn.className = 'tb-action-btn del';
-      delBtn.textContent = '✕ Delete';
-      delBtn.addEventListener('click', () => {
-        if (confirm(`Delete "${team.name}"? This cannot be undone.`)) {
-          deleteTeam(team.id);
-          _render();
-        }
-      });
-
-      [loadHome, loadAway, expBtn, editBtn, delBtn].forEach(b => actions.appendChild(b));
-      card.appendChild(actions);
-      grid.appendChild(card);
-    });
-
-    body.appendChild(grid);
+    if (!_builderContainer) return;
+    _builderContainer.innerHTML = '';
+    _renderBuilder(_builderContainer);
   }
 
   /* ══════════════════════════════════════════════════════
@@ -338,6 +244,8 @@ const TeamBuilder = (() => {
         id:               uuid(),
         name:             '',
         baseTeamId:       null,
+        budget:           START_GP,
+        colors:           { accent: DEFAULT_ACCENT },
         rerolls:          0,
         fanFactor:        0,
         assistantCoaches: 0,
@@ -349,19 +257,9 @@ const TeamBuilder = (() => {
     }
   }
 
-  async function _renderBuilderWithDraft() {
-    /* Fetch roster for pre-existing draft's base team */
-    if (_draft.baseTeamId && !_rosterData) {
-      const all  = await _getTeamsData();
-      const base = all.find(t => t.id === _draft.baseTeamId);
-      if (base) _rosterData = await _fetchRoster(base.file);
-    }
-    await Promise.all([_getBoxTeamsData(), _getStarPlayersData()]);
-    _render();
-  }
-
   function _renderBuilder(body) {
     if (!_draft) _initDraft();
+    _ensureDraftDefaults(_draft);
 
     /* ── Team name ── */
     const nameSec = document.createElement('div');
@@ -425,6 +323,10 @@ const TeamBuilder = (() => {
     treasury.id = 'tb-treasury';
     body.appendChild(treasury);
     _refreshTreasury(body);
+
+    /* ── Team Budget (adjustable gold) + Colour ── */
+    _renderBudgetSection(body);
+    _renderColorSection(body);
 
     if (!_rosterData || !_draft.baseTeamId) return;
 
@@ -500,6 +402,7 @@ const TeamBuilder = (() => {
             ma: pos.ma, st: pos.st, ag: pos.ag, pa: pos.pa, av: pos.av,
             skills:           pos.skills ?? '',
             value:            pos.value ?? 0,
+            fact:             '',
             spp:              0,
             learnedSkills:    [],
             nigglingInjuries: 0,
@@ -536,8 +439,11 @@ const TeamBuilder = (() => {
         const row = document.createElement('div');
         row.className = `tb-player-row${p.isStarPlayer ? ' star-player-row' : ''}`;
 
+        /* Top line: jersey + name + position */
+        const head = document.createElement('div');
+        head.className = 'tb-player-head';
+
         if (p.isStarPlayer) {
-          /* Star players: read-only name badge, no jersey edit */
           const badge = document.createElement('span');
           badge.className = 'tb-pos-pill star-pill';
           badge.textContent = '★';
@@ -546,7 +452,8 @@ const TeamBuilder = (() => {
           nameEl.textContent = p.name;
           const pos = document.createElement('span');
           pos.className = 'tb-pos-pill'; pos.textContent = 'Star Player';
-          row.appendChild(badge); row.appendChild(nameEl); row.appendChild(pos);
+          head.appendChild(badge); head.appendChild(nameEl); head.appendChild(pos);
+          row.appendChild(head);
         } else {
           const jInp = document.createElement('input');
           jInp.type = 'text'; jInp.className = 'tb-jersey-inp';
@@ -561,7 +468,18 @@ const TeamBuilder = (() => {
           const pos = document.createElement('span');
           pos.className = 'tb-pos-pill'; pos.textContent = p.position;
 
-          row.appendChild(jInp); row.appendChild(nInp); row.appendChild(pos);
+          head.appendChild(jInp); head.appendChild(nInp); head.appendChild(pos);
+          row.appendChild(head);
+
+          /* Flavor text */
+          const flavor = document.createElement('input');
+          flavor.type = 'text'; flavor.className = 'tb-flavor-inp';
+          flavor.value = p.fact ?? ''; flavor.placeholder = 'Flavor text (shown on the player’s card)…';
+          flavor.addEventListener('input', () => { p.fact = flavor.value; });
+          row.appendChild(flavor);
+
+          /* Skills: starting (read-only) + purchased (removable) + buy control */
+          row.appendChild(_buildPlayerSkills(p));
         }
         list.appendChild(row);
       });
@@ -575,10 +493,12 @@ const TeamBuilder = (() => {
     /* ── Staff & Extras ── */
     _renderStaffSection(body);
 
-    /* ── Save button ── */
+    /* ── Save / Cancel ── */
+    const actions = document.createElement('div');
+    actions.className = 'tb-builder-actions';
+
     const saveBtn = document.createElement('button');
-    saveBtn.type = 'button'; saveBtn.className = 'roll-btn';
-    saveBtn.style.cssText = 'width:100%;margin-top:1rem;';
+    saveBtn.type = 'button'; saveBtn.className = 'roll-btn tb-save-btn';
     saveBtn.innerHTML = '<span class="roll-btn-icon">💾</span> Save Team';
     saveBtn.addEventListener('click', () => {
       if (!_draft.name.trim()) {
@@ -592,17 +512,105 @@ const TeamBuilder = (() => {
       }
       const { remaining } = _calcDraftTreasury();
       if (remaining < 0) {
-        _showToast('✗ Over budget! Remove some players or staff', true); return;
+        _showToast('✗ Over budget! Raise the team budget or remove players/staff', true); return;
       }
       _draft.treasury = remaining;
       saveTeam(_draft);
       _showToast(`✓ Saved: ${_draft.name}`);
-      _draft = null;
-      _rosterData = null;
-      _view = 'list';
+      _finishBuilder();
+    });
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button'; cancelBtn.className = 'tb-cancel-btn';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.addEventListener('click', () => _finishBuilder());
+
+    actions.appendChild(cancelBtn);
+    actions.appendChild(saveBtn);
+    body.appendChild(actions);
+  }
+
+  function _finishBuilder() {
+    _draft = null;
+    _rosterData = null;
+    const done = _onDone;
+    _builderContainer = null;
+    _onDone = null;
+    if (done) done();
+  }
+
+  /* Starting skills (read-only) + purchased skills (removable) + buy control. */
+  function _buildPlayerSkills(p) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tb-skills-row';
+
+    const baseSkills = (p.skills ?? '').split(',').map(s => s.trim()).filter(Boolean);
+    baseSkills.forEach(s => {
+      const chip = document.createElement('span');
+      chip.className = 'tb-skill-chip base';
+      chip.textContent = s;
+      wrap.appendChild(chip);
+    });
+
+    (p.learnedSkills ?? []).forEach(s => {
+      const chip = document.createElement('span');
+      chip.className = 'tb-skill-chip bought';
+      chip.innerHTML = `${h(s)} <button class="tb-skill-x" type="button" title="Remove skill (refund ${fmtGP(SKILL_COST)})" aria-label="Remove ${h(s)}">×</button>`;
+      chip.querySelector('.tb-skill-x').addEventListener('click', () => {
+        p.learnedSkills = p.learnedSkills.filter(x => x !== s);
+        p.value = Math.max(0, (p.value ?? 0) - SKILL_COST);
+        _render();
+      });
+      wrap.appendChild(chip);
+    });
+
+    /* Buy control */
+    const buy = document.createElement('button');
+    buy.type = 'button'; buy.className = 'tb-skill-add';
+    buy.textContent = `+ Skill (${fmtGP(SKILL_COST)})`;
+    buy.addEventListener('click', () => _openSkillPicker(p, buy));
+    wrap.appendChild(buy);
+
+    return wrap;
+  }
+
+  /* Inline skill picker: a category-grouped select that buys on choose. */
+  function _openSkillPicker(p, anchorBtn) {
+    const all = (window.BBSkillsList ?? []).filter(s =>
+      PURCHASABLE_SKILL_CATEGORIES.includes(s.category));
+    const owned = new Set([
+      ...((p.skills ?? '').split(',').map(s => s.trim())),
+      ...(p.learnedSkills ?? []),
+    ]);
+
+    const sel = document.createElement('select');
+    sel.className = 'tb-skill-select';
+    sel.innerHTML = '<option value="">Choose a skill…</option>';
+    PURCHASABLE_SKILL_CATEGORIES.forEach(cat => {
+      const inCat = all.filter(s => s.category === cat && !owned.has(s.name));
+      if (!inCat.length) return;
+      const og = document.createElement('optgroup');
+      og.label = cat.replace(' Skill', '');
+      inCat.forEach(s => {
+        const o = document.createElement('option');
+        o.value = s.name; o.textContent = s.name;
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    });
+
+    sel.addEventListener('change', () => {
+      const name = sel.value;
+      if (!name) return;
+      const { remaining } = _calcDraftTreasury();
+      if (remaining < SKILL_COST) { _showToast('✗ Not enough gold!', true); return; }
+      p.learnedSkills = [...(p.learnedSkills ?? []), name];
+      p.value = (p.value ?? 0) + SKILL_COST;
       _render();
     });
-    body.appendChild(saveBtn);
+
+    anchorBtn.replaceWith(sel);
+    sel.focus();
   }
 
   function _loadBoxTeam(boxEntry) {
@@ -622,6 +630,7 @@ const TeamBuilder = (() => {
           ma: pos.ma, st: pos.st, ag: pos.ag, pa: pos.pa, av: pos.av,
           skills:           pos.skills ?? '',
           value:            pos.value ?? 0,
+          fact:             '',
           spp:              0,
           learnedSkills:    [],
           nigglingInjuries: 0,
@@ -633,6 +642,85 @@ const TeamBuilder = (() => {
       }
     });
     _render();
+  }
+
+  /* ── Team Budget (adjustable gold) ── */
+  function _renderBudgetSection(body) {
+    const sec = document.createElement('div');
+    sec.className = 'tb-section';
+    sec.innerHTML = '<div class="tb-section-title">Team Budget</div>';
+
+    const row = document.createElement('div');
+    row.className = 'tb-staff-row';
+
+    const info = document.createElement('div');
+    info.className = 'tb-staff-info';
+    info.innerHTML = `<span class="tb-staff-label">Total gold to spend</span>
+      <span class="tb-staff-cost">${BUDGET_STEP / 1000}k steps · default ${fmtGP(START_GP)}</span>`;
+
+    const ctrl = document.createElement('div');
+    ctrl.className = 'tb-staff-ctrl';
+
+    const minus = document.createElement('button');
+    minus.type = 'button'; minus.className = 'tb-qty-btn'; minus.textContent = '−';
+
+    const val = document.createElement('span');
+    val.className = 'tb-staff-val tb-budget-val'; val.textContent = fmtGP(teamBudget(_draft));
+
+    const plus = document.createElement('button');
+    plus.type = 'button'; plus.className = 'tb-qty-btn'; plus.textContent = '+';
+
+    const sync = () => {
+      val.textContent  = fmtGP(teamBudget(_draft));
+      minus.disabled   = teamBudget(_draft) <= START_GP;
+      _refreshTreasury(body.parentElement ?? body);
+    };
+    minus.addEventListener('click', () => {
+      _draft.budget = Math.max(START_GP, teamBudget(_draft) - BUDGET_STEP);
+      sync();
+    });
+    plus.addEventListener('click', () => {
+      _draft.budget = teamBudget(_draft) + BUDGET_STEP;
+      sync();
+    });
+    minus.disabled = teamBudget(_draft) <= START_GP;
+
+    ctrl.appendChild(minus); ctrl.appendChild(val); ctrl.appendChild(plus);
+    row.appendChild(info); row.appendChild(ctrl);
+    sec.appendChild(row);
+    body.appendChild(sec);
+  }
+
+  /* ── Team Colour (accent feeds the My Teams card + in-game theme) ── */
+  function _renderColorSection(body) {
+    const sec = document.createElement('div');
+    sec.className = 'tb-section';
+    sec.innerHTML = '<div class="tb-section-title">Team Colour</div>';
+
+    const row = document.createElement('div');
+    row.className = 'tb-staff-row';
+
+    const info = document.createElement('div');
+    info.className = 'tb-staff-info';
+    info.innerHTML = `<span class="tb-staff-label">Accent colour</span>
+      <span class="tb-staff-cost">Shown on the team card &amp; roster theme</span>`;
+
+    const picker = document.createElement('input');
+    picker.type = 'color'; picker.className = 'tb-color-input';
+    picker.value = _toHex(_draft.colors?.accent) || DEFAULT_ACCENT;
+    picker.addEventListener('input', () => {
+      _draft.colors = { ...(_draft.colors ?? {}), accent: picker.value };
+    });
+
+    row.appendChild(info); row.appendChild(picker);
+    sec.appendChild(row);
+    body.appendChild(sec);
+  }
+
+  /* Best-effort coercion of an accent value to a #rrggbb the color input accepts. */
+  function _toHex(c) {
+    if (typeof c === 'string' && /^#[0-9a-f]{6}$/i.test(c)) return c;
+    return null;
   }
 
   function _renderStarPlayerSection(body) {
@@ -850,7 +938,7 @@ const TeamBuilder = (() => {
     el.innerHTML = `
       <span class="tb-treasury-num${remaining < 0 ? ' over' : ''}">${fmtGP(Math.abs(remaining))}${remaining < 0 ? ' OVER BUDGET' : ' remaining'}</span>
       <span class="tb-treasury-label">treasury</span>
-      <span class="tb-treasury-spent">${fmtGP(spent)} spent of ${fmtGP(START_GP)}</span>
+      <span class="tb-treasury-spent">${fmtGP(spent)} spent of ${fmtGP(teamBudget(_draft))}</span>
     `;
   }
 
@@ -934,7 +1022,7 @@ const TeamBuilder = (() => {
      ══════════════════════════════════════════════════════ */
 
   return {
-    open, close, openPicker,
+    open, close, openPicker, renderBuilderInto,
     getTeams, getTeam, saveTeam, deleteTeam,
     exportTeam, importTeam, loadIntoGame,
   };

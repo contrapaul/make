@@ -487,6 +487,27 @@
   color:          color-mix(in srgb, var(--card-color, #fff) 80%, #fff);
 }
 
+/* My Teams card carries an inline edit button */
+.ct-card--myteam { position: relative; padding-right: 2rem; }
+.ct-card-edit {
+  position:    absolute;
+  top:         0.45rem;
+  right:       0.45rem;
+  background:  rgba(255, 255, 255, 0.06);
+  border:      1px solid rgba(120, 160, 255, 0.3);
+  color:       rgba(210, 230, 255, 0.85);
+  border-radius: 4px;
+  font-size:   0.7rem;
+  line-height: 1;
+  padding:     0.2rem 0.3rem;
+  cursor:      pointer;
+  transition:  background 0.15s, color 0.15s;
+}
+.ct-card-edit:hover { background: rgba(80, 130, 255, 0.25); color: #fff; }
+
+/* Builder occupies the right pane (scrolls) */
+.ct-builder-body { display: block; }
+
 /* Blueprint "Create New Team" card */
 .ct-card--blueprint {
   background:

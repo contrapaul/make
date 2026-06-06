@@ -112,12 +112,26 @@ function bindChooseButtons() {
   });
 }
 
+/* Right pane mode: 'browse' (default teams grid) | 'builder' (Team Builder form) */
+let ctMode = 'browse';
+
 function openChooseTeam(side) {
   chooseSide = side;
+  ctMode = 'browse';
   buildChooseTeamPanel();
   window.Panels?.togglePanel('chooseteam');
 }
 window.openChooseTeam = openChooseTeam;
+
+/* Open the Team Builder inside the Choose Team window's right pane.
+   teamId === null → new team; otherwise edit the saved team. */
+function showTeamBuilder(teamId = null) {
+  ctMode = 'builder';
+  const panel = document.getElementById('panel-chooseteam');
+  if (panel && panel.hasAttribute('hidden')) window.Panels?.openPanel('chooseteam');
+  buildChooseTeamPanel(teamId);
+}
+window.showTeamBuilder = showTeamBuilder;
 
 /* Refresh the "Choose Home/Away Team" button label after a pick. */
 function updateChooseBtn(side, name, accent) {
@@ -128,29 +142,47 @@ function updateChooseBtn(side, name, accent) {
   btn.style.setProperty('--gb-team-accent', accent || '');
 }
 
-function buildChooseTeamPanel() {
-  /* ── Right 2/3 — default teams, alphabetical, skills-card styling ── */
-  const grid = document.getElementById('ct-choose-grid');
-  if (grid) {
-    const teams = [...state.teams].sort((a, b) => a.name.localeCompare(b.name));
-    grid.innerHTML = '';
-    teams.forEach(team => {
-      const accent = team.colors?.accent || team.colors?.gold || 'rgba(255,255,255,0.3)';
-      const card = document.createElement('button');
-      card.type = 'button';
-      card.className = 'ct-card';
-      card.style.setProperty('--card-color', accent);
-      card.innerHTML = `<span class="ct-card-name">${esc(team.name)}</span>`;
-      card.addEventListener('click', async () => {
-        closeModal(chooseSide);
-        await loadTeam(chooseSide, team.id);
-        window.Panels?.closePanel('chooseteam');
-      });
-      grid.appendChild(card);
+function buildChooseTeamPanel(teamId = null) {
+  buildMyTeamsColumn();
+
+  const title = document.getElementById('ct-right-title');
+  const body  = document.getElementById('ct-right-body');
+  if (!body) return;
+
+  if (ctMode === 'builder') {
+    if (title) title.textContent = teamId ? 'Edit Team' : 'Team Builder';
+    body.className = 'ct-col-body ct-builder-body';
+    body.innerHTML = '';
+    window.TeamBuilder?.renderBuilderInto(body, {
+      teamId,
+      onDone: () => { ctMode = 'browse'; buildChooseTeamPanel(); },
     });
+    return;
   }
 
-  /* ── Left 1/3 — Create New Team + saved teams (one column) ── */
+  /* ── Browse mode: default teams, alphabetical, skills-card styling ── */
+  if (title) title.textContent = 'Choose Team';
+  body.className = 'ct-col-body ct-grid';
+  body.innerHTML = '';
+  const teams = [...state.teams].sort((a, b) => a.name.localeCompare(b.name));
+  teams.forEach(team => {
+    const accent = team.colors?.accent || team.colors?.gold || 'rgba(255,255,255,0.3)';
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'ct-card';
+    card.style.setProperty('--card-color', accent);
+    card.innerHTML = `<span class="ct-card-name">${esc(team.name)}</span>`;
+    card.addEventListener('click', async () => {
+      closeModal(chooseSide);
+      await loadTeam(chooseSide, team.id);
+      window.Panels?.closePanel('chooseteam');
+    });
+    body.appendChild(card);
+  });
+}
+
+/* Left 1/3 — Create New Team blueprint + saved teams (one column) */
+function buildMyTeamsColumn() {
   const mine = document.getElementById('ct-myteams-grid');
   if (!mine) return;
   mine.innerHTML = '';
@@ -159,33 +191,34 @@ function buildChooseTeamPanel() {
   create.type = 'button';
   create.className = 'ct-card ct-card--blueprint';
   create.innerHTML = '<span class="ct-card-name">+ Create New Team</span>';
-  create.addEventListener('click', () => {
-    window.Panels?.closePanel('chooseteam');
-    window.TeamBuilder?.open('builder');
-  });
+  create.addEventListener('click', () => showTeamBuilder(null));
   mine.appendChild(create);
 
   const saved = window.TeamBuilder?.getTeams?.() ?? [];
   if (saved.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'ct-empty';
-    empty.textContent = 'No saved teams yet. Create one to set its colours and roster.';
+    empty.textContent = 'No saved teams yet. Create one to set its colours, roster, and skills.';
     mine.appendChild(empty);
     return;
   }
   saved.forEach(team => {
-    const accent = team.colors?.accent || team.colors?.gold || 'rgba(150,180,255,0.6)';
-    const card = document.createElement('button');
-    card.type = 'button';
-    card.className = 'ct-card';
+    const accent = team.colors?.accent || 'rgba(150,180,255,0.6)';
+    const card = document.createElement('div');
+    card.className = 'ct-card ct-card--myteam';
     card.style.setProperty('--card-color', accent);
     card.innerHTML = `
       <span class="ct-card-name">${esc(team.name)}</span>
-      <span class="ct-card-meta">${team.players.length}pl · ${team.rerolls}RR</span>`;
+      <span class="ct-card-meta">${team.players.length}pl · ${team.rerolls}RR</span>
+      <button class="ct-card-edit" type="button" title="Edit team" aria-label="Edit ${esc(team.name)}">✏</button>`;
     card.addEventListener('click', async () => {
       closeModal(chooseSide);
       await window.TeamBuilder?.loadIntoGame(team.id, chooseSide);
       window.Panels?.closePanel('chooseteam');
+    });
+    card.querySelector('.ct-card-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      showTeamBuilder(team.id);
     });
     mine.appendChild(card);
   });
@@ -238,13 +271,16 @@ async function loadCustomTeam(side, savedTeam) {
     value:       p.value ?? 0,
     qty:         null,
     jerseyNumber: p.jerseyNumber,
-    isStarPlayer: false,
+    fact:        p.fact ?? '',
+    isStarPlayer: !!p.isStarPlayer,
   }));
 
   state[side].team    = baseEntry ?? { id: savedTeam.baseTeamId, name: savedTeam.name, colors: {} };
   state[side].players = players;
 
-  applyTeamColors(side, baseEntry?.colors ?? {});
+  /* Saved-team accent overrides the base race colour where set. */
+  const customColors = { ...(baseEntry?.colors ?? {}), ...(savedTeam.colors ?? {}) };
+  applyTeamColors(side, customColors);
   renderRoster(side, players);
   syncTeamSkills(side, players, savedTeam.name);
 
@@ -259,7 +295,7 @@ async function loadCustomTeam(side, savedTeam) {
     Panels.setAccordionValue(side, players.reduce((s, p) => s + (p.value || 0), 0));
     Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
   }
-  updateChooseBtn(side, savedTeam.name, baseEntry?.colors?.accent);
+  updateChooseBtn(side, savedTeam.name, customColors.accent);
   updateStartGameGlow();
 }
 
@@ -278,7 +314,7 @@ function bindMyTeamsButtons() {
       ?.addEventListener('click', () => window.TeamBuilder?.openPicker(side));
   });
   document.getElementById('my-teams-nav')
-    ?.addEventListener('click', () => window.TeamBuilder?.open('list'));
+    ?.addEventListener('click', () => openChooseTeam('left'));
 }
 
 /* ────────────────────────────────────────────────────────
@@ -407,6 +443,8 @@ function buildCard(player, side) {
   /* Store full player data on the DOM element so wizards can access it */
   card._playerData = player;
 
+  if (player.isStarPlayer) applyHolo(card, false);
+
   card.addEventListener('click', () => openModal(side, player));
   card.addEventListener('keydown', e => {
     if (e.target.closest('.skill-link')) return; /* skill-link handles its own activation */
@@ -424,6 +462,47 @@ function buildCard(player, side) {
 }
 
 /* ────────────────────────────────────────────────────────
+   HOLOGRAPHIC STAR CARDS
+   Adds the `holo` class and feeds cursor position (--mx/--my)
+   plus tilt (--rx/--ry) to the CSS in style.css. Idempotent:
+   listeners bind once per element, so the reused modal card can
+   be toggled on/off as different players open.
+   ──────────────────────────────────────────────────────── */
+function applyHolo(el, tilt) {
+  el.classList.add('holo');
+  el._holoTilt = !!tilt;
+  if (el._holoBound) return;
+  el._holoBound = true;
+  const MAX = 10; /* max tilt in degrees */
+
+  el.addEventListener('pointermove', e => {
+    if (!el.classList.contains('holo')) return;
+    const r  = el.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top)  / r.height;
+    el.style.setProperty('--mx', `${(px * 100).toFixed(1)}%`);
+    el.style.setProperty('--my', `${(py * 100).toFixed(1)}%`);
+    if (el._holoTilt) {
+      el.style.setProperty('--ry', `${((px - 0.5) * 2 * MAX).toFixed(2)}deg`);
+      el.style.setProperty('--rx', `${(-(py - 0.5) * 2 * MAX).toFixed(2)}deg`);
+    }
+    el.classList.add('holo-active');
+  });
+
+  el.addEventListener('pointerleave', () => {
+    el.classList.remove('holo-active');
+    el.style.setProperty('--mx', '50%');
+    el.style.setProperty('--my', '50%');
+    el.style.setProperty('--rx', '0deg');
+    el.style.setProperty('--ry', '0deg');
+  });
+}
+
+function clearHolo(el) {
+  el.classList.remove('holo', 'holo-active');
+}
+
+/* ────────────────────────────────────────────────────────
    TRADING CARD MODAL
    ──────────────────────────────────────────────────────── */
 function openModal(side, player) {
@@ -435,6 +514,7 @@ function openModal(side, player) {
   const imgDir  = team?.imageDir ?? 'images/';
 
   card.className = 'trading-card' + (isStar ? ' star-card' : '');
+  if (isStar) applyHolo(card, true); else clearHolo(card);
 
   card.innerHTML = `
     <div class="modal-image-area" style="background:${bgColor};">

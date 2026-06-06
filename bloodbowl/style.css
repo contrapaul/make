@@ -310,6 +310,96 @@
     inset 1px 1px 0 rgba(255, 255, 255, 0.6);
 }
 
+/* ══════════════════════════════════════════════════════════
+   HOLOGRAPHIC STAR CARDS
+   Foil sheen + cursor-tracking glare + 3D tilt + shimmer glow.
+   Driven by --mx/--my (glare position) and --rx/--ry (tilt),
+   set in script.js applyHolo(). Auto-shimmers when idle.
+   ══════════════════════════════════════════════════════════ */
+@keyframes holoFoil {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes holoGlow {
+  0%, 100% { box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 0 26px rgba(212, 175, 55, 0.35),
+    inset 0 0 0 1px rgba(255, 240, 180, 0.45); }
+  50%      { box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 0 46px rgba(255, 216, 120, 0.62),
+    inset 0 0 0 1px rgba(255, 255, 225, 0.85); }
+}
+
+/* ── Big trading card ── */
+.trading-card.star-card.holo {
+  --mx: 50%; --my: 50%; --rx: 0deg; --ry: 0deg;
+  animation: holoGlow 3.4s ease-in-out infinite;
+  transform: perspective(1100px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.2s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.trading-card.star-card.holo.holo-active { transition: transform 0.06s linear; }
+
+/* Foil sheen — rainbow band that drifts; intensifies on interaction */
+.trading-card.star-card.holo::after {
+  content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  background: linear-gradient(115deg,
+    rgba(255, 0, 128, 0.40) 0%,  rgba(255, 175, 0, 0.34) 20%,
+    rgba(70, 255, 170, 0.34) 40%, rgba(0, 170, 255, 0.34) 60%,
+    rgba(180, 80, 255, 0.40) 80%, rgba(255, 0, 128, 0.40) 100%);
+  background-size: 200% 200%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.32;
+  animation: holoFoil 7s linear infinite;
+}
+.trading-card.star-card.holo.holo-active::after { opacity: 0.5; }
+
+/* Glare — bright spot tracking the cursor */
+.trading-card.star-card.holo::before {
+  content: ''; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  background: radial-gradient(circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 45%);
+  mix-blend-mode: screen;
+  opacity: 0; transition: opacity 0.2s ease;
+}
+.trading-card.star-card.holo.holo-active::before { opacity: 0.85; }
+
+/* ── Small roster row (lighter holo) ── */
+.player-card.star-player.holo {
+  --mx: 50%; --my: 50%;
+  overflow: hidden;
+}
+.player-card.star-player.holo::after {
+  content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg,
+    rgba(255, 0, 128, 0.30), rgba(255, 175, 0, 0.26), rgba(70, 255, 170, 0.26),
+    rgba(0, 170, 255, 0.26), rgba(180, 80, 255, 0.30));
+  background-size: 200% 100%;
+  mix-blend-mode: overlay;
+  opacity: 0.30;
+  animation: holoFoil 7s linear infinite;
+}
+.player-card.star-player.holo::before {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%);
+  mix-blend-mode: screen;
+  opacity: 0; transition: opacity 0.15s ease;
+}
+.player-card.star-player.holo:hover::before,
+.player-card.star-player.holo.holo-active::before { opacity: 0.7; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trading-card.star-card.holo,
+  .trading-card.star-card.holo::after,
+  .player-card.star-player.holo::after { animation: none !important; }
+  .trading-card.star-card.holo { transform: none !important; }
+}
+
 
 @keyframes cardIn {
   from { transform: scale(0.93) translateY(10px); opacity: 0; }

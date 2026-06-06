@@ -516,3 +516,121 @@
   white-space:   nowrap;
 }
 .my-teams-btn:hover { background: rgba(212, 175, 55, 0.14); color: var(--bb-gold, #D4AF37); }
+
+/* ════════════════════════════════════════════════════════
+   OVERHAULED BUILDER — rename, flavor text, buy skills,
+   adjustable budget & team colour (renders in Choose Team pane)
+   ════════════════════════════════════════════════════════ */
+
+/* Player rows now stack: head line, flavor, skills */
+.tb-player-row {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.35rem;
+  padding:        0.5rem 0.6rem;
+  border:         1px solid rgba(80, 130, 255, 0.12);
+  border-radius:  6px;
+  background:     rgba(255, 255, 255, 0.02);
+}
+.tb-player-head { display: flex; align-items: center; gap: 0.4rem; }
+
+.tb-flavor-inp {
+  width:        100%;
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    0.68rem;
+  font-style:   italic;
+  color:        rgba(220, 235, 255, 0.85);
+  background:   rgba(255, 255, 255, 0.05);
+  border:       1px solid rgba(100, 140, 220, 0.22);
+  border-radius: 4px;
+  padding:      0.3rem 0.45rem;
+  box-sizing:   border-box;
+}
+.tb-flavor-inp:focus { outline: 1px solid rgba(120, 170, 255, 0.5); }
+
+/* Skills row */
+.tb-skills-row {
+  display:    flex;
+  flex-wrap:  wrap;
+  align-items: center;
+  gap:        0.3rem;
+}
+.tb-skill-chip {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  letter-spacing: 0.03em;
+  padding:       0.18rem 0.4rem;
+  border-radius: 3px;
+  white-space:   nowrap;
+}
+.tb-skill-chip.base {
+  background: rgba(120, 150, 200, 0.12);
+  color:      rgba(190, 210, 245, 0.75);
+  border:     1px solid rgba(120, 150, 200, 0.25);
+}
+.tb-skill-chip.bought {
+  background: rgba(212, 175, 55, 0.16);
+  color:      var(--bb-gold, #E8C24A);
+  border:     1px solid rgba(212, 175, 55, 0.4);
+}
+.tb-skill-x {
+  background: transparent; border: none; color: inherit;
+  cursor: pointer; font-size: 0.8rem; line-height: 1;
+  padding: 0 0 0 0.15rem; opacity: 0.75;
+}
+.tb-skill-x:hover { opacity: 1; }
+.tb-skill-add {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  font-weight:   700;
+  color:         rgba(150, 200, 255, 0.9);
+  background:    rgba(80, 130, 255, 0.12);
+  border:        1px dashed rgba(120, 170, 255, 0.45);
+  border-radius: 3px;
+  padding:       0.2rem 0.45rem;
+  cursor:        pointer;
+}
+.tb-skill-add:hover { background: rgba(80, 130, 255, 0.22); }
+.tb-skill-select {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.66rem;
+  color:         rgba(220, 235, 255, 0.9);
+  background:    rgba(8, 16, 40, 0.95);
+  border:        1px solid rgba(120, 170, 255, 0.5);
+  border-radius: 4px;
+  padding:       0.22rem 0.4rem;
+}
+
+/* Budget value emphasis */
+.tb-budget-val { min-width: 5.5rem; text-align: center; }
+
+/* Team colour swatch */
+.tb-color-input {
+  width:  2.6rem;
+  height: 1.8rem;
+  padding: 0;
+  border: 1px solid rgba(120, 160, 255, 0.4);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Save / Cancel actions */
+.tb-builder-actions {
+  display: flex;
+  gap:     0.6rem;
+  margin:  1.1rem 0 0.4rem;
+}
+.tb-save-btn { flex: 1; margin: 0 !important; }
+.tb-cancel-btn {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.75rem;
+  font-weight:   700;
+  color:         rgba(200, 215, 245, 0.7);
+  background:    rgba(255, 255, 255, 0.05);
+  border:        1px solid rgba(120, 150, 210, 0.3);
+  border-radius: 6px;
+  padding:       0 1.1rem;
+  cursor:        pointer;
+}
+.tb-cancel-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
