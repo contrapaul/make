@@ -15,7 +15,7 @@
 .pwiz3 {
   display: flex;
   flex-direction: column;
-  width: 67rem;
+  width: max-content;   /* sized by the 5 fixed-width stage columns — constant */
   height: 53rem;
   transform-origin: top center;
   will-change: transform;
@@ -94,7 +94,7 @@
    natural width so .pwiz3 has a real size for FitScale to lock the ratio. */
 .pwiz3-stage {
   display: grid;
-  grid-template-columns: 13.5em max-content 13.5em;
+  grid-template-columns: 12em 13.5em max-content 13.5em 12em;
   gap: 0.8rem;
   margin-top: 0.6rem;
   align-items: start;
@@ -106,6 +106,16 @@
   display: flex; flex-direction: column; gap: 0.45rem; min-width: 0;
   min-height: 0; max-height: 100%; overflow-y: auto; overflow-x: hidden;
 }
+
+/* Skill reference cards live in the outer columns (uses the side space) */
+.pwiz3-skills-col {
+  display: flex; flex-direction: column; gap: 0.5rem;
+  min-width: 0; min-height: 0; max-height: 100%;
+  overflow-y: auto; overflow-x: hidden;
+}
+.pwiz3-skills-col .sk-card { padding: 0.55rem 0.65rem; }
+.pwiz3-skills-col .sk-card-name { font-size: 0.86rem; }
+.pwiz3-skills-col .sk-card-desc { font-size: 0.62rem; line-height: 1.5; }
 .pwiz3-col-label {
   font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
   letter-spacing: 0.12em; text-transform: uppercase; color: rgba(190, 215, 255, 0.6);

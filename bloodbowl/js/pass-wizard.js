@@ -187,9 +187,12 @@ function initPassWizard() {
     const seq = el('div', 'pwiz3-seq'); seq.id = 'pwiz3-seq';
     root.appendChild(seq);
 
-    /* Stage: thrower | pitch | catcher */
+    /* Stage: thrower skills | thrower card | pitch | catcher card | catcher skills */
     const stage = el('div', 'pwiz3-stage');
     root.appendChild(stage);
+
+    const throwerSkills = el('div', 'pwiz3-skills-col'); throwerSkills.id = 'pwiz3-thrower-skills';
+    stage.appendChild(throwerSkills);
 
     const throwerCol = el('div', 'pwiz3-col pwiz3-col-left'); throwerCol.id = 'pwiz3-thrower-col';
     stage.appendChild(throwerCol);
@@ -205,6 +208,9 @@ function initPassWizard() {
 
     const catcherCol = el('div', 'pwiz3-col pwiz3-col-right'); catcherCol.id = 'pwiz3-catcher-col';
     stage.appendChild(catcherCol);
+
+    const catcherSkills = el('div', 'pwiz3-skills-col'); catcherSkills.id = 'pwiz3-catcher-skills';
+    stage.appendChild(catcherSkills);
 
     if (typeof window.BloodBowlPitch !== 'undefined') {
       ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: PITCH_SCALE, noZoom: true });
@@ -281,11 +287,13 @@ function initPassWizard() {
     if (window.FitScale && pbody) ws._fit = window.FitScale(pbody, root, { max: 1.4 });
   }
 
-  /* ── Player columns ── */
+  /* ── Player columns (card in the middle, skills in the outer column) ── */
   function buildPlayerColumn(role) {
-    const col = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-col' : 'pwiz3-catcher-col');
+    const col       = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-col' : 'pwiz3-catcher-col');
+    const skillsCol = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-skills' : 'pwiz3-catcher-skills');
     if (!col) return;
     col.innerHTML = '';
+    if (skillsCol) skillsCol.innerHTML = '';
     col.appendChild(el('div', 'pwiz3-col-label', role === 'thrower' ? 'Thrower' : 'Catcher'));
 
     const player = role === 'thrower' ? ws.thrower : ws.catcher;
@@ -298,20 +306,21 @@ function initPassWizard() {
       if (pos) col.appendChild(el('div', 'pwiz3-pos-note', `Placed at (${pos.col}, ${pos.row})`));
       else     col.appendChild(el('div', 'pwiz3-pos-note pwiz3-pos-warn', 'Tap the pitch to place'));
 
-      const allow = role === 'thrower' ? PASS_THROWER_SKILLS : PASS_CATCHER_SKILLS;
-      const set   = new Set(allow);
-      const rel = [...new Set((getPlayerSkills(player) || [])
-        .map(s => s.replace(/\s*\(.*\)$/, '').trim())
-        .filter(s => set.has(s)))];
-      const skillWrap = el('div', 'pwiz3-skill-cards');
-      if (rel.length) rel.forEach(s => skillWrap.appendChild(window.buildSkillCard(s)));
-      else skillWrap.appendChild(el('div', 'pwiz3-skill-empty', 'No passing skills'));
-      col.appendChild(skillWrap);
-
       const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
       btn.textContent = `Change ${cap(role)}`;
       btn.addEventListener('click', () => openPicker(role));
       col.appendChild(btn);
+
+      /* Relevant skills → outer column */
+      if (skillsCol) {
+        skillsCol.appendChild(el('div', 'pwiz3-col-label', `${cap(role)} Skills`));
+        const set = new Set(role === 'thrower' ? PASS_THROWER_SKILLS : PASS_CATCHER_SKILLS);
+        const rel = [...new Set((getPlayerSkills(player) || [])
+          .map(s => s.replace(/\s*\(.*\)$/, '').trim())
+          .filter(s => set.has(s)))];
+        if (rel.length) rel.forEach(s => skillsCol.appendChild(window.buildSkillCard(s)));
+        else skillsCol.appendChild(el('div', 'pwiz3-skill-empty', 'No passing skills'));
+      }
     } else {
       col.appendChild(el('div', 'pwiz3-card-empty', `No ${cap(role)} selected`));
       const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
