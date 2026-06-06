@@ -131,7 +131,7 @@ async function loadTeam(side, teamId) {
   if (!team) return;
 
   try {
-    const players = await fetchJSON(team.file);
+    const players = await fetchJSON(team.fullTeam ?? team.file);
     state[side].team    = team;
     state[side].players = players;
     applyTeamColors(side, team.colors);

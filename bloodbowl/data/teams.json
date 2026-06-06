@@ -6,13 +6,13 @@
     "imageDir": "data/images/imperial-v1/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#8C8C8C",
-      "primary":     "#73030D",
+      "bg": "#8C8C8C",
+      "primary": "#73030D",
       "primaryDark": "#450008",
-      "accent":      "#732F3B",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#1a0005"
+      "accent": "#732F3B",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#1a0005"
     }
   },
   {
@@ -22,13 +22,23 @@
     "imageDir": "images/amazon/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0E2A14",
-      "primary":     "#1E5A2A",
+      "bg": "#0E2A14",
+      "primary": "#1E5A2A",
       "primaryDark": "#081408",
-      "accent":      "#3A7A40",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#050A06"
+      "accent": "#3A7A40",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#050A06"
+    },
+    "fullTeam": "data/teams/full/amazon.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 690000,
+      "totalGold": 1000000
     }
   },
   {
@@ -38,13 +48,23 @@
     "imageDir": "images/black-orc/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#1A1A1A",
-      "primary":     "#3A3A3A",
+      "bg": "#1A1A1A",
+      "primary": "#3A3A3A",
       "primaryDark": "#0A0A0A",
-      "accent":      "#5A5A5A",
-      "gold":        "#CC6600",
-      "goldDark":    "#885500",
-      "headerBg":    "#080808"
+      "accent": "#5A5A5A",
+      "gold": "#CC6600",
+      "goldDark": "#885500",
+      "headerBg": "#080808"
+    },
+    "fullTeam": "data/teams/full/black-orc.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 880000,
+      "totalGold": 1000000
     }
   },
   {
@@ -54,13 +74,23 @@
     "imageDir": "images/bretonnian/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0A0A2A",
-      "primary":     "#1A1A6A",
+      "bg": "#0A0A2A",
+      "primary": "#1A1A6A",
       "primaryDark": "#050518",
-      "accent":      "#2A2A9A",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#050514"
+      "accent": "#2A2A9A",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#050514"
+    },
+    "fullTeam": "data/teams/full/bretonnian.json",
+    "build": {
+      "rerolls": 4,
+      "apothecary": true,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 710000,
+      "totalGold": 1000000
     }
   },
   {
@@ -70,13 +100,23 @@
     "imageDir": "images/chaos-chosen/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#1A0A1A",
-      "primary":     "#4A0A4A",
+      "bg": "#1A0A1A",
+      "primary": "#4A0A4A",
       "primaryDark": "#0D050D",
-      "accent":      "#7A1A7A",
-      "gold":        "#8B0000",
-      "goldDark":    "#5A0000",
-      "headerBg":    "#0A040A"
+      "accent": "#7A1A7A",
+      "gold": "#8B0000",
+      "goldDark": "#5A0000",
+      "headerBg": "#0A040A"
+    },
+    "fullTeam": "data/teams/full/chaos-chosen.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 900000,
+      "totalGold": 1000000
     }
   },
   {
@@ -86,13 +126,23 @@
     "imageDir": "images/chaos-dwarf/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#1A0A00",
-      "primary":     "#4A1A00",
+      "bg": "#1A0A00",
+      "primary": "#4A1A00",
       "primaryDark": "#0D0800",
-      "accent":      "#7A3A0A",
-      "gold":        "#CD7F32",
-      "goldDark":    "#8B5E3C",
-      "headerBg":    "#0A0600"
+      "accent": "#7A3A0A",
+      "gold": "#CD7F32",
+      "goldDark": "#8B5E3C",
+      "headerBg": "#0A0600"
+    },
+    "fullTeam": "data/teams/full/chaos-dwarf.json",
+    "build": {
+      "rerolls": 1,
+      "apothecary": false,
+      "fanFactor": 2,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 890000,
+      "totalGold": 1000000
     }
   },
   {
@@ -102,13 +152,23 @@
     "imageDir": "images/chaos-renegades/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#1A0A1A",
-      "primary":     "#3A0A3A",
+      "bg": "#1A0A1A",
+      "primary": "#3A0A3A",
       "primaryDark": "#0D050D",
-      "accent":      "#5A1A5A",
-      "gold":        "#9B59B6",
-      "goldDark":    "#6C3483",
-      "headerBg":    "#0A040A"
+      "accent": "#5A1A5A",
+      "gold": "#9B59B6",
+      "goldDark": "#6C3483",
+      "headerBg": "#0A040A"
+    },
+    "fullTeam": "data/teams/full/chaos-renegades.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 630000,
+      "totalGold": 1000000
     }
   },
   {
@@ -118,13 +178,23 @@
     "imageDir": "images/dark-elf/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#0A0A1E",
-      "primary":     "#1A1A5A",
+      "bg": "#0A0A1E",
+      "primary": "#1A1A5A",
       "primaryDark": "#050510",
-      "accent":      "#3A3A8A",
-      "gold":        "#C0C0C0",
-      "goldDark":    "#808080",
-      "headerBg":    "#050510"
+      "accent": "#3A3A8A",
+      "gold": "#C0C0C0",
+      "goldDark": "#808080",
+      "headerBg": "#050510"
+    },
+    "fullTeam": "data/teams/full/dark-elf.json",
+    "build": {
+      "rerolls": 3,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 825000,
+      "totalGold": 995000
     }
   },
   {
@@ -134,13 +204,23 @@
     "imageDir": "images/dwarf/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#1E1A14",
-      "primary":     "#4A3A2A",
+      "bg": "#1E1A14",
+      "primary": "#4A3A2A",
       "primaryDark": "#0F0E0A",
-      "accent":      "#7A5A3A",
-      "gold":        "#CD7F32",
-      "goldDark":    "#8B5E3C",
-      "headerBg":    "#0A0906"
+      "accent": "#7A5A3A",
+      "gold": "#CD7F32",
+      "goldDark": "#8B5E3C",
+      "headerBg": "#0A0906"
+    },
+    "fullTeam": "data/teams/full/dwarf.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 850000,
+      "totalGold": 1000000
     }
   },
   {
@@ -150,13 +230,23 @@
     "imageDir": "images/elven-union/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#0A1E0A",
-      "primary":     "#1A5A1A",
+      "bg": "#0A1E0A",
+      "primary": "#1A5A1A",
       "primaryDark": "#051205",
-      "accent":      "#2A8A2A",
-      "gold":        "#E8D5A0",
-      "goldDark":    "#B8A060",
-      "headerBg":    "#051005"
+      "accent": "#2A8A2A",
+      "gold": "#E8D5A0",
+      "goldDark": "#B8A060",
+      "headerBg": "#051005"
+    },
+    "fullTeam": "data/teams/full/elven-union.json",
+    "build": {
+      "rerolls": 3,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 835000,
+      "totalGold": 995000
     }
   },
   {
@@ -166,13 +256,23 @@
     "imageDir": "images/gnome/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#0E1A0A",
-      "primary":     "#2A4A1A",
+      "bg": "#0E1A0A",
+      "primary": "#2A4A1A",
       "primaryDark": "#08100A",
-      "accent":      "#4A6A3A",
-      "gold":        "#8FBC8F",
-      "goldDark":    "#2E8B57",
-      "headerBg":    "#060A06"
+      "accent": "#4A6A3A",
+      "gold": "#8FBC8F",
+      "goldDark": "#2E8B57",
+      "headerBg": "#060A06"
+    },
+    "fullTeam": "data/teams/full/gnome.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": true,
+      "fanFactor": 3,
+      "coaches": 3,
+      "cheerleaders": 3,
+      "playerGold": 610000,
+      "totalGold": 1000000
     }
   },
   {
@@ -182,13 +282,23 @@
     "imageDir": "images/goblin/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0A1A00",
-      "primary":     "#2A6A00",
+      "bg": "#0A1A00",
+      "primary": "#2A6A00",
       "primaryDark": "#051000",
-      "accent":      "#4A9A00",
-      "gold":        "#CCCC00",
-      "goldDark":    "#888800",
-      "headerBg":    "#050A00"
+      "accent": "#4A9A00",
+      "gold": "#CCCC00",
+      "goldDark": "#888800",
+      "headerBg": "#050A00"
+    },
+    "fullTeam": "data/teams/full/goblin.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 5,
+      "coaches": 5,
+      "cheerleaders": 4,
+      "playerGold": 555000,
+      "totalGold": 995000
     }
   },
   {
@@ -198,13 +308,23 @@
     "imageDir": "images/halfling/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#1E1200",
-      "primary":     "#5A3A00",
+      "bg": "#1E1200",
+      "primary": "#5A3A00",
       "primaryDark": "#120A00",
-      "accent":      "#8A5A1A",
-      "gold":        "#DAA520",
-      "goldDark":    "#9A7215",
-      "headerBg":    "#0D0800"
+      "accent": "#8A5A1A",
+      "gold": "#DAA520",
+      "goldDark": "#9A7215",
+      "headerBg": "#0D0800"
+    },
+    "fullTeam": "data/teams/full/halfling.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 6,
+      "coaches": 5,
+      "cheerleaders": 5,
+      "playerGold": 540000,
+      "totalGold": 1000000
     }
   },
   {
@@ -214,13 +334,23 @@
     "imageDir": "images/high-elf/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#0A1420",
-      "primary":     "#1A3A6A",
+      "bg": "#0A1420",
+      "primary": "#1A3A6A",
       "primaryDark": "#050A10",
-      "accent":      "#3A5A8A",
-      "gold":        "#C0C0C0",
-      "goldDark":    "#A0A0A0",
-      "headerBg":    "#05080E"
+      "accent": "#3A5A8A",
+      "gold": "#C0C0C0",
+      "goldDark": "#A0A0A0",
+      "headerBg": "#05080E"
+    },
+    "fullTeam": "data/teams/full/high-elf.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 2,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 855000,
+      "totalGold": 995000
     }
   },
   {
@@ -230,13 +360,23 @@
     "imageDir": "images/human/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#1A0A0A",
-      "primary":     "#5A1A1A",
+      "bg": "#1A0A0A",
+      "primary": "#5A1A1A",
       "primaryDark": "#0D0505",
-      "accent":      "#8A2A2A",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#0A0505"
+      "accent": "#8A2A2A",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#0A0505"
+    },
+    "fullTeam": "data/teams/full/human.json",
+    "build": {
+      "rerolls": 1,
+      "apothecary": false,
+      "fanFactor": 2,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 910000,
+      "totalGold": 1000000
     }
   },
   {
@@ -246,13 +386,23 @@
     "imageDir": "images/imperial-nobility/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#140005",
-      "primary":     "#6A000F",
+      "bg": "#140005",
+      "primary": "#6A000F",
       "primaryDark": "#0A0006",
-      "accent":      "#9A1A2A",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#080004"
+      "accent": "#9A1A2A",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#080004"
+    },
+    "fullTeam": "data/teams/full/imperial-nobility.json",
+    "build": {
+      "rerolls": 3,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 785000,
+      "totalGold": 995000
     }
   },
   {
@@ -262,13 +412,23 @@
     "imageDir": "images/khorne/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#1A0000",
-      "primary":     "#6A0000",
+      "bg": "#1A0000",
+      "primary": "#6A0000",
       "primaryDark": "#0D0000",
-      "accent":      "#9A0000",
-      "gold":        "#CD7F32",
-      "goldDark":    "#8B5E3C",
-      "headerBg":    "#0A0000"
+      "accent": "#9A0000",
+      "gold": "#CD7F32",
+      "goldDark": "#8B5E3C",
+      "headerBg": "#0A0000"
+    },
+    "fullTeam": "data/teams/full/khorne.json",
+    "build": {
+      "rerolls": 0,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 970000,
+      "totalGold": 1000000
     }
   },
   {
@@ -278,13 +438,23 @@
     "imageDir": "images/lizardmen/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#003A2A",
-      "primary":     "#005A40",
+      "bg": "#003A2A",
+      "primary": "#005A40",
       "primaryDark": "#002014",
-      "accent":      "#008060",
-      "gold":        "#FFD700",
-      "goldDark":    "#DAA520",
-      "headerBg":    "#001A14"
+      "accent": "#008060",
+      "gold": "#FFD700",
+      "goldDark": "#DAA520",
+      "headerBg": "#001A14"
+    },
+    "fullTeam": "data/teams/full/lizardmen.json",
+    "build": {
+      "rerolls": 0,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 980000,
+      "totalGold": 1000000
     }
   },
   {
@@ -294,13 +464,23 @@
     "imageDir": "images/necromantic-horror/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#0A1414",
-      "primary":     "#1A3A3A",
+      "bg": "#0A1414",
+      "primary": "#1A3A3A",
       "primaryDark": "#050A0A",
-      "accent":      "#2A5A5A",
-      "gold":        "#7B68EE",
-      "goldDark":    "#4B0082",
-      "headerBg":    "#030A0A"
+      "accent": "#2A5A5A",
+      "gold": "#7B68EE",
+      "goldDark": "#4B0082",
+      "headerBg": "#030A0A"
+    },
+    "fullTeam": "data/teams/full/necromantic-horror.json",
+    "build": {
+      "rerolls": 1,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 900000,
+      "totalGold": 1000000
     }
   },
   {
@@ -310,13 +490,23 @@
     "imageDir": "images/norse/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0A1A2A",
-      "primary":     "#1A3A6A",
+      "bg": "#0A1A2A",
+      "primary": "#1A3A6A",
       "primaryDark": "#050A14",
-      "accent":      "#3A6A9A",
-      "gold":        "#E0F0FF",
-      "goldDark":    "#90B0D0",
-      "headerBg":    "#050A14"
+      "accent": "#3A6A9A",
+      "gold": "#E0F0FF",
+      "goldDark": "#90B0D0",
+      "headerBg": "#050A14"
+    },
+    "fullTeam": "data/teams/full/norse.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 860000,
+      "totalGold": 1000000
     }
   },
   {
@@ -326,13 +516,23 @@
     "imageDir": "images/nurgle/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0E1200",
-      "primary":     "#2A3A00",
+      "bg": "#0E1200",
+      "primary": "#2A3A00",
       "primaryDark": "#080A00",
-      "accent":      "#4A5A00",
-      "gold":        "#6B8E23",
-      "goldDark":    "#4A6615",
-      "headerBg":    "#050800"
+      "accent": "#4A5A00",
+      "gold": "#6B8E23",
+      "goldDark": "#4A6615",
+      "headerBg": "#050800"
+    },
+    "fullTeam": "data/teams/full/nurgle.json",
+    "build": {
+      "rerolls": 1,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 920000,
+      "totalGold": 1000000
     }
   },
   {
@@ -342,13 +542,23 @@
     "imageDir": "images/ogre/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#1A1814",
-      "primary":     "#3A3220",
+      "bg": "#1A1814",
+      "primary": "#3A3220",
       "primaryDark": "#0E0D0A",
-      "accent":      "#5A5040",
-      "gold":        "#CD7F32",
-      "goldDark":    "#8B5E3C",
-      "headerBg":    "#0A0906"
+      "accent": "#5A5040",
+      "gold": "#CD7F32",
+      "goldDark": "#8B5E3C",
+      "headerBg": "#0A0906"
+    },
+    "fullTeam": "data/teams/full/ogre.json",
+    "build": {
+      "rerolls": 3,
+      "apothecary": false,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 790000,
+      "totalGold": 1000000
     }
   },
   {
@@ -358,13 +568,23 @@
     "imageDir": "images/old-world-alliance/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#1A0A00",
-      "primary":     "#4A1A00",
+      "bg": "#1A0A00",
+      "primary": "#4A1A00",
       "primaryDark": "#0D0800",
-      "accent":      "#7A3A1A",
-      "gold":        "#D4AF37",
-      "goldDark":    "#9A7D0A",
-      "headerBg":    "#0A0600"
+      "accent": "#7A3A1A",
+      "gold": "#D4AF37",
+      "goldDark": "#9A7D0A",
+      "headerBg": "#0A0600"
+    },
+    "fullTeam": "data/teams/full/old-world-alliance.json",
+    "build": {
+      "rerolls": 4,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 700000,
+      "totalGold": 1000000
     }
   },
   {
@@ -374,13 +594,23 @@
     "imageDir": "images/orc/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#001A00",
-      "primary":     "#003A00",
+      "bg": "#001A00",
+      "primary": "#003A00",
       "primaryDark": "#000D00",
-      "accent":      "#005A00",
-      "gold":        "#808000",
-      "goldDark":    "#606000",
-      "headerBg":    "#000A00"
+      "accent": "#005A00",
+      "gold": "#808000",
+      "goldDark": "#606000",
+      "headerBg": "#000A00"
+    },
+    "fullTeam": "data/teams/full/orc.json",
+    "build": {
+      "rerolls": 4,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 740000,
+      "totalGold": 1000000
     }
   },
   {
@@ -390,13 +620,23 @@
     "imageDir": "images/shambling-undead/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#0E0E0A",
-      "primary":     "#2A2A1A",
+      "bg": "#0E0E0A",
+      "primary": "#2A2A1A",
       "primaryDark": "#080808",
-      "accent":      "#4A4A3A",
-      "gold":        "#A0A030",
-      "goldDark":    "#706020",
-      "headerBg":    "#060606"
+      "accent": "#4A4A3A",
+      "gold": "#A0A030",
+      "goldDark": "#706020",
+      "headerBg": "#060606"
+    },
+    "fullTeam": "data/teams/full/shambling-undead.json",
+    "build": {
+      "rerolls": 3,
+      "apothecary": false,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 790000,
+      "totalGold": 1000000
     }
   },
   {
@@ -406,13 +646,23 @@
     "imageDir": "images/skaven/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#1A0E0E",
-      "primary":     "#3A1A1A",
+      "bg": "#1A0E0E",
+      "primary": "#3A1A1A",
       "primaryDark": "#0D0808",
-      "accent":      "#5A2A2A",
-      "gold":        "#C06830",
-      "goldDark":    "#804020",
-      "headerBg":    "#0A0808"
+      "accent": "#5A2A2A",
+      "gold": "#C06830",
+      "goldDark": "#804020",
+      "headerBg": "#0A0808"
+    },
+    "fullTeam": "data/teams/full/skaven.json",
+    "build": {
+      "rerolls": 1,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 0,
+      "playerGold": 930000,
+      "totalGold": 1000000
     }
   },
   {
@@ -422,13 +672,23 @@
     "imageDir": "images/snotling/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#1A1E00",
-      "primary":     "#3A4A00",
+      "bg": "#1A1E00",
+      "primary": "#3A4A00",
       "primaryDark": "#0D0E00",
-      "accent":      "#5A7000",
-      "gold":        "#ADFF2F",
-      "goldDark":    "#7CFC00",
-      "headerBg":    "#0A0D00"
+      "accent": "#5A7000",
+      "gold": "#ADFF2F",
+      "goldDark": "#7CFC00",
+      "headerBg": "#0A0D00"
+    },
+    "fullTeam": "data/teams/full/snotling.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 6,
+      "coaches": 6,
+      "cheerleaders": 12,
+      "playerGold": 405000,
+      "totalGold": 995000
     }
   },
   {
@@ -438,13 +698,23 @@
     "imageDir": "images/tomb-kings/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#1E1400",
-      "primary":     "#4A3000",
+      "bg": "#1E1400",
+      "primary": "#4A3000",
       "primaryDark": "#100A00",
-      "accent":      "#7A5A0A",
-      "gold":        "#FFD700",
-      "goldDark":    "#C8A800",
-      "headerBg":    "#0D0A00"
+      "accent": "#7A5A0A",
+      "gold": "#FFD700",
+      "goldDark": "#C8A800",
+      "headerBg": "#0D0A00"
+    },
+    "fullTeam": "data/teams/full/tomb-kings.json",
+    "build": {
+      "rerolls": 4,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 730000,
+      "totalGold": 1000000
     }
   },
   {
@@ -454,13 +724,23 @@
     "imageDir": "images/underworld-denizens/",
     "reroll": 70000,
     "colors": {
-      "bg":          "#0A0A14",
-      "primary":     "#1A1A3A",
+      "bg": "#0A0A14",
+      "primary": "#1A1A3A",
       "primaryDark": "#050508",
-      "accent":      "#2A2A5A",
-      "gold":        "#7B68EE",
-      "goldDark":    "#4B0082",
-      "headerBg":    "#030308"
+      "accent": "#2A2A5A",
+      "gold": "#7B68EE",
+      "goldDark": "#4B0082",
+      "headerBg": "#030308"
+    },
+    "fullTeam": "data/teams/full/underworld-denizens.json",
+    "build": {
+      "rerolls": 5,
+      "apothecary": false,
+      "fanFactor": 5,
+      "coaches": 4,
+      "cheerleaders": 4,
+      "playerGold": 520000,
+      "totalGold": 1000000
     }
   },
   {
@@ -470,13 +750,23 @@
     "imageDir": "images/vampire/",
     "reroll": 60000,
     "colors": {
-      "bg":          "#0E0000",
-      "primary":     "#4A0020",
+      "bg": "#0E0000",
+      "primary": "#4A0020",
       "primaryDark": "#080000",
-      "accent":      "#7A0030",
-      "gold":        "#800020",
-      "goldDark":    "#500010",
-      "headerBg":    "#060000"
+      "accent": "#7A0030",
+      "gold": "#800020",
+      "goldDark": "#500010",
+      "headerBg": "#060000"
+    },
+    "fullTeam": "data/teams/full/vampire.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 1,
+      "coaches": 1,
+      "cheerleaders": 1,
+      "playerGold": 850000,
+      "totalGold": 1000000
     }
   },
   {
@@ -486,13 +776,23 @@
     "imageDir": "images/wood-elf/",
     "reroll": 50000,
     "colors": {
-      "bg":          "#001A00",
-      "primary":     "#0A4A0A",
+      "bg": "#001A00",
+      "primary": "#0A4A0A",
       "primaryDark": "#000D00",
-      "accent":      "#1A6A1A",
-      "gold":        "#8FBC8F",
-      "goldDark":    "#3CB371",
-      "headerBg":    "#000800"
+      "accent": "#1A6A1A",
+      "gold": "#8FBC8F",
+      "goldDark": "#3CB371",
+      "headerBg": "#000800"
+    },
+    "fullTeam": "data/teams/full/wood-elf.json",
+    "build": {
+      "rerolls": 2,
+      "apothecary": false,
+      "fanFactor": 0,
+      "coaches": 0,
+      "cheerleaders": 0,
+      "playerGold": 895000,
+      "totalGold": 995000
     }
   }
 ]
