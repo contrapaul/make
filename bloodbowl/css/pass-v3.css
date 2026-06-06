@@ -1,0 +1,186 @@
+/* ════════════════════════════════════════════════════════
+   PASS WIZARD v3 — trading-card players, single roll button
+   ════════════════════════════════════════════════════════ */
+.pwiz3 { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.pwiz3 .pwiz-team-tabs { flex-shrink: 0; }
+
+/* Sequence strip (top, above pitch) */
+.pwiz3-seq {
+  flex-shrink: 0;
+  min-height: 3.2rem;
+  margin: 0.5rem 0 0.2rem;
+  padding: 0.5rem 0.7rem;
+  background: rgba(6, 14, 40, 0.55);
+  border: 1px solid rgba(80, 140, 255, 0.18);
+  border-radius: 8px;
+}
+.pwiz3-seq-wait {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(180, 210, 255, 0.55);
+  text-align: center;
+  padding: 0.4rem;
+}
+.pwiz3-seq-mods {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: rgba(190, 215, 255, 0.7);
+  margin-bottom: 0.45rem;
+}
+.pwiz3-mod-group b { color: var(--bb-gold, #E8C24A); }
+.pwiz3-mod-group.neg b { color: #ff8fa0; }
+.pwiz3-seq-row { display: flex; align-items: stretch; gap: 0.4rem; flex-wrap: wrap; }
+.pwiz3-seq-arrow { align-self: center; color: rgba(150, 180, 255, 0.4); font-size: 0.9rem; }
+.pwiz3-seq-chip {
+  min-width: 6.5rem;
+  padding: 0.35rem 0.55rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(100, 150, 255, 0.2);
+  border-radius: 6px;
+}
+.pwiz3-seq-chip.active { border-color: rgba(120, 170, 255, 0.7); background: rgba(80, 130, 255, 0.12); }
+.pwiz3-seq-chip-hd {
+  display: flex; justify-content: space-between; gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700;
+  color: rgba(220, 235, 255, 0.9);
+}
+.pwiz3-seq-chip-tgt { color: var(--bb-gold, #E8C24A); }
+.pwiz3-seq-chip-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; color: rgba(180, 210, 255, 0.55); }
+.pwiz3-seq-chip-res { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.2rem; min-height: 0.9rem; }
+.pwiz3-seq-roll { font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.95rem; color: #fff; }
+.pwiz3-seq-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; font-weight: 700;
+  padding: 0.05rem 0.35rem; border-radius: 3px;
+}
+.pwiz3-seq-tag.ok   { color: #81c784; background: rgba(76,175,80,0.15); }
+.pwiz3-seq-tag.warn { color: #FFD54F; background: rgba(255,213,79,0.12); }
+.pwiz3-seq-tag.bad  { color: #ff8fa0; background: rgba(200,16,46,0.15); }
+.pwiz3-seq-explain { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; color: rgba(180,210,255,0.5); flex-basis: 100%; }
+
+/* Scatter (inside seq strip) */
+.pwiz3-scatter { margin-top: 0.5rem; }
+.pwiz3-scatter-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: rgba(180,210,255,0.45); margin-bottom: 0.35rem;
+}
+.pwiz3-scatter-row { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.pwiz3-scatter-card { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
+.pwiz3-scatter-res { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: rgba(200,220,255,0.7); }
+.pwiz3-scatter-arrow { font-size: 0.85rem; }
+
+/* Stage: thrower | pitch | catcher (lowered) */
+.pwiz3-stage {
+  flex: 1 1 0; min-height: 0;
+  display: grid;
+  grid-template-columns: 13.5em 1fr 13.5em;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+  align-items: start;
+}
+.pwiz3-pitch { display: flex; flex-direction: column; min-width: 0; }
+.pwiz3-col { display: flex; flex-direction: column; gap: 0.45rem; min-width: 0; }
+.pwiz3-col-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: rgba(190, 215, 255, 0.6);
+}
+.pwiz3-card-wrap { width: 100%; }
+.pwiz3-card-wrap .bwiz-embedded-card { margin: 0 auto; }
+.bwiz-card-small { max-width: 12.5em !important; }
+.pwiz3-card-empty {
+  aspect-ratio: 5 / 7; display: flex; align-items: center; justify-content: center;
+  text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.66rem;
+  color: rgba(150, 185, 255, 0.4);
+  border: 1px dashed rgba(80, 130, 255, 0.25); border-radius: 8px;
+}
+.pwiz3-pos-note { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: rgba(180,210,255,0.5); text-align: center; }
+.pwiz3-pos-warn { color: #FFD54F; }
+
+/* Skill cards under the player (card-width) */
+.pwiz3-skill-cards { display: flex; flex-direction: column; gap: 0.4rem; max-width: 12.5em; margin: 0 auto; width: 100%; }
+.pwiz3-skill-cards .sk-card { padding: 0.5rem 0.6rem; }
+.pwiz3-skill-cards .sk-card-name { font-size: 0.82rem; }
+.pwiz3-skill-cards .sk-card-desc { font-size: 0.58rem; line-height: 1.5; }
+.pwiz3-skill-empty {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: rgba(150,185,255,0.4);
+  text-align: center; padding: 0.3rem; max-width: 12.5em; margin: 0 auto;
+}
+.pwiz3-choose-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; font-weight: 700;
+  color: rgba(210, 230, 255, 0.85); background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(100,140,220,0.32); border-radius: 5px;
+  padding: 0.35rem 0.6rem; cursor: pointer; width: 100%; max-width: 12.5em;
+  margin: 0 auto;
+}
+.pwiz3-choose-btn:hover { background: rgba(80,130,255,0.16); border-color: rgba(120,170,255,0.55); }
+
+/* Roll frame (under pitch) */
+.pwiz3-rollframe {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: rgba(6, 14, 40, 0.6);
+  border: 1px solid rgba(80, 140, 255, 0.2);
+  border-radius: 10px;
+}
+.pwiz3-frame-left  { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-start; }
+.pwiz3-frame-center { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.pwiz3-frame-right { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; }
+.pwiz3-frame-right-btns { display: flex; gap: 0.4rem; }
+
+.pwiz3-tool-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 700;
+  color: rgba(210, 230, 255, 0.85); background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(100,140,220,0.3); border-radius: 5px;
+  padding: 0.3rem 0.6rem; cursor: pointer; white-space: nowrap;
+}
+.pwiz3-tool-btn:hover  { background: rgba(80,130,255,0.16); }
+.pwiz3-tool-btn.active { background: rgba(80,130,255,0.3); border-color: rgba(120,170,255,0.6); color: #fff; }
+
+.pwiz3-dice-slot {
+  min-width: 3rem; min-height: 3rem;
+  display: flex; align-items: center; justify-content: center; gap: 0.3rem;
+}
+.pwiz3-roll-btn { min-width: 11rem; }
+
+.pwiz3-skill-slot { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: flex-end; min-height: 1.6rem; }
+.pwiz3-skill-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  color: var(--bb-gold, #E8C24A); background: rgba(212,175,55,0.12);
+  border: 1px solid rgba(212,175,55,0.4); border-radius: 5px;
+  padding: 0.25rem 0.55rem; cursor: pointer;
+}
+.pwiz3-skill-btn:hover { background: rgba(212,175,55,0.22); }
+
+/* Opposing list */
+.pwiz3-opp-list { display: flex; flex-direction: column; gap: 0.25rem; width: 100%; }
+.pwiz3-opp-row {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: rgba(200,220,255,0.7);
+}
+.pwiz3-opp-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pwiz3-opp-pos { color: rgba(150,185,255,0.5); }
+.pwiz3-opp-rm {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; color: rgba(255,143,160,0.8);
+  background: rgba(200,16,46,0.1); border: 1px solid rgba(200,16,46,0.3);
+  border-radius: 4px; padding: 0.12rem 0.4rem; cursor: pointer;
+}
+.pwiz3-opp-rm:hover { background: rgba(200,16,46,0.22); color: #fff; }
+
+/* Picker chips */
+.pwiz3-pick-chip {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.54rem;
+  padding: 0.1rem 0.35rem; border-radius: 3px;
+  background: rgba(120,150,200,0.12); color: rgba(190,210,245,0.7);
+  border: 1px solid rgba(120,150,200,0.22);
+}
+.pwiz3-pick-chip.hi { background: rgba(212,175,55,0.16); color: var(--bb-gold,#E8C24A); border-color: rgba(212,175,55,0.4); }
+
+@media (max-width: 820px) {
+  .pwiz3-stage { grid-template-columns: 1fr; }
+  .pwiz3-rollframe { grid-template-columns: 1fr; }
+  .pwiz3-frame-left, .pwiz3-frame-right { align-items: center; }
+}

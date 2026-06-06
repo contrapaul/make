@@ -2,8 +2,10 @@
 
 /* ═══════════════════════════════════════════════════════
    Blood Bowl Companion — js/pass-wizard.js
-   Sprints 11-14: Console TV layout, player chooser cards,
-   skill tooltips, right info panel.
+   Rebuilt layout: trading-card players (thrower left, catcher
+   right), pitch + cards lowered, a single Roll button in a
+   dice frame under the pitch, sequence info above the pitch,
+   and a block-wizard-style single-roll flow.
    ═══════════════════════════════════════════════════════ */
 
 function parsePassStat(statsText, key) {
@@ -24,10 +26,14 @@ function parseAllStats(statsText) {
   return stats;
 }
 
+/* Skills shown as cards under the matching player. */
+const PASS_THROWER_SKILLS = ['Pass','Accurate','Strong Arm','Cannoneer','Hail Mary Pass',
+  'Nerves of Steel','Consummate Professional','Cloud Burster','Dump-Off','Pro','Safe Pass'];
+const PASS_CATCHER_SKILLS = ['Catch','Diving Catch','Sure Hands','Extra Arms','Nerves of Steel','Pro'];
+
 function initPassWizard() {
   const panel = document.getElementById('panel-pass');
   if (!panel) return;
-
   const body = panel.querySelector('.panel-body');
 
   /* ── Wizard state ── */
@@ -46,44 +52,42 @@ function initPassWizard() {
     pitch:           null,
     passSkillUsed:   false,
     teamRRUsed:      false,
+    plan:            null,
+    intIndex:        0,
     _built:          false,
-    variant:         parseInt(localStorage.getItem('pwiz-variant') || '1', 10),
   };
 
-  function gbSide() { return ws.activeSide === 'left' ? 'home' : 'away'; }
-
-  function resetWizardState() {
-    ws.pitch?.clear();
-    ws.thrower         = null;
-    ws.catcher         = null;
-    ws.throwerPos      = null;
-    ws.catcherPos      = null;
-    ws.opposingPlayers = [];
-    ws.zonesOn         = false;
-    ws._built          = false;
-    resetRoll();
-  }
-
-  function getStat(p, key) { return parsePassStat(p?.statsText, key); }
+  const gbSide = () => (ws.activeSide === 'left' ? 'home' : 'away');
+  const delay  = ms => new Promise(r => setTimeout(r, ms));
+  const cap    = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const getStat = (p, key) => parsePassStat(p?.statsText, key);
 
   function hasSk(p, name) {
     if (!p) return false;
     const sk = typeof getPlayerSkills === 'function' ? getPlayerSkills(p) : [];
-    return sk.some(s => s.toLowerCase() === name.toLowerCase());
+    return sk.some(s => s.replace(/\s*\(.*\)$/, '').trim().toLowerCase() === name.toLowerCase());
   }
 
   function resetRoll() {
-    ws.passResult    = null;
-    ws.catchResult   = null;
-    ws.passSkillUsed = false;
-    ws.teamRRUsed    = false;
+    ws.passResult = null; ws.catchResult = null;
+    ws.passSkillUsed = false; ws.teamRRUsed = false;
+    ws.intIndex = 0;
   }
 
-  function playerNum(p)   { return p?.number != null ? String(p.number) : String((p?.idx ?? 0) + 1); }
-  function playerLabel(p) { return `#${playerNum(p)} ${p?.name || p?.pos || '?'}`; }
+  function resetWizardState() {
+    ws.pitch?.clear();
+    ws.thrower = null; ws.catcher = null;
+    ws.throwerPos = null; ws.catcherPos = null;
+    ws.opposingPlayers = [];
+    ws.zonesOn = false; ws._built = false; ws.plan = null;
+    resetRoll();
+  }
+
+  const playerNum   = p => (p?.number != null ? String(p.number) : String((p?.idx ?? 0) + 1));
+  const playerLabel = p => `#${playerNum(p)} ${p?.name || p?.pos || '?'}`;
 
   function computeTZ() {
-    function count(pos) {
+    const count = pos => {
       if (!pos) return 0;
       let n = 0;
       for (const op of ws.opposingPlayers) {
@@ -91,8 +95,8 @@ function initPassWizard() {
             !(op.col === pos.col && op.row === pos.row)) n++;
       }
       return n;
-    }
-    ws.tz        = count(ws.throwerPos);
+    };
+    ws.tz = count(ws.throwerPos);
     ws.catcherTZ = count(ws.catcherPos);
   }
 
@@ -114,6 +118,7 @@ function initPassWizard() {
 
   function getInterceptors() {
     if (!ws.throwerPos || !ws.catcherPos) return [];
+    if (hasSk(ws.thrower, 'Hail Mary Pass')) return [];
     const line = getLineCells(ws.throwerPos.col, ws.throwerPos.row, ws.catcherPos.col, ws.catcherPos.row);
     return ws.opposingPlayers
       .filter(op => line.some(c => Math.abs(c.col - op.col) <= 1 && Math.abs(c.row - op.row) <= 1))
@@ -124,131 +129,77 @@ function initPassWizard() {
       });
   }
 
-  const delay = ms => new Promise(r => setTimeout(r, ms));
-
-  /* Pitch scale: fills center column, capped at 60vw max.
-     Panel = min(82vw,1600px). Column widths mirror CSS clamp values.
-     Pitch at scale s ≈ s × 784px wide (28 cols × round(28s) px). */
   function _pitchScale() {
-    const vw     = window.innerWidth;
-    const panelW = Math.min(vw * 0.82, 1600);
-    const leftW  = Math.max(150, Math.min(240, vw * 0.17));
-    const rightW = Math.max(100, Math.min(195, vw * 0.115));
-    const gaps   = 60;
-    const centerW = Math.max(200, panelW - leftW - rightW - gaps);
-    const target  = Math.min(centerW * 0.95, vw * 0.60);
+    const vw      = window.innerWidth;
+    const panelW  = Math.min(vw * 0.82, 1600);
+    const sideW   = 2 * Math.max(150, Math.min(220, vw * 0.13));
+    const centerW = Math.max(200, panelW - sideW - 60);
+    const target  = Math.min(centerW * 0.98, vw * 0.6);
     return Math.max(0.35, target / 784);
   }
 
-  /* ── Skill tooltip chip (Sprint 13) ── */
-  const RELEVANT_SKILLS = new Set([
-    'Accurate','Strong Arm','Pass','Nerves of Steel','Cannoneer',
-    'Hail Mary Pass','Catch','Diving Catch','Sure Hands','Extra Arms',
-    'Consummate Professional','Cloud Burster','Dump-Off','Pro',
-  ]);
-
-  function makeSkillChip(skillName, extraClass) {
-    const entry = typeof lookupSkill === 'function' ? lookupSkill(skillName) : null;
-    const chip  = document.createElement('span');
-    const isRel = RELEVANT_SKILLS.has(skillName);
-    chip.className = `pwiz-skill-chip ${isRel ? 'pos' : 'neutral'} pwiz-skill-inline`
-      + (extraClass ? ` ${extraClass}` : '');
-    chip.textContent = skillName;
-    if (entry?.description) {
-      chip.title = entry.description;
-      chip.style.cursor = 'help';
-      chip.addEventListener('click', e => {
-        e.stopPropagation();
-        let tip = chip.querySelector('.pwiz-skill-tooltip');
-        if (tip) { tip.remove(); return; }
-        tip = document.createElement('div');
-        tip.className = 'pwiz-skill-tooltip';
-        tip.textContent = entry.description;
-        chip.appendChild(tip);
-        const off = e => { if (!chip.contains(e.target)) { tip.remove(); document.removeEventListener('click', off, true); } };
-        setTimeout(() => document.addEventListener('click', off, true), 0);
-      });
-    }
-    return chip;
-  }
-
-  function buildModBreakdown(rows) {
-    const wrap = document.createElement('div');
-    wrap.className = 'pwiz-mod-breakdown';
-    rows.forEach(({ label, value, chip: chipName, cls }) => {
-      const row = document.createElement('div');
-      row.className = 'pwiz-mod-row' + (cls ? ` ${cls}` : '');
-      const lbl = document.createElement('span');
-      lbl.className = 'pwiz-mod-label';
-      if (chipName) lbl.appendChild(makeSkillChip(chipName));
-      else lbl.textContent = label;
-      const val = document.createElement('span');
-      val.className = 'pwiz-mod-value';
-      val.textContent = value;
-      row.appendChild(lbl);
-      row.appendChild(val);
-      wrap.appendChild(row);
-    });
-    return wrap;
-  }
-
   /* ─────────────────────────────────────────────────────
-     LAYOUT BUILDER (Sprint 11)
-     3-column: left panel | center (pitch + choosers) | right panel
-     5 variant buttons switch visual style.
+     LAYOUT
      ──────────────────────────────────────────────────── */
+
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
 
   function buildLayout() {
     body.innerHTML = '';
     resetRoll();
 
-    /* Hidden weather chip slot (for Panels.refreshWeatherChips) */
-    const wChip = document.createElement('div');
-    wChip.className = 'weather-chip-slot'; wChip.id = 'wchip-pass'; wChip.hidden = true;
+    const wChip = el('div', 'weather-chip-slot'); wChip.id = 'wchip-pass'; wChip.hidden = true;
     body.appendChild(wChip);
     window.Panels?.refreshWeatherChips?.();
 
-    /* Root */
-    const root = document.createElement('div');
-    root.className = `pwiz-v2 pwiz-variant-${ws.variant}`;
-    root.id = 'pwiz-v2-root';
+    const root = el('div', 'pwiz3'); root.id = 'pwiz3-root';
     body.appendChild(root);
 
-    /* Header: variant selector + team tabs */
-    _buildHeader(root);
+    /* Header — team tabs only */
+    const teamRow = el('div', 'pwiz-team-tabs');
+    ['Home', 'Away'].forEach((label, i) => {
+      const side = i === 0 ? 'left' : 'right';
+      const btn  = el('button', 'pwiz-team-tab' + (ws.activeSide === side ? ' active' : ''));
+      btn.type = 'button'; btn.textContent = label;
+      btn.addEventListener('click', () => {
+        if (ws.activeSide === side) return;
+        ws.activeSide = side;
+        ws.thrower = ws.catcher = ws.throwerPos = ws.catcherPos = null;
+        ws.opposingPlayers = []; ws.pitch?.clear();
+        teamRow.querySelectorAll('.pwiz-team-tab').forEach(b => b.classList.toggle('active', b === btn));
+        buildPlayerColumn('thrower'); buildPlayerColumn('catcher'); buildOppList(); armWizard();
+      });
+      teamRow.appendChild(btn);
+    });
+    root.appendChild(teamRow);
 
-    /* Body: 3 columns */
-    const bodyEl = document.createElement('div');
-    bodyEl.className = 'pwiz-v2-body';
-    root.appendChild(bodyEl);
+    /* Sequence strip (top, above pitch) */
+    const seq = el('div', 'pwiz3-seq'); seq.id = 'pwiz3-seq';
+    root.appendChild(seq);
 
-    const leftEl = document.createElement('div');
-    leftEl.className = 'pwiz-v2-left';
-    leftEl.id = 'pwiz-v2-left';
-    bodyEl.appendChild(leftEl);
+    /* Stage: thrower | pitch | catcher */
+    const stage = el('div', 'pwiz3-stage');
+    root.appendChild(stage);
 
-    const centerEl = document.createElement('div');
-    centerEl.className = 'pwiz-v2-center';
-    bodyEl.appendChild(centerEl);
+    const throwerCol = el('div', 'pwiz3-col pwiz3-col-left'); throwerCol.id = 'pwiz3-thrower-col';
+    stage.appendChild(throwerCol);
 
-    const rightEl = document.createElement('div');
-    rightEl.className = 'pwiz-v2-right';
-    rightEl.id = 'pwiz-v2-right';
-    bodyEl.appendChild(rightEl);
-
-    /* Placement banner */
-    const placeBanner = document.createElement('div');
-    placeBanner.id = 'pwiz-place-banner';
-    placeBanner.hidden = true;
-    placeBanner.className = 'pwiz-place-banner';
-    placeBanner.title = 'Click to cancel placement';
+    const pitchCol = el('div', 'pwiz3-pitch');
+    const placeBanner = el('div', 'pwiz-place-banner'); placeBanner.id = 'pwiz-place-banner';
+    placeBanner.hidden = true; placeBanner.title = 'Click to cancel placement';
     placeBanner.addEventListener('click', () => { ws.pitch?.cancelPlacement(); placeBanner.hidden = true; });
-    centerEl.appendChild(placeBanner);
+    pitchCol.appendChild(placeBanner);
+    const pitchWrap = el('div', 'pwiz-pitch-wrap');
+    pitchCol.appendChild(pitchWrap);
+    stage.appendChild(pitchCol);
 
-    /* Pitch */
-    const pitchWrap = document.createElement('div');
-    pitchWrap.className = 'pwiz-pitch-wrap';
-    centerEl.appendChild(pitchWrap);
+    const catcherCol = el('div', 'pwiz3-col pwiz3-col-right'); catcherCol.id = 'pwiz3-catcher-col';
+    stage.appendChild(catcherCol);
 
     if (typeof window.BloodBowlPitch !== 'undefined') {
       ws.pitch = new window.BloodBowlPitch(pitchWrap, { scale: _pitchScale(), noZoom: true });
@@ -264,406 +215,564 @@ function initPassWizard() {
           const op = ws.opposingPlayers.find(o => o.col === fc && o.row === fr);
           if (op) { op.col = tc; op.row = tr; }
         }
-        computeTZ();
-        rebuildLeft();
-        rebuildRight();
-        updateReqs();
+        computeTZ(); buildPlayerColumn('thrower'); buildPlayerColumn('catcher'); buildOppList(); armWizard();
       };
     }
 
-    /* Left panel (includes chooser cards at top) */
-    _buildLeftPanel(leftEl);
+    /* Roll frame (under pitch) */
+    const frame = el('div', 'pwiz3-rollframe');
+    root.appendChild(frame);
 
-    /* Right panel */
-    _buildRightPanel(rightEl);
-
-    /* Roll area (full-width below 3 columns) */
-    const reqEl = document.createElement('div');
-    reqEl.className = 'pwiz-requirements'; reqEl.id = 'pwiz-req';
-    root.appendChild(reqEl);
-
-    const rollEl = document.createElement('div');
-    rollEl.id = 'pwiz-roll';
-    root.appendChild(rollEl);
-
-    updateReqs();
-  }
-
-  /* ── Header: variant selector + Home/Away tabs ── */
-  function _buildHeader(root) {
-    const hdr = document.createElement('div');
-    hdr.className = 'pwiz-v2-header';
-    root.appendChild(hdr);
-
-    /* Team tabs */
-    const teamRow = document.createElement('div');
-    teamRow.className = 'pwiz-team-tabs';
-    ['Home', 'Away'].forEach((label, i) => {
-      const side = i === 0 ? 'left' : 'right';
-      const btn  = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'pwiz-team-tab' + (ws.activeSide === side ? ' active' : '');
-      btn.textContent = label;
-      btn.addEventListener('click', () => {
-        if (ws.activeSide === side) return;
-        ws.activeSide = side;
-        ws.thrower = null; ws.catcher = null;
-        ws.throwerPos = null; ws.catcherPos = null;
-        ws.opposingPlayers = [];
-        ws.pitch?.clear();
-        teamRow.querySelectorAll('.pwiz-team-tab').forEach(b => b.classList.toggle('active', b === btn));
-        rebuildLeft(); rebuildRight(); updateReqs();
-      });
-      teamRow.appendChild(btn);
-    });
-    hdr.appendChild(teamRow);
-  }
-
-  /* ── Left panel: chooser cards + zones toggle + opposing players + weather ── */
-  function _buildLeftPanel(container) {
-    container.innerHTML = '';
-
-    /* Thrower + catcher chooser cards (moved from below-pitch) */
-    const chooserWrap = document.createElement('div');
-    chooserWrap.className = 'pwiz-below-pitch';
-    chooserWrap.id = 'pwiz-below-pitch';
-    container.appendChild(chooserWrap);
-    _buildBelowPitch(chooserWrap);
-
-    /* Section label */
-    const lbl = document.createElement('div');
-    lbl.className = 'pwiz-panel-label';
-    lbl.textContent = 'Controls';
-    container.appendChild(lbl);
-
-    /* Zones toggle */
-    const zonesBtn = document.createElement('button');
-    zonesBtn.type = 'button'; zonesBtn.className = 'dmt-btn pwiz-zones-btn' + (ws.zonesOn ? ' active' : '');
-    zonesBtn.textContent = '⬡ Show Zones';
+    /* Left: add opposing + zones toggle + opp list */
+    const fLeft = el('div', 'pwiz3-frame-left');
+    const addOpp = el('button', 'pwiz3-tool-btn'); addOpp.type = 'button';
+    addOpp.textContent = 'Add Opposing Player';
+    addOpp.addEventListener('click', () => openPicker('opposing'));
+    fLeft.appendChild(addOpp);
+    const zonesBtn = el('button', 'pwiz3-tool-btn' + (ws.zonesOn ? ' active' : ''));
+    zonesBtn.type = 'button'; zonesBtn.id = 'pwiz3-zones-btn';
+    zonesBtn.textContent = 'Show Passing Zones';
     zonesBtn.addEventListener('click', () => {
       ws.zonesOn = !ws.zonesOn;
       zonesBtn.classList.toggle('active', ws.zonesOn);
       if (ws.zonesOn && ws.throwerPos) ws.pitch?.showPassZones(ws.throwerPos.col, ws.throwerPos.row);
       else ws.pitch?.hidePassZones();
     });
-    container.appendChild(zonesBtn);
+    fLeft.appendChild(zonesBtn);
+    const oppList = el('div', 'pwiz3-opp-list'); oppList.id = 'pwiz3-opp-list';
+    fLeft.appendChild(oppList);
+    frame.appendChild(fLeft);
 
-    /* Opposing players section */
-    const oppHdr = document.createElement('div');
-    oppHdr.className = 'pwiz-panel-label';
-    oppHdr.style.marginTop = '0.8rem';
-    oppHdr.textContent = 'Opposing Players';
-    container.appendChild(oppHdr);
+    /* Center: dice slot + roll button */
+    const fCenter = el('div', 'pwiz3-frame-center');
+    const dice = el('div', 'pwiz3-dice-slot'); dice.id = 'pwiz3-dice';
+    fCenter.appendChild(dice);
+    const rollBtn = el('button', 'roll-btn pwiz3-roll-btn'); rollBtn.id = 'pwiz3-roll';
+    rollBtn.type = 'button'; rollBtn.textContent = 'Roll'; rollBtn.disabled = true;
+    fCenter.appendChild(rollBtn);
+    frame.appendChild(fCenter);
 
+    /* Right: confirm + reroll + skill slot */
+    const fRight = el('div', 'pwiz3-frame-right');
+    const confirmBtn = el('button', 'bwiz-confirm-btn'); confirmBtn.id = 'pwiz3-confirm';
+    confirmBtn.type = 'button'; confirmBtn.textContent = 'Confirm Roll'; confirmBtn.hidden = true;
+    const rerollBtn = el('button', 'bwiz-rr-action-btn'); rerollBtn.id = 'pwiz3-reroll';
+    rerollBtn.type = 'button'; rerollBtn.textContent = 'Use Re-roll'; rerollBtn.hidden = true;
+    const skillSlot = el('div', 'pwiz3-skill-slot'); skillSlot.id = 'pwiz3-skill';
+    const btnRow = el('div', 'pwiz3-frame-right-btns');
+    btnRow.appendChild(confirmBtn); btnRow.appendChild(rerollBtn);
+    fRight.appendChild(btnRow);
+    fRight.appendChild(skillSlot);
+    frame.appendChild(fRight);
+
+    buildPlayerColumn('thrower');
+    buildPlayerColumn('catcher');
+    buildOppList();
+    armWizard();
+  }
+
+  /* ── Player columns ── */
+  function buildPlayerColumn(role) {
+    const col = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-col' : 'pwiz3-catcher-col');
+    if (!col) return;
+    col.innerHTML = '';
+    col.appendChild(el('div', 'pwiz3-col-label', role === 'thrower' ? 'Thrower' : 'Catcher'));
+
+    const player = role === 'thrower' ? ws.thrower : ws.catcher;
+    const pos    = role === 'thrower' ? ws.throwerPos : ws.catcherPos;
+
+    if (player) {
+      const cardWrap = el('div', 'pwiz3-card-wrap');
+      col.appendChild(cardWrap);
+      buildEmbeddedCardShared(cardWrap, player, ws.activeSide, { small: true });
+      if (pos) col.appendChild(el('div', 'pwiz3-pos-note', `Placed at (${pos.col}, ${pos.row})`));
+      else     col.appendChild(el('div', 'pwiz3-pos-note pwiz3-pos-warn', 'Tap the pitch to place'));
+
+      const allow = role === 'thrower' ? PASS_THROWER_SKILLS : PASS_CATCHER_SKILLS;
+      const set   = new Set(allow);
+      const rel = [...new Set((getPlayerSkills(player) || [])
+        .map(s => s.replace(/\s*\(.*\)$/, '').trim())
+        .filter(s => set.has(s)))];
+      const skillWrap = el('div', 'pwiz3-skill-cards');
+      if (rel.length) rel.forEach(s => skillWrap.appendChild(window.buildSkillCard(s)));
+      else skillWrap.appendChild(el('div', 'pwiz3-skill-empty', 'No passing skills'));
+      col.appendChild(skillWrap);
+
+      const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
+      btn.textContent = `Change ${cap(role)}`;
+      btn.addEventListener('click', () => openPicker(role));
+      col.appendChild(btn);
+    } else {
+      col.appendChild(el('div', 'pwiz3-card-empty', `No ${cap(role)} selected`));
+      const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
+      btn.textContent = `Choose ${cap(role)}`;
+      btn.addEventListener('click', () => openPicker(role));
+      col.appendChild(btn);
+    }
+  }
+
+  /* ── Opposing players list (under Add button) ── */
+  function buildOppList() {
+    const list = document.getElementById('pwiz3-opp-list');
+    if (!list) return;
+    list.innerHTML = '';
     ws.opposingPlayers.forEach((op, i) => {
-      const row = document.createElement('div');
-      row.className = 'pwiz-opp-row';
-      const lbl2 = document.createElement('span');
-      lbl2.className = 'pwiz-opp-label';
-      lbl2.textContent = playerLabel(op.player);
-      const pos = document.createElement('span');
-      pos.className = 'pwiz-opp-pos';
-      pos.textContent = `(${op.col},${op.row})`;
-      const rmBtn = document.createElement('button');
-      rmBtn.type = 'button'; rmBtn.className = 'pwiz-rm-btn'; rmBtn.textContent = '✕';
-      rmBtn.addEventListener('click', () => {
+      const row = el('div', 'pwiz3-opp-row');
+      row.appendChild(el('span', 'pwiz3-opp-name', esc(playerLabel(op.player))));
+      row.appendChild(el('span', 'pwiz3-opp-pos', `(${op.col},${op.row})`));
+      const rm = el('button', 'pwiz3-opp-rm'); rm.type = 'button'; rm.textContent = 'Remove';
+      rm.addEventListener('click', () => {
         ws.pitch?.removePlayer(op.col, op.row);
         ws.opposingPlayers.splice(i, 1);
-        computeTZ(); rebuildLeft(); rebuildRight(); updateReqs();
+        computeTZ(); buildOppList(); armWizard();
       });
-      row.appendChild(lbl2); row.appendChild(pos); row.appendChild(rmBtn);
-      container.appendChild(row);
+      row.appendChild(rm);
+      list.appendChild(row);
     });
-
-    const addOppBtn = document.createElement('button');
-    addOppBtn.type = 'button'; addOppBtn.className = 'pwiz-add-btn';
-    addOppBtn.textContent = '+ Add Opposing Player';
-    addOppBtn.addEventListener('click', () => openPicker('opposing'));
-    container.appendChild(addOppBtn);
-
-    /* TZ summary */
-    if (ws.throwerPos || ws.catcherPos) {
-      const tzDiv = document.createElement('div');
-      tzDiv.className = 'pwiz-tz-summary';
-      const parts = [];
-      if (ws.tz)        parts.push(`Thrower: ${ws.tz} TZ${hasSk(ws.thrower, 'Nerves of Steel') ? ' (NoS)' : ''}`);
-      if (ws.catcherTZ) parts.push(`Catcher: ${ws.catcherTZ} TZ`);
-      if (parts.length) tzDiv.textContent = parts.join(' · ');
-      if (parts.length) container.appendChild(tzDiv);
-    }
-
-    /* Weather effect note */
-    const w = window.GameState?.currentWeather;
-    if (w?.effect && w.effect !== 'No effect') {
-      const chip = document.createElement('div');
-      chip.className = 'pwiz-skill-chip neg';
-      chip.style.marginTop = '0.8rem';
-      chip.textContent = `${w.emoji ?? ''} ${w.effect}`.trim();
-      container.appendChild(chip);
-    }
-  }
-
-  /* ── Below-pitch: thrower + catcher chooser areas ── */
-  function _buildBelowPitch(container) {
-    container.innerHTML = '';
-
-    ['thrower', 'catcher'].forEach(role => {
-      const area = document.createElement('div');
-      area.className = 'pwiz-chooser-area';
-      area.dataset.role = role;
-
-      const player = role === 'thrower' ? ws.thrower : ws.catcher;
-      const pos    = role === 'thrower' ? ws.throwerPos : ws.catcherPos;
-
-      if (player) {
-        /* Selected state */
-        area.classList.add('pwiz-chooser-selected');
-
-        const nameEl = document.createElement('div');
-        nameEl.className = 'pwiz-chooser-name';
-        nameEl.innerHTML = `<span class="pwiz-chooser-role">${role === 'thrower' ? '🎯 Thrower' : '🤲 Catcher'}</span>`
-          + `<span class="pwiz-chooser-player-name">${esc(playerLabel(player))}</span>`;
-        if (pos) {
-          nameEl.innerHTML += ` <span class="pwiz-chooser-pos">(${pos.col},${pos.row})</span>`;
-        }
-        area.appendChild(nameEl);
-
-        /* Stats row */
-        const stats = parseAllStats(player.statsText);
-        if (Object.keys(stats).length) {
-          const statsEl = document.createElement('div');
-          statsEl.className = 'pwiz-chooser-stats';
-          ['MA', 'ST', 'AG', 'PA', 'AV'].forEach(key => {
-            const val = stats[key];
-            if (!val) return;
-            const st = document.createElement('div');
-            st.className = 'pwiz-chooser-stat';
-            st.innerHTML = `<span class="pwiz-cs-key">${key}</span><span class="pwiz-cs-val">${val}</span>`;
-            statsEl.appendChild(st);
-          });
-          area.appendChild(statsEl);
-        }
-
-        /* Relevant skills */
-        const skills = typeof getPlayerSkills === 'function' ? getPlayerSkills(player) : [];
-        if (skills.length) {
-          const skillsEl = document.createElement('div');
-          skillsEl.className = 'pwiz-chooser-skills';
-          skills.forEach(s => skillsEl.appendChild(makeSkillChip(s)));
-          area.appendChild(skillsEl);
-        }
-
-        /* Remove button */
-        const rmBtn = document.createElement('button');
-        rmBtn.type = 'button'; rmBtn.className = 'pwiz-rm-btn';
-        rmBtn.style.marginTop = '0.3rem';
-        rmBtn.textContent = '✕ Remove';
-        rmBtn.addEventListener('click', () => {
-          if (role === 'thrower') {
-            if (ws.throwerPos) ws.pitch?.removePlayer(ws.throwerPos.col, ws.throwerPos.row);
-            ws.thrower = null; ws.throwerPos = null;
-            ws.pitch?.clearPassLine(); ws.pitch?.hidePassZones(); ws.zonesOn = false;
-          } else {
-            if (ws.catcherPos) ws.pitch?.removePlayer(ws.catcherPos.col, ws.catcherPos.row);
-            ws.catcher = null; ws.catcherPos = null;
-            ws.pitch?.clearPassLine();
-          }
-          computeTZ(); rebuildLeft(); rebuildRight(); updateReqs();
-        });
-        area.appendChild(rmBtn);
-
-      } else {
-        /* Empty state */
-        const chooseBtn = document.createElement('button');
-        chooseBtn.type = 'button'; chooseBtn.className = 'pwiz-chooser-btn';
-        chooseBtn.innerHTML = (role === 'thrower' ? '🎯' : '🤲')
-          + ` Choose ${role === 'thrower' ? 'Thrower' : 'Catcher'}`;
-        chooseBtn.addEventListener('click', () => openPicker(role));
-        area.appendChild(chooseBtn);
-      }
-
-      container.appendChild(area);
-    });
-  }
-
-  /* ── Right panel: team re-rolls + weather + game info (Sprint 14) ── */
-  function _buildRightPanel(container) {
-    container.innerHTML = '';
-
-    const lbl = document.createElement('div');
-    lbl.className = 'pwiz-panel-label';
-    lbl.textContent = 'Game Info';
-    container.appendChild(lbl);
-
-    /* Team re-rolls (large display) */
-    const rrCount = window.GameState?.rerolls?.[gbSide()] ?? 0;
-    const rrBlock = document.createElement('div');
-    rrBlock.className = 'pwiz-right-rr';
-    rrBlock.id = 'pwiz-right-rr';
-    rrBlock.innerHTML = `
-      <div class="pwiz-rr-big-num${rrCount === 0 ? ' zero' : ''}">${rrCount}</div>
-      <div class="pwiz-rr-big-label">Team Re-rolls</div>
-    `;
-    if (ws.teamRRUsed) {
-      const used = document.createElement('div');
-      used.className = 'pwiz-rr-used-note';
-      used.textContent = 'Used this roll';
-      rrBlock.appendChild(used);
-    }
-    container.appendChild(rrBlock);
-
-    /* Weather */
-    const w = window.GameState?.currentWeather;
-    const weatherBlock = document.createElement('div');
-    weatherBlock.className = 'pwiz-right-weather';
-    if (w?.name) {
-      weatherBlock.innerHTML = `
-        <div class="pwiz-weather-emoji">${w.emoji ?? '🌤'}</div>
-        <div class="pwiz-weather-name">${esc(w.name)}</div>
-        ${w.effect && w.effect !== 'No effect' ? `<div class="pwiz-weather-effect">${esc(w.effect)}</div>` : ''}
-      `;
-    } else {
-      weatherBlock.innerHTML = `<div class="pwiz-weather-name" style="opacity:0.4;">No weather</div>`;
-    }
-    container.appendChild(weatherBlock);
-
-    /* Turn / half */
-    const gs = window.GameState;
-    const half = gs?.half ?? 1;
-    const turn = typeof gbState !== 'undefined' ? (gbState.currentTurn ?? 0) : 0;
-    const gameBlock = document.createElement('div');
-    gameBlock.className = 'pwiz-right-game';
-    gameBlock.innerHTML = `
-      <div class="pwiz-game-row"><span class="pwiz-game-key">Half</span><span class="pwiz-game-val">${half}</span></div>
-      ${turn ? `<div class="pwiz-game-row"><span class="pwiz-game-key">Turn</span><span class="pwiz-game-val">${turn}</span></div>` : ''}
-    `;
-    container.appendChild(gameBlock);
-
-    /* Score */
-    const scores = gs?.scores ?? window.gbState?.scores;
-    if (scores) {
-      const scoreBlock = document.createElement('div');
-      scoreBlock.className = 'pwiz-right-game';
-      scoreBlock.style.marginTop = '0.3rem';
-      scoreBlock.innerHTML = `
-        <div class="pwiz-game-row"><span class="pwiz-game-key">Score</span>
-          <span class="pwiz-game-val">${scores.home ?? 0} – ${scores.away ?? 0}</span></div>
-      `;
-      container.appendChild(scoreBlock);
-    }
-
-    /* Active side re-roll pip display note */
-    const sideLabel = ws.activeSide === 'left' ? 'Home' : 'Away';
-    const sideNote = document.createElement('div');
-    sideNote.className = 'pwiz-right-note';
-    sideNote.textContent = `Showing ${sideLabel} re-rolls`;
-    container.appendChild(sideNote);
-  }
-
-  /* ── Rebuild helpers ── */
-
-  function rebuildLeft() {
-    const el = document.getElementById('pwiz-v2-left');
-    if (el) _buildLeftPanel(el);
-  }
-
-  function rebuildBelowPitch() {
-    rebuildLeft(); // choosers now live inside the left panel
-  }
-
-  function rebuildRight() {
-    const el = document.getElementById('pwiz-v2-right');
-    if (el) _buildRightPanel(el);
   }
 
   /* ─────────────────────────────────────────────────────
-     ROSTER PICKER — full card overlay (Sprint 12)
+     PLAN + SEQUENCE STRIP
      ──────────────────────────────────────────────────── */
 
+  function computePlan() {
+    if (!ws.thrower || !ws.catcher) return null;
+
+    let range = null;
+    if (ws.throwerPos && ws.catcherPos && ws.pitch) {
+      range = ws.pitch.getPassRange(ws.throwerPos.col, ws.throwerPos.row, ws.catcherPos.col, ws.catcherPos.row);
+    }
+
+    const w          = window.GameState?.currentWeather;
+    const isBlizzard = w?.name === 'Blizzard';
+
+    const paBase       = getStat(ws.thrower, 'PA');
+    const nosThrow     = hasSk(ws.thrower, 'Nerves of Steel');
+    const hasAccurate  = hasSk(ws.thrower, 'Accurate');
+    const hasCannoneer = hasSk(ws.thrower, 'Cannoneer');
+    const hasHailMary  = hasSk(ws.thrower, 'Hail Mary Pass');
+
+    const rangePenalty     = range?.mod ?? 0;
+    const tzPenalty        = nosThrow ? 0 : ws.tz;
+    const accurateBonus    = (hasAccurate  && range && (range.rangeKey === 'quick' || range.rangeKey === 'short')) ? 1 : 0;
+    const cannoneerBonus   = (hasCannoneer && range && (range.rangeKey === 'long'  || range.rangeKey === 'bomb'))  ? 1 : 0;
+    const verySunnyPenalty = w?.name === 'Very Sunny' ? 1 : 0;
+
+    const paFinal = paBase >= 99 ? 99 : Math.min(6, Math.max(2,
+      paBase - rangePenalty + tzPenalty + verySunnyPenalty - accurateBonus - cannoneerBonus));
+
+    const blizzFumble = isBlizzard && range && (range.rangeKey === 'long' || range.rangeKey === 'bomb');
+
+    const agBase         = getStat(ws.catcher, 'AG');
+    const wCatchPenalty  = (w?.name === 'Pouring Rain' || w?.name === 'Blizzard') ? 1 : 0;
+    const catchTZPenalty = hasSk(ws.catcher, 'Nerves of Steel') ? 0 : ws.catcherTZ;
+    const catchSkBonus   = hasSk(ws.catcher, 'Catch') ? 1 : 0;
+    const agFinal        = agBase >= 99 ? 99 : Math.min(6, Math.max(2, agBase + wCatchPenalty + catchTZPenalty - catchSkBonus));
+
+    const intWeatherPenalty = w?.name === 'Pouring Rain' ? 1 : 0;
+    const interceptors = getInterceptors().map(op => {
+      const ag = getStat(op.player, 'AG');
+      return { op, target: Math.min(6, Math.max(2, (ag >= 99 ? 4 : ag) + intWeatherPenalty)) };
+    });
+
+    return {
+      range, paBase, paFinal, agBase, agFinal, blizzFumble, interceptors,
+      mods: { rangePenalty, tzPenalty, verySunnyPenalty, accurateBonus, cannoneerBonus,
+        nosThrow, hasAccurate, hasCannoneer, hasHailMary,
+        wCatchPenalty, catchTZPenalty, catchSkBonus },
+    };
+  }
+
+  function weatherLabel() {
+    const w = window.GameState?.currentWeather;
+    return w?.name && w.name !== 'Nice' ? w.name : null;
+  }
+
+  function modBreakdownHtml() {
+    const p = ws.plan; if (!p) return '';
+    const m = p.mods;
+    const t = [];
+    if (p.paFinal < 99) {
+      const rows = [`PA ${p.paBase}+`];
+      if (m.rangePenalty)     rows.push(`${p.range.rangeLabel} +${-m.rangePenalty}`);
+      if (m.tzPenalty)        rows.push(`${m.tzPenalty} Tackle Zone${m.tzPenalty > 1 ? 's' : ''} +${m.tzPenalty}`);
+      if (m.verySunnyPenalty) rows.push('Very Sunny +1');
+      if (m.nosThrow && ws.tz) rows.push('Nerves of Steel (TZ ignored)');
+      if (m.accurateBonus)    rows.push('Accurate −1');
+      if (m.cannoneerBonus)   rows.push('Cannoneer −1');
+      if (m.hasHailMary)      rows.push('Hail Mary (no intercept)');
+      t.push(`<span class="pwiz3-mod-group"><b>Throw ${p.paFinal}+</b> · ${rows.join(' · ')}</span>`);
+    }
+    if (p.agFinal < 99) {
+      const rows = [`AG ${p.agBase}+`];
+      if (m.catchSkBonus)   rows.push('Catch −1');
+      if (m.catchTZPenalty) rows.push(`${m.catchTZPenalty} Tackle Zone${m.catchTZPenalty > 1 ? 's' : ''} +${m.catchTZPenalty}`);
+      if (m.wCatchPenalty)  rows.push(`${weatherLabel() || 'Weather'} +1`);
+      t.push(`<span class="pwiz3-mod-group"><b>Catch ${p.agFinal}+</b> · ${rows.join(' · ')}</span>`);
+    }
+    if (p.blizzFumble) t.push('<span class="pwiz3-mod-group neg"><b>Blizzard</b> · Long/Bomb passes auto-fumble</span>');
+    return t.join('');
+  }
+
+  let seqChips = {};
+
+  function seqChip(key, label, target, sub) {
+    const c = el('div', 'pwiz3-seq-chip');
+    c.dataset.key = key;
+    c.innerHTML = `<div class="pwiz3-seq-chip-hd">${esc(label)}<span class="pwiz3-seq-chip-tgt">${esc(target)}</span></div>`
+      + (sub ? `<div class="pwiz3-seq-chip-sub">${esc(sub)}</div>` : '')
+      + `<div class="pwiz3-seq-chip-res"></div>`;
+    seqChips[key] = c.querySelector('.pwiz3-seq-chip-res');
+    return c;
+  }
+
+  function renderSeq() {
+    const seq = document.getElementById('pwiz3-seq');
+    if (!seq) return;
+    seq.innerHTML = '';
+    seqChips = {};
+
+    if (!ws.plan) {
+      const steps = [];
+      if (!ws.thrower) steps.push('Select a Thrower');
+      else if (!ws.throwerPos) steps.push('Place the Thrower on the pitch');
+      if (!ws.catcher) steps.push('Select a Catcher');
+      else if (!ws.catcherPos) steps.push('Place the Catcher on the pitch');
+      seq.appendChild(el('div', 'pwiz3-seq-wait', steps.join(' · ') || 'Ready'));
+      return;
+    }
+
+    const mods = modBreakdownHtml();
+    if (mods) seq.appendChild(el('div', 'pwiz3-seq-mods', mods));
+
+    const row = el('div', 'pwiz3-seq-row');
+    row.appendChild(seqChip('throw', 'Throw', ws.plan.paFinal >= 99 ? '—' : `${ws.plan.paFinal}+`));
+    ws.plan.interceptors.forEach((it, i) => {
+      row.appendChild(el('div', 'pwiz3-seq-arrow', '→'));
+      row.appendChild(seqChip(`int${i}`, 'Intercept', `${it.target}+`, it.op.player.name || it.op.player.pos || '?'));
+    });
+    row.appendChild(el('div', 'pwiz3-seq-arrow', '→'));
+    row.appendChild(seqChip('catch', 'Catch', ws.plan.agFinal >= 99 ? '—' : `${ws.plan.agFinal}+`));
+    seq.appendChild(row);
+
+    const scatter = el('div', 'pwiz3-scatter'); scatter.id = 'pwiz3-scatter';
+    seq.appendChild(scatter);
+  }
+
+  function setSeqActive(key) {
+    document.querySelectorAll('#pwiz3-seq .pwiz3-seq-chip').forEach(c =>
+      c.classList.toggle('active', c.dataset.key === key));
+  }
+
+  function seqResult(key, roll, label, cls, explain) {
+    const slot = seqChips[key];
+    if (!slot) return;
+    slot.innerHTML = `<span class="pwiz3-seq-roll">${roll != null ? roll : ''}</span>` +
+      `<span class="pwiz3-seq-tag ${cls}">${esc(label)}</span>` +
+      (explain ? `<span class="pwiz3-seq-explain">${esc(explain)}</span>` : '');
+  }
+
+  /* ─────────────────────────────────────────────────────
+     ROLL FLOW (single button, block-wizard style)
+     ──────────────────────────────────────────────────── */
+
+  const rollBtnEl  = () => document.getElementById('pwiz3-roll');
+  const confirmEl  = () => document.getElementById('pwiz3-confirm');
+  const rerollEl   = () => document.getElementById('pwiz3-reroll');
+  const skillEl    = () => document.getElementById('pwiz3-skill');
+  const diceEl     = () => document.getElementById('pwiz3-dice');
+
+  function clearAfterRoll() {
+    confirmEl().hidden = true; confirmEl().classList.remove('glow-blue'); confirmEl().onclick = null;
+    rerollEl().hidden = true; rerollEl().classList.remove('glow-gold'); rerollEl().onclick = null;
+    if (skillEl()) skillEl().innerHTML = '';
+  }
+
+  function consumeTeamRR() {
+    const gs = window.GameState?.rerolls; const key = gbSide();
+    if (gs && gs[key] > 0) { gs[key] = Math.max(0, gs[key] - 1); window.Panels?.renderRerollPips?.(key); }
+    ws.teamRRUsed = true;
+  }
+
+  /* Show Confirm + (optional) Use Re-roll + context skill buttons after a roll. */
+  function afterRoll({ onConfirm, rerollFn = null, skillButtons = [] }) {
+    const roll = rollBtnEl(); roll.disabled = true;
+    const cf = confirmEl(); cf.hidden = false; cf.classList.add('glow-blue');
+    cf.onclick = () => { clearAfterRoll(); onConfirm(); };
+
+    const rr = window.GameState?.rerolls?.[gbSide()] ?? 0;
+    if (rerollFn && !ws.teamRRUsed && rr > 0) {
+      const rb = rerollEl(); rb.hidden = false; rb.classList.add('glow-gold');
+      rb.onclick = () => { consumeTeamRR(); clearAfterRoll(); rerollFn(); };
+    }
+    const slot = skillEl(); if (slot) { slot.innerHTML = ''; skillButtons.forEach(b => slot.appendChild(b)); }
+  }
+
+  function armRoll(label, fn) {
+    const roll = rollBtnEl();
+    roll.textContent = label;
+    roll.classList.remove('roll-btn--complete', 'glow-green');
+    roll.classList.add('glow-blue');
+    roll.disabled = false;
+    roll.onclick = fn;
+    clearAfterRoll();
+  }
+
+  function finish(label) {
+    const roll = rollBtnEl();
+    roll.disabled = false;
+    roll.textContent = label || 'Complete — Close';
+    roll.classList.add('roll-btn--complete');
+    roll.classList.remove('glow-blue');
+    roll.onclick = () => { resetWizardState(); window.Panels?.closePanel?.('pass'); };
+    clearAfterRoll();
+  }
+
+  async function rollDie() {
+    const slot = diceEl(); slot.innerHTML = '';
+    const die = el('div', 'die'); die.dataset.value = '1';
+    die.innerHTML = '<div class="die-face"></div>';
+    slot.appendChild(die);
+    return await Dice.rollDieElement(die);
+  }
+
+  function armWizard() {
+    ws.plan = computePlan();
+    resetRoll();
+    renderSeq();
+    const roll = rollBtnEl(); if (!roll) return;
+    clearAfterRoll();
+    if (diceEl()) diceEl().innerHTML = '';
+    if (!ws.plan || !ws.throwerPos || !ws.catcherPos) {
+      roll.disabled = true; roll.textContent = 'Roll';
+      roll.classList.remove('roll-btn--complete', 'glow-blue');
+      roll.onclick = null;
+      return;
+    }
+    armRoll('Roll Throw', doThrow);
+  }
+
+  /* Pass skill re-roll button (context skill slot). */
+  function passSkillButton() {
+    const b = el('button', 'pwiz3-skill-btn'); b.type = 'button';
+    b.textContent = 'Pass — Re-roll';
+    b.addEventListener('click', () => {
+      ws.passSkillUsed = true; ws.teamRRUsed = true;
+      clearAfterRoll(); doThrow();
+    });
+    return b;
+  }
+
+  async function doThrow() {
+    setSeqActive('throw');
+    rollBtnEl().disabled = true;
+
+    if (ws.plan.blizzFumble) {
+      seqResult('throw', null, 'Auto-Fumble', 'bad', 'Blizzard blocks Long/Bomb passes');
+      ws.passResult = 'fumble';
+      await scatterFrom(ws.throwerPos, 3, 'Fumble — ball scatters from thrower');
+      finish('Fumble — Close'); return;
+    }
+
+    const roll = await rollDie();
+    const isFumble   = roll === 1 && ws.plan.paFinal < 99;
+    const isAccurate = !isFumble && (ws.plan.paFinal >= 99 || roll >= ws.plan.paFinal);
+    ws.passResult = isFumble ? 'fumble' : (isAccurate ? 'accurate' : 'inaccurate');
+    const explain = buildThrowExplain(ws.plan.paFinal, ws.plan.range);
+
+    if (isFumble) {
+      seqResult('throw', roll, 'Fumble', 'bad', explain);
+      await scatterFrom(ws.throwerPos, 3, 'Fumble — ball scatters from thrower');
+      finish('Fumble — Close'); return;
+    }
+
+    seqResult('throw', roll, isAccurate ? 'Accurate' : 'Inaccurate', isAccurate ? 'ok' : 'warn', explain);
+
+    if (isAccurate) {
+      afterRoll({ onConfirm: afterThrowAccurate, rerollFn: doThrow });
+    } else {
+      const skills = (hasSk(ws.thrower, 'Pass') && !ws.passSkillUsed) ? [passSkillButton()] : [];
+      afterRoll({
+        onConfirm: async () => { await scatterFrom(ws.catcherPos, 3, 'Inaccurate — ball scatters'); finish('Inaccurate — Close'); },
+        rerollFn: doThrow,
+        skillButtons: skills,
+      });
+    }
+  }
+
+  function afterThrowAccurate() {
+    if (ws.plan.interceptors.length) { ws.intIndex = 0; armIntercept(); }
+    else armCatch();
+  }
+
+  function armIntercept() {
+    const it = ws.plan.interceptors[ws.intIndex];
+    setSeqActive(`int${ws.intIndex}`);
+    armRoll(`Roll Intercept — ${it.op.player.name || it.op.player.pos || '?'}`, doIntercept);
+  }
+
+  async function doIntercept() {
+    const it = ws.plan.interceptors[ws.intIndex];
+    rollBtnEl().disabled = true;
+    const roll = await rollDie();
+    const caught = roll >= it.target;
+    seqResult(`int${ws.intIndex}`, roll, caught ? 'Intercepted' : 'No Intercept', caught ? 'bad' : 'ok');
+    if (caught) {
+      ws.passResult = 'intercepted';
+      finish('Intercepted — Turnover — Close');
+      return;
+    }
+    afterRoll({
+      onConfirm: () => {
+        if (ws.intIndex + 1 < ws.plan.interceptors.length) { ws.intIndex++; armIntercept(); }
+        else armCatch();
+      },
+    });
+  }
+
+  function armCatch() {
+    setSeqActive('catch');
+    armRoll('Roll Catch', doCatch);
+  }
+
+  async function doCatch() {
+    setSeqActive('catch');
+    rollBtnEl().disabled = true;
+    const roll = await rollDie();
+    const caught = roll !== 1 && (ws.plan.agFinal >= 99 || roll >= ws.plan.agFinal);
+    ws.catchResult = caught ? 'caught' : 'dropped';
+    const explain = buildCatchExplain(ws.plan.agFinal);
+    seqResult('catch', roll, caught ? 'Caught' : 'Dropped', caught ? 'ok' : 'bad', explain);
+
+    if (caught) {
+      if (ws.catcher && window.GameState) {
+        window.GameState.ballCarrier = { side: ws.activeSide, idx: ws.catcher.idx };
+      }
+      finish('Complete Pass — Close');
+      return;
+    }
+    afterRoll({
+      onConfirm: async () => { await scatterFrom(ws.catcherPos, 1, 'Dropped — ball bounces'); finish('Dropped — Close'); },
+      rerollFn: doCatch,
+    });
+  }
+
+  /* ─────────────────────────────────────────────────────
+     SCATTER (rendered into the sequence strip)
+     ──────────────────────────────────────────────────── */
+  const D8A = {1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘'};
+  const D8N = {1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right'};
+
+  async function scatterFrom(originPos, numDice, title) {
+    const host = document.getElementById('pwiz3-scatter');
+    if (!host) return;
+    host.innerHTML = '';
+    host.appendChild(el('div', 'pwiz3-scatter-title', title || `Scatter — ${numDice} × D8`));
+    const cardsRow = el('div', 'pwiz3-scatter-row');
+    host.appendChild(cardsRow);
+
+    const dirs = [];
+    for (let i = 0; i < numDice; i++) {
+      if (i > 0) { cardsRow.appendChild(el('div', 'pwiz3-seq-arrow', '→')); await delay(200); }
+      const card = el('div', 'pwiz3-scatter-card');
+      const dieWrap = el('div', 'pwiz3-scatter-die');
+      const dieEl = el('div', 'die'); dieEl.dataset.value = '1'; dieEl.dataset.sides = '8';
+      dieEl.innerHTML = '<div class="die-face d8-face"></div>';
+      dieWrap.appendChild(dieEl);
+      card.appendChild(dieWrap);
+      const resEl = el('div', 'pwiz3-scatter-res');
+      card.appendChild(resEl);
+      cardsRow.appendChild(card);
+
+      const d = await Dice.rollDieElement(dieEl);
+      dirs.push(d);
+      resEl.innerHTML = `<span class="pwiz3-scatter-arrow">${D8A[d]}</span> ${D8N[d]}`;
+      if (originPos && ws.pitch) ws.pitch.showScatterPath(originPos.col, originPos.row, dirs);
+    }
+  }
+
+  /* ── Explanation builders (weather-aware) ── */
+  function buildThrowExplain(target, range) {
+    if (!ws.thrower || target >= 99) return '';
+    const parts = [];
+    if (range?.mod) parts.push(`${range.rangeLabel} +${-range.mod}`);
+    if (ws.tz > 0) parts.push(hasSk(ws.thrower, 'Nerves of Steel') ? `${ws.tz} TZ (ignored)` : `${ws.tz} TZ +${ws.tz}`);
+    const w = window.GameState?.currentWeather;
+    if (w?.name === 'Very Sunny') parts.push('Very Sunny +1');
+    if (hasSk(ws.thrower, 'Accurate')  && range && (range.rangeKey === 'quick' || range.rangeKey === 'short')) parts.push('Accurate −1');
+    if (hasSk(ws.thrower, 'Cannoneer') && range && (range.rangeKey === 'long'  || range.rangeKey === 'bomb'))  parts.push('Cannoneer −1');
+    return parts.join(' · ');
+  }
+
+  function buildCatchExplain(target) {
+    if (!ws.catcher || target >= 99) return '';
+    const parts = [];
+    if (hasSk(ws.catcher, 'Catch')) parts.push('Catch −1');
+    if (ws.catcherTZ > 0) parts.push(`${ws.catcherTZ} TZ +${ws.catcherTZ}`);
+    const w = window.GameState?.currentWeather;
+    if (w?.name === 'Pouring Rain' || w?.name === 'Blizzard') parts.push(`${w.name} +1`);
+    return parts.join(' · ');
+  }
+
+  /* ─────────────────────────────────────────────────────
+     ROSTER PICKER + PLACEMENT
+     ──────────────────────────────────────────────────── */
   let _activePickerClose = null;
 
   function openPicker(role) {
     _activePickerClose?.();
-
-    const anchor = document.getElementById('pwiz-v2-root') ?? body;
+    const anchor = document.getElementById('pwiz3-root') ?? body;
     const side = role === 'opposing'
       ? (ws.activeSide === 'left' ? 'right' : 'left')
       : ws.activeSide;
     let players = window.getPlayerList?.(side) ?? [];
     if (!players.length) return;
 
-    if (role === 'thrower')  players = [...players].sort((a, b) => getStat(a, 'PA') - getStat(b, 'PA'));
+    if (role === 'thrower')      players = [...players].sort((a, b) => getStat(a, 'PA') - getStat(b, 'PA'));
     else if (role === 'catcher') players = [...players].sort((a, b) => getStat(a, 'AG') - getStat(b, 'AG'));
-    if (role === 'opposing') players = players.filter(p => !window.STATUS_META?.[p.status]?.dim);
+    if (role === 'opposing')     players = players.filter(p => !window.STATUS_META?.[p.status]?.dim);
 
-    const overlay = document.createElement('div');
-    overlay.className = 'pwiz-full-picker-overlay';
-
-    const card = document.createElement('div');
-    card.className = 'pwiz-full-picker-card';
-
-    const hdr = document.createElement('div');
-    hdr.className = 'pwiz-full-picker-hdr';
-    const titles = { thrower: '🎯 Choose Thrower', catcher: '🤲 Choose Catcher', opposing: '⚔ Add Opposing Player' };
+    const overlay = el('div', 'pwiz-full-picker-overlay');
+    const card    = el('div', 'pwiz-full-picker-card');
+    const hdr     = el('div', 'pwiz-full-picker-hdr');
+    const titles  = { thrower: 'Choose Thrower', catcher: 'Choose Catcher', opposing: 'Add Opposing Player' };
     hdr.innerHTML = `<span>${titles[role] ?? 'Select Player'}</span>`;
-    const closeX = document.createElement('button');
-    closeX.type = 'button'; closeX.className = 'pwiz-rm-btn'; closeX.textContent = '✕';
-    closeX.style.cssText = 'width:22px;height:22px;font-size:0.75rem;';
+    const closeX  = el('button', 'pwiz3-opp-rm'); closeX.type = 'button'; closeX.textContent = 'Close';
     closeX.addEventListener('click', close);
     hdr.appendChild(closeX);
     card.appendChild(hdr);
 
-    const grid = document.createElement('div');
-    grid.className = 'pwiz-full-picker-grid';
-
-    const THROWER_SKILLS = ['Accurate','Strong Arm','Pass','Nerves of Steel','Cannoneer','Hail Mary Pass','Consummate Professional','Cloud Burster','Dump-Off'];
-    const CATCHER_SKILLS = ['Catch','Diving Catch','Sure Hands','Extra Arms','Nerves of Steel'];
-    const highlightSet = role === 'thrower' ? new Set(THROWER_SKILLS)
-                       : role === 'catcher' ? new Set(CATCHER_SKILLS)
-                       : new Set();
+    const grid = el('div', 'pwiz-full-picker-grid');
+    const THROWER_SET = new Set(PASS_THROWER_SKILLS);
+    const CATCHER_SET = new Set(PASS_CATCHER_SKILLS);
+    const highlight = role === 'thrower' ? THROWER_SET : role === 'catcher' ? CATCHER_SET : new Set();
 
     players.forEach(p => {
-      const btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'pwiz-player-pick-card';
-
-      /* Name row */
-      const nameRow = document.createElement('div');
-      nameRow.className = 'pwiz-pick-name-row';
-      const nameEl = document.createElement('div');
-      nameEl.className = 'pwiz-pick-name';
-      nameEl.textContent = playerLabel(p);
-      const posEl = document.createElement('div');
-      posEl.className = 'pwiz-pick-pos';
-      posEl.textContent = p.pos || '';
-      nameRow.appendChild(nameEl); nameRow.appendChild(posEl);
+      const btn = el('button', 'pwiz-player-pick-card'); btn.type = 'button';
+      const nameRow = el('div', 'pwiz-pick-name-row');
+      nameRow.appendChild(el('div', 'pwiz-pick-name', esc(playerLabel(p))));
+      nameRow.appendChild(el('div', 'pwiz-pick-pos', esc(p.pos || '')));
       btn.appendChild(nameRow);
 
-      /* Stats */
       const stats = parseAllStats(p.statsText);
       if (Object.keys(stats).length) {
-        const statsRow = document.createElement('div');
-        statsRow.className = 'pwiz-pick-stats';
-        ['MA', 'ST', 'AG', 'PA', 'AV'].forEach(key => {
-          const val = stats[key];
-          const st = document.createElement('div');
-          st.className = 'pwiz-pick-stat' + (key === 'PA' && role !== 'catcher' ? ' pwiz-stat-focus' : '')
-            + (key === 'AG' && role === 'catcher' ? ' pwiz-stat-focus' : '');
-          st.innerHTML = `<span class="pwiz-stat-key">${key}</span><span class="pwiz-stat-val">${val || '—'}</span>`;
-          statsRow.appendChild(st);
+        const sr = el('div', 'pwiz-pick-stats');
+        ['MA','ST','AG','PA','AV'].forEach(key => {
+          const focus = (key === 'PA' && role !== 'catcher') || (key === 'AG' && role === 'catcher');
+          sr.appendChild(el('div', 'pwiz-pick-stat' + (focus ? ' pwiz-stat-focus' : ''),
+            `<span class="pwiz-stat-key">${key}</span><span class="pwiz-stat-val">${stats[key] || '—'}</span>`));
         });
-        btn.appendChild(statsRow);
+        btn.appendChild(sr);
       }
 
-      /* Skills */
-      const skills = typeof getPlayerSkills === 'function' ? getPlayerSkills(p) : [];
+      const skills = (getPlayerSkills(p) || []).map(s => s.replace(/\s*\(.*\)$/, '').trim());
       if (skills.length) {
-        const skillsRow = document.createElement('div');
-        skillsRow.className = 'pwiz-pick-skills';
+        const skr = el('div', 'pwiz-pick-skills');
         skills.forEach(s => {
-          const chip = makeSkillChip(s, highlightSet.has(s) ? 'highlight' : '');
-          skillsRow.appendChild(chip);
+          const chip = el('span', 'pwiz3-pick-chip' + (highlight.has(s) ? ' hi' : ''), esc(s));
+          skr.appendChild(chip);
         });
-        btn.appendChild(skillsRow);
+        btn.appendChild(skr);
       }
 
       btn.addEventListener('click', () => { close(); doPlacement(role, p); });
@@ -675,25 +784,19 @@ function initPassWizard() {
     anchor.appendChild(overlay);
 
     function close() {
-      overlay.remove();
-      _activePickerClose = null;
+      overlay.remove(); _activePickerClose = null;
       document.removeEventListener('keydown', onKey);
     }
     const onKey = e => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
-
     const onOutside = e => { if (!card.contains(e.target)) { close(); document.removeEventListener('click', onOutside, true); } };
     setTimeout(() => document.addEventListener('click', onOutside, true), 0);
     _activePickerClose = close;
   }
 
-  /* ─────────────────────────────────────────────────────
-     TWO-STEP PLACEMENT
-     ──────────────────────────────────────────────────── */
-
   function doPlacement(role, player) {
     const banner = document.getElementById('pwiz-place-banner');
-    if (banner) { banner.hidden = false; banner.textContent = `Tap pitch to place ${playerLabel(player)} — tap banner to cancel`; }
+    if (banner) { banner.hidden = false; banner.textContent = `Tap pitch to place ${playerLabel(player)} — tap to cancel`; }
 
     const tokSide = role === 'opposing'
       ? (ws.activeSide === 'left' ? 'away' : 'home')
@@ -703,495 +806,35 @@ function initPassWizard() {
 
     ws.pitch?.startPlacement({ id, label: lbl, side: tokSide }, (col, row) => {
       if (banner) banner.hidden = true;
-
       if (role === 'thrower') {
         if (ws.throwerPos) ws.pitch?.removePlayer(ws.throwerPos.col, ws.throwerPos.row);
-        ws.thrower    = player;
-        ws.throwerPos = { col, row };
+        ws.thrower = player; ws.throwerPos = { col, row };
         ws.pitch?.clearPassLine();
         if (ws.catcherPos) ws.pitch?.drawPassLine(col, row, ws.catcherPos.col, ws.catcherPos.row);
         if (ws.zonesOn) ws.pitch?.showPassZones(col, row);
       } else if (role === 'catcher') {
         if (ws.catcherPos) ws.pitch?.removePlayer(ws.catcherPos.col, ws.catcherPos.row);
-        ws.catcher    = player;
-        ws.catcherPos = { col, row };
+        ws.catcher = player; ws.catcherPos = { col, row };
         ws.pitch?.clearPassLine();
         if (ws.throwerPos) ws.pitch?.drawPassLine(ws.throwerPos.col, ws.throwerPos.row, col, row);
       } else {
         ws.opposingPlayers.push({ player, col, row, id });
       }
       computeTZ();
-      rebuildLeft();
-      rebuildRight();
-      updateReqs();
+      buildPlayerColumn('thrower'); buildPlayerColumn('catcher'); buildOppList();
+      armWizard();
     });
-  }
-
-  /* ─────────────────────────────────────────────────────
-     REQUIREMENTS SUMMARY
-     ──────────────────────────────────────────────────── */
-
-  function updateReqs() {
-    const reqEl  = document.getElementById('pwiz-req');
-    const rollEl = document.getElementById('pwiz-roll');
-    if (!reqEl) return;
-    reqEl.innerHTML = '';
-    if (rollEl) rollEl.innerHTML = '';
-
-    if (!ws.thrower || !ws.catcher) {
-      /* Show a visible waiting state so the roll section is always present */
-      if (rollEl) {
-        const wait = document.createElement('div');
-        wait.className = 'pwiz-roll-waiting';
-        const steps = [];
-        if (!ws.thrower) steps.push('🎯 Select and place a Thrower');
-        else if (!ws.throwerPos) steps.push('🎯 Place the Thrower on the pitch');
-        if (!ws.catcher) steps.push('🤲 Select and place a Catcher');
-        else if (!ws.catcherPos) steps.push('🤲 Place the Catcher on the pitch');
-        wait.innerHTML = steps.map(s =>
-          `<div class="pwiz-wait-step">${s}</div>`
-        ).join('');
-        rollEl.appendChild(wait);
-      }
-      return;
-    }
-
-    let range = null;
-    if (ws.throwerPos && ws.catcherPos && ws.pitch) {
-      range = ws.pitch.getPassRange(ws.throwerPos.col, ws.throwerPos.row, ws.catcherPos.col, ws.catcherPos.row);
-    }
-
-    const paBase  = getStat(ws.thrower, 'PA');
-    const agBase  = getStat(ws.catcher, 'AG');
-    const w            = window.GameState?.currentWeather;
-    const isBlizzard   = w?.name === 'Blizzard';
-
-    const nosThrow     = hasSk(ws.thrower, 'Nerves of Steel');
-    const hasAccurate  = hasSk(ws.thrower, 'Accurate');
-    const hasCannoneer = hasSk(ws.thrower, 'Cannoneer');
-    const hasHailMary  = hasSk(ws.thrower, 'Hail Mary Pass');
-
-    const rangePenalty      = range?.mod ?? 0;
-    const tzPenalty         = nosThrow ? 0 : ws.tz;
-    const accurateBonus     = (hasAccurate && range &&
-      (range.rangeKey === 'quick' || range.rangeKey === 'short')) ? 1 : 0;
-    const cannoneerBonus    = (hasCannoneer && range &&
-      (range.rangeKey === 'long' || range.rangeKey === 'bomb')) ? 1 : 0;
-    const verySunnyPenalty  = w?.name === 'Very Sunny' ? 1 : 0;
-
-    const paFinal = paBase >= 99 ? 99 : Math.min(6, Math.max(2,
-      paBase - rangePenalty + tzPenalty + verySunnyPenalty - accurateBonus - cannoneerBonus));
-
-    const blizzFumble = isBlizzard && range && (range.rangeKey === 'long' || range.rangeKey === 'bomb');
-
-    const wCatchPenalty  = w?.name === 'Pouring Rain' ? 1 : 0;
-    const catchTZPenalty = hasSk(ws.catcher, 'Nerves of Steel') ? 0 : ws.catcherTZ;
-    const catchSkBonus   = hasSk(ws.catcher, 'Catch') ? 1 : 0;
-    const agFinal        = Math.min(6, Math.max(2, agBase + wCatchPenalty + catchTZPenalty - catchSkBonus));
-
-    const intWeatherPenalty = w?.name === 'Pouring Rain' ? 1 : 0;
-
-    const interceptors = getInterceptors();
-    const parts = [];
-    if (ws.tz)        parts.push(`Thrower: ${ws.tz} TZ${hasSk(ws.thrower,'Nerves of Steel') ? ' (NoS)' : ''}`);
-    if (ws.catcherTZ) parts.push(`Catcher: ${ws.catcherTZ} TZ`);
-    if (interceptors.length) parts.push(`${interceptors.length} possible interceptor${interceptors.length > 1 ? 's' : ''}`);
-    if (parts.length) {
-      const strip = document.createElement('div');
-      strip.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.6rem;color:rgba(180,210,255,0.5);margin-bottom:0.3rem;';
-      strip.textContent = parts.join(' · ');
-      reqEl.appendChild(strip);
-    }
-
-    if (rollEl) {
-      buildActionRow(rollEl, paFinal, agFinal, blizzFumble, range, interceptors, {
-        paBase, rangePenalty, tzPenalty, verySunnyPenalty, accurateBonus, cannoneerBonus,
-        nosThrow, hasAccurate, hasCannoneer, hasHailMary,
-        agBase, wCatchPenalty, catchTZPenalty, catchSkBonus,
-        intWeatherPenalty,
-      });
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     ACTION ROW (roll sequence — unchanged from Sprint 6)
-     ──────────────────────────────────────────────────── */
-
-  function addCompleteButton(container, label) {
-    if (container.querySelector('.pwiz-complete-btn')) return;
-    const btn = document.createElement('button');
-    btn.type = 'button'; btn.className = 'roll-btn pwiz-complete-btn';
-    btn.style.cssText = 'margin-top:0.5rem;background:rgba(76,175,80,0.1);border-color:rgba(76,175,80,0.35);color:#81c784;display:block;width:100%;';
-    btn.textContent = label ?? '✓ Complete — Close';
-    btn.addEventListener('click', () => {
-      resetWizardState();
-      window.Panels?.closePanel?.('pass');
-    });
-    container.appendChild(btn);
-  }
-
-  function buildActionRow(el, paTarget, agTarget, blizzardFumble, range, interceptors, mods) {
-    el.innerHTML = '';
-
-    const RANGE_C = { quick:'#81c784', short:'#FFD54F', long:'#FF8C00', bomb:'#ff8fa0' };
-    const rangeStr = range
-      ? `<span style="color:${RANGE_C[range.rangeKey] ?? '#ccc'};font-size:0.6rem;">${range.rangeLabel} (${range.distance}sq)</span>`
-      : '';
-
-    const sep = document.createElement('div');
-    sep.style.cssText = 'border-top:1px solid rgba(80,130,255,0.18);margin:0.5rem 0 0.4rem;padding-top:0.35rem;font-family:JetBrains Mono,monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.4);display:flex;align-items:center;gap:0.4rem;';
-    sep.innerHTML = `Roll Sequence ${rangeStr}`;
-    el.appendChild(sep);
-
-    if (mods && paTarget < 99) {
-      const modRows = [];
-      modRows.push({ label: `PA ${mods.paBase}+`, value: 'base' });
-      if (range?.mod) modRows.push({ label: range.rangeLabel, value: `+${-range.mod}`, cls: 'neg' });
-      if (mods.tzPenalty)        modRows.push({ label: `${mods.tzPenalty} Tackle Zone${mods.tzPenalty > 1 ? 's' : ''}`, value: `+${mods.tzPenalty}`, cls: 'neg' });
-      if (mods.verySunnyPenalty) modRows.push({ label: '☀ Very Sunny', value: '+1', cls: 'neg' });
-      if (mods.nosThrow)         modRows.push({ chip: 'Nerves of Steel', value: '(TZ ignored)', cls: 'pos' });
-      if (mods.accurateBonus)    modRows.push({ chip: 'Accurate',        value: '−1', cls: 'pos' });
-      if (mods.cannoneerBonus)   modRows.push({ chip: 'Cannoneer',       value: '−1', cls: 'pos' });
-      if (mods.hasHailMary)      modRows.push({ chip: 'Hail Mary Pass',  value: '(LB range, no intercept)', cls: 'pos' });
-      modRows.push({ label: `Final: ${paTarget}+`, value: '', cls: 'final' });
-      el.appendChild(buildModBreakdown(modRows));
-    }
-
-    const row = document.createElement('div');
-    row.className = 'pwiz-action-row';
-    el.appendChild(row);
-
-    const scatterEl = document.createElement('div');
-    scatterEl.id = 'pwiz-scatter-area';
-    el.appendChild(scatterEl);
-
-    const resultSummary = document.createElement('div');
-    resultSummary.id = 'pwiz-result-summary';
-    el.appendChild(resultSummary);
-
-    function makeCol(icon, label, targetStr, chipCls) {
-      const col = document.createElement('div');
-      col.className = 'pwiz-action-col';
-      col.innerHTML = `<div class="pwiz-action-chip ${chipCls}">${icon} ${label}<br><span class="pwiz-action-target">${targetStr}</span></div>`;
-      const dieWrap = document.createElement('div'); dieWrap.className = 'pwiz-action-die';
-      const resEl   = document.createElement('div'); resEl.className   = 'pwiz-action-result';
-      col.appendChild(dieWrap); col.appendChild(resEl);
-      return { col, dieWrap, resEl };
-    }
-
-    function addArrow() {
-      const a = document.createElement('div');
-      a.className = 'pwiz-action-arrow'; a.textContent = '→';
-      row.appendChild(a);
-    }
-
-    async function rollD6(wrap) {
-      const die = document.createElement('div');
-      die.className = 'die'; die.dataset.value = '1';
-      die.innerHTML = '<div class="die-face"></div>';
-      wrap.innerHTML = ''; wrap.appendChild(die);
-      return await Dice.rollDieElement(die);
-    }
-
-    function offerPassSkillReroll(resEl) {
-      if (!hasSk(ws.thrower, 'Pass') || ws.passSkillUsed) return Promise.resolve(false);
-      return new Promise(resolve => {
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'pass-nav-btn';
-        btn.style.cssText = 'margin-top:0.2rem;margin-right:0.25rem;background:rgba(212,175,55,0.12);border-color:rgba(212,175,55,0.4);';
-        btn.appendChild(makeSkillChip('Pass'));
-        btn.insertAdjacentText('beforeend', ' Re-roll');
-        const skipBtn = document.createElement('button');
-        skipBtn.type = 'button'; skipBtn.className = 'pass-nav-btn';
-        skipBtn.style.marginTop = '0.2rem';
-        skipBtn.textContent = '→ Skip';
-        btn.addEventListener('click', () => {
-          btn.remove(); skipBtn.remove();
-          ws.passSkillUsed = true;
-          ws.teamRRUsed    = true;
-          rebuildLeft(); rebuildRight();
-          resolve(true);
-        });
-        skipBtn.addEventListener('click', () => { btn.remove(); skipBtn.remove(); resolve(false); });
-        resEl.appendChild(btn); resEl.appendChild(skipBtn);
-      });
-    }
-
-    function offerReroll(resEl, label) {
-      return new Promise(resolve => {
-        const gs      = window.GameState?.rerolls;
-        const key     = gbSide();
-        const rerolls = gs?.[key] ?? 0;
-        if (ws.teamRRUsed || rerolls <= 0) { resolve(false); return; }
-
-        const isConsProf = hasSk(ws.thrower, 'Consummate Professional');
-
-        const rrBtn = document.createElement('button');
-        rrBtn.type = 'button'; rrBtn.className = 'pass-nav-btn';
-        rrBtn.style.cssText = 'margin-top:0.2rem;margin-right:0.25rem;';
-        if (isConsProf) {
-          rrBtn.appendChild(makeSkillChip('Consummate Professional'));
-          rrBtn.insertAdjacentText('beforeend', ` Re-roll (${rerolls}, not spent)`);
-        } else {
-          rrBtn.textContent = `↺ Team Re-roll (${rerolls})`;
-        }
-        const skipBtn = document.createElement('button');
-        skipBtn.type = 'button'; skipBtn.className = 'pass-nav-btn';
-        skipBtn.style.marginTop = '0.2rem';
-        skipBtn.textContent = label ?? '→ Continue';
-        rrBtn.addEventListener('click', () => {
-          rrBtn.remove(); skipBtn.remove();
-          ws.teamRRUsed = true;
-          if (!isConsProf && gs) {
-            gs[key] = Math.max(0, rerolls - 1);
-            window.Panels?.renderRerollPips?.(key);
-          }
-          rebuildLeft(); rebuildRight();
-          resolve(true);
-        });
-        skipBtn.addEventListener('click', () => { rrBtn.remove(); skipBtn.remove(); resolve(false); });
-        resEl.appendChild(rrBtn); resEl.appendChild(skipBtn);
-      });
-    }
-
-    /* Throw column */
-    const throwTarget = paTarget >= 99 ? '— (No PA)' : `${paTarget}+`;
-    const { col: throwCol, dieWrap: throwDie, resEl: throwRes } = makeCol('🎯', 'Throw', throwTarget, 'chip-throw');
-    const throwBtn = document.createElement('button');
-    throwBtn.type = 'button'; throwBtn.className = 'roll-btn'; throwBtn.style.marginTop = '0.3rem';
-    throwBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
-    throwCol.appendChild(throwBtn);
-    row.appendChild(throwCol);
-
-    /* Intercept columns */
-    const intCols = [];
-    interceptors.forEach(op => {
-      addArrow();
-      const ag = getStat(op.player, 'AG');
-      const intTarget = Math.min(6, Math.max(2, (ag >= 99 ? 4 : ag) + (mods?.intWeatherPenalty ?? 0)));
-      const { col: ic, dieWrap: id_, resEl: ir } = makeCol('⚡', 'Intercept', `${intTarget}+`, 'chip-int');
-      ic.querySelector('.pwiz-action-chip').insertAdjacentHTML('beforeend',
-        `<div class="pwiz-action-sub">${esc(op.player.name || op.player.pos || '?')}</div>`);
-      const intBtn = document.createElement('button');
-      intBtn.type = 'button'; intBtn.className = 'roll-btn'; intBtn.style.marginTop = '0.3rem';
-      intBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
-      intBtn.disabled = true;
-      ic.appendChild(intBtn);
-      row.appendChild(ic);
-      intCols.push({ btn: intBtn, dieWrap: id_, resEl: ir, target: intTarget, op });
-    });
-
-    /* Catch column */
-    addArrow();
-    const { col: catchCol, dieWrap: catchDie, resEl: catchRes } = makeCol('🤲', 'Catch', agTarget >= 99 ? '—' : `${agTarget}+`, 'chip-catch');
-    const catchBtn = document.createElement('button');
-    catchBtn.type = 'button'; catchBtn.className = 'roll-btn'; catchBtn.style.marginTop = '0.3rem';
-    catchBtn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll';
-    catchBtn.disabled = true;
-    catchCol.appendChild(catchBtn);
-    row.appendChild(catchCol);
-
-    throwBtn.addEventListener('click', async () => {
-      throwBtn.disabled = true;
-      await doThrow();
-    });
-
-    async function doThrow() {
-      ws.teamRRUsed = false;
-      if (blizzardFumble) {
-        throwRes.innerHTML = `<span class="result-chip result-chip-bad">❌ Auto-Fumble</span><p class="result-desc" style="font-size:0.65rem;">Blizzard blocks Long/Bomb passes.</p>`;
-        ws.passResult = 'fumble';
-        catchBtn.disabled = true;
-        await autoScatter(scatterEl, ws.throwerPos, 3, '💀 Fumble — Ball Scatters from Thrower');
-        addCompleteButton(resultSummary, '💀 Fumble — Close');
-        return;
-      }
-
-      const roll = await rollD6(throwDie);
-      const isFumble   = roll === 1 && paTarget < 99;
-      const isAccurate = !isFumble && (paTarget >= 99 || roll >= paTarget);
-      ws.passResult = isFumble ? 'fumble' : (isAccurate ? 'accurate' : 'inaccurate');
-
-      const explain = buildThrowExplain(paTarget, range);
-
-      if (isFumble) {
-        throwRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip result-chip-bad">💀 Fumble!</span>`;
-        if (explain) throwRes.insertAdjacentHTML('beforeend', `<p class="result-desc" style="font-size:0.6rem;opacity:0.65;">${explain}</p>`);
-        catchBtn.disabled = true;
-        await autoScatter(scatterEl, ws.throwerPos, 3, '💀 Fumble — Ball Scatters from Thrower');
-        addCompleteButton(resultSummary, '💀 Fumble — Close');
-        return;
-      }
-
-      const okCls = isAccurate ? 'result-chip-ok' : 'result-chip-warn';
-      throwRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${okCls}">${isAccurate ? '✓ Accurate' : '⚠ Inaccurate'}</span>`;
-      if (explain) throwRes.insertAdjacentHTML('beforeend', `<p class="result-desc" style="font-size:0.6rem;opacity:0.65;">${explain}</p>`);
-
-      if (!isAccurate) {
-        catchBtn.disabled = true;
-        const usePassSkill = await offerPassSkillReroll(throwRes);
-        if (usePassSkill) { throwRes.innerHTML = ''; await doThrow(); return; }
-        const useReroll = await offerReroll(throwRes, '→ Scatter');
-        if (useReroll) { throwRes.innerHTML = ''; await doThrow(); return; }
-        await autoScatter(scatterEl, ws.catcherPos, 3, '⚠ Inaccurate — Scatter');
-        addCompleteButton(resultSummary, '⚠ Inaccurate — Close');
-        return;
-      }
-
-      if (intCols.length) intCols[0].btn.disabled = false;
-      else catchBtn.disabled = false;
-    }
-
-    intCols.forEach(({ btn: intBtn, dieWrap: intDie, resEl: intRes, target: intTarget }, i) => {
-      intBtn.addEventListener('click', async () => {
-        intBtn.disabled = true;
-        const roll   = await rollD6(intDie);
-        const caught = roll >= intTarget;
-        intRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${caught ? 'result-chip-bad' : 'result-chip-ok'}">${caught ? '⚔ Intercepted!' : '✓ Not Int.'}</span>`;
-        if (caught) {
-          ws.passResult = 'intercepted';
-          resultSummary.innerHTML = `<div style="margin-top:0.5rem;padding:0.4rem 0.6rem;background:rgba(200,16,46,0.1);border:1px solid rgba(200,16,46,0.3);border-radius:4px;font-family:JetBrains Mono,monospace;font-size:0.72rem;color:#ff8fa0;">⚔ Intercepted — Turnover!</div>`;
-          addCompleteButton(resultSummary, '⚔ Intercepted — Close');
-        } else {
-          if (i + 1 < intCols.length) intCols[i + 1].btn.disabled = false;
-          else catchBtn.disabled = false;
-        }
-      });
-    });
-
-    catchBtn.addEventListener('click', async () => {
-      catchBtn.disabled = true;
-      await doCatch();
-    });
-
-    async function doCatch() {
-      ws.teamRRUsed = false;
-      const roll   = await rollD6(catchDie);
-      const caught = roll !== 1 && roll >= agTarget;
-      ws.catchResult = caught ? 'caught' : 'dropped';
-      const explain = buildCatchExplain(agTarget);
-      catchRes.innerHTML = `<div class="result-roll-num">${roll}</div><span class="result-chip ${caught ? 'result-chip-ok' : 'result-chip-bad'}">${caught ? '✓ Caught!' : '✗ Dropped'}</span>`;
-      if (explain) catchRes.insertAdjacentHTML('beforeend', `<p class="result-desc" style="font-size:0.6rem;opacity:0.65;">${explain}</p>`);
-
-      if (caught) {
-        if (ws.catcher && window.GameState) {
-          window.GameState.ballCarrier = { side: ws.activeSide, idx: ws.catcher.idx };
-        }
-        const closeBtn = document.createElement('button');
-        closeBtn.type = 'button'; closeBtn.className = 'roll-btn';
-        closeBtn.style.cssText = 'margin-top:0.5rem;background:rgba(76,175,80,0.15);border-color:rgba(76,175,80,0.4);color:#81c784;';
-        closeBtn.innerHTML = '✓ Complete Pass — Close';
-        closeBtn.addEventListener('click', () => { resetWizardState(); window.Panels?.closePanel?.('pass'); });
-        resultSummary.appendChild(closeBtn);
-        return;
-      }
-
-      const useReroll = await offerReroll(catchRes, '→ Ball Bounces');
-      if (useReroll) { catchRes.innerHTML = ''; await doCatch(); return; }
-      await autoScatter(scatterEl, ws.catcherPos, 1, 'Dropped — Ball Bounces (D8)');
-      addCompleteButton(resultSummary, '✗ Dropped — Close');
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     AUTO-ROLLING SCATTER
-     ──────────────────────────────────────────────────── */
-
-  const D8A = {1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘'};
-  const D8N = {1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right'};
-
-  async function autoScatter(el, originPos, numDice, title) {
-    el.innerHTML = '';
-    const sec = document.createElement('div');
-    sec.style.cssText = 'margin-top:0.5rem;border-top:1px solid rgba(80,130,255,0.18);padding-top:0.4rem;';
-    const h = document.createElement('div');
-    h.style.cssText = 'font-family:JetBrains Mono,monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(180,210,255,0.4);margin-bottom:0.4rem;';
-    h.textContent = title || `↗ Scatter — ${numDice} × D8`;
-    sec.appendChild(h);
-
-    const cardsRow = document.createElement('div');
-    cardsRow.className = 'pwiz-action-row';
-    sec.appendChild(cardsRow);
-    el.appendChild(sec);
-
-    const dirsCollected = [];
-
-    for (let i = 0; i < numDice; i++) {
-      if (i > 0) {
-        const arr = document.createElement('div');
-        arr.className = 'pwiz-action-arrow'; arr.textContent = '→';
-        cardsRow.appendChild(arr);
-        await delay(250);
-      }
-      const card = document.createElement('div');
-      card.className = 'pwiz-action-col';
-      const chip = document.createElement('div');
-      chip.className = 'pwiz-action-chip chip-scatter';
-      chip.innerHTML = `↗ Scatter ${i + 1}<br><span class="pwiz-action-target">D8</span>`;
-      card.appendChild(chip);
-      const dieWrap = document.createElement('div');
-      dieWrap.className = 'pwiz-action-die';
-      const dieEl = document.createElement('div');
-      dieEl.className = 'die'; dieEl.dataset.value = '1'; dieEl.dataset.sides = '8';
-      dieEl.innerHTML = '<div class="die-face d8-face"></div>';
-      dieWrap.appendChild(dieEl);
-      card.appendChild(dieWrap);
-      const resEl = document.createElement('div');
-      resEl.className = 'pwiz-action-result';
-      card.appendChild(resEl);
-      cardsRow.appendChild(card);
-
-      const d = await Dice.rollDieElement(dieEl);
-      dirsCollected.push(d);
-      resEl.innerHTML = `<div class="result-roll-num" style="font-size:1rem;">${d}</div><div style="font-size:0.65rem;color:rgba(200,220,255,0.7);margin-top:0.1rem;">${D8A[d]} ${D8N[d]}</div>`;
-      if (originPos && ws.pitch) ws.pitch.showScatterPath(originPos.col, originPos.row, dirsCollected);
-    }
-  }
-
-  /* ─────────────────────────────────────────────────────
-     ROLL EXPLANATION BUILDERS
-     ──────────────────────────────────────────────────── */
-
-  function buildThrowExplain(target, range) {
-    if (!ws.thrower || target >= 99) return '';
-    const parts = [];
-    if (range?.mod) parts.push(`${range.rangeLabel}: +${-range.mod} to target`);
-    if (ws.tz > 0) {
-      if (hasSk(ws.thrower, 'Nerves of Steel')) parts.push(`${ws.tz} TZ (Nerves of Steel: ignored)`);
-      else parts.push(`${ws.tz} TZ: +${ws.tz} to target`);
-    }
-    const w = window.GameState?.currentWeather;
-    if (w?.name === 'Very Sunny') parts.push('Very Sunny: +1 to target');
-    if (hasSk(ws.thrower, 'Accurate') && range &&
-        (range.rangeKey === 'quick' || range.rangeKey === 'short')) parts.push('Accurate: −1 target');
-    if (hasSk(ws.thrower, 'Cannoneer') && range &&
-        (range.rangeKey === 'long'  || range.rangeKey === 'bomb'))  parts.push('Cannoneer: −1 target');
-    return parts.join(' · ');
-  }
-
-  function buildCatchExplain(target) {
-    if (!ws.catcher || target >= 99) return '';
-    const parts = [];
-    if (hasSk(ws.catcher, 'Catch')) parts.push('Catch: −1 target');
-    if (ws.catcherTZ > 0) parts.push(`${ws.catcherTZ} TZ penalty`);
-    const w = window.GameState?.currentWeather;
-    if (w?.name === 'Pouring Rain' || w?.name === 'Blizzard') parts.push(`${w.name}: +1 target`);
-    return parts.join(' · ');
   }
 
   /* ── Boot ── */
   onPanelOpen('panel-pass', () => {
-    if (!ws._built) {
-      buildLayout();
-      ws._built = true;
-    } else {
-      rebuildLeft();
-      rebuildRight();
+    if (!ws._built) { buildLayout(); ws._built = true; }
+    else {
+      buildPlayerColumn('thrower'); buildPlayerColumn('catcher');
+      buildOppList(); armWizard();
       window.Panels?.refreshWeatherChips?.();
     }
   });
 
-  panel.addEventListener('bb:diceMode', () => {
-    window.Panels?.refreshWeatherChips?.();
-  });
+  panel.addEventListener('bb:diceMode', () => { window.Panels?.refreshWeatherChips?.(); });
 }

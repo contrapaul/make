@@ -501,6 +501,8 @@ function applyHolo(el, tilt) {
 function clearHolo(el) {
   el.classList.remove('holo', 'holo-active');
 }
+window.applyHolo = applyHolo;
+window.clearHolo = clearHolo;
 
 /* ────────────────────────────────────────────────────────
    TRADING CARD MODAL

@@ -204,6 +204,80 @@ const BBResolve = {
   },
 };
 
+/* ════════════════════════════════════════════════════════
+   SHARED EMBEDDED TRADING CARD
+   Builds the same .trading-card used by the roster modal into a
+   wrapper. Used by the Block and Pass wizards. Returns the parsed
+   AV so callers that need it (block armour) can read it.
+   opts.small → slightly smaller card (Pass wizard, to free pitch space).
+   ════════════════════════════════════════════════════════ */
+function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
+  wrapEl.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+
+  const pd     = player.playerData;
+  const team   = window.state?.[side]?.team ?? null;
+  const colors = team?.colors || {};
+  const imgDir = team?.imageDir || 'images/';
+
+  const playerId   = pd ? String(pd.id)       : (player.id   != null ? player.id   : '?');
+  const playerName = pd ? String(pd.name)     : (player.name != null ? player.name : '');
+  const position   = pd ? String(pd.position) : (player.pos  != null ? player.pos  : '');
+  const isStar     = pd ? !!pd.isStarPlayer   : !!(player.card && player.card.classList.contains('star-player'));
+  const bgColor    = (window.POSITION_COLORS || {})[position] || '#1a3a6a';
+
+  const KEYS = ['MA','ST','AG','PA','AV'];
+  const statVals = KEYS.map(k => {
+    const lk = k.toLowerCase();
+    if (pd && pd[lk] !== undefined) return String(pd[lk]);
+    const m = player.statsText ? player.statsText.match(new RegExp('\\b' + k + '\\s*([\\d+]+)', 'i')) : null;
+    return m ? m[1] : '-';
+  });
+  const avVal = parseInt(statVals[4], 10) || 9;
+
+  const card = document.createElement('div');
+  card.className = 'trading-card bwiz-embedded-card'
+    + (isStar ? ' star-card' : '')
+    + (opts.small ? ' bwiz-card-small' : '');
+
+  const cmap = {
+    primary: '--tc-primary', primaryDark: '--tc-primary-dark',
+    accent: '--tc-accent', gold: '--tc-gold', goldDark: '--tc-gold-dark',
+  };
+  Object.keys(cmap).forEach(k => { if (colors[k]) card.style.setProperty(cmap[k], colors[k]); });
+
+  let statsHtml = KEYS.map((l, i) =>
+    `<div class="modal-stat"><span class="ms-label">${l}</span><span class="ms-value">${statVals[i]}</span></div>`).join('');
+  if (pd && pd.value) {
+    statsHtml += `<div class="modal-stat"><span class="ms-label">GP</span>` +
+      `<span class="ms-value" style="font-size:0.82rem;">${Math.round(pd.value / 1000)}k</span></div>`;
+  }
+
+  card.innerHTML =
+    `<div class="modal-image-area" style="background:${bgColor};">` +
+      `<img class="modal-img" src="${imgDir}Player${playerId}.png" alt="${esc(playerName)}">` +
+      `<span class="img-placeholder-num" aria-hidden="true">${playerId}</span>` +
+      `<div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">` +
+        `<div class="modal-jersey-circle">${playerId}</div>` +
+        `<div class="modal-overlay-info">` +
+          `<h2 class="modal-name">${esc(playerName)}</h2>` +
+          `<p class="modal-position">${esc(position)}</p>` +
+        `</div></div></div>` +
+    `<div class="modal-stats"><div class="modal-stats-row">${statsHtml}</div></div>` +
+    `<div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p>` +
+      `<p class="skills-text">${window.renderSkillLinks ? window.renderSkillLinks(pd ? (pd.skills || '') : '') : ''}</p></div>` +
+    (pd && pd.fact ? `<div class="modal-fact">&ldquo;${esc(pd.fact)}&rdquo;</div>` : '');
+
+  const img  = card.querySelector('.modal-img');
+  const stub = card.querySelector('.img-placeholder-num');
+  img.addEventListener('load',  () => { stub.style.display = 'none'; });
+  img.addEventListener('error', () => { img.style.display  = 'none'; });
+
+  if (window.attachSkillEvents) window.attachSkillEvents(card, false);
+  if (pd && pd.isStarPlayer && typeof window.applyHolo === 'function') window.applyHolo(card, true);
+  wrapEl.appendChild(card);
+  return { avVal, card };
+}
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BLOCK WIZARD  (full rebuild)
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -432,72 +506,8 @@ function initBlockWizard() {
 
   /* â”€â”€ Embedded trading card â”€â”€ */
   function buildEmbeddedCard(wrapEl, player, side) {
-    wrapEl.querySelectorAll(".bwiz-embedded-card").forEach(function(c) { c.remove(); });
-
-    var pd     = player.playerData;
-    var team   = window.state ? window.state[side] ? window.state[side].team : null : null;
-    var colors = team ? (team.colors || {}) : {};
-    var imgDir = team ? (team.imageDir || "images/") : "images/";
-
-    var playerId   = pd ? String(pd.id)      : (player.id   != null ? player.id   : "?");
-    var playerName = pd ? String(pd.name)     : (player.name != null ? player.name : "");
-    var position   = pd ? String(pd.position) : (player.pos  != null ? player.pos  : "");
-    var isStar     = pd ? !!pd.isStarPlayer   : !!(player.card && player.card.classList.contains("star-player"));
-    var bgColor    = (window.POSITION_COLORS || {})[position] || "#1a3a6a";
-
-    var KEYS = ["MA","ST","AG","PA","AV"];
-    var statVals = KEYS.map(function(k) {
-      var lk = k.toLowerCase();
-      if (pd && pd[lk] !== undefined) return String(pd[lk]);
-      var m = player.statsText ? player.statsText.match(new RegExp("\\b" + k + "\\s*([\\d+]+)", "i")) : null;
-      return m ? m[1] : "-";
-    });
-
-    var avVal = parseInt(statVals[4], 10) || 9;
+    const { avVal } = buildEmbeddedCardShared(wrapEl, player, side);
     if (side === "left") { attAV = avVal; } else { defAV = avVal; }
-
-    var card = document.createElement("div");
-    card.className = "trading-card bwiz-embedded-card" + (isStar ? " star-card" : "");
-
-    var cmap = {
-      primary: "--tc-primary", primaryDark: "--tc-primary-dark",
-      accent: "--tc-accent", gold: "--tc-gold", goldDark: "--tc-gold-dark"
-    };
-    Object.keys(cmap).forEach(function(k) {
-      if (colors[k]) card.style.setProperty(cmap[k], colors[k]);
-    });
-
-    var statsHtml = KEYS.map(function(l, i) {
-      return "<div class=\"modal-stat\"><span class=\"ms-label\">" + l +
-             "</span><span class=\"ms-value\">" + statVals[i] + "</span></div>";
-    }).join("");
-    if (pd && pd.value) {
-      statsHtml += "<div class=\"modal-stat\"><span class=\"ms-label\">GP</span>" +
-        "<span class=\"ms-value\" style=\"font-size:0.82rem;\">" + Math.round(pd.value / 1000) + "k</span></div>";
-    }
-
-    card.innerHTML =
-      "<div class=\"modal-image-area\" style=\"background:" + bgColor + ";\">"+
-        "<img class=\"modal-img\" src=\"" + imgDir + "Player" + playerId + ".png\" alt=\"" + esc(playerName) + "\">"+
-        "<span class=\"img-placeholder-num\" aria-hidden=\"true\">" + playerId + "</span>"+
-        "<div class=\"modal-card-overlay" + (isStar ? " star-overlay" : "") + "\">"+
-          "<div class=\"modal-jersey-circle\">" + playerId + "</div>"+
-          "<div class=\"modal-overlay-info\">"+
-            "<h2 class=\"modal-name\">" + esc(playerName) + "</h2>"+
-            "<p class=\"modal-position\">" + esc(position) + "</p>"+
-          "</div></div></div>"+
-      "<div class=\"modal-stats\"><div class=\"modal-stats-row\">" + statsHtml + "</div></div>"+
-      "<div class=\"modal-skills\"><p class=\"skills-label\">Skills &amp; Traits</p>"+
-        "<p class=\"skills-text\">" + (window.renderSkillLinks ? window.renderSkillLinks(pd ? (pd.skills || "") : "") : "") + "</p></div>"+
-      (pd && pd.fact ? "<div class=\"modal-fact\">&ldquo;" + esc(pd.fact) + "&rdquo;</div>" : "");
-
-    var img  = card.querySelector(".modal-img");
-    var stub = card.querySelector(".img-placeholder-num");
-    img.addEventListener("load",  function() { stub.style.display = "none"; });
-    img.addEventListener("error", function() { img.style.display  = "none"; });
-
-    if (window.attachSkillEvents) window.attachSkillEvents(card, false);
-    wrapEl.appendChild(card);
   }
 
   /* â”€â”€ Load block-relevant skills into side column â”€â”€ */
