@@ -553,6 +553,9 @@ function initPassWizard() {
     const roll = rollBtnEl(); if (!roll) return;
     clearAfterRoll();
     if (diceEl()) diceEl().innerHTML = '';
+    /* Re-fit after setup changes (placing players adds skill cards, etc.).
+       Not called during rolls, so the layout never re-scales mid-action. */
+    ws._fit?.refit?.();
     if (!ws.plan || !ws.throwerPos || !ws.catcherPos) {
       roll.disabled = true; roll.textContent = 'Roll';
       roll.classList.remove('roll-btn--complete', 'glow-blue');

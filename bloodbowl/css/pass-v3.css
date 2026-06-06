@@ -20,10 +20,12 @@
 /* Pitch sizes to its fixed design width so the stage has a natural size to fit */
 .pwiz3 .pwiz-pitch-wrap { width: max-content; max-width: none; }
 
-/* Sequence strip (top, above pitch) */
+/* Sequence strip (top, above pitch). Bounded height + internal scroll so the
+   stage size stays fixed and the layout doesn't re-scale as results populate. */
 .pwiz3-seq {
   flex-shrink: 0;
-  min-height: 3.2rem;
+  height: 7rem;          /* fixed — results scroll inside; stage size never changes */
+  overflow-y: auto;
   margin: 0.5rem 0 0.2rem;
   padding: 0.5rem 0.7rem;
   background: rgba(6, 14, 40, 0.55);
@@ -145,7 +147,7 @@
 .pwiz3-frame-left  { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-start; }
 .pwiz3-frame-center { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
 .pwiz3-frame-right { display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; }
-.pwiz3-frame-right-btns { display: flex; gap: 0.4rem; }
+.pwiz3-frame-right-btns { display: flex; gap: 0.4rem; min-height: 2rem; }
 
 .pwiz3-tool-btn {
   font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; font-weight: 700;
@@ -157,7 +159,7 @@
 .pwiz3-tool-btn.active { background: rgba(80,130,255,0.3); border-color: rgba(120,170,255,0.6); color: #fff; }
 
 .pwiz3-dice-slot {
-  min-width: 3rem; min-height: 3rem;
+  min-width: 3rem; height: 5rem;   /* reserved for the die so the frame never grows */
   display: flex; align-items: center; justify-content: center; gap: 0.3rem;
 }
 .pwiz3-roll-btn { min-width: 11rem; }

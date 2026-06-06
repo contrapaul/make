@@ -1224,33 +1224,42 @@
   padding:               0 !important;
 }
 
-/* ── Unified scaling root — natural-sized at a fixed base; JS transform-scales
-   it to fit the panel as one ratio-locked unit (no clipping/scrollbars). ── */
+/* ── Unified scaling root — FIXED design size (em × 15px). Its size never
+   changes with content, so FitScale (window-driven only) locks the layout
+   in place and never re-scales mid-use. Variable parts scroll internally. ── */
 .bwiz-scale-root {
   display:           flex;
   flex-direction:    column;
   overflow:          visible;
   font-size:         15px;       /* fixed design base; FitScale handles fit */
+  width:             74em;
+  height:            46em;
   transform-origin:  top center;
   will-change:       transform;
 }
 
-/* ── Main wizard row ── */
+/* ── Main wizard row — fills the space above the results strip ── */
 .bwiz-outer {
   display:         flex;
   align-items:     flex-start;
   gap:             0.75em;
   padding:         0.85em 0.75em 0.5em;
   overflow:        visible;
+  flex:            1 1 0;
+  min-height:      0;
 }
 
-/* ── Skills columns (far left / right) ── */
+/* ── Skills columns (far left / right) — scroll if a player has many ── */
 .bwiz-skills-col {
   width:           10em;
   flex-shrink:     0;
   display:         flex;
   flex-direction:  column;
   gap:             0.4rem;
+  min-height:      0;
+  max-height:      100%;
+  overflow-y:      auto;
+  overflow-x:      hidden;
 }
 
 .bwiz-skills-heading {
@@ -1393,6 +1402,10 @@
   align-items:     center;
   gap:             0.65rem;
   padding-top:     0.25rem;
+  min-height:      0;
+  max-height:      100%;
+  overflow-y:      auto;
+  overflow-x:      hidden;
 }
 
 /* Re-rolls */
@@ -1550,7 +1563,7 @@
   gap:             0.3em;
   transition:      opacity 0.25s, border-color 0.25s;
   min-width:       0;
-  min-height:      10em;
+  height:          13em;        /* fixed — extra results scroll inside, no growth */
   font-family:     'JetBrains Mono', monospace;
 }
 
@@ -1572,6 +1585,9 @@
   display:        flex;
   flex-direction: column;
   gap:            0.3em;
+  flex:           1 1 0;
+  min-height:     0;
+  overflow-y:     auto;
 }
 
 /* Headline — bold italic, sized to match panels.css .result-name pattern */

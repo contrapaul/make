@@ -168,9 +168,11 @@ function ensurePhysZone(refEl, id) {
 
 /* ════════════════════════════════════════════════════════
    FIT-TO-CONTAINER SCALER
-   Scales `content` (a natural-sized element) with transform so
-   it fits `container` on BOTH axes — the whole wizard stage
-   scales as one ratio-locked unit, no clipping or scrollbars.
+   Scales `content` (a FIXED-size stage) with transform so it fits
+   `container` on both axes. The scale is driven ONLY by the window /
+   panel size — never by content changes — so the layout locks in
+   place like a video game and never re-scales mid-use. (The stage has
+   a fixed design size; variable parts scroll internally.)
    offsetWidth/Height ignore transforms, so measurement is stable.
    ════════════════════════════════════════════════════════ */
 function FitScale(container, content, opts = {}) {
@@ -188,9 +190,9 @@ function FitScale(container, content, opts = {}) {
   }
   const schedule = () => { if (!raf) raf = requestAnimationFrame(fit); };
 
+  /* Observe ONLY the container — content growth must not trigger re-scale. */
   const ro = new ResizeObserver(schedule);
   ro.observe(container);
-  ro.observe(content);
   schedule();
   return { refit: schedule, disconnect: () => ro.disconnect() };
 }
