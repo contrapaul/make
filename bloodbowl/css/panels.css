@@ -863,11 +863,31 @@
 
 .accord-label {
   font-family:    'JetBrains Mono', monospace;
+  font-weight:    800;
+  font-style:     italic;
+  font-size:      1.15rem;
+  color:          rgba(232, 240, 255, 0.95);
+  letter-spacing: 0.01em;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+  white-space:    nowrap;
+  min-width:      0;
+}
+
+.accord-right {
+  display:     flex;
+  align-items: center;
+  gap:         0.6rem;
+  flex-shrink: 0;
+}
+
+.accord-value {
+  font-family:    'JetBrains Mono', monospace;
   font-weight:    700;
-  font-size:      0.65rem;
-  color:          rgba(190, 215, 255, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  font-size:      0.8rem;
+  color:          var(--tc-gold, #D4AF37);
+  letter-spacing: 0.02em;
+  white-space:    nowrap;
 }
 
 .accord-arrow {

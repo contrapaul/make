@@ -285,6 +285,11 @@ function setAccordionLabel(side, name) {
   if (el) el.textContent = name || (side === 'left' ? 'Home Roster' : 'Away Roster');
 }
 
+function setAccordionValue(side, gold) {
+  const el = document.getElementById(`accord-${side}-value`);
+  if (el) el.textContent = gold ? `${Math.round(gold / 1000)}k gp` : '';
+}
+
 /* ════════════════════════════════════════════════════════
    GAME BAR
    ════════════════════════════════════════════════════════ */
@@ -1160,7 +1165,7 @@ window.gbState = gbState;
 
 window.Panels = {
   openPanel, closePanel, togglePanel,
-  openAccordion, setAccordionLabel, setRerolls, renderRerollPips,
+  openAccordion, setAccordionLabel, setAccordionValue, setRerolls, renderRerollPips,
   refreshWeatherChips, updateGameBarWeather,
   applyMode,
 };

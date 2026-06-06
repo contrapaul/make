@@ -142,6 +142,8 @@ async function loadTeam(side, teamId) {
     if (window.Panels) {
       Panels.openAccordion(side);
       Panels.setAccordionLabel(side, team.name);
+      Panels.setAccordionValue(side,
+        team.build?.totalGold ?? players.reduce((s, p) => s + (p.value || 0), 0));
       /* Default 3 re-rolls — will be team-builder-driven in Phase 4 */
       Panels.setRerolls(side === 'left' ? 'home' : 'away', 3);
     }
@@ -188,6 +190,7 @@ async function loadCustomTeam(side, savedTeam) {
   if (window.Panels) {
     Panels.openAccordion(side);
     Panels.setAccordionLabel(side, savedTeam.name);
+    Panels.setAccordionValue(side, players.reduce((s, p) => s + (p.value || 0), 0));
     Panels.setRerolls(gbSide, savedTeam.rerolls ?? 0);
   }
   updateStartGameGlow();
@@ -252,6 +255,7 @@ function clearSide(side) {
   /* Reset companion UI */
   if (window.Panels) {
     Panels.setAccordionLabel(side, null);
+    Panels.setAccordionValue(side, null);
     Panels.setRerolls(gbSide, 0);
   }
   updateStartGameGlow();
