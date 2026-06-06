@@ -522,7 +522,7 @@ function initPassWizard() {
     const roll = rollBtnEl();
     roll.textContent = label;
     roll.classList.remove('roll-btn--complete', 'glow-green');
-    roll.classList.add('glow-blue');
+    roll.classList.add('glow-gold');
     roll.disabled = false;
     roll.onclick = fn;
     clearAfterRoll();
@@ -532,8 +532,8 @@ function initPassWizard() {
     const roll = rollBtnEl();
     roll.disabled = false;
     roll.textContent = label || 'Complete — Close';
-    roll.classList.add('roll-btn--complete');
-    roll.classList.remove('glow-blue');
+    roll.classList.add('roll-btn--complete', 'glow-green');
+    roll.classList.remove('glow-gold');
     roll.onclick = () => { resetWizardState(); window.Panels?.closePanel?.('pass'); };
     clearAfterRoll();
   }
@@ -553,12 +553,9 @@ function initPassWizard() {
     const roll = rollBtnEl(); if (!roll) return;
     clearAfterRoll();
     if (diceEl()) diceEl().innerHTML = '';
-    /* Re-fit after setup changes (placing players adds skill cards, etc.).
-       Not called during rolls, so the layout never re-scales mid-action. */
-    ws._fit?.refit?.();
     if (!ws.plan || !ws.throwerPos || !ws.catcherPos) {
       roll.disabled = true; roll.textContent = 'Roll';
-      roll.classList.remove('roll-btn--complete', 'glow-blue');
+      roll.classList.remove('roll-btn--complete', 'glow-gold', 'glow-green');
       roll.onclick = null;
       return;
     }
@@ -808,35 +805,60 @@ function initPassWizard() {
   }
 
   function doPlacement(role, player) {
-    const banner = document.getElementById('pwiz-place-banner');
-    if (banner) { banner.hidden = false; banner.textContent = `Tap pitch to place ${playerLabel(player)} — tap to cancel`; }
-
     const tokSide = role === 'opposing'
       ? (ws.activeSide === 'left' ? 'away' : 'home')
       : (ws.activeSide === 'left' ? 'home' : 'away');
-    const lbl = playerNum(player);
-    const id  = role === 'opposing' ? `opp-${Date.now()}` : role;
+    const data = { id: role === 'opposing' ? `opp-${Date.now()}` : role, label: playerNum(player), side: tokSide };
 
-    ws.pitch?.startPlacement({ id, label: lbl, side: tokSide }, (col, row) => {
+    /* Load the player's card immediately — before placement. */
+    if (role === 'thrower')      ws.thrower = player;
+    else if (role === 'catcher') ws.catcher = player;
+    if (role !== 'opposing') { buildPlayerColumn(role); armWizard(); }
+
+    const banner = document.getElementById('pwiz-place-banner');
+    if (banner) { banner.hidden = false; banner.textContent =
+      `Tap the pitch to place ${playerLabel(player)} — or tap outside for the default spot`; }
+
+    let done = false;
+    const finalize = (col, row) => {
+      if (done) return; done = true;
+      document.removeEventListener('click', onOutside, true);
+      ws.pitch?.cancelPlacement();
       if (banner) banner.hidden = true;
+
       if (role === 'thrower') {
         if (ws.throwerPos) ws.pitch?.removePlayer(ws.throwerPos.col, ws.throwerPos.row);
-        ws.thrower = player; ws.throwerPos = { col, row };
-        ws.pitch?.clearPassLine();
-        if (ws.catcherPos) ws.pitch?.drawPassLine(col, row, ws.catcherPos.col, ws.catcherPos.row);
-        if (ws.zonesOn) ws.pitch?.showPassZones(col, row);
+        ws.throwerPos = { col, row };
       } else if (role === 'catcher') {
         if (ws.catcherPos) ws.pitch?.removePlayer(ws.catcherPos.col, ws.catcherPos.row);
-        ws.catcher = player; ws.catcherPos = { col, row };
-        ws.pitch?.clearPassLine();
-        if (ws.throwerPos) ws.pitch?.drawPassLine(ws.throwerPos.col, ws.throwerPos.row, col, row);
+        ws.catcherPos = { col, row };
       } else {
-        ws.opposingPlayers.push({ player, col, row, id });
+        ws.opposingPlayers.push({ player, col, row, id: data.id });
       }
+      ws.pitch?.placePlayer(col, row, data);
+      ws.pitch?.clearPassLine();
+      if (ws.throwerPos && ws.catcherPos) {
+        ws.pitch?.drawPassLine(ws.throwerPos.col, ws.throwerPos.row, ws.catcherPos.col, ws.catcherPos.row);
+      }
+      if (role === 'thrower' && ws.zonesOn) ws.pitch?.showPassZones(col, row);
+
       computeTZ();
       buildPlayerColumn('thrower'); buildPlayerColumn('catcher'); buildOppList();
       armWizard();
-    });
+    };
+
+    ws.pitch?.startPlacement(data, (col, row) => finalize(col, row));
+
+    /* Tap anywhere outside the pitch → drop at the default spot (thrower 8,8 /
+       catcher 12,8); the token can be dragged afterwards. */
+    const DEFAULT = role === 'catcher' ? { col: 12, row: 8 } : { col: 8, row: 8 };
+    const pitchWrap = document.querySelector('#panel-pass .pwiz-pitch-wrap');
+    function onOutside(e) {
+      if (pitchWrap && pitchWrap.contains(e.target)) return;     // pitch taps handled above
+      if (e.target.closest('.pwiz-full-picker-overlay')) return; // ignore picker clicks
+      finalize(DEFAULT.col, DEFAULT.row);
+    }
+    setTimeout(() => document.addEventListener('click', onOutside, true), 0);
   }
 
   /* ── Boot ── */

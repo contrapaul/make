@@ -1825,7 +1825,8 @@
 .bwiz-card-glow-def { animation: bwiz-card-pulse-red   1.8s ease-in-out infinite; border-radius: 8px; }
 
 /* Slow fade-out when glow class is removed; fast on hover */
-#block-roll-btn {
+#block-roll-btn,
+.pwiz3-roll-btn {
   transition:      background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s;
   font-family:     'Nuffle Italic', serif;
   font-size:       1.5em;
@@ -1839,15 +1840,19 @@
   justify-content: center;
   margin:          0.4em 0 0;
 }
-#block-roll-btn:hover {
+#block-roll-btn:hover,
+.pwiz3-roll-btn:hover {
   transition:   background 0.15s, box-shadow 0.15s, transform 0.12s, border-color 0.15s;
   background:   rgba(212, 175, 55, 1);
   border-color: rgba(212, 175, 55, 1);
   box-shadow:   0 0 20px rgba(212, 175, 55, 0.5), 0 4px 16px rgba(0,0,0,0.35);
 }
+.pwiz3-roll-btn:disabled { opacity: 0.45; }
 
-#block-roll-btn.glow-gold  { animation: bwiz-pulse-gold-strong  1.6s ease-in-out infinite; }
-#block-roll-btn.glow-green { animation: bwiz-pulse-green-strong 1.6s ease-in-out infinite; }
+#block-roll-btn.glow-gold,
+.pwiz3-roll-btn.glow-gold  { animation: bwiz-pulse-gold-strong  1.6s ease-in-out infinite; }
+#block-roll-btn.glow-green,
+.pwiz3-roll-btn.glow-green { animation: bwiz-pulse-green-strong 1.6s ease-in-out infinite; }
 
 /* ── Roll button — Complete Block state (solid green, white text persists) ── */
 .roll-btn--complete {
@@ -1863,13 +1868,15 @@
 }
 
 /* Block roll btn Complete state overrides with solid green + white text */
-#block-roll-btn.roll-btn--complete {
+#block-roll-btn.roll-btn--complete,
+.pwiz3-roll-btn.roll-btn--complete {
   background:  rgba(76, 175, 80, 0.85);
   border-color: rgba(76, 175, 80, 0.95);
   color:        #fff;
   text-shadow:  0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
 }
-#block-roll-btn.roll-btn--complete:hover {
+#block-roll-btn.roll-btn--complete:hover,
+.pwiz3-roll-btn.roll-btn--complete:hover {
   background:  rgba(76, 175, 80, 1);
   border-color: rgba(76, 175, 80, 1);
   box-shadow:   0 0 20px rgba(76, 175, 80, 0.5), 0 4px 16px rgba(0,0,0,0.35);
@@ -2072,12 +2079,13 @@
   container-type: inline-size;
 }
 
-/* Name band scales with the card */
-.bwiz-embedded-card .modal-card-overlay  { gap: 3.5cqw; padding: 1.4cqw 3cqw; }
-.bwiz-embedded-card .modal-jersey-circle { width: 19cqw; height: 19cqw; font-size: 10.5cqw; }
-.bwiz-embedded-card .modal-name          { font-size: 8cqw; -webkit-text-stroke: 0.35cqw #000; }
-.bwiz-embedded-card .modal-position      { font-size: 3.6cqw; -webkit-text-stroke: 0.25cqw #000; }
-.bwiz-embedded-card .img-placeholder-num { font-size: 30cqw; }
+/* Name band — proportions matched to the full-size roster card (name ≈5.5%
+   of card width, jersey ≈13%) so the embedded card is a uniform scale-down. */
+.bwiz-embedded-card .modal-card-overlay  { gap: 2.5cqw; padding: 2cqw 3cqw; }
+.bwiz-embedded-card .modal-jersey-circle { width: 13.5cqw; height: 13.5cqw; font-size: 7.5cqw; border-width: 0.4cqw; }
+.bwiz-embedded-card .modal-name          { font-size: 5.6cqw; -webkit-text-stroke: 0.28cqw #000; }
+.bwiz-embedded-card .modal-position      { font-size: 2.7cqw; -webkit-text-stroke: 0.2cqw #000; letter-spacing: 0.04em; }
+.bwiz-embedded-card .img-placeholder-num { font-size: 21cqw; }
 
 /* Picture fills the space left over above the stats/skills/flavor */
 .bwiz-embedded-card .modal-image-area { flex: 1 1 0; min-height: 0; }
@@ -2087,8 +2095,8 @@
   flex: 0 0 auto;
   position: relative;
   z-index: 4;
-  margin-top: -13cqw;
-  padding: 5.5cqw 2.2cqw 2.2cqw;
+  margin-top: -11cqw;
+  padding: 5cqw 2.5cqw 2cqw;
   border-bottom: none;
   background: linear-gradient(to bottom,
     rgba(16, 20, 30, 0) 0%,
@@ -2099,17 +2107,17 @@
 .bwiz-embedded-card .modal-stat {
   border: none;
   background: #fff;
-  border-radius: 1.4cqw;
-  padding: 1.2cqw 0.4cqw;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  border-radius: 1.3cqw;
+  padding: 1.3cqw 0.3cqw;
+  box-shadow: 0 0.3cqw 1cqw rgba(0, 0, 0, 0.5);
 }
-.bwiz-embedded-card .ms-label { color: #6a6a6a; font-size: 3cqw; }
-.bwiz-embedded-card .ms-value { font-size: 5cqw; }
+.bwiz-embedded-card .ms-label { color: #6a6a6a; font-size: 2.2cqw; }
+.bwiz-embedded-card .ms-value { font-size: 4.2cqw; line-height: 1.25; }
 
 /* Skills: boxed tags directly under stats; no heading, no underline, no commas */
 .bwiz-embedded-card .modal-skills {
   flex: 0 0 auto;
-  padding: 1cqw 2.2cqw 2.2cqw;
+  padding: 1cqw 2.5cqw 2cqw;
   border-bottom: none;
   max-height: none;
   min-height: 0;
@@ -2121,30 +2129,30 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1.2cqw;
-  font-size: 3.4cqw;
-  line-height: 1.3;
+  font-size: 3cqw;
+  line-height: 1.35;
 }
 .bwiz-embedded-card .skill-sep { display: none; }
 .bwiz-embedded-card .skill-link {
   font-weight: 700;
   color: var(--tc-primary, #2a4a8a);
   background: color-mix(in srgb, var(--tc-primary, #2a4a8a) 10%, #fff);
-  border: 1px solid color-mix(in srgb, var(--tc-primary, #2a4a8a) 45%, transparent);
-  border-radius: 1.4cqw;
-  padding: 0.4cqw 1.6cqw;
+  border: 0.2cqw solid color-mix(in srgb, var(--tc-primary, #2a4a8a) 45%, transparent);
+  border-radius: 1.3cqw;
+  padding: 0.5cqw 1.6cqw;
 }
 .bwiz-embedded-card .skill-link:hover,
 .bwiz-embedded-card .skill-link:focus-visible {
   border-color: var(--tc-primary, #2a4a8a);
   background: color-mix(in srgb, var(--tc-primary, #2a4a8a) 20%, #fff);
 }
-.bwiz-embedded-card .no-skills { font-size: 3.4cqw; }
+.bwiz-embedded-card .no-skills { font-size: 3cqw; }
 
 /* Flavor: always visible, clamp to 2 lines, scales with the card */
 .bwiz-embedded-card .modal-fact {
   flex: 0 0 auto;
-  padding: 2.2cqw 3cqw;
-  font-size: 3.8cqw;
+  padding: 2cqw 3cqw;
+  font-size: 3.2cqw;
   line-height: 1.4;
   border-top: 1px solid #D8D8D8;
   display: -webkit-box;
@@ -2152,5 +2160,5 @@
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.4em;
+  min-height: 2.8em;
 }
