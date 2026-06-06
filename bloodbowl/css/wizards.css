@@ -2014,11 +2014,14 @@
 /* Let the glow/pulse bleed out of the card column */
 .bwiz-card-col { overflow: visible; }
 
-/* Card is its own query container; drop the strict 5:7 lock */
+/* Keep the locked 5:7 ratio; the card is its own query container so every
+   internal size (in cqw) scales with the card's width — i.e. self-similar at
+   any size, so content always fits the 5:7 box. */
 .bwiz-embedded-card {
-  aspect-ratio: auto !important;
+  aspect-ratio: 5 / 7 !important;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   container-type: inline-size;
 }
 
@@ -2029,10 +2032,12 @@
 .bwiz-embedded-card .modal-position      { font-size: 3.6cqw; -webkit-text-stroke: 0.25cqw #000; }
 .bwiz-embedded-card .img-placeholder-num { font-size: 30cqw; }
 
-.bwiz-embedded-card .modal-image-area { aspect-ratio: 5 / 4; flex: 0 0 auto; }
+/* Picture fills the space left over above the stats/skills/flavor */
+.bwiz-embedded-card .modal-image-area { flex: 1 1 0; min-height: 0; }
 
 /* Stats lifted over the picture on a fade-to-card gradient */
 .bwiz-embedded-card .modal-stats {
+  flex: 0 0 auto;
   position: relative;
   z-index: 4;
   margin-top: -13cqw;
@@ -2056,11 +2061,12 @@
 
 /* Skills: boxed tags directly under stats; no heading, no underline, no commas */
 .bwiz-embedded-card .modal-skills {
+  flex: 0 0 auto;
   padding: 1cqw 2.2cqw 2.2cqw;
   border-bottom: none;
   max-height: none;
   min-height: 0;
-  overflow: visible;
+  overflow: hidden;
   background: #F2F2F2;
 }
 .bwiz-embedded-card .skills-label { display: none; }
