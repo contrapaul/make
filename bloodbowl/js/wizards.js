@@ -1452,268 +1452,244 @@ function initFoulWizard() {
   const rollBtn = document.getElementById('foul-roll-btn');
   if (!rollBtn) return;
 
-  let selectedAV = 8;
-  let assists    = 0;
-  const mods     = { 'dirty-player': false, stunty: false };
+  let fouler = null, foulerSide = 'left';
+  let target = null, targetSide = 'right';
+  let assists = 0;
 
-  function setFoulAV(av) {
-    const clamped = Math.max(5, Math.min(10, av));
-    let best = null, bestDiff = Infinity;
-    document.querySelectorAll('#foul-av-picker .av-btn').forEach(b => {
-      const d = Math.abs(parseInt(b.dataset.av, 10) - clamped);
-      if (d < bestDiff) { bestDiff = d; best = b; }
+  const pName = p => p?.playerData?.name ?? p?.name ?? '?';
+  const skillSet = player =>
+    new Set(getPlayerSkills(player).map(s => s.replace(/\s*\(.*\)$/, '').trim()));
+
+  /* Dice (shared numeric faces, like the Special Actions wizard) */
+  async function rollTwoD6() {
+    const tray = document.getElementById('foul-dice-tray');
+    tray.innerHTML = '';
+    const faces = [0, 1].map(() => {
+      const d = document.createElement('div'); buildNumericFace(d, 1); tray.appendChild(d); return d;
     });
-    if (best) {
-      document.querySelectorAll('#foul-av-picker .av-btn').forEach(b => b.classList.remove('active'));
-      best.classList.add('active');
-      selectedAV = parseInt(best.dataset.av, 10);
-    }
-    if (wizardMode('foul') === 'physical') buildFoulPhysUI();
+    return Promise.all(faces.map(f => rollNumericDie(f)));
   }
 
-  document.getElementById('foul-av-picker')?.addEventListener('click', e => {
-    const btn = e.target.closest('.av-btn');
-    if (!btn) return;
-    document.querySelectorAll('#foul-av-picker .av-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    selectedAV = parseInt(btn.dataset.av, 10);
-    if (wizardMode('foul') === 'physical') buildFoulPhysUI();
-  });
-
-  initFoulPlayerSelect(setFoulAV);
-  bindStepper(document.getElementById('foul-assists'), 0, 11, v => { assists = v; if (wizardMode('foul') === 'physical') buildFoulPhysUI(); });
-
-  document.getElementById('foul-mod-dp')?.addEventListener('click', e => {
-    mods['dirty-player'] = !mods['dirty-player'];
-    e.currentTarget.classList.toggle('active', mods['dirty-player']);
-    if (wizardMode('foul') === 'physical') buildFoulPhysUI();
-  });
-  document.getElementById('foul-mod-stunty')?.addEventListener('click', e => {
-    mods.stunty = !mods.stunty;
-    e.currentTarget.classList.toggle('active', mods.stunty);
-  });
-
-  const d1El       = document.getElementById('foul-d1');
-  const d2El       = document.getElementById('foul-d2');
-  const avResEl    = document.getElementById('foul-av-result');
-  const refResEl   = document.getElementById('foul-ref-result');
-  const injSection = document.getElementById('foul-injury-section');
-  const diceTray   = document.getElementById('foul-dice-tray');
-
-  const physZone   = ensurePhysZone(diceTray, 'foul-phys');
-
-  function bonus() { return assists + (mods['dirty-player'] ? 1 : 0); }
-
-  /* phys=true â†’ no doubles check, no per-die breakdown */
-  function processFoulArmourRoll(d1, d2, total, phys = false) {
-    const bon        = bonus();
-    const modded     = total + bon;
-    const isDoubles  = !phys && d1 !== null && d1 === d2;
-    const bonusNote  = bon > 0 ? ` + ${bon} (assists${mods['dirty-player'] ? ' + Dirty Player' : ''})` : '';
-    const doubleFlag = isDoubles ? `<div class="result-effect">âš ï¸ Natural Double â€” referee may have spotted it!</div>` : '';
-    const breakdown  = phys
-      ? `<div class="result-roll-breakdown">Physical roll vs AV${selectedAV}+</div>`
-      : `<div class="result-roll-breakdown">${d1} + ${d2}${bonusNote} vs AV${selectedAV}+</div>`;
-
-    if (modded < selectedAV) {
-      avResEl.innerHTML = `
-        <div class="result-roll-num">${total}${bon ? ` (+${bon})` : ''}</div>
-        ${breakdown}
-        ${doubleFlag}
-        <div class="result-name" style="color:var(--bb-gold,#D4AF37);">Armour Holds</div>
-        <p class="result-desc">Total ${modded} is below AV ${selectedAV}+. No injury from the foul.</p>
-      `;
-      avResEl.hidden = false;
-    } else {
-      avResEl.innerHTML = `
-        <div class="result-roll-num">${total}${bon ? ` (+${bon})` : ''}</div>
-        ${breakdown}
-        ${doubleFlag}
-        <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
-        <p class="result-desc">Rolling Injury tableâ€¦</p>
-      `;
-      avResEl.hidden = false;
-    }
-
-    if (isDoubles && refResEl) {
-      refResEl.innerHTML = `
-        <div class="result-name" style="color:#FF8C00;">âš ï¸ Referee Spots the Foul!</div>
-        <p class="result-desc">A natural double â€” the fouling player is Sent Off! <strong>Argue the Call</strong>: D6 â€” on 6 player stays; on 1 Head Coach ejected; 2â€“5 call stands. A <em>Bribe</em> avoids ejection entirely (2+ succeeds).</p>
-      `;
-      refResEl.hidden = false;
-    } else if (refResEl) {
-      refResEl.hidden = true;
-    }
-
-    return modded >= selectedAV;
+  /* Result panels */
+  function setPanel(panelId, contentId, headline, cls, note) {
+    document.getElementById(panelId)?.classList.remove('locked');
+    const el = document.getElementById(contentId);
+    if (!el) return;
+    el.className = 'bwiz-result-content';
+    el.innerHTML = `<div class="bwiz-result-headline bwiz-result-${cls}">${esc(headline)}</div>` +
+      (note ? `<p class="bwiz-result-note info">${note}</p>` : '');
   }
 
-  async function doFoulRoll() {
-    rollBtn.disabled = true;
-    avResEl.hidden   = true;
-    if (refResEl)   refResEl.hidden   = true;
-    if (injSection) injSection.hidden = true;
+  function lockPanels() {
+    ['foul-armor-panel', 'foul-injury-panel', 'foul-ref-panel'].forEach(id =>
+      document.getElementById(id)?.classList.add('locked'));
+    ['foul-armor-content', 'foul-injury-content', 'foul-ref-content'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.textContent = '—';
+    });
+    const tray = document.getElementById('foul-dice-tray'); if (tray) tray.innerHTML = '';
+  }
 
-    const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
-    const broke = processFoulArmourRoll(d1, d2, total);
-
-    if (broke) {
-      await pause(450);
-      if (injSection) injSection.hidden = false;
-      const injD1 = document.getElementById('foul-inj-d1');
-      const injD2 = document.getElementById('foul-inj-d2');
-      const { d1: i1, d2: i2, total: injTotal } = await Dice.roll2D6(injD1, injD2);
-      const bon      = bonus();
-      const injModded = Math.min(12, injTotal + bon);
-      const injTable  = mods.stunty ? window.BBData?.injury?.stunty : window.BBData?.injury?.injury;
-      const inj = rangeFind(injTable, injModded) ?? { result: 'Unknown', 'class': '', desc: '' };
-      const injResEl = document.getElementById('foul-inj-result');
-      if (injResEl) {
-        injResEl.innerHTML = `
-          <div class="result-roll-num">${injTotal}${bon ? ` (+${bon})` : ''}</div>
-          <div class="result-roll-breakdown">${i1} + ${i2} â€” Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
-          <div class="result-name ${inj['class']}">${esc(inj.result)}</div>
-          <p class="result-desc">${esc(inj.desc)}</p>
-        `;
-        injResEl.hidden = false;
-      }
-
-      if (inj.result === 'Casualty!') {
-        await pause(500);
-        const casTray  = document.getElementById('foul-cas-tray');
-        const casD1    = document.getElementById('foul-cas-d1');
-        const casResEl = document.getElementById('foul-cas-result');
-        if (casTray) casTray.hidden = false;
-        if (casResEl) { casResEl.innerHTML = `<p class="result-desc" style="margin:0">Rolling Casualty table (D16)â€¦</p>`; casResEl.hidden = false; }
-        await pause(300);
-        const casVal = await Dice.rollDieElement(casD1);
-        const cas    = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
-        if (casResEl) {
-          casResEl.innerHTML = `
-            <div class="result-roll-num">${casVal}</div>
-            <div class="result-roll-breakdown">Casualty Table (D16)</div>
-            <div class="result-name ${cas['class']}">${esc(cas.result)}</div>
-            <p class="result-desc">${esc(cas.desc)}</p>
-          `;
-        }
-      }
-    }
-
+  function complete() {
     rollBtn.disabled = false;
+    rollBtn.textContent = 'Done';
+    rollBtn.classList.add('roll-btn--complete');
+    rollBtn.onclick = () => document.querySelector('#panel-foul .panel-close')?.click();
   }
 
-  /* â”€â”€ Physical foul armour buttons â”€â”€ */
-  function buildFoulPhysUI() {
-    const bon = bonus();
-    window.PhysicalDice.showPhysicalButtons(physZone, {
-      buttons: Array.from({ length: 11 }, (_, i) => {
-        const total  = i + 2;
-        const modded = total + bon;
-        const breaks = modded >= selectedAV;
-        return { value: total, label: breaks ? `Breaks! (${modded})` : `Holds (${modded})`, cls: breaks ? 'phys-bad' : 'phys-muted' };
-      }),
-      columns: 4,
-      onSelect(total) {
-        avResEl.hidden = true;
-        if (refResEl)   refResEl.hidden   = true;
-        if (injSection) injSection.hidden = true;
-        /* For physical mode doubles detection is not possible â€” skip referee check */
-        const broke = processFoulArmourRoll(null, null, total, true);
-        if (!broke) return;
-        /* Auto-show injury physical buttons */
-        if (injSection) injSection.hidden = false;
-        buildFoulInjPhysUI();
-      },
+  function readyToRoll() {
+    if (rollBtn.classList.contains('roll-btn--complete')) return;
+    rollBtn.disabled = !(fouler && target);
+  }
+
+  function updateSummary() {
+    const el = document.getElementById('foul-summary');
+    if (!el) return;
+    if (!fouler || !target) { el.textContent = 'Select fouler and target'; return; }
+    const dirtyPlayer = skillSet(fouler).has('Dirty Player');
+    const av    = parseStat(target.statsText, 'AV') ?? 9;
+    const bonus = assists + (dirtyPlayer ? 1 : 0);
+    el.innerHTML = `${esc(pName(fouler))} fouls ${esc(pName(target))}` +
+      `<br>vs AV ${av}+ · +${bonus}` +
+      (assists ? ` (${assists} assist${assists > 1 ? 's' : ''})` : '') +
+      (dirtyPlayer ? ' · Dirty Player' : '');
+  }
+
+  /* Resolution: Armour -> Injury -> Casualty, with referee doubles check */
+  async function resolve() {
+    if (!(fouler && target)) return;
+    rollBtn.disabled = true;
+    rollBtn.textContent = 'Rolling…';
+    rollBtn.onclick = null;
+    lockPanels();
+
+    const tSkills     = skillSet(target);
+    const dirtyPlayer = skillSet(fouler).has('Dirty Player');
+    const av          = parseStat(target.statsText, 'AV') ?? 9;
+    const stunty      = tSkills.has('Stunty') ? 1 : 0;
+    const thickSkull  = tSkills.has('Thick Skull');
+    const ironHard    = tSkills.has('Iron Hard Skin');
+    const bonus       = assists + (dirtyPlayer ? 1 : 0);
+    const bonusTxt    = bonus
+      ? ` + ${bonus} (${assists ? `${assists} assist${assists > 1 ? 's' : ''}` : ''}${assists && dirtyPlayer ? ', ' : ''}${dirtyPlayer ? 'Dirty Player' : ''})`
+      : '';
+
+    /* Armour */
+    const [a1, a2] = await rollTwoD6();
+    const armour   = BBResolve.armourBreaks(a1, a2, { av, bonus, ironHard });
+    setPanel('foul-armor-panel', 'foul-armor-content',
+      armour.broke ? 'Armour Broken!' : 'Armour Holds', armour.broke ? 'bad' : 'ok',
+      `${a1} + ${a2}${bonusTxt} = ${armour.shown} vs AV ${av}+${ironHard ? ' · Iron Hard Skin' : ''}`);
+
+    let injuryDouble = false;
+    if (armour.broke) {
+      await pause(350);
+      /* Injury */
+      const [i1, i2] = await rollTwoD6();
+      injuryDouble   = i1 === i2;
+      const inj      = BBResolve.injuryOutcome(i1, i2, { mb: bonus, stunty, thickSkull });
+      setPanel('foul-injury-panel', 'foul-injury-content', `${pName(target)} ${inj.outcome}!`,
+        inj.outcome === 'Stunned' ? 'warn' : 'bad',
+        `${i1} + ${i2}${bonus ? ` + ${bonus}` : ''}${stunty ? ' + 1 Stunty' : ''} = ${inj.total}`);
+      BBResolve.applyStatus(targetSide, target.idx, inj.status);
+
+      if (inj.outcome === 'Casualty') {
+        const decay = tSkills.has('Decay') ? 1 : 0;
+        const { casVal, cas } = BBResolve.rollCasualty(decay);
+        const el = document.createElement('div');
+        el.className = 'bwiz-casualty-result';
+        el.innerHTML =
+          `<div class="bwiz-result-headline bwiz-result-bad">${esc(cas.result)}</div>` +
+          (cas.desc ? `<p class="bwiz-result-note bad">${esc(cas.desc)}</p>` : '') +
+          `<p class="bwiz-math-row">Casualty table · D16: ${casVal}${decay ? ' (+1 Decay)' : ''}</p>`;
+        document.getElementById('foul-injury-panel')?.appendChild(el);
+      }
+    }
+
+    /* The Referee: a natural double on Armour OR Injury spots the foul */
+    const armourDouble = a1 === a2;
+    if (armourDouble || injuryDouble) {
+      const on = armourDouble ? 'Armour' : 'Injury';
+      setPanel('foul-ref-panel', 'foul-ref-content', 'Sent Off!', 'bad',
+        `Natural double on the ${on} roll — the referee spots the foul and ejects ${esc(pName(fouler))}. ` +
+        `<strong>Argue the Call</strong>: D6 — 6 the player stays, 1 the coach is ejected too, 2–5 the call stands. A <em>Bribe</em> avoids it on 2+.`);
+    } else {
+      setPanel('foul-ref-panel', 'foul-ref-content', 'No Whistle', 'ok',
+        'No double rolled — the referee misses the foul.');
+    }
+
+    complete();
+  }
+
+  /* Fouler/target card columns (mirrors the Block wizard) */
+  function showPicker(role) {
+    const wrap   = document.getElementById(`foul-${role}-card-wrap`);
+    const picker = document.getElementById(`foul-${role}-picker`);
+    if (!wrap || !picker) return;
+    wrap.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+    picker.hidden = false;
+
+    const PS = window.PlayerStatus;
+    const isFouler = role === 'fouler';
+    const side     = isFouler ? foulerSide : targetSide;
+    const listId   = isFouler ? 'foul-fouler-list' : 'foul-target-list';
+    const filter   = isFouler
+      ? (p => !window.STATUS_META?.[p.status]?.dim)
+      : (p => p.status === PS?.PRONE || p.status === PS?.STUNNED);
+
+    buildWizardPlayerList(listId, side, filter, (player) => {
+      if (isFouler) { fouler = player; foulerSide = side; }
+      else          { target = player; targetSide = side; }
+      picker.hidden = true;
+      buildEmbeddedCardShared(wrap, player, side);
+      resetRoll();
+      updateSummary();
+      readyToRoll();
     });
-    physZone.hidden = false;
   }
 
-  function buildFoulInjPhysUI() {
-    const bon = bonus();
-    const injPhysZone = ensurePhysZone(document.getElementById('foul-inj-result') ?? injSection, 'foul-inj-phys');
-    const CLS = { 'result-ok': 'phys-neutral', 'result-ko': 'phys-warn', 'result-cas': 'phys-bad' };
-    window.PhysicalDice.showPhysicalButtons(injPhysZone, {
-      buttons: Array.from({ length: 11 }, (_, i) => {
-        const roll   = i + 2;
-        const modded = Math.min(12, roll + bon);
-        const table  = mods.stunty ? window.BBData?.injury?.stunty : window.BBData?.injury?.injury;
-        const entry  = rangeFind(table, modded);
-        return { value: roll, label: entry?.result ?? '?', cls: CLS[entry?.['class']] ?? 'phys-neutral' };
-      }),
-      columns: 4,
-      onSelect(roll) {
-        const bon2    = bonus();
-        const modded  = Math.min(12, roll + bon2);
-        const table   = mods.stunty ? window.BBData?.injury?.stunty : window.BBData?.injury?.injury;
-        const inj     = rangeFind(table, modded) ?? { result: 'Unknown', 'class': '', desc: '' };
-        const injResEl = document.getElementById('foul-inj-result');
-        if (injResEl) {
-          injResEl.innerHTML = `
-            <div class="result-roll-num">${roll}${bon2 ? ` (+${bon2})` : ''}</div>
-            <div class="result-roll-breakdown">Physical â€” Injury table${mods.stunty ? ' (Stunty)' : ''}</div>
-            <div class="result-name ${inj['class']}">${esc(inj.result)}</div>
-            <p class="result-desc">${esc(inj.desc)}</p>
-          `;
-          injResEl.hidden = false;
-        }
-        if (inj.result === 'Casualty!') {
-          const casTray  = document.getElementById('foul-cas-tray');
-          const casResEl = document.getElementById('foul-cas-result');
-          if (casTray) casTray.hidden = false;
-          buildFoulCasPhysUI(casTray);
-          if (casResEl) casResEl.hidden = true;
-        }
-      },
-    });
-    injPhysZone.hidden = false;
+  function restoreCard(role) {
+    const wrap   = document.getElementById(`foul-${role}-card-wrap`);
+    const picker = document.getElementById(`foul-${role}-picker`);
+    if (!wrap || !picker) return;
+    const player = role === 'fouler' ? fouler : target;
+    const side   = role === 'fouler' ? foulerSide : targetSide;
+    if (!player) { showPicker(role); return; }
+    picker.hidden = true;
+    if (!wrap.querySelector('.bwiz-embedded-card')) buildEmbeddedCardShared(wrap, player, side);
   }
 
-  function buildFoulCasPhysUI(afterEl) {
-    const casPhysZone = ensurePhysZone(afterEl ?? injSection, 'foul-cas-phys');
-    const CLS = { 'result-ok': 'phys-neutral', 'result-ko': 'phys-warn', 'result-cas': 'phys-bad' };
-    window.PhysicalDice.showPhysicalButtons(casPhysZone, {
-      buttons: Array.from({ length: 16 }, (_, i) => {
-        const val   = i + 1;
-        const entry = rangeFind(window.BBData?.injury?.casualty, val);
-        return { value: val, label: entry?.result ?? '?', cls: CLS[entry?.['class']] ?? 'phys-neutral' };
-      }),
-      columns: 4,
-      onSelect(val) {
-        const cas    = rangeFind(window.BBData?.injury?.casualty, val) ?? { result: 'Unknown', 'class': '', desc: '' };
-        const casResEl = document.getElementById('foul-cas-result');
-        if (casResEl) {
-          casResEl.innerHTML = `
-            <div class="result-roll-num">${val}</div>
-            <div class="result-roll-breakdown">Physical â€” Casualty Table (D16)</div>
-            <div class="result-name ${cas['class']}">${esc(cas.result)}</div>
-            <p class="result-desc">${esc(cas.desc)}</p>
-          `;
-          casResEl.hidden = false;
-        }
-      },
-    });
-    casPhysZone.hidden = false;
+  function resetRoll() {
+    rollBtn.textContent = 'Roll Foul';
+    rollBtn.classList.remove('roll-btn--complete');
+    rollBtn.onclick = resolve;
+    lockPanels();
+    readyToRoll();
   }
 
-  function showPhys() {
-    diceTray.hidden  = true;
-    rollBtn.hidden   = true;
-    avResEl.hidden   = true;
-    if (refResEl)   refResEl.hidden   = true;
-    if (injSection) injSection.hidden = true;
-    buildFoulPhysUI();
+  /* Reset a role's card when its roster changes while the panel is open */
+  function watchRosterForReset(rosterId, role) {
+    const roster = document.getElementById(rosterId);
+    if (!roster) return;
+    new MutationObserver(() => {
+      if (panel?.hasAttribute('hidden')) return;
+      if (role === 'fouler') fouler = null; else target = null;
+      assists = 0;
+      renderAssistDots();
+      showPicker(role);
+      updateSummary();
+      resetRoll();
+    }).observe(roster, { childList: true });
   }
 
-  function showDigital() {
-    physZone.hidden  = true;
-    diceTray.hidden  = false;
-    rollBtn.hidden   = false;
+  function renderAssistDots() {
+    const el = document.getElementById('foul-assists-dots');
+    if (!el) return;
+    el.innerHTML = '';
+    const label = document.createElement('div');
+    label.className = 'bwiz-assists-label';
+    label.textContent = 'Assists';
+    el.appendChild(label);
+    const row = document.createElement('div');
+    row.className = 'bwiz-assists-row';
+    for (let i = 1; i <= 6; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'assist-dot' + (i <= assists ? ' active' : '');
+      dot.dataset.n = i;
+      dot.setAttribute('aria-label', `${i} assist${i > 1 ? 's' : ''}`);
+      dot.addEventListener('click', () => {
+        assists = (assists === i) ? i - 1 : i;
+        renderAssistDots();
+        updateSummary();
+      });
+      row.appendChild(dot);
+    }
+    el.appendChild(row);
   }
 
-  panel?.addEventListener('bb:diceMode', e => e.detail.mode === 'physical' ? showPhys() : showDigital());
-  rollBtn.addEventListener('click', doFoulRoll);
+  document.getElementById('foul-change-fouler')?.addEventListener('click', () => showPicker('fouler'));
+  document.getElementById('foul-change-target')?.addEventListener('click', () => showPicker('target'));
 
-  if (wizardMode('foul') === 'physical') showPhys();
+  watchRosterForReset('roster-left',  'fouler');
+  watchRosterForReset('roster-right', 'target');
+
+  /* Fit-to-panel scaling, identical to the Block wizard. */
+  let _foulFit = null;
+  const scaleRoot = panel.querySelector('.bwiz-scale-root');
+
+  rollBtn.onclick = resolve;
+  renderAssistDots();
+
+  onPanelOpen('panel-foul', () => {
+    /* Fouler from the team taking its turn (left), target from the opponent. */
+    foulerSide = 'left'; targetSide = 'right';
+    resetRoll();
+    if (!fouler) showPicker('fouler'); else restoreCard('fouler');
+    if (!target) showPicker('target'); else restoreCard('target');
+    renderAssistDots();
+    updateSummary();
+    if (!_foulFit && scaleRoot) _foulFit = FitScale(panel.querySelector('.bwiz-panel-body'), scaleRoot, { max: 1.6 });
+    else _foulFit?.refit();
+  });
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -2578,28 +2554,6 @@ function onPanelOpen(panelId, fn) {
 
 /* initBlockPlayerSelect removed â€” integrated into initBlockWizard() */
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   FOUL WIZARD â€” player selection
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-
-function initFoulPlayerSelect(avPickerUpdate) {
-  const PS = window.PlayerStatus;
-
-  function refreshFoulLists() {
-    buildWizardPlayerList(
-      'foul-fouler-list', 'left',
-      p => !window.STATUS_META?.[p.status]?.dim,
-      () => {}
-    );
-    buildWizardPlayerList(
-      'foul-target-list', 'right',
-      p => p.status === PS?.PRONE || p.status === PS?.STUNNED,
-      (p, stats) => { if (stats.av && avPickerUpdate) avPickerUpdate(stats.av); }
-    );
-  }
-
-  onPanelOpen('panel-foul', refreshFoulLists);
-}
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    BOOT

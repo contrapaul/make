@@ -49,6 +49,7 @@ function initPassWizard() {
     zonesOn:         false,
     passResult:      null,
     catchResult:     null,
+    activeStepKey:   'throw',
     pitch:           null,
     passSkillUsed:   false,
     teamRRUsed:      false,
@@ -254,27 +255,30 @@ function initPassWizard() {
     fLeft.appendChild(oppList);
     frame.appendChild(fLeft);
 
-    /* Center: dice slot + roll button */
-    const fCenter = el('div', 'pwiz3-frame-center');
+    /* Center: color-coded equation for the active roll (to the left of the dice) */
+    const fMath = el('div', 'pwiz3-math'); fMath.id = 'pwiz3-math';
+    frame.appendChild(fMath);
+
+    /* Right: dice (left of button) + big Roll, with confirm/reroll + skill slot */
+    const fRoll = el('div', 'pwiz3-frame-roll');
+    const diceRow = el('div', 'pwiz3-dice-row');
     const dice = el('div', 'pwiz3-dice-slot'); dice.id = 'pwiz3-dice';
-    fCenter.appendChild(dice);
     const rollBtn = el('button', 'roll-btn pwiz3-roll-btn'); rollBtn.id = 'pwiz3-roll';
     rollBtn.type = 'button'; rollBtn.textContent = 'Roll'; rollBtn.disabled = true;
-    fCenter.appendChild(rollBtn);
-    frame.appendChild(fCenter);
+    diceRow.appendChild(dice); diceRow.appendChild(rollBtn);
+    fRoll.appendChild(diceRow);
 
-    /* Right: confirm + reroll + skill slot */
-    const fRight = el('div', 'pwiz3-frame-right');
+    const actRow = el('div', 'pwiz3-act-row');
     const confirmBtn = el('button', 'bwiz-confirm-btn'); confirmBtn.id = 'pwiz3-confirm';
-    confirmBtn.type = 'button'; confirmBtn.textContent = 'Confirm Roll'; confirmBtn.hidden = true;
+    confirmBtn.type = 'button'; confirmBtn.textContent = 'Confirm Result'; confirmBtn.hidden = true;
     const rerollBtn = el('button', 'bwiz-rr-action-btn'); rerollBtn.id = 'pwiz3-reroll';
     rerollBtn.type = 'button'; rerollBtn.textContent = 'Use Re-roll'; rerollBtn.hidden = true;
+    actRow.appendChild(confirmBtn); actRow.appendChild(rerollBtn);
+    fRoll.appendChild(actRow);
+
     const skillSlot = el('div', 'pwiz3-skill-slot'); skillSlot.id = 'pwiz3-skill';
-    const btnRow = el('div', 'pwiz3-frame-right-btns');
-    btnRow.appendChild(confirmBtn); btnRow.appendChild(rerollBtn);
-    fRight.appendChild(btnRow);
-    fRight.appendChild(skillSlot);
-    frame.appendChild(fRight);
+    fRoll.appendChild(skillSlot);
+    frame.appendChild(fRoll);
 
     buildPlayerColumn('thrower');
     buildPlayerColumn('catcher');
@@ -431,42 +435,91 @@ function initPassWizard() {
     return w?.name && w.name !== 'Nice' ? w.name : null;
   }
 
-  function modBreakdownHtml() {
-    const p = ws.plan; if (!p) return '';
-    const m = p.mods;
-    const t = [];
-    if (p.paFinal < 99) {
-      const rows = [`PA ${p.paBase}+`];
-      if (m.rangePenalty)     rows.push(`${p.range.rangeLabel} +${-m.rangePenalty}`);
-      if (m.tzPenalty)        rows.push(`${m.tzPenalty} Tackle Zone${m.tzPenalty > 1 ? 's' : ''} +${m.tzPenalty}`);
-      if (m.verySunnyPenalty) rows.push('Very Sunny +1');
-      if (m.nosThrow && ws.tz) rows.push('Nerves of Steel (TZ ignored)');
-      if (m.accurateBonus)    rows.push('Accurate −1');
-      if (m.cannoneerBonus)   rows.push('Cannoneer −1');
-      if (m.hasHailMary)      rows.push('Hail Mary (no intercept)');
-      t.push(`<span class="pwiz3-mod-group"><b>Throw ${p.paFinal}+</b> · ${rows.join(' · ')}</span>`);
+  /* ── Per-step equation for the active roll (drives the bottom math) ── */
+  function stepMath(key) {
+    const p = ws.plan; if (!p) return null;
+
+    if (key === 'throw') {
+      if (p.paFinal >= 99)
+        return { label: 'Throw', base: 'PA —', terms: [], target: '—', effects: ['This player cannot pass'] };
+      const m = p.mods, terms = [], effects = [];
+      if (m.rangePenalty)     terms.push({ label: p.range.rangeLabel, delta: -m.rangePenalty });
+      if (m.tzPenalty)        terms.push({ label: `${m.tzPenalty} Tackle Zone${m.tzPenalty > 1 ? 's' : ''}`, delta: m.tzPenalty });
+      if (m.verySunnyPenalty) terms.push({ label: 'Very Sunny', delta: 1 });
+      if (m.accurateBonus)    terms.push({ label: 'Accurate', delta: -1 });
+      if (m.cannoneerBonus)   terms.push({ label: 'Cannoneer', delta: -1 });
+      if (m.nosThrow && ws.tz) effects.push('Nerves of Steel — tackle zones ignored');
+      if (m.hasHailMary)       effects.push('Hail Mary Pass — cannot be intercepted');
+      if (p.blizzFumble)       effects.push('Blizzard — Long/Bomb passes auto-fumble');
+      return { label: 'Throw', base: `PA ${p.paBase}+`, terms, target: `${p.paFinal}+`, effects };
     }
-    if (p.agFinal < 99) {
-      const rows = [`AG ${p.agBase}+`];
-      if (m.catchSkBonus)   rows.push('Catch −1');
-      if (m.catchTZPenalty) rows.push(`${m.catchTZPenalty} Tackle Zone${m.catchTZPenalty > 1 ? 's' : ''} +${m.catchTZPenalty}`);
-      if (m.wCatchPenalty)  rows.push(`${weatherLabel() || 'Weather'} +1`);
-      t.push(`<span class="pwiz3-mod-group"><b>Catch ${p.agFinal}+</b> · ${rows.join(' · ')}</span>`);
+
+    if (key === 'catch') {
+      if (p.agFinal >= 99)
+        return { label: 'Catch', base: 'AG —', terms: [], target: '—', effects: [] };
+      const m = p.mods, terms = [], effects = [];
+      if (m.catchSkBonus)   terms.push({ label: 'Catch', delta: -1 });
+      if (m.catchTZPenalty) terms.push({ label: `${m.catchTZPenalty} Tackle Zone${m.catchTZPenalty > 1 ? 's' : ''}`, delta: m.catchTZPenalty });
+      if (m.wCatchPenalty)  terms.push({ label: weatherLabel() || 'Weather', delta: 1 });
+      if (hasSk(ws.catcher, 'Nerves of Steel') && ws.catcherTZ) effects.push('Nerves of Steel — tackle zones ignored');
+      return { label: 'Catch', base: `AG ${p.agBase}+`, terms, target: `${p.agFinal}+`, effects };
     }
-    if (p.blizzFumble) t.push('<span class="pwiz3-mod-group neg"><b>Blizzard</b> · Long/Bomb passes auto-fumble</span>');
-    return t.join('');
+
+    if (key.startsWith('int')) {
+      const it = p.interceptors[parseInt(key.slice(3), 10)]; if (!it) return null;
+      const ag = getStat(it.op.player, 'AG');
+      const terms = [];
+      if (window.GameState?.currentWeather?.name === 'Pouring Rain') terms.push({ label: 'Pouring Rain', delta: 1 });
+      return {
+        label: `Intercept · ${it.op.player.name || it.op.player.pos || '?'}`,
+        base: `AG ${ag >= 99 ? '4' : ag}+`, terms, target: `${it.target}+`, effects: [],
+      };
+    }
+    return null;
+  }
+
+  /* ── Bottom math: color-coded equation, big target, right next to Roll ── */
+  function renderMath() {
+    const host = document.getElementById('pwiz3-math');
+    if (!host) return;
+    const m = stepMath(ws.activeStepKey || 'throw');
+    if (!m) {
+      host.innerHTML = '<div class="pwiz3-math-wait">Select a thrower and catcher, then place both on the pitch.</div>';
+      return;
+    }
+    const terms = m.terms.map(t => {
+      const cls  = t.delta > 0 ? 'neg' : 'pos';
+      const sign = t.delta > 0 ? '+' : '−';
+      return `<span class="pwiz3-math-term ${cls}">${sign}${Math.abs(t.delta)}<small>${esc(t.label)}</small></span>`;
+    }).join('<span class="pwiz3-math-op">·</span>');
+    const eff  = m.effects.map(e => `<span class="pwiz3-math-effect">${esc(e)}</span>`).join('');
+    const verb = m.label.startsWith('Throw') ? 'pass' : m.label.startsWith('Catch') ? 'catch' : 'intercept';
+    host.innerHTML =
+      `<div class="pwiz3-math-step">${esc(m.label)}</div>` +
+      `<div class="pwiz3-math-eq">` +
+        `<span class="pwiz3-math-base">${esc(m.base)}</span>` +
+        (terms ? `<span class="pwiz3-math-op">·</span>${terms}` : '') +
+        `<span class="pwiz3-math-eq-sep">=</span>` +
+        `<span class="pwiz3-math-target">${esc(m.target)}</span>` +
+        `<span class="pwiz3-math-need">to&nbsp;${verb}</span>` +
+      `</div>` +
+      (eff ? `<div class="pwiz3-math-effects">${eff}</div>` : '');
   }
 
   let seqChips = {};
 
-  function seqChip(key, label, target, sub) {
-    const c = el('div', 'pwiz3-seq-chip');
-    c.dataset.key = key;
-    c.innerHTML = `<div class="pwiz3-seq-chip-hd">${esc(label)}<span class="pwiz3-seq-chip-tgt">${esc(target)}</span></div>`
-      + (sub ? `<div class="pwiz3-seq-chip-sub">${esc(sub)}</div>` : '')
-      + `<div class="pwiz3-seq-chip-res"></div>`;
-    seqChips[key] = c.querySelector('.pwiz3-seq-chip-res');
-    return c;
+  /* Block-wizard-style result panel: label + big target, result fills in after the roll. */
+  function resultPanel(key, label, target, sub) {
+    const p = el('div', 'pwiz3-result-panel locked');
+    p.dataset.key = key;
+    p.innerHTML =
+      `<div class="pwiz3-result-top">` +
+        `<span class="bwiz-result-label">${esc(label)}${sub ? ` · ${esc(sub)}` : ''}</span>` +
+        `<span class="pwiz3-result-target">${esc(target)}</span>` +
+      `</div>` +
+      `<div class="bwiz-result-content"><div class="pwiz3-result-idle">Awaiting roll…</div></div>`;
+    seqChips[key] = p.querySelector('.bwiz-result-content');
+    return p;
   }
 
   function renderSeq() {
@@ -485,34 +538,30 @@ function initPassWizard() {
       return;
     }
 
-    const mods = modBreakdownHtml();
-    if (mods) seq.appendChild(el('div', 'pwiz3-seq-mods', mods));
-
-    const row = el('div', 'pwiz3-seq-row');
-    row.appendChild(seqChip('throw', 'Throw', ws.plan.paFinal >= 99 ? '—' : `${ws.plan.paFinal}+`));
-    ws.plan.interceptors.forEach((it, i) => {
-      row.appendChild(el('div', 'pwiz3-seq-arrow', '→'));
-      row.appendChild(seqChip(`int${i}`, 'Intercept', `${it.target}+`, it.op.player.name || it.op.player.pos || '?'));
-    });
-    row.appendChild(el('div', 'pwiz3-seq-arrow', '→'));
-    row.appendChild(seqChip('catch', 'Catch', ws.plan.agFinal >= 99 ? '—' : `${ws.plan.agFinal}+`));
-    seq.appendChild(row);
-
-    const scatter = el('div', 'pwiz3-scatter'); scatter.id = 'pwiz3-scatter';
-    seq.appendChild(scatter);
+    const strip = el('div', 'pwiz3-results-strip');
+    strip.appendChild(resultPanel('throw', 'Throw', ws.plan.paFinal >= 99 ? '—' : `${ws.plan.paFinal}+`));
+    ws.plan.interceptors.forEach((it, i) =>
+      strip.appendChild(resultPanel(`int${i}`, 'Intercept', `${it.target}+`,
+        it.op.player.name || it.op.player.pos || '?')));
+    strip.appendChild(resultPanel('catch', 'Catch', ws.plan.agFinal >= 99 ? '—' : `${ws.plan.agFinal}+`));
+    seq.appendChild(strip);
   }
 
   function setSeqActive(key) {
-    document.querySelectorAll('#pwiz3-seq .pwiz3-seq-chip').forEach(c =>
+    ws.activeStepKey = key;
+    document.querySelectorAll('#pwiz3-seq .pwiz3-result-panel').forEach(c =>
       c.classList.toggle('active', c.dataset.key === key));
+    renderMath();
   }
 
   function seqResult(key, roll, label, cls, explain) {
     const slot = seqChips[key];
     if (!slot) return;
-    slot.innerHTML = `<span class="pwiz3-seq-roll">${roll != null ? roll : ''}</span>` +
-      `<span class="pwiz3-seq-tag ${cls}">${esc(label)}</span>` +
-      (explain ? `<span class="pwiz3-seq-explain">${esc(explain)}</span>` : '');
+    slot.closest('.pwiz3-result-panel')?.classList.remove('locked');
+    slot.innerHTML =
+      `<div class="bwiz-result-headline bwiz-result-${cls}">${esc(label)}</div>` +
+      (roll != null ? `<div class="pwiz3-result-roll">rolled <b>${roll}</b></div>` : '') +
+      (explain ? `<p class="bwiz-result-note ${cls}">${esc(explain)}</p>` : '');
   }
 
   /* ─────────────────────────────────────────────────────
@@ -583,6 +632,7 @@ function initPassWizard() {
   function armWizard() {
     ws.plan = computePlan();
     resetRoll();
+    ws.activeStepKey = 'throw';
     renderSeq();
     const roll = rollBtnEl(); if (!roll) return;
     clearAfterRoll();
@@ -591,9 +641,11 @@ function initPassWizard() {
       roll.disabled = true; roll.textContent = 'Roll';
       roll.classList.remove('roll-btn--complete', 'glow-gold', 'glow-green');
       roll.onclick = null;
+      renderMath();
       return;
     }
     armRoll('Roll Throw', doThrow);
+    setSeqActive('throw');
   }
 
   /* Pass skill re-roll button (context skill slot). */
@@ -708,9 +760,10 @@ function initPassWizard() {
   const D8N = {1:'Up-Left',2:'Up',3:'Up-Right',4:'Left',5:'Right',6:'Down-Left',7:'Down',8:'Down-Right'};
 
   async function scatterFrom(originPos, numDice, title) {
-    const host = document.getElementById('pwiz3-scatter');
-    if (!host) return;
-    host.innerHTML = '';
+    const content = seqChips[ws.activeStepKey];
+    if (!content) return;
+    const host = el('div', 'pwiz3-scatter');
+    content.appendChild(host);
     host.appendChild(el('div', 'pwiz3-scatter-title', title || `Scatter — ${numDice} × D8`));
     const cardsRow = el('div', 'pwiz3-scatter-row');
     host.appendChild(cardsRow);

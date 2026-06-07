@@ -359,80 +359,66 @@
           </div>
           <button class="panel-close" aria-label="Close foul panel">&#215;</button>
         </div>
-        <div class="panel-body" id="panel-foul-body">
+        <div class="panel-body bwiz-panel-body" id="panel-foul-body">
           <div class="weather-chip-slot" id="wchip-foul" hidden></div>
-          <p class="panel-intro">Select fouler and prone/stunned target from the rosters. Each assist adds +1. A natural double on Armour means the ref spots the foul.</p>
+          <div class="bwiz-scale-root">
 
-          <!-- Player selection (populated by wizards.js) -->
-          <div class="wps-panel" id="foul-player-select">
-            <div class="wps-side">
-              <div class="wps-heading">Fouler</div>
-              <div class="wps-list" id="foul-fouler-list">
-                <p class="wps-empty">Load a roster first</p>
+          <!-- ═══ Main wizard row ═══ -->
+          <div class="bwiz-outer">
+
+            <!-- Fouler card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="foul-change-fouler">Change Fouler</button>
+              <div class="bwiz-card-wrap" id="foul-fouler-card-wrap">
+                <div class="bwiz-picker" id="foul-fouler-picker">
+                  <div class="bwiz-picker-label">Select Fouler</div>
+                  <div class="wps-list" id="foul-fouler-list"><p class="wps-empty">Load a roster first</p></div>
+                </div>
+              </div>
+              <div class="bwiz-assists" id="foul-assists-dots"></div>
+            </div>
+
+            <!-- Center: modifiers, summary, dice, roll button -->
+            <div class="bwiz-center">
+              <div class="bwiz-st-compare" id="foul-summary">Select fouler and target</div>
+              <div class="block-dice-tray bwiz-dice-tray" id="foul-dice-tray" aria-live="polite"></div>
+              <button class="roll-btn" id="foul-roll-btn">Roll Foul</button>
+            </div>
+
+            <!-- Target card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="foul-change-target">Change Target</button>
+              <div class="bwiz-card-wrap" id="foul-target-card-wrap">
+                <div class="bwiz-picker" id="foul-target-picker">
+                  <div class="bwiz-picker-label">Target (Prone / Stunned)</div>
+                  <div class="wps-list" id="foul-target-list"><p class="wps-empty">No prone/stunned players</p></div>
+                </div>
               </div>
             </div>
-            <div class="wps-divider">⚽</div>
-            <div class="wps-side">
-              <div class="wps-heading">Target (Prone / Stunned)</div>
-              <div class="wps-list" id="foul-target-list">
-                <p class="wps-empty">No prone/stunned players</p>
-              </div>
-            </div>
-          </div>
 
-          <div class="injury-inputs">
-            <label class="input-label">Target Armour Value (AV)</label>
-            <div class="av-picker" id="foul-av-picker">
-              <button class="av-btn" data-av="5">5+</button>
-              <button class="av-btn" data-av="6">6+</button>
-              <button class="av-btn" data-av="7">7+</button>
-              <button class="av-btn active" data-av="8">8+</button>
-              <button class="av-btn" data-av="9">9+</button>
-              <button class="av-btn" data-av="10">10+</button>
-            </div>
-            <label class="input-label">Fouling Assists</label>
-            <div class="stat-stepper" id="foul-assists">
-              <button class="stepper-btn" data-dir="-1" aria-label="Fewer assists">−</button>
-              <span class="stepper-val">0</span>
-              <button class="stepper-btn" data-dir="+1" aria-label="More assists">+</button>
-            </div>
-            <label class="input-label">Extra Modifiers</label>
-            <div class="mod-toggles">
-              <button class="mod-toggle" id="foul-mod-dp" data-mod="dirty-player" title="Dirty Player: +1 to Armour and Injury rolls">Dirty Player +1</button>
-              <button class="mod-toggle" id="foul-mod-stunty" data-mod="stunty" title="Target has Stunty — use Stunty injury table">Stunty Target</button>
-            </div>
-          </div>
+          </div><!-- /.bwiz-outer -->
 
-          <!-- Armour roll dice -->
-          <div class="dice-tray" id="foul-dice-tray">
-            <div class="die" id="foul-d1" data-value="1" aria-label="First die"><div class="die-face"></div></div>
-            <div class="die" id="foul-d2" data-value="1" aria-label="Second die"><div class="die-face"></div></div>
-          </div>
-          <button class="roll-btn" id="foul-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Foul
-          </button>
-          <div class="roll-result" id="foul-av-result" hidden aria-live="polite"></div>
+          <!-- ═══ Results strip ═══ -->
+          <div class="bwiz-results-strip">
 
-          <!-- Referee spotted result (doubles) -->
-          <div class="roll-result" id="foul-ref-result" hidden aria-live="polite"></div>
-
-          <!-- Injury step (auto-rolls when armour breaks) -->
-          <div id="foul-injury-section" hidden>
-            <div class="dice-tray" id="foul-inj-tray">
-              <div class="die" id="foul-inj-d1" data-value="1" aria-label="Injury die 1"><div class="die-face"></div></div>
-              <div class="die" id="foul-inj-d2" data-value="1" aria-label="Injury die 2"><div class="die-face"></div></div>
+            <div class="bwiz-result-panel locked" id="foul-armor-panel">
+              <div class="bwiz-result-label">Armour Roll</div>
+              <div class="bwiz-result-content" id="foul-armor-content" aria-live="polite">—</div>
             </div>
-            <div class="roll-result" id="foul-inj-result" hidden aria-live="polite"></div>
 
-            <!-- Casualty D16 (if casualty result) -->
-            <div class="dice-tray single" id="foul-cas-tray" hidden>
-              <div class="die" id="foul-cas-d1" data-value="1" data-sides="16" aria-label="Casualty D16">
-                <div class="die-face d8-face"></div>
-                <span class="die-sub-label">Casualty</span>
-              </div>
+            <div class="bwiz-result-panel locked" id="foul-injury-panel">
+              <div class="bwiz-result-label">Injury Roll</div>
+              <div class="bwiz-result-content" id="foul-injury-content" aria-live="polite">—</div>
             </div>
-            <div class="roll-result" id="foul-cas-result" hidden aria-live="polite"></div>
-          </div>
+
+            <div class="bwiz-result-panel locked" id="foul-ref-panel">
+              <div class="bwiz-result-label">The Referee</div>
+              <div class="bwiz-result-content" id="foul-ref-content" aria-live="polite">—</div>
+            </div>
+
+          </div><!-- /.bwiz-results-strip -->
+
+          </div><!-- /.bwiz-scale-root -->
         </div>
       </div>
 
