@@ -144,10 +144,14 @@ const TeamBuilder = (() => {
   let _boxTeamsData  = null;  /* cache of data/box-teams.json */
   let _starPlayersData = null; /* cache of data/star-players.json */
 
+  /* Prefix data paths so the builder works from subpages (e.g. /teams/) that set
+     window.BB_DATA_PREFIX = '../'. Defaults to '' for the main app. */
+  function _dp(path) { return (window.BB_DATA_PREFIX || '') + path; }
+
   async function _getTeamsData() {
     if (_teamsData) return _teamsData;
     try {
-      const res = await fetch('data/teams.json');
+      const res = await fetch(_dp('data/teams.json'));
       _teamsData = await res.json();
     } catch { _teamsData = []; }
     return _teamsData;
@@ -156,7 +160,7 @@ const TeamBuilder = (() => {
   async function _getBoxTeamsData() {
     if (_boxTeamsData) return _boxTeamsData;
     try {
-      const res = await fetch('data/box-teams.json');
+      const res = await fetch(_dp('data/box-teams.json'));
       _boxTeamsData = await res.json();
     } catch { _boxTeamsData = {}; }
     return _boxTeamsData;
@@ -165,7 +169,7 @@ const TeamBuilder = (() => {
   async function _getStarPlayersData() {
     if (_starPlayersData) return _starPlayersData;
     try {
-      const res = await fetch('data/star-players.json');
+      const res = await fetch(_dp('data/star-players.json'));
       _starPlayersData = await res.json();
     } catch { _starPlayersData = []; }
     return _starPlayersData;
@@ -173,7 +177,7 @@ const TeamBuilder = (() => {
 
   async function _fetchRoster(fileUrl) {
     try {
-      const res = await fetch(fileUrl);
+      const res = await fetch(_dp(fileUrl));
       return await res.json();
     } catch { return []; }
   }

@@ -1,0 +1,263 @@
+/* ════════════════════════════════════════════════════════
+   TEAMS PAGE — full-page layout mirroring the Choose Team wizard
+   Left 1/3: My Teams + Create Team · Right 2/3: team gallery / builder
+   ════════════════════════════════════════════════════════ */
+
+.tp-page {
+  box-sizing: border-box;
+  display:    flex;
+  gap:        1.5rem;
+  align-items: flex-start;
+  width:      100%;
+  max-width:  1500px;
+  margin:     0 auto;
+  padding:    0 1rem 3rem;
+}
+.tp-page *, .tp-page *::before, .tp-page *::after { box-sizing: border-box; }
+
+/* ── Left sidebar (1/3) ── */
+.tp-sidebar {
+  flex:           0 0 32%;
+  max-width:      32%;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.85rem;
+  position:       sticky;
+  top:            1rem;
+}
+.tp-side-title {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.95rem;
+  font-weight:    800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color:          rgba(190, 215, 255, 0.85);
+  margin:         0;
+}
+.tp-create-btn {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.85rem;
+  font-weight:    700;
+  color:          #0b1430;
+  background:     var(--bb-gold, #E8C24A);
+  border:         1px solid rgba(255, 220, 130, 0.7);
+  border-radius:  8px;
+  padding:        0.7rem 1rem;
+  cursor:         pointer;
+  transition:     filter 0.15s, transform 0.1s;
+}
+.tp-create-btn:hover  { filter: brightness(1.08); }
+.tp-create-btn:active { transform: translateY(1px); }
+
+.tp-myteams { display: flex; flex-direction: column; gap: 0.5rem; }
+.tp-empty {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.72rem;
+  line-height: 1.6;
+  color:       rgba(150, 185, 255, 0.45);
+  margin:      0.25rem 0 0;
+}
+.tp-myteam {
+  position:       relative;
+  display:        flex;
+  flex-direction: column;
+  gap:            0.15rem;
+  padding:        0.65rem 2.2rem 0.65rem 0.85rem;
+  background:     rgba(10, 22, 65, 0.55);
+  border:         1px solid rgba(80, 130, 255, 0.2);
+  border-left:    4px solid var(--card-color, rgba(150,180,255,0.6));
+  border-radius:  8px;
+  cursor:         pointer;
+  transition:     background 0.15s, border-color 0.15s;
+}
+.tp-myteam:hover { background: rgba(20, 38, 90, 0.7); border-color: rgba(120, 170, 255, 0.5); }
+.tp-myteam-name { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: rgba(220, 235, 255, 0.92); }
+.tp-myteam-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: rgba(160, 195, 255, 0.55); }
+.tp-myteam-edit {
+  position:    absolute;
+  top:         50%;
+  right:       0.6rem;
+  transform:   translateY(-50%);
+  background:  rgba(255, 255, 255, 0.06);
+  border:      1px solid rgba(120, 150, 220, 0.3);
+  border-radius: 5px;
+  color:       rgba(200, 225, 255, 0.8);
+  font-size:   0.8rem;
+  padding:     0.2rem 0.4rem;
+  cursor:      pointer;
+}
+.tp-myteam-edit:hover { background: rgba(80, 130, 255, 0.25); color: #fff; }
+
+/* ── Right content (2/3) ── */
+.tp-content { flex: 1 1 0; min-width: 0; }
+.tp-content-title {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.95rem;
+  font-weight:    800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color:          rgba(190, 215, 255, 0.85);
+  margin:         0 0 1rem;
+}
+.tp-gallery {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap:                   1rem;
+}
+.tp-team-card {
+  position:       relative;
+  aspect-ratio:   5 / 3;
+  display:        flex;
+  align-items:    flex-end;
+  padding:        0.9rem;
+  border:         1px solid rgba(255, 255, 255, 0.12);
+  border-radius:  12px;
+  cursor:         pointer;
+  overflow:       hidden;
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--card-color) 55%, #0a1230) 0%,
+                            rgba(8, 16, 42, 0.95) 80%);
+  transition:     transform 0.12s, border-color 0.15s, box-shadow 0.15s;
+}
+.tp-team-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-top: 3px solid var(--card-color, #5A8CFF);
+  opacity: 0.9;
+}
+.tp-team-card:hover {
+  transform:   translateY(-3px);
+  border-color: var(--card-color, #5A8CFF);
+  box-shadow:  0 10px 28px rgba(0, 0, 0, 0.45);
+}
+.tp-team-card-name {
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    0.95rem;
+  font-weight:  800;
+  font-style:   italic;
+  color:        #fff;
+  text-shadow:  0 2px 6px rgba(0, 0, 0, 0.6);
+  line-height:  1.2;
+}
+
+/* ── Embedded builder ── */
+.tp-content--builder .ct-builder-body { margin-top: 0.5rem; }
+.tp-builder-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+.tp-builder-bar .tp-content-title { margin: 0; }
+.tp-back-btn {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.72rem;
+  font-weight:   700;
+  color:         rgba(210, 230, 255, 0.85);
+  background:    rgba(255, 255, 255, 0.06);
+  border:        1px solid rgba(120, 150, 220, 0.32);
+  border-radius: 6px;
+  padding:       0.4rem 0.7rem;
+  cursor:        pointer;
+}
+.tp-back-btn:hover { background: rgba(80, 130, 255, 0.18); border-color: rgba(120, 170, 255, 0.55); }
+
+/* ════════════════════════════════════════════════════════
+   TEAM DETAIL POPUP
+   ════════════════════════════════════════════════════════ */
+.tp-overlay {
+  position:        fixed;
+  inset:           0;
+  z-index:         600;
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  padding:         1.5rem;
+  background:      rgba(0, 0, 0, 0.72);
+  opacity:         0;
+  transition:      opacity 0.18s ease;
+}
+.tp-overlay[hidden] { display: none; }
+.tp-overlay.active  { opacity: 1; }
+
+.tp-detail-window {
+  width:          min(1120px, 96vw);
+  max-height:     90vh;
+  overflow-y:     auto;
+  background:     linear-gradient(180deg, rgba(10, 20, 52, 0.98), rgba(6, 12, 34, 0.98));
+  border:         1px solid rgba(90, 140, 255, 0.28);
+  border-top:     4px solid var(--tc-accent, var(--tc-primary, #5A8CFF));
+  border-radius:  16px;
+  padding:        1.5rem 1.6rem 2rem;
+  box-shadow:     0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.tp-detail-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.tp-detail-title {
+  font-family:  'JetBrains Mono', monospace;
+  font-size:    1.5rem;
+  font-weight:  800;
+  font-style:   italic;
+  color:        #fff;
+  margin:       0;
+}
+.tp-close {
+  background:    rgba(255, 255, 255, 0.06);
+  border:        1px solid rgba(150, 180, 255, 0.3);
+  border-radius: 8px;
+  color:         rgba(220, 235, 255, 0.85);
+  font-size:     1.4rem;
+  line-height:   1;
+  width:         2.2rem;
+  height:        2.2rem;
+  cursor:        pointer;
+  flex-shrink:   0;
+}
+.tp-close:hover { background: rgba(200, 40, 60, 0.3); color: #fff; }
+.tp-detail-desc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size:   0.85rem;
+  font-style:  italic;
+  line-height: 1.6;
+  color:       rgba(180, 210, 255, 0.7);
+  margin:      0.6rem 0 1.4rem;
+  padding:     0.8rem 1rem;
+  background:  rgba(80, 130, 255, 0.07);
+  border:      1px solid rgba(80, 130, 255, 0.18);
+  border-radius: 8px;
+}
+
+.tp-roster-grid {
+  display:               grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap:                   1.1rem;
+  justify-items:         center;
+}
+
+/* Scaled trading-card thumbnail: a full-size card transformed to fit a fixed box. */
+.tp-card-thumb {
+  position:   relative;
+  width:      210px;
+  height:     294px;          /* 210 × 7/5 */
+  padding:    0;
+  border:     none;
+  background: none;
+  cursor:     pointer;
+  transition: transform 0.12s;
+}
+.tp-card-thumb:hover { transform: translateY(-4px); }
+.tp-card-thumb .trading-card {
+  position:         absolute;
+  top:              0;
+  left:             0;
+  width:            420px;     /* full design width */
+  max-width:        none;
+  transform:        scale(0.5);
+  transform-origin: top left;
+  animation:        none;
+  pointer-events:   none;      /* clicks go to the thumb button */
+}
+
+/* ── Full-size player card popup — reuses .modal-overlay + .trading-card from
+   style.css; just sit above the detail popup. ── */
+.tp-player-overlay { z-index: 700; }
+
+@media (max-width: 760px) {
+  .tp-page { flex-direction: column; }
+  .tp-sidebar { flex: 1 1 auto; max-width: none; width: 100%; position: static; }
+}

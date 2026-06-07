@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/team-builder.css">
+  <link rel="stylesheet" href="../css/teams-page.css">
   <script src="../js/title-quips.js" defer></script>
 </head>
 <body>
@@ -39,11 +41,38 @@
       <span class="bb-title-sub">placeholder bottom</span>
     </div>
 
-    <div class="bb-page-content">
-      <!-- Teams content goes here -->
+    <div class="bb-page-content tp-page">
+
+      <!-- Left 1/3 — My Teams + Create Team -->
+      <aside class="tp-sidebar">
+        <h2 class="tp-side-title">My Teams</h2>
+        <button class="tp-create-btn" id="tp-create" type="button">+ Create Team</button>
+        <div class="tp-myteams" id="tp-myteams"></div>
+      </aside>
+
+      <!-- Right 2/3 — team cards gallery, or the team builder when creating/editing -->
+      <section class="tp-content" id="tp-content"></section>
+
     </div>
 
   </main>
+
+  <!-- Team detail popup — scaled player trading cards + flavour text -->
+  <div class="tp-overlay" id="tp-detail" hidden role="dialog" aria-modal="true" aria-label="Team detail">
+    <div class="tp-detail-window" id="tp-detail-window">
+      <div class="tp-detail-head">
+        <h2 class="tp-detail-title" id="tp-detail-title">Team</h2>
+        <button class="tp-close" id="tp-detail-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <p class="tp-detail-desc" id="tp-detail-desc">Placeholder team description</p>
+      <div class="tp-roster-grid" id="tp-roster-grid"></div>
+    </div>
+  </div>
+
+  <!-- Full-size player card popup -->
+  <div class="modal-overlay tp-player-overlay" id="tp-player-modal" hidden role="dialog" aria-modal="true" aria-label="Player card">
+    <div class="trading-card" id="tp-player-card"></div>
+  </div>
 
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">
@@ -71,6 +100,12 @@
       });
     })();
   </script>
+
+  <!-- Teams page: data + builder. BB_DATA_PREFIX lets the shared builder fetch
+       from the parent /bloodbowl/ directory while running on this subpage. -->
+  <script>window.BB_DATA_PREFIX = '../';</script>
+  <script src="../js/team-builder.js?v=4"></script>
+  <script src="../js/teams-page.js?v=1"></script>
 
 </body>
 </html>
