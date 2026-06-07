@@ -2486,12 +2486,13 @@ function initThrowWizard() {
    Event delegation â€” one listener on container.
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
-function buildWizardPlayerList(listId, side, filterFn, onSelect) {
+function buildWizardPlayerList(listId, side, filterFn, onSelect, opts = {}) {
   const container = document.getElementById(listId);
   if (!container) return { getSelected: () => null };
 
   const allPlayers = window.getPlayerList?.(side) ?? [];
   const players    = allPlayers.filter(filterFn);
+  if (opts.sort) players.sort(opts.sort);
 
   container.innerHTML = '';
   const oldHandler = container._wpsHandler;
@@ -2518,7 +2519,7 @@ function buildWizardPlayerList(listId, side, filterFn, onSelect) {
     const avMatch  = p.statsText.match(/\bAV\s*(\d+)/i);
     const stVal    = stMatch  ? stMatch[1]  : null;
     const avVal    = avMatch  ? avMatch[1]  : null;
-    const statHint = stVal ? `ST${stVal}` : (avVal ? `AV${avVal}+` : '');
+    const statHint = opts.statHint ? opts.statHint(p) : (stVal ? `ST${stVal}` : (avVal ? `AV${avVal}+` : ''));
 
     const statusMeta = window.STATUS_META?.[p.status];
     const statusHtml = statusMeta?.label

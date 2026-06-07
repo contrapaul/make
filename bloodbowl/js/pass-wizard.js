@@ -292,42 +292,66 @@ function initPassWizard() {
     const col       = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-col' : 'pwiz3-catcher-col');
     const skillsCol = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-skills' : 'pwiz3-catcher-skills');
     if (!col) return;
-    col.innerHTML = '';
-    if (skillsCol) skillsCol.innerHTML = '';
-    col.appendChild(el('div', 'pwiz3-col-label', role === 'thrower' ? 'Thrower' : 'Catcher'));
 
     const player = role === 'thrower' ? ws.thrower : ws.catcher;
     const pos    = role === 'thrower' ? ws.throwerPos : ws.catcherPos;
 
-    if (player) {
-      const cardWrap = el('div', 'pwiz3-card-wrap');
-      col.appendChild(cardWrap);
-      buildEmbeddedCardShared(cardWrap, player, ws.activeSide, { small: true });
-      if (pos) col.appendChild(el('div', 'pwiz3-pos-note', `Placed at (${pos.col}, ${pos.row})`));
-      else     col.appendChild(el('div', 'pwiz3-pos-note pwiz3-pos-warn', 'Tap the pitch to place'));
+    /* No player yet → load the roster inline where the card will go. */
+    if (!player) { showInlinePicker(role); return; }
 
-      const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
-      btn.textContent = `Change ${cap(role)}`;
-      btn.addEventListener('click', () => openPicker(role));
-      col.appendChild(btn);
+    col.innerHTML = '';
+    if (skillsCol) skillsCol.innerHTML = '';
+    col.appendChild(el('div', 'pwiz3-col-label', role === 'thrower' ? 'Thrower' : 'Catcher'));
 
-      /* Relevant skills → outer column */
-      if (skillsCol) {
-        skillsCol.appendChild(el('div', 'pwiz3-col-label', `${cap(role)} Skills`));
-        const set = new Set(role === 'thrower' ? PASS_THROWER_SKILLS : PASS_CATCHER_SKILLS);
-        const rel = [...new Set((getPlayerSkills(player) || [])
-          .map(s => s.replace(/\s*\(.*\)$/, '').trim())
-          .filter(s => set.has(s)))];
-        if (rel.length) rel.forEach(s => skillsCol.appendChild(window.buildSkillCard(s)));
-        else skillsCol.appendChild(el('div', 'pwiz3-skill-empty', 'No passing skills'));
-      }
-    } else {
-      col.appendChild(el('div', 'pwiz3-card-empty', `No ${cap(role)} selected`));
-      const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
-      btn.textContent = `Choose ${cap(role)}`;
-      btn.addEventListener('click', () => openPicker(role));
-      col.appendChild(btn);
+    const cardWrap = el('div', 'pwiz3-card-wrap');
+    col.appendChild(cardWrap);
+    buildEmbeddedCardShared(cardWrap, player, ws.activeSide, { small: true });
+    if (pos) col.appendChild(el('div', 'pwiz3-pos-note', `Placed at (${pos.col}, ${pos.row})`));
+    else     col.appendChild(el('div', 'pwiz3-pos-note pwiz3-pos-warn', 'Tap the pitch to place'));
+
+    const btn = el('button', 'pwiz3-choose-btn'); btn.type = 'button';
+    btn.textContent = `Change ${cap(role)}`;
+    btn.addEventListener('click', () => showInlinePicker(role));
+    col.appendChild(btn);
+
+    /* Relevant skills → outer column */
+    if (skillsCol) {
+      skillsCol.appendChild(el('div', 'pwiz3-col-label', `${cap(role)} Skills`));
+      const set = new Set(role === 'thrower' ? PASS_THROWER_SKILLS : PASS_CATCHER_SKILLS);
+      const rel = [...new Set((getPlayerSkills(player) || [])
+        .map(s => s.replace(/\s*\(.*\)$/, '').trim())
+        .filter(s => set.has(s)))];
+      if (rel.length) rel.forEach(s => skillsCol.appendChild(window.buildSkillCard(s)));
+      else skillsCol.appendChild(el('div', 'pwiz3-skill-empty', 'No passing skills'));
     }
+  }
+
+  /* ── Inline roster picker (in the card slot, like the block wizard) ──
+     Sorted best-first: by Passing Ability for the thrower, Agility for the
+     catcher, so the most likely picks are at the top — no scrolling needed. */
+  function showInlinePicker(role) {
+    const col       = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-col' : 'pwiz3-catcher-col');
+    const skillsCol = document.getElementById(role === 'thrower' ? 'pwiz3-thrower-skills' : 'pwiz3-catcher-skills');
+    if (!col) return;
+    col.innerHTML = '';
+    if (skillsCol) skillsCol.innerHTML = '';
+    col.appendChild(el('div', 'pwiz3-col-label', role === 'thrower' ? 'Thrower' : 'Catcher'));
+
+    const statKey = role === 'thrower' ? 'PA' : 'AG';
+    const picker = el('div', 'pwiz3-picker');
+    picker.appendChild(el('div', 'pwiz3-picker-label',
+      role === 'thrower' ? 'Select Thrower — best PA first' : 'Select Catcher — best AG first'));
+    const list = el('div', 'wps-list'); list.id = `pwiz3-${role}-list`;
+    picker.appendChild(list);
+    col.appendChild(picker);
+
+    buildWizardPlayerList(list.id, ws.activeSide,
+      p => !window.STATUS_META?.[p.status]?.dim,
+      (p) => doPlacement(role, p),
+      {
+        sort:     (a, b) => getStat(a, statKey) - getStat(b, statKey),   // lower target = better, on top
+        statHint: p => { const v = getStat(p, statKey); return v >= 99 ? `${statKey} —` : `${statKey} ${v}+`; },
+      });
   }
 
   /* ── Opposing players list (under Add button) ── */
@@ -549,10 +573,11 @@ function initPassWizard() {
 
   async function rollDie() {
     const slot = diceEl(); slot.innerHTML = '';
-    const die = el('div', 'die'); die.dataset.value = '1';
-    die.innerHTML = '<div class="die-face"></div>';
-    slot.appendChild(die);
-    return await Dice.rollDieElement(die);
+    /* Custom numeric die from the block wizard (Nuffle Dice face). */
+    const face = document.createElement('div');
+    buildNumericFace(face, 1);
+    slot.appendChild(face);
+    return await rollNumericDie(face);
   }
 
   function armWizard() {
