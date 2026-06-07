@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../css/starplayers.css">
   <script src="../js/title-quips.js" defer></script>
 </head>
 <body>
@@ -39,11 +40,33 @@
       <span class="bb-title-sub">placeholder bottom</span>
     </div>
 
-    <div class="bb-page-content">
-      <!-- Star Players content goes here -->
+    <!-- Search -->
+    <div class="sp-controls">
+      <div class="sp-search-wrap">
+        <span class="sp-search-icon">⌕</span>
+        <input type="search" class="sp-search" id="sp-search" placeholder="Search star players or skills…" autocomplete="off" spellcheck="false">
+      </div>
+      <label class="sp-select-wrap">
+        <span class="sp-select-label">League</span>
+        <select class="sp-select" id="sp-league"></select>
+      </label>
     </div>
 
+    <!-- Cost filter -->
+    <div class="sp-filters" id="sp-cost-filters" role="group" aria-label="Filter by cost"></div>
+
+    <!-- Count -->
+    <div class="sp-count" id="sp-count"></div>
+
+    <!-- Trading cards grid -->
+    <div class="sp-grid" id="sp-grid" aria-live="polite"></div>
+
   </main>
+
+  <!-- Full-size player card popup -->
+  <div class="modal-overlay sp-player-overlay" id="sp-player-modal" hidden role="dialog" aria-modal="true" aria-label="Star player card">
+    <div class="trading-card" id="sp-player-card"></div>
+  </div>
 
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">
@@ -54,6 +77,7 @@
   </footer>
 
   <script>
+    /* ── Nav toggle ── */
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
       const nav    = document.getElementById('bb-nav');
@@ -68,6 +92,189 @@
           nav.classList.remove('bb-nav-open');
           toggle.setAttribute('aria-expanded', 'false');
         }
+      });
+    })();
+
+    /* ═══════════════════════════════════════════════════════
+       STAR PLAYERS — trading cards, filtered by league + cost
+       ═══════════════════════════════════════════════════════ */
+    (function () {
+      const STAT_KEYS = ['ma', 'st', 'ag', 'pa', 'av'];
+      const STAR_BG   = '#8B6914';
+
+      /* Cost brackets (gp). Data ranges 70k–340k. */
+      const COST_TIERS = [
+        { key: 'all',  label: 'All Costs', min: 0,      max: Infinity },
+        { key: 'c1',   label: '≤ 120k',    min: 0,      max: 120000 },
+        { key: 'c2',   label: '130–190k',  min: 121000, max: 190000 },
+        { key: 'c3',   label: '200–260k',  min: 191000, max: 260000 },
+        { key: 'c4',   label: '270k +',    min: 261000, max: Infinity },
+      ];
+
+      let stars        = [];
+      let teamNames    = {};       /* id → display name */
+      let activeLeague = 'all';    /* 'all' | team id */
+      let activeCost   = 'all';
+      let searchQuery  = '';
+
+      function esc(s) {
+        return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      function skillLinks(str) {
+        const sk = (str || '').split(',').map(s => s.trim()).filter(Boolean);
+        if (!sk.length) return '<span class="no-skills">—</span>';
+        return sk.map(n => `<span class="skill-link" data-skill="${esc(n)}">${esc(n)}</span>`)
+          .join('<span class="skill-sep">, </span>');
+      }
+      function fmtGP(v) { return Math.round((v || 0) / 1000) + 'k'; }
+
+      /* Eligibility summary for the card's flavour line. */
+      function eligibilityText(star) {
+        const ids = star.eligibleTeams || [];
+        if (ids.length >= Object.keys(teamNames).length) return 'Available to any team';
+        if (ids.length > 6) return `Available to ${ids.length} teams`;
+        return 'Plays for: ' + ids.map(id => teamNames[id] || id).join(', ');
+      }
+
+      /* Trading-card markup (mirrors the main app's openModal / teams page). */
+      function cardMarkup(star) {
+        return `
+          <div class="modal-image-area" style="background:${STAR_BG};">
+            <span class="img-placeholder-num" aria-hidden="true">★</span>
+            <div class="modal-card-overlay star-overlay">
+              <div class="modal-jersey-circle">★</div>
+              <div class="modal-overlay-info">
+                <h2 class="modal-name">${esc(star.name)}</h2>
+                <p class="modal-position">Star Player</p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-stats"><div class="modal-stats-row">
+            ${STAT_KEYS.map(s => `<div class="modal-stat"><span class="ms-label">${s.toUpperCase()}</span><span class="ms-value">${esc(String(star[s] ?? '—'))}</span></div>`).join('')}
+            <div class="modal-stat"><span class="ms-label">GP</span><span class="ms-value" style="font-size:0.82rem;">${fmtGP(star.value)}</span></div>
+          </div></div>
+          <div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p><p class="skills-text">${skillLinks(star.skills)}</p></div>
+          <div class="modal-fact">${esc(eligibilityText(star))}</div>`;
+      }
+
+      function themeCard(card) {
+        card.style.setProperty('--tc-primary', '#6e5713');
+        card.style.setProperty('--tc-primary-dark', '#3a2d08');
+        card.style.setProperty('--tc-gold', '#D4AF37');
+        card.style.setProperty('--tc-gold-dark', '#9A7D0A');
+        card.style.setProperty('--tc-bg', '#2a2410');
+      }
+
+      /* ── Full-size popup ── */
+      const playerOverlay = document.getElementById('sp-player-modal');
+      const playerCard    = document.getElementById('sp-player-card');
+      function openPlayer(star) {
+        playerCard.className = 'trading-card star-card';
+        themeCard(playerCard);
+        playerCard.innerHTML = cardMarkup(star);
+        playerOverlay.removeAttribute('hidden');
+        requestAnimationFrame(() => playerOverlay.classList.add('active'));
+        playerCard.scrollTop = 0;
+      }
+      function closePlayer() {
+        playerOverlay.classList.remove('active');
+        setTimeout(() => playerOverlay.setAttribute('hidden', ''), 200);
+      }
+      playerOverlay.addEventListener('click', e => { if (e.target === playerOverlay) closePlayer(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && !playerOverlay.hasAttribute('hidden')) closePlayer(); });
+
+      /* ── Render grid ── */
+      function render() {
+        const grid  = document.getElementById('sp-grid');
+        const count = document.getElementById('sp-count');
+        const q     = searchQuery.trim().toLowerCase();
+        const tier  = COST_TIERS.find(t => t.key === activeCost) || COST_TIERS[0];
+
+        const visible = stars.filter(star => {
+          if (activeLeague !== 'all' && !(star.eligibleTeams || []).includes(activeLeague)) return false;
+          if (star.value < tier.min || star.value > tier.max) return false;
+          if (!q) return true;
+          return star.name.toLowerCase().includes(q) || (star.skills || '').toLowerCase().includes(q);
+        });
+
+        count.textContent = visible.length === stars.length
+          ? `${stars.length} star players`
+          : `${visible.length} of ${stars.length} star players`;
+
+        if (!visible.length) {
+          grid.innerHTML = '<p class="sp-empty">No star players match your filters.</p>';
+          return;
+        }
+
+        grid.innerHTML = '';
+        visible.forEach(star => {
+          const thumb = document.createElement('button');
+          thumb.type = 'button';
+          thumb.className = 'sp-card-thumb';
+          thumb.setAttribute('aria-label', `View ${star.name}`);
+          const card = document.createElement('div');
+          card.className = 'trading-card star-card';
+          themeCard(card);
+          card.innerHTML = cardMarkup(star);
+          thumb.appendChild(card);
+          thumb.addEventListener('click', () => openPlayer(star));
+          grid.appendChild(thumb);
+        });
+      }
+
+      /* ── Build filters ── */
+      function buildCostFilters() {
+        const wrap = document.getElementById('sp-cost-filters');
+        wrap.innerHTML = COST_TIERS.map(t => {
+          const n = t.key === 'all' ? stars.length
+            : stars.filter(s => s.value >= t.min && s.value <= t.max).length;
+          return `<button class="sp-filter-btn${t.key === 'all' ? ' active' : ''}" data-cost="${t.key}" aria-pressed="${t.key === 'all'}">${t.label} <span style="opacity:.55">(${n})</span></button>`;
+        }).join('');
+        wrap.addEventListener('click', e => {
+          const btn = e.target.closest('.sp-filter-btn');
+          if (!btn) return;
+          activeCost = btn.dataset.cost;
+          wrap.querySelectorAll('.sp-filter-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.cost === activeCost);
+            b.setAttribute('aria-pressed', b.dataset.cost === activeCost);
+          });
+          render();
+        });
+      }
+
+      function buildLeagueSelect() {
+        const sel = document.getElementById('sp-league');
+        const ids = Object.keys(teamNames).sort((a, b) => teamNames[a].localeCompare(teamNames[b]));
+        sel.innerHTML = '<option value="all">All Leagues</option>' +
+          ids.map(id => {
+            const n = stars.filter(s => (s.eligibleTeams || []).includes(id)).length;
+            return `<option value="${esc(id)}">${esc(teamNames[id])} (${n})</option>`;
+          }).join('');
+        sel.addEventListener('change', () => { activeLeague = sel.value; render(); });
+      }
+
+      document.getElementById('sp-search').addEventListener('input', e => {
+        searchQuery = e.target.value;
+        render();
+      });
+
+      /* ── Load data ── */
+      Promise.all([
+        fetch('../data/star-players.json').then(r => r.json()),
+        fetch('../data/teams.json').then(r => r.json()).catch(() => []),
+      ]).then(([starData, teamData]) => {
+        stars = starData.sort((a, b) => a.name.localeCompare(b.name));
+        teamData.forEach(t => { teamNames[t.id] = t.name; });
+        /* Include any eligibleTeams ids missing from teams.json so no league is lost. */
+        stars.forEach(s => (s.eligibleTeams || []).forEach(id => {
+          if (!teamNames[id]) teamNames[id] = id.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }));
+        buildLeagueSelect();
+        buildCostFilters();
+        render();
+      }).catch(() => {
+        document.getElementById('sp-grid').innerHTML =
+          '<p class="sp-empty">Could not load star player data.</p>';
       });
     })();
   </script>

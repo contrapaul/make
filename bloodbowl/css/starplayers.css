@@ -1,0 +1,148 @@
+/* ─────────────────────────────────────────────
+   STAR PLAYERS PAGE — trading cards + league/cost filters
+   Mirrors the Skills page controls; cards reuse the
+   .trading-card / .modal-* styling from style.css.
+   ───────────────────────────────────────────── */
+
+/* ── Controls bar ── */
+.sp-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 1.5rem 1.5rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sp-search-wrap { position: relative; flex: 1 1 240px; min-width: 180px; }
+.sp-search {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  padding: 0.55rem 0.75rem 0.55rem 2.2rem;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.sp-search::placeholder { color: rgba(255,255,255,0.3); }
+.sp-search:focus { border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.1); }
+.sp-search-icon {
+  position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%);
+  opacity: 0.4; font-size: 0.85rem; pointer-events: none;
+}
+
+/* League dropdown */
+.sp-select-wrap { display: inline-flex; align-items: center; gap: 0.5rem; }
+.sp-select-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.sp-select {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  padding: 0.5rem 0.7rem;
+  outline: none;
+  cursor: pointer;
+  min-width: 13rem;
+}
+.sp-select:focus { border-color: rgba(255,255,255,0.35); }
+.sp-select option { background: #14182b; color: #fff; }
+
+/* ── Cost filter chips ── */
+.sp-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+.sp-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 0.3rem 0.75rem; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.55);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.sp-filter-btn:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); }
+.sp-filter-btn.active {
+  color: #fff;
+  border-color: var(--bb-gold, #D4AF37);
+  background: color-mix(in srgb, var(--bb-gold, #D4AF37) 18%, transparent);
+  box-shadow: 0 0 0 1px var(--bb-gold, #D4AF37) inset;
+}
+
+/* ── Count bar ── */
+.sp-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: rgba(255,255,255,0.3); letter-spacing: 0.05em;
+  padding: 0.6rem 1.5rem 0;
+  max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box;
+}
+
+/* ── Trading-card grid ── */
+.sp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.2rem;
+  padding: 1rem 1.5rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  justify-items: center;
+  align-items: start;
+}
+.sp-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.25);
+  font-style: italic;
+  padding: 3rem 1rem;
+}
+
+/* Scaled trading-card thumbnail: a full-size card transformed into a fixed box. */
+.sp-card-thumb {
+  position: relative;
+  width: 210px;
+  height: 294px;          /* 210 × 7/5 */
+  padding: 0; border: none; background: none;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+.sp-card-thumb:hover { transform: translateY(-4px); }
+.sp-card-thumb .trading-card {
+  position: absolute; top: 0; left: 0;
+  width: 420px; max-width: none;
+  transform: scale(0.5);
+  transform-origin: top left;
+  animation: none;
+  pointer-events: none;   /* clicks go to the thumb button */
+}
+
+/* Full-size popup reuses .modal-overlay + .trading-card from style.css. */
+.sp-player-overlay { z-index: 700; }
+
+@media (max-width: 560px) {
+  .sp-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+  .sp-card-thumb { width: 170px; height: 238px; }
+  .sp-card-thumb .trading-card { transform: scale(0.4047); }
+}
