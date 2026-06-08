@@ -596,20 +596,20 @@ function initBlockWizard() {
       side === 'att' ? 'block-attacker-list' : 'block-defender-list',
       side === 'att' ? 'left' : 'right',
       side === 'att'
-        ? (p => { const PS = window.PlayerStatus; return p.status === PS?.AVAILABLE || p.status === PS?.PRONE || p.status === PS?.STUNNED; })
-        : (() => true),
+        ? (p => window.isPlayerAvailable?.(p) && (() => { const PS = window.PlayerStatus; return p.status === PS?.AVAILABLE || p.status === PS?.PRONE || p.status === PS?.STUNNED; })())
+        : (p => window.isPlayerAvailable?.(p)),
       (player, stats) => {
-        /* Player selected: build card, load skills, set ST */
+        /* Player selected: build card, load skills, set ST (with any active buffs) */
         if (side === 'att') {
           attPlayer = player;
-          attST     = stats.st ?? 3;
+          attST     = window.getEffectiveStat?.('left', player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
           attSide   = 'left';
           picker.hidden = true;
           buildEmbeddedCard(wrap, player, 'left');
           loadBlockSkills('att', player);
         } else {
           defPlayer = player;
-          defST     = stats.st ?? 3;
+          defST     = window.getEffectiveStat?.('right', player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
           picker.hidden = true;
           buildEmbeddedCard(wrap, player, 'right');
           loadBlockSkills('def', player);
@@ -1312,9 +1312,14 @@ function initBlockWizard() {
 /* â”€â”€ Skill extraction from a player card DOM element â”€â”€ */
 function getPlayerSkills(playerObj) {
   if (!playerObj?.card) return [];
-  return Array.from(playerObj.card.querySelectorAll('.skill-link'))
+  const domSkills = Array.from(playerObj.card.querySelectorAll('.skill-link'))
     .map(el => el.dataset.skill?.trim() ?? '')
     .filter(Boolean);
+  /* Temporary effects may grant a skill for the duration (e.g. a prayer). These
+     funnel through here so hasSkill / loadBlockSkills / special-action detection
+     all see them. */
+  const granted = (playerObj.effects ?? []).map(e => e.grantsSkill).filter(Boolean);
+  return granted.length ? [...domSkills, ...granted] : domSkills;
 }
 
 function hasSkill(playerObj, name) {
@@ -1593,7 +1598,7 @@ function initFoulWizard() {
     const side     = isFouler ? foulerSide : targetSide;
     const listId   = isFouler ? 'foul-fouler-list' : 'foul-target-list';
     const filter   = isFouler
-      ? (p => !window.STATUS_META?.[p.status]?.dim)
+      ? (p => window.isPlayerAvailable?.(p))
       : (p => p.status === PS?.PRONE || p.status === PS?.STUNNED);
 
     buildWizardPlayerList(listId, side, filter, (player) => {
@@ -1863,7 +1868,7 @@ function initThrowWizard() {
 
     buildRosterTabs(el, {
       initialSide: ws.throwerSide,
-      filterFn: p => hasSkill(p, 'Throw Team-Mate') && !window.STATUS_META?.[p.status]?.dim,
+      filterFn: p => hasSkill(p, 'Throw Team-Mate') && window.isPlayerAvailable?.(p),
       onSelect(p, _stats, side) {
         ws.thrower     = p;
         ws.throwerSide = side;
@@ -1902,7 +1907,7 @@ function initThrowWizard() {
 
     buildRosterTabs(el, {
       initialSide: ws.thrownSide,
-      filterFn: p => hasSkill(p, 'Right Stuff') && !window.STATUS_META?.[p.status]?.dim,
+      filterFn: p => hasSkill(p, 'Right Stuff') && window.isPlayerAvailable?.(p),
       onSelect(p, stats, side) {
         ws.thrown      = p;
         ws.thrownSide  = side;
@@ -2732,7 +2737,7 @@ function initSpecialWizard() {
   function buildTargetList() {
     const PS = window.PlayerStatus;
     buildWizardPlayerList('spec-target-list', targetSide,
-      p => p.status === PS?.AVAILABLE,
+      p => p.status === PS?.AVAILABLE && window.isPlayerAvailable?.(p),
       (p) => { target = p; readyToResolve(); });
   }
 
@@ -2754,7 +2759,7 @@ function initSpecialWizard() {
       buildRosterTabs(wrap, {
         tabsId: 'spec-actor',
         initialSide: 'left',
-        filterFn: p => specialSkillsOf(p).length > 0,
+        filterFn: p => specialSkillsOf(p).length > 0 && window.isPlayerAvailable?.(p),
         onSelect: (p, _stats, side) => {
           actor = p; actorSide = side; targetSide = opposite(side);
           buildActionChips();

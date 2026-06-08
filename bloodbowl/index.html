@@ -589,13 +589,19 @@
         </div>
       </div>
 
-      <!-- GAME SETTINGS (content TBD) -->
+      <!-- GAME SETTINGS -->
       <div class="bb-panel" id="panel-gamesettings" hidden aria-label="Game Settings">
         <div class="wiz-header">
           <h2 class="wiz-title">Game Settings</h2>
           <button class="panel-close" aria-label="Close">&#215;</button>
         </div>
-        <div class="panel-body wiz-body"></div>
+        <div class="panel-body wiz-body">
+          <div class="gs-section">
+            <h3 class="gs-section-title">Player Conditions</h3>
+            <p class="gs-section-desc">Statuses (KO, injuries, prone/stunned) and temporary buffs persist for this matchup, even after a reload. Clear them to reset the game state.</p>
+            <button class="gs-clear-btn" id="gs-clear-status" type="button">Clear status data</button>
+          </div>
+        </div>
       </div>
 
       <!-- MY TEAMS (content TBD) -->
@@ -737,7 +743,7 @@
 
   <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
   <script src="js/dice.js"></script>
-  <script src="js/state.js?v=2"></script>
+  <script src="js/state.js?v=3"></script>
   <script src="js/settings.js"></script>
   <script src="js/physical-dice.js"></script>
   <script src="js/pitch.js"></script>
@@ -745,7 +751,7 @@
   <script src="js/team-builder.js?v=4"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js"></script>
-  <script src="js/wizards.js?v=18"></script>
+  <script src="js/wizards.js?v=19"></script>
   <script src="js/pass-wizard.js?v=9"></script>
   <script src="script.js?v=5"></script>
   <script>
@@ -760,6 +766,26 @@
       document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
       document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
       document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.openChooseTeam?.('left'));
+
+      /* Clear all player conditions (statuses + buffs) for this matchup. */
+      document.getElementById('gs-clear-status')?.addEventListener('click', () => {
+        if (confirm('Clear all player statuses and buffs for this game?')) {
+          window.clearGameState?.();
+          const b = document.getElementById('gs-clear-status');
+          if (b) { const t = b.textContent; b.textContent = '✓ Cleared'; setTimeout(() => { b.textContent = t; }, 1500); }
+        }
+      });
+
+      /* Starting a new game (picking a mode) resets in-progress conditions. */
+      document.querySelectorAll('#panel-startgame .mode-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          if (confirm('Start a new game? This clears all player statuses and buffs.')) {
+            window.clearGameState?.();
+            window.Panels?.closePanel?.('startgame');
+          }
+        });
+      });
 
       const moreCard = document.getElementById('bb-more-card');
       const moreMenu = document.getElementById('bb-more-menu');

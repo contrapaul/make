@@ -562,6 +562,16 @@ function initWeatherModule() {
    MODULE: PRAYERS TO NUFFLE  (D16)
    ════════════════════════════════════════════════════════ */
 
+/* The few prayers with a clean per-player effect. Others stay banner-only.
+   "Until the end of the game" → removeOn:'permanent' (cleared on new game / reset). */
+const PRAYER_EFFECTS = {
+  'Stiletto':           { label: 'Stab',    kind: 'buff',   grantsSkill: 'Stab' },
+  'Iron Man':           { label: '+1 AV',   kind: 'buff',   statMods: { AV: 1 } },
+  'Knuckle Dusters':    { label: 'M.Blow',  kind: 'buff',   grantsSkill: 'Mighty Blow' },
+  'Blessing of Nuffle': { label: 'Pro',     kind: 'buff',   grantsSkill: 'Pro' },
+  'Greasy Cleats':      { label: '−1 MA',   kind: 'debuff', statMods: { MA: -1 } },
+};
+
 function initPrayersModule() {
   const panel    = document.getElementById('panel-prayers');
   const rollBtn  = document.getElementById('prayers-roll-btn');
@@ -571,6 +581,44 @@ function initPrayersModule() {
   if (!rollBtn) return;
 
   const physZone = ensurePhysZone(diceTray, 'prayers-phys');
+
+  /* When a per-player prayer rolls, let the coach pick the affected player. */
+  function offerPrayerEffect(prayerName) {
+    const def = PRAYER_EFFECTS[prayerName];
+    if (!def || !window.getPlayerList) return;
+    const pick = document.createElement('div');
+    pick.className = 'prayer-effect-pick';
+    pick.innerHTML = `<p class="prayer-effect-label">Apply <strong>${h(def.label)}</strong> to a player:</p>`;
+    const row = document.createElement('div');
+    row.className = 'prayer-effect-players';
+    ['left', 'right'].forEach(side => {
+      (window.getPlayerList(side) || [])
+        .filter(p => window.isPlayerAvailable?.(p))
+        .forEach(p => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'prayer-effect-btn';
+          b.textContent = `${side === 'left' ? 'H' : 'A'} · #${p.id} ${p.name}`;
+          b.addEventListener('click', () => {
+            window.addPlayerEffect(side, p.idx, {
+              id:          `prayer-${prayerName}-${side}-${p.idx}`,
+              label:       def.label,
+              kind:        def.kind,
+              statMods:    def.statMods ?? {},
+              grantsSkill: def.grantsSkill,
+              removeOn:    'permanent',
+              source:      'prayer',
+            });
+            row.querySelectorAll('.prayer-effect-btn').forEach(x => { x.disabled = true; });
+            b.classList.add('applied');
+            b.textContent = '✓ ' + b.textContent;
+          });
+          row.appendChild(b);
+        });
+    });
+    pick.appendChild(row);
+    resultEl.appendChild(pick);
+  }
 
   function processRoll(val) {
     if (!DATA.prayers) {
@@ -588,6 +636,7 @@ function initPrayersModule() {
     `;
     resultEl.hidden = false;
     addRerollBtn(resultEl, doRoll);
+    offerPrayerEffect(prayer.name);
 
     /* Persist prayer to main-screen banner */
     if (window.GameState) window.GameState.activePrayer = prayer;

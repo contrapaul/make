@@ -909,6 +909,24 @@
 .player-prone  .player-name { text-decoration: underline dotted rgba(100, 160, 255, 0.5); }
 .player-stunned .player-name { text-decoration: underline dotted rgba(255, 200, 50, 0.5); }
 
+/* ── Temporary effect badges (buffs / debuffs) — parallel to status badge ── */
+.player-effect-badge {
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding:        1px 5px;
+  border-radius:  3px;
+  border:         1px solid currentColor;
+  flex-shrink:    0;
+  white-space:    nowrap;
+  pointer-events: none;
+}
+.effect-buff   { color: #7CFFB0; background: rgba(60, 255, 140, 0.12); }
+.effect-debuff { color: #FF9F7C; background: rgba(255, 120, 60, 0.12); }
+.player-buffed { box-shadow: inset 0 0 0 1px rgba(124, 255, 176, 0.35); }
+
 /* ── Status cycle button (⚑) ── */
 .status-cycle-btn {
   position:   absolute;
@@ -977,6 +995,122 @@
 .status-menu-item.status-cas     { color: var(--bb-red, #C8102E); }
 .status-menu-item.status-dead    { color: #888; }
 .status-menu-item.status-sent-off{ color: #FFAACC; }
+
+/* Effects section in the status menu */
+.status-menu-sep {
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.55rem;
+  font-weight:    700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color:          rgba(150, 185, 255, 0.4);
+  padding:        0.35rem 0.55rem 0.15rem;
+  border-top:     1px solid rgba(80, 130, 255, 0.2);
+  margin-top:     0.2rem;
+}
+.status-menu-item.smitem-effect {
+  display:         flex;
+  justify-content: space-between;
+  align-items:     center;
+  gap:             0.5rem;
+}
+.status-menu-item.smitem-effect.effect-buff   { color: #7CFFB0; }
+.status-menu-item.smitem-effect.effect-debuff { color: #FF9F7C; }
+.smitem-x { opacity: 0.6; font-weight: 800; }
+.status-menu-item.smitem-effect:hover .smitem-x { opacity: 1; }
+.status-menu-presets {
+  display:        flex;
+  flex-wrap:      wrap;
+  gap:            3px;
+  padding:        0.3rem 0.4rem 0.2rem;
+}
+.status-preset-btn {
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.6rem;
+  font-weight:   700;
+  padding:       0.15rem 0.4rem;
+  border-radius: 4px;
+  border:        1px solid currentColor;
+  background:    rgba(255, 255, 255, 0.04);
+  cursor:        pointer;
+}
+.status-preset-btn.effect-buff   { color: #7CFFB0; }
+.status-preset-btn.effect-debuff { color: #FF9F7C; }
+.status-preset-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.status-menu-item.smitem-apoth { color: #7CFFB0; font-weight: 700; }
+
+/* Game Settings — clear status data */
+.gs-section { padding: 0.5rem 0.25rem; }
+.gs-section-title {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase; color: rgba(190, 215, 255, 0.85); margin: 0 0 0.4rem;
+}
+.gs-section-desc {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6;
+  color: rgba(180, 210, 255, 0.6); margin: 0 0 0.8rem;
+}
+.gs-clear-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 700;
+  color: #FF9F7C; background: rgba(255, 120, 60, 0.12);
+  border: 1px solid rgba(255, 120, 60, 0.4); border-radius: 7px;
+  padding: 0.55rem 1rem; cursor: pointer;
+}
+.gs-clear-btn:hover { background: rgba(255, 120, 60, 0.22); color: #fff; }
+
+/* Prayer per-player effect picker (in the prayers result) */
+.prayer-effect-pick { margin-top: 0.6rem; }
+.prayer-effect-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; color: rgba(180, 210, 255, 0.8); margin: 0 0 0.35rem;
+}
+.prayer-effect-players { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.prayer-effect-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 700;
+  color: rgba(210, 230, 255, 0.85); background: rgba(80, 130, 255, 0.1);
+  border: 1px solid rgba(80, 130, 255, 0.3); border-radius: 5px;
+  padding: 0.25rem 0.5rem; cursor: pointer;
+}
+.prayer-effect-btn:hover:not(:disabled) { background: rgba(80, 130, 255, 0.25); color: #fff; }
+.prayer-effect-btn.applied { color: #7CFFB0; border-color: rgba(124, 255, 176, 0.5); }
+.prayer-effect-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ── KO recovery / status reset prompt ── */
+.bb-recovery-backdrop {
+  position: fixed; inset: 0; z-index: 800;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex; align-items: center; justify-content: center; padding: 1.5rem;
+}
+.bb-recovery-modal {
+  background: linear-gradient(180deg, rgba(10, 20, 52, 0.98), rgba(6, 12, 34, 0.98));
+  border: 1px solid rgba(90, 140, 255, 0.3);
+  border-radius: 14px; padding: 1.4rem 1.5rem; max-width: 460px; width: 100%;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  font-family: 'JetBrains Mono', monospace;
+}
+.bb-recovery-title {
+  font-size: 1.05rem; font-weight: 800; font-style: italic; color: #fff; margin: 0 0 0.2rem;
+}
+.bb-recovery-sub { font-size: 0.68rem; color: rgba(180, 210, 255, 0.6); margin: 0 0 0.9rem; }
+.bb-recovery-row {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.45rem 0; border-top: 1px solid rgba(80, 130, 255, 0.15);
+}
+.bb-recovery-name { flex: 1; font-size: 0.78rem; color: rgba(220, 235, 255, 0.9); }
+.bb-recovery-res  { font-size: 0.72rem; font-weight: 700; min-width: 5.5rem; text-align: right; }
+.bb-recovery-res.ok  { color: #7CFFB0; }
+.bb-recovery-res.bad { color: #FF9F7C; }
+.bb-recovery-roll, .bb-recovery-done {
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.7rem;
+  border-radius: 6px; cursor: pointer; padding: 0.3rem 0.7rem;
+}
+.bb-recovery-roll { color: var(--bb-gold, #E8C24A); background: rgba(212,175,55,0.14); border: 1px solid rgba(212,175,55,0.4); }
+.bb-recovery-roll:hover:not(:disabled) { background: rgba(212,175,55,0.26); }
+.bb-recovery-roll:disabled { opacity: 0.5; cursor: default; }
+.bb-recovery-done {
+  margin-top: 1rem; width: 100%; color: #fff;
+  background: rgba(80,130,255,0.2); border: 1px solid rgba(80,130,255,0.45);
+}
+.bb-recovery-done:hover { background: rgba(80,130,255,0.35); }
 
 /* ─────────────────────────────────────────────
    WIZARD PLAYER SELECTION PANELS
