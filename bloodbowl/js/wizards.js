@@ -232,7 +232,9 @@ const BBResolve = {
   },
 
   applyStatus(side, idx, status) {
-    if (status !== undefined && window.GameState) window.GameState.setPlayerStatus?.(side, idx, status);
+    /* setPlayerStatus is exported on window, NOT on GameState — the old
+       GameState.setPlayerStatus?.() call silently did nothing. */
+    if (status !== undefined && idx != null) window.setPlayerStatus?.(side, idx, status);
   },
 };
 
@@ -335,6 +337,7 @@ function initBlockWizard() {
   let attAV = 9, defAV = 9;          // armor values (parsed from statsText)
   let attPlayer = null, defPlayer = null;
   let attSide = 'left';              // which roster side the attacker is from
+  const defSide = () => (attSide === 'left' ? 'right' : 'left');
   let rolledFaces = [];              // array of BLOCK_FACES[n] objects from last roll
   let chosenFace  = null;            // the face the user confirmed
   let rrUsed      = false;           // team re-roll consumed this action
@@ -586,6 +589,34 @@ function initBlockWizard() {
     });
   }
 
+  /* ── Home/Away tabs: which roster the ATTACKER blocks from ── */
+  function renderSideTabs(picker) {
+    let tabs = picker.querySelector('.bwiz-team-tabs');
+    if (!tabs) {
+      tabs = document.createElement('div');
+      tabs.className = 'bwiz-team-tabs';
+      tabs.innerHTML =
+        '<button type="button" class="bwiz-team-tab" data-side="left">Home</button>' +
+        '<button type="button" class="bwiz-team-tab" data-side="right">Away</button>';
+      picker.insertBefore(tabs, picker.firstChild);
+      tabs.querySelectorAll('.bwiz-team-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (attSide === btn.dataset.side) return;
+          attSide   = btn.dataset.side;
+          /* Both selections are side-bound — start the pick over. */
+          attPlayer = null;
+          defPlayer = null;
+          showPicker('att');
+          showPicker('def');
+          resetRoll();
+          updateStDisplay();
+        });
+      });
+    }
+    tabs.querySelectorAll('.bwiz-team-tab').forEach(b =>
+      b.classList.toggle('active', b.dataset.side === attSide));
+  }
+
   /* ── Show picker for a side (hide card) ── */
   function showPicker(side) {
     const wrap   = document.getElementById(`block-${side}-card-wrap`);
@@ -593,10 +624,12 @@ function initBlockWizard() {
     if (!picker || !wrap) return;
     wrap.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
     picker.hidden = false;
+    if (side === 'att') renderSideTabs(picker);
     updateCardGlows(); // one card removed — clear other card's glow until both are chosen again
+    const rosterSide = side === 'att' ? attSide : defSide();
     buildWizardPlayerList(
       side === 'att' ? 'block-attacker-list' : 'block-defender-list',
-      side === 'att' ? 'left' : 'right',
+      rosterSide,
       side === 'att'
         ? (p => window.isPlayerAvailable?.(p) && (() => { const PS = window.PlayerStatus; return p.status === PS?.AVAILABLE || p.status === PS?.PRONE || p.status === PS?.STUNNED; })())
         : (p => window.isPlayerAvailable?.(p)),
@@ -604,16 +637,15 @@ function initBlockWizard() {
         /* Player selected: build card, load skills, set ST (with any active buffs) */
         if (side === 'att') {
           attPlayer = player;
-          attST     = window.getEffectiveStat?.('left', player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
-          attSide   = 'left';
+          attST     = window.getEffectiveStat?.(attSide, player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
           picker.hidden = true;
-          buildEmbeddedCard(wrap, player, 'left');
+          buildEmbeddedCard(wrap, player, attSide);
           loadBlockSkills('att', player);
         } else {
           defPlayer = player;
-          defST     = window.getEffectiveStat?.('right', player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
+          defST     = window.getEffectiveStat?.(defSide(), player.idx, 'ST', stats.st ?? 3) ?? (stats.st ?? 3);
           picker.hidden = true;
-          buildEmbeddedCard(wrap, player, 'right');
+          buildEmbeddedCard(wrap, player, defSide());
           loadBlockSkills('def', player);
         }
         resetRoll();
@@ -621,6 +653,8 @@ function initBlockWizard() {
         if (attPlayer && defPlayer) setGlow('gold');
         updateCardGlows();
       },
+      /* Being blocked is not an action — acted players are legal targets. */
+      side === 'def' ? { allowActed: true } : {},
     );
   }
 
@@ -632,7 +666,7 @@ function initBlockWizard() {
     picker.hidden = true;
     if (!wrap.querySelector('.bwiz-embedded-card')) {
       const player     = side === 'att' ? attPlayer : defPlayer;
-      const rosterSide = side === 'att' ? 'left' : 'right';
+      const rosterSide = side === 'att' ? attSide : defSide();
       if (player) {
         const avVal = parseInt(player.statsText?.match(/\bAV\s*(\d+)/i)?.[1] ?? 9, 10);
         if (side === 'att') attAV = avVal; else defAV = avVal;
@@ -849,7 +883,12 @@ function initBlockWizard() {
     rollBtn.disabled  = false;
     rollBtn.innerHTML = 'Complete Block';
     rollBtn.classList.add('roll-btn--complete');
-    rollBtn.onclick   = () => document.querySelector('#panel-block .panel-close')?.click(); // players preserved on reopen
+    rollBtn.onclick   = () => {
+      /* Block resolved — clear the matchup so the next open starts fresh. */
+      attPlayer = null;
+      defPlayer = null;
+      document.querySelector('#panel-block .panel-close')?.click();
+    };
     setGlow('green');
     /* Defensive: ensure result content divs keep their styling class */
     ['armor-result-content', 'injury-result-content'].forEach(id => {
@@ -1025,7 +1064,7 @@ function initBlockWizard() {
 
     /* Update roster status */
     const targetPlayer = knockedSide === 'att' ? attPlayer : defPlayer;
-    const targetSide   = knockedSide === 'att' ? 'left' : 'right';
+    const targetSide   = knockedSide === 'att' ? attSide : defSide();
     if (targetPlayer) BBResolve.applyStatus(targetSide, targetPlayer.idx, status);
 
     /* Casualty: auto-roll D16 on the casualty table (Decay adds +1). */
@@ -1661,7 +1700,8 @@ function initFoulWizard() {
       resetRoll();
       updateSummary();
       readyToRoll();
-    });
+    /* Being fouled is not an action — acted players are legal targets. */
+    }, isFouler ? {} : { allowActed: true });
   }
 
   function restoreCard(role) {
@@ -2835,7 +2875,9 @@ function initSpecialWizard() {
     const PS = window.PlayerStatus;
     buildWizardPlayerList('spec-target-list', targetSide,
       p => p.status === PS?.AVAILABLE && window.isPlayerAvailable?.(p),
-      (p) => { target = p; readyToResolve(); });
+      (p) => { target = p; readyToResolve(); },
+      /* Being attacked is not an action — acted players are legal targets. */
+      { allowActed: true });
   }
 
   function refresh() {

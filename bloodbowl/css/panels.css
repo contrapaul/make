@@ -1286,7 +1286,11 @@
    WEATHER CHIP  (Sprint 2)
    ════════════════════════════════════════════════════════ */
 
-.weather-chip-slot { margin-bottom: 0.55rem; }
+.weather-chip-slot {
+  margin-bottom: 0.55rem;
+  /* Anchor for the expanded description popover */
+  position: relative;
+}
 
 .weather-chip {
   display:       flex;
@@ -1314,15 +1318,22 @@
   flex-shrink: 0;
 }
 .weather-chip-desc {
-  margin-top:    0.4rem;
+  /* Floating popover under the chip — expanding must NOT reflow the
+     wizard stage (it used to push the roll button under the frame). */
+  position:      absolute;
+  top:           calc(100% + 0.3rem);
+  left:          0;
+  right:         0;
+  z-index:       var(--z-tooltip, 500);
   padding:       0.5rem 0.7rem;
-  background:    rgba(0, 0, 0, 0.35);
-  border:        1px solid rgba(255, 140, 0, 0.18);
+  background:    rgba(10, 8, 2, 0.96);
+  border:        1px solid rgba(255, 140, 0, 0.35);
   border-radius: 4px;
   font-family:   'JetBrains Mono', monospace;
   font-size:     0.7rem;
-  color:         rgba(255, 220, 160, 0.8);
+  color:         rgba(255, 220, 160, 0.9);
   line-height:   1.5;
+  box-shadow:    0 8px 24px rgba(0, 0, 0, 0.55);
 }
 
 /* ════════════════════════════════════════════════════════

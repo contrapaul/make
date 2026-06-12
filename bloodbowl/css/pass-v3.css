@@ -81,8 +81,10 @@
 .pwiz3-result-roll { font-size: 0.8rem; color: rgba(190,215,255,0.7); }
 .pwiz3-result-roll b { font-size: 1.05rem; color: #fff; }
 
-/* Scatter (rendered inside the active result panel) */
-.pwiz3-scatter { margin-top: 0.3rem; }
+/* Scatter (rendered inside the active result panel).
+   Compact dice so 3 scatter dice fit inside the 12rem panel. */
+.pwiz3-scatter { margin-top: 0.3rem; --dice-size: 36px; }
+.pwiz3-scatter .d8-num { font-size: 1rem; }
 .pwiz3-scatter-title {
   font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase;
   letter-spacing: 0.1em; color: rgba(180,210,255,0.45); margin-bottom: 0.3rem;

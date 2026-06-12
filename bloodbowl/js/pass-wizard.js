@@ -800,6 +800,9 @@ function initPassWizard() {
       dirs.push(d);
       resEl.innerHTML = `<span class="pwiz3-scatter-arrow">${D8A[d]}</span> ${D8N[d]}`;
       if (originPos && ws.pitch) ws.pitch.showScatterPath(originPos.col, originPos.row, dirs);
+      /* Keep the scatter row in view inside the scrolling result panel */
+      const scrollHost = host.closest('.bwiz-result-content');
+      if (scrollHost) scrollHost.scrollTop = scrollHost.scrollHeight;
     }
   }
 
