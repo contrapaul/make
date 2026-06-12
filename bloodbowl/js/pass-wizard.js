@@ -622,6 +622,13 @@ function initPassWizard() {
 
   async function rollDie() {
     const slot = diceEl(); slot.innerHTML = '';
+    if (window.BBSettings?.getWizardDiceMode('pass') === 'physical') {
+      const v = await window.DiceSlot.d6(slot, 'Enter your D6 roll');
+      const face = document.createElement('div');
+      buildNumericFace(face, v);
+      slot.appendChild(face);
+      return v;
+    }
     /* Custom numeric die from the block wizard (Nuffle Dice face). */
     const face = document.createElement('div');
     buildNumericFace(face, 1);
@@ -662,6 +669,8 @@ function initPassWizard() {
   async function doThrow() {
     setSeqActive('throw');
     rollBtnEl().disabled = true;
+    /* Pass committed — the thrower has acted (catching is not an action). */
+    if (ws.thrower) window.markPlayerActed?.(ws.activeSide, ws.thrower.idx, 'pass');
 
     if (ws.plan.blizzFumble) {
       seqResult('throw', null, 'Auto-Fumble', 'bad', 'Blizzard blocks Long/Bomb passes');
@@ -781,7 +790,13 @@ function initPassWizard() {
       card.appendChild(resEl);
       cardsRow.appendChild(card);
 
-      const d = await Dice.rollDieElement(dieEl);
+      let d;
+      if (window.BBSettings?.getWizardDiceMode('pass') === 'physical') {
+        d = await window.DiceSlot.direction(card, 'Enter the scatter direction');
+        Dice.setDieValue(dieEl, d);
+      } else {
+        d = await Dice.rollDieElement(dieEl);
+      }
       dirs.push(d);
       resEl.innerHTML = `<span class="pwiz3-scatter-arrow">${D8A[d]}</span> ${D8N[d]}`;
       if (originPos && ws.pitch) ws.pitch.showScatterPath(originPos.col, originPos.row, dirs);
@@ -845,7 +860,12 @@ function initPassWizard() {
     const highlight = role === 'thrower' ? THROWER_SET : role === 'catcher' ? CATCHER_SET : new Set();
 
     players.forEach(p => {
-      const btn = el('button', 'pwiz-player-pick-card'); btn.type = 'button';
+      /* Thrower must be fresh; a catcher may already have acted
+         (receiving a pass is not an action). */
+      const acted = role === 'thrower' && window.hasPlayerActed?.(side, p.idx);
+
+      const btn = el('button', 'pwiz-player-pick-card' + (acted ? ' wps-acted' : '')); btn.type = 'button';
+      if (acted) btn.disabled = true;
       const nameRow = el('div', 'pwiz-pick-name-row');
       nameRow.appendChild(el('div', 'pwiz-pick-name', esc(playerLabel(p))));
       nameRow.appendChild(el('div', 'pwiz-pick-pos', esc(p.pos || '')));
@@ -872,7 +892,7 @@ function initPassWizard() {
         btn.appendChild(skr);
       }
 
-      btn.addEventListener('click', () => { close(); doPlacement(role, p); });
+      btn.addEventListener('click', () => { if (acted) return; close(); doPlacement(role, p); });
       grid.appendChild(btn);
     });
 

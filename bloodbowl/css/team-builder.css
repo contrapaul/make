@@ -634,3 +634,38 @@
   cursor:        pointer;
 }
 .tb-cancel-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+/* ── Card photo upload row (player editor) ── */
+.tb-photo-row {
+  display:     flex;
+  align-items: center;
+  gap:         0.5rem;
+  margin-top:  0.35rem;
+}
+.tb-photo-thumb {
+  width:         34px;
+  height:        34px;
+  object-fit:    cover;
+  border-radius: 6px;
+  border:        1px solid rgba(80, 130, 255, 0.35);
+}
+.tb-photo-thumb[hidden] { display: none; }
+.tb-photo-btn {
+  padding:       0.25rem 0.6rem;
+  background:    rgba(10, 22, 65, 0.65);
+  border:        1px solid rgba(80, 130, 255, 0.3);
+  border-radius: 6px;
+  color:         rgba(190, 215, 255, 0.85);
+  font-family:   'JetBrains Mono', monospace;
+  font-size:     0.68rem;
+  cursor:        pointer;
+}
+.tb-photo-btn:hover { background: rgba(30, 70, 160, 0.5); }
+.tb-photo-remove {
+  background: none;
+  border:     none;
+  color:      rgba(255, 140, 160, 0.7);
+  font-size:  0.8rem;
+  cursor:     pointer;
+}
+.tb-photo-remove[hidden] { display: none; }

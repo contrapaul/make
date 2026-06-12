@@ -121,13 +121,16 @@
   gap:         0.65rem;
   flex-wrap:   wrap;
   margin:      0 0 0.5rem;
-  min-height:  72px;
+  min-height:  var(--block-die-size, 72px);
   align-items: flex-end;
+  /* Dice paint above sibling frames/buttons — never "load under" them */
+  position:    relative;
+  z-index:     var(--z-dice, 100);
 }
 
 .block-face {
-  width:           72px;
-  height:          72px;
+  width:           var(--block-die-size, 72px);
+  height:          var(--block-die-size, 72px);
   border-radius:   10px;
   display:         flex;
   align-items:     center;
@@ -891,7 +894,7 @@
   white-space:    normal;
   max-width:      min(280px, 22em);
   min-width:      min(180px, 15em);
-  z-index:        500;
+  z-index:        var(--z-tooltip, 500);
   line-height:    1.45;
   box-shadow:     0 4px 20px rgba(0,0,0,0.6);
   pointer-events: none;
@@ -1220,7 +1223,9 @@
   grid-template-columns: minmax(0, 1fr);
   justify-items:         center;
   align-items:           start;
-  overflow:              hidden !important;
+  /* clip (not hidden): same containment but can never be scroll-shifted,
+     which previously let dice/frames render offset under controls */
+  overflow:              clip !important;
   padding:               0 !important;
 }
 
@@ -2161,4 +2166,20 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 2.8em;
+}
+
+/* ════════════════════════════════════════════════════════
+   TURN TRACKING — players who already acted this turn stay
+   visible in wizard pickers but cannot be selected.
+   ════════════════════════════════════════════════════════ */
+.wps-player-btn.wps-acted,
+.pwiz-player-pick-card.wps-acted {
+  opacity: 0.45;
+  cursor:  not-allowed;
+  filter:  saturate(0.4);
+}
+.player-status-badge.status-acted {
+  background: rgba(120, 130, 150, 0.25);
+  color:      rgba(200, 210, 230, 0.8);
+  border:     1px solid rgba(150, 160, 180, 0.35);
 }

@@ -118,6 +118,8 @@ const GameState = {
   scores:         { home: 0, away: 0 },     /* mirrored from gbState by adjustScore() */
   sppEvents:      [],     /* [{ side, playerIdx, savedId, amount, reason, timestamp }] */
   activeTeamIds:  { home: null, away: null },  /* saved team UUIDs when custom teams loaded */
+  /* side → { idx: { acted: true, actionType } } — cleared on End Turn */
+  turnFlags:      { left: {}, right: {} },
 };
 
 window.GameState = GameState;
@@ -231,6 +233,37 @@ function setPlayerStatus(side, idx, status) {
 
 window.getPlayerStatus = getPlayerStatus;
 window.setPlayerStatus = setPlayerStatus;
+
+/* ────────────────────────────────────────────────────────
+   TURN TRACKING
+   A player who completes a wizard action is flagged for the
+   rest of the team turn. Exceptions are handled by callers:
+   catching a pass is not an action, and a blitzer keeps any
+   remaining movement (the flag records actionType 'blitz').
+   ──────────────────────────────────────────────────────── */
+
+function hasPlayerActed(side, idx) {
+  /* Professional mode can switch action tracking off entirely. */
+  if (window.BBSettings?.modeAllows && !window.BBSettings.modeAllows('turnTracking')) return false;
+  return !!GameState.turnFlags[side]?.[idx]?.acted;
+}
+
+function markPlayerActed(side, idx, actionType) {
+  if (idx == null) return;
+  if (!GameState.turnFlags[side]) GameState.turnFlags[side] = {};
+  GameState.turnFlags[side][idx] = { acted: true, actionType };
+  document.dispatchEvent(new CustomEvent('bb:playerActed', { detail: { side, idx, actionType } }));
+}
+
+/* End the current team turn: every player is fresh again. */
+function endTurn() {
+  GameState.turnFlags = { left: {}, right: {} };
+  document.dispatchEvent(new CustomEvent('bb:turnEnd'));
+}
+
+window.hasPlayerActed  = hasPlayerActed;
+window.markPlayerActed = markPlayerActed;
+window.endTurn         = endTurn;
 
 /* ── Temporary effects (buffs / debuffs) — a parallel channel to status ──
    Effect: { id, label, kind:'buff'|'debuff', statMods:{ST,MA,AG,PA,AV},
@@ -595,10 +628,14 @@ function persistGameState() {
   clearTimeout(_persistTimer);
   _persistTimer = setTimeout(() => {
     try {
+      /* Never persist before any roster is loaded — an empty snapshot
+         (empty sig) would clobber the real save during page boot. */
+      if (!(getPlayerList('left')?.length || getPlayerList('right')?.length)) return;
       const payload = {
         v: 1,
         statuses: GameState.playerStatuses,
         effects:  GameState.playerEffects,
+        turns:    GameState.turnFlags,
         half:     GameState.half,
         phase:    GameState.phase,
         sig:      { left: _rosterSig('left'), right: _rosterSig('right') },
@@ -621,6 +658,7 @@ function rehydrateSide(side) {
   const statuses = saved.statuses?.[side] || {};
   const effects  = saved.effects?.[side]  || {};
   GameState.playerEffects[side] = effects;
+  GameState.turnFlags[side]     = saved.turns?.[side] || {};
   Object.keys(statuses).forEach(idx => {
     GameState.playerStatuses[side][idx] = statuses[idx];
   });
@@ -634,6 +672,7 @@ window.rehydrateSide = rehydrateSide;
 function clearGameState() {
   GameState.playerStatuses = { left: {}, right: {} };
   GameState.playerEffects  = { left: {}, right: {} };
+  GameState.turnFlags      = { left: {}, right: {} };
   try { localStorage.removeItem(_matchKey()); } catch (_) {}
   ['left', 'right'].forEach(side =>
     (getPlayerList(side) || []).forEach(p =>
@@ -645,6 +684,8 @@ window.clearGameState = clearGameState;
 document.addEventListener('bb:playerStatus', persistGameState);
 document.addEventListener('bb:playerEffect', persistGameState);
 document.addEventListener('bb:phase',        persistGameState);
+document.addEventListener('bb:playerActed',  persistGameState);
+document.addEventListener('bb:turnEnd',      persistGameState);
 
 /* ────────────────────────────────────────────────────────
    BOOT

@@ -273,6 +273,7 @@ async function loadCustomTeam(side, savedTeam) {
     jerseyNumber: p.jerseyNumber,
     fact:        p.fact ?? '',
     isStarPlayer: !!p.isStarPlayer,
+    photo:       p.photo,
   }));
 
   state[side].team    = baseEntry ?? { id: savedTeam.baseTeamId, name: savedTeam.name, colors: {} };
@@ -403,12 +404,12 @@ function applyTeamColors(side, colors) {
 function renderRoster(side, players) {
   const grid = document.getElementById(`roster-${side}`);
   const frag = document.createDocumentFragment();
-  players.forEach(p => frag.appendChild(buildCard(p, side)));
+  players.forEach((p, i) => frag.appendChild(buildCard(p, side, i)));
   grid.innerHTML = '';
   grid.appendChild(frag);
 }
 
-function buildCard(player, side) {
+function buildCard(player, side, idx) {
   const card = document.createElement('div');
   card.className = 'player-card' + (player.isStarPlayer ? ' star-player' : '');
   card.setAttribute('tabindex', '0');
@@ -445,12 +446,12 @@ function buildCard(player, side) {
 
   if (player.isStarPlayer) applyHolo(card, false);
 
-  card.addEventListener('click', () => openModal(side, player));
+  card.addEventListener('click', () => openModal(side, player, idx));
   card.addEventListener('keydown', e => {
     if (e.target.closest('.skill-link')) return; /* skill-link handles its own activation */
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      openModal(side, player);
+      openModal(side, player, idx);
     }
   });
 
@@ -507,71 +508,23 @@ window.clearHolo = clearHolo;
 /* ────────────────────────────────────────────────────────
    TRADING CARD MODAL
    ──────────────────────────────────────────────────────── */
-function openModal(side, player) {
+function openModal(side, player, idx) {
   const overlay = document.getElementById(`modal-${side}`);
   const card    = document.getElementById(`card-${side}`);
   const team    = state[side].team;
   const isStar  = player.isStarPlayer;
-  const bgColor = POSITION_COLORS[player.position] || '#555';
   const imgDir  = team?.imageDir ?? 'images/';
 
   card.className = 'trading-card' + (isStar ? ' star-card' : '');
   if (isStar) applyHolo(card, true); else clearHolo(card);
 
-  card.innerHTML = `
-    <div class="modal-image-area" style="background:${bgColor};">
-      <img class="modal-img"
-           src="${imgDir}Player${player.id}.png"
-           alt="${esc(player.name)}">
-      <span class="img-placeholder-num" aria-hidden="true">${player.id}</span>
-
-      <div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">
-        <div class="modal-jersey-circle">${player.id}</div>
-        <div class="modal-overlay-info">
-          <h2 class="modal-name">${esc(player.name)}</h2>
-          <p class="modal-position">
-            ${esc(player.position)}${player.characteristic
-              ? ` &middot; ${esc(player.characteristic)}`
-              : ''}${player.qty
-              ? ` <span class="modal-qty">(${esc(player.qty)})</span>`
-              : ''}
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-stats">
-      <div class="modal-stats-row">
-        ${STAT_KEYS.map(s => `
-          <div class="modal-stat">
-            <span class="ms-label">${s.toUpperCase()}</span>
-            <span class="ms-value">${player[s]}</span>
-          </div>`).join('')}
-        ${player.value ? `
-          <div class="modal-stat">
-            <span class="ms-label">GP</span>
-            <span class="ms-value" style="font-size:0.82rem;">
-              ${Math.round(player.value / 1000)}k
-            </span>
-          </div>` : ''}
-      </div>
-    </div>
-
-    <div class="modal-skills">
-      <p class="skills-label">Skills &amp; Traits</p>
-      <p class="skills-text">${renderSkillLinks(player.skills)}</p>
-    </div>
-
-    ${player.fact
-      ? `<div class="modal-fact">&ldquo;${esc(player.fact)}&rdquo;</div>`
-      : ''}
-  `;
-
-  /* Image: hide placeholder once real image loads; hide img tag on error */
-  const img  = card.querySelector('.modal-img');
-  const stub = card.querySelector('.img-placeholder-num');
-  img.addEventListener('load',  () => { stub.style.display = 'none'; });
-  img.addEventListener('error', () => { img.style.display  = 'none'; });
+  /* Shared trading-card markup (js/player-card.js) + live status banner */
+  card.innerHTML = window.PlayerCard.html(player, {
+    imageDir:   imgDir,
+    statusHTML: window.PlayerCard.statusHTML(side, idx),
+  });
+  window.PlayerCard.bindImage(card);
+  window.PlayerCard.applyStatusClasses(card, side, idx);
 
   /* Skill links in trading card: hover + click open the anchored tooltip.
      No stopPropagation needed — modal backdrop only closes on e.target===overlay. */

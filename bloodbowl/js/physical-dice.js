@@ -85,7 +85,7 @@ function showPhysicalButtons(container, config) {
 
     const valEl = document.createElement('span');
     valEl.className   = 'phys-val';
-    valEl.textContent = String(b.value);
+    valEl.textContent = b.display ?? String(b.value);
     btn.appendChild(valEl);
 
     if (b.label) {

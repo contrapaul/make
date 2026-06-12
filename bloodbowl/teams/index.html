@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teams | Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../css/tokens.css">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
-  <link rel="stylesheet" href="../style.css">
-  <link rel="stylesheet" href="../css/team-builder.css">
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../css/team-builder.css?v=2">
   <link rel="stylesheet" href="../css/teams-page.css">
   <script src="../js/title-quips.js" defer></script>
 </head>
@@ -43,21 +44,21 @@
 
     <div class="bb-page-content tp-page">
 
-      <!-- Left 1/3 — My Teams + Create Team -->
+      <!-- Left 1/3 â€” My Teams + Create Team -->
       <aside class="tp-sidebar">
         <h2 class="tp-side-title">My Teams</h2>
         <button class="tp-create-btn" id="tp-create" type="button">+ Create Team</button>
         <div class="tp-myteams" id="tp-myteams"></div>
       </aside>
 
-      <!-- Right 2/3 — team cards gallery, or the team builder when creating/editing -->
+      <!-- Right 2/3 â€” team cards gallery, or the team builder when creating/editing -->
       <section class="tp-content" id="tp-content"></section>
 
     </div>
 
   </main>
 
-  <!-- Team detail popup — scaled player trading cards + flavour text -->
+  <!-- Team detail popup â€” scaled player trading cards + flavour text -->
   <div class="tp-overlay" id="tp-detail" hidden role="dialog" aria-modal="true" aria-label="Team detail">
     <div class="tp-detail-window" id="tp-detail-window">
       <div class="tp-detail-head">
@@ -79,7 +80,7 @@
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
       <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
     </div>
-    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play â€” especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
   <script>
@@ -104,8 +105,9 @@
   <!-- Teams page: data + builder. BB_DATA_PREFIX lets the shared builder fetch
        from the parent /bloodbowl/ directory while running on this subpage. -->
   <script>window.BB_DATA_PREFIX = '../';</script>
-  <script src="../js/team-builder.js?v=4"></script>
-  <script src="../js/teams-page.js?v=1"></script>
+  <script src="../js/player-card.js"></script>
+  <script src="../js/team-builder.js?v=5"></script>
+  <script src="../js/teams-page.js?v=3"></script>
 
 </body>
 </html>

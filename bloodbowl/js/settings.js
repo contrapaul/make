@@ -12,6 +12,8 @@ const DEFAULTS = {
   diceMode:          'digital',   /* 'digital' | 'physical' */
   diceModeOverrides: {},          /* { wizardKey: 'digital' | 'physical' } */
   mode:              'veteran',   /* 'veteran' | 'beginner' */
+  gameMode:          'seasoned',  /* 'first' | 'seasoned' | 'pro' */
+  trackTurns:        true,        /* Professional mode: per-turn action tracking on/off */
 };
 
 function getSettings() {
@@ -37,8 +39,25 @@ function saveSetting(key, value) {
 
 /** Returns 'digital' | 'physical' for a given wizard key. */
 function getWizardDiceMode(wizardKey) {
+  if (!modeAllows('physicalDice')) return 'digital';   /* First Match is fully digital */
   const s = getSettings();
   return s.diceModeOverrides?.[wizardKey] ?? s.diceMode;
 }
 
-window.BBSettings = { getSettings, saveSetting, getWizardDiceMode };
+/** Single gate for game-mode-dependent features. */
+function modeAllows(feature) {
+  const s = getSettings();
+  switch (feature) {
+    case 'physicalDice': return s.gameMode !== 'first';
+    case 'turnTracking': return s.gameMode === 'pro' ? !!s.trackTurns : true;
+    case 'tutorial':     return s.gameMode === 'first';
+    default:             return true;
+  }
+}
+
+function setGameMode(mode) {
+  saveSetting('gameMode', mode);
+  document.dispatchEvent(new CustomEvent('bb:gameMode', { detail: { mode } }));
+}
+
+window.BBSettings = { getSettings, saveSetting, getWizardDiceMode, modeAllows, setGameMode };

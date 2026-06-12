@@ -292,6 +292,11 @@
   width: 100%;
   max-width: 420px;
   aspect-ratio: 5 / 7;
+  /* Container queries: internals sized in cqw so the same markup
+     renders identically at ANY card width (modal, wizard, teams page).
+     cqw values below mirror the original rem sizes at the 420px design
+     width (1rem = 16px = 3.81cqw). */
+  container-type: inline-size;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -655,6 +660,57 @@
   background: #f7f3f3;
   border-top: 1px solid #D8D8D8;
 }
+
+/* ── Container-query scaling — same markup at any card width ──
+   @container rules win over the rem bases above whenever the card
+   is sized; values reproduce the 420px design exactly (px / 4.2). */
+@container (min-width: 1px) {
+  .modal-card-overlay     { gap: 2.48cqw; padding: 0.95cqw 2.29cqw; }
+  .modal-jersey-circle    { width: 13.33cqw; height: 13.33cqw; font-size: 7.62cqw; border-width: 0.48cqw; }
+  .modal-name             { font-size: 5.52cqw; }
+  .modal-position         { font-size: 2.67cqw; }
+  .modal-qty              { font-size: 2.48cqw; }
+  .img-placeholder-num    { font-size: 20.95cqw; }
+  .modal-stats            { padding: 2.67cqw 3.81cqw; }
+  .modal-stat             { padding: 1.71cqw 0.76cqw; }
+  .ms-label               { font-size: 2.21cqw; }
+  .ms-value               { font-size: 4cqw; }
+  .ms-value-gp            { font-size: 3.12cqw; }
+  .modal-skills           { padding: 3.24cqw 3.81cqw; max-height: 34.29cqw; min-height: 17.14cqw; }
+  .skills-label           { font-size: 2.21cqw; margin-bottom: 1.33cqw; }
+  .skills-text            { font-size: 3.35cqw; }
+  .modal-fact             { padding: 3.43cqw 3.81cqw; font-size: 3.24cqw; }
+
+  /* Status / effect banner pinned to the bottom of the card art */
+  .tc-status-banner {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    z-index: var(--z-card-overlay, 10);
+    display: flex; flex-direction: column; gap: 0.5cqw;
+    padding: 1.4cqw 2.29cqw;
+    background: rgba(10, 10, 14, 0.78);
+  }
+  .tc-status-row { display: flex; align-items: baseline; gap: 1.9cqw; min-width: 0; }
+  .tc-status-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800; font-style: italic;
+    font-size: 3.1cqw; color: #ffd87a;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .tc-status-row.status-cas .tc-status-label,
+  .tc-status-row.status-dead .tc-status-label,
+  .tc-status-row.status-sent-off .tc-status-label,
+  .tc-status-row.effect-debuff .tc-status-label { color: #ff8fa0; }
+  .tc-status-row.effect-buff .tc-status-label   { color: #81c784; }
+  .tc-status-msg {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.5cqw; color: rgba(235, 240, 255, 0.85);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+}
+
+/* Out-of-game players: desaturate the card art (not the status banner) */
+.trading-card.tc-unavailable .modal-img { filter: grayscale(0.85) brightness(0.75); }
 
 /* ── Start Game mode cards — reuse the trading-card look ── */
 .mode-card { cursor: default; }

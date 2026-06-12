@@ -1,0 +1,50 @@
+/* ============================================================
+   Blood Bowl Companion — css/tokens.css
+   Shared design tokens. Loaded BEFORE all other stylesheets.
+
+   Z-INDEX SCALE — every overlay layer on the site, lowest to
+   highest. Values match the pre-token numbers so relative order
+   is preserved; always use the var, never a raw number.
+
+   NOTE: the pass wizard keeps an internal 50/200/300 picker
+   stack; those are relative values inside the panel's own
+   stacking context and intentionally stay local.
+   ============================================================ */
+
+:root {
+  /* ── Z-index layers ── */
+  --z-base:           0;
+  --z-card-overlay:   10;   /* status/effect badges on cards */
+  --z-dice:           100;  /* dice always above wizard stage chrome */
+  --z-gamebar:        200;
+  --z-panel-backdrop: 350;
+  --z-panel:          400;  /* wizard panels (block/pass/foul/throw/special) */
+  --z-tooltip:        500;  /* skill tooltips, above panels */
+  --z-drive-backdrop: 598;
+  --z-drive-pill:     599;
+  --z-drive:          600;  /* drive wizard modal */
+  --z-drawer:         700;  /* settings drawer, page overlays */
+  --z-overlay-page:   800;  /* spp / team-builder full-page overlays */
+  --z-toast:          900;
+  --z-drag-ghost:     9999; /* pitch drag ghost */
+
+  /* ── Dice sizing ──
+     Inside FitScale stages the transform already scales dice, so
+     these stay fixed design px there; fluid contexts (drive wizard,
+     plain panels) may override them with clamp(). */
+  --dice-size:      60px;   /* d6 / d8 face */
+  --block-die-size: 72px;   /* block die face */
+
+  /* ── Spacing / radius / type scale ── */
+  --bb-space-1: 0.25rem;
+  --bb-space-2: 0.5rem;
+  --bb-space-3: 0.75rem;
+  --bb-space-4: 1rem;
+  --bb-space-5: 1.5rem;
+  --bb-space-6: 2.25rem;
+  --bb-radius:     10px;
+  --bb-radius-lg:  16px;
+  --bb-font-sm: clamp(0.7rem,  0.65rem + 0.25vw, 0.85rem);
+  --bb-font-md: clamp(0.85rem, 0.78rem + 0.35vw, 1.05rem);
+  --bb-font-lg: clamp(1.1rem,  1rem    + 0.6vw,  1.7rem);
+}

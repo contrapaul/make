@@ -42,11 +42,17 @@ const TeamBuilder = (() => {
     return getTeams().find(t => t.id === id) ?? null;
   }
 
+  /* Returns false when localStorage is full (likely too many photos). */
   function saveTeam(team) {
     const all = getTeams();
     const idx = all.findIndex(t => t.id === team.id);
     if (idx >= 0) all[idx] = team; else all.push(team);
-    setTeams(all);
+    try {
+      setTeams(all);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   function deleteTeam(id) {
@@ -489,6 +495,9 @@ const TeamBuilder = (() => {
           flavor.addEventListener('input', () => { p.fact = flavor.value; });
           row.appendChild(flavor);
 
+          /* Card photo: upload a picture of the miniature */
+          row.appendChild(_buildPhotoControl(p));
+
           /* Skills: starting (read-only) + purchased (removable) + buy control */
           row.appendChild(_buildPlayerSkills(p));
         }
@@ -526,7 +535,10 @@ const TeamBuilder = (() => {
         _showToast('✗ Over budget! Raise the team budget or remove players/staff', true); return;
       }
       _draft.treasury = remaining;
-      saveTeam(_draft);
+      if (!saveTeam(_draft)) {
+        _showToast('✗ Storage full — remove some player photos and try again', true);
+        return;
+      }
       _showToast(`✓ Saved: ${_draft.name}`);
       _finishBuilder();
     });
@@ -548,6 +560,71 @@ const TeamBuilder = (() => {
     _builderContainer = null;
     _onDone = null;
     if (done) done();
+  }
+
+  /* ── Card photo control: file input → downscaled JPEG dataURL ── */
+
+  function _downscalePhoto(file, maxEdge = 512, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width  = Math.max(1, Math.round(img.width  * scale));
+        c.height = Math.max(1, Math.round(img.height * scale));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        resolve(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
+      img.src = url;
+    });
+  }
+
+  function _buildPhotoControl(p) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tb-photo-row';
+
+    const thumb = document.createElement('img');
+    thumb.className = 'tb-photo-thumb';
+    thumb.alt = '';
+
+    const pick = document.createElement('button');
+    pick.type = 'button'; pick.className = 'tb-photo-btn';
+
+    const remove = document.createElement('button');
+    remove.type = 'button'; remove.className = 'tb-photo-remove';
+    remove.textContent = '✕';
+    remove.title = 'Remove photo';
+
+    const input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*'; input.hidden = true;
+
+    const sync = () => {
+      thumb.src = p.photo || '';
+      thumb.hidden = !p.photo;
+      remove.hidden = !p.photo;
+      pick.textContent = p.photo ? '📷 Replace Photo' : '📷 Add Card Photo';
+    };
+
+    pick.addEventListener('click', () => input.click());
+    remove.addEventListener('click', () => { p.photo = undefined; sync(); });
+    input.addEventListener('change', async () => {
+      const file = input.files?.[0];
+      input.value = '';
+      if (!file) return;
+      try {
+        p.photo = await _downscalePhoto(file);
+        sync();
+      } catch (e) {
+        _showToast('✗ Could not read that image', true);
+      }
+    });
+
+    sync();
+    wrap.appendChild(thumb); wrap.appendChild(pick); wrap.appendChild(remove); wrap.appendChild(input);
+    return wrap;
   }
 
   /* Starting skills (read-only) + purchased skills (removable) + buy control. */

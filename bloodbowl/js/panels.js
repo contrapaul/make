@@ -105,6 +105,14 @@ function initDiceModeToggles() {
     if (closeBtn) header.insertBefore(pill, closeBtn);
     else header.appendChild(pill);
   });
+
+  /* First Match is fully digital — hide the toggle there. */
+  const syncPills = () => {
+    const allowed = window.BBSettings.modeAllows?.('physicalDice') ?? true;
+    document.querySelectorAll('.dmt-pill').forEach(p => { p.hidden = !allowed; });
+  };
+  syncPills();
+  document.addEventListener('bb:gameMode', syncPills);
 }
 
 /* ════════════════════════════════════════════════════════

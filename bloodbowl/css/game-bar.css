@@ -24,7 +24,7 @@ body.app-loading .bb-app {
   min-height:            74px;
   position:              sticky;
   top:                   0;
-  z-index:               200;
+  z-index:               var(--z-gamebar, 200);
   box-shadow:            0 4px 24px rgba(0, 0, 0, 0.65);
 }
 

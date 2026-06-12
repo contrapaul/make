@@ -277,32 +277,24 @@ function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
   };
   Object.keys(cmap).forEach(k => { if (colors[k]) card.style.setProperty(cmap[k], colors[k]); });
 
-  let statsHtml = KEYS.map((l, i) =>
-    `<div class="modal-stat"><span class="ms-label">${l}</span><span class="ms-value">${statVals[i]}</span></div>`).join('');
-  if (pd && pd.value) {
-    statsHtml += `<div class="modal-stat"><span class="ms-label">GP</span>` +
-      `<span class="ms-value" style="font-size:0.82rem;">${Math.round(pd.value / 1000)}k</span></div>`;
-  }
-
-  card.innerHTML =
-    `<div class="modal-image-area" style="background:${bgColor};">` +
-      `<img class="modal-img" src="${imgDir}Player${playerId}.png" alt="${esc(playerName)}">` +
-      `<span class="img-placeholder-num" aria-hidden="true">${playerId}</span>` +
-      `<div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">` +
-        `<div class="modal-jersey-circle">${playerId}</div>` +
-        `<div class="modal-overlay-info">` +
-          `<h2 class="modal-name">${esc(playerName)}</h2>` +
-          `<p class="modal-position">${esc(position)}</p>` +
-        `</div></div></div>` +
-    `<div class="modal-stats"><div class="modal-stats-row">${statsHtml}</div></div>` +
-    `<div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p>` +
-      `<p class="skills-text">${window.renderSkillLinks ? window.renderSkillLinks(pd ? (pd.skills || '') : '') : ''}</p></div>` +
-    (pd && pd.fact ? `<div class="modal-fact">&ldquo;${esc(pd.fact)}&rdquo;</div>` : '');
-
-  const img  = card.querySelector('.modal-img');
-  const stub = card.querySelector('.img-placeholder-num');
-  img.addEventListener('load',  () => { stub.style.display = 'none'; });
-  img.addEventListener('error', () => { img.style.display  = 'none'; });
+  /* Shared trading-card markup (js/player-card.js) + live status banner */
+  card.innerHTML = window.PlayerCard.html({
+    id:           playerId,
+    name:         playerName,
+    position:     position,
+    ma: statVals[0], st: statVals[1], ag: statVals[2], pa: statVals[3], av: statVals[4],
+    skills:       pd ? (pd.skills || '') : '',
+    value:        pd?.value,
+    fact:         pd?.fact,
+    isStarPlayer: isStar,
+    photo:        pd?.photo,
+  }, {
+    imageDir:   imgDir,
+    statusHTML: window.PlayerCard.statusHTML(side, player.idx),
+  });
+  window.PlayerCard.bindImage(card);
+  window.PlayerCard.applyStatusClasses(card, side, player.idx);
+  card.querySelector('.modal-image-area').style.background = bgColor;
 
   if (window.attachSkillEvents) window.attachSkillEvents(card, false);
   if (pd && pd.isStarPlayer && typeof window.applyHolo === 'function') window.applyHolo(card, true);
@@ -409,18 +401,28 @@ function initBlockWizard() {
     });
   }
 
-  /* Roll a single inline D6 (animated) appended to the last prompt row. */
+  /* Roll a single inline D6 (animated) appended to the last prompt row.
+     Physical mode: same row, entry grid instead of an animated die. */
   async function askD6(labelHtml) {
     const z   = promptZone();
     const row = document.createElement('div');
     row.className = 'bwiz-prompt';
     row.innerHTML = `<span class="bwiz-prompt-label">${labelHtml}</span>`;
-    const die = document.createElement('div');
-    die.className = 'block-face bwiz-mini-die';
-    buildNumericFace(die, 1);
-    row.appendChild(die);
     z.appendChild(row);
-    const v = await rollNumericDie(die);
+    let v;
+    if (wizardMode('block') === 'physical') {
+      v = await window.DiceSlot.d6(row, '');
+      const die = document.createElement('div');
+      die.className = 'block-face bwiz-mini-die';
+      buildNumericFace(die, v);
+      row.appendChild(die);
+    } else {
+      const die = document.createElement('div');
+      die.className = 'block-face bwiz-mini-die';
+      buildNumericFace(die, 1);
+      row.appendChild(die);
+      v = await rollNumericDie(die);
+    }
     const res = document.createElement('span');
     res.className = 'bwiz-prompt-res';
     res.textContent = v;
@@ -1031,7 +1033,14 @@ function initBlockWizard() {
       const host = injRow ?? document.getElementById('injury-roll-panel');
       if (host) {
         const decay = knockedSide === 'def' && defHas('Decay') ? 1 : 0;
-        const { casVal, cas } = BBResolve.rollCasualty(decay);
+        let casVal, cas;
+        if (wizardMode('block') === 'physical') {
+          const entered = await window.DiceSlot.d16(host);
+          casVal = Math.min(16, entered + decay);
+          cas = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
+        } else {
+          ({ casVal, cas } = BBResolve.rollCasualty(decay));
+        }
         const casEl = document.createElement('div');
         casEl.className = 'bwiz-casualty-result';
         casEl.innerHTML =
@@ -1069,12 +1078,26 @@ function initBlockWizard() {
     }
   }
 
-  /* Roll 2D6 using the main block tray (animated numeric dice). */
+  /* Roll 2D6 using the main block tray (animated numeric dice).
+     Physical mode: enter each die; the tray shows the entered faces. */
   async function rollTwoDice() {
     const blockTray = document.getElementById('block-dice-tray');
     if (blockTray) {
       blockTray.innerHTML = '';
       blockTray.classList.remove('def-picks');
+    }
+    if (wizardMode('block') === 'physical') {
+      const host = promptZone();
+      const d1 = await window.DiceSlot.d6(host, 'Enter the first D6');
+      const d2 = await window.DiceSlot.d6(host, 'Enter the second D6');
+      if (blockTray) [d1, d2].forEach(v => {
+        const face = document.createElement('div');
+        buildNumericFace(face, v);
+        blockTray.appendChild(face);
+      });
+      return [d1, d2];
+    }
+    if (blockTray) {
       for (let i = 0; i < 2; i++) {
         const face = document.createElement('div');
         buildNumericFace(face, 1);
@@ -1169,6 +1192,9 @@ function initBlockWizard() {
     chosenFace = null;
 
     const pre = await preBlock();
+    /* The action is spent once committed — even a wasted block (Foul
+       Appearance) uses the player's action for this turn. */
+    if (attPlayer) window.markPlayerActed?.(attSide, attPlayer.idx, isBlitz ? 'blitz' : 'block');
     if (pre.abort) { rollBtn.disabled = true; return; }
 
     const { count, attFav } = calcBlock();
@@ -1176,7 +1202,13 @@ function initBlockWizard() {
     if (attFav === false) document.getElementById('block-dice-tray').classList.add('def-picks');
 
     const faces = Array.from({ length: count }, (_, i) => document.getElementById(`block-face-${i}`));
-    const rolls = await Promise.all(faces.map(f => rollBlockDie(f)));
+    let rolls;
+    if (wizardMode('block') === 'physical') {
+      rolls = await window.DiceSlot.blockFaces(promptZone(), count);
+      rolls.forEach((r, i) => buildBlockFace(faces[i], r));
+    } else {
+      rolls = await Promise.all(faces.map(f => rollBlockDie(f)));
+    }
     rolledFaces  = rolls.map(r => BLOCK_FACES[r]);
 
     /* Roll button stays disabled — user must confirm or re-roll */
@@ -1465,10 +1497,21 @@ function initFoulWizard() {
   const skillSet = player =>
     new Set(getPlayerSkills(player).map(s => s.replace(/\s*\(.*\)$/, '').trim()));
 
-  /* Dice (shared numeric faces, like the Special Actions wizard) */
+  /* Dice (shared numeric faces, like the Special Actions wizard).
+     Physical mode: enter each die; the tray shows the entered faces.
+     Per-die entry keeps the referee's natural-doubles check honest. */
   async function rollTwoD6() {
     const tray = document.getElementById('foul-dice-tray');
     tray.innerHTML = '';
+    if (wizardMode('foul') === 'physical') {
+      const host = tray.parentElement ?? tray;
+      const d1 = await window.DiceSlot.d6(host, 'Enter the first D6');
+      const d2 = await window.DiceSlot.d6(host, 'Enter the second D6');
+      [d1, d2].forEach(v => {
+        const d = document.createElement('div'); buildNumericFace(d, v); tray.appendChild(d);
+      });
+      return [d1, d2];
+    }
     const faces = [0, 1].map(() => {
       const d = document.createElement('div'); buildNumericFace(d, 1); tray.appendChild(d); return d;
     });
@@ -1526,6 +1569,7 @@ function initFoulWizard() {
     rollBtn.textContent = 'Rolling…';
     rollBtn.onclick = null;
     lockPanels();
+    window.markPlayerActed?.(foulerSide, fouler.idx, 'foul');
 
     const tSkills     = skillSet(target);
     const dirtyPlayer = skillSet(fouler).has('Dirty Player');
@@ -1559,7 +1603,15 @@ function initFoulWizard() {
 
       if (inj.outcome === 'Casualty') {
         const decay = tSkills.has('Decay') ? 1 : 0;
-        const { casVal, cas } = BBResolve.rollCasualty(decay);
+        let casVal, cas;
+        if (wizardMode('foul') === 'physical') {
+          const host = document.getElementById('foul-injury-panel') ?? document.body;
+          const entered = await window.DiceSlot.d16(host);
+          casVal = Math.min(16, entered + decay);
+          cas = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
+        } else {
+          ({ casVal, cas } = BBResolve.rollCasualty(decay));
+        }
         const el = document.createElement('div');
         el.className = 'bwiz-casualty-result';
         el.innerHTML =
@@ -2082,6 +2134,10 @@ function initThrowWizard() {
     resultEl.className = 'roll-result'; resultEl.hidden = true;
 
     function processThrow(roll) {
+      /* Throw committed — thrower AND thrown team-mate have acted. */
+      if (ws.thrower) window.markPlayerActed?.(ws.throwerSide, ws.thrower.idx, 'throw-teammate');
+      if (ws.thrown)  window.markPlayerActed?.(ws.thrownSide,  ws.thrown.idx,  'thrown');
+
       let outcome, title, cls, desc;
 
       if (ws.useHailMary) {
@@ -2491,10 +2547,15 @@ function buildWizardPlayerList(listId, side, filterFn, onSelect, opts = {}) {
   const playerMap = new Map();
 
   players.forEach(p => {
+    /* Already acted this turn → visible but not selectable
+       (opts.allowActed: e.g. catching a pass is not an action). */
+    const acted = !opts.allowActed && window.hasPlayerActed?.(side, p.idx);
+
     const btn = document.createElement('button');
     btn.type  = 'button';
-    btn.className = 'wps-player-btn';
+    btn.className = 'wps-player-btn' + (acted ? ' wps-acted' : '');
     btn.dataset.playerIdx = p.idx;
+    if (acted) btn.disabled = true;
 
     const stMatch  = p.statsText.match(/\bST\s*(\d+)/i);
     const avMatch  = p.statsText.match(/\bAV\s*(\d+)/i);
@@ -2512,7 +2573,10 @@ function buildWizardPlayerList(listId, side, filterFn, onSelect, opts = {}) {
       ${p.pos    ? `<span class="wps-pos">${esc(p.pos)}</span>` : ''}
       ${statHint ? `<span class="wps-stat-badge">${statHint}</span>` : ''}
       ${statusHtml}
+      ${acted ? '<span class="player-status-badge status-acted">Acted</span>' : ''}
     `;
+
+    if (acted) { container.appendChild(btn); return; }
 
     playerMap.set(p.idx, {
       player: p,
@@ -2600,12 +2664,26 @@ function initSpecialWizard() {
   async function rollOneD6() {
     const tray = document.getElementById('spec-dice-tray');
     tray.innerHTML = '';
+    if (wizardMode('special') === 'physical') {
+      const v = await window.DiceSlot.d6(tray.parentElement ?? tray, 'Enter your D6 roll');
+      const die = document.createElement('div'); buildNumericFace(die, v); tray.appendChild(die);
+      return v;
+    }
     const die = document.createElement('div'); buildNumericFace(die, 1); tray.appendChild(die);
     return rollNumericDie(die);
   }
   async function rollTwoD6() {
     const tray = document.getElementById('spec-dice-tray');
     tray.innerHTML = '';
+    if (wizardMode('special') === 'physical') {
+      const host = tray.parentElement ?? tray;
+      const d1 = await window.DiceSlot.d6(host, 'Enter the first D6');
+      const d2 = await window.DiceSlot.d6(host, 'Enter the second D6');
+      [d1, d2].forEach(v => {
+        const d = document.createElement('div'); buildNumericFace(d, v); tray.appendChild(d);
+      });
+      return [d1, d2];
+    }
     const faces = [0, 1].map(() => { const d = document.createElement('div'); buildNumericFace(d, 1); tray.appendChild(d); return d; });
     return Promise.all(faces.map(f => rollNumericDie(f)));
   }
@@ -2650,6 +2728,7 @@ function initSpecialWizard() {
     rollBtn.textContent = 'Resolving…';
     rollBtn.onclick = null;
     lockPanels();
+    window.markPlayerActed?.(actorSide, actor.idx, 'special');
 
     let victim = target, victimSide = targetSide;
 
@@ -2699,7 +2778,14 @@ function initSpecialWizard() {
 
     if (inj.outcome === 'Casualty') {
       const decay = vSkills.has('Decay') ? 1 : 0;
-      const { casVal, cas } = BBResolve.rollCasualty(decay);
+      let casVal, cas;
+      if (wizardMode('special') === 'physical') {
+        const entered = await window.DiceSlot.d16(document.getElementById('spec-injury-panel') ?? document.body);
+        casVal = Math.min(16, entered + decay);
+        cas = rangeFind(window.BBData?.injury?.casualty, casVal) ?? { result: 'Unknown', 'class': '', desc: '' };
+      } else {
+        ({ casVal, cas } = BBResolve.rollCasualty(decay));
+      }
       const panel = document.getElementById('spec-injury-panel');
       const el = document.createElement('div');
       el.className = 'bwiz-casualty-result';

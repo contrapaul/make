@@ -12,7 +12,7 @@
   left:            0;
   right:           0;
   bottom:          0;
-  z-index:         600;
+  z-index:         var(--z-drive, 600);
   background:      rgba(4, 10, 30, 0.97);
   border:          1px solid rgba(80, 130, 255, 0.22);
   border-radius:   16px 16px 0 0;
@@ -128,7 +128,7 @@
   position:      fixed;
   bottom:        1.2rem;
   right:         1.2rem;
-  z-index:       599;
+  z-index:       var(--z-drive-pill, 599);
   padding:       0.45rem 1rem;
   background:    rgba(4, 10, 30, 0.93);
   border:        1px solid rgba(212, 175, 55, 0.4);
@@ -149,7 +149,7 @@
 .dw-backdrop {
   position:       fixed;
   inset:          0;
-  z-index:        598;
+  z-index:        var(--z-drive-backdrop, 598);
   background:     rgba(0, 5, 20, 0.55);
   opacity:        0;
   pointer-events: none;
@@ -212,7 +212,7 @@
   top:             0;
   right:           0;
   bottom:          0;
-  z-index:         700;
+  z-index:         var(--z-drawer, 700);
   width:           min(360px, 90vw);
   background:      rgba(4, 10, 30, 0.97);
   border-left:     1px solid rgba(80, 130, 255, 0.18);
@@ -261,7 +261,7 @@
 .settings-backdrop {
   position:       fixed;
   inset:          0;
-  z-index:        699;
+  z-index:        calc(var(--z-drawer, 700) - 1);
   background:     rgba(0, 5, 20, 0.48);
   opacity:        0;
   pointer-events: none;

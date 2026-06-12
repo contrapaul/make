@@ -67,41 +67,19 @@
       value:        p.value,
       fact:         p.fact,
       isStarPlayer: !!p.isStarPlayer,
+      photo:        p.photo,
     }));
   }
 
-  /* ── Trading-card markup (matches script.js openModal) ── */
+  /* ── Trading-card markup — shared renderer (js/player-card.js) ── */
   function cardMarkup(player, imageDir) {
-    const isStar = !!player.isStarPlayer;
-    const bg  = POSITION_COLORS[player.position] || '#555';
-    const img = dataURL((imageDir || 'images/') + 'Player' + player.id + '.png');
-    return `
-      <div class="modal-image-area" style="background:${bg};">
-        <img class="modal-img" src="${img}" alt="${esc(player.name)}">
-        <span class="img-placeholder-num" aria-hidden="true">${esc(String(player.id))}</span>
-        <div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">
-          <div class="modal-jersey-circle">${esc(String(player.id))}</div>
-          <div class="modal-overlay-info">
-            <h2 class="modal-name">${esc(player.name)}</h2>
-            <p class="modal-position">${esc(player.position)}${player.qty ? ` <span class="modal-qty">(${esc(player.qty)})</span>` : ''}</p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-stats"><div class="modal-stats-row">
-        ${STAT_KEYS.map(s => `<div class="modal-stat"><span class="ms-label">${s.toUpperCase()}</span><span class="ms-value">${esc(String(player[s] ?? '—'))}</span></div>`).join('')}
-        ${player.value ? `<div class="modal-stat"><span class="ms-label">GP</span><span class="ms-value" style="font-size:0.82rem;">${Math.round(player.value / 1000)}k</span></div>` : ''}
-      </div></div>
-      <div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p><p class="skills-text">${skillLinks(player.skills)}</p></div>
-      ${player.fact ? `<div class="modal-fact">&ldquo;${esc(player.fact)}&rdquo;</div>` : ''}`;
+    return window.PlayerCard.html(player, {
+      imgSrc:       dataURL((imageDir || 'images/') + 'Player' + player.id + '.png'),
+      skillLinksFn: skillLinks,
+    });
   }
 
-  function bindCardImage(card) {
-    const img  = card.querySelector('.modal-img');
-    const stub = card.querySelector('.img-placeholder-num');
-    if (!img) return;
-    img.addEventListener('load',  () => { if (stub) stub.style.display = 'none'; });
-    img.addEventListener('error', () => { img.style.display = 'none'; });
-  }
+  function bindCardImage(card) { window.PlayerCard.bindImage(card); }
 
   /* ── DOM refs ── */
   let content, sidebar, myteamsEl, createBtn;

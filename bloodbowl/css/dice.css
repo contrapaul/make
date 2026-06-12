@@ -10,6 +10,9 @@
   align-items: flex-end;
   padding: 0.25rem 0 0;
   flex-wrap: wrap;
+  /* Dice paint above sibling frames/buttons — never "load under" them */
+  position: relative;
+  z-index: var(--z-dice, 100);
 }
 
 .dice-tray.single {
@@ -26,8 +29,8 @@
 
 /* ── D6 face ── */
 .die-face {
-  width: 60px;
-  height: 60px;
+  width: var(--dice-size, 60px);
+  height: var(--dice-size, 60px);
   background: var(--bb-cream, #F5F0E8);
   border: 2px solid #2A2525;
   border-radius: 10px;

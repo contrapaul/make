@@ -7,7 +7,9 @@
   grid-template-columns: minmax(0, 1fr);
   justify-items:         center;
   align-items:           start;
-  overflow:              hidden !important;
+  /* clip (not hidden): same containment but can never be scroll-shifted,
+     which previously let dice/frames render offset under controls */
+  overflow:              clip !important;
   padding:               0 !important;
 }
 /* Fixed design size — like the block stage. Its footprint never changes with

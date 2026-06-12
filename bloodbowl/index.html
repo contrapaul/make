@@ -1,20 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../WEB/css/jetbrains-mono.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
   <link rel="stylesheet" href="css/game-bar.css">
-  <link rel="stylesheet" href="css/panels.css">
-  <link rel="stylesheet" href="css/dice.css">
-  <link rel="stylesheet" href="css/wizards.css?v=9">
-  <link rel="stylesheet" href="css/pass-v3.css?v=11">
+  <link rel="stylesheet" href="css/panels.css?v=3">
+  <link rel="stylesheet" href="css/dice.css?v=2">
+  <link rel="stylesheet" href="css/wizards.css?v=11">
+  <link rel="stylesheet" href="css/pass-v3.css?v=12">
   <link rel="stylesheet" href="css/pitch.css">
   <link rel="stylesheet" href="css/drive-wizard.css">
-  <link rel="stylesheet" href="css/team-builder.css">
+  <link rel="stylesheet" href="css/team-builder.css?v=2">
   <link rel="stylesheet" href="css/spp.css">
 </head>
 <body class="app-loading">
@@ -37,14 +38,14 @@
 
   <main class="bb-app">
 
-    <!-- ═══════════════ PAGE TITLE ═══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PAGE TITLE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="bb-page-title" aria-label="Yeah so it's kind of like Fantasy Football Chess">
       <span class="bb-title-sub">YEAH SO IT'S KIND OF LIKE</span>
       <span class="bb-title-main">FANTASY FOOTBALL CHESS</span>
       <span class="bb-title-sub">BUT NOT LIKE "FANTASY FOOTBALL", THERE'S ORCS AND STUFF</span>
     </div>
 
-    <!-- ═══════════════ GAME BAR ═══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• GAME BAR â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="game-bar" id="game-bar">
 
       <div class="gb-team gb-home" id="gb-home-team">
@@ -60,6 +61,7 @@
         <div class="gb-start-sub">
           <button class="gb-start-sub-btn" id="gb-game-settings-btn" type="button">Game Settings</button>
           <button class="gb-start-sub-btn" id="gb-my-teams-btn" type="button">My Teams</button>
+          <button class="gb-start-sub-btn" id="gb-end-turn-btn" type="button" title="Clear all 'acted this turn' flags">End Turn</button>
         </div>
       </div>
 
@@ -73,14 +75,14 @@
 
     </div><!-- /.game-bar -->
 
-    <!-- Active prayer indicator — shown after Prayers to Nuffle is rolled -->
+    <!-- Active prayer indicator â€” shown after Prayers to Nuffle is rolled -->
     <div id="active-prayer-banner" hidden class="active-prayer-banner">
-      <span class="apb-icon">✦</span>
+      <span class="apb-icon">âœ¦</span>
       <span class="apb-text" id="active-prayer-text"></span>
-      <button class="apb-dismiss" id="active-prayer-dismiss" title="Dismiss — effect has ended">✕</button>
+      <button class="apb-dismiss" id="active-prayer-dismiss" title="Dismiss â€” effect has ended">âœ•</button>
     </div>
 
-    <!-- ═══════════════ PANELS ZONE ═══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• PANELS ZONE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="panels-zone" id="panels-zone">
 
       <!-- KICKOFF PANEL -->
@@ -95,7 +97,7 @@
           <button class="panel-close" aria-label="Close kickoff panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-kickoff-body">
-          <p class="panel-intro">Roll 2D6 on the Kickoff Event table. Results are read as a sum — but doubles matter for some events.</p>
+          <p class="panel-intro">Roll 2D6 on the Kickoff Event table. Results are read as a sum â€” but doubles matter for some events.</p>
           <div class="dice-tray" id="kickoff-dice-tray">
             <div class="die" id="kickoff-d1" data-value="1" aria-label="First die">
               <div class="die-face"></div>
@@ -105,7 +107,7 @@
             </div>
           </div>
           <button class="roll-btn" id="kickoff-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Kickoff Event
+            <span class="roll-btn-icon">ðŸŽ²</span> Roll Kickoff Event
           </button>
           <div class="roll-result" id="kickoff-result" hidden aria-live="polite"></div>
         </div>
@@ -129,7 +131,7 @@
             <div class="die" id="weather-d2" data-value="1" aria-label="Second die"><div class="die-face"></div></div>
           </div>
           <button class="roll-btn" id="weather-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Weather
+            <span class="roll-btn-icon">ðŸŽ²</span> Roll Weather
           </button>
           <div class="roll-result" id="weather-result" hidden aria-live="polite"></div>
         </div>
@@ -147,12 +149,12 @@
           <button class="panel-close" aria-label="Close prayers panel">&#215;</button>
         </div>
         <div class="panel-body" id="panel-prayers-body">
-          <p class="panel-intro">If a team has fewer Players on the Pitch than the opposition at kick-off, that team may pray to Nuffle for a blessing. Roll a D16 — there are 16 possible blessings.</p>
+          <p class="panel-intro">If a team has fewer Players on the Pitch than the opposition at kick-off, that team may pray to Nuffle for a blessing. Roll a D16 â€” there are 16 possible blessings.</p>
           <div class="dice-tray single" id="prayers-dice-tray">
             <div class="die" id="prayers-d1" data-value="1" data-sides="16" aria-label="D16 die"><div class="die-face d8-face"></div></div>
           </div>
           <button class="roll-btn" id="prayers-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll D16 — Pray to Nuffle
+            <span class="roll-btn-icon">ðŸŽ²</span> Roll D16 â€” Pray to Nuffle
           </button>
           <div class="roll-result" id="prayers-result" hidden aria-live="polite"></div>
         </div>
@@ -182,7 +184,7 @@
               <div class="die" id="deviation-d8" data-value="1" data-sides="8" aria-label="Direction (D8)"><div class="die-face d8-face"></div><span class="die-sub-label">Direction</span></div>
             </div>
             <button class="roll-btn" id="deviation-roll-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Deviation
+              <span class="roll-btn-icon">ðŸŽ²</span> Roll Deviation
             </button>
             <div class="roll-result" id="deviation-result" hidden aria-live="polite"></div>
           </div>
@@ -193,19 +195,19 @@
             </div>
             <div class="compass-wrap" aria-hidden="true">
               <div class="compass" id="bounce-compass">
-                <span class="compass-dir" data-dir="1">↖</span>
-                <span class="compass-dir" data-dir="2">↑</span>
-                <span class="compass-dir" data-dir="3">↗</span>
-                <span class="compass-dir" data-dir="4">←</span>
-                <span class="compass-center">📍</span>
-                <span class="compass-dir" data-dir="5">→</span>
-                <span class="compass-dir" data-dir="6">↙</span>
-                <span class="compass-dir" data-dir="7">↓</span>
-                <span class="compass-dir" data-dir="8">↘</span>
+                <span class="compass-dir" data-dir="1">â†–</span>
+                <span class="compass-dir" data-dir="2">â†‘</span>
+                <span class="compass-dir" data-dir="3">â†—</span>
+                <span class="compass-dir" data-dir="4">â†</span>
+                <span class="compass-center">ðŸ“</span>
+                <span class="compass-dir" data-dir="5">â†’</span>
+                <span class="compass-dir" data-dir="6">â†™</span>
+                <span class="compass-dir" data-dir="7">â†“</span>
+                <span class="compass-dir" data-dir="8">â†˜</span>
               </div>
             </div>
             <button class="roll-btn" id="bounce-roll-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Bounce
+              <span class="roll-btn-icon">ðŸŽ²</span> Roll Bounce
             </button>
             <div class="roll-result" id="bounce-result" hidden aria-live="polite"></div>
           </div>
@@ -216,7 +218,7 @@
               <div class="die" id="throwin-d8" data-value="1" data-sides="8" aria-label="Direction (D8)"><div class="die-face d8-face"></div><span class="die-sub-label">Direction</span></div>
             </div>
             <button class="roll-btn" id="throwin-roll-btn">
-              <span class="roll-btn-icon">🎲</span> Roll Throw-In
+              <span class="roll-btn-icon">ðŸŽ²</span> Roll Throw-In
             </button>
             <div class="roll-result" id="throwin-result" hidden aria-live="polite"></div>
           </div>
@@ -252,7 +254,7 @@
         <div class="panel-body bwiz-panel-body" id="panel-block-body">
           <div class="bwiz-scale-root">
 
-          <!-- ═══ Main wizard row ═══ -->
+          <!-- â•â•â• Main wizard row â•â•â• -->
           <div class="bwiz-outer">
 
             <!-- Attacker block-relevant skills -->
@@ -305,24 +307,24 @@
 
           </div><!-- /.bwiz-outer -->
 
-          <!-- ═══ Results strip ═══ -->
+          <!-- â•â•â• Results strip â•â•â• -->
           <div class="bwiz-results-strip">
 
             <div class="bwiz-result-panel locked" id="block-result-panel">
               <div class="bwiz-result-label">Block Result</div>
-              <div class="bwiz-result-content" id="block-result-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="block-result-content" aria-live="polite">â€”</div>
             </div>
 
             <div class="bwiz-result-panel locked" id="armor-roll-panel">
               <div class="bwiz-result-label">Armor Roll</div>
-              <div class="bwiz-result-content" id="armor-result-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="armor-result-content" aria-live="polite">â€”</div>
               <div class="bwiz-armor-dice-tray" id="armor-dice-tray"></div>
               <button class="roll-btn bwiz-roll-btn-sm" id="armor-roll-btn" hidden>Roll Armor</button>
             </div>
 
             <div class="bwiz-result-panel locked" id="injury-roll-panel">
               <div class="bwiz-result-label">Injury Roll</div>
-              <div class="bwiz-result-content" id="injury-result-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="injury-result-content" aria-live="polite">â€”</div>
               <div class="bwiz-armor-dice-tray" id="injury-dice-tray"></div>
               <button class="roll-btn bwiz-roll-btn-sm" id="injury-roll-btn" hidden>Roll Injury</button>
             </div>
@@ -363,7 +365,7 @@
           <div class="weather-chip-slot" id="wchip-foul" hidden></div>
           <div class="bwiz-scale-root">
 
-          <!-- ═══ Main wizard row ═══ -->
+          <!-- â•â•â• Main wizard row â•â•â• -->
           <div class="bwiz-outer">
 
             <!-- Fouler card column -->
@@ -398,22 +400,22 @@
 
           </div><!-- /.bwiz-outer -->
 
-          <!-- ═══ Results strip ═══ -->
+          <!-- â•â•â• Results strip â•â•â• -->
           <div class="bwiz-results-strip">
 
             <div class="bwiz-result-panel locked" id="foul-armor-panel">
               <div class="bwiz-result-label">Armour Roll</div>
-              <div class="bwiz-result-content" id="foul-armor-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="foul-armor-content" aria-live="polite">â€”</div>
             </div>
 
             <div class="bwiz-result-panel locked" id="foul-injury-panel">
               <div class="bwiz-result-label">Injury Roll</div>
-              <div class="bwiz-result-content" id="foul-injury-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="foul-injury-content" aria-live="polite">â€”</div>
             </div>
 
             <div class="bwiz-result-panel locked" id="foul-ref-panel">
               <div class="bwiz-result-label">The Referee</div>
-              <div class="bwiz-result-content" id="foul-ref-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="foul-ref-content" aria-live="polite">â€”</div>
             </div>
 
           </div><!-- /.bwiz-results-strip -->
@@ -434,7 +436,7 @@
           <button class="panel-close" aria-label="Close special actions panel">&#215;</button>
         </div>
         <div class="panel-body bwiz-panel-body" id="panel-special-body">
-          <p class="panel-intro">Resolve attacks made <em>instead of a Block</em> — Stab, Chainsaw, Breathe Fire, Projectile Vomit, Chomp. Pick the acting player, the action, and a standing target.</p>
+          <p class="panel-intro">Resolve attacks made <em>instead of a Block</em> â€” Stab, Chainsaw, Breathe Fire, Projectile Vomit, Chomp. Pick the acting player, the action, and a standing target.</p>
           <div class="spec-outer">
 
             <div class="spec-col">
@@ -459,15 +461,15 @@
           <div class="bwiz-results-strip">
             <div class="bwiz-result-panel locked" id="spec-hit-panel">
               <div class="bwiz-result-label">To-Hit</div>
-              <div class="bwiz-result-content" id="spec-hit-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="spec-hit-content" aria-live="polite">â€”</div>
             </div>
             <div class="bwiz-result-panel locked" id="spec-armor-panel">
               <div class="bwiz-result-label">Armor Roll</div>
-              <div class="bwiz-result-content" id="spec-armor-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="spec-armor-content" aria-live="polite">â€”</div>
             </div>
             <div class="bwiz-result-panel locked" id="spec-injury-panel">
               <div class="bwiz-result-label">Injury Roll</div>
-              <div class="bwiz-result-content" id="spec-injury-content" aria-live="polite">—</div>
+              <div class="bwiz-result-content" id="spec-injury-content" aria-live="polite">â€”</div>
             </div>
           </div>
 
@@ -512,12 +514,12 @@
             <div class="die" id="injury-d2" data-value="1" aria-label="Second die"><div class="die-face"></div></div>
           </div>
           <button class="roll-btn" id="injury-roll-btn">
-            <span class="roll-btn-icon">🎲</span> Roll Armour Check
+            <span class="roll-btn-icon">ðŸŽ²</span> Roll Armour Check
           </button>
           <div class="roll-result" id="injury-result" hidden aria-live="polite"></div>
           <div class="roll-result" id="injury-inj-result" hidden aria-live="polite"></div>
 
-          <!-- Casualty D16 tray — revealed only when a Casualty! result is rolled -->
+          <!-- Casualty D16 tray â€” revealed only when a Casualty! result is rolled -->
           <div class="dice-tray single" id="casualty-dice-tray" hidden>
             <div class="die" id="injury-cas-d1" data-value="1" data-sides="16" aria-label="Casualty D16">
               <div class="die-face d8-face"></div>
@@ -528,7 +530,7 @@
         </div>
       </div>
 
-      <!-- START GAME — mode select -->
+      <!-- START GAME â€” mode select -->
       <div class="bb-panel" id="panel-startgame" hidden aria-label="Start Game">
         <div class="wiz-header">
           <h2 class="wiz-title">Start Game</h2>
@@ -537,7 +539,7 @@
         <div class="panel-body wiz-body">
           <div class="sg-modes">
 
-            <article class="trading-card mode-card" style="--tc-primary:#1A5A2A;--tc-accent:#1A5A2A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
+            <article class="trading-card mode-card" data-mode="first" style="--tc-primary:#1A5A2A;--tc-accent:#1A5A2A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
               <div class="modal-image-area" style="background:#1A5A2A;">
                 <span class="img-placeholder-num" aria-hidden="true">1</span>
                 <div class="modal-card-overlay">
@@ -553,7 +555,7 @@
               </div>
             </article>
 
-            <article class="trading-card mode-card" style="--tc-primary:#1A3A7A;--tc-accent:#1A3A7A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
+            <article class="trading-card mode-card" data-mode="seasoned" style="--tc-primary:#1A3A7A;--tc-accent:#1A3A7A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
               <div class="modal-image-area" style="background:#1A3A7A;">
                 <span class="img-placeholder-num" aria-hidden="true">2</span>
                 <div class="modal-card-overlay">
@@ -569,7 +571,7 @@
               </div>
             </article>
 
-            <article class="trading-card mode-card" style="--tc-primary:#8B6914;--tc-accent:#8B6914;--tc-gold:#D4AF37;--tc-gold-dark:#5A4410;">
+            <article class="trading-card mode-card" data-mode="pro" style="--tc-primary:#8B6914;--tc-accent:#8B6914;--tc-gold:#D4AF37;--tc-gold-dark:#5A4410;">
               <div class="modal-image-area" style="background:#8B6914;">
                 <span class="img-placeholder-num" aria-hidden="true">3</span>
                 <div class="modal-card-overlay">
@@ -601,6 +603,11 @@
             <p class="gs-section-desc">Statuses (KO, injuries, prone/stunned) and temporary buffs persist for this matchup, even after a reload. Clear them to reset the game state.</p>
             <button class="gs-clear-btn" id="gs-clear-status" type="button">Clear status data</button>
           </div>
+          <div class="gs-section">
+            <h3 class="gs-section-title">Turn Tracking</h3>
+            <p class="gs-section-desc">Players who act (block, pass, foulâ€¦) are greyed out until End Turn. In Consummate Professional mode you can switch this off.</p>
+            <label class="gs-toggle-label"><input type="checkbox" id="gs-track-turns"> Track player actions per turn</label>
+          </div>
         </div>
       </div>
 
@@ -613,7 +620,7 @@
         <div class="panel-body wiz-body"></div>
       </div>
 
-      <!-- CHOOSE TEAM — opened by the "Choose Home/Away Team" buttons -->
+      <!-- CHOOSE TEAM â€” opened by the "Choose Home/Away Team" buttons -->
       <div class="bb-panel" id="panel-chooseteam" hidden aria-label="Choose Team" role="dialog" aria-modal="true">
         <div class="ct-layout">
           <div class="ct-col ct-myteams">
@@ -632,7 +639,7 @@
 
     </div><!-- /.panels-zone -->
 
-    <!-- ═══════════════ ACTION CARDS ═══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• ACTION CARDS â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="bb-action-cards" aria-label="Game action wizards">
       <button class="bb-action-card" data-panel="block">
         <span class="bb-action-card-name">Block</span>
@@ -646,7 +653,7 @@
       <button class="bb-action-card bb-action-card--more" id="bb-more-card">
         <span class="bb-action-card-name">More</span>
       </button>
-      <!-- More actions dropdown — inside cards div so position:absolute works off position:relative parent -->
+      <!-- More actions dropdown â€” inside cards div so position:absolute works off position:relative parent -->
       <div class="bb-more-menu" id="bb-more-menu" hidden>
         <button class="bb-more-item" data-panel="special">Special Actions</button>
         <button class="bb-more-item" data-panel="throw">Throw Team-Mate</button>
@@ -658,7 +665,7 @@
       </div>
     </div>
 
-    <!-- ═══════════════ ROSTER SECTION ═══════════════ -->
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• ROSTER SECTION â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
     <div class="roster-section">
 
       <div class="roster-accordion" id="side-left">
@@ -666,7 +673,7 @@
           <span class="accord-label" id="accord-left-label">Home Roster</span>
           <span class="accord-right">
             <span class="accord-value" id="accord-left-value"></span>
-            <span class="accord-arrow" aria-hidden="true">▾</span>
+            <span class="accord-arrow" aria-hidden="true">â–¾</span>
           </span>
         </button>
         <div class="accordion-body" id="accord-left-body">
@@ -681,7 +688,7 @@
           <span class="accord-label" id="accord-right-label">Away Roster</span>
           <span class="accord-right">
             <span class="accord-value" id="accord-right-value"></span>
-            <span class="accord-arrow" aria-hidden="true">▾</span>
+            <span class="accord-arrow" aria-hidden="true">â–¾</span>
           </span>
         </button>
         <div class="accordion-body" id="accord-right-body">
@@ -695,29 +702,29 @@
 
   </main>
 
-  <!-- ═══════════════ DRIVE WIZARD ═══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• DRIVE WIZARD â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="drive-wizard" id="drive-wizard" hidden aria-label="Drive wizard" role="dialog" aria-modal="true">
     <div class="dw-header">
       <div class="dw-step-dots" id="dw-step-dots"></div>
-      <button class="dw-minimise" id="dw-minimise" aria-label="Minimise drive wizard" title="Minimise">−</button>
+      <button class="dw-minimise" id="dw-minimise" aria-label="Minimise drive wizard" title="Minimise">âˆ’</button>
     </div>
     <div class="dw-content" id="dw-content"></div>
     <div class="dw-nav">
-      <button class="dw-nav-btn" id="dw-back">← Back</button>
-      <button class="dw-nav-btn dw-primary" id="dw-next">Next →</button>
+      <button class="dw-nav-btn" id="dw-back">â† Back</button>
+      <button class="dw-nav-btn dw-primary" id="dw-next">Next â†’</button>
     </div>
   </div>
   <!-- Drive wizard minimised pill -->
   <button class="dw-pill" id="dw-pill" hidden aria-label="Restore drive wizard">
-    ▸ Drive: Step <span id="dw-pill-step">1</span>
+    â–¸ Drive: Step <span id="dw-pill-step">1</span>
   </button>
   <!-- Drive wizard backdrop -->
   <div class="dw-backdrop" id="dw-backdrop"></div>
 
-  <!-- Panel backdrop — dims the page when any module panel is open -->
+  <!-- Panel backdrop â€” dims the page when any module panel is open -->
   <div class="panel-backdrop" id="panel-backdrop"></div>
 
-  <!-- ═══════════════ TRADING CARD MODALS (fixed, full-screen) ═══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• TRADING CARD MODALS (fixed, full-screen) â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="modal-overlay" id="modal-left" hidden role="dialog" aria-modal="true" aria-label="Player card">
     <div class="trading-card" id="card-left"></div>
   </div>
@@ -725,7 +732,7 @@
     <div class="trading-card" id="card-right"></div>
   </div>
 
-  <!-- ═══════════════ SKILL TOOLTIP (unchanged) ═══════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SKILL TOOLTIP (unchanged) â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div class="skill-overlay" id="skill-overlay" hidden role="dialog" aria-modal="true" aria-label="Skill reference">
     <div class="skill-card" id="skill-card"></div>
   </div>
@@ -738,22 +745,25 @@
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
       <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
     </div>
-    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play â€” especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
-  <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
+  <!-- JS â€” load order: dice â†’ state â†’ settings â†’ physical-dice â†’ panels â†’ wizards â†’ app -->
   <script src="js/dice.js"></script>
-  <script src="js/state.js?v=3"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/physical-dice.js"></script>
+  <script src="js/state.js?v=6"></script>
+  <script src="js/settings.js?v=2"></script>
+  <script src="js/tutorial.js"></script>
+  <script src="js/physical-dice.js?v=2"></script>
+  <script src="js/dice-slot.js"></script>
+  <script src="js/player-card.js"></script>
   <script src="js/pitch.js"></script>
   <script src="js/drive-wizard.js"></script>
-  <script src="js/team-builder.js?v=4"></script>
+  <script src="js/team-builder.js?v=5"></script>
   <script src="js/spp-tracker.js"></script>
-  <script src="js/panels.js"></script>
-  <script src="js/wizards.js?v=19"></script>
-  <script src="js/pass-wizard.js?v=9"></script>
-  <script src="script.js?v=5"></script>
+  <script src="js/panels.js?v=2"></script>
+  <script src="js/wizards.js?v=22"></script>
+  <script src="js/pass-wizard.js?v=11"></script>
+  <script src="script.js?v=7"></script>
   <script>
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
@@ -766,26 +776,48 @@
       document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
       document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
       document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.openChooseTeam?.('left'));
+      document.getElementById('gb-end-turn-btn')?.addEventListener('click', () => {
+        window.endTurn?.();
+        const b = document.getElementById('gb-end-turn-btn');
+        if (b) { const t = b.textContent; b.textContent = 'âœ“ New Turn'; setTimeout(() => { b.textContent = t; }, 1200); }
+      });
 
       /* Clear all player conditions (statuses + buffs) for this matchup. */
       document.getElementById('gs-clear-status')?.addEventListener('click', () => {
         if (confirm('Clear all player statuses and buffs for this game?')) {
           window.clearGameState?.();
           const b = document.getElementById('gs-clear-status');
-          if (b) { const t = b.textContent; b.textContent = '✓ Cleared'; setTimeout(() => { b.textContent = t; }, 1500); }
+          if (b) { const t = b.textContent; b.textContent = 'âœ“ Cleared'; setTimeout(() => { b.textContent = t; }, 1500); }
         }
       });
 
-      /* Starting a new game (picking a mode) resets in-progress conditions. */
+      /* Starting a new game (picking a mode) sets the game mode and
+         resets in-progress conditions. */
+      const markModeCards = () => {
+        const m = window.BBSettings?.getSettings().gameMode;
+        document.querySelectorAll('#panel-startgame .mode-card').forEach(c =>
+          c.classList.toggle('mode-card--selected', c.dataset.mode === m));
+      };
+      markModeCards();
       document.querySelectorAll('#panel-startgame .mode-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', () => {
           if (confirm('Start a new game? This clears all player statuses and buffs.')) {
+            window.BBSettings?.setGameMode?.(card.dataset.mode || 'seasoned');
+            markModeCards();
             window.clearGameState?.();
             window.Panels?.closePanel?.('startgame');
+            if (card.dataset.mode === 'first') window.BBTutorial?.start?.();
           }
         });
       });
+
+      /* Professional mode: optional per-turn action tracking */
+      const tt = document.getElementById('gs-track-turns');
+      if (tt) {
+        tt.checked = !!window.BBSettings?.getSettings().trackTurns;
+        tt.addEventListener('change', () => window.BBSettings?.saveSetting('trackTurns', tt.checked));
+      }
 
       const moreCard = document.getElementById('bb-more-card');
       const moreMenu = document.getElementById('bb-more-menu');
