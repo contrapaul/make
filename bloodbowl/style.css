@@ -961,6 +961,13 @@
   filter:  grayscale(0.6);
 }
 
+/* Player has used their action this turn (cleared on End Turn) */
+.status-acted { color: #9AA8C0; background: rgba(120, 130, 150, 0.15); }
+.player-card.player-acted:not(.player-unavailable) {
+  opacity: 0.6;
+  filter:  saturate(0.5);
+}
+
 /* Subtle highlight for prone/stunned (legal foul targets) */
 .player-prone  .player-name { text-decoration: underline dotted rgba(100, 160, 255, 0.5); }
 .player-stunned .player-name { text-decoration: underline dotted rgba(255, 200, 50, 0.5); }

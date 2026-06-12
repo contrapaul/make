@@ -44,8 +44,8 @@
     <!-- Search -->
     <div class="sp-controls">
       <div class="sp-search-wrap">
-        <span class="sp-search-icon">âŒ•</span>
-        <input type="search" class="sp-search" id="sp-search" placeholder="Search star players or skillsâ€¦" autocomplete="off" spellcheck="false">
+        <span class="sp-search-icon">⌕</span>
+        <input type="search" class="sp-search" id="sp-search" placeholder="Search star players or skills…" autocomplete="off" spellcheck="false">
       </div>
       <label class="sp-select-wrap">
         <span class="sp-select-label">League</span>
@@ -74,11 +74,11 @@
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
       <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
     </div>
-    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play â€” especially for new players. It is not designed or intended for any commercial purpose.</p>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
   <script>
-    /* â”€â”€ Nav toggle â”€â”€ */
+    /* ── Nav toggle ── */
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
       const nav    = document.getElementById('bb-nav');
@@ -96,24 +96,24 @@
       });
     })();
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-       STAR PLAYERS â€” trading cards, filtered by league + cost
-       â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ═══════════════════════════════════════════════════════
+       STAR PLAYERS — trading cards, filtered by league + cost
+       ═══════════════════════════════════════════════════════ */
     (function () {
       const STAT_KEYS = ['ma', 'st', 'ag', 'pa', 'av'];
       const STAR_BG   = '#8B6914';
 
-      /* Cost brackets (gp). Data ranges 70kâ€“340k. */
+      /* Cost brackets (gp). Data ranges 70k–340k. */
       const COST_TIERS = [
         { key: 'all',  label: 'All Costs', min: 0,      max: Infinity },
-        { key: 'c1',   label: 'â‰¤ 120k',    min: 0,      max: 120000 },
-        { key: 'c2',   label: '130â€“190k',  min: 121000, max: 190000 },
-        { key: 'c3',   label: '200â€“260k',  min: 191000, max: 260000 },
+        { key: 'c1',   label: '≤ 120k',    min: 0,      max: 120000 },
+        { key: 'c2',   label: '130–190k',  min: 121000, max: 190000 },
+        { key: 'c3',   label: '200–260k',  min: 191000, max: 260000 },
         { key: 'c4',   label: '270k +',    min: 261000, max: Infinity },
       ];
 
       let stars        = [];
-      let teamNames    = {};       /* id â†’ display name */
+      let teamNames    = {};       /* id → display name */
       let activeLeague = 'all';    /* 'all' | team id */
       let activeCost   = 'all';
       let searchQuery  = '';
@@ -123,7 +123,7 @@
       }
       function skillLinks(str) {
         const sk = (str || '').split(',').map(s => s.trim()).filter(Boolean);
-        if (!sk.length) return '<span class="no-skills">â€”</span>';
+        if (!sk.length) return '<span class="no-skills">—</span>';
         return sk.map(n => `<span class="skill-link" data-skill="${esc(n)}">${esc(n)}</span>`)
           .join('<span class="skill-sep">, </span>');
       }
@@ -141,9 +141,9 @@
       function cardMarkup(star) {
         return `
           <div class="modal-image-area" style="background:${STAR_BG};">
-            <span class="img-placeholder-num" aria-hidden="true">â˜…</span>
+            <span class="img-placeholder-num" aria-hidden="true">★</span>
             <div class="modal-card-overlay star-overlay">
-              <div class="modal-jersey-circle">â˜…</div>
+              <div class="modal-jersey-circle">★</div>
               <div class="modal-overlay-info">
                 <h2 class="modal-name">${esc(star.name)}</h2>
                 <p class="modal-position">Star Player</p>
@@ -151,7 +151,7 @@
             </div>
           </div>
           <div class="modal-stats"><div class="modal-stats-row">
-            ${STAT_KEYS.map(s => `<div class="modal-stat"><span class="ms-label">${s.toUpperCase()}</span><span class="ms-value">${esc(String(star[s] ?? 'â€”'))}</span></div>`).join('')}
+            ${STAT_KEYS.map(s => `<div class="modal-stat"><span class="ms-label">${s.toUpperCase()}</span><span class="ms-value">${esc(String(star[s] ?? '—'))}</span></div>`).join('')}
             <div class="modal-stat"><span class="ms-label">GP</span><span class="ms-value" style="font-size:0.82rem;">${fmtGP(star.value)}</span></div>
           </div></div>
           <div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p><p class="skills-text">${skillLinks(star.skills)}</p></div>
@@ -166,7 +166,7 @@
         card.style.setProperty('--tc-bg', '#2a2410');
       }
 
-      /* â”€â”€ Full-size popup â”€â”€ */
+      /* ── Full-size popup ── */
       const playerOverlay = document.getElementById('sp-player-modal');
       const playerCard    = document.getElementById('sp-player-card');
       function openPlayer(star) {
@@ -184,7 +184,7 @@
       playerOverlay.addEventListener('click', e => { if (e.target === playerOverlay) closePlayer(); });
       document.addEventListener('keydown', e => { if (e.key === 'Escape' && !playerOverlay.hasAttribute('hidden')) closePlayer(); });
 
-      /* â”€â”€ Render grid â”€â”€ */
+      /* ── Render grid ── */
       function render() {
         const grid  = document.getElementById('sp-grid');
         const count = document.getElementById('sp-count');
@@ -223,7 +223,7 @@
         });
       }
 
-      /* â”€â”€ Build filters â”€â”€ */
+      /* ── Build filters ── */
       function buildCostFilters() {
         const wrap = document.getElementById('sp-cost-filters');
         wrap.innerHTML = COST_TIERS.map(t => {
@@ -259,7 +259,7 @@
         render();
       });
 
-      /* â”€â”€ Load data â”€â”€ */
+      /* ── Load data ── */
       Promise.all([
         fetch('../data/star-players.json').then(r => r.json()),
         fetch('../data/teams.json').then(r => r.json()).catch(() => []),

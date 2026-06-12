@@ -265,6 +265,17 @@ window.hasPlayerActed  = hasPlayerActed;
 window.markPlayerActed = markPlayerActed;
 window.endTurn         = endTurn;
 
+/* Keep roster rows in sync with turn flags */
+document.addEventListener('bb:playerActed', e => {
+  const { side, idx } = e.detail || {};
+  if (side != null) refreshPlayerCard(side, idx, getPlayerStatus(side, idx));
+});
+document.addEventListener('bb:turnEnd', () => {
+  ['left', 'right'].forEach(side =>
+    (getPlayerList(side) || []).forEach(p =>
+      refreshPlayerCard(side, p.idx, getPlayerStatus(side, p.idx))));
+});
+
 /* ── Temporary effects (buffs / debuffs) — a parallel channel to status ──
    Effect: { id, label, kind:'buff'|'debuff', statMods:{ST,MA,AG,PA,AV},
              grantsSkill?, removeOn:'untilRoll'|'drive'|'half'|'permanent', source } */
@@ -352,6 +363,17 @@ function refreshPlayerCard(side, idx, status) {
     b.textContent = e.label;
     card.appendChild(b);
   });
+
+  /* Acted-this-turn badge (turn tracking) */
+  card.querySelector('.player-acted-badge')?.remove();
+  const acted = hasPlayerActed(side, idx);
+  if (acted) {
+    const b = document.createElement('span');
+    b.className = 'player-status-badge status-acted player-acted-badge';
+    b.textContent = 'Acted';
+    card.appendChild(b);
+  }
+  card.classList.toggle('player-acted', acted);
 
   card.classList.toggle('player-unavailable', meta.dim);
   card.classList.toggle('player-prone',   status === PlayerStatus.PRONE);

@@ -25,6 +25,10 @@
   flex-direction: column;
   align-items: center;
   gap: 0.35rem;
+  /* Every die paints above sibling frames/buttons, even outside a
+     .dice-tray (e.g. pass-wizard scatter cards) */
+  position: relative;
+  z-index: var(--z-dice, 100);
 }
 
 /* ── D6 face ── */

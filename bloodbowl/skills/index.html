@@ -44,12 +44,12 @@
     <!-- Search -->
     <div class="skills-controls">
       <div class="skills-search-wrap">
-        <span class="skills-search-icon">âŒ•</span>
+        <span class="skills-search-icon">⌕</span>
         <input
           type="search"
           class="skills-search"
           id="skills-search"
-          placeholder="Search skillsâ€¦"
+          placeholder="Search skills…"
           autocomplete="off"
           spellcheck="false"
         >
@@ -72,11 +72,11 @@
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
       <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
     </div>
-    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play â€” especially for new players. It is not designed or intended for any commercial purpose.</p>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
   <script>
-    /* â”€â”€ Nav toggle â”€â”€ */
+    /* ── Nav toggle ── */
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');
       const nav    = document.getElementById('bb-nav');
@@ -94,7 +94,7 @@
       });
     })();
 
-    /* â”€â”€ Category config â”€â”€ */
+    /* ── Category config ── */
     const CATEGORIES = [
       { key: 'All',               label: 'All',           color: 'rgba(255,255,255,0.5)' },
       { key: 'General Skill',     label: 'General',       color: '#2563EB' },
@@ -120,7 +120,7 @@
       'Star Player Trait': 'Star Player',
     };
 
-    /* â”€â”€ localStorage team data â”€â”€ */
+    /* ── localStorage team data ── */
     function loadTeamSkills(side) {
       /* side: 'home' | 'away' */
       try {
@@ -134,12 +134,12 @@
       catch (_) { return null; }
     }
 
-    /* â”€â”€ State â”€â”€ */
+    /* ── State ── */
     let allSkills    = [];
     let activeFilter = 'All';   /* 'All' | category key | 'home' | 'away' */
     let searchQuery  = '';
 
-    /* â”€â”€ Helpers â”€â”€ */
+    /* ── Helpers ── */
     function escRe(s) {
       return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
@@ -157,7 +157,7 @@
       return escHtml(text).replace(re, '<mark>$1</mark>');
     }
 
-    /* â”€â”€ Render â”€â”€ */
+    /* ── Render ── */
     function render() {
       const grid  = document.getElementById('skills-grid');
       const count = document.getElementById('skills-count');
@@ -197,7 +197,7 @@
       if (visible.length === 0) {
         if ((activeFilter === 'home' || activeFilter === 'away') && !teamSkillSet) {
           const side = activeFilter === 'home' ? 'Home' : 'Away';
-          grid.innerHTML = `<p class="skills-empty">No ${side} team loaded â€” select a team on the <a href="../" style="color:rgba(212,175,55,0.8)">main page</a> first.</p>`;
+          grid.innerHTML = `<p class="skills-empty">No ${side} team loaded — select a team on the <a href="../" style="color:rgba(212,175,55,0.8)">main page</a> first.</p>`;
         } else {
           grid.innerHTML = '<p class="skills-empty">No skills match your search.</p>';
         }
@@ -213,13 +213,13 @@
   <div class="sk-card-header">
     <span class="sk-card-name">${highlight(skill.name, searchQuery.trim())}</span>
     <span class="sk-card-badge">${badge}</span>
-  </div>${mandatory ? '\n  <div class="sk-card-mandatory">âš  Mandatory</div>' : ''}
+  </div>${mandatory ? '\n  <div class="sk-card-mandatory">⚠ Mandatory</div>' : ''}
   <p class="sk-card-desc">${highlight(skill.description, searchQuery.trim())}</p>
 </article>`;
       }).join('\n');
     }
 
-    /* â”€â”€ Build filter buttons â”€â”€ */
+    /* ── Build filter buttons ── */
     function buildFilters(skills) {
       const counts = {};
       skills.forEach(s => { counts[s.category] = (counts[s.category] || 0) + 1; });
@@ -249,8 +249,8 @@
 
       const homeLabel = homeName ? escHtml(homeName) : 'My Team';
       const awayLabel = awayName ? escHtml(awayName) : 'Away Team';
-      const homeSuffix = homeCount !== null ? ` <span style="opacity:.55">(${homeCount})</span>` : ' <span style="opacity:.35">â€”</span>';
-      const awaySuffix = awayCount !== null ? ` <span style="opacity:.55">(${awayCount})</span>` : ' <span style="opacity:.35">â€”</span>';
+      const homeSuffix = homeCount !== null ? ` <span style="opacity:.55">(${homeCount})</span>` : ' <span style="opacity:.35">—</span>';
+      const awaySuffix = awayCount !== null ? ` <span style="opacity:.55">(${awayCount})</span>` : ' <span style="opacity:.35">—</span>';
 
       const teamButtons = `
 <span class="skills-filter-divider" aria-hidden="true"></span>
@@ -271,13 +271,13 @@
       });
     }
 
-    /* â”€â”€ Search input â”€â”€ */
+    /* ── Search input ── */
     document.getElementById('skills-search').addEventListener('input', e => {
       searchQuery = e.target.value;
       render();
     });
 
-    /* â”€â”€ Load data â”€â”€ */
+    /* ── Load data ── */
     fetch('../data/skills.json')
       .then(r => r.json())
       .then(data => {

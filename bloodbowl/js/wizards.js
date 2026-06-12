@@ -1,19 +1,19 @@
 ﻿'use strict';
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   Blood Bowl Companion â€” js/wizards.js
+/* ═══════════════════════════════════════════════════════
+   Blood Bowl Companion — js/wizards.js
    Block, Pass, Foul, Throw Team-Mate wizards.
    Depends on: dice.js, panels.js (BBData), settings.js, physical-dice.js
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════ */
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────────────────
    BLOCK DIE
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ──────────────────────────────────────────────────────── */
 
 /* Nuffle Dice font character map (see Nuffle Dice.woff2):
    J=push arrow, K=attacker down skull, L=both down burst,
    M=stumble burst, N=defender down skull, O-T=weather icons */
-const NUFFLE_NUM  = n => String.fromCharCode(64 + n); // A=1 â€¦ I=9
+const NUFFLE_NUM  = n => String.fromCharCode(64 + n); // A=1 … I=9
 const NUFFLE_WEATHER = { verySunny:'O', nice:'P', pouringRain:'Q', blizzard:'R', sweltering:'S', heavyRain:'T' };
 
 const BLOCK_FACES = [
@@ -116,9 +116,9 @@ function rollBlockDie(faceEl) {
   });
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────────────────
    SHARED UTILITIES
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ──────────────────────────────────────────────────────── */
 
 function bindStepper(el, min, max, onChange) {
   if (!el) return { get: () => min, set: () => {} };
@@ -198,12 +198,12 @@ function FitScale(container, content, opts = {}) {
 }
 window.FitScale = FitScale;
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════════════════════
    SHARED ARMOUR / INJURY / CASUALTY RULES
    Pure functions used by BOTH the Block wizard and the Special Actions
    wizard so the rules (Mighty Blow, Claws, Iron Hard Skin, Stunty,
    Thick Skull, Decay, casualty table) live in one place.
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ════════════════════════════════════════════════════════ */
 const BBResolve = {
   /* Does 2D6 break armour? `bonus` is any +N (e.g. Mighty Blow, Chainsaw +3);
      Claws breaks on a natural 8+; Iron Hard Skin cancels modifiers & Claws. */
@@ -302,9 +302,9 @@ function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
   return { avVal, card };
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════════════════════
    BLOCK WIZARD  (full rebuild)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ════════════════════════════════════════════════════════ */
 
 /* Skills that affect block outcomes — referenced in the side columns and
    consulted by the resolution engine. Attacker = the blocking player;
@@ -329,7 +329,7 @@ function initBlockWizard() {
   const defBanner  = document.getElementById('block-def-picks-banner');
   if (!rollBtn) return;
 
-  /* â”€â”€ State â”€â”€ */
+  /* ── State ── */
   let attST = 3, defST = 3, attAst = 0, defAst = 0;
   let attSkills = new Set(), defSkills = new Set();
   let attAV = 9, defAV = 9;          // armor values (parsed from statsText)
@@ -339,7 +339,7 @@ function initBlockWizard() {
   let chosenFace  = null;            // the face the user confirmed
   let rrUsed      = false;           // team re-roll consumed this action
 
-  /* â”€â”€ Skill-resolution state (full simulation) â”€â”€ */
+  /* ── Skill-resolution state (full simulation) ── */
   let isBlitz      = false;          // block is part of a Blitz action
   let multiBlock   = false;          // attacker using Multiple Block (-2 ST)
   let dauntlessOn  = false;          // Dauntless succeeded → treat ST as equal
@@ -348,7 +348,7 @@ function initBlockWizard() {
   let preBlockDone = false;          // pre-block reactions resolved (once per action)
   let stMods       = { att: 0 };     // transient ST modifiers from skills (Horns)
 
-  /* â”€â”€ Skill helpers â”€â”€ */
+  /* ── Skill helpers ── */
   const attHas = n => attSkills.has(n);
   const defHas = n => defSkills.has(n);
 
@@ -430,7 +430,7 @@ function initBlockWizard() {
     return { value: v, row };
   }
 
-  /* â”€â”€ Phase 1a fix: "over double" is strictly > not >= â”€â”€ */
+  /* ── Phase 1a fix: "over double" is strictly > not >= ── */
   function calcBlock() {
     const a = effAttST() + attAst;
     const d = defST + defAst;
@@ -441,7 +441,7 @@ function initBlockWizard() {
     return                 { count: 2, who: 'defender picks', attFav: false };
   }
 
-  /* â”€â”€ ST compare display â”€â”€ */
+  /* ── ST compare display ── */
   function updateStDisplay() {
     const compareEl = document.getElementById('block-st-compare');
     if (!compareEl) return;
@@ -458,7 +458,7 @@ function initBlockWizard() {
     renderRerolls();
   }
 
-  /* â”€â”€ Dice tray â”€â”€ */
+  /* ── Dice tray ── */
   function renderDiceTray(count) {
     const tray = document.getElementById('block-dice-tray');
     if (!tray) return;
@@ -472,7 +472,7 @@ function initBlockWizard() {
     }
   }
 
-  /* â”€â”€ Assist dots â”€â”€ */
+  /* ── Assist dots ── */
   function renderAssistDots(elId, count, teamSide, onChangeFn) {
     const el = document.getElementById(elId);
     if (!el) return;
@@ -504,7 +504,7 @@ function initBlockWizard() {
     el.appendChild(row);
   }
 
-  /* â”€â”€ Re-roll dots â”€â”€ */
+  /* ── Re-roll dots ── */
   function renderRerolls() {
     const el = document.getElementById('block-rerolls');
     if (!el) return;
@@ -541,13 +541,13 @@ function initBlockWizard() {
     }
   }
 
-  /* â”€â”€ Embedded trading card â”€â”€ */
+  /* ── Embedded trading card ── */
   function buildEmbeddedCard(wrapEl, player, side) {
     const { avVal } = buildEmbeddedCardShared(wrapEl, player, side);
     if (side === "left") { attAV = avVal; } else { defAV = avVal; }
   }
 
-  /* â”€â”€ Load block-relevant skills into side column â”€â”€ */
+  /* ── Load block-relevant skills into side column ── */
   function loadBlockSkills(side, player) {
     const colId     = side === 'att' ? 'block-att-skills-col' : 'block-def-skills-col';
     const whitelist = side === 'att' ? ATT_BLOCK_SKILLS : DEF_BLOCK_SKILLS;
@@ -586,7 +586,7 @@ function initBlockWizard() {
     });
   }
 
-  /* â”€â”€ Show picker for a side (hide card) â”€â”€ */
+  /* ── Show picker for a side (hide card) ── */
   function showPicker(side) {
     const wrap   = document.getElementById(`block-${side}-card-wrap`);
     const picker = document.getElementById(`block-${side}-picker`);
@@ -649,15 +649,15 @@ function initBlockWizard() {
     defCard?.classList.toggle('bwiz-card-glow-def', both);
   }
 
-  /* â”€â”€ Change buttons â”€â”€ */
+  /* ── Change buttons ── */
   document.getElementById('block-change-att')?.addEventListener('click', () => showPicker('att'));
   document.getElementById('block-change-def')?.addEventListener('click', () => showPicker('def'));
 
-  /* â”€â”€ Assist dots â”€â”€ */
+  /* ── Assist dots ── */
   renderAssistDots('block-att-assists-dots', 6, 'left',  v => { attAst = v; updateStDisplay(); });
   renderAssistDots('block-def-assists-dots', 6, 'right', v => { defAst = v; updateStDisplay(); });
 
-  /* â”€â”€ Reset all roll state â”€â”€ */
+  /* ── Reset all roll state ── */
   function resetRoll() {
     rolledFaces = [];
     chosenFace  = null;
@@ -697,7 +697,7 @@ function initBlockWizard() {
     setGlow('off');
   }
 
-  /* â”€â”€ Phase 1b+1c: interpret chosen face with active skills â”€â”€ */
+  /* ── Phase 1b+1c: interpret chosen face with active skills ── */
   function pName(player) {
     return player?.playerData?.name ?? player?.name ?? '?';
   }
@@ -903,7 +903,7 @@ function initBlockWizard() {
     return row;
   }
 
-  /* â”€â”€ Armor roll â”€â”€ */
+  /* ── Armor roll ── */
   function unlockArmorRoll(knockedSide, nextSide = null) {
     const armorPanel = document.getElementById('armor-roll-panel');
     const armorNote  = document.getElementById('armor-result-content');
@@ -969,7 +969,7 @@ function initBlockWizard() {
     }
   }
 
-  /* â”€â”€ Injury roll â”€â”€ */
+  /* ── Injury roll ── */
   function unlockInjuryRoll(knockedSide, nextSide = null) {
     const injPanel = document.getElementById('injury-roll-panel');
     if (!injPanel) return;
@@ -1110,7 +1110,7 @@ function initBlockWizard() {
       : [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
   }
 
-  /* â”€â”€ Pre-block reactions (resolved once per block action) â”€â”€ */
+  /* ── Pre-block reactions (resolved once per block action) ── */
   async function preBlock() {
     if (preBlockDone) return { abort: false };
     preBlockDone = true;
@@ -1182,7 +1182,7 @@ function initBlockWizard() {
     }
   }
 
-  /* â”€â”€ Main roll â”€â”€ */
+  /* ── Main roll ── */
   async function doRoll() {
     rollBtn.disabled   = true;
     setGlow('off');
@@ -1299,7 +1299,7 @@ function initBlockWizard() {
     await interpretResult(chosenFace);
   });
 
-  /* â”€â”€ Init â”€â”€ */
+  /* ── Init ── */
   updateStDisplay();
   resetRoll();
 
@@ -1337,11 +1337,11 @@ function initBlockWizard() {
   rollBtn.onclick = doRoll;
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   PASS WIZARD  (Sprint 3 rebuild â€” 8-step sequence)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ════════════════════════════════════════════════════════
+   PASS WIZARD  (Sprint 3 rebuild — 8-step sequence)
+   ════════════════════════════════════════════════════════ */
 
-/* â”€â”€ Skill extraction from a player card DOM element â”€â”€ */
+/* ── Skill extraction from a player card DOM element ── */
 function getPlayerSkills(playerObj) {
   if (!playerObj?.card) return [];
   const domSkills = Array.from(playerObj.card.querySelectorAll('.skill-link'))
@@ -1359,7 +1359,7 @@ function hasSkill(playerObj, name) {
   return getPlayerSkills(playerObj).some(s => s.toLowerCase() === lc);
 }
 
-/* â”€â”€ Shared skill-use prompt â€” returns Promise<boolean>
+/* ── Shared skill-use prompt — returns Promise<boolean>
    Renders inline Yes/No buttons in `containerEl`.
    Resolves true if the user chooses to use the skill, false otherwise.
 
@@ -1367,8 +1367,8 @@ function hasSkill(playerObj, name) {
    If used: caller should re-roll the original die and handle new result.
 
    For Pro specifically: on click "Use Pro", roll D6 automatically.
-   If result >= 4 â†’ resolve true (caller may re-roll).
-   If result < 4  â†’ resolve false (Pro failed, proceed to failure path). */
+   If result >= 4 → resolve true (caller may re-roll).
+   If result < 4  → resolve false (Pro failed, proceed to failure path). */
 function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
   return new Promise(resolve => {
     if (!hasSkill(playerObj, skillName)) { resolve(false); return; }
@@ -1400,7 +1400,7 @@ function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
         const proOk = proVal >= 4;
         const proRes = document.createElement('span');
         proRes.style.cssText = `font-family:JetBrains Mono,monospace;font-size:0.65rem;font-weight:700;color:${proOk ? '#81c784' : '#ff8fa0'};margin-left:0.25rem;`;
-        proRes.textContent = proOk ? `${proVal} âœ“ Pro succeeds â€” re-roll!` : `${proVal} âœ— Pro failed.`;
+        proRes.textContent = proOk ? `${proVal} ✓ Pro succeeds — re-roll!` : `${proVal} ✗ Pro failed.`;
         wrap.appendChild(proRes);
         resolve(proOk);
       });
@@ -1427,7 +1427,7 @@ function promptSkillUse(playerObj, skillName, containerEl, rollD6Fn) {
   });
 }
 
-/* Parse a stat value from the card stats text (e.g. "AG3+" â†’ 3, "PAâ€”" â†’ null) */
+/* Parse a stat value from the card stats text (e.g. "AG3+" → 3, "PA—" → null) */
 function parseStat(statsText, key) {
   const m = statsText.match(new RegExp(`\\b${key}\\s*(\\d+)`, 'i'));
   return m ? parseInt(m[1], 10) : null;
@@ -1480,9 +1480,9 @@ function buildRosterTabs(el, { tabsId, initialSide = 'left', filterFn, onSelect 
 
 
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════════════════════
    FOUL WIZARD
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ════════════════════════════════════════════════════════ */
 
 function initFoulWizard() {
   const panel   = document.getElementById('panel-foul');
@@ -1749,15 +1749,15 @@ function initFoulWizard() {
   });
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   THROW TEAM-MATE WIZARD  (Sprint 4 rebuild â€” 8-step)
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ════════════════════════════════════════════════════════
+   THROW TEAM-MATE WIZARD  (Sprint 4 rebuild — 8-step)
+   ════════════════════════════════════════════════════════ */
 
 function initThrowWizard() {
   const panel = document.getElementById('panel-throw');
   if (!panel) return;
 
-  /* â”€â”€ Wizard state â”€â”€ */
+  /* ── Wizard state ── */
   const ws = {
     step: 1,
     thrower:     null,
@@ -1787,32 +1787,39 @@ function initThrowWizard() {
 
   const body = panel.querySelector('.panel-body');
 
-  /* â”€â”€ Shell builder â”€â”€ */
+  /* ── Shell builder ── */
   function buildShell() {
-    body.innerHTML = '';
+    /* Persistent fixed-design stage (FitScale) like Block/Foul/Special. */
+    let root = body.querySelector('.bwiz-scale-root');
+    if (!root) {
+      root = document.createElement('div');
+      root.className = 'bwiz-scale-root bwiz-scale-root--throw';
+      body.appendChild(root);
+    }
+    root.innerHTML = '';
     const sumEl = document.createElement('div');
     sumEl.className = 'pass-summary-strip'; sumEl.id = 'twiz-summary';
-    body.appendChild(sumEl);
+    root.appendChild(sumEl);
     const indEl = document.createElement('div');
     indEl.className = 'pass-step-indicator'; indEl.id = 'twiz-ind';
-    body.appendChild(indEl);
+    root.appendChild(indEl);
     const contentEl = document.createElement('div');
     contentEl.id = 'twiz-content';
-    body.appendChild(contentEl);
+    root.appendChild(contentEl);
     const navEl = document.createElement('div');
     navEl.className = 'pass-nav';
-    navEl.innerHTML = `<button class="pass-nav-btn" id="twiz-back">â† Back</button><button class="pass-nav-btn nav-primary" id="twiz-next">Next â†’</button>`;
-    body.appendChild(navEl);
+    navEl.innerHTML = `<button class="pass-nav-btn" id="twiz-back">← Back</button><button class="pass-nav-btn nav-primary" id="twiz-next">Next →</button>`;
+    root.appendChild(navEl);
     document.getElementById('twiz-back').addEventListener('click', () => go(ws.step - 1));
     document.getElementById('twiz-next').addEventListener('click', () => go(ws.step + 1));
   }
 
-  /* â”€â”€ Step definitions â”€â”€ */
+  /* ── Step definitions ── */
   const ALL_STEPS = [
     { id: 1, label: 'Thrower'  },
     { id: 2, label: 'Thrown'   },
     { id: 3, label: 'Range'    },
-    { id: 4, label: 'ðŸ– Hungry' },
+    { id: 4, label: '🍖 Hungry' },
     { id: 5, label: 'Throw'    },
     { id: 6, label: 'Scatter'  },
     { id: 7, label: 'Land'     },
@@ -1841,7 +1848,7 @@ function initThrowWizard() {
     render();
   }
 
-  /* â”€â”€ Render â”€â”€ */
+  /* ── Render ── */
   function render() {
     const active = activeSteps();
 
@@ -1865,7 +1872,7 @@ function initThrowWizard() {
     const lastStep = active[active.length - 1];
     if (backBtn) backBtn.disabled = ws.step === active[0];
     if (nextBtn) {
-      nextBtn.textContent = ws.step === lastStep ? 'Done âœ“' : 'Next â†’';
+      nextBtn.textContent = ws.step === lastStep ? 'Done ✓' : 'Next →';
       nextBtn.disabled = ws.step === lastStep;
     }
 
@@ -1886,19 +1893,19 @@ function initThrowWizard() {
     updateSummary();
   }
 
-  /* â”€â”€ Summary strip â”€â”€ */
+  /* ── Summary strip ── */
   function updateSummary() {
     const el = document.getElementById('twiz-summary');
     if (!el) return;
-    const thrName  = ws.thrower?.name ?? 'â€”';
-    const thnName  = ws.thrown?.name  ?? 'â€”';
+    const thrName  = ws.thrower?.name ?? '—';
+    const thnName  = ws.thrown?.name  ?? '—';
     const rng      = ws.rangeTarget === 4 ? 'Short' : 'Long';
-    const res      = ws.throwResult ?? (ws.hungryResult === 'eaten' ? 'ðŸ– Eaten!' : 'â€”');
+    const res      = ws.throwResult ?? (ws.hungryResult === 'eaten' ? '🍖 Eaten!' : '—');
     const resCls   = ws.throwResult === 'superb' || ws.throwResult === 'accurate' ? 'ok'
                    : (ws.throwResult === 'fumble' || ws.hungryResult === 'eaten') ? 'bad' : '';
     el.innerHTML = `
       <span class="pass-sum-name">${esc(thrName)}</span>
-      <span class="pass-sum-sep">â‡’</span>
+      <span class="pass-sum-sep">⇒</span>
       <span class="pass-sum-name">${esc(thnName)}</span>
       <span class="pass-sum-sep">|</span>
       <span class="pass-sum-range">${rng} (${ws.rangeTarget}+)</span>
@@ -1907,9 +1914,9 @@ function initThrowWizard() {
     `;
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-     STEP 1: THROWER â€” must have Throw Team-Mate trait
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ─────────────────────────────────────────────────────
+     STEP 1: THROWER — must have Throw Team-Mate trait
+     ──────────────────────────────────────────────────── */
   function renderThrower(el) {
     el.innerHTML = '<div class="pwiz-step-title">Select Thrower</div>';
     const note = document.createElement('p');
@@ -1937,18 +1944,18 @@ function initThrowWizard() {
         const chips = document.createElement('div');
         chips.className = 'pwiz-mod-row twiz-skill-chips';
         chips.style.marginTop = '0.5rem';
-        if (ws.hasAlwaysHungry) chips.innerHTML += `<span class="pwiz-skill-chip neg">ðŸ– Always Hungry</span>`;
-        if (ws.hasStrongArm)    chips.innerHTML += `<span class="pwiz-skill-chip pos">ðŸ’ª Strong Arm +1</span>`;
+        if (ws.hasAlwaysHungry) chips.innerHTML += `<span class="pwiz-skill-chip neg">🍖 Always Hungry</span>`;
+        if (ws.hasStrongArm)    chips.innerHTML += `<span class="pwiz-skill-chip pos">💪 Strong Arm +1</span>`;
         if (ws.hasHailMary)     chips.innerHTML += `<span class="pwiz-skill-chip pos">Hail Mary Pass</span>`;
-        if (ws.hasBullseye)     chips.innerHTML += `<span class="pwiz-skill-chip pos">ðŸŽ¯ Bullseye</span>`;
+        if (ws.hasBullseye)     chips.innerHTML += `<span class="pwiz-skill-chip pos">🎯 Bullseye</span>`;
         if (chips.innerHTML) el.appendChild(chips);
       },
     });
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-     STEP 2: THROWN PLAYER â€” must have Right Stuff trait
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ─────────────────────────────────────────────────────
+     STEP 2: THROWN PLAYER — must have Right Stuff trait
+     ──────────────────────────────────────────────────── */
   function renderThrown(el) {
     el.innerHTML = '<div class="pwiz-step-title">Select Thrown Player</div>';
     const note = document.createElement('p');
@@ -1981,9 +1988,9 @@ function initThrowWizard() {
     });
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 3: RANGE & OPTIONS
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     ──────────────────────────────────────────────────── */
   function renderRange(el) {
     el.innerHTML = `<div class="pwiz-step-title">Range &amp; Options</div>`;
 
@@ -1997,7 +2004,7 @@ function initThrowWizard() {
     rangePicker.style.marginBottom = '0.5rem';
 
     [{ label: 'Short (4+)', target: 4, desc: 'Up to 3 squares' },
-     { label: 'Long (5+)',  target: 5, desc: '4â€“6 squares' }].forEach(opt => {
+     { label: 'Long (5+)',  target: 5, desc: '4–6 squares' }].forEach(opt => {
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'av-btn';
       btn.textContent = opt.label; btn.title = opt.desc;
@@ -2034,7 +2041,7 @@ function initThrowWizard() {
     if (ws.hasStrongArm) {
       const chipRow = document.createElement('div');
       chipRow.className = 'pwiz-mod-row'; chipRow.style.marginTop = '0.4rem';
-      chipRow.innerHTML = `<span class="pwiz-skill-chip pos">ðŸ’ª Strong Arm: +1 to throw roll</span>`;
+      chipRow.innerHTML = `<span class="pwiz-skill-chip pos">💪 Strong Arm: +1 to throw roll</span>`;
       el.appendChild(chipRow);
     }
 
@@ -2047,7 +2054,7 @@ function initThrowWizard() {
       const bar = document.getElementById('twiz-target-bar');
       if (!bar) return;
       if (ws.useHailMary) {
-        bar.innerHTML = `<span class="pwiz-target-num">â€”</span><span class="pwiz-target-note"> Hail Mary â€” always inaccurate (fumble on 1)</span>`;
+        bar.innerHTML = `<span class="pwiz-target-num">—</span><span class="pwiz-target-note"> Hail Mary — always inaccurate (fumble on 1)</span>`;
       } else {
         const eff = Math.max(2, ws.rangeTarget - ws.strongArmMod);
         bar.innerHTML = `<span class="pwiz-target-num">${eff}+</span><span class="pwiz-target-note"> on D6${ws.strongArmMod ? ` (base ${ws.rangeTarget}+, Strong Arm +1)` : ''}</span>`;
@@ -2056,12 +2063,12 @@ function initThrowWizard() {
     refreshTargetDisplay();
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 4: ALWAYS HUNGRY (conditional)
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     ──────────────────────────────────────────────────── */
   function renderHungry(el) {
-    el.innerHTML = `<div class="pwiz-step-title">ðŸ– Always Hungry Check</div>
-      <p class="panel-intro" style="margin-bottom:0.6rem;">The thrower has <strong>Always Hungry</strong>. Roll D6 â€” on a 2+ the throw proceeds. On a 1, the thrower can't resist and devours the team-mate!</p>`;
+    el.innerHTML = `<div class="pwiz-step-title">🍖 Always Hungry Check</div>
+      <p class="panel-intro" style="margin-bottom:0.6rem;">The thrower has <strong>Always Hungry</strong>. Roll D6 — on a 2+ the throw proceeds. On a 1, the thrower can't resist and devours the team-mate!</p>`;
 
     const resultEl = document.createElement('div');
     resultEl.className = 'roll-result'; resultEl.hidden = true;
@@ -2071,8 +2078,8 @@ function initThrowWizard() {
       if (roll === 1) {
         resultEl.innerHTML = `
           <div class="result-roll-num">1</div>
-          <div class="result-name result-cas">ðŸ– Teammate Eaten!</div>
-          <p class="result-desc">The thrower couldn't resist! The thrown player is removed from the pitch as a Casualty â€” they suffer a <strong>Badly Hurt</strong> result (no Casualty roll). The action ends immediately.</p>
+          <div class="result-name result-cas">🍖 Teammate Eaten!</div>
+          <p class="result-desc">The thrower couldn't resist! The thrown player is removed from the pitch as a Casualty — they suffer a <strong>Badly Hurt</strong> result (no Casualty roll). The action ends immediately.</p>
         `;
       } else {
         resultEl.innerHTML = `
@@ -2096,7 +2103,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Always Hungry (need 2+)';
+      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Always Hungry (need 2+)';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2110,7 +2117,7 @@ function initThrowWizard() {
         buttons: Array.from({ length: 6 }, (_, i) => {
           const r = i + 1;
           return r === 1
-            ? { value: 1, label: 'ðŸ– Eaten!', cls: 'phys-bad' }
+            ? { value: 1, label: '🍖 Eaten!', cls: 'phys-bad' }
             : { value: r, label: 'Proceed',   cls: 'phys-good' };
         }),
         onSelect(r) { processHungry(r); },
@@ -2121,11 +2128,11 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 5: THROW ROLL
      Outcomes: Natural 1 = Fumble, Natural 6 = Superb,
-     â‰¥ target = Accurate, < target = Inaccurate
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     ≥ target = Accurate, < target = Inaccurate
+     ──────────────────────────────────────────────────── */
   function renderThrow(el) {
     el.innerHTML = `<div class="pwiz-step-title">Throw Roll</div>`;
 
@@ -2143,27 +2150,27 @@ function initThrowWizard() {
       if (ws.useHailMary) {
         if (roll === 1) {
           outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas';
-          desc = "Natural 1 â€” Hail Mary fails! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt).";
+          desc = "Natural 1 — Hail Mary fails! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt).";
         } else {
-          outcome = 'inaccurate'; title = 'Hail Mary â€” Inaccurate'; cls = 'result-ko';
-          desc = `Roll ${roll}. Hail Mary always scatters â€” the team-mate deviates once from the intended landing square. They must still make a Landing roll wherever they land.`;
+          outcome = 'inaccurate'; title = 'Hail Mary — Inaccurate'; cls = 'result-ko';
+          desc = `Roll ${roll}. Hail Mary always scatters — the team-mate deviates once from the intended landing square. They must still make a Landing roll wherever they land.`;
         }
       } else if (roll === 1) {
         outcome = 'fumble'; title = 'Fumble!'; cls = 'result-cas';
-        desc = "Natural 1 â€” the throw fails catastrophically! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt). Turnover!";
+        desc = "Natural 1 — the throw fails catastrophically! The team-mate is placed in the thrower's square and removed as a Casualty (Badly Hurt). Turnover!";
       } else if (roll === 6) {
-        outcome = 'superb'; title = 'â˜… Superb Throw!'; cls = 'result-ok';
+        outcome = 'superb'; title = '★ Superb Throw!'; cls = 'result-ok';
         if (ws.hasBullseye) {
-          desc = `Natural 6 â€” Superb! The team-mate lands precisely on target. With the Bullseye trait, no Landing roll is required!`;
+          desc = `Natural 6 — Superb! The team-mate lands precisely on target. With the Bullseye trait, no Landing roll is required!`;
         } else {
-          desc = `Natural 6 â€” Superb throw! The team-mate lands precisely on target. Make a Landing roll now.`;
+          desc = `Natural 6 — Superb throw! The team-mate lands precisely on target. Make a Landing roll now.`;
         }
       } else if (roll >= effTarget) {
         outcome = 'accurate'; title = 'Accurate Throw!'; cls = 'result-ok';
-        desc = `Roll ${roll} vs ${effTarget}+ â€” the team-mate lands on target. Make a Landing roll.`;
+        desc = `Roll ${roll} vs ${effTarget}+ — the team-mate lands on target. Make a Landing roll.`;
       } else {
         outcome = 'inaccurate'; title = 'Inaccurate Throw'; cls = 'result-ko';
-        desc = `Roll ${roll} vs ${effTarget}+ â€” the team-mate scatters 3 times from the intended square. Make a Landing roll in their final position.`;
+        desc = `Roll ${roll} vs ${effTarget}+ — the team-mate scatters 3 times from the intended square. Make a Landing roll in their final position.`;
       }
 
       ws.throwResult  = outcome;
@@ -2181,7 +2188,7 @@ function initThrowWizard() {
       setTimeout(() => {
         if (outcome === 'fumble') return; /* stay on step 5 */
         if (outcome === 'inaccurate') go(6);
-        else go(7); /* superb/accurate â†’ landing (or skip if Bullseye) */
+        else go(7); /* superb/accurate → landing (or skip if Bullseye) */
       }, 850);
     }
 
@@ -2195,7 +2202,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Throw';
+      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Throw';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2215,7 +2222,7 @@ function initThrowWizard() {
           } else if (roll === 1) {
             label = 'Fumble!'; cls = 'phys-bad';
           } else if (roll === 6) {
-            label = 'â˜… Superb!'; cls = 'phys-good';
+            label = '★ Superb!'; cls = 'phys-good';
           } else if (roll >= effTarget) {
             label = 'Accurate!'; cls = 'phys-good';
           } else {
@@ -2231,19 +2238,19 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 6: SCATTER
-     Inaccurate â†’ 3Ã—D8   |   Hail Mary â†’ 1Ã—D8
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     Inaccurate → 3×D8   |   Hail Mary → 1×D8
+     ──────────────────────────────────────────────────── */
   function renderScatter(el) {
     const scatterCount = ws.useHailMary ? 1 : 3;
-    el.innerHTML = `<div class="pwiz-step-title">Scatter Ã—${scatterCount}</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">The team-mate scatters ${scatterCount === 1 ? 'once' : '3 times'} from the intended landing square. Roll D8 for direction each time â€” they move 1 square per roll.</p>`;
+    el.innerHTML = `<div class="pwiz-step-title">Scatter ×${scatterCount}</div>
+      <p class="panel-intro" style="margin-bottom:0.5rem;">The team-mate scatters ${scatterCount === 1 ? 'once' : '3 times'} from the intended landing square. Roll D8 for direction each time — they move 1 square per roll.</p>`;
 
     ws.scatterDirs = [];
     const resultsEl = document.createElement('div');
-    const DIR_LABEL = { 1:'â†– Up-Left',2:'â†‘ Up',3:'â†— Up-Right',4:'â† Left',5:'â†’ Right',6:'â†™ Down-Left',7:'â†“ Down',8:'â†˜ Down-Right' };
-    const DIR_SYM   = { 1:'â†–',2:'â†‘',3:'â†—',4:'â†',5:'â†’',6:'â†™',7:'â†“',8:'â†˜' };
+    const DIR_LABEL = { 1:'↖ Up-Left',2:'↑ Up',3:'↗ Up-Right',4:'← Left',5:'→ Right',6:'↙ Down-Left',7:'↓ Down',8:'↘ Down-Right' };
+    const DIR_SYM   = { 1:'↖',2:'↑',3:'↗',4:'←',5:'→',6:'↙',7:'↓',8:'↘' };
     const isPhys    = wizardMode('throw') === 'physical';
 
     function addScatter(dir) {
@@ -2281,7 +2288,7 @@ function initThrowWizard() {
         tray.className = 'dice-tray single'; tray.appendChild(dieEl);
         const btn = document.createElement('button');
         btn.type = 'button'; btn.className = 'roll-btn';
-        btn.innerHTML = `<span class="roll-btn-icon">ðŸŽ²</span> Scatter ${n}`;
+        btn.innerHTML = `<span class="roll-btn-icon">🎲</span> Scatter ${n}`;
         btn.addEventListener('click', async () => {
           btn.disabled = true;
           const dir = await Dice.rollDieElement(dieEl);
@@ -2296,11 +2303,11 @@ function initThrowWizard() {
     buildNextScatter();
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 7: LANDING ROLL
      Need 4+ (modified by TZ, Landing skill)
-     Superb + Bullseye â†’ this step is skipped entirely
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     Superb + Bullseye → this step is skipped entirely
+     ──────────────────────────────────────────────────── */
   function renderLanding(el) {
     el.innerHTML = `<div class="pwiz-step-title">Landing Roll</div>`;
 
@@ -2310,7 +2317,7 @@ function initThrowWizard() {
       const banner = document.createElement('p');
       banner.className = 'panel-intro';
       banner.style.color = '#81c784';
-      banner.textContent = 'â˜… Superb throw â€” no Landing roll needed! The team-mate touches down perfectly.';
+      banner.textContent = '★ Superb throw — no Landing roll needed! The team-mate touches down perfectly.';
       el.appendChild(banner);
       /* This branch only reached if Bullseye is absent */
     }
@@ -2319,7 +2326,7 @@ function initThrowWizard() {
     const tzRow = document.createElement('div');
     tzRow.className = 'pwiz-mod-row';
     tzRow.innerHTML = '<span class="input-label" style="margin:0;">Tackle Zones in Landing Square:</span>';
-    const tzMinus = document.createElement('button'); tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = 'âˆ’';
+    const tzMinus = document.createElement('button'); tzMinus.type = 'button'; tzMinus.className = 'tz-btn'; tzMinus.textContent = '−';
     const tzVal   = document.createElement('span');   tzVal.className = 'tz-val'; tzVal.textContent = ws.landingTZ;
     const tzPlus  = document.createElement('button'); tzPlus.type = 'button'; tzPlus.className = 'tz-btn'; tzPlus.textContent = '+';
     function getLandMod() { return -ws.landingTZ + (ws.hasLandingSkill ? 1 : 0); }
@@ -2348,7 +2355,7 @@ function initThrowWizard() {
     const occupiedNote = document.createElement('p');
     occupiedNote.className = 'panel-intro';
     occupiedNote.style.cssText = 'font-size:0.68rem;color:rgba(255,200,80,0.75);margin-top:0.4rem;';
-    occupiedNote.textContent = 'âš  If the landing square is occupied: both players are knocked down and must roll Armour.';
+    occupiedNote.textContent = '⚠ If the landing square is occupied: both players are knocked down and must roll Armour.';
     el.appendChild(occupiedNote);
 
     const resultEl = document.createElement('div');
@@ -2362,19 +2369,19 @@ function initThrowWizard() {
       if (modified >= 4) {
         ws.landingResult = 'safe';
         title = 'Safe Landing!'; cls = 'result-ok';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (â†’ ${modified})` : ''} vs 4+ â€” the team-mate sticks the landing! They are placed on the pitch and may act normally (if not yet activated this turn).`;
+        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs 4+ — the team-mate sticks the landing! They are placed on the pitch and may act normally (if not yet activated this turn).`;
       } else if (roll === 1) {
         ws.landingResult = 'crash';
         title = 'Crash Landing!'; cls = 'result-cas';
-        desc  = 'Natural 1 â€” always fails. The team-mate is knocked down in their landing square. Roll Armour on step 8.';
+        desc  = 'Natural 1 — always fails. The team-mate is knocked down in their landing square. Roll Armour on step 8.';
       } else {
         ws.landingResult = 'crash';
         title = 'Crash Landing!'; cls = 'result-cas';
-        desc  = `Roll ${roll}${mod !== 0 ? ` (â†’ ${modified})` : ''} vs 4+ â€” the team-mate crashes down! They are knocked down. Roll Armour on step 8.`;
+        desc  = `Roll ${roll}${mod !== 0 ? ` (→ ${modified})` : ''} vs 4+ — the team-mate crashes down! They are knocked down. Roll Armour on step 8.`;
       }
 
       resultEl.innerHTML = `
-        <div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (â†’${modified})</span>` : ''}</div>
+        <div class="result-roll-num">${roll}${mod !== 0 ? `<span style="font-size:1rem;font-weight:600;"> (→${modified})</span>` : ''}</div>
         <div class="result-name ${cls}">${esc(title)}</div>
         <p class="result-desc">${esc(desc)}</p>
       `;
@@ -2393,7 +2400,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray single'; tray.appendChild(dieEl);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = '<span class="roll-btn-icon">ðŸŽ²</span> Roll Landing (need 4+)';
+      btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Landing (need 4+)';
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const roll = await Dice.rollDieElement(dieEl);
@@ -2422,14 +2429,14 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  /* ─────────────────────────────────────────────────────
      STEP 8: ARMOUR ROLL (Crash Landing)
      Pre-loaded with thrown player's AV
-     â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+     ──────────────────────────────────────────────────── */
   function renderArmour(el) {
     const av = ws.thrownAV;
     el.innerHTML = `<div class="pwiz-step-title">Armour Roll</div>
-      <p class="panel-intro" style="margin-bottom:0.5rem;">Crash landing! Roll 2D6 vs the thrown player's AV${av}+. If broken, the player is injured â€” use the Injury panel for the injury table.</p>`;
+      <p class="panel-intro" style="margin-bottom:0.5rem;">Crash landing! Roll 2D6 vs the thrown player's AV${av}+. If broken, the player is injured — use the Injury panel for the injury table.</p>`;
 
     const avChip = document.createElement('div');
     avChip.className = 'pwiz-mod-row';
@@ -2451,14 +2458,14 @@ function initThrowWizard() {
           <div class="result-roll-num">${total}</div>
           ${breakdownHtml}
           <div class="result-name" style="color:var(--bb-red,#C8102E);">Armour Broken!</div>
-          <p class="result-desc">Total ${total} â‰¥ AV${av}. The thrown player's armour is broken â€” open the <strong>Injury panel</strong> and roll the Injury table. Apply any relevant modifiers.</p>
+          <p class="result-desc">Total ${total} ≥ AV${av}. The thrown player's armour is broken — open the <strong>Injury panel</strong> and roll the Injury table. Apply any relevant modifiers.</p>
         `;
       } else {
         resultEl.innerHTML = `
           <div class="result-roll-num">${total}</div>
           ${breakdownHtml}
           <div class="result-name" style="color:var(--bb-gold,#D4AF37);">Armour Holds</div>
-          <p class="result-desc">Total ${total} &lt; AV${av}. The armour held â€” the player is Prone but not injured. They will be turned face-up at the start of your next turn.</p>
+          <p class="result-desc">Total ${total} &lt; AV${av}. The armour held — the player is Prone but not injured. They will be turned face-up at the start of your next turn.</p>
         `;
       }
       resultEl.hidden = false;
@@ -2477,7 +2484,7 @@ function initThrowWizard() {
       tray.className = 'dice-tray'; tray.appendChild(d1El); tray.appendChild(d2El);
       const btn = document.createElement('button');
       btn.type = 'button'; btn.className = 'roll-btn';
-      btn.innerHTML = `<span class="roll-btn-icon">ðŸŽ²</span> Roll Armour Check (vs AV${av}+)`;
+      btn.innerHTML = `<span class="roll-btn-icon">🎲</span> Roll Armour Check (vs AV${av}+)`;
       btn.addEventListener('click', async () => {
         btn.disabled = true; resultEl.hidden = true;
         const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
@@ -2501,10 +2508,11 @@ function initThrowWizard() {
     el.appendChild(resultEl);
   }
 
-  /* â”€â”€ Boot â”€â”€ */
+  /* ── Boot ── */
   buildShell();
   render();
 
+  let _throwFit = null;
   onPanelOpen('panel-throw', () => {
     ws.step = 1;
     ws.throwResult   = null;
@@ -2513,15 +2521,18 @@ function initThrowWizard() {
     ws.landingResult = null;
     buildShell();
     render();
+    const root = body.querySelector('.bwiz-scale-root');
+    if (!_throwFit && root) _throwFit = FitScale(body, root, { max: 1.6 });
+    else _throwFit?.refit();
   });
 
   panel.addEventListener('bb:diceMode', () => render());
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════════════════════
    PLAYER SELECTION PANELS (shared utility)
-   Event delegation â€” one listener on container.
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   Event delegation — one listener on container.
+   ════════════════════════════════════════════════════════ */
 
 function buildWizardPlayerList(listId, side, filterFn, onSelect, opts = {}) {
   const container = document.getElementById(listId);
@@ -2621,12 +2632,12 @@ function onPanelOpen(panelId, fn) {
   }).observe(panel, { attributes: true });
 }
 
-/* initBlockPlayerSelect removed â€” integrated into initBlockWizard() */
+/* initBlockPlayerSelect removed — integrated into initBlockWizard() */
 
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ════════════════════════════════════════════════════════
    BOOT
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ════════════════════════════════════════════════════════ */
 
 /* ════════════════════════════════════════════════════════
    SPECIAL ACTIONS WIZARD
@@ -2857,7 +2868,16 @@ function initSpecialWizard() {
   }
 
   rollBtn.onclick = resolve;
-  onPanelOpen('panel-special', refresh);
+
+  /* Fit-to-panel scaling, identical to the Block/Foul wizards. */
+  let _specFit = null;
+  const specPanel = document.getElementById('panel-special');
+  const specScaleRoot = specPanel?.querySelector('.bwiz-scale-root');
+  onPanelOpen('panel-special', () => {
+    refresh();
+    if (!_specFit && specScaleRoot) _specFit = FitScale(specPanel.querySelector('.bwiz-panel-body'), specScaleRoot, { max: 1.6 });
+    else _specFit?.refit();
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

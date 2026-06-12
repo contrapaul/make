@@ -65,7 +65,7 @@
       <div class="tb-grid" id="grid-mods"></div>
       <h3 class="tb-subtitle">Injury Roll <span class="tb-dice">2D6</span></h3>
       <div class="tb-grid" id="grid-injury"></div>
-      <h3 class="tb-subtitle">Injury Roll â€” Stunty Players <span class="tb-dice">2D6</span></h3>
+      <h3 class="tb-subtitle">Injury Roll — Stunty Players <span class="tb-dice">2D6</span></h3>
       <div class="tb-grid" id="grid-stunty"></div>
       <h3 class="tb-subtitle">Casualty Table <span class="tb-dice">D16</span></h3>
       <div class="tb-grid" id="grid-casualty"></div>
@@ -88,7 +88,7 @@
         'result-cas': '#ff6b6b',
       };
       const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      const range = (a, b) => (a === b ? String(a) : `${a}â€“${b}`);
+      const range = (a, b) => (a === b ? String(a) : `${a}–${b}`);
 
       function card(item, color) {
         const c = item.cls ? (RESULT_C[item.cls] || color) : color;
@@ -153,7 +153,7 @@
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
       <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
     </div>
-    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play â€” especially for new players. It is not designed or intended for any commercial purpose.</p>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
 
   <script>

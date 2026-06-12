@@ -2008,7 +2008,25 @@
 
 /* ════════════════════════════════════════════════════════
    SPECIAL ACTIONS WIZARD
+   Fixed-design stage (FitScale) like Block/Foul — same
+   74em × 46em scale root; internals scroll, never reflow.
    ════════════════════════════════════════════════════════ */
+/* Throw wizard fixed stage — step content scrolls, chrome stays put */
+.bwiz-scale-root--throw .pass-summary-strip,
+.bwiz-scale-root--throw .pass-step-indicator,
+.bwiz-scale-root--throw .pass-nav { flex-shrink: 0; }
+.bwiz-scale-root--throw #twiz-content {
+  flex:       1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.bwiz-scale-root--special .panel-intro { flex-shrink: 0; margin-bottom: 0; }
+.bwiz-scale-root--special .spec-outer  { flex: 1 1 0; min-height: 0; }
+.bwiz-scale-root--special .spec-col,
+.bwiz-scale-root--special .spec-center { min-height: 0; overflow-y: auto; }
+.bwiz-scale-root--special .bwiz-results-strip { flex-shrink: 0; }
+
 .spec-outer {
   display:        grid;
   grid-template-columns: 1fr 1.1fr 1fr;
