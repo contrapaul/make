@@ -371,13 +371,14 @@ function refreshPlayerCard(side, idx, status) {
     card.appendChild(b);
   });
 
-  /* Acted-this-turn badge (turn tracking) */
+  /* Acted-this-turn badge (turn tracking) — "Blitzed" when the action was a Blitz */
   card.querySelector('.player-acted-badge')?.remove();
   const acted = hasPlayerActed(side, idx);
   if (acted) {
+    const blitzed = GameState.turnFlags[side]?.[idx]?.actionType === 'blitz';
     const b = document.createElement('span');
-    b.className = 'player-status-badge status-acted player-acted-badge';
-    b.textContent = 'Acted';
+    b.className = `player-status-badge status-acted player-acted-badge${blitzed ? ' status-blitzed' : ''}`;
+    b.textContent = blitzed ? 'Blitzed' : 'Acted';
     card.appendChild(b);
   }
   card.classList.toggle('player-acted', acted);

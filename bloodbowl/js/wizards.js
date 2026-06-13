@@ -326,7 +326,6 @@ const DEF_BLOCK_SKILLS = new Set([
 function initBlockWizard() {
   const panel      = document.getElementById('panel-block');
   const rollBtn    = document.getElementById('block-roll-btn');
-  const confirmBtn = document.getElementById('block-confirm-btn');
   const useRrBtn   = document.getElementById('block-use-rr-btn');
   const defBanner  = document.getElementById('block-def-picks-banner');
   if (!rollBtn) return;
@@ -355,9 +354,12 @@ function initBlockWizard() {
   const attHas = n => attSkills.has(n);
   const defHas = n => defSkills.has(n);
 
+  /* Horns grants +1 ST on a Blitz — driven live by the Blitz toggle. */
+  const hornsBonus = () => (isBlitz && attHas('Horns')) ? 1 : 0;
+
   /* Effective strengths after skill modifiers (Horns/Multiple Block/Dauntless). */
   function effAttST() {
-    let a = attST + stMods.att - (multiBlock ? 2 : 0);
+    let a = attST + stMods.att + hornsBonus() - (multiBlock ? 2 : 0);
     if (dauntlessOn) a = Math.max(a, defST);
     return Math.max(1, a);
   }
@@ -476,7 +478,7 @@ function initBlockWizard() {
   }
 
   /* ── Assist dots ── */
-  function renderAssistDots(elId, count, teamSide, onChangeFn) {
+  function renderAssistDots(elId, count, teamSide, onChangeFn, opts = {}) {
     const el = document.getElementById(elId);
     if (!el) return;
     el.innerHTML = '';
@@ -504,7 +506,39 @@ function initBlockWizard() {
         d.classList.toggle('active', idx < active);
       });
     }
+
+    /* Blitz toggle — to the right of the 6th assist (attacker only). Declares
+       this Block part of a Blitz action (drives Horns/Juggernaut + roster tag). */
+    if (opts.blitz) {
+      const blitz = document.createElement('button');
+      blitz.type = 'button';
+      blitz.id = 'block-blitz-toggle';
+      blitz.className = 'bwiz-blitz-toggle';
+      blitz.textContent = 'Blitz';
+      blitz.addEventListener('click', () => {
+        if (blitz.disabled) return;
+        isBlitz = !isBlitz;
+        refreshBlitzToggle();
+        updateStDisplay();
+      });
+      row.appendChild(blitz);
+    }
+
     el.appendChild(row);
+  }
+
+  /* Sync the Blitz toggle's active/disabled state with current selection. */
+  function refreshBlitzToggle() {
+    const btn = document.getElementById('block-blitz-toggle');
+    if (!btn) return;
+    const used = !!window.blitzUsedThisTurn?.(attSide);
+    const canBlitz = !!attPlayer && !used;
+    if (used) isBlitz = false;            // one Blitz per team turn
+    btn.disabled = !canBlitz;
+    btn.classList.toggle('active', isBlitz);
+    btn.title = used
+      ? 'Blitz already used this turn'
+      : 'Declare this Block part of a Blitz action';
   }
 
   /* ── Re-roll dots ── */
@@ -687,8 +721,8 @@ function initBlockWizard() {
   document.getElementById('block-change-att')?.addEventListener('click', () => showPicker('att'));
   document.getElementById('block-change-def')?.addEventListener('click', () => showPicker('def'));
 
-  /* ── Assist dots ── */
-  renderAssistDots('block-att-assists-dots', 6, 'left',  v => { attAst = v; updateStDisplay(); });
+  /* ── Assist dots (attacker row also carries the Blitz toggle) ── */
+  renderAssistDots('block-att-assists-dots', 6, 'left',  v => { attAst = v; updateStDisplay(); }, { blitz: true });
   renderAssistDots('block-def-assists-dots', 6, 'right', v => { defAst = v; updateStDisplay(); });
 
   /* ── Reset all roll state ── */
@@ -708,10 +742,10 @@ function initBlockWizard() {
     rollBtn.disabled   = !(attPlayer && defPlayer);
     rollBtn.onclick    = doRoll;
     rollBtn.innerHTML  = 'Roll';
-    rollBtn.classList.remove('roll-btn--complete');
-    if (confirmBtn) confirmBtn.hidden = true;
+    rollBtn.classList.remove('roll-btn--complete', 'roll-btn--confirm');
     if (useRrBtn)   useRrBtn.hidden   = true;
     if (defBanner)  defBanner.hidden  = true;
+    refreshBlitzToggle();
     /* Lock result panels */
     ['block-result-panel','armor-roll-panel','injury-roll-panel'].forEach(id => {
       document.getElementById(id)?.classList.add('locked');
@@ -874,8 +908,8 @@ function initBlockWizard() {
 
   /* ── Glow state helper ── */
   function setGlow(mode) {
-    rollBtn.classList.remove('glow-gold', 'glow-green');
-    if (mode === 'gold' || mode === 'green') rollBtn.classList.add(`glow-${mode}`);
+    rollBtn.classList.remove('glow-gold', 'glow-green', 'glow-blue');
+    if (mode === 'gold' || mode === 'green' || mode === 'blue') rollBtn.classList.add(`glow-${mode}`);
   }
 
   /* Transform the Roll button into a green “Complete Block” closer */
@@ -1165,21 +1199,8 @@ function initBlockWizard() {
       }
     }
 
-    /* Blitz-dependent skills (Horns / Juggernaut / Frenzy).
-       One Blitz per team turn — once it's spent, don't ask again. */
-    if (attHas('Horns') || attHas('Juggernaut') || attHas('Frenzy')) {
-      if (window.blitzUsedThisTurn?.(attSide)) {
-        const z = promptZone();
-        const n = document.createElement('div');
-        n.className = 'bwiz-prompt-note';
-        n.textContent = 'Blitz already used this turn — resolved as a normal Block.';
-        z.appendChild(n);
-      } else {
-        isBlitz = await askInline('Is this Block part of a <b>Blitz</b> action?',
-          [{ text: 'Blitz', value: true, primary: true }, { text: 'Normal Block', value: false }]);
-        if (isBlitz && attHas('Horns')) { stMods.att += 1; }
-      }
-    }
+    /* Blitz is declared up-front via the Blitz toggle under the attacker card
+       (isBlitz); Horns ST and Juggernaut read it directly — no inline prompt. */
 
     /* Multiple Block: block two marked players at −2 ST each. */
     if (attHas('Multiple Block')) {
@@ -1188,7 +1209,7 @@ function initBlockWizard() {
     }
 
     /* Dauntless vs a stronger opponent. */
-    const baseA = attST + stMods.att - (multiBlock ? 2 : 0);
+    const baseA = attST + stMods.att + hornsBonus() - (multiBlock ? 2 : 0);
     if (attHas('Dauntless') && baseA < defST) {
       const { value } = await askD6(`<b>Dauntless</b> — roll D6 + ST ${baseA} vs ${esc(pName(defPlayer))} ST ${defST}:`);
       dauntlessOn = (baseA + value) > defST;
@@ -1233,8 +1254,9 @@ function initBlockWizard() {
   /* ── Main roll ── */
   async function doRoll() {
     rollBtn.disabled   = true;
+    rollBtn.innerHTML  = 'Roll';
+    rollBtn.classList.remove('roll-btn--confirm');
     setGlow('off');
-    if (confirmBtn) { confirmBtn.hidden = true; confirmBtn.classList.remove('glow-blue'); }
     if (useRrBtn)   { useRrBtn.hidden   = true; useRrBtn.classList.remove('glow-gold');  }
     if (defBanner)  defBanner.hidden  = true;
     chosenFace = null;
@@ -1275,7 +1297,12 @@ function initBlockWizard() {
     } else {
       if (defBanner) defBanner.hidden = false;
     }
-    if (confirmBtn) { confirmBtn.hidden = false; confirmBtn.classList.add('glow-blue'); }
+    /* The Roll button becomes the Confirm button (blue) — no separate button. */
+    rollBtn.disabled  = false;
+    rollBtn.innerHTML = 'Confirm Result';
+    rollBtn.classList.add('roll-btn--confirm');
+    rollBtn.onclick   = confirmResult;
+    setGlow('blue');
 
     /* Show Use Re-roll if the attacker's team has re-rolls left and none used yet */
     if (useRrBtn) {
@@ -1332,12 +1359,15 @@ function initBlockWizard() {
     doRoll();
   });
 
-  confirmBtn?.addEventListener('click', async () => {
+  /* Confirm the selected die — runs on the merged Roll/Confirm button. */
+  async function confirmResult() {
     if (!chosenFace) return;
-    confirmBtn.classList.remove('glow-blue');
-    confirmBtn.hidden  = true;
     if (useRrBtn) { useRrBtn.classList.remove('glow-gold'); useRrBtn.hidden = true; }
-    rollBtn.disabled   = true;   // locked until armor/injury sequence re-enables it
+    /* Drop the blue confirm look; the armor/injury sequence reuses this button. */
+    rollBtn.classList.remove('roll-btn--confirm');
+    rollBtn.innerHTML = 'Roll';
+    rollBtn.disabled  = true;   // locked until armor/injury sequence re-enables it
+    setGlow('off');
     if (defBanner) defBanner.hidden = true;
     /* Remove click listeners by cloning dice */
     document.querySelectorAll('#block-dice-tray .block-face').forEach(f => {
@@ -1345,7 +1375,7 @@ function initBlockWizard() {
       f.replaceWith(clone);
     });
     await interpretResult(chosenFace);
-  });
+  }
 
   /* ── Init ── */
   updateStDisplay();

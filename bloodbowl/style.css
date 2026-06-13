@@ -963,6 +963,8 @@
 
 /* Player has used their action this turn (cleared on End Turn) */
 .status-acted { color: #9AA8C0; background: rgba(120, 130, 150, 0.15); }
+/* Blitz action — gold, to stand out from a plain "Acted" tag */
+.status-blitzed { color: #E8C24A; background: rgba(212, 175, 55, 0.16); border-color: rgba(212, 175, 55, 0.5); }
 .player-card.player-acted:not(.player-unavailable) {
   opacity: 0.6;
   filter:  saturate(0.5);

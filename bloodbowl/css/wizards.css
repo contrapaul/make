@@ -1374,8 +1374,40 @@
 }
 
 .bwiz-assists-row {
-  display:    flex;
-  gap:        0.35rem;
+  display:     flex;
+  gap:         0.35rem;
+  align-items: center;
+}
+
+/* Blitz toggle — sits to the right of the 6th assist dot (attacker only) */
+.bwiz-blitz-toggle {
+  margin-left:    0.4rem;
+  padding:        0.18rem 0.6rem;
+  border-radius:  4px;
+  border:         1px solid rgba(212, 175, 55, 0.45);
+  background:     rgba(212, 175, 55, 0.1);
+  color:          var(--bb-gold, #D4AF37);
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      0.62rem;
+  font-weight:    800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor:         pointer;
+  transition:     background 0.12s, border-color 0.12s, box-shadow 0.12s;
+}
+.bwiz-blitz-toggle:hover:not(:disabled) {
+  background:   rgba(212, 175, 55, 0.22);
+  border-color: rgba(212, 175, 55, 0.7);
+}
+.bwiz-blitz-toggle.active {
+  background:   var(--bb-gold, #D4AF37);
+  border-color: var(--bb-gold, #D4AF37);
+  color:        #1a1205;
+  box-shadow:   0 0 10px rgba(212, 175, 55, 0.5);
+}
+.bwiz-blitz-toggle:disabled {
+  opacity: 0.35;
+  cursor:  not-allowed;
 }
 
 .assist-dot {
@@ -1821,6 +1853,18 @@
                 0 0 40px 10px rgba(102,238,68,0.35);
   }
 }
+@keyframes bwiz-pulse-blue-strong {
+  0%, 100% {
+    box-shadow: 0 0 0 1px rgba(80,130,255,0.60),
+                0 0 14px 4px rgba(80,130,255,0.35),
+                0 0 26px 6px rgba(80,130,255,0.22);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(80,130,255,1.0),
+                0 0 22px 6px rgba(80,130,255,0.70),
+                0 0 40px 10px rgba(80,130,255,0.38);
+  }
+}
 
 /* Confirm button blue pulse */
 .bwiz-confirm-btn { transition: background 0.12s, border-color 0.12s, box-shadow 0.7s ease; }
@@ -1863,6 +1907,23 @@
 .pwiz3-roll-btn.glow-gold  { animation: bwiz-pulse-gold-strong  1.6s ease-in-out infinite; }
 #block-roll-btn.glow-green,
 .pwiz3-roll-btn.glow-green { animation: bwiz-pulse-green-strong 1.6s ease-in-out infinite; }
+#block-roll-btn.glow-blue,
+.pwiz3-roll-btn.glow-blue  { animation: bwiz-pulse-blue-strong  1.6s ease-in-out infinite; }
+
+/* ── Roll button — Confirm Result state (solid blue, replaces gold) ── */
+#block-roll-btn.roll-btn--confirm,
+.pwiz3-roll-btn.roll-btn--confirm {
+  background:   rgba(80, 130, 255, 0.9);
+  border-color: rgba(80, 130, 255, 1);
+  color:        #fff;
+  text-shadow:  0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
+}
+#block-roll-btn.roll-btn--confirm:hover,
+.pwiz3-roll-btn.roll-btn--confirm:hover {
+  background:   rgba(80, 130, 255, 1);
+  border-color: rgba(80, 130, 255, 1);
+  box-shadow:   0 0 20px rgba(80, 130, 255, 0.55), 0 4px 16px rgba(0,0,0,0.35);
+}
 
 /* ── Roll button — Complete Block state (solid green, white text persists) ── */
 .roll-btn--complete {
