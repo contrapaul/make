@@ -1439,6 +1439,9 @@
   align-items:     center;
   gap:             0.65rem;
   padding-top:     0.25rem;
+  /* Room so the Roll/Confirm/Complete button's glow isn't clipped by the
+     scrollport's bottom edge. */
+  padding-bottom:  2.4rem;
   min-height:      0;
   max-height:      100%;
   overflow-y:      auto;
