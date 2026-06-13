@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lessons — Chinese Vocab Review</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="sidebar-title">汉语词汇</div>
+    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="index.html" class="sidebar-link"><span class="icon">🏠</span> Home</a>
+    <a href="lessons.html" class="sidebar-link tool-link active"><span class="icon">📚</span> Lessons</a>
+    <a href="glossary.html" class="sidebar-link tool-link"><span class="icon">📖</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="icon">🧩</span> Sentence Builder</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="icon">🎯</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="icon">⬇️</span> Download Anki Deck</a>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
+      <span class="topbar-title">📚 Lessons</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </div>
+  </header>
+
+  <div class="lessons-page">
+    <div class="builder-header" style="margin-bottom:16px">
+      <h2 class="section-title">Lessons</h2>
+      <p class="section-subtitle">All chapter and bonus vocabulary, grouped by lesson. Tap a header to expand.</p>
+    </div>
+
+    <!-- Contents dropdown + controls -->
+    <div class="lesson-toc-bar">
+      <label for="lessonToc">Contents</label>
+      <select class="lesson-toc-select" id="lessonToc">
+        <option value="">Jump to a lesson…</option>
+      </select>
+      <div class="lesson-toc-actions">
+        <button class="btn btn-secondary btn-sm" id="expandAll">Expand all</button>
+        <button class="btn btn-secondary btn-sm" id="collapseAll">Collapse all</button>
+      </div>
+    </div>
+
+    <!-- Lesson blocks injected by lessons.js -->
+    <div id="lessonsContainer"></div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/lessons.js"></script>
+</body>
+</html>

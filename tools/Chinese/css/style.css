@@ -657,6 +657,10 @@ a:hover { text-decoration: underline; }
 }
 
 .slot.filled:hover .remove-btn { display: flex; }
+/* Touch devices have no hover — keep the remove button visible so words can be removed */
+@media (hover: none) {
+  .slot.filled .remove-btn { display: flex; }
+}
 
 /* Word bank */
 .word-bank {
@@ -693,6 +697,28 @@ a:hover { text-decoration: underline; }
   user-select: none;
   transition: all var(--transition);
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  line-height: 1.25;
+  touch-action: none;          /* let pointer-drag work without the page scrolling */
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Floating clone that follows the finger/cursor during a drag */
+.drag-ghost {
+  position: fixed;
+  z-index: 999;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0.92;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px 14px;
+  border: 1px solid var(--accent2);
+  border-radius: 20px;
+  background: var(--bg-card);
+  color: var(--text);
   line-height: 1.25;
 }
 
@@ -858,6 +884,103 @@ a:hover { text-decoration: underline; }
 .t4 { color: var(--tone4); }
 .t5 { color: var(--tone5); }
 
+/* --- Lessons Page --- */
+.lessons-page { padding: 24px 28px 60px; max-width: 1100px; margin: 0 auto; }
+
+.lesson-toc-bar {
+  position: sticky;
+  top: 56px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.lesson-toc-bar label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.lesson-toc-select {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.lesson-toc-actions { display: flex; gap: 8px; }
+
+.lesson-block { margin-bottom: 14px; }
+
+.lesson-block .accordion-trigger {
+  border-left: 4px solid var(--accent2);
+  font-size: 1rem;
+}
+.lesson-block.is-bonus .accordion-trigger { border-left-color: var(--accent); }
+
+.lesson-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: 8px;
+  background: rgba(69,123,157,0.15);
+  color: var(--accent2);
+  vertical-align: middle;
+}
+.lesson-block.is-bonus .lesson-badge { background: rgba(230,57,70,0.15); color: var(--accent); }
+
+.vocab-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+  padding: 16px;
+}
+
+.vocab-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.vocab-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.10); }
+
+.vc-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.vc-hanzi { font-size: 1.7rem; font-weight: 600; line-height: 1.2; }
+.vc-pinyin { font-size: 0.92rem; color: var(--accent2); font-style: italic; }
+.vc-def { font-size: 0.9rem; color: var(--text); margin-top: 4px; }
+
+.vc-example {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border-card);
+  font-size: 0.82rem;
+}
+.vc-example .ex-zh { color: var(--text); }
+.vc-example .ex-pinyin { color: var(--text-muted); font-style: italic; }
+.vc-example .ex-en { color: var(--text-muted); }
+
+.vc-tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; }
+
 /* --- Hamburger (mobile) --- */
 .sidebar-toggle {
   display: none;
@@ -901,6 +1024,9 @@ a:hover { text-decoration: underline; }
   .accordion-group { padding-left: 16px; padding-right: 16px; }
 
   .sentence-widget { margin-left: 16px; margin-right: 16px; }
+
+  .lessons-page { padding-left: 16px; padding-right: 16px; }
+  .vocab-card-grid { grid-template-columns: 1fr; }
 
   .trainer-options { grid-template-columns: 1fr; }
 

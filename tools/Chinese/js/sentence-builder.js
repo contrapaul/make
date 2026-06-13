@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let slotStates   = [];   // null | 'pending' | 'correct' | 'incorrect'
   let bankWords    = [];   // [{zh,py,id}] or [{en,id}]
   let score        = { correct: 0, total: 0 };
-  let dragSourceId = null;
 
   // ── DOM ────────────────────────────────────────────────────────────────────
   const $ = id => document.getElementById(id);
@@ -204,11 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
         rm.setAttribute('aria-label', 'Remove');
         rm.addEventListener('click', e => { e.stopPropagation(); removeSlot(idx); });
         slot.appendChild(rm);
+        // Tapping a filled slot removes it (mobile-friendly — no hover needed)
+        slot.addEventListener('click', () => removeSlot(idx));
       }
-
-      slot.addEventListener('dragover',  e => { e.preventDefault(); slot.classList.add('drag-over'); });
-      slot.addEventListener('dragleave', ()  => slot.classList.remove('drag-over'));
-      slot.addEventListener('drop',      e => { e.preventDefault(); slot.classList.remove('drag-over'); handleDrop(idx); });
 
       slotsArea.appendChild(slot);
     });
@@ -224,24 +221,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const chip = document.createElement('div');
       chip.className = 'word-chip' + (used ? ' used' : '');
       chip.dataset.wid = w.id;
-      chip.draggable = !used;
       chip.innerHTML = mode === 'zh'
         ? `<span class="chip-zh">${w.zh}</span>${w.py ? `<span class="chip-py">${w.py}</span>` : ''}`
         : `<span class="chip-en">${w.en}</span>`;
 
-      chip.addEventListener('dragstart', e => {
-        dragSourceId = w.id;
-        chip.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'copy';
-      });
-      chip.addEventListener('dragend', () => { chip.classList.remove('dragging'); dragSourceId = null; });
-
-      // Tap: place in first empty slot
-      chip.addEventListener('click', () => {
-        if (used) return;
-        const first = slotValues.findIndex(v => v === null);
-        if (first !== -1) placeWord(first, w);
-      });
+      // Unified pointer drag (works for mouse AND touch). Falls back to
+      // tap-to-place-in-first-empty-slot when the pointer barely moves.
+      if (!used) chip.addEventListener('pointerdown', e => startDrag(e, chip, w));
 
       wordBank.appendChild(chip);
     });
@@ -258,10 +244,69 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState();
   }
 
-  function handleDrop(slotIdx) {
-    const word = bankWords.find(w => w.id === dragSourceId);
-    if (!dragSourceId || !word) return;
-    placeWord(slotIdx, word);
+  // ── Pointer drag engine (mouse + touch) ─────────────────────────────────────
+  function startDrag(e, chip, word) {
+    if (e.button && e.button !== 0) return;       // ignore non-primary mouse buttons
+    e.preventDefault();
+
+    const startX = e.clientX, startY = e.clientY;
+    let ghost = null, dragging = false, lastSlot = null;
+    const THRESHOLD = 6; // px before it counts as a drag rather than a tap
+
+    function slotUnder(x, y) {
+      const el = document.elementFromPoint(x, y);
+      return el ? el.closest('.slot') : null;
+    }
+
+    function makeGhost() {
+      ghost = chip.cloneNode(true);
+      ghost.classList.add('drag-ghost');
+      const r = chip.getBoundingClientRect();
+      ghost.style.width = r.width + 'px';
+      document.body.appendChild(ghost);
+      chip.classList.add('dragging');
+    }
+
+    function moveGhost(x, y) {
+      if (ghost) { ghost.style.left = x + 'px'; ghost.style.top = y + 'px'; }
+      const slot = slotUnder(x, y);
+      if (slot !== lastSlot) {
+        lastSlot?.classList.remove('drag-over');
+        if (slot && slot.classList.contains('filled') === false) slot.classList.add('drag-over');
+        lastSlot = slot;
+      }
+    }
+
+    function onMove(ev) {
+      const x = ev.clientX, y = ev.clientY;
+      if (!dragging && Math.hypot(x - startX, y - startY) > THRESHOLD) {
+        dragging = true;
+        makeGhost();
+      }
+      if (dragging) { ev.preventDefault(); moveGhost(x, y); }
+    }
+
+    function onUp(ev) {
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      document.removeEventListener('pointercancel', onUp);
+      lastSlot?.classList.remove('drag-over');
+      chip.classList.remove('dragging');
+      if (ghost) { ghost.remove(); ghost = null; }
+
+      const target = dragging ? slotUnder(ev.clientX, ev.clientY) : null;
+      if (target) {
+        placeWord(+target.dataset.idx, word);
+      } else if (!dragging) {
+        // Treat as a tap → first empty slot
+        const first = slotValues.findIndex(v => v === null);
+        if (first !== -1) placeWord(first, word);
+      }
+    }
+
+    document.addEventListener('pointermove', onMove, { passive: false });
+    document.addEventListener('pointerup', onUp);
+    document.addEventListener('pointercancel', onUp);
   }
 
   function removeSlot(idx) {
