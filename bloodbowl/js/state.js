@@ -261,9 +261,16 @@ function endTurn() {
   document.dispatchEvent(new CustomEvent('bb:turnEnd'));
 }
 
-window.hasPlayerActed  = hasPlayerActed;
-window.markPlayerActed = markPlayerActed;
-window.endTurn         = endTurn;
+/* A team gets ONE Blitz action per turn. */
+function blitzUsedThisTurn(side) {
+  const flags = GameState.turnFlags[side] || {};
+  return Object.values(flags).some(f => f?.actionType === 'blitz');
+}
+
+window.hasPlayerActed     = hasPlayerActed;
+window.markPlayerActed    = markPlayerActed;
+window.endTurn            = endTurn;
+window.blitzUsedThisTurn  = blitzUsedThisTurn;
 
 /* Keep roster rows in sync with turn flags */
 document.addEventListener('bb:playerActed', e => {

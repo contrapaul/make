@@ -1165,11 +1165,20 @@ function initBlockWizard() {
       }
     }
 
-    /* Blitz-dependent skills (Horns / Juggernaut / Frenzy). */
+    /* Blitz-dependent skills (Horns / Juggernaut / Frenzy).
+       One Blitz per team turn — once it's spent, don't ask again. */
     if (attHas('Horns') || attHas('Juggernaut') || attHas('Frenzy')) {
-      isBlitz = await askInline('Is this Block part of a <b>Blitz</b> action?',
-        [{ text: 'Blitz', value: true, primary: true }, { text: 'Normal Block', value: false }]);
-      if (isBlitz && attHas('Horns')) { stMods.att += 1; }
+      if (window.blitzUsedThisTurn?.(attSide)) {
+        const z = promptZone();
+        const n = document.createElement('div');
+        n.className = 'bwiz-prompt-note';
+        n.textContent = 'Blitz already used this turn — resolved as a normal Block.';
+        z.appendChild(n);
+      } else {
+        isBlitz = await askInline('Is this Block part of a <b>Blitz</b> action?',
+          [{ text: 'Blitz', value: true, primary: true }, { text: 'Normal Block', value: false }]);
+        if (isBlitz && attHas('Horns')) { stMods.att += 1; }
+      }
     }
 
     /* Multiple Block: block two marked players at −2 ST each. */
