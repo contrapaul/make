@@ -1,0 +1,43 @@
+/* ============================================================
+   Blood Bowl Companion — css/game-page.css
+   Game-page-only chrome: full-width timeline strip, intro
+   overlay (G2), and contextual turn button polish. Loaded
+   only by game/index.html.
+   ============================================================ */
+
+/* ── Full-width game timeline strip ── */
+.bb-game-timeline {
+  width:        100%;
+  min-height:   2.5rem;
+  margin:       var(--bb-space-2, 0.5rem) 0;
+  display:      flex;
+  align-items:  center;
+}
+.bb-tl-placeholder {
+  width:          100%;
+  text-align:     center;
+  font-family:    'JetBrains Mono', monospace;
+  font-size:      var(--bb-font-sm, 0.8rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color:          rgba(150, 185, 255, 0.4);
+  padding:        0.5rem 0;
+  border-top:     1px solid rgba(80, 130, 255, 0.15);
+  border-bottom:  1px solid rgba(80, 130, 255, 0.15);
+}
+
+/* ── Contextual turn button (reuses the gold roll-btn look) ── */
+.gb-turn-btn { white-space: nowrap; }
+
+/* ── Intro overlay (TEAM vs TEAM) — populated in G2 ── */
+.bb-intro-overlay {
+  position:        fixed;
+  inset:          0;
+  z-index:        var(--z-toast, 900);
+  display:        flex;
+  align-items:    center;
+  justify-content: center;
+  background:     rgba(2, 6, 18, 0.92);
+  backdrop-filter: blur(6px);
+}
+.bb-intro-overlay[hidden] { display: none; }

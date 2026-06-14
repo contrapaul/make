@@ -52,6 +52,34 @@ const state = {
 };
 /* Expose for embedded card rendering in wizards */
 window.state            = state;
+
+/* ────────────────────────────────────────────────────────
+   SELECTED-TEAM REGISTRY  (handoff to the /game page)
+   Records which team each side loaded — { kind:'default'|'custom', id } —
+   mirrored to localStorage so New Game can write bb:activeMatch and the
+   game page can reconstruct the exact same two teams.
+   ──────────────────────────────────────────────────────── */
+const BB_SELECTED_KEY = 'bb:selectedSides';
+function _readSelected() {
+  try { return JSON.parse(localStorage.getItem(BB_SELECTED_KEY) || '{}'); } catch { return {}; }
+}
+function recordSelectedSide(side, kind, id) {
+  const sel = _readSelected();
+  sel[side] = { kind, id };
+  try { localStorage.setItem(BB_SELECTED_KEY, JSON.stringify(sel)); } catch (_) {}
+}
+function getSelectedSides() { return _readSelected(); }
+window.getSelectedSides = getSelectedSides;
+
+/* Reconstruct one side from a { kind, id } record (used by the game page). */
+function reconstructSide(side, sel) {
+  if (!sel || !sel.id) return Promise.resolve(false);
+  if (sel.kind === 'custom' && window.TeamBuilder?.loadIntoGame) {
+    return Promise.resolve(window.TeamBuilder.loadIntoGame(sel.id, side)).then(() => true);
+  }
+  return Promise.resolve(loadTeam(side, sel.id)).then(() => true);
+}
+window.reconstructSide = reconstructSide;
 window.POSITION_COLORS  = POSITION_COLORS;
 
 /* Timers for skill-link hover/close grace period */
@@ -90,6 +118,9 @@ async function init() {
     console.error('[BB] Init failed:', err);
   } finally {
     bbSignalReady();
+    /* Signal that team/skill data is loaded so the game page can reconstruct. */
+    window.__bbAppReady = true;
+    document.dispatchEvent(new CustomEvent('bb:appReady'));
   }
 }
 
@@ -232,6 +263,7 @@ async function loadTeam(side, teamId) {
     const players = await fetchJSON(team.fullTeam ?? team.file);
     state[side].team    = team;
     state[side].players = players;
+    recordSelectedSide(side, 'default', team.id);
     applyTeamColors(side, team.colors);
     renderRoster(side, players);
     syncTeamSkills(side, players, team.name);
@@ -278,6 +310,7 @@ async function loadCustomTeam(side, savedTeam) {
 
   state[side].team    = baseEntry ?? { id: savedTeam.baseTeamId, name: savedTeam.name, colors: {} };
   state[side].players = players;
+  recordSelectedSide(side, 'custom', savedTeam.id);
 
   /* Saved-team accent overrides the base race colour where set. */
   const customColors = { ...(baseEntry?.colors ?? {}), ...(savedTeam.colors ?? {}) };

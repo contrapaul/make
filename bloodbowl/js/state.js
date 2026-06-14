@@ -120,6 +120,12 @@ const GameState = {
   activeTeamIds:  { home: null, away: null },  /* saved team UUIDs when custom teams loaded */
   /* side → { idx: { acted: true, actionType } } — cleared on End Turn */
   turnFlags:      { left: {}, right: {} },
+  /* Sequencer state (game page): which team is taking its turn, and its turn # */
+  activeTeam:     null,   /* 'home' | 'away' — set by the game-page turn engine */
+  turn:           { home: 0, away: 0 },   /* per-team turn number within the half */
+  /* Broad game-event log surfaced by the game timeline (touchdowns, injuries,
+     fumbles, sendings-off, …). Each: { half, turn, side, type, playerIdx?, playerName?, detail } */
+  gameLog:        [],
 };
 
 window.GameState = GameState;
@@ -668,6 +674,15 @@ function persistGameState() {
         turns:    GameState.turnFlags,
         half:     GameState.half,
         phase:    GameState.phase,
+        /* Volatile globals so a /game refresh is lossless */
+        scores:       GameState.scores,
+        kickingTeam:  GameState.kickingTeam,
+        currentWeather: GameState.currentWeather,
+        rerolls:      GameState.rerolls,
+        rerollsTotal: GameState.rerollsTotal,
+        activeTeam:   GameState.activeTeam,
+        turn:         GameState.turn,
+        gameLog:      GameState.gameLog,
         sig:      { left: _rosterSig('left'), right: _rosterSig('right') },
       };
       localStorage.setItem(_matchKey(), JSON.stringify(payload));
@@ -698,17 +713,60 @@ function rehydrateSide(side) {
 }
 window.rehydrateSide = rehydrateSide;
 
+/* Restore match-wide globals (scores, kicking team, weather, rerolls, turn,
+   half/phase, event log) from the saved blob. Roster-independent, so no sig
+   check — call once after both sides are reconstructed (game page reload). */
+function rehydrateGlobals() {
+  let saved;
+  try { saved = JSON.parse(localStorage.getItem(_matchKey()) || 'null'); } catch (_) { saved = null; }
+  if (!saved || saved.v !== 1) return;
+  if (saved.scores)       GameState.scores       = saved.scores;
+  if (saved.kickingTeam)  GameState.kickingTeam  = saved.kickingTeam;
+  if (saved.currentWeather !== undefined) GameState.currentWeather = saved.currentWeather;
+  if (saved.rerolls)      GameState.rerolls      = saved.rerolls;
+  if (saved.rerollsTotal) GameState.rerollsTotal = saved.rerollsTotal;
+  if (saved.activeTeam !== undefined) GameState.activeTeam = saved.activeTeam;
+  if (saved.turn)         GameState.turn         = saved.turn;
+  if (Array.isArray(saved.gameLog)) GameState.gameLog = saved.gameLog;
+  if (typeof saved.half === 'number') GameState.half = saved.half;
+  if (saved.phase)        GameState.phase        = saved.phase;
+}
+window.rehydrateGlobals = rehydrateGlobals;
+
 /* Wipe all in-game conditions for the current match (explicit reset). */
 function clearGameState() {
   GameState.playerStatuses = { left: {}, right: {} };
   GameState.playerEffects  = { left: {}, right: {} };
   GameState.turnFlags      = { left: {}, right: {} };
+  GameState.scores         = { home: 0, away: 0 };
+  GameState.turn           = { home: 0, away: 0 };
+  GameState.activeTeam     = null;
+  GameState.kickingTeam    = null;
+  GameState.currentWeather = null;
+  GameState.gameLog        = [];
   try { localStorage.removeItem(_matchKey()); } catch (_) {}
   ['left', 'right'].forEach(side =>
     (getPlayerList(side) || []).forEach(p =>
       refreshPlayerCard(side, p.idx, PlayerStatus.AVAILABLE)));
 }
 window.clearGameState = clearGameState;
+
+/* ────────────────────────────────────────────────────────
+   GAME EVENT LOG  (surfaced by the game timeline)
+   ──────────────────────────────────────────────────────── */
+function logGameEvent(type, data = {}) {
+  GameState.gameLog.push({
+    half: GameState.half,
+    turn: GameState.activeTeam ? (GameState.turn?.[GameState.activeTeam] ?? 0) : 0,
+    activeTeam: GameState.activeTeam,
+    type,
+    ...data,
+    t: Date.now(),
+  });
+  document.dispatchEvent(new CustomEvent('bb:gameEvent', { detail: { type, ...data } }));
+  persistGameState();
+}
+window.logGameEvent = logGameEvent;
 
 /* Save whenever conditions or phase change. */
 document.addEventListener('bb:playerStatus', persistGameState);
