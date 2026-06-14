@@ -29,7 +29,7 @@
 /* ── Contextual turn button (reuses the gold roll-btn look) ── */
 .gb-turn-btn { white-space: nowrap; }
 
-/* ── Intro overlay (TEAM vs TEAM) — populated in G2 ── */
+/* ── Intro overlay (TEAM vs TEAM) ── */
 .bb-intro-overlay {
   position:        fixed;
   inset:          0;
@@ -37,7 +37,130 @@
   display:        flex;
   align-items:    center;
   justify-content: center;
-  background:     rgba(2, 6, 18, 0.92);
-  backdrop-filter: blur(6px);
+  background:     radial-gradient(circle at 50% 30%, rgba(20, 30, 70, 0.96), rgba(2, 6, 18, 0.97));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow:       hidden;
 }
 .bb-intro-overlay[hidden] { display: none; }
+body.bb-intro-open { overflow: hidden; }
+
+.bb-intro-inner {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  width:          100%;
+  height:         100%;
+  padding:        var(--bb-space-4, 1rem) var(--bb-space-4, 1rem) var(--bb-space-5, 1.5rem);
+  box-sizing:     border-box;
+}
+
+/* Headline: HOME vs AWAY */
+.bb-intro-head {
+  display:        flex;
+  align-items:    baseline;
+  justify-content: center;
+  gap:            clamp(0.6rem, 2vw, 1.6rem);
+  flex-shrink:    0;
+  margin-bottom:  var(--bb-space-3, 0.75rem);
+  font-family:    'JetBrains Mono', monospace;
+  text-align:     center;
+}
+.bb-intro-team {
+  font-weight:    800;
+  font-style:     italic;
+  font-size:      clamp(1.3rem, 4.5vw, 3.2rem);
+  line-height:    1.05;
+  color:          #fff;
+  text-shadow:    0 0 18px rgba(120, 160, 255, 0.35), 0 2px 4px rgba(0,0,0,0.8);
+  max-width:      40vw;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+}
+.bb-intro-team--home { color: #cfe0ff; }
+.bb-intro-team--away { color: #ffd9c8; }
+.bb-intro-vs {
+  font-weight:    700;
+  font-size:      clamp(0.9rem, 2.2vw, 1.6rem);
+  color:          var(--bb-gold, #D4AF37);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* Arena: two columns of fanned cards */
+.bb-intro-arena {
+  display:        flex;
+  flex:           1 1 0;
+  min-height:     0;
+  width:          100%;
+  gap:            clamp(0.5rem, 3vw, 2.5rem);
+  justify-content: center;
+}
+.bb-intro-col {
+  flex:           1 1 0;
+  min-width:      0;
+  display:        flex;
+  justify-content: center;
+  align-items:    flex-start;
+  overflow:       hidden;
+}
+
+/* Fanned stack — fixed natural width; FitScale shrinks it to the column.
+   Cards overlap so the whole roster reads as a deck. */
+.bb-intro-stack {
+  width:            17rem;
+  display:          flex;
+  flex-direction:   column;
+  align-items:      center;
+  transform-origin: top center;
+  will-change:      transform;
+}
+.bb-intro-card {
+  width:          100%;
+  margin-top:     -78%;            /* overlap: ~22% (name band) of each shows */
+  box-shadow:     0 10px 24px rgba(0, 0, 0, 0.55);
+  transition:     transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1), opacity 0.45s ease;
+  animation:      none !important; /* override .trading-card cardIn — it would hijack transform */
+}
+.bb-intro-stack .bb-intro-card:first-child { margin-top: 0; }
+
+/* Off-screen start positions (removed to animate to rest). --flyx is set in JS
+   per stack so the distance clears the viewport even when the stack is scaled. */
+.bb-intro-stack.home .bb-intro-card.fly { transform: translateX(calc(-1 * var(--flyx, 150vw))) rotate(-7deg); opacity: 0; }
+.bb-intro-stack.away .bb-intro-card.fly { transform: translateX(var(--flyx, 150vw)) rotate( 7deg); opacity: 0; }
+
+/* START GAME! button — pops in once the rosters settle */
+.bb-intro-start {
+  flex-shrink:    0;
+  margin-top:     var(--bb-space-4, 1rem);
+  font-family:    'Nuffle Italic', serif;
+  font-size:      clamp(1.2rem, 3.5vw, 2.4rem);
+  padding:        0.5em 1.6em;
+  background:     rgba(212, 175, 55, 0.92);
+  border:         1px solid rgba(212, 175, 55, 1);
+  color:          #1a1205;
+  letter-spacing: 0.05em;
+  border-radius:  10px;
+  cursor:         pointer;
+  opacity:        0;
+  transform:      scale(0.6);
+  pointer-events: none;
+  transition:     opacity 0.3s ease, transform 0.35s cubic-bezier(0.2, 1.4, 0.4, 1);
+  box-shadow:     0 0 28px rgba(212, 175, 55, 0.5);
+}
+.bb-intro-start.show {
+  opacity:        1;
+  transform:      scale(1);
+  pointer-events: auto;
+  animation:      bb-intro-pulse 1.8s ease-in-out infinite 0.4s;
+}
+.bb-intro-start.show:hover { background: rgba(212, 175, 55, 1); }
+@keyframes bb-intro-pulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(212, 175, 55, 0.45); }
+  50%      { box-shadow: 0 0 40px rgba(212, 175, 55, 0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-intro-card  { transition: none; }
+  .bb-intro-start { transition: none; animation: none; }
+}
