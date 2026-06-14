@@ -53,19 +53,190 @@
     }
 
     window.rehydrateGlobals?.();
-    wireTurnButton();
+    syncScoreboard();
+    initEngine();
     document.body.classList.add('bb-game-ready');
     window.BBGameTimeline?.render?.();
 
     maybeShowIntro(match);
   }
 
-  /* ── Contextual turn button (G1 stub → full engine in G3) ── */
-  function wireTurnButton() {
+  /* Push restored scores into the game-bar scoreboard + panels.gbState
+     (adjustScore updates the DOM live, but a reload needs this one-time sync). */
+  function syncScoreboard() {
+    const sc = window.GameState?.scores || { home: 0, away: 0 };
+    if (window.gbState) window.gbState.scores = { ...sc };
+    ['home', 'away'].forEach(side => {
+      const el = document.getElementById(`gb-${side}-score`);
+      if (el) el.textContent = sc[side] ?? 0;
+    });
+  }
+
+  /* ════════════════════════════════════════════════════════
+     TURN / SEQUENCE ENGINE
+     The contextual button drives the whole match:
+       Start of Half → End [Team] Turn #N → (TD → Kick Off) →
+       … → Start 2nd Half → … → Game Over.
+     Each coach gets TURNS_PER_HALF team-turns per half; the
+     receiving team takes the first turn after each kickoff.
+     ════════════════════════════════════════════════════════ */
+  const TURNS_PER_HALF = 8;
+  let engineMode = 'pre';   // pre | drive | pendingKick | halftime | gameover
+
+  const opp    = t => (t === 'home' ? 'away' : 'home');
+  const sideOf = t => (t === 'home' ? 'left' : 'right');
+  const nameOf = t => window.state?.[sideOf(t)]?.team?.name || (t === 'home' ? 'Home' : 'Away');
+
+  function gs() { return window.GameState; }
+
+  function initEngine() {
     const btn = document.getElementById('gb-turn-btn');
-    if (!btn || btn._wired) return;
-    btn._wired = true;
-    btn.addEventListener('click', () => window.DriveWizard?.open?.('half-start'));
+    if (btn && !btn._wired) { btn._wired = true; btn.addEventListener('click', onTurnButton); }
+    document.addEventListener('bb:driveClosed', onDriveClosed);
+    document.addEventListener('bb:score', onScore);
+    document.addEventListener('bb:playerStatus', onPlayerStatus);
+    deriveMode();
+    renderTurnButton();
+  }
+
+  /* Log notable injury outcomes to the game timeline (sent-off is logged
+     directly by the foul wizard, so it's excluded here to avoid doubles). */
+  const INJURY_LABELS = { ko: 'KO', badly_hurt: 'Casualty', dead: 'Dead', mng: 'MNG' };
+  function onPlayerStatus(e) {
+    const { side, idx, status } = e.detail || {};
+    const label = INJURY_LABELS[status];
+    if (!label) return;
+    const p = window.getPlayerList?.(side)?.[idx];
+    window.logGameEvent?.('injury', { side, idx, status, detail: `${p?.name || 'Player'} — ${label}` });
+  }
+
+  /* Reconstruct engineMode from restored state (reload-safe). */
+  function deriveMode() {
+    const g = gs();
+    if (g.phase === window.GamePhase?.GAME_OVER) engineMode = 'gameover';
+    else if (g.activeTeam && g.phase === window.GamePhase?.DRIVE) engineMode = 'drive';
+    else if (g.half === 2 && !g.activeTeam) engineMode = 'halftime';
+    else engineMode = 'pre';
+  }
+
+  function renderTurnButton() {
+    const btn = document.getElementById('gb-turn-btn');
+    if (!btn) return;
+    const g = gs();
+    const labels = {
+      pre:         'Start of Half',
+      halftime:    'Start 2nd Half',
+      pendingKick: '▶ Kick Off',
+      gameover:    '🏆 Game Over',
+      drive:       g.activeTeam ? `End ${nameOf(g.activeTeam)} — Turn ${g.turn?.[g.activeTeam] ?? 1}` : 'End Turn',
+    };
+    btn.textContent = labels[engineMode] || 'Start of Half';
+    btn.classList.toggle('gb-turn-btn--drive', engineMode === 'drive');
+    btn.classList.toggle('gb-turn-btn--over',  engineMode === 'gameover');
+  }
+
+  function onTurnButton() {
+    switch (engineMode) {
+      case 'pre':         window.DriveWizard?.open?.('half-start'); break;
+      case 'halftime':    window.DriveWizard?.open?.('half-start'); break;
+      case 'pendingKick': window.DriveWizard?.open?.('drive-only'); break;
+      case 'drive':       endActiveTurn(); break;
+      case 'gameover':    showSummary(); break;
+    }
+  }
+
+  /* A team begins its turn → bump its counter, go active, enter DRIVE. */
+  function beginTurn(team) {
+    const g = gs();
+    if (!g.turn) g.turn = { home: 0, away: 0 };
+    if ((g.turn[team] ?? 0) >= TURNS_PER_HALF) { endHalf(); return; }
+    g.turn[team] = (g.turn[team] ?? 0) + 1;
+    g.activeTeam = team;
+    engineMode = 'drive';
+    window.setPhase?.(window.GamePhase?.DRIVE || 'drive');
+    window.persistGameState?.();
+    renderTurnButton();
+    window.BBGameTimeline?.render?.();
+  }
+
+  function endActiveTurn() {
+    const g = gs();
+    window.endTurn?.();                       // clears per-player acted flags (+ bb:turnEnd)
+    const next = opp(g.activeTeam);
+    if ((g.turn?.[next] ?? 0) >= TURNS_PER_HALF) endHalf();
+    else beginTurn(next);
+  }
+
+  function endHalf() {
+    const g = gs();
+    if (g.half >= 2) { endGame(); return; }
+    g.half = 2;
+    g.kickingTeam = opp(g.kickingTeam);       // H1 receiver kicks off in H2
+    g.turn = { home: 0, away: 0 };
+    g.activeTeam = null;
+    engineMode = 'halftime';
+    window.setPhase?.(window.GamePhase?.HALF_TIME || 'half_time');
+    window.persistGameState?.();
+    renderTurnButton();
+    window.BBGameTimeline?.render?.();
+  }
+
+  function endGame() {
+    gs().activeTeam = null;
+    engineMode = 'gameover';
+    window.setPhase?.(window.GamePhase?.GAME_OVER || 'game_over');
+    window.persistGameState?.();
+    renderTurnButton();
+    window.BBGameTimeline?.render?.();
+    showSummary();
+  }
+
+  /* Drive wizard finished (half-start or post-TD kickoff) → start the
+     receiving team's turn. */
+  function onDriveClosed(e) {
+    const d = e.detail || {};
+    if (!d.completed) return;
+    if (d.flow !== 'half-start' && d.flow !== 'drive-only') return;
+    const recv = opp(gs().kickingTeam || 'away');
+    if ((gs().turn?.[recv] ?? 0) >= TURNS_PER_HALF) endHalf();
+    else beginTurn(recv);
+  }
+
+  /* Touchdown → the scoring team's turn ends and they kick off again. */
+  function onScore(e) {
+    const { side, delta } = e.detail || {};
+    if (!delta || delta <= 0) return;
+    const scorer = side === 'home' ? 'home' : 'away';
+    window.logGameEvent?.('touchdown', { side: sideOf(scorer), team: nameOf(scorer) });
+    window.endTurn?.();
+    gs().kickingTeam = scorer;                // scorer kicks off next
+    engineMode = 'pendingKick';
+    window.persistGameState?.();
+    renderTurnButton();
+  }
+
+  /* Lightweight Game Over summary (reuses the intro overlay shell). */
+  function showSummary() {
+    const overlay = document.getElementById('bb-intro-overlay');
+    if (!overlay) return;
+    const g = gs();
+    const hs = g.scores?.home ?? 0, as = g.scores?.away ?? 0;
+    const winner = hs === as ? 'Draw' : `${nameOf(hs > as ? 'home' : 'away')} win!`;
+    overlay.innerHTML = `
+      <div class="bb-intro-inner bb-summary">
+        <div class="bb-intro-head"><span class="bb-intro-team">Full Time</span></div>
+        <div class="bb-summary-score">
+          <span class="bb-intro-team--home">${esc(nameOf('home'))}</span>
+          <span class="bb-summary-nums">${hs} – ${as}</span>
+          <span class="bb-intro-team--away">${esc(nameOf('away'))}</span>
+        </div>
+        <div class="bb-summary-winner">${esc(winner)}</div>
+        <div class="bb-summary-actions">
+          <a class="roll-btn bb-intro-start show" href="./" role="button">Back to Menu</a>
+        </div>
+      </div>`;
+    overlay.hidden = false;
+    document.body.classList.add('bb-intro-open');
   }
 
   /* ════════════════════════════════════════════════════════

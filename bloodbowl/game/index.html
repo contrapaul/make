@@ -17,10 +17,10 @@
   <link rel="stylesheet" href="css/wizards.css?v=18">
   <link rel="stylesheet" href="css/pass-v3.css?v=13">
   <link rel="stylesheet" href="css/pitch.css">
-  <link rel="stylesheet" href="css/drive-wizard.css?v=2">
+  <link rel="stylesheet" href="css/drive-wizard.css?v=3">
   <link rel="stylesheet" href="css/team-builder.css?v=2">
   <link rel="stylesheet" href="css/spp.css">
-  <link rel="stylesheet" href="css/game-page.css?v=3">
+  <link rel="stylesheet" href="css/game-page.css?v=6">
 </head>
 <body class="app-loading">
 
@@ -53,13 +53,18 @@
           <button class="gb-choose-btn" id="choose-left" type="button" aria-haspopup="dialog">
             Choose Home Team
           </button>
+          <div class="gb-score-block">
+            <button class="gb-score-btn" id="gb-home-minus" type="button" aria-label="Home score −1">−</button>
+            <span class="gb-score" id="gb-home-score">0</span>
+            <button class="gb-score-btn gb-score-td" id="gb-home-plus" type="button" aria-label="Home touchdown">TD</button>
+          </div>
         </div>
       </div>
 
       <div class="gb-center">
         <!-- Contextual sequencer button (driven by js/game-page.js): Start of Half →
              End [Team] Turn #N → kickoff → … → Game Over -->
-        <button class="roll-btn gb-turn-btn" id="gb-turn-btn" type="button">Start of Half</button>
+        <button class="roll-btn gb-start-btn gb-turn-btn" id="gb-turn-btn" type="button">Start of Half</button>
         <div class="gb-start-sub">
           <button class="gb-start-sub-btn" id="gb-game-settings-btn" type="button">Game Settings</button>
           <a class="gb-start-sub-btn" href="./" role="button">Exit to Menu</a>
@@ -71,6 +76,11 @@
           <button class="gb-choose-btn" id="choose-right" type="button" aria-haspopup="dialog">
             Choose Away Team
           </button>
+          <div class="gb-score-block">
+            <button class="gb-score-btn gb-score-td" id="gb-away-plus" type="button" aria-label="Away touchdown">TD</button>
+            <span class="gb-score" id="gb-away-score">0</span>
+            <button class="gb-score-btn" id="gb-away-minus" type="button" aria-label="Away score −1">−</button>
+          </div>
         </div>
       </div>
 
@@ -762,15 +772,15 @@
   <script src="js/dice-slot.js"></script>
   <script src="js/player-card.js"></script>
   <script src="js/pitch.js"></script>
-  <script src="js/drive-wizard.js"></script>
+  <script src="js/drive-wizard.js?v=3"></script>
   <script src="js/team-builder.js?v=5"></script>
   <script src="js/spp-tracker.js"></script>
-  <script src="js/panels.js?v=2"></script>
-  <script src="js/wizards.js?v=29"></script>
-  <script src="js/pass-wizard.js?v=12"></script>
+  <script src="js/panels.js?v=3"></script>
+  <script src="js/wizards.js?v=30"></script>
+  <script src="js/pass-wizard.js?v=13"></script>
   <script src="script.js?v=8"></script>
-  <script src="js/game-timeline.js?v=1"></script>
-  <script src="js/game-page.js?v=3"></script>
+  <script src="js/game-timeline.js?v=2"></script>
+  <script src="js/game-page.js?v=7"></script>
   <script>
     (function () {
       const toggle = document.getElementById('bb-nav-toggle');

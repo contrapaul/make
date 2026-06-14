@@ -1707,6 +1707,7 @@ function initFoulWizard() {
       setPanel('foul-ref-panel', 'foul-ref-content', 'Sent Off!', 'bad',
         `Natural double on the ${on} roll — the referee spots the foul and ejects ${esc(pName(fouler))}. ` +
         `<strong>Argue the Call</strong>: D6 — 6 the player stays, 1 the coach is ejected too, 2–5 the call stands. A <em>Bribe</em> avoids it on 2+.`);
+      window.logGameEvent?.('sent-off', { side: foulerSide, detail: `${pName(fouler)} sent off for a foul` });
     } else {
       setPanel('foul-ref-panel', 'foul-ref-content', 'No Whistle', 'ok',
         'No double rolled — the referee misses the foul.');
@@ -2225,6 +2226,7 @@ function initThrowWizard() {
       if (ws.thrown)  window.markPlayerActed?.(ws.thrownSide,  ws.thrown.idx,  'thrown');
 
       let outcome, title, cls, desc;
+      const logFumble = () => window.logGameEvent?.('fumble', { side: ws.throwerSide, detail: `${ws.thrown?.name || 'Team-mate'} thrown — fumbled` });
 
       if (ws.useHailMary) {
         if (roll === 1) {
@@ -2255,6 +2257,7 @@ function initThrowWizard() {
       ws.throwResult  = outcome;
       ws.scatterDirs  = [];
       ws.landingResult = null;
+      if (outcome === 'fumble') logFumble();
 
       resultEl.innerHTML = `
         <div class="result-roll-num">${roll}</div>

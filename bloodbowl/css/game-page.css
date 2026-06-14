@@ -7,27 +7,178 @@
 
 /* ── Full-width game timeline strip ── */
 .bb-game-timeline {
+  position:     relative;          /* anchor for the marker popover */
   width:        100%;
-  min-height:   2.5rem;
   margin:       var(--bb-space-2, 0.5rem) 0;
-  display:      flex;
-  align-items:  center;
 }
 .bb-tl-placeholder {
   width:          100%;
   text-align:     center;
   font-family:    'JetBrains Mono', monospace;
   font-size:      var(--bb-font-sm, 0.8rem);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   color:          rgba(150, 185, 255, 0.4);
   padding:        0.5rem 0;
+}
+
+.bb-tl {
+  display:        flex;
+  flex-direction: column;
+  gap:            clamp(2px, 0.4vw, 5px);
+  padding:        0.4rem clamp(0.4rem, 1.5vw, 1rem);
+  background:     rgba(6, 14, 40, 0.55);
   border-top:     1px solid rgba(80, 130, 255, 0.15);
   border-bottom:  1px solid rgba(80, 130, 255, 0.15);
 }
 
-/* ── Contextual turn button (reuses the gold roll-btn look) ── */
-.gb-turn-btn { white-space: nowrap; }
+/* Each row: fixed label + two equal half-blocks separated by a divider. */
+.bb-tl-headrow,
+.bb-tl-row {
+  display:     flex;
+  align-items: stretch;
+  gap:         clamp(2px, 0.4vw, 5px);
+}
+.bb-tl-rowlabel {
+  flex:           0 0 clamp(54px, 9vw, 120px);
+  display:        flex;
+  align-items:    center;
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      clamp(0.5rem, 1.1vw, 0.72rem);
+  color:          rgba(200, 220, 255, 0.8);
+  white-space:    nowrap;
+  overflow:       hidden;
+  text-overflow:  ellipsis;
+}
+.bb-tl-row--active .bb-tl-rowlabel { color: var(--bb-gold, #D4AF37); }
+
+.bb-tl-half {
+  flex:    1 1 0;
+  display: flex;
+  gap:     clamp(1px, 0.3vw, 4px);
+  min-width: 0;
+}
+.bb-tl-sep { flex: 0 0 clamp(6px, 1vw, 14px); }
+
+.bb-tl-halflabel {
+  flex:           1 1 0;
+  text-align:     center;
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    700;
+  font-size:      clamp(0.42rem, 0.9vw, 0.6rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color:          rgba(150, 185, 255, 0.45);
+}
+.bb-tl-headrow .bb-tl-rowlabel { flex: 0 0 clamp(54px, 9vw, 120px); }
+
+/* Turn cells */
+.bb-tl-cell {
+  flex:           1 1 0;
+  min-width:      0;
+  height:         clamp(14px, 2.2vw, 26px);
+  border-radius:  3px;
+  background:     rgba(20, 35, 80, 0.5);
+  border:         1px solid rgba(80, 130, 255, 0.16);
+  position:       relative;
+  display:        flex;
+  align-items:    center;
+  justify-content: center;
+  gap:            1px;
+}
+.bb-tl-cell--played  { background: rgba(60, 100, 200, 0.32); border-color: rgba(100, 150, 255, 0.3); }
+.bb-tl-cell--current {
+  background:   rgba(212, 175, 55, 0.22);
+  border-color: var(--bb-gold, #D4AF37);
+  box-shadow:   0 0 8px rgba(212, 175, 55, 0.35);
+}
+
+/* Event markers inside a cell */
+.bb-tl-marker {
+  background:  none;
+  border:      none;
+  padding:     0;
+  cursor:      pointer;
+  line-height: 1;
+  font-size:   clamp(8px, 1.3vw, 14px);
+  filter:      drop-shadow(0 1px 1px rgba(0,0,0,0.7));
+  transition:  transform 0.1s;
+}
+.bb-tl-marker:hover { transform: scale(1.3); }
+
+/* Marker popover */
+.bb-tl-pop {
+  position:      absolute;
+  z-index:       var(--z-tooltip, 500);
+  transform:     translateX(-50%);
+  max-width:     220px;
+  padding:       0.4rem 0.6rem;
+  background:    rgba(8, 14, 34, 0.97);
+  border:        1px solid rgba(120, 160, 255, 0.4);
+  border-radius: 6px;
+  box-shadow:    0 8px 24px rgba(0, 0, 0, 0.55);
+  font-family:   'JetBrains Mono', monospace;
+  display:       flex;
+  flex-direction: column;
+  gap:           0.15rem;
+  pointer-events: none;
+}
+.bb-tl-pop-title  { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--bb-gold, #D4AF37); }
+.bb-tl-pop-detail { font-size: 0.66rem; color: rgba(220, 235, 255, 0.9); }
+
+/* ── Contextual turn button — gold base via .gb-start-btn; state modifiers ── */
+.gb-center .gb-turn-btn { white-space: nowrap; }
+/* Active turn: green "end turn" look */
+.gb-center .gb-turn-btn--drive {
+  background:   rgba(76, 175, 80, 0.9);
+  border-color: rgba(76, 175, 80, 1);
+}
+.gb-center .gb-turn-btn--drive:hover {
+  background:   rgba(76, 175, 80, 1);
+  box-shadow:   0 0 20px rgba(76, 175, 80, 0.5), 0 4px 16px rgba(0,0,0,0.35);
+}
+/* Game over: muted */
+.gb-center .gb-turn-btn--over {
+  background:   rgba(90, 100, 120, 0.6);
+  border-color: rgba(120, 135, 160, 0.6);
+}
+
+/* TD button accent (touchdown) */
+.gb-score-td {
+  width:        auto;
+  padding:      0 0.4rem;
+  font-size:    0.6rem;
+  font-weight:  800;
+  color:        var(--bb-gold, #D4AF37);
+  border-color: rgba(212, 175, 55, 0.5);
+}
+.gb-score-td:hover { background: rgba(212, 175, 55, 0.2); }
+
+/* ── Game Over summary (reuses the intro overlay shell) ── */
+.bb-summary { justify-content: center; gap: var(--bb-space-4, 1rem); }
+.bb-summary-score {
+  display:        flex;
+  align-items:    center;
+  justify-content: center;
+  gap:            clamp(0.8rem, 3vw, 2.4rem);
+  font-family:    'JetBrains Mono', monospace;
+  font-weight:    800;
+}
+.bb-summary-nums {
+  font-size:   clamp(2rem, 7vw, 5rem);
+  color:       var(--bb-gold, #D4AF37);
+  letter-spacing: 0.04em;
+}
+.bb-summary-score .bb-intro-team--home,
+.bb-summary-score .bb-intro-team--away { font-size: clamp(1rem, 3vw, 2rem); max-width: 30vw; }
+.bb-summary-winner {
+  font-family:    'JetBrains Mono', monospace;
+  font-style:     italic;
+  font-weight:    700;
+  font-size:      clamp(1rem, 3vw, 1.8rem);
+  color:          #fff;
+  text-align:     center;
+}
+.bb-summary-actions { display: flex; gap: 1rem; }
 
 /* ── Intro overlay (TEAM vs TEAM) ── */
 .bb-intro-overlay {

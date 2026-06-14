@@ -315,6 +315,8 @@ function adjustScore(side, delta) {
   if (el) el.textContent = gbState.scores[side];
   /* Mirror scores to GameState for post-game screen */
   if (window.GameState) window.GameState.scores = { ...gbState.scores };
+  /* Notify the game-page sequence engine (touchdown → kickoff flow). */
+  document.dispatchEvent(new CustomEvent('bb:score', { detail: { side, delta } }));
   /* Auto-open TD SPP prompt when scoring */
   if (delta > 0 && window.SPPTracker) {
     window.SPPTracker.openTDPrompt(side === 'home' ? 'left' : 'right');

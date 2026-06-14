@@ -33,8 +33,10 @@ const DriveWizard = (() => {
   };
 
   /* ── Internal state ── */
-  let _flow  = [];
-  let _step  = 0;
+  let _flow       = [];
+  let _flowName   = '';
+  let _step       = 0;
+  let _reachedEnd = false;   /* true once the final step is shown — drives "completed" */
   let _state = {};  /* { weather, kickingTeam, prayer, deviation, kickoff } */
 
   /* ── Next-button lock (for roll-required steps) ── */
@@ -70,8 +72,10 @@ const DriveWizard = (() => {
   /* ── Public API ── */
 
   function open(flow = 'half-start') {
-    _flow  = FLOWS[flow] ?? FLOWS['half-start'];
+    _flowName = FLOWS[flow] ? flow : 'half-start';
+    _flow  = FLOWS[_flowName];
     _step  = 0;
+    _reachedEnd = false;
     _state = {};
     _wireNav();
     _render();
@@ -79,6 +83,12 @@ const DriveWizard = (() => {
   }
 
   function close() {
+    /* completed = finished the flow via the final "Play the Drive" step
+       (vs dismissed early via backdrop). Lets the game page resume play. */
+    const completed = _reachedEnd || _step >= _flow.length - 1;
+    document.dispatchEvent(new CustomEvent('bb:driveClosed', {
+      detail: { flow: _flowName, completed },
+    }));
     _hideModal();
   }
 
@@ -174,6 +184,7 @@ const DriveWizard = (() => {
       nextBtn.textContent = isLast ? '▸ Play the Drive' : 'Next →';
       nextBtn.disabled    = false;
     }
+    if (isLast) _reachedEnd = true;
 
     _updatePill();
 
@@ -316,9 +327,31 @@ const DriveWizard = (() => {
 
     /* ── PRAYERS ── */
     prayers(el) {
+      /* Prayers to Nuffle only apply when one team can field FEWER players
+         than the other at kick-off. At the start of the game (and any time the
+         teams are even) none apply — so don't gate the wizard on a roll. */
+      const avail = side => (window.getPlayerList?.(side) || [])
+        .filter(p => window.isPlayerAvailable ? window.isPlayerAvailable(p) : true).length;
+      const fieldable = side => Math.min(11, avail(side));
+      const fh = fieldable('left'), fa = fieldable('right');
+
+      if (fh === fa) {
+        const ok = document.createElement('p');
+        ok.className = 'panel-intro';
+        ok.innerHTML = `Both teams can field <strong>${fh}</strong> player${fh === 1 ? '' : 's'} — ` +
+          `no Prayers to Nuffle this kick-off.`;
+        el.appendChild(ok);
+        _unlockNext();   // nothing to roll — proceed freely
+        return;
+      }
+
+      const prayingSide = fh < fa ? 'left' : 'right';
+      const prayingName = window.state?.[prayingSide]?.team?.name ||
+        (prayingSide === 'left' ? 'Home' : 'Away');
       const note = document.createElement('p');
       note.className = 'panel-intro';
-      note.textContent = 'If a team has fewer players on the pitch than the opposition at kick-off, that team\'s Coach may pray to Nuffle. Roll D16.';
+      note.innerHTML = `<strong>${h(prayingName)}</strong> can field fewer players ` +
+        `(${Math.min(fh, fa)} vs ${Math.max(fh, fa)}) — its Coach may pray to Nuffle. Roll D16.`;
       el.appendChild(note);
 
       const resultEl = document.createElement('div');

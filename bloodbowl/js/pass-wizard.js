@@ -675,6 +675,7 @@ function initPassWizard() {
     if (ws.plan.blizzFumble) {
       seqResult('throw', null, 'Auto-Fumble', 'bad', 'Blizzard blocks Long/Bomb passes');
       ws.passResult = 'fumble';
+      window.logGameEvent?.('fumble', { side: ws.activeSide, detail: `${ws.thrower?.name || 'Thrower'} fumbled the pass (Blizzard)` });
       await scatterFrom(ws.throwerPos, 3, 'Fumble — ball scatters from thrower');
       finish('Fumble — Close'); return;
     }
@@ -687,6 +688,7 @@ function initPassWizard() {
 
     if (isFumble) {
       seqResult('throw', roll, 'Fumble', 'bad', explain);
+      window.logGameEvent?.('fumble', { side: ws.activeSide, detail: `${ws.thrower?.name || 'Thrower'} fumbled the pass` });
       await scatterFrom(ws.throwerPos, 3, 'Fumble — ball scatters from thrower');
       finish('Fumble — Close'); return;
     }
