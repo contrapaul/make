@@ -1887,7 +1887,9 @@
   transition:      background 0.15s, box-shadow 0.7s ease, transform 0.12s, border-color 0.15s;
   font-family:     'Nuffle Italic', serif;
   font-size:       1.5em;
-  width:           100%;
+  /* Leave breathing room on each side so the pulsing glow isn't clipped by the
+     wizard frame (was width:100%). */
+  width:           calc(100% - 2.4em);
   padding:         0.55em 1em;
   background:      rgba(212, 175, 55, 0.88);
   border-color:    rgba(212, 175, 55, 0.95);
@@ -1895,7 +1897,7 @@
   text-shadow:     0 0 4px rgba(0,0,0,0.7), 0 1px 2px rgba(0,0,0,0.9);
   letter-spacing:  0.06em;
   justify-content: center;
-  margin:          0.4em 0 0;
+  margin:          0.4em auto 0;
 }
 #block-roll-btn:hover,
 .pwiz3-roll-btn:hover {
