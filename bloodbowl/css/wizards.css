@@ -1833,39 +1833,39 @@
 @keyframes bwiz-pulse-gold-strong {
   0%, 100% {
     box-shadow: 0 0 0 1px rgba(255,210,40,0.70),
-                0 0 16px 5px rgba(255,210,40,0.45),
-                0 0 30px 8px rgba(255,210,40,0.24),
+                0 0 8px 2px rgba(255,210,40,0.45),
+                0 0 15px 4px rgba(255,210,40,0.22),
                 0 4px 12px rgba(0,0,0,0.28);
   }
   50% {
     box-shadow: 0 0 0 2px rgba(255,210,40,1.0),
-                0 0 24px 8px rgba(255,210,40,0.78),
-                0 0 44px 14px rgba(255,210,40,0.40),
+                0 0 13px 3px rgba(255,210,40,0.72),
+                0 0 22px 6px rgba(255,210,40,0.36),
                 0 4px 12px rgba(0,0,0,0.28);
   }
 }
 @keyframes bwiz-pulse-green-strong {
   0%, 100% {
     box-shadow: 0 0 0 1px rgba(102,238,68,0.60),
-                0 0 14px 4px rgba(102,238,68,0.35),
-                0 0 26px 6px rgba(102,238,68,0.22);
+                0 0 8px 2px rgba(102,238,68,0.35),
+                0 0 14px 3px rgba(102,238,68,0.20);
   }
   50% {
     box-shadow: 0 0 0 1px rgba(102,238,68,1.0),
-                0 0 22px 6px rgba(102,238,68,0.65),
-                0 0 40px 10px rgba(102,238,68,0.35);
+                0 0 12px 3px rgba(102,238,68,0.62),
+                0 0 20px 5px rgba(102,238,68,0.32);
   }
 }
 @keyframes bwiz-pulse-blue-strong {
   0%, 100% {
     box-shadow: 0 0 0 1px rgba(80,130,255,0.60),
-                0 0 14px 4px rgba(80,130,255,0.35),
-                0 0 26px 6px rgba(80,130,255,0.22);
+                0 0 8px 2px rgba(80,130,255,0.35),
+                0 0 14px 3px rgba(80,130,255,0.20);
   }
   50% {
     box-shadow: 0 0 0 2px rgba(80,130,255,1.0),
-                0 0 22px 6px rgba(80,130,255,0.70),
-                0 0 40px 10px rgba(80,130,255,0.38);
+                0 0 12px 3px rgba(80,130,255,0.68),
+                0 0 20px 5px rgba(80,130,255,0.36);
   }
 }
 

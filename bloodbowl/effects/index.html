@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card Effects Gallery — Blood Bowl Companion (temp)</title>
+<style>
+  :root {
+    --bg: #14171d; --panel: #1c2029; --line: #2b313d; --ink: #e8ecf2; --muted: #99a2b2;
+    --gold: #ffd24a; --green: #5ce06a; --red: #ff5a45; --blue: #6aa0ff; --purple: #c08bff; --orange: #ff9a3c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: radial-gradient(ellipse at 50% -10%, #20252f, var(--bg) 60%); color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; line-height: 1.5; padding: 1.5rem clamp(0.8rem, 3vw, 2.5rem) 4rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 0.2rem; }
+  .sub { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.2rem; max-width: 70ch; }
+  .toolbar { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.5rem; }
+  .btn { background: #2a313d; color: var(--ink); border: 1px solid var(--line); border-radius: 6px;
+    padding: 0.5rem 0.9rem; font-size: 0.85rem; cursor: pointer; }
+  .btn:hover { background: #343d4c; }
+  .group-title { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+    margin: 1.8rem 0 0.7rem; border-bottom: 1px solid var(--line); padding-bottom: 0.4rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 1.6rem 1.2rem; }
+  .tile { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  .stage { width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; }
+  .label { text-align: center; font-size: 0.82rem; font-weight: 600; }
+  .code { font-family: ui-monospace, "Courier New", monospace; font-size: 0.68rem; color: var(--muted); }
+
+  /* ── Generic mini trading-card ── */
+  .fx-card {
+    position: relative; width: 108px; height: 150px; border-radius: 9px; overflow: visible;
+    background: linear-gradient(160deg, #3a4356, #232a37);
+    border: 1.5px solid #4a566b; color: #fff; cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.5); user-select: none;
+  }
+  .fx-card .fx-head { height: 34px; border-radius: 7px 7px 0 0; background: linear-gradient(180deg, var(--gold), #c79412);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 8px; }
+  .fx-card .fx-num { font-weight: 800; font-size: 0.9rem; color: #1a1205; }
+  .fx-card .fx-pos { font-size: 0.6rem; color: #1a1205; opacity: 0.8; }
+  .fx-card .fx-portrait { height: 70px; margin: 6px; border-radius: 5px;
+    background: repeating-linear-gradient(45deg, #2c3340, #2c3340 6px, #323a48 6px, #323a48 12px); }
+  .fx-card .fx-name { text-align: center; font-size: 0.7rem; font-weight: 700; padding: 2px; }
+  .fx-card .fx-stats { display: flex; justify-content: space-around; font-size: 0.58rem; color: #cdd6e2; padding: 0 4px 4px; }
+
+  /* overlay layer that effects draw into (clipped to card for washes/cracks) */
+  .fx-clip { position: absolute; inset: 0; border-radius: 9px; overflow: hidden; pointer-events: none; }
+
+  /* ════════ EFFECTS ════════ */
+  /* Glows (continuous) */
+  @keyframes fx-glow { 0%,100% { box-shadow: 0 0 0 1px var(--c), 0 0 8px 2px var(--c2), 0 6px 16px rgba(0,0,0,0.5); }
+    50% { box-shadow: 0 0 0 2px var(--c), 0 0 18px 6px var(--c2), 0 6px 16px rgba(0,0,0,0.5); } }
+  .fx-glow-green { --c: rgba(92,224,106,0.9); --c2: rgba(92,224,106,0.55); animation: fx-glow 1.5s ease-in-out infinite; }
+  .fx-glow-red   { --c: rgba(255,90,69,0.9);  --c2: rgba(255,90,69,0.55);  animation: fx-glow 1.5s ease-in-out infinite; }
+  .fx-glow-gold  { --c: rgba(255,210,74,0.9); --c2: rgba(255,210,74,0.55); animation: fx-glow 1.5s ease-in-out infinite; }
+  .fx-glow-blue  { --c: rgba(106,160,255,0.9);--c2: rgba(106,160,255,0.55);animation: fx-glow 1.5s ease-in-out infinite; }
+
+  /* Expanding ring */
+  @keyframes fx-ring { 0% { box-shadow: 0 0 0 0 var(--c); } 60%,100% { box-shadow: 0 0 0 22px rgba(0,0,0,0); } }
+  .fx-ring::after { content: ''; position: absolute; inset: 0; border-radius: 9px; animation: fx-ring 1.8s ease-out infinite; }
+  .fx-ring-green::after { --c: rgba(92,224,106,0.6); }
+  .fx-ring-red::after   { --c: rgba(255,90,69,0.6); }
+
+  /* Colour wash flash (clipped) */
+  @keyframes fx-flash { 0%,100% { opacity: 0; } 8% { opacity: 0.85; } 45% { opacity: 0; } }
+  .fx-flash > .fx-clip::after { content: ''; position: absolute; inset: 0; animation: fx-flash 2.4s ease-in-out infinite; }
+  .fx-flash-green > .fx-clip::after { background: radial-gradient(circle, rgba(92,224,106,0.9), rgba(92,224,106,0) 70%); }
+  .fx-flash-red   > .fx-clip::after { background: radial-gradient(circle, rgba(255,90,69,0.9), rgba(255,90,69,0) 70%); }
+
+  /* Shake / jolt */
+  @keyframes fx-shake { 0%,72%,100% { transform: translateX(0) rotate(0); }
+    74% { transform: translateX(-5px) rotate(-2deg); } 78% { transform: translateX(5px) rotate(2deg); }
+    82% { transform: translateX(-4px) rotate(-1deg); } 86% { transform: translateX(3px) rotate(1deg); } 90% { transform: translateX(0); } }
+  .fx-shake { animation: fx-shake 2.2s ease-in-out infinite; }
+  @keyframes fx-jolt { 0%,60%,100% { transform: translateY(0) scale(1); } 66% { transform: translateY(6px) scale(0.97); } 72% { transform: translateY(-2px) scale(1.01); } 78% { transform: translateY(0) scale(1); } }
+  .fx-jolt { animation: fx-jolt 2.2s ease-in-out infinite; }
+
+  /* Stamp pop (uses .fx-stamp child) */
+  @keyframes fx-stamp { 0%,8% { opacity: 0; transform: translate(-50%,-50%) scale(2.4) rotate(-18deg); }
+    16% { opacity: 1; transform: translate(-50%,-50%) scale(1) rotate(-12deg); }
+    70% { opacity: 1; } 84%,100% { opacity: 0; transform: translate(-50%,-50%) scale(1) rotate(-12deg); } }
+  .fx-stamp { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    font-weight: 900; font-size: 1.5rem; padding: 0.1em 0.35em; border: 3px solid currentColor; border-radius: 8px;
+    font-family: ui-monospace, monospace; letter-spacing: 0.04em; opacity: 0; animation: fx-stamp 2.6s ease-in-out infinite;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6); }
+  .fx-stamp.green { color: var(--green); } .fx-stamp.red { color: var(--red); }
+  .fx-stamp.gold { color: var(--gold); } .fx-stamp.orange { color: var(--orange); }
+  .fx-stamp.big { font-size: 1.1rem; }
+
+  /* Dizzy stars (stun) */
+  @keyframes fx-orbit { from { transform: rotate(0) translateX(28px) rotate(0); } to { transform: rotate(360deg) translateX(28px) rotate(-360deg); } }
+  .fx-stars .fx-star { position: absolute; left: 50%; top: 26%; font-size: 1rem; }
+  .fx-stars .fx-star:nth-child(1) { animation: fx-orbit 1.4s linear infinite; }
+  .fx-stars .fx-star:nth-child(2) { animation: fx-orbit 1.4s linear infinite; animation-delay: -0.47s; }
+  .fx-stars .fx-star:nth-child(3) { animation: fx-orbit 1.4s linear infinite; animation-delay: -0.93s; }
+
+  /* Wobble (stun alt) */
+  @keyframes fx-wobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-6deg); } 50% { transform: rotate(5deg); } 75% { transform: rotate(-3deg); } }
+  .fx-wobble { animation: fx-wobble 1.1s ease-in-out infinite; transform-origin: bottom center; }
+
+  /* Desaturate + dim (injury / out) */
+  @keyframes fx-desat { 0%,100% { filter: grayscale(0.9) brightness(0.7); } 50% { filter: grayscale(0.9) brightness(0.55); } }
+  .fx-desat { animation: fx-desat 2s ease-in-out infinite; }
+
+  /* Armour crack (SVG overlay) */
+  @keyframes fx-crackin { 0%,20% { opacity: 0; } 30% { opacity: 1; } 80% { opacity: 1; } 92%,100% { opacity: 0; } }
+  .fx-crack .fx-crack-svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; animation: fx-crackin 2.6s ease-in-out infinite; }
+  .fx-crack .fx-crack-svg path { stroke: #ffce54; stroke-width: 2.2; fill: none; filter: drop-shadow(0 0 3px rgba(255,120,40,0.9)); }
+
+  /* Radial burst (injury / armour shatter) */
+  @keyframes fx-burst { 0%,15% { opacity: 0; transform: scale(0.4); } 25% { opacity: 1; transform: scale(1); } 55%,100% { opacity: 0; transform: scale(1.5); } }
+  .fx-burst .fx-spark { position: absolute; left: 50%; top: 50%; width: 4px; height: 30px; margin: -15px 0 0 -2px;
+    background: linear-gradient(var(--bc, #ffce54), transparent); transform-origin: bottom center; opacity: 0;
+    animation: fx-burst 2.2s ease-out infinite; }
+
+  /* Fumble drop */
+  @keyframes fx-drop { 0%,55%,100% { transform: translateY(0) rotate(0); } 65% { transform: translateY(10px) rotate(8deg); } 75% { transform: translateY(2px) rotate(-4deg); } 85% { transform: translateY(0) rotate(0); } }
+  .fx-drop { animation: fx-drop 2.4s ease-in-out infinite; }
+  /* Ball flies off (fumble) */
+  @keyframes fx-ballfly { 0%,50% { opacity: 0; transform: translate(0,0) rotate(0); } 55% { opacity: 1; } 100% { opacity: 0; transform: translate(60px,-40px) rotate(240deg); } }
+  .fx-ball { position: absolute; left: 50%; top: 45%; width: 16px; height: 16px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #b9742f, #6e3d12); opacity: 0; animation: fx-ballfly 2.4s ease-in infinite; }
+
+  /* Shimmer sweep (catch / success) */
+  @keyframes fx-shimmer { 0% { transform: translateX(-130%) skewX(-20deg); } 35%,100% { transform: translateX(230%) skewX(-20deg); } }
+  .fx-shimmer > .fx-clip::after { content: ''; position: absolute; top: 0; bottom: 0; width: 50%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent); animation: fx-shimmer 2.4s ease-in-out infinite; }
+
+  /* Bounce-in pop (success) */
+  @keyframes fx-pop { 0%,60%,100% { transform: scale(1); } 68% { transform: scale(1.12); } 76% { transform: scale(0.97); } 84% { transform: scale(1); } }
+  .fx-pop { animation: fx-pop 2.2s ease-in-out infinite; }
+</style>
+</head>
+<body>
+  <h1>Card Effects Gallery <span style="color:var(--muted);font-size:0.8rem;font-weight:400;">(temporary)</span></h1>
+  <p class="sub">Candidate effects to flag game events on a player's card. Click any card to replay. Pick the ones to wire in;
+     each tile shows the CSS class to reference.</p>
+  <div class="toolbar">
+    <button class="btn" id="replay">↻ Replay all</button>
+    <button class="btn" id="toggle-motion">Pause / play</button>
+  </div>
+  <div id="gallery"></div>
+
+<script>
+  /* group → [ {name, cls, overlay} ]  (cls applied to .fx-card; overlay = extra inner HTML) */
+  const STAR = '<div class="fx-star">★</div>';
+  const sparks = (color) => Array.from({length: 8}, (_, i) =>
+    `<div class="fx-spark" style="--bc:${color};transform:rotate(${i*45}deg)"></div>`).join('');
+  const crackSVG = `<svg class="fx-crack-svg" viewBox="0 0 108 150" preserveAspectRatio="none">
+      <path d="M54 10 L48 55 L62 70 L40 95 L58 120 L46 145 M48 55 L20 60 M62 70 L92 64 M40 95 L14 110 M58 120 L88 128"/></svg>`;
+
+  const GROUPS = {
+    'Successful block / push': [
+      { name: 'Green glow', cls: 'fx-glow-green' },
+      { name: 'Green ring', cls: 'fx-ring fx-ring-green' },
+      { name: 'Check stamp', cls: '', overlay: '<div class="fx-stamp green">✓</div>' },
+      { name: 'Jolt + green flash', cls: 'fx-jolt fx-flash fx-flash-green' },
+      { name: 'Bounce pop', cls: 'fx-pop fx-glow-green' },
+    ],
+    'Armour break': [
+      { name: 'Crack lines', cls: 'fx-crack' },
+      { name: 'Shatter burst', cls: 'fx-burst', overlay: sparks('#ffce54') },
+      { name: 'Orange flash + shake', cls: 'fx-shake fx-flash fx-flash-red', accent: 'orange' },
+      { name: 'CRACK! stamp', cls: 'fx-shake', overlay: '<div class="fx-stamp orange big">CRACK</div>' },
+    ],
+    'Injury / casualty': [
+      { name: 'Red burst', cls: 'fx-burst', overlay: sparks('#ff5a45') },
+      { name: 'Skull stamp', cls: 'fx-shake', overlay: '<div class="fx-stamp red">💀</div>' },
+      { name: 'Red throb + desat', cls: 'fx-desat fx-glow-red' },
+      { name: 'CAS stamp', cls: '', overlay: '<div class="fx-stamp red big">CAS</div>' },
+    ],
+    'Stun / knocked down': [
+      { name: 'Dizzy stars', cls: 'fx-stars', overlay: STAR + STAR + STAR },
+      { name: 'Wobble', cls: 'fx-wobble' },
+      { name: 'STUN stamp', cls: 'fx-jolt', overlay: '<div class="fx-stamp gold big">STUN</div>' },
+      { name: 'Jolt down', cls: 'fx-jolt' },
+    ],
+    'Successful pass / catch': [
+      { name: 'Blue glow', cls: 'fx-glow-blue' },
+      { name: 'Shimmer sweep', cls: 'fx-shimmer' },
+      { name: 'Catch pop + shimmer', cls: 'fx-pop fx-shimmer' },
+      { name: 'Gold ✓ stamp', cls: '', overlay: '<div class="fx-stamp gold">✓</div>' },
+    ],
+    'Fumble / turnover': [
+      { name: 'Card drop', cls: 'fx-drop' },
+      { name: 'Ball flies off', cls: 'fx-shake', overlay: '<div class="fx-ball"></div>' },
+      { name: 'Red ✕ stamp + shake', cls: 'fx-shake', overlay: '<div class="fx-stamp red big">✕</div>' },
+      { name: 'Red flash drop', cls: 'fx-drop fx-flash fx-flash-red' },
+    ],
+    'Selection / active': [
+      { name: 'Gold selected glow', cls: 'fx-glow-gold' },
+      { name: 'Blue active glow', cls: 'fx-glow-blue' },
+      { name: 'Gold ring', cls: 'fx-ring fx-ring-red' },
+    ],
+  };
+
+  function cardHTML(overlay) {
+    return `
+      <div class="fx-head"><span class="fx-num">#7</span><span class="fx-pos">Blitzer</span></div>
+      <div class="fx-portrait"></div>
+      <div class="fx-name">GRIFF</div>
+      <div class="fx-stats"><span>MA7</span><span>ST3</span><span>AG3+</span><span>AV9+</span></div>
+      <div class="fx-clip"></div>
+      ${overlay || ''}`;
+  }
+
+  const gallery = document.getElementById('gallery');
+  Object.entries(GROUPS).forEach(([title, items]) => {
+    const h = document.createElement('div'); h.className = 'group-title'; h.textContent = title;
+    gallery.appendChild(h);
+    const grid = document.createElement('div'); grid.className = 'grid';
+    items.forEach(it => {
+      const tile = document.createElement('div'); tile.className = 'tile';
+      const stage = document.createElement('div'); stage.className = 'stage';
+      const card = document.createElement('div'); card.className = 'fx-card ' + (it.cls || '');
+      card.innerHTML = cardHTML(it.overlay);
+      card.addEventListener('click', () => { /* restart animations */
+        const c = card.className; card.className = 'fx-card'; void card.offsetWidth; card.className = c;
+      });
+      stage.appendChild(card);
+      const label = document.createElement('div'); label.className = 'label'; label.textContent = it.name;
+      const code = document.createElement('div'); code.className = 'code'; code.textContent = it.cls || '(overlay only)';
+      tile.append(stage, label, code);
+      grid.appendChild(tile);
+    });
+    gallery.appendChild(grid);
+  });
+
+  document.getElementById('replay').addEventListener('click', () => {
+    document.querySelectorAll('.fx-card').forEach(card => {
+      const c = card.className; card.className = 'fx-card'; void card.offsetWidth; card.className = c;
+    });
+  });
+  let paused = false;
+  document.getElementById('toggle-motion').addEventListener('click', () => {
+    paused = !paused;
+    document.querySelectorAll('.fx-card, .fx-card *').forEach(el => {
+      el.style.animationPlayState = paused ? 'paused' : 'running';
+    });
+  });
+</script>
+</body>
+</html>
