@@ -58,7 +58,7 @@
     document.body.classList.add('bb-game-ready');
     window.BBGameTimeline?.render?.();
 
-    maybeShowIntro(match);
+    maybeShowIntro();
   }
 
   /* Push restored scores into the game-bar scoreboard + panels.gbState
@@ -137,9 +137,9 @@
 
   function onTurnButton() {
     switch (engineMode) {
-      case 'pre':         window.DriveWizard?.open?.('half-start'); break;
-      case 'halftime':    window.DriveWizard?.open?.('half-start'); break;
-      case 'pendingKick': window.DriveWizard?.open?.('drive-only'); break;
+      case 'pre':         startDrive('half-start'); break;
+      case 'halftime':    startDrive('half-start'); break;
+      case 'pendingKick': startDrive('drive-only'); break;
       case 'drive':       endActiveTurn(); break;
       case 'gameover':    showSummary(); break;
     }
@@ -240,110 +240,136 @@
   }
 
   /* ════════════════════════════════════════════════════════
-     INTRO — TEAM vs TEAM
-     Rosters fly in from off-screen and stack into a fanned
-     deck; a big START GAME! button reveals once they settle.
-     Shown once per fresh match (keyed on match.createdAt).
+     FIELDING WIZARD — start of each drive
+     The roster trading-cards lay out in a 3-column grid per side.
+     A big count shows how many players will take the field; tap a
+     card to bench it for this drive. A team (bar Snotlings) can't
+     field more than 11, so the start button locks until each side
+     is at 11 or fewer. Repurposes the old TEAM-vs-TEAM intro shell.
      ════════════════════════════════════════════════════════ */
 
-  function maybeShowIntro(match) {
-    const key = String(match.createdAt || '');
-    let shownFor = null;
-    try { shownFor = localStorage.getItem('bb:introShownFor'); } catch (_) {}
-    if (key && shownFor === key) return;   // already played for this match (e.g. reload)
-    showIntro(match, key);
+  function isOut(side, idx) {
+    return !!window.STATUS_META?.[window.getPlayerStatus?.(side, idx)]?.dim;
+  }
+  function teamIsSnotling(side) {
+    const t = window.state?.[side]?.team || {};
+    return /snotling/i.test(`${t.name || ''} ${t.id || ''}`);
   }
 
-  function buildStack(side) {
-    const team    = window.state?.[side]?.team || {};
-    const players = window.state?.[side]?.players || [];
-    const imgDir  = team.imageDir || 'images/';
-    const colors  = team.colors || {};
-
-    const stack = document.createElement('div');
-    stack.className = `bb-intro-stack ${side === 'left' ? 'home' : 'away'}`;
-    Object.entries(TC_VARS).forEach(([k, prop]) => {
-      if (colors[k]) stack.style.setProperty(prop, colors[k]);
-    });
-
-    players.forEach((p, i) => {
-      const card = document.createElement('div');
-      card.className = 'trading-card bb-intro-card' + (p.isStarPlayer ? ' star-card' : '');
-      if (!REDUCED) card.classList.add('fly');
-      card.style.transitionDelay = `${i * 55}ms`;
-      card.innerHTML = window.PlayerCard.html(p, { imageDir: imgDir });
-      window.PlayerCard.bindImage(card);
-      stack.appendChild(card);
-    });
-    return { stack, team, count: players.length };
+  /* Boot / reload entry: open the fielding wizard for the first drive unless the
+     match is already under way (reload mid-game). */
+  function maybeShowIntro() {
+    if (engineMode !== 'pre') return;          // already past kickoff (reload)
+    startDrive('half-start');
   }
 
-  function showIntro(match, key) {
+  /* Show the fielding wizard, then hand off to the drive (kickoff) wizard. */
+  function startDrive(flow) {
     const overlay = document.getElementById('bb-intro-overlay');
-    if (!overlay || !window.PlayerCard) return;
+    if (!overlay || !window.PlayerCard) { window.DriveWizard?.open?.(flow); return; }
 
-    const home = buildStack('left');
-    const away = buildStack('right');
+    const g = gs();
+    g.drive = (g.drive || 0) + 1;
+    /* Fresh fielding each drive — bench choices are per-drive. */
+    window.clearBenched?.('left');
+    window.clearBenched?.('right');
+    window.persistGameState?.();
 
     overlay.innerHTML = `
-      <div class="bb-intro-inner">
-        <div class="bb-intro-head">
-          <span class="bb-intro-team bb-intro-team--home">${esc(home.team.name || 'Home')}</span>
-          <span class="bb-intro-vs">vs</span>
-          <span class="bb-intro-team bb-intro-team--away">${esc(away.team.name || 'Away')}</span>
+      <div class="bb-intro-inner bb-fielding">
+        <div class="bb-intro-head"><span class="bb-intro-team">Drive ${g.drive}</span></div>
+        <div class="bb-fld-arena">
+          ${sideBlock('left')}
+          ${sideBlock('right')}
         </div>
-        <div class="bb-intro-arena">
-          <div class="bb-intro-col" id="bb-intro-col-home"></div>
-          <div class="bb-intro-col" id="bb-intro-col-away"></div>
-        </div>
-        <button class="roll-btn bb-intro-start" id="bb-intro-start" type="button">START GAME!</button>
+        <button class="roll-btn bb-intro-start" id="bb-fld-start" type="button">Take the Field →</button>
       </div>`;
-
-    const colHome = overlay.querySelector('#bb-intro-col-home');
-    const colAway = overlay.querySelector('#bb-intro-col-away');
-    colHome.appendChild(home.stack);
-    colAway.appendChild(away.stack);
     overlay.hidden = false;
     document.body.classList.add('bb-intro-open');
 
-    const pairs = [[colHome, home.stack], [colAway, away.stack]];
-    /* Scale each fanned stack to fit its column, and set the off-screen fly
-       distance in stack space so cards clear the viewport at any scale. */
-    function fitStacks() {
-      pairs.forEach(([col, stack]) => {
-        stack.style.transform = 'none';
-        const cw = col.clientWidth, ch = col.clientHeight;
-        const nw = stack.offsetWidth, nh = stack.offsetHeight;
-        if (!cw || !ch || !nw || !nh) return;
-        const s = Math.min(cw / nw, ch / nh, 1.1);
-        stack.style.transform = `scale(${s})`;
-        stack.style.setProperty('--flyx', `${Math.round(150 / Math.max(s, 0.12))}vw`);
-      });
-    }
+    ['left', 'right'].forEach(buildFieldingGrid);
 
-    const startBtn = overlay.querySelector('#bb-intro-start');
-    const onResize = () => fitStacks();
-    const finish = () => {
-      try { if (key) localStorage.setItem('bb:introShownFor', key); } catch (_) {}
-      window.removeEventListener('resize', onResize);
+    const startBtn = overlay.querySelector('#bb-fld-start');
+    const refresh  = () => updateFieldingState(startBtn);
+
+    overlay.addEventListener('click', (e) => {
+      const card = e.target.closest('.bb-fld-card');
+      if (!card || card.classList.contains('bb-fld-out')) return;
+      const side = card.dataset.side, idx = parseInt(card.dataset.idx, 10);
+      const benchIt = !card.classList.contains('bb-fld-benched');
+      window.setBenched?.(side, idx, benchIt);
+      card.classList.toggle('bb-fld-benched', benchIt);
+      refresh();
+    });
+
+    startBtn.addEventListener('click', () => {
+      if (startBtn.disabled) return;
+      window.persistGameState?.();
       overlay.hidden = true;
       overlay.innerHTML = '';
       document.body.classList.remove('bb-intro-open');
-      window.DriveWizard?.open?.('half-start');
-    };
-    startBtn.addEventListener('click', finish);
-    window.addEventListener('resize', onResize);
+      window.DriveWizard?.open?.(flow);
+    });
 
-    const cards = overlay.querySelectorAll('.bb-intro-card');
-    /* setTimeout (not rAF) so this is reliable even when the tab isn't painting. */
-    setTimeout(() => {
-      fitStacks();                       // sets scale + correct --flyx while cards are off-screen
-      void overlay.offsetWidth;          // force reflow so the fly start state registers
-      if (!REDUCED) cards.forEach(c => c.classList.remove('fly'));   // animate to rest
-    }, 40);
+    refresh();
+    setTimeout(() => startBtn.classList.add('show'), 200);
+  }
 
-    const total = REDUCED ? 0 : cards.length * 55 + 650;
-    setTimeout(() => startBtn.classList.add('show'), Math.min(total, 2600));
+  function sideBlock(side) {
+    const team = window.state?.[side]?.team || {};
+    const cls  = side === 'left' ? 'home' : 'away';
+    return `<div class="bb-fld-side ${cls}" data-side="${side}">
+        <div class="bb-fld-side-head">
+          <span class="bb-fld-team">${esc(team.name || (side === 'left' ? 'Home' : 'Away'))}</span>
+          <span class="bb-fld-count" id="bb-fld-count-${side}">0</span>
+          <span class="bb-fld-count-cap">on the field</span>
+          <span class="bb-fld-msg" id="bb-fld-msg-${side}"></span>
+        </div>
+        <div class="bb-fld-grid" id="bb-fld-grid-${side}"></div>
+      </div>`;
+  }
+
+  function buildFieldingGrid(side) {
+    const grid = document.getElementById(`bb-fld-grid-${side}`);
+    if (!grid) return;
+    const st     = window.state?.[side] || {};
+    const team   = st.team || {};
+    const imgDir = team.imageDir || 'images/';
+    const colors = team.colors || {};
+    Object.entries(TC_VARS).forEach(([k, prop]) => { if (colors[k]) grid.style.setProperty(prop, colors[k]); });
+
+    (st.players || []).forEach((p, i) => {
+      const out  = isOut(side, i);
+      const card = document.createElement('div');
+      card.className = 'trading-card bb-fld-card'
+        + (out ? ' bb-fld-out' : (window.isBenched?.(side, i) ? ' bb-fld-benched' : ''));
+      card.dataset.side = side;
+      card.dataset.idx  = i;
+      card.innerHTML = window.PlayerCard.html(p, { imageDir: imgDir });
+      window.PlayerCard.bindImage(card);
+      grid.appendChild(card);
+    });
+  }
+
+  function updateFieldingState(startBtn) {
+    let allValid = true;
+    ['left', 'right'].forEach(side => {
+      const n     = window.fieldedCount?.(side) ?? 0;
+      const valid = teamIsSnotling(side) || n <= 11;
+      if (!valid) allValid = false;
+      const countEl = document.getElementById(`bb-fld-count-${side}`);
+      const msgEl   = document.getElementById(`bb-fld-msg-${side}`);
+      if (countEl) { countEl.textContent = n; countEl.classList.toggle('over', !valid); }
+      if (msgEl) {
+        if (valid) { msgEl.textContent = 'Ready to take the field'; msgEl.className = 'bb-fld-msg ok'; }
+        else {
+          const over = n - 11;
+          msgEl.textContent = `Send ${over} more player${over === 1 ? '' : 's'} to the bench`;
+          msgEl.className = 'bb-fld-msg bad';
+        }
+      }
+    });
+    if (startBtn) startBtn.disabled = !allValid;
   }
 
   function esc(s) {

@@ -120,9 +120,13 @@ const GameState = {
   activeTeamIds:  { home: null, away: null },  /* saved team UUIDs when custom teams loaded */
   /* side → { idx: { acted: true, actionType } } — cleared on End Turn */
   turnFlags:      { left: {}, right: {} },
+  /* side → { idx: true } — players sat on the bench for the current drive (chosen
+     in the fielding wizard). Benched players are excluded from the action wizards. */
+  benched:        { left: {}, right: {} },
   /* Sequencer state (game page): which team is taking its turn, and its turn # */
   activeTeam:     null,   /* 'home' | 'away' — set by the game-page turn engine */
   turn:           { home: 0, away: 0 },   /* per-team turn number within the half */
+  drive:          0,      /* incremented by the fielding wizard at each kickoff */
   /* Broad game-event log surfaced by the game timeline (touchdowns, injuries,
      fumbles, sendings-off, …). Each: { half, turn, side, type, playerIdx?, playerName?, detail } */
   gameLog:        [],
@@ -347,10 +351,31 @@ function getEffectiveStat(side, idx, statKey, baseValue) {
   return base + delta;
 }
 
-/* Canonical "is this player selectable in a wizard?" test. */
+/* Canonical "is this player selectable in a wizard?" test — excludes injured/
+   off-pitch statuses AND players benched for the current drive. */
 function isPlayerAvailable(p) {
-  return !STATUS_META?.[p?.status]?.dim;
+  return !p?.benched && !STATUS_META?.[p?.status]?.dim;
 }
+
+/* ── Fielding / bench (per drive) ── */
+function isBenched(side, idx)        { return !!GameState.benched[side]?.[idx]; }
+function setBenched(side, idx, val) {
+  if (!GameState.benched[side]) GameState.benched[side] = {};
+  if (val) GameState.benched[side][idx] = true;
+  else     delete GameState.benched[side][idx];
+  document.dispatchEvent(new CustomEvent('bb:benched', { detail: { side, idx, benched: !!val } }));
+}
+function clearBenched(side) { GameState.benched[side] = {}; }
+/* How many players will take the field for a side: available (not injured/off) and
+   not benched. */
+function fieldedCount(side) {
+  return (getPlayerList(side) || [])
+    .filter(p => !STATUS_META?.[p.status]?.dim && !isBenched(side, p.idx)).length;
+}
+window.isBenched    = isBenched;
+window.setBenched   = setBenched;
+window.clearBenched = clearBenched;
+window.fieldedCount = fieldedCount;
 
 window.getPlayerEffects    = getPlayerEffects;
 window.addPlayerEffect     = addPlayerEffect;
@@ -562,6 +587,7 @@ function getPlayerList(side) {
     pos:        card.querySelector('.player-pos')?.textContent?.trim()  ?? '',
     statsText:  card.querySelector('.card-stats')?.textContent?.trim()  ?? '',
     status:     getPlayerStatus(sideKey, idx),
+    benched:    isBenched(sideKey, idx),
     effects:    getPlayerEffects(sideKey, idx),
     savedId:    card._playerData?.savedId ?? card._playerData?.id ?? null,
     playerData: card._playerData ?? null,
@@ -681,6 +707,8 @@ function persistGameState() {
         statuses: GameState.playerStatuses,
         effects:  GameState.playerEffects,
         turns:    GameState.turnFlags,
+        benched:  GameState.benched,
+        drive:    GameState.drive,
         half:     GameState.half,
         phase:    GameState.phase,
         /* Volatile globals so a /game refresh is lossless */
@@ -713,6 +741,7 @@ function rehydrateSide(side) {
   const effects  = saved.effects?.[side]  || {};
   GameState.playerEffects[side] = effects;
   GameState.turnFlags[side]     = saved.turns?.[side] || {};
+  GameState.benched[side]       = saved.benched?.[side] || {};
   Object.keys(statuses).forEach(idx => {
     GameState.playerStatuses[side][idx] = statuses[idx];
   });
@@ -738,6 +767,7 @@ function rehydrateGlobals() {
   if (saved.turn)         GameState.turn         = saved.turn;
   if (Array.isArray(saved.gameLog)) GameState.gameLog = saved.gameLog;
   if (typeof saved.half === 'number') GameState.half = saved.half;
+  if (typeof saved.drive === 'number') GameState.drive = saved.drive;
   if (saved.phase)        GameState.phase        = saved.phase;
 }
 window.rehydrateGlobals = rehydrateGlobals;
@@ -747,6 +777,8 @@ function clearGameState() {
   GameState.playerStatuses = { left: {}, right: {} };
   GameState.playerEffects  = { left: {}, right: {} };
   GameState.turnFlags      = { left: {}, right: {} };
+  GameState.benched        = { left: {}, right: {} };
+  GameState.drive          = 0;
   GameState.scores         = { home: 0, away: 0 };
   GameState.turn           = { home: 0, away: 0 };
   GameState.activeTeam     = null;

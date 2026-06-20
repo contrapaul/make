@@ -912,17 +912,18 @@ function initBlockWizard() {
     if (mode === 'gold' || mode === 'green' || mode === 'blue') rollBtn.classList.add(`glow-${mode}`);
   }
 
-  /* Transform the Roll button into a green “Confirm Result” button. Instead of
-     closing the wizard it dismisses the matchup and returns to the player picker
-     (now showing the attacker greyed out, plus any new injuries), so the user can
-     chain the turn's many blocks without reopening the wizard each time. */
+  /* Transform the Roll button into a blue “Confirm Result” button (the site-wide
+     scheme for Confirm Result — only End Turn is green). Instead of closing the
+     wizard it dismisses the matchup and returns to the player picker (now showing
+     the attacker greyed out, plus any new injuries), so the user can chain the
+     turn's many blocks without reopening the wizard each time. */
   function setCompleteMode() {
     rollBtn.disabled  = false;
     rollBtn.innerHTML = 'Confirm Result';
-    rollBtn.classList.remove('roll-btn--confirm');
-    rollBtn.classList.add('roll-btn--complete');
+    rollBtn.classList.remove('roll-btn--complete');
+    rollBtn.classList.add('roll-btn--confirm');
     rollBtn.onclick   = advanceToNextBlock;
-    setGlow('green');
+    setGlow('blue');
     /* Defensive: ensure result content divs keep their styling class */
     ['armor-result-content', 'injury-result-content'].forEach(id => {
       const el = document.getElementById(id);

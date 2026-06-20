@@ -315,3 +315,89 @@ body.bb-intro-open { overflow: hidden; }
   .bb-intro-card  { transition: none; }
   .bb-intro-start { transition: none; animation: none; }
 }
+
+/* ════════════════════════════════════════════════════════
+   FIELDING WIZARD (start of each drive)
+   3-column grid of trading cards per side, a big fielded count,
+   tap-to-bench, and a locked start button until each side ≤ 11.
+   ════════════════════════════════════════════════════════ */
+.bb-fld-arena {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  gap: clamp(0.6rem, 3vw, 2rem);
+  justify-content: center;
+}
+.bb-fld-side {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.bb-fld-side-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  flex-shrink: 0;
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+.bb-fld-team {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; font-style: italic;
+  font-size: clamp(0.85rem, 2vw, 1.35rem);
+  color: #fff; max-width: 42vw;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.bb-fld-count {
+  font-family: 'JetBrains Mono', monospace; font-weight: 800;
+  font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: 1;
+  color: #9fe0b0; transition: color 0.15s ease;
+}
+.bb-fld-count.over { color: #ff7a6b; }
+.bb-fld-count-cap {
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: #9aa3b2;
+}
+.bb-fld-msg { font-size: clamp(0.72rem, 1.6vw, 0.9rem); min-height: 1.3em; }
+.bb-fld-msg.ok  { color: #9fe0b0; }
+.bb-fld-msg.bad { color: #ff7a6b; font-weight: 600; }
+
+.bb-fld-grid {
+  flex: 1 1 0; min-height: 0; overflow-y: auto;
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem; align-content: start; padding: 0.3rem;
+}
+.bb-fld-card {
+  width: 100%; margin: 0; cursor: pointer; position: relative;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+  transition: transform 0.12s ease, opacity 0.15s ease, filter 0.15s ease;
+  animation: none !important;   /* override .trading-card cardIn */
+}
+.bb-fld-card:hover { transform: translateY(-3px); }
+.bb-fld-card.bb-fld-benched { opacity: 0.45; filter: grayscale(0.7); }
+.bb-fld-card.bb-fld-benched::after {
+  content: 'BENCHED'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 800;
+  font-size: clamp(0.6rem, 1.4vw, 0.85rem); letter-spacing: 0.1em; color: #fff;
+  background: rgba(18, 20, 30, 0.35); border: 2px solid rgba(255,255,255,0.55);
+  border-radius: 8px; pointer-events: none;
+}
+.bb-fld-card.bb-fld-out {
+  opacity: 0.32; filter: grayscale(1); cursor: not-allowed;
+}
+.bb-fld-card.bb-fld-out:hover { transform: none; }
+
+/* Locked "Take the Field" button until both sides are legal. */
+.bb-fielding .bb-intro-start:disabled {
+  opacity: 0.4; pointer-events: none; cursor: not-allowed;
+  animation: none; box-shadow: none; filter: grayscale(0.6);
+}
+
+@media (max-width: 640px) {
+  .bb-fld-grid { grid-template-columns: repeat(2, 1fr); }
+  .bb-fld-team { max-width: 44vw; }
+}
