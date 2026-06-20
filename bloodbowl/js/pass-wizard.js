@@ -975,6 +975,8 @@ function initPassWizard() {
 
   /* ── Boot ── */
   onPanelOpen('panel-pass', () => {
+    /* Thrower's team defaults to the team on its turn (in the game environment). */
+    if (!ws.thrower) ws.activeSide = window.activeRosterSide?.() ?? 'left';
     if (!ws._built) { buildLayout(); ws._built = true; }
     else {
       buildPlayerColumn('thrower'); buildPlayerColumn('catcher');

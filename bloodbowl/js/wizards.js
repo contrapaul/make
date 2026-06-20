@@ -912,23 +912,66 @@ function initBlockWizard() {
     if (mode === 'gold' || mode === 'green' || mode === 'blue') rollBtn.classList.add(`glow-${mode}`);
   }
 
-  /* Transform the Roll button into a green “Complete Block” closer */
+  /* Transform the Roll button into a green “Confirm Result” button. Instead of
+     closing the wizard it dismisses the matchup and returns to the player picker
+     (now showing the attacker greyed out, plus any new injuries), so the user can
+     chain the turn's many blocks without reopening the wizard each time. */
   function setCompleteMode() {
     rollBtn.disabled  = false;
-    rollBtn.innerHTML = 'Complete Block';
+    rollBtn.innerHTML = 'Confirm Result';
+    rollBtn.classList.remove('roll-btn--confirm');
     rollBtn.classList.add('roll-btn--complete');
-    rollBtn.onclick   = () => {
-      /* Block resolved — clear the matchup so the next open starts fresh. */
-      attPlayer = null;
-      defPlayer = null;
-      document.querySelector('#panel-block .panel-close')?.click();
-    };
+    rollBtn.onclick   = advanceToNextBlock;
     setGlow('green');
     /* Defensive: ensure result content divs keep their styling class */
     ['armor-result-content', 'injury-result-content'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.className = 'bwiz-result-content';
     });
+  }
+
+  /* Block confirmed → clear the matchup and reopen the (live-updated) picker,
+     keeping the wizard open for the next block. */
+  function advanceToNextBlock() {
+    attPlayer = null;
+    defPlayer = null;
+    attSide   = window.activeRosterSide?.() ?? attSide;
+    resetRoll();
+    showPicker('att');
+    showPicker('def');
+    maybeOfferEndTurn();
+    _blockFit?.refit();
+  }
+
+  /* True while at least one player on the active team can still take an action
+     (a non-acted entry exists in the freshly-built attacker list). */
+  function attackerAvailable() {
+    const list = document.getElementById('block-attacker-list');
+    return !list || list.querySelectorAll('.wps-player-btn:not(.wps-acted)').length > 0;
+  }
+
+  /* Note 1: when nobody on the active team can still act, the Roll button becomes
+     a glowing green End Turn button — ending the turn and closing the wizard in
+     one tap. Only applies at the picker stage (no attacker chosen). */
+  function maybeOfferEndTurn() {
+    if (attPlayer || attackerAvailable()) return false;
+    rollBtn.hidden    = false;
+    rollBtn.disabled  = false;
+    rollBtn.innerHTML = 'End Turn';
+    rollBtn.classList.remove('roll-btn--confirm');
+    rollBtn.classList.add('roll-btn--complete');
+    rollBtn.onclick = () => {
+      attPlayer = null;
+      defPlayer = null;
+      document.querySelector('#panel-block .panel-close')?.click();
+      /* Use the turn engine's End Turn (alternates teams) when mid-drive,
+         otherwise just clear the acted flags. */
+      const turnBtn = document.getElementById('gb-turn-btn');
+      if (turnBtn && turnBtn.classList.contains('gb-turn-btn--drive')) turnBtn.click();
+      else window.endTurn?.();
+    };
+    setGlow('green');
+    return true;
   }
 
   function showCompleteBlock() {
@@ -1402,9 +1445,12 @@ function initBlockWizard() {
 
   /* Open picker on panel open — preserve player selections across close/reopen */
   onPanelOpen('panel-block', () => {
+    /* Default the attacker to the team on its turn (in the game environment). */
+    if (!attPlayer) attSide = window.activeRosterSide?.() ?? 'left';
     resetRoll();
     if (!attPlayer) showPicker('att'); else restoreCard('att');
     if (!defPlayer) showPicker('def'); else restoreCard('def');
+    maybeOfferEndTurn();   /* everyone already acted → offer End Turn immediately */
     updateStDisplay();
     renderRerolls();
     updateCardGlows();
@@ -1817,8 +1863,9 @@ function initFoulWizard() {
   renderAssistDots();
 
   onPanelOpen('panel-foul', () => {
-    /* Fouler from the team taking its turn (left), target from the opponent. */
-    foulerSide = 'left'; targetSide = 'right';
+    /* Fouler from the team taking its turn, target from the opponent. */
+    foulerSide = window.activeRosterSide?.() ?? 'left';
+    targetSide = foulerSide === 'left' ? 'right' : 'left';
     resetRoll();
     if (!fouler) showPicker('fouler'); else restoreCard('fouler');
     if (!target) showPicker('target'); else restoreCard('target');
@@ -2601,6 +2648,8 @@ function initThrowWizard() {
     ws.hungryResult  = null;
     ws.scatterDirs   = [];
     ws.landingResult = null;
+    /* Thrower (and thrown team-mate) default to the team on its turn. */
+    if (!ws.thrower) { ws.throwerSide = window.activeRosterSide?.() ?? 'left'; ws.thrownSide = ws.throwerSide; }
     buildShell();
     render();
     const root = body.querySelector('.bwiz-scale-root');
@@ -2958,6 +3007,8 @@ function initSpecialWizard() {
   const specPanel = document.getElementById('panel-special');
   const specScaleRoot = specPanel?.querySelector('.bwiz-scale-root');
   onPanelOpen('panel-special', () => {
+    /* Default the acting player to the team on its turn. */
+    if (!actor) { actorSide = window.activeRosterSide?.() ?? 'left'; targetSide = opposite(actorSide); }
     refresh();
     if (!_specFit && specScaleRoot) _specFit = FitScale(specPanel.querySelector('.bwiz-panel-body'), specScaleRoot, { max: 1.6 });
     else _specFit?.refit();

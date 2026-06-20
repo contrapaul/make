@@ -278,6 +278,15 @@ window.markPlayerActed    = markPlayerActed;
 window.endTurn            = endTurn;
 window.blitzUsedThisTurn  = blitzUsedThisTurn;
 
+/* The roster side ('left' = home, 'right' = away) of the team currently on its
+   turn, per the game-page turn engine. Wizards default their actor/attacker
+   picker to this. Outside the game environment activeTeam is null, so it falls
+   back to 'left' (home) — the prior behaviour. */
+function activeRosterSide() {
+  return GameState.activeTeam === 'away' ? 'right' : 'left';
+}
+window.activeRosterSide = activeRosterSide;
+
 /* Keep roster rows in sync with turn flags */
 document.addEventListener('bb:playerActed', e => {
   const { side, idx } = e.detail || {};
