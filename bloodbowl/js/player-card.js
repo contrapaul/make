@@ -55,43 +55,76 @@
    *         skillLinksFn?     custom skill-link renderer
    *         statusHTML? }     pre-built status banner HTML (see statusHTML())
    */
+  /* Parse a skills field (array or comma string) into a clean name list. */
+  function skillList(skills) {
+    if (Array.isArray(skills)) return skills.map(s => String(s).trim()).filter(Boolean);
+    return String(skills || '').split(',').map(s => s.trim()).filter(Boolean);
+  }
+
   function html(player, opts = {}) {
     const isStar = !!player.isStarPlayer;
     const colors = window.POSITION_COLORS || FALLBACK_POSITION_COLORS;
-    const bg     = colors[player.position] || '#555';
+    /* Team accent drives the whole card. The consumer's card element already
+       carries the team colour as --tc-primary (and may set --team-accent); use
+       that so the frame ring and internals stay consistent, with a JS fallback. */
+    const accentColor = opts.accent || colors[player.position] || '#3b6fe0';
+    const a      = `var(--team-accent, var(--tc-primary, ${accentColor}))`;
+    const num    = esc(String(player.id ?? ''));
     const src    = player.photo || opts.imgSrc || ((opts.imageDir || 'images/') + 'Player' + player.id + '.png');
-    const skillsFn = opts.skillLinksFn || window.renderSkillLinks || fallbackSkillLinks;
+    const posLine = esc(player.position || '')
+      + (player.characteristic ? ' · ' + esc(player.characteristic) : '')
+      + (player.qty ? ' (' + esc(player.qty) + ')' : '');
+
+    const stats = STAT_KEYS.map(k => ({ k: k.toUpperCase(), v: String(player[k] ?? '—') }));
+    const gp    = player.value ? Math.round(player.value / 1000) + 'k' : '';
+
+    const skills = skillList(player.skills);
+    const skillPills = skills.length
+      ? skills.map(n => `<span class="skill-link tc-skill" data-skill="${esc(n)}" style="font-family:var(--bb-font-body);font-weight:500;font-size:3cqw;color:color-mix(in srgb, ${a} 70%, #000);background:color-mix(in srgb, ${a} 13%, #fff);border:0.25cqw solid color-mix(in srgb, ${a} 30%, transparent);padding:0.9cqw 2.7cqw;border-radius:8cqw;white-space:nowrap;">${esc(n)}</span>`).join('')
+      : `<span style="font-family:var(--bb-font-body);font-style:italic;font-size:3cqw;color:#a8a294;">No skills yet — a fresh recruit.</span>`;
 
     return `
-      <div class="modal-image-area" style="background:${bg};">
-        <img class="modal-img" src="${esc(src)}" alt="${esc(player.name)}">
-        <span class="img-placeholder-num" aria-hidden="true">${esc(String(player.id))}</span>
-        <div class="modal-card-overlay${isStar ? ' star-overlay' : ''}">
-          <div class="modal-jersey-circle">${esc(String(player.id))}</div>
-          <div class="modal-overlay-info">
-            <h2 class="modal-name">${esc(player.name)}</h2>
-            <p class="modal-position">
-              ${esc(player.position)}${player.characteristic ? ` &middot; ${esc(player.characteristic)}` : ''}${player.qty ? ` <span class="modal-qty">(${esc(player.qty)})</span>` : ''}
-            </p>
-          </div>
+      <div class="tc-image" style="position:relative;flex:1 1 0;min-height:0;overflow:hidden;background:linear-gradient(155deg, color-mix(in srgb, ${a} 80%, #000), color-mix(in srgb, ${a} 40%, #14181f));">
+        <img class="modal-img" src="${esc(src)}" alt="${esc(player.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg, transparent, transparent 4.5cqw, rgba(0,0,0,0.055) 4.5cqw, rgba(0,0,0,0.055) 9cqw);pointer-events:none;"></div>
+        <span class="tc-watermark" aria-hidden="true" style="position:absolute;right:2cqw;bottom:-6cqw;font-family:var(--bb-font-num);font-weight:800;font-style:italic;font-size:48cqw;line-height:1;color:rgba(255,255,255,0.14);letter-spacing:-0.04em;pointer-events:none;">${num}</span>
+        <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:2.6cqw;padding:2.8cqw 3.2cqw 5cqw;background:linear-gradient(180deg, color-mix(in srgb, ${a} 70%, #07101f) 0%, color-mix(in srgb, ${a} 30%, transparent) 65%, transparent 100%);">
+          <span style="flex-shrink:0;width:13cqw;height:13cqw;border-radius:50%;background:#fff;border:0.55cqw solid #0d1424;display:flex;align-items:center;justify-content:center;font-family:var(--bb-font-num);font-weight:800;font-style:italic;font-size:6.4cqw;color:#111;box-shadow:0 0.8cqw 2cqw rgba(0,0,0,0.45);">${num}</span>
+          <span style="min-width:0;flex:1;">
+            <span style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-family:var(--bb-font-head);font-weight:700;font-size:6.6cqw;line-height:1.0;color:#fff;text-shadow:0 0.4cqw 1.4cqw rgba(0,0,0,0.65);">${esc(player.name)}</span>
+            <span style="display:block;font-family:var(--bb-font-head);font-weight:600;font-size:3cqw;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.88);margin-top:0.5cqw;text-shadow:0 0.3cqw 0.8cqw rgba(0,0,0,0.5);">${posLine}</span>
+          </span>
         </div>
-        ${opts.statusHTML || ''}
       </div>
-      <div class="modal-stats"><div class="modal-stats-row">
-        ${STAT_KEYS.map(s => `<div class="modal-stat"><span class="ms-label">${s.toUpperCase()}</span><span class="ms-value">${esc(String(player[s] ?? '—'))}</span></div>`).join('')}
-        ${player.value ? `<div class="modal-stat"><span class="ms-label">GP</span><span class="ms-value ms-value-gp">${Math.round(player.value / 1000)}k</span></div>` : ''}
-      </div></div>
-      <div class="modal-skills"><p class="skills-label">Skills &amp; Traits</p><p class="skills-text">${skillsFn(player.skills)}</p></div>
-      ${player.fact ? `<div class="modal-fact">&ldquo;${esc(player.fact)}&rdquo;</div>` : ''}`;
+
+      <div style="flex:none;display:flex;background:#efeae0;border-top:0.25cqw solid rgba(0,0,0,0.09);">
+        ${stats.map(s => `<span style="flex:1;display:flex;flex-direction:column;align-items:center;padding:2.4cqw 0;border-right:0.25cqw solid rgba(0,0,0,0.08);">
+          <span style="font-family:var(--bb-font-head);font-weight:700;font-size:2.7cqw;letter-spacing:0.05em;color:#9a9488;text-transform:uppercase;">${s.k}</span>
+          <span style="font-family:var(--bb-font-num);font-weight:700;font-size:5cqw;color:#1a1a1a;line-height:1.2;">${esc(s.v)}</span>
+        </span>`).join('')}
+        ${gp ? `<span style="flex:1;display:flex;flex-direction:column;align-items:center;padding:2.4cqw 0;">
+          <span style="font-family:var(--bb-font-head);font-weight:700;font-size:2.7cqw;letter-spacing:0.05em;color:#9a9488;text-transform:uppercase;">GP</span>
+          <span style="font-family:var(--bb-font-num);font-weight:700;font-size:4.3cqw;color:#9a7d0a;line-height:1.4;">${gp}</span>
+        </span>` : ''}
+      </div>
+
+      <div style="flex:none;max-height:33cqw;overflow-y:auto;padding:2.8cqw 3.4cqw;background:#f4f1ea;border-top:0.25cqw solid rgba(0,0,0,0.07);">
+        <div style="font-family:var(--bb-font-head);font-weight:700;font-size:2.6cqw;letter-spacing:0.13em;text-transform:uppercase;color:#9a7d4a;margin-bottom:1.8cqw;">Skills &amp; Traits</div>
+        <div style="display:flex;flex-wrap:wrap;gap:1.7cqw;">${skillPills}</div>
+      </div>
+
+      ${player.fact ? `<div style="flex:none;padding:2.6cqw 3.4cqw;font-family:var(--bb-font-body);font-style:italic;font-size:3cqw;line-height:1.5;color:#6a6256;background:#ece6da;border-top:0.25cqw solid rgba(0,0,0,0.09);">&ldquo;${esc(player.fact)}&rdquo;</div>` : ''}
+
+      ${isStar ? `<div class="tc-star-sheen" aria-hidden="true" style="position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:4.6cqw;box-shadow:inset 0 0 6cqw 0.6cqw rgba(212,175,55,0.45);background:linear-gradient(115deg, rgba(255,235,150,0) 30%, rgba(255,240,190,0.28) 48%, rgba(255,235,150,0) 66%);background-size:240% 100%;animation:tcStarSheen 7s linear infinite;"></div>` : ''}
+      ${opts.statusHTML || ''}`;
   }
 
-  /* Hide the placeholder number once the image loads; hide the img on error. */
+  /* No photo art → hide the <img> so the accent gradient + watermark show. */
   function bindImage(cardEl) {
-    const img  = cardEl.querySelector('.modal-img');
-    const stub = cardEl.querySelector('.img-placeholder-num');
+    const img = cardEl.querySelector('.modal-img');
     if (!img) return;
-    img.addEventListener('load',  () => { if (stub) stub.style.display = 'none'; });
     img.addEventListener('error', () => { img.style.display = 'none'; });
+    if (img.complete && img.naturalWidth === 0) img.style.display = 'none';
   }
 
   /* Status + effects banner HTML for a tracked player (or '' if clean). */

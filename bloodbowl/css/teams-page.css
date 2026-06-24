@@ -242,13 +242,13 @@
 }
 .tp-card-thumb:hover { transform: translateY(-4px); }
 .tp-card-thumb .trading-card {
+  /* No transform-scale hack: the container-query card renders at full fidelity at
+     the thumb's real width; aspect-ratio sizes the height. */
   position:         absolute;
   top:              0;
   left:             0;
-  width:            420px;     /* full design width */
+  width:            100%;
   max-width:        none;
-  transform:        scale(0.5);
-  transform-origin: top left;
   animation:        none;
   pointer-events:   none;      /* clicks go to the thumb button */
 }

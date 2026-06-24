@@ -1320,14 +1320,17 @@
 
 /* Card wrap contains either the picker or the embedded card */
 .bwiz-card-wrap {
-  width:      17.5em;
+  /* Pixel width (not em): the unified container-query card renders identically
+     here and on the Teams page. em drifted with the FitScale-inherited font-size. */
+  width:      200px;
   flex-shrink: 0;
   position:   relative;
 }
 
-/* Embedded trading card — fixed width, ratio locked by parent .trading-card rule */
+/* Embedded trading card — fills the fixed-width wrap; ratio locked by .trading-card. */
 .bwiz-embedded-card {
-  max-width: 17.5em !important;
+  width:     100%;
+  max-width: none !important;
   cursor:    default;
 }
 

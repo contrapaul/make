@@ -47,4 +47,42 @@
   --bb-font-sm: clamp(0.7rem,  0.65rem + 0.25vw, 0.85rem);
   --bb-font-md: clamp(0.85rem, 0.78rem + 0.35vw, 1.05rem);
   --bb-font-lg: clamp(1.1rem,  1rem    + 0.6vw,  1.7rem);
+
+  /* ── UI Refinement design language (handoff Phase 1) ──
+     Type roles: Nuffle = display/names/stamps; Barlow Condensed = labels/nav/
+     buttons; Barlow = body/flavour/pills; JetBrains Mono = NUMBERS ONLY. */
+  --bb-font-display: 'Nuffle', 'Barlow Condensed', serif;
+  --bb-font-head:    'Barlow Condensed', system-ui, sans-serif;
+  --bb-font-body:    'Barlow', system-ui, sans-serif;
+  --bb-font-num:     'JetBrains Mono', ui-monospace, monospace;
+
+  /* App background (apply to <body>, background-attachment: fixed) */
+  --bb-bg:
+    radial-gradient(120% 80% at 25% -5%, rgba(36,74,170,0.42) 0%, transparent 55%),
+    radial-gradient(120% 90% at 90% 105%, rgba(14,36,120,0.40) 0%, transparent 52%),
+    linear-gradient(168deg, #05091a 0%, #091634 58%, #060e22 100%);
+
+  --bb-text:        #eaf0ff;
+  --bb-text-muted:  rgba(190,212,255,0.62);
+  --bb-text-faint:  rgba(150,185,255,0.45);
+
+  --bb-hairline:    rgba(120,160,255,0.14);   /* 1px borders on dark glass */
+  --bb-highlight:   rgba(255,255,255,0.07);   /* inset "light from above" */
+
+  --bb-gold-grad:   linear-gradient(180deg, #f4d977 0%, #e0b53f 48%, #c9991f 100%);
+
+  /* Parchment / card surface (light) */
+  --bb-parchment:   linear-gradient(180deg, rgba(244,243,239,0.97), rgba(228,228,224,0.95));
+
+  /* Glass surfaces */
+  --bb-panel-bg:     linear-gradient(180deg, rgba(13,24,56,0.60), rgba(8,15,38,0.66));
+  --bb-panel-border: 1px solid var(--bb-hairline);
+  --bb-panel-shadow: 0 16px 40px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.05);
+
+  /* Sticky bars (header / game bar) */
+  --bb-bar-bg:       rgba(6,12,30,0.72);
+  --bb-bar-blur:     blur(18px) saturate(1.4);
+
+  /* Team accent — overwritten per team; derive tints via color-mix. */
+  --team-accent:     #3b6fe0;
 }
