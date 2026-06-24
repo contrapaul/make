@@ -449,47 +449,63 @@ function buildCard(player, side, idx) {
   card.setAttribute('role', 'listitem');
   card.setAttribute('aria-label', `View ${player.name} — ${player.position}`);
 
-  /* Single-line layout: num · name · pos | MA7 · ST3 · AG3+ · PA4+ · AV9+ | skills */
-  const statsStr = STAT_KEYS.map(s =>
-    `<span class="ss">${s.toUpperCase()}</span>${esc(String(player[s]))}`
-  ).join('<span class="sd" aria-hidden="true"> · </span>');
-
   /* For canonical roster templates, name === position — show qty instead */
   const posDisplay = (player.qty && player.name === player.position)
     ? player.qty
     : player.position;
 
+  const statCells = STAT_KEYS.map(s =>
+    `<span class="pr-stat"><span class="pr-stat-k">${s.toUpperCase()}</span><span class="pr-stat-v">${esc(String(player[s] ?? '—'))}</span></span>`
+  ).join('');
+  const gpCell = player.value
+    ? `<span class="pr-stat pr-stat-gp"><span class="pr-stat-k">GP</span><span class="pr-stat-v">${Math.round(player.value / 1000)}</span></span>`
+    : '';
+
+  /* Skills: accent-tinted pills (each a .skill-link → existing reference tooltip).
+     Cap at 5 visible; overflow hidden behind a gold "+N" chip that expands inline. */
+  const skills = (player.skills || '').split(',').map(s => s.trim()).filter(Boolean);
+  const CAP = 5;
+  const pills = skills.map((n, i) =>
+    `<button class="skill-link pr-skill${i >= CAP ? ' pr-skill-extra' : ''}" data-skill="${esc(n)}">${esc(n)}</button>`
+  ).join('');
+  const moreChip = skills.length > CAP
+    ? `<button class="pr-more" type="button" aria-label="Show all ${skills.length} skills">+${skills.length - CAP}</button>`
+    : '';
+  const skillsHtml = skills.length ? pills + moreChip : '<span class="pr-no-skills">—</span>';
+
   card.innerHTML = `
-    <span class="card-num">#${player.id}</span>
-    <span class="player-name">${esc(player.name)}</span>
-    <span class="cd" aria-hidden="true">·</span>
-    <span class="player-pos">${esc(posDisplay)}</span>
-    ${player.isStarPlayer ? '<span class="star-badge">&#9733; Star</span>' : ''}
-    <span class="cd" aria-hidden="true">|</span>
-    <span class="card-stats" aria-label="Stats">${statsStr}</span>
-    <span class="cd" aria-hidden="true">|</span>
-    <span class="card-skills">${renderSkillLinks(player.skills)}</span>
-    ${player.value
-      ? `<span class="card-value">${Math.round(player.value / 1000)}k gp</span>`
-      : ''}
+    <span class="pr-jersey">${player.isStarPlayer ? '&#9733;' : '#' + esc(String(player.id))}</span>
+    <span class="pr-name-col">
+      <span class="pr-name">${esc(player.name)}</span>
+      <span class="pr-pos">${player.isStarPlayer ? '&#9733; Star Player' : esc(posDisplay)}</span>
+    </span>
+    <span class="pr-stats" aria-label="Stats">${statCells}${gpCell}</span>
+    <span class="pr-skills">${skillsHtml}</span>
+    ${player.value ? `<span class="pr-cost">${Math.round(player.value / 1000)}k</span>` : ''}
   `;
 
   /* Store full player data on the DOM element so wizards can access it */
   card._playerData = player;
 
-  if (player.isStarPlayer) applyHolo(card, false);
-
   card.addEventListener('click', () => openModal(side, player, idx));
   card.addEventListener('keydown', e => {
-    if (e.target.closest('.skill-link')) return; /* skill-link handles its own activation */
+    if (e.target.closest('.skill-link') || e.target.closest('.pr-more')) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       openModal(side, player, idx);
     }
   });
 
-  /* Skill links in roster card: hover shows tooltip, click stops propagation
-     so the card's own click handler (open modal) doesn't also fire. */
+  /* "+N" chip → expand the hidden skill pills inline (tap again to collapse). */
+  const more = card.querySelector('.pr-more');
+  if (more) more.addEventListener('click', e => {
+    e.stopPropagation();
+    card.querySelector('.pr-skills').classList.toggle('pr-skills--open');
+    more.classList.toggle('pr-more--open');
+  });
+
+  /* Skill pills: hover shows the reference tooltip; click stops propagation so
+     the row's own click (open card) doesn't also fire. */
   attachSkillEvents(card, true);
 
   return card;

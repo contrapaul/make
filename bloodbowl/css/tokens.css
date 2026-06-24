@@ -83,6 +83,7 @@
   --bb-bar-bg:       rgba(6,12,30,0.72);
   --bb-bar-blur:     blur(18px) saturate(1.4);
 
-  /* Team accent — overwritten per team; derive tints via color-mix. */
-  --team-accent:     #3b6fe0;
+  /* NOTE: --team-accent is intentionally NOT defaulted here. Components resolve
+     it as var(--team-accent, var(--tc-primary, #3b6fe0)) so the existing per-team
+     --tc-primary drives the accent; set --team-accent per team to override. */
 }
