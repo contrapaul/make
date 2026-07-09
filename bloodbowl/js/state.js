@@ -580,19 +580,24 @@ function watchRosters() {
 function getPlayerList(side) {
   const sideKey = side === 'left' ? 'left' : 'right';
   const cards   = document.querySelectorAll(`#roster-${sideKey} .player-card`);
-  return Array.from(cards).map((card, idx) => ({
-    idx,
-    id:         card.querySelector('.card-num')?.textContent?.replace('#', '').trim() ?? String(idx + 1),
-    name:       card.querySelector('.player-name')?.textContent?.trim() ?? `#${idx + 1}`,
-    pos:        card.querySelector('.player-pos')?.textContent?.trim()  ?? '',
-    statsText:  card.querySelector('.card-stats')?.textContent?.trim()  ?? '',
-    status:     getPlayerStatus(sideKey, idx),
-    benched:    isBenched(sideKey, idx),
-    effects:    getPlayerEffects(sideKey, idx),
-    savedId:    card._playerData?.savedId ?? card._playerData?.id ?? null,
-    playerData: card._playerData ?? null,
-    card,
-  }));
+  return Array.from(cards).map((card, idx) => {
+    const pd = card._playerData;
+    return {
+      idx,
+      id:         pd?.id != null ? String(pd.id)
+                    : (card.querySelector('.pr-jersey')?.textContent?.replace('#', '').trim() ?? String(idx + 1)),
+      name:       pd?.name ?? card.querySelector('.pr-name')?.textContent?.trim() ?? `#${idx + 1}`,
+      pos:        pd?.position ?? card.querySelector('.pr-pos')?.textContent?.trim() ?? '',
+      statsText:  pd ? `MA ${pd.ma} ST ${pd.st} AG ${pd.ag} PA ${pd.pa} AV ${pd.av}`
+                    : (card.querySelector('.pr-stats')?.textContent?.trim() ?? ''),
+      status:     getPlayerStatus(sideKey, idx),
+      benched:    isBenched(sideKey, idx),
+      effects:    getPlayerEffects(sideKey, idx),
+      savedId:    pd?.savedId ?? pd?.id ?? null,
+      playerData: pd ?? null,
+      card,
+    };
+  });
 }
 
 window.getPlayerList = getPlayerList;

@@ -257,7 +257,6 @@ function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
   const playerName = pd ? String(pd.name)     : (player.name != null ? player.name : '');
   const position   = pd ? String(pd.position) : (player.pos  != null ? player.pos  : '');
   const isStar     = pd ? !!pd.isStarPlayer   : !!(player.card && player.card.classList.contains('star-player'));
-  const bgColor    = (window.POSITION_COLORS || {})[position] || '#1a3a6a';
 
   const KEYS = ['MA','ST','AG','PA','AV'];
   const statVals = KEYS.map(k => {
@@ -296,7 +295,6 @@ function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
   });
   window.PlayerCard.bindImage(card);
   window.PlayerCard.applyStatusClasses(card, side, player.idx);
-  card.querySelector('.modal-image-area').style.background = bgColor;
 
   if (window.attachSkillEvents) window.attachSkillEvents(card, false);
   if (pd && pd.isStarPlayer && typeof window.applyHolo === 'function') window.applyHolo(card, true);
