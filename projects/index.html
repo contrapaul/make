@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Projects — a reverse-chronological timeline of builds from contrapaul / make.">
+<title>contrapaul / make — projects</title>
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/space-grotesk">
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/jetbrains-mono">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body class="page-projects">
+
+<header class="site-header">
+  <a href="/" class="wordmark">CONTRAPAUL<span class="slash">/</span>MAKE</a>
+  <nav class="nav">
+    <a href="/projects/" class="nav-link is-current">Projects</a>
+    <a href="/fun/" class="nav-link">Fun</a>
+    <a href="/tools/" class="nav-link">Tools</a>
+    <a href="/about/" class="nav-link">About</a>
+    <a href="https://contrapaul.com" class="nav-link nav-ext">↑ main</a>
+    <a href="https://edu.contrapaul.com" class="nav-link nav-ext">edu</a>
+    <a href="https://blog.contrapaul.com" class="nav-link nav-ext">blog</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero-tools">
+    <div>
+      <span class="eyebrow">Newest first — scroll for history</span>
+      <h1 class="display">Projects</h1>
+    </div>
+    <p class="lede">Everything I've built, month by month, newest at the top. Click any card for the full story — images, write-up, and links.</p>
+  </section>
+
+  <!-- TIMELINE (rows built by timeline.js from projects.js) -->
+  <section class="timeline" id="timeline"></section>
+
+</main>
+
+<!-- EXPANDED CARD MODAL -->
+<div class="pmodal" id="pmodal" hidden>
+  <div class="pmodal-box" role="dialog" aria-modal="true" aria-label="Project details">
+    <button class="pmodal-close" aria-label="Close">✕</button>
+    <div class="pmodal-content"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <span class="footer-brand">CONTRAPAUL / MAKE — /projects</span>
+  <div class="footer-links">
+    <a href="https://contrapaul.com">Main</a>
+    <a href="https://edu.contrapaul.com">Edu</a>
+    <a href="https://blog.contrapaul.com">Blog</a>
+  </div>
+</footer>
+
+<script src="projects.js"></script>
+<script src="timeline.js"></script>
+</body>
+</html>
