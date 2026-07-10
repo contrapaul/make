@@ -1283,11 +1283,20 @@
   background: rgba(4, 10, 28, 0.97);
   border-bottom: 1px solid rgba(70, 110, 220, 0.3);
   position: relative;
+  /* Above the sticky game-bar (200) so the mobile nav dropdown isn't
+     covered; below panels (400) and modals. */
+  z-index: 250;
 }
 
+/* The parent site styles .site-header as the flex row and has no
+   .header-inner — these pages wrap the wordmark/toggle/nav in one, so it
+   must become the flex row itself or everything stacks in a block. */
 .bb-header-inner {
   max-width: none;
   padding: 0 1.5rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -1405,7 +1414,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: rgba(4, 10, 28, 0.98);
+    background: rgb(4, 10, 28);
     border-bottom: 1px solid rgba(70, 110, 220, 0.3);
     z-index: 300;
     padding: 0.5rem 0;
