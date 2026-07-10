@@ -312,13 +312,15 @@ function buildEmbeddedCardShared(wrapEl, player, side, opts = {}) {
 const ATT_BLOCK_SKILLS = new Set([
   'Block','Wrestle','Mighty Blow','Claws','Tackle','Dauntless','Horns',
   'Multiple Block','Juggernaut','Frenzy','Grab','Strip Ball','Brawler',
-  'Hatred','Pro','Guard','Pile Driver','Arm Bar','Taunt','Eye Gouge','Loner',
+  'Hatred','Pro','Guard','Pile Driver','Arm Bar','Eye Gouge','Loner',
+  'Dodge','Jump Up','Hit and Run','Steady Footing','Thick Skull','Stunty',
+  'Decay','Regeneration','Plague Ridden',
 ]);
 const DEF_BLOCK_SKILLS = new Set([
   'Block','Dodge','Wrestle','Fend','Stand Firm','Sidestep','Side Step','Tentacles',
   'Thick Skull','Stunty','Decay','Foul Appearance','Dump-Off','Iron Hard Skin',
   'Sure Hands','Steady Footing','Safe Pair of Hands','Saboteur','Trickster',
-  'Guard','Pro','Loner',
+  'Guard','Pro','Loner','Taunt','Regeneration',
 ]);
 
 function initBlockWizard() {
@@ -778,7 +780,7 @@ function initBlockWizard() {
     if (defHas('Fend') && !attHas('Juggernaut')) notes.push(`${pName(defPlayer)} prevents Follow-up (Fend).`);
     if (attHas('Frenzy'))                     notes.push('Frenzy — must Follow-up and Block again.');
     if (attHas('Strip Ball') && !defHas('Sure Hands')) notes.push('Strip Ball — ball carrier drops the ball in the push square.');
-    if (attHas('Taunt'))                      notes.push('Taunt — may force the opponent to Follow-up.');
+    if (defHas('Taunt'))                      notes.push(`${pName(defPlayer)} may force the opponent to Follow-up (Taunt).`);
     return notes;
   }
 
@@ -1090,14 +1092,15 @@ function initBlockWizard() {
     if (!injPanel) return;
 
     injPanel.classList.remove('locked');
+    const kHas = knockedSide === 'att' ? attHas : defHas;
     const ironHard = knockedSide === 'def' && defHas('Iron Hard Skin');
     const mbAvail  = attHas('Mighty Blow') && knockedSide === 'def' && !mbSpent && !ironHard;
     const who   = pName(knockedSide === 'att' ? attPlayer : defPlayer);
     const mods  = [
       mbAvail ? 'Mighty Blow available' : '',
-      (knockedSide === 'def' && defHas('Stunty')) ? '+1 Stunty' : '',
-      (knockedSide === 'def' && defHas('Thick Skull')) ? 'Thick Skull (KO 9+)' : '',
-      (knockedSide === 'def' && defHas('Decay')) ? 'Decay (+1 Casualty)' : '',
+      kHas('Stunty') ? '+1 Stunty' : '',
+      kHas('Thick Skull') ? 'Thick Skull (KO 9+)' : '',
+      kHas('Decay') ? 'Decay (+1 Casualty)' : '',
     ].filter(Boolean).join(' · ');
     const injEl = document.getElementById('injury-result-content');
     appendRollRow(injEl, who, `Roll Injury${mods ? ` · ${mods}` : ''}`);
@@ -1126,8 +1129,9 @@ function initBlockWizard() {
       if (choice === 'yes') { mbHere = 1; mbSpent = true; }
     }
 
-    const stunty     = knockedSide === 'def' && defHas('Stunty') ? 1 : 0;
-    const thickSkull = knockedSide === 'def' && defHas('Thick Skull');
+    const kHas       = knockedSide === 'att' ? attHas : defHas;
+    const stunty     = kHas('Stunty') ? 1 : 0;
+    const thickSkull = kHas('Thick Skull');
     const { total, outcome, status } = BBResolve.injuryOutcome(d1, d2, { mb: mbHere, stunty, thickSkull });
 
     const injuredName = pName(knockedSide === 'att' ? attPlayer : defPlayer);
@@ -1147,7 +1151,7 @@ function initBlockWizard() {
     if (outcome === 'Casualty') {
       const host = injRow ?? document.getElementById('injury-roll-panel');
       if (host) {
-        const decay = knockedSide === 'def' && defHas('Decay') ? 1 : 0;
+        const decay = kHas('Decay') ? 1 : 0;
         let casVal, cas;
         if (wizardMode('block') === 'physical') {
           const entered = await window.DiceSlot.d16(host);

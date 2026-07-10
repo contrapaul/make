@@ -2,13 +2,16 @@
 
 /* ═══════════════════════════════════════════════════════
    Blood Bowl Companion — js/drive-wizard.js
-   Step-through wizard for drive setup and teardown.
 
-   Flows:
-     'half-start'  — Weather → Kicking → Prayers → Setup
-                     → Deviation → Kickoff → Ready
-     'drive-only'  — Setup → Deviation → Kickoff → Ready
-     'drive-end'   — Effects → KO Recovery
+   Kickoff flows ('half-start', 'drive-only') render as a single
+   fixed window (same size as the Block/Pass wizards) showing every
+   step at once, with three roll modes:
+     · Auto-Roll   — one click, the board rolls itself in sequence
+     · I'll Roll   — a roll button per step, unlocked in order
+     · Table Rolls — click the result rolled at the table, see what it means
+
+   'drive-end' (effects + KO recovery) keeps the original bottom-sheet
+   step-through.
    ═══════════════════════════════════════════════════════ */
 
 const DriveWizard = (() => {
@@ -19,6 +22,26 @@ const DriveWizard = (() => {
     'drive-only': ['setup', 'deviation', 'kickoff', 'ready'],
     'drive-end':  ['effects', 'ko-recovery'],
   };
+
+  /* Kickoff-board flows: every panel visible at once, resolved in order. */
+  const BOARD_FLOWS = {
+    'half-start': ['kicking', 'weather', 'prayers', 'deviation', 'kickoff'],
+    'drive-only': ['deviation', 'kickoff'],
+  };
+
+  const BOARD_META = {
+    kicking:   { icon: '⚽', title: 'Kicking Team' },
+    weather:   { icon: '🌤', title: 'Weather' },
+    prayers:   { icon: '✦',  title: 'Prayers to Nuffle' },
+    deviation: { icon: '⬡',  title: 'Kick Deviation' },
+    kickoff:   { icon: '⚡', title: 'Kickoff Event' },
+  };
+
+  const MODES = [
+    { key: 'auto',   label: '⚡ Auto-Roll' },
+    { key: 'manual', label: "🎲 I'll Roll" },
+    { key: 'table',  label: '👆 Table Rolls' },
+  ];
 
   const STEP_LABELS = {
     weather:       '🌤 Weather',
@@ -32,12 +55,20 @@ const DriveWizard = (() => {
     'ko-recovery': '💊 KO Recovery',
   };
 
+  const DIR = { 1:'↖ Up-Left',2:'↑ Up',3:'↗ Up-Right',4:'← Left',5:'→ Right',6:'↙ Down-Left',7:'↓ Down',8:'↘ Down-Right' };
+  const KICKOFF_AFFECTS = { 2:'both',3:'both',4:'kicking',5:'receiving',6:'both',7:'both',8:'both',9:'receiving',10:'kicking',11:'both',12:'both' };
+
   /* ── Internal state ── */
   let _flow       = [];
   let _flowName   = '';
   let _step       = 0;
   let _reachedEnd = false;   /* true once the final step is shown — drives "completed" */
-  let _state = {};  /* { weather, kickingTeam, prayer, deviation, kickoff } */
+  let _state = {};  /* { weather, kickingTeam, prayer, prayersDone, deviation, kickoff } */
+
+  /* Kickoff-board state */
+  let _boardKeys = null;     /* array of panel keys, or null (legacy step mode) */
+  let _mode      = 'auto';
+  let _rolling   = false;
 
   /* ── Next-button lock (for roll-required steps) ── */
   function _lockNext() {
@@ -55,6 +86,13 @@ const DriveWizard = (() => {
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  function ce(tag, cls, html) {
+    const el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (html != null) el.innerHTML = html;
+    return el;
+  }
+
   function mkDie(id, sides = 6) {
     const el = document.createElement('div');
     el.className = 'die';
@@ -69,6 +107,8 @@ const DriveWizard = (() => {
     return (window.BBSettings?.getSettings().diceMode ?? 'digital') === 'physical';
   }
 
+  const _pause = ms => new Promise(r => setTimeout(r, ms));
+
   /* ── Public API ── */
 
   function open(flow = 'half-start') {
@@ -77,19 +117,30 @@ const DriveWizard = (() => {
     _step  = 0;
     _reachedEnd = false;
     _state = {};
+    if (BOARD_FLOWS[_flowName]) {
+      _openBoard();
+      return;
+    }
+    _boardKeys = null;
+    document.getElementById('drive-wizard')?.classList.remove('dw-board');
     _wireNav();
     _render();
     _showModal();
   }
 
   function close() {
-    /* completed = finished the flow via the final "Play the Drive" step
-       (vs dismissed early via backdrop). Lets the game page resume play. */
-    const completed = _reachedEnd || _step >= _flow.length - 1;
+    /* completed = finished the flow (vs dismissed early via backdrop).
+       Lets the game page resume play. */
+    const completed = _boardKeys
+      ? _allResolved()
+      : (_reachedEnd || _step >= _flow.length - 1);
     document.dispatchEvent(new CustomEvent('bb:driveClosed', {
       detail: { flow: _flowName, completed },
     }));
     _hideModal();
+    document.getElementById('drive-wizard')?.classList.remove('dw-board');
+    _boardKeys = null;
+    _rolling   = false;
   }
 
   function minimise() {
@@ -124,7 +175,12 @@ const DriveWizard = (() => {
 
   function _updatePill() {
     const el = document.getElementById('dw-pill-step');
-    if (el) el.textContent = `${_step + 1}/${_flow.length}`;
+    if (!el) return;
+    if (_boardKeys) {
+      el.textContent = `${_boardKeys.filter(_isResolved).length}/${_boardKeys.length}`;
+    } else {
+      el.textContent = `${_step + 1}/${_flow.length}`;
+    }
   }
 
   function _wireNav() {
@@ -179,10 +235,11 @@ const DriveWizard = (() => {
     const backBtn = document.getElementById('dw-back');
     const nextBtn = document.getElementById('dw-next');
     const isLast  = _step >= _flow.length - 1;
-    if (backBtn) backBtn.disabled = _step === 0;
+    if (backBtn) { backBtn.style.display = ''; backBtn.disabled = _step === 0; }
     if (nextBtn) {
-      nextBtn.textContent = isLast ? '▸ Play the Drive' : 'Next →';
+      nextBtn.textContent = isLast ? '▸ Done' : 'Next →';
       nextBtn.disabled    = false;
+      nextBtn.classList.remove('dwk-ready');
     }
     if (isLast) _reachedEnd = true;
 
@@ -203,369 +260,577 @@ const DriveWizard = (() => {
   }
 
   /* ─────────────────────────────────────────────────────
-     STEP RENDERERS
+     KICKOFF BOARD — all steps in one block-wizard-sized window
      ──────────────────────────────────────────────────── */
 
-  const STEPS = {
+  function _loadMode() {
+    try {
+      const saved = localStorage.getItem('bb:kickoffRollMode');
+      if (saved && MODES.some(m => m.key === saved)) return saved;
+    } catch (_) {}
+    return isPhys() ? 'table' : 'auto';
+  }
 
-    /* ── WEATHER ── */
-    weather(el) {
-      const cur = window.GameState?.currentWeather;
-      if (cur) {
-        const curEl = document.createElement('p');
-        curEl.className = 'panel-intro';
-        curEl.style.marginBottom = '0.4rem';
-        curEl.innerHTML = `Current: ${h(cur.emoji)} <strong>${h(cur.name)}</strong>`;
-        el.appendChild(curEl);
-      } else {
-        const intro = document.createElement('p');
-        intro.className = 'panel-intro';
-        intro.textContent = 'Roll 2D6 to determine weather conditions for this half.';
-        el.appendChild(intro);
+  function _saveMode() {
+    try { localStorage.setItem('bb:kickoffRollMode', _mode); } catch (_) {}
+  }
+
+  function _openBoard() {
+    _boardKeys = BOARD_FLOWS[_flowName];
+    _mode      = _loadMode();
+    _rolling   = false;
+    document.getElementById('drive-wizard')?.classList.add('dw-board');
+    _wireNav();          /* minimise / pill / backdrop; nav buttons overridden below */
+    _renderBoard();
+    _showModal();
+  }
+
+  function _isResolved(key) {
+    switch (key) {
+      case 'kicking':   return !!_state.kickingTeam;
+      case 'weather':   return !!_state.weather;
+      case 'prayers':   return !!_state.prayersDone;
+      case 'deviation': return !!_state.deviation;
+      case 'kickoff':   return !!_state.kickoff;
+    }
+    return false;
+  }
+
+  function _activeKey()   { return _boardKeys.find(k => !_isResolved(k)) ?? null; }
+  function _allResolved() { return _boardKeys.every(_isResolved); }
+
+  function _renderBoard() {
+    /* Header: title + mode switcher replace the step dots */
+    const dotsEl = document.getElementById('dw-step-dots');
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      const title = ce('div', 'dwk-title');
+      title.textContent = _flowName === 'half-start' ? 'Kickoff' : 'New Drive';
+      dotsEl.appendChild(title);
+
+      const seg = ce('div', 'dwk-modes');
+      MODES.forEach(m => {
+        const b = ce('button', 'dwk-mode-btn' + (m.key === _mode ? ' active' : ''));
+        b.type = 'button';
+        b.textContent = m.label;
+        b.addEventListener('click', () => {
+          if (_rolling || m.key === _mode) return;
+          _mode = m.key;
+          _saveMode();
+          _renderBoard();
+        });
+        seg.appendChild(b);
+      });
+      dotsEl.appendChild(seg);
+    }
+
+    /* Content: panel row + summary strip */
+    const content = document.getElementById('dw-content');
+    if (!content) return;
+    content.innerHTML = '';
+
+    const grid = ce('div', 'dwk-grid');
+    grid.id = 'dwk-grid';
+    _boardKeys.forEach(k => grid.appendChild(_buildPanel(k)));
+    content.appendChild(grid);
+
+    const summary = ce('div', 'dwk-summary');
+    summary.id = 'dwk-summary';
+    content.appendChild(summary);
+
+    _refreshSummary();
+    _refreshBoardNav();
+    _updatePill();
+  }
+
+  function _buildPanel(key) {
+    const meta = BOARD_META[key];
+    const p = ce('section', 'dwk-panel');
+    p.id = `dwk-panel-${key}`;
+    p.dataset.key = key;
+    p.appendChild(ce('div', 'dwk-panel-head',
+      `<span class="dwk-panel-icon">${meta.icon}</span>` +
+      `<span class="dwk-panel-title">${h(meta.title)}</span>` +
+      `<span class="dwk-panel-check">✓</span>`));
+    const body = ce('div', 'dwk-panel-body');
+    p.appendChild(body);
+    _fillPanel(key, p, body);
+    return p;
+  }
+
+  function _rerenderPanel(key) {
+    const p = document.getElementById(`dwk-panel-${key}`);
+    if (!p) return;
+    const body = p.querySelector('.dwk-panel-body');
+    body.innerHTML = '';
+    _fillPanel(key, p, body);
+  }
+
+  function _fillPanel(key, p, body) {
+    const done   = _isResolved(key);
+    const active = !done && _activeKey() === key;
+    p.classList.toggle('done',   done);
+    p.classList.toggle('active', active);
+    p.classList.toggle('locked', !done && !active);
+
+    if (done)    { _renderPanelResult(key, body); return; }
+    if (!active) { body.appendChild(ce('div', 'dwk-wait', '·&nbsp;·&nbsp;·')); return; }
+
+    /* Prayers resolve themselves when no team is short-handed */
+    if (key === 'prayers' && !_prayersNeeded()) {
+      _state.prayersDone = true;
+      _state.prayersNote = 'Both teams field equal numbers — no Prayers to Nuffle.';
+      _afterResolve('prayers');
+      return;
+    }
+    PANEL_UI[key](body);
+  }
+
+  /* Marks a panel resolved in the DOM, unlocks the next, refreshes chrome. */
+  function _afterResolve(key) {
+    _rerenderPanel(key);
+    const next = _activeKey();
+    if (next) _rerenderPanel(next);
+    if (_allResolved()) _reachedEnd = true;
+    _refreshSummary();
+    _refreshBoardNav();
+    _updatePill();
+  }
+
+  /* ── State setters (shared by all three modes) ── */
+
+  function _setKicker(side, roll = null) {
+    _state.kickingTeam = side;
+    _state.kickingRoll = roll;
+    if (window.GameState) window.GameState.kickingTeam = side;
+  }
+
+  function _setWeather(total, d1 = null, d2 = null) {
+    const data = window.BBData?.weather ?? [];
+    const w    = data.find(e => total >= e.rollMin && total <= e.rollMax)
+              ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '', rollMin: total, rollMax: total };
+    /* Store state — but do NOT call refreshWeatherChips/updateGameBarWeather
+       synchronously; they can trigger setPhase/updateModuleAvailability which
+       applies module-dimmed styles mid-flow. Defer. */
+    if (window.GameState) window.GameState.currentWeather = w;
+    _state.weather     = w;
+    _state.weatherRoll = { total, d1, d2 };
+    setTimeout(() => {
+      window.Panels?.refreshWeatherChips?.();
+      window.Panels?.updateGameBarWeather?.(w);
+    }, 0);
+  }
+
+  function _setPrayer(val) {
+    const data = window.BBData?.prayers ?? [];
+    _state.prayer      = data.find(e => e.roll === val) ?? { name: 'Unknown Blessing', desc: '' };
+    _state.prayerRoll  = val;
+    _state.prayersDone = true;
+  }
+
+  function _setDeviation(dist, dir) {
+    _state.deviation = { dist, dir };
+  }
+
+  function _setKickoff(total, d1 = null, d2 = null) {
+    const data = window.BBData?.kickoff ?? [];
+    _state.kickoff     = data.find(e => e.roll === total) ?? { name: 'Unknown Event', desc: '' };
+    _state.kickoffRoll = { total, d1, d2 };
+  }
+
+  function _prayersNeeded() {
+    const info = _prayersInfo();
+    return info.fh !== info.fa;
+  }
+
+  /* Prayers apply only when one team fields FEWER players at kick-off. */
+  function _prayersInfo() {
+    const avail = side => (window.getPlayerList?.(side) || [])
+      .filter(p => window.isPlayerAvailable ? window.isPlayerAvailable(p) : true).length;
+    const fh = Math.min(11, avail('left')), fa = Math.min(11, avail('right'));
+    const prayingSide = fh < fa ? 'left' : 'right';
+    const prayingName = window.state?.[prayingSide]?.team?.name ||
+      (prayingSide === 'left' ? 'Home' : 'Away');
+    return { fh, fa, prayingSide, prayingName };
+  }
+
+  /* ── Per-panel UI for the ACTIVE, unresolved panel ── */
+
+  const PANEL_UI = {
+
+    kicking(body) {
+      body.appendChild(ce('p', 'dwk-hint', 'Which team kicks off this drive?'));
+
+      const sel = ce('div', 'dw-team-select');
+      [['home', '🏠 We kick'], ['away', '✈️ They kick']].forEach(([side, label]) => {
+        const b = ce('button', 'dw-team-btn');
+        b.type = 'button';
+        b.textContent = label;
+        b.addEventListener('click', () => { _setKicker(side); _afterResolve('kicking'); });
+        sel.appendChild(b);
+      });
+      body.appendChild(sel);
+
+      if (_mode === 'table') {
+        body.appendChild(ce('p', 'dwk-hint dwk-hint-sub', 'Flip a coin at the table if needed — 1–3 Home, 4–6 Away.'));
+        return;
       }
 
-      const resultEl = document.createElement('div');
-      resultEl.className = 'roll-result'; resultEl.hidden = true;
+      const flipRow = ce('div', 'dwk-flip-row');
+      const die = mkDie('dwk-kick-flip-die');
+      const flipBtn = ce('button', 'dmt-btn dwk-flip-btn');
+      flipBtn.type = 'button';
+      flipBtn.textContent = '🪙 Coin Flip (D6: 1–3 Home, 4–6 Away)';
+      flipBtn.addEventListener('click', async () => {
+        flipBtn.disabled = true;
+        const roll = await Dice.rollDieElement(die);
+        _setKicker(roll <= 3 ? 'home' : 'away', roll);
+        _afterResolve('kicking');
+      });
+      flipRow.appendChild(die);
+      flipRow.appendChild(flipBtn);
+      body.appendChild(flipRow);
+      if (_mode === 'auto') {
+        body.appendChild(ce('p', 'dwk-hint dwk-hint-sub', 'Auto-Roll flips the coin if you don\'t choose.'));
+      }
+    },
 
-      if (!isPhys()) {
-        const d1El = mkDie('dw-wth-d1'); const d2El = mkDie('dw-wth-d2');
-        const tray = document.createElement('div');
-        tray.className = 'dice-tray'; tray.appendChild(d1El); tray.appendChild(d2El);
-        el.appendChild(tray);
-
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'roll-btn';
-        btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Weather (2D6)';
-        btn.addEventListener('click', async () => {
-          btn.disabled = true;
-          const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
-          _applyWeather(total, resultEl, d1, d2);
-          btn.disabled = false;
-        });
-        el.appendChild(btn);
-      } else {
-        const zone = document.createElement('div'); zone.className = 'physical-zone';
+    weather(body) {
+      body.appendChild(ce('p', 'dwk-hint', 'Roll 2D6 on the Weather table.'));
+      if (_mode === 'table') {
+        const zone = ce('div', 'physical-zone');
         const data = window.BBData?.weather ?? [];
         window.PhysicalDice.showPhysicalButtons(zone, {
-          columns: 4,
+          columns: 3,
           buttons: Array.from({ length: 11 }, (_, i) => {
             const t = i + 2;
             const w = data.find(e => t >= e.rollMin && t <= e.rollMax);
             return { value: t, label: w ? `${w.emoji} ${w.name}` : '?',
                      cls: w && w.effect && w.effect !== 'No effect' ? 'phys-warn' : 'phys-neutral' };
           }),
-          onSelect: t => _applyWeather(t, resultEl),
+          onSelect: t => { _setWeather(t); _afterResolve('weather'); },
         });
-        el.appendChild(zone);
-      }
-      el.appendChild(resultEl);
-      _lockNext();
-    },
-
-    /* ── KICKING TEAM ── */
-    kicking(el) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.textContent = 'Which team is kicking off this drive?';
-      el.appendChild(note);
-
-      const resultEl = document.createElement('div');
-      resultEl.className = 'roll-result'; resultEl.hidden = true;
-
-      function setKicker(key) {
-        const label = key === 'home' ? 'Home' : 'Away';
-        sel.querySelectorAll('.dw-team-btn').forEach(b => b.classList.toggle('active', b.dataset.team === key));
-        _state.kickingTeam = key;
-        if (window.GameState) window.GameState.kickingTeam = key;
-        resultEl.innerHTML = `<div class="result-name">⚽ ${h(label)} team kicks off!</div>`;
-        resultEl.hidden = false;
-      }
-
-      const sel = document.createElement('div'); sel.className = 'dw-team-select';
-      ['Home', 'Away'].forEach(team => {
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'dw-team-btn';
-        btn.dataset.team = team.toLowerCase();
-        btn.textContent = team === 'Home' ? '🏠 We kick' : '✈️ They kick';
-        if (_state.kickingTeam === team.toLowerCase()) btn.classList.add('active');
-        btn.addEventListener('click', () => setKicker(team.toLowerCase()));
-        sel.appendChild(btn);
-      });
-      el.appendChild(sel);
-
-      /* Coin flip row */
-      const flipRow = document.createElement('div');
-      flipRow.style.cssText = 'display:flex;align-items:center;gap:0.6rem;margin-top:0.6rem;';
-
-      const flipDieEl = mkDie('dw-kick-flip-die');
-      flipDieEl.style.cssText = 'width:36px;height:36px;flex-shrink:0;';
-
-      const flipBtn = document.createElement('button');
-      flipBtn.type = 'button'; flipBtn.className = 'dmt-btn';
-      flipBtn.style.cssText = 'padding:0.3rem 0.85rem;font-size:0.72rem;';
-      flipBtn.textContent = '🪙 Coin Flip (D6: 1–3 = Home, 4–6 = Away)';
-      flipBtn.addEventListener('click', async () => {
-        flipBtn.disabled = true;
-        const roll = await Dice.rollDieElement(flipDieEl);
-        const key = roll <= 3 ? 'home' : 'away';
-        setKicker(key);
-        /* Auto-advance after 1.5 s */
-        setTimeout(() => _go(1), 1500);
-      });
-
-      flipRow.appendChild(flipDieEl);
-      flipRow.appendChild(flipBtn);
-      el.appendChild(flipRow);
-
-      const hint = document.createElement('p');
-      hint.className = 'panel-intro';
-      hint.style.marginTop = '0.5rem';
-      hint.textContent = 'The kicking team places the ball on the pitch. The receiving team receives first.';
-      el.appendChild(hint);
-      el.appendChild(resultEl);
-    },
-
-    /* ── PRAYERS ── */
-    prayers(el) {
-      /* Prayers to Nuffle only apply when one team can field FEWER players
-         than the other at kick-off. At the start of the game (and any time the
-         teams are even) none apply — so don't gate the wizard on a roll. */
-      const avail = side => (window.getPlayerList?.(side) || [])
-        .filter(p => window.isPlayerAvailable ? window.isPlayerAvailable(p) : true).length;
-      const fieldable = side => Math.min(11, avail(side));
-      const fh = fieldable('left'), fa = fieldable('right');
-
-      if (fh === fa) {
-        const ok = document.createElement('p');
-        ok.className = 'panel-intro';
-        ok.innerHTML = `Both teams can field <strong>${fh}</strong> player${fh === 1 ? '' : 's'} — ` +
-          `no Prayers to Nuffle this kick-off.`;
-        el.appendChild(ok);
-        _unlockNext();   // nothing to roll — proceed freely
+        body.appendChild(zone);
         return;
       }
-
-      const prayingSide = fh < fa ? 'left' : 'right';
-      const prayingName = window.state?.[prayingSide]?.team?.name ||
-        (prayingSide === 'left' ? 'Home' : 'Away');
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.innerHTML = `<strong>${h(prayingName)}</strong> can field fewer players ` +
-        `(${Math.min(fh, fa)} vs ${Math.max(fh, fa)}) — its Coach may pray to Nuffle. Roll D16.`;
-      el.appendChild(note);
-
-      const resultEl = document.createElement('div');
-      resultEl.className = 'roll-result'; resultEl.hidden = true;
-
-      if (!isPhys()) {
-        const dieEl = mkDie('dw-pr-d1', 16);
-        const tray  = document.createElement('div');
-        tray.className = 'dice-tray single'; tray.appendChild(dieEl);
-        el.appendChild(tray);
-
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'roll-btn';
-        btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll D16 — Pray to Nuffle';
+      const tray = ce('div', 'dice-tray');
+      tray.appendChild(mkDie('dwk-wth-d1'));
+      tray.appendChild(mkDie('dwk-wth-d2'));
+      body.appendChild(tray);
+      if (_mode === 'manual') {
+        const btn = ce('button', 'roll-btn dwk-roll-btn');
+        btn.type = 'button';
+        btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Weather';
         btn.addEventListener('click', async () => {
           btn.disabled = true;
-          const val = await Dice.rollDieElement(dieEl);
-          _applyPrayer(val, resultEl);
-          btn.disabled = false;
+          const { d1, d2, total } = await Dice.roll2D6(tray.children[0], tray.children[1]);
+          _setWeather(total, d1, d2);
+          _afterResolve('weather');
         });
-        el.appendChild(btn);
-      } else {
-        const zone = document.createElement('div'); zone.className = 'physical-zone';
+        body.appendChild(btn);
+      }
+    },
+
+    prayers(body) {
+      const { fh, fa, prayingName } = _prayersInfo();
+      body.appendChild(ce('p', 'dwk-hint',
+        `<strong>${h(prayingName)}</strong> fields fewer players (${Math.min(fh, fa)} vs ${Math.max(fh, fa)}) — its Coach may pray to Nuffle (D16).`));
+
+      if (_mode === 'table') {
+        const zone = ce('div', 'physical-zone');
         const data = window.BBData?.prayers ?? [];
         window.PhysicalDice.showPhysicalButtons(zone, {
-          columns: 4,
+          columns: 3,
           buttons: Array.from({ length: 16 }, (_, i) => {
             const v = i + 1;
-            const p = data.find(e => e.roll === v);
-            return { value: v, label: p?.name ?? '?' };
+            return { value: v, label: data.find(e => e.roll === v)?.name ?? '?' };
           }),
-          onSelect: v => _applyPrayer(v, resultEl),
+          onSelect: v => { _setPrayer(v); _afterResolve('prayers'); },
         });
-        el.appendChild(zone);
+        body.appendChild(zone);
+      } else {
+        const tray = ce('div', 'dice-tray single');
+        tray.appendChild(mkDie('dwk-pr-d1', 16));
+        body.appendChild(tray);
+        if (_mode === 'manual') {
+          const btn = ce('button', 'roll-btn dwk-roll-btn');
+          btn.type = 'button';
+          btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll D16';
+          btn.addEventListener('click', async () => {
+            btn.disabled = true;
+            const val = await Dice.rollDieElement(tray.children[0]);
+            _setPrayer(val);
+            _afterResolve('prayers');
+          });
+          body.appendChild(btn);
+        }
       }
 
-      const skipBtn = document.createElement('button');
-      skipBtn.type = 'button'; skipBtn.className = 'dw-nav-btn';
-      skipBtn.style.marginTop = '0.45rem';
-      skipBtn.textContent = 'Skip — no prayers needed';
-      skipBtn.addEventListener('click', () => { _unlockNext(); _go(1); });
-      el.appendChild(skipBtn);
-      el.appendChild(resultEl);
-      _lockNext();
+      const skip = ce('button', 'dwk-skip-btn');
+      skip.type = 'button';
+      skip.textContent = 'Skip — no prayer';
+      skip.addEventListener('click', () => {
+        _state.prayersDone = true;
+        _state.prayersNote = 'Prayer skipped.';
+        _afterResolve('prayers');
+      });
+      body.appendChild(skip);
     },
 
-    /* ── SETUP REMINDER ── */
-    setup(el) {
-      const kicker = _state.kickingTeam ?? window.GameState?.kickingTeam;
-      const kickLabel = kicker ? (kicker.charAt(0).toUpperCase() + kicker.slice(1)) + ' team kicking' : 'Kicking team TBD';
-
-      const card = document.createElement('div');
-      card.className = 'roll-result';
-      card.style.display = 'block';
-      card.innerHTML = `
-        <div class="result-name" style="margin-bottom:0.4rem;">⚽ ${h(kickLabel)}</div>
-        <p class="result-desc">
-          Place all your players in their zones. The kicking team must have at least 3 players
-          on the line of scrimmage. The receiving team sets up across from them.
-          The kicking team places the ball anywhere in their own half.
-        </p>
-        <p class="result-desc" style="margin-top:0.3rem;opacity:0.65;font-size:0.7rem;">
-          Both teams must field at least 3 players. Any player with a Secret Weapon must
-          declare it now if they have not already.
-        </p>
-      `;
-      el.appendChild(card);
-    },
-
-    /* ── KICK DEVIATION ── */
-    deviation(el) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.textContent = 'Roll D6 for distance (squares) and D8 for direction (scatter template).';
-      el.appendChild(note);
-
-      const DIR = { 1:'↖ Up-Left',2:'↑ Up',3:'↗ Up-Right',4:'← Left',5:'→ Right',6:'↙ Down-Left',7:'↓ Down',8:'↘ Down-Right' };
-      const resultEl = document.createElement('div');
-      resultEl.className = 'roll-result'; resultEl.hidden = true;
-
-      if (!isPhys()) {
-        const d6El = mkDie('dw-dev-d6');
-        const d8El = mkDie('dw-dev-d8', 8);
-        const tray = document.createElement('div');
-        tray.className = 'dice-tray'; tray.appendChild(d6El); tray.appendChild(d8El);
-        el.appendChild(tray);
-
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'roll-btn';
-        btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Kick Deviation';
-        btn.addEventListener('click', async () => {
-          btn.disabled = true;
-          const [dist, dir] = await Promise.all([Dice.rollDieElement(d6El), Dice.rollDieElement(d8El)]);
-          resultEl.innerHTML = `<div class="result-name">Deviates ${dist} square${dist !== 1 ? 's' : ''}</div><div class="result-direction">${DIR[dir] ?? dir}</div>`;
-          resultEl.hidden = false;
-          _state.deviation = { dist, dir };
-          _unlockNext();
-          btn.disabled = false;
-        });
-        el.appendChild(btn);
-      } else {
-        /* Physical: distance first, then compass direction */
+    deviation(body) {
+      body.appendChild(ce('p', 'dwk-hint', 'D6 distance (squares) · D8 direction (scatter template).'));
+      if (_mode === 'table') {
         let selDist = null;
-
-        const distLbl = document.createElement('div');
-        distLbl.className = 'input-label'; distLbl.style.marginBottom = '0.25rem';
-        distLbl.textContent = 'Distance (D6)';
-        el.appendChild(distLbl);
-
-        const distZone = document.createElement('div'); distZone.className = 'physical-zone';
+        body.appendChild(ce('div', 'input-label dwk-sub-label', 'Distance (D6)'));
+        const distZone = ce('div', 'physical-zone');
         window.PhysicalDice.showPhysicalButtons(distZone, {
           columns: 6,
-          buttons: Array.from({ length: 6 }, (_, i) => ({ value: i + 1, label: `${i + 1} sq` })),
-          onSelect(d) {
-            selDist = d;
-            dirLblWrap.hidden = false;
-            dirZone.hidden    = false;
-          },
+          buttons: Array.from({ length: 6 }, (_, i) => ({ value: i + 1, label: `${i + 1}` })),
+          onSelect(d) { selDist = d; dirLbl.hidden = false; dirZone.hidden = false; },
         });
-        el.appendChild(distZone);
-
-        const dirLblWrap = document.createElement('div'); dirLblWrap.hidden = true;
-        const dirLbl = document.createElement('div');
-        dirLbl.className = 'input-label'; dirLbl.style.margin = '0.5rem 0 0.25rem';
-        dirLbl.textContent = 'Direction (D8)';
-        dirLblWrap.appendChild(dirLbl);
-        el.appendChild(dirLblWrap);
-
-        const dirZone = document.createElement('div'); dirZone.className = 'physical-zone'; dirZone.hidden = true;
+        body.appendChild(distZone);
+        const dirLbl = ce('div', 'input-label dwk-sub-label', 'Direction (D8)');
+        dirLbl.hidden = true;
+        body.appendChild(dirLbl);
+        const dirZone = ce('div', 'physical-zone');
+        dirZone.hidden = true;
         window.PhysicalDice.showCompassButtons(dirZone, dir => {
-          resultEl.innerHTML = `<div class="result-name">Deviates ${selDist} square${selDist !== 1 ? 's' : ''}</div><div class="result-direction">${DIR[dir] ?? dir}</div>`;
-          resultEl.hidden = false;
-          _state.deviation = { dist: selDist, dir };
-          _unlockNext();
+          _setDeviation(selDist, dir);
+          _afterResolve('deviation');
         });
-        el.appendChild(dirZone);
+        body.appendChild(dirZone);
+        return;
       }
-      el.appendChild(resultEl);
-      _lockNext();
+      const tray = ce('div', 'dice-tray');
+      tray.appendChild(mkDie('dwk-dev-d6'));
+      tray.appendChild(mkDie('dwk-dev-d8', 8));
+      body.appendChild(tray);
+      if (_mode === 'manual') {
+        const btn = ce('button', 'roll-btn dwk-roll-btn');
+        btn.type = 'button';
+        btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Deviation';
+        btn.addEventListener('click', async () => {
+          btn.disabled = true;
+          const [dist, dir] = await Promise.all([
+            Dice.rollDieElement(tray.children[0]),
+            Dice.rollDieElement(tray.children[1]),
+          ]);
+          _setDeviation(dist, dir);
+          _afterResolve('deviation');
+        });
+        body.appendChild(btn);
+      }
     },
 
-    /* ── KICKOFF EVENT ── */
-    kickoff(el) {
-      const note = document.createElement('p');
-      note.className = 'panel-intro';
-      note.textContent = 'Roll 2D6 for the Kickoff Event table.';
-      el.appendChild(note);
-
-      const AFFECTS = { 2:'both',3:'both',4:'kicking',5:'receiving',6:'both',7:'both',8:'both',9:'receiving',10:'kicking',11:'both',12:'both' };
-      const resultEl = document.createElement('div');
-      resultEl.className = 'roll-result'; resultEl.hidden = true;
-
-      if (!isPhys()) {
-        const d1El = mkDie('dw-ko-d1'); const d2El = mkDie('dw-ko-d2');
-        const tray = document.createElement('div');
-        tray.className = 'dice-tray'; tray.appendChild(d1El); tray.appendChild(d2El);
-        el.appendChild(tray);
-
-        const btn = document.createElement('button');
-        btn.type = 'button'; btn.className = 'roll-btn';
+    kickoff(body) {
+      body.appendChild(ce('p', 'dwk-hint', 'Roll 2D6 on the Kickoff Event table.'));
+      if (_mode === 'table') {
+        const zone = ce('div', 'physical-zone');
+        const data = window.BBData?.kickoff ?? [];
+        window.PhysicalDice.showPhysicalButtons(zone, {
+          columns: 3,
+          buttons: Array.from({ length: 11 }, (_, i) => {
+            const t = i + 2;
+            return { value: t, label: data.find(e => e.roll === t)?.name ?? '?' };
+          }),
+          onSelect: t => { _setKickoff(t); _afterResolve('kickoff'); },
+        });
+        body.appendChild(zone);
+        return;
+      }
+      const tray = ce('div', 'dice-tray');
+      tray.appendChild(mkDie('dwk-ko-d1'));
+      tray.appendChild(mkDie('dwk-ko-d2'));
+      body.appendChild(tray);
+      if (_mode === 'manual') {
+        const btn = ce('button', 'roll-btn dwk-roll-btn');
+        btn.type = 'button';
         btn.innerHTML = '<span class="roll-btn-icon">🎲</span> Roll Kickoff Event';
         btn.addEventListener('click', async () => {
           btn.disabled = true;
-          const { d1, d2, total } = await Dice.roll2D6(d1El, d2El);
-          _applyKickoff(total, resultEl, d1, d2, AFFECTS);
-          btn.disabled = false;
+          const { d1, d2, total } = await Dice.roll2D6(tray.children[0], tray.children[1]);
+          _setKickoff(total, d1, d2);
+          _afterResolve('kickoff');
         });
-        el.appendChild(btn);
-      } else {
-        const zone = document.createElement('div'); zone.className = 'physical-zone';
-        const data = window.BBData?.kickoff ?? [];
-        window.PhysicalDice.showPhysicalButtons(zone, {
-          columns: 4,
-          buttons: Array.from({ length: 11 }, (_, i) => {
-            const t = i + 2;
-            const ev = data.find(e => e.roll === t);
-            return { value: t, label: ev?.name ?? '?' };
-          }),
-          onSelect: t => _applyKickoff(t, resultEl, null, null, AFFECTS),
-        });
-        el.appendChild(zone);
+        body.appendChild(btn);
       }
-      el.appendChild(resultEl);
-      _lockNext();
     },
+  };
 
-    /* ── DRIVE READY ── */
-    ready(el) {
-      const w      = window.GameState?.currentWeather;
-      const kicker = window.GameState?.kickingTeam ?? _state.kickingTeam;
-      const koEv   = _state.kickoff;
+  /* ── Resolved-panel result views ── */
 
-      const card = document.createElement('div');
-      card.className = 'roll-result';
-      card.style.display = 'block';
+  function _rollLine(roll) {
+    if (!roll || roll.total == null) return '';
+    const parts = roll.d1 != null ? ` <span class="dwk-res-dice">(${roll.d1} + ${roll.d2})</span>` : '';
+    return `<div class="dwk-res-roll">${roll.total}${parts}</div>`;
+  }
 
-      let body = `<div class="result-name" style="color:#81c784;font-size:1.05rem;margin-bottom:0.5rem;">✓ Drive Ready!</div>`;
+  function _renderPanelResult(key, body) {
+    const wrap = ce('div', 'dwk-result');
+    if (key === 'kicking') {
+      const side  = _state.kickingTeam;
+      const label = side === 'home' ? '🏠 Home team kicks off' : '✈️ Away team kicks off';
+      wrap.innerHTML = `<div class="dwk-res-name">${label}</div>` +
+        (_state.kickingRoll ? `<div class="dwk-res-dice">Coin flip: ${_state.kickingRoll}</div>` : '');
+      const swap = ce('button', 'dwk-skip-btn');
+      swap.type = 'button';
+      swap.textContent = '⇄ Swap';
+      swap.addEventListener('click', () => {
+        _setKicker(side === 'home' ? 'away' : 'home');
+        _rerenderPanel('kicking');
+        _refreshSummary();
+      });
+      body.appendChild(wrap);
+      body.appendChild(swap);
+      return;
+    }
+    if (key === 'weather') {
+      const w = _state.weather;
+      const isPerfect = !w.effect || w.effect === 'No effect';
+      wrap.innerHTML = _rollLine(_state.weatherRoll) +
+        `<div class="dwk-res-name">${h(w.emoji)} ${h(w.name)}</div>` +
+        (isPerfect
+          ? '<span class="result-chip result-chip-ok">✓ No mechanical effect</span>'
+          : `<span class="result-chip result-chip-warn">⚠ ${h(w.effect)}</span>`) +
+        `<p class="dwk-res-desc">${h(w.desc)}</p>`;
+    } else if (key === 'prayers') {
+      wrap.innerHTML = _state.prayer
+        ? `${_rollLine({ total: _state.prayerRoll })}` +
+          `<div class="dwk-res-name">✦ ${h(_state.prayer.name)}</div>` +
+          `<p class="dwk-res-desc">${h(_state.prayer.desc)}</p>`
+        : `<div class="dwk-res-name">✦ No prayer</div>` +
+          `<p class="dwk-res-desc">${h(_state.prayersNote ?? '')}</p>`;
+    } else if (key === 'deviation') {
+      const d = _state.deviation;
+      wrap.innerHTML =
+        `<div class="dwk-res-name">${d.dist} square${d.dist !== 1 ? 's' : ''}</div>` +
+        `<div class="dwk-res-dir">${DIR[d.dir] ?? d.dir}</div>`;
+    } else if (key === 'kickoff') {
+      const ev  = _state.kickoff;
+      const aff = KICKOFF_AFFECTS[_state.kickoffRoll?.total] ?? 'both';
+      const chip = aff === 'kicking'
+        ? '<span class="result-chip result-chip-warn">⚽ Kicking Team</span>'
+        : aff === 'receiving'
+        ? '<span class="result-chip result-chip-ok">🏆 Receiving Team</span>'
+        : '<span class="result-chip result-chip-info">⚖️ Both Teams</span>';
+      wrap.innerHTML = _rollLine(_state.kickoffRoll) +
+        `<div class="dwk-res-name">${h(ev.name)}</div>` + chip +
+        `<p class="dwk-res-desc">${h(ev.desc)}</p>`;
+    }
+    body.appendChild(wrap);
+  }
 
-      if (w) {
-        const isPerfect = !w.effect || w.effect === 'No effect';
-        body += `<div style="margin-bottom:0.3rem;">${isPerfect
-          ? `<span class="result-chip result-chip-ok">${h(w.emoji)} ${h(w.name)}</span>`
-          : `<span class="result-chip result-chip-warn">⚠ ${h(w.emoji)} ${h(w.name)}: ${h(w.effect)}</span>`}</div>`;
+  /* ── Summary strip — fills as results land ── */
+
+  function _refreshSummary() {
+    const el = document.getElementById('dwk-summary');
+    if (!el) return;
+    el.innerHTML = '';
+    const chips = [];
+
+    const kicker = _state.kickingTeam ?? window.GameState?.kickingTeam;
+    if (kicker) chips.push({ cls: 'dwk-sum-info', text: `⚽ ${kicker === 'home' ? 'Home' : 'Away'} kicks` });
+    const w = _state.weather ?? window.GameState?.currentWeather;
+    if (w) {
+      const isPerfect = !w.effect || w.effect === 'No effect';
+      chips.push({ cls: isPerfect ? 'dwk-sum-ok' : 'dwk-sum-warn',
+                   text: `${w.emoji} ${w.name}${isPerfect ? '' : ` — ${w.effect}`}` });
+    }
+    if (_state.prayer)    chips.push({ cls: 'dwk-sum-info', text: `✦ ${_state.prayer.name}` });
+    if (_state.deviation) chips.push({ cls: 'dwk-sum-info', text: `⬡ ${_state.deviation.dist} sq ${DIR[_state.deviation.dir] ?? ''}` });
+    if (_state.kickoff)   chips.push({ cls: 'dwk-sum-info', text: `⚡ ${_state.kickoff.name}` });
+
+    if (_allResolved()) chips.push({ cls: 'dwk-sum-ready', text: '✓ Drive Ready — good luck!' });
+
+    chips.forEach(c => el.appendChild(ce('span', `dwk-sum-chip ${c.cls}`, h(c.text))));
+
+    el.appendChild(ce('span', 'dwk-setup-note',
+      'Setup: kicking team first, at least 3 players on the line of scrimmage; ' +
+      'receiving team sets up across; ball placed anywhere in the kicking half.'));
+  }
+
+  /* ── Primary button (repurposed #dw-next) ── */
+
+  function _refreshBoardNav() {
+    const backBtn = document.getElementById('dw-back');
+    const nextBtn = document.getElementById('dw-next');
+    if (backBtn) backBtn.style.display = 'none';
+    if (!nextBtn) return;
+    nextBtn.title = '';
+    if (_mode === 'auto' && !_allResolved()) {
+      nextBtn.textContent = _rolling ? '🎲 Rolling…' : '⚡ Roll Kickoff';
+      nextBtn.disabled    = _rolling;
+      nextBtn.classList.remove('dwk-ready');
+      nextBtn.onclick     = _autoRollAll;
+    } else {
+      nextBtn.textContent = '▸ Play the Drive';
+      nextBtn.disabled    = !_allResolved();
+      nextBtn.classList.toggle('dwk-ready', _allResolved());
+      nextBtn.onclick     = close;
+    }
+  }
+
+  /* ── Auto-Roll: resolve every remaining panel in sequence ── */
+
+  async function _autoRollAll() {
+    if (_rolling) return;
+    _rolling = true;
+    _refreshBoardNav();
+    for (const key of _boardKeys) {
+      if (_isResolved(key)) continue;
+      _rerenderPanel(key);           /* ensure the active dice tray is present */
+      await _pause(220);
+      await _autoResolve(key);
+      if (!_isResolved(key)) break;  /* safety: never spin */
+      await _pause(420);
+    }
+    _rolling = false;
+    _refreshBoardNav();
+  }
+
+  async function _autoResolve(key) {
+    const p = document.getElementById(`dwk-panel-${key}`);
+    if (!p) return;
+    const dice = p.querySelectorAll('.die');
+    switch (key) {
+      case 'kicking': {
+        const roll = await Dice.rollDieElement(dice[0]);
+        _setKicker(roll <= 3 ? 'home' : 'away', roll);
+        break;
       }
-      if (kicker) {
-        body += `<div style="font-family:JetBrains Mono,monospace;font-size:0.72rem;color:rgba(200,220,255,0.65);margin-bottom:0.2rem;">⚽ ${h(kicker.charAt(0).toUpperCase() + kicker.slice(1))} team kicking</div>`;
+      case 'weather': {
+        const { d1, d2, total } = await Dice.roll2D6(dice[0], dice[1]);
+        _setWeather(total, d1, d2);
+        break;
       }
-      if (koEv) {
-        body += `<div style="font-family:JetBrains Mono,monospace;font-size:0.72rem;color:rgba(200,220,255,0.65);">⚡ ${h(koEv.name)}</div>`;
+      case 'prayers': {
+        /* Even teams already auto-resolved by _fillPanel; here a prayer is due */
+        const val = await Dice.rollDieElement(dice[0]);
+        _setPrayer(val);
+        break;
       }
-      body += `<p class="result-desc" style="margin-top:0.4rem;">All pre-drive checks complete. Good luck!</p>`;
-      card.innerHTML = body;
-      el.appendChild(card);
-    },
+      case 'deviation': {
+        const [dist, dir] = await Promise.all([
+          Dice.rollDieElement(dice[0]),
+          Dice.rollDieElement(dice[1]),
+        ]);
+        _setDeviation(dist, dir);
+        break;
+      }
+      case 'kickoff': {
+        const { d1, d2, total } = await Dice.roll2D6(dice[0], dice[1]);
+        _setKickoff(total, d1, d2);
+        break;
+      }
+    }
+    _afterResolve(key);
+  }
+
+  /* ─────────────────────────────────────────────────────
+     LEGACY STEP RENDERERS — drive-end flow only
+     ──────────────────────────────────────────────────── */
+
+  const STEPS = {
 
     /* ── DRIVE EFFECTS (end of drive) ── */
     effects(el) {
@@ -656,78 +921,6 @@ const DriveWizard = (() => {
       });
     },
   };
-
-  /* ─────────────────────────────────────────────────────
-     EFFECT HELPERS
-     ──────────────────────────────────────────────────── */
-
-  function _applyWeather(total, resultEl, d1, d2) {
-    const data = window.BBData?.weather ?? [];
-    const w    = data.find(e => total >= e.rollMin && total <= e.rollMax)
-              ?? { name: 'Unknown', emoji: '❓', effect: '', desc: '', rollMin: total, rollMax: total };
-
-    /* Store state — but do NOT call refreshWeatherChips/updateGameBarWeather here.
-       Those functions can trigger setPhase/updateModuleAvailability which applies
-       module-dimmed styles and locks the UI. Defer to after unlock. */
-    if (window.GameState) window.GameState.currentWeather = w;
-
-    const isPerfect    = !w.effect || w.effect === 'No effect';
-    const breakdownHtml = d1 != null ? `<div class="result-roll-breakdown">${d1} + ${d2}</div>` : '';
-    resultEl.innerHTML = `
-      <div class="result-roll-num">${total}</div>
-      ${breakdownHtml}
-      <div class="result-name">${h(w.emoji)} ${h(w.name)}</div>
-      ${isPerfect
-        ? '<span class="result-chip result-chip-ok">✓ No mechanical effect</span>'
-        : `<span class="result-chip result-chip-warn">⚠ ${h(w.effect)}</span>`}
-      <p class="result-desc">${h(w.desc)}</p>
-    `;
-    resultEl.hidden = false;
-    _state.weather = w;
-    _unlockNext();
-
-    /* Deferred cosmetic updates — safe after unlock */
-    setTimeout(() => {
-      window.Panels?.refreshWeatherChips?.();
-      window.Panels?.updateGameBarWeather?.(w);
-    }, 0);
-  }
-
-  function _applyPrayer(val, resultEl) {
-    const data   = window.BBData?.prayers ?? [];
-    const prayer = data.find(e => e.roll === val) ?? { name: 'Unknown Blessing', desc: '' };
-    resultEl.innerHTML = `
-      <div class="result-roll-num">${val}</div>
-      <div class="result-name">✦ ${h(prayer.name)}</div>
-      <p class="result-desc">${h(prayer.desc)}</p>
-    `;
-    resultEl.hidden = false;
-    _state.prayer = prayer;
-    _unlockNext();
-  }
-
-  function _applyKickoff(total, resultEl, d1, d2, AFFECTS) {
-    const data = window.BBData?.kickoff ?? [];
-    const ev   = data.find(e => e.roll === total) ?? { name: 'Unknown Event', desc: '' };
-    const aff  = (AFFECTS ?? {})[total] ?? 'both';
-    const chipHtml = aff === 'kicking'
-      ? '<span class="result-chip result-chip-warn">⚽ Kicking Team</span>'
-      : aff === 'receiving'
-      ? '<span class="result-chip result-chip-ok">🏆 Receiving Team</span>'
-      : '<span class="result-chip result-chip-info">⚖️ Both Teams</span>';
-    const breakdownHtml = d1 != null ? `<div class="result-roll-breakdown">${d1} + ${d2}</div>` : '';
-
-    resultEl.innerHTML = `
-      <div class="result-roll-num">${total}</div>
-      ${breakdownHtml}
-      <div class="result-name">${h(ev.name)}</div>
-      ${chipHtml}
-      <p class="result-desc">${h(ev.desc)}</p>
-    `;
-    resultEl.hidden = false;
-    _state.kickoff = ev;
-    _unlockNext();
-  }
 
   function _applyKORecovery(player, roll, resultSpan) {
     if (roll >= 4) {

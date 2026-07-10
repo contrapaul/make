@@ -28,8 +28,10 @@ function parseAllStats(statsText) {
 
 /* Skills shown as cards under the matching player. */
 const PASS_THROWER_SKILLS = ['Pass','Accurate','Strong Arm','Cannoneer','Hail Mary Pass',
-  'Nerves of Steel','Consummate Professional','Cloud Burster','Dump-Off','Pro','Safe Pass'];
-const PASS_CATCHER_SKILLS = ['Catch','Diving Catch','Sure Hands','Extra Arms','Nerves of Steel','Pro'];
+  'Nerves of Steel','Consummate Professional','Cloud Burster','Dump-Off','Pro','Safe Pass',
+  'Animosity','Give and Go','My Ball','No Ball'];
+const PASS_CATCHER_SKILLS = ['Catch','Diving Catch','Sure Hands','Extra Arms','Nerves of Steel','Pro',
+  'No Ball'];
 
 function initPassWizard() {
   const panel = document.getElementById('panel-pass');

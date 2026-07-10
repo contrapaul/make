@@ -1318,11 +1318,11 @@
   color:          #fff;
 }
 
-/* Card wrap contains either the picker or the embedded card */
+/* Card wrap contains either the picker or the embedded card. Fills the column
+   so the card matches the Change button and assists row width (the card is a
+   container-query card — self-similar at any width). */
 .bwiz-card-wrap {
-  /* Pixel width (not em): the unified container-query card renders identically
-     here and on the Teams page. em drifted with the FitScale-inherited font-size. */
-  width:      200px;
+  width:      100%;
   flex-shrink: 0;
   position:   relative;
 }
@@ -1558,7 +1558,9 @@
 
 /* Use Re-roll button (gold) */
 .bwiz-rr-action-btn {
-  width:          100%;
+  /* Match the Roll/Confirm button width: 100% − 2.4em at its 1.5em font on the
+     fixed 15px panel base = 100% − 54px. */
+  width:          calc(100% - 54px);
   padding:        0.4rem 1.2rem;
   background:     rgba(212, 175, 55, 0.12);
   border:         1px solid rgba(212, 175, 55, 0.5);
