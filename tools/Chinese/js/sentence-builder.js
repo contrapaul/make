@@ -1,8 +1,14 @@
 /* sentence-builder.js
-   — word-level tokenisation with pinyin on every Chinese token
-   — auto-check fires whenever all slots are filled
-   — per-slot state: null | 'pending' | 'correct' | 'incorrect'
-   — removing a slot clears only that slot; others keep their colour
+   Interaction model:
+   — every placement is checked immediately: green = correct slot,
+     yellow = belongs in the sentence but wrong slot (stays, can be moved),
+     red = not in this sentence (bounces back to the bank and stays red there)
+   — placed words can be dragged between slots (drop on a filled slot swaps)
+   — removing a placed word returns it to the bank colored yellow ("belongs,
+     not placed") — even if it was green, since it's no longer in position
+   — Hint fills the first non-green slot with the right word
+   — solved when every slot is green: banner + pinyin, wait for Next
+   — progress = running accuracy: correct placements / placement attempts
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -22,33 +28,27 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Count how many Chinese characters a pinyin word represents.
-  // Uses finals-aware matching so compound finals like "uo", "ui", "iu",
-  // "ang", "eng", "ing", "ian", "uan" etc. count as ONE syllable.
   function pinyinSyllableCount(pyWord) {
     const clean = stripToneMarks(pyWord).toLowerCase().replace(/[^a-züA-ZÜ]/g, '');
-    // Order finals longest-first to avoid partial matches
     const m = clean.match(
       /(?:zh|ch|sh|[bpmfdtnlgkhjqxrzcsyw])?(?:iang|iao|iong|uang|uai|üan|üe|ue|ian|uan|ang|eng|ing|ong|ao|ou|ia|ie|ua|uo|ui|iu|ai|ei|an|en|in|un|er|[aoeüiu]+)/g
     );
-    return Math.max(1, m ? m.length : 1);
+    let n = Math.max(1, m ? m.length : 1);
+    // Erhua: a trailing 'r' the finals didn't consume (nǎr, yǒudiǎnr,
+    // miàntiáor…) is written 儿 — one extra character. ("èr/ér" themselves
+    // match the "er" final fully, so they don't hit this branch.)
+    if (m && clean.endsWith('r') && m.join('').length === clean.length - 1) n += 1;
+    return n;
   }
 
-  // Punctuation to strip before tokenizing — includes CJK punctuation, ASCII
-  // punctuation, and dash variants (em/en dash) used for dialogue like
-  // "你有什么爱好？——我的爱好是……".
+  // Punctuation to strip before tokenizing — CJK + ASCII + dash variants.
   const PUNCT_RE = /[。？！，、；：""''「」（）【】.,!?;:'"()—–…]/g;
 
   // Split a sentence into word-level tokens, each with {zh, pinyin}
   function tokenizeSentence(zh, pinyin) {
-    // Bail out entirely on sentences containing embedded Latin-letter terms
-    // (CPU, DDR5, USB, Arduino, T恤衫, vitamin "C", etc. — a handful of the
-    // bonus tech-vocab sentences). A stray letter throws off the character
-    // count for every token AFTER it too, silently mispairing unrelated
-    // hanzi with the wrong pinyin — and since those tokens are still pure
-    // CJK, they'd otherwise slip into the shared distractor pool and pollute
-    // puzzles for *other* (including real textbook) sentences. Safer to
-    // just not offer these sentences for hanzi tokenization at all; they
-    // still work fine in English-arrange mode and Tone Trainer.
+    // Sentences with embedded Latin terms (CPU, T恤衫, …) can't be reliably
+    // character-counted; skip them for hanzi-arrange mode entirely so bad
+    // pairings never reach the shared distractor pool.
     if (/[A-Za-z]/.test(zh)) return [];
 
     const cleanZh = zh.replace(PUNCT_RE, '');
@@ -63,13 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (hanzi) tokens.push({ zh: hanzi, pinyin: pyWord });
       charPos += n;
     }
-    // Bundle any leftover characters (count mismatch safety)
     if (charPos < cleanZh.length && tokens.length) {
       tokens[tokens.length - 1].zh += cleanZh.slice(charPos);
     }
-    // Merge consecutive all-digit tokens into one number token, e.g. a
-    // spelled-out year like "2026" (Chinese: èr líng èr liù, one syllable
-    // per digit) would otherwise become four separate single-digit chips.
+    // Merge consecutive all-digit tokens (spelled-out years etc.)
     const merged = [];
     for (const t of tokens) {
       const prev = merged[merged.length - 1];
@@ -85,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Distractor pool (lazy, built once) ────────────────────────────────────
   let _pool = null;
-  function pool(mode) {
+  function pool(m) {
     if (!_pool) {
       _pool = { zh: [], en: [] };
       sentences.forEach(s => {
@@ -93,30 +90,29 @@ document.addEventListener('DOMContentLoaded', () => {
         s.en.replace(/[.,!?;:'"()—–]/g, '').split(/\s+/).filter(Boolean)
             .forEach(w => _pool.en.push(w.toLowerCase()));
       });
-      // Deduplicate + keep only pure-Chinese (or spelled-out number) tokens —
-      // no stray Latin-letter contamination.
       const zhSeen = new Set();
       const pureZh = /^[一-鿿㐀-䶿0-9]+$/;
       _pool.zh = _pool.zh.filter(t => {
-        if (!pureZh.test(t.zh)) return false;  // skip if any non-CJK char
+        if (!pureZh.test(t.zh)) return false;
         if (zhSeen.has(t.zh)) return false;
         zhSeen.add(t.zh);
         return true;
       });
       _pool.en = [...new Set(_pool.en)];
     }
-    return _pool[mode];
+    return _pool[m];
   }
 
   // ── State ──────────────────────────────────────────────────────────────────
   const STORE = 'cv-builder';
-  let mode         = 'zh';
-  let currentIdx   = -1;
-  let tokens       = [];   // [{zh,pinyin}] or [string]
-  let slotValues   = [];   // null | {zh,py} | string
-  let slotStates   = [];   // null | 'pending' | 'correct' | 'incorrect'
-  let bankWords    = [];   // [{zh,py,id}] or [{en,id}]
-  let score        = { correct: 0, total: 0 };
+  let mode        = 'zh';
+  let currentIdx  = -1;
+  let tokens      = [];    // [{zh,pinyin}] or [string]
+  let bank        = [];    // [{id, zh?, py?, en?, status:'idle'|'red'|'yellow', slot:number|null}]
+  let slots       = [];    // bankId | null, per token position
+  let slotStates  = [];    // 'green' | 'yellow' | null
+  let solvedLock  = false; // freeze the board after solving, until Next
+  let stats       = { attempts: 0, correct: 0, solved: 0 };
 
   // ── DOM ────────────────────────────────────────────────────────────────────
   const $ = id => document.getElementById(id);
@@ -138,6 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSentence(pickRandom());
   }
 
+  // ── Word helpers ───────────────────────────────────────────────────────────
+  const wordById  = id => bank.find(w => w.id === id);
+  const wordText  = w  => mode === 'zh' ? w.zh : w.en;
+  const tokenText = i  => mode === 'zh' ? tokens[i].zh : tokens[i];
+  const tokenList = () => tokens.map((_, i) => tokenText(i));
+
+  // green | yellow | red for placing `word` into slot `idx`
+  function evaluate(idx, word) {
+    const text = wordText(word);
+    if (text === tokenText(idx)) return 'green';
+    if (tokenList().includes(text)) return 'yellow';
+    return 'red';
+  }
+
   // ── Load sentence ──────────────────────────────────────────────────────────
   function pickRandom() {
     let idx;
@@ -148,38 +158,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadSentence(idx) {
     currentIdx = idx;
+    solvedLock = false;
     const s = sentences[idx];
     if (mode === 'zh') {
       tokens = tokenizeSentence(s.zh, s.pinyin)
-        .filter(t => /^[一-鿿㐀-䶿0-9]+$/.test(t.zh)); // skip any Latin-contaminated tokens
-      if (!tokens.length) { loadSentence(pickRandom()); return; } // skip bad sentence
-      if (promptLabel) promptLabel.textContent = 'Arrange the Chinese words to match this English:';
-      if (promptText)  promptText.textContent  = s.en;
+        .filter(t => /^[一-鿿㐀-䶿0-9]+$/.test(t.zh));
+      if (!tokens.length) { loadSentence(pickRandom()); return; }
+      if (promptLabel)  promptLabel.textContent  = 'Arrange the Chinese words to match this English:';
+      if (promptText)   promptText.textContent   = s.en;
       if (promptPinyin) promptPinyin.textContent = '';
     } else {
       tokens = s.en.replace(/[.,!?;:'"()—–]/g, '').split(/\s+/).filter(Boolean).map(w => w.toLowerCase());
+      if (!tokens.length) { loadSentence(pickRandom()); return; }
       if (promptLabel)  promptLabel.textContent  = 'Arrange the English words to match this Chinese:';
       if (promptText)   promptText.textContent   = s.zh;
       if (promptPinyin) promptPinyin.textContent = s.pinyin;
     }
-    slotValues = new Array(tokens.length).fill(null);
+    slots      = new Array(tokens.length).fill(null);
     slotStates = new Array(tokens.length).fill(null);
     buildBank();
-    render();
     hideFeedback();
-    saveState();
+    render();
   }
 
   // ── Bank ───────────────────────────────────────────────────────────────────
   function buildBank() {
     const distractors = pickDistractors(20);
+    let raw;
     if (mode === 'zh') {
-      bankWords = shuffle([...tokens, ...distractors])
+      raw = shuffle([...tokens, ...distractors])
         .map((t, i) => ({ zh: t.zh, py: t.pinyin, id: 'w' + i }));
     } else {
-      bankWords = shuffle([...tokens, ...distractors])
+      raw = shuffle([...tokens, ...distractors])
         .map((w, i) => ({ en: w, id: 'w' + i }));
     }
+    bank = raw.map(w => ({ ...w, status: 'idle', slot: null }));
   }
 
   function pickDistractors(n) {
@@ -201,196 +214,328 @@ document.addEventListener('DOMContentLoaded', () => {
     return r;
   }
 
+  // ── Core moves ─────────────────────────────────────────────────────────────
+  // Attempt to place a bank word into a slot. Returns the verdict.
+  function placeFromBank(word, idx, opts = {}) {
+    if (solvedLock) return null;
+    const verdict = evaluate(idx, word);
+    if (!opts.isHint) {
+      stats.attempts++;
+      if (verdict === 'green') stats.correct++;
+      saveStats();
+    }
+    if (verdict === 'red') {
+      word.status = 'red';
+      showFeedback(`❌ ${chipLabel(word)} isn't in this sentence.`, 'incorrect');
+      return verdict;
+    }
+    // Displace any occupant back to the bank (yellow — it belongs).
+    const occupantId = slots[idx];
+    if (occupantId !== null) returnToBank(occupantId);
+    word.slot = idx;
+    word.status = 'idle';
+    slots[idx] = word.id;
+    slotStates[idx] = verdict;
+    hideFeedback();
+    checkSolved();
+    return verdict;
+  }
+
+  // Move a placed word from one slot to another. Swaps if the target is
+  // occupied. The dragged word counts as an attempt; the swapped occupant is
+  // re-evaluated silently.
+  function moveSlotToSlot(from, to) {
+    if (solvedLock || from === to) return;
+    const wordId = slots[from];
+    if (wordId === null) return;
+    const word = wordById(wordId);
+    const occupantId = slots[to];
+
+    stats.attempts++;
+    const verdict = evaluate(to, word); // green|yellow — slot words always belong
+    if (verdict === 'green') stats.correct++;
+    saveStats();
+
+    slots[from] = null;
+    slotStates[from] = null;
+    slots[to] = word.id;
+    slotStates[to] = verdict;
+    word.slot = to;
+
+    if (occupantId !== null) {
+      const occ = wordById(occupantId);
+      slots[from] = occ.id;
+      slotStates[from] = evaluate(from, occ);
+      occ.slot = from;
+    }
+    hideFeedback();
+    checkSolved();
+  }
+
+  // Remove a word from its slot back to the bank. Green AND yellow both
+  // become yellow in the bank — the word belongs but is no longer placed.
+  function returnToBank(wordId) {
+    const word = wordById(wordId);
+    if (!word || word.slot === null) return;
+    slots[word.slot] = null;
+    slotStates[word.slot] = null;
+    word.slot = null;
+    word.status = 'yellow';
+  }
+
+  function removeSlot(idx) {
+    if (solvedLock) return;
+    const id = slots[idx];
+    if (id === null) return;
+    returnToBank(id);
+    hideFeedback();
+    render();
+  }
+
+  // ── Hint ───────────────────────────────────────────────────────────────────
+  function hint() {
+    if (solvedLock) return;
+    const idx = slotStates.findIndex(st => st !== 'green');
+    if (idx === -1) return;
+    const needed = tokenText(idx);
+    // Prefer a free bank chip; otherwise pull the word out of a wrong slot.
+    let word = bank.find(w => w.slot === null && wordText(w) === needed);
+    if (!word) {
+      word = bank.find(w => w.slot !== null && slotStates[w.slot] !== 'green' && wordText(w) === needed);
+      if (word) returnToBank(word.id);
+    }
+    if (!word) return;
+    placeFromBank(word, idx, { isHint: true });
+    render();
+  }
+
+  // ── Solved? ────────────────────────────────────────────────────────────────
+  function checkSolved() {
+    if (!slotStates.length || !slotStates.every(st => st === 'green')) return;
+    solvedLock = true;
+    stats.solved++;
+    saveStats();
+    const s = sentences[currentIdx];
+    const answer = mode === 'zh' ? `${s.zh} — ${s.pinyin}` : s.en;
+    showFeedback(`✅ Solved! ${answer}`, 'correct');
+  }
+
   // ── Render ─────────────────────────────────────────────────────────────────
   function render() { renderSlots(); renderBank(); updateProgress(); }
 
-  function chipContent(val, isChinese) {
-    // Returns inner HTML for a filled slot or bank chip
-    if (!isChinese) return `<span class="chip-en">${val}</span>`;
-    const zh = typeof val === 'object' ? val.zh : val;
-    const py = typeof val === 'object' ? val.py : '';
-    return `<span class="chip-zh">${zh}</span>${py ? `<span class="chip-py">${py}</span>` : ''}`;
+  function chipLabel(word) {
+    return mode === 'zh' ? word.zh : word.en;
+  }
+
+  function chipInnerHtml(word) {
+    return mode === 'zh'
+      ? `<span class="chip-zh">${word.zh}</span>${word.py ? `<span class="chip-py">${word.py}</span>` : ''}`
+      : `<span class="chip-en">${word.en}</span>`;
   }
 
   function renderSlots() {
     slotsArea.innerHTML = '';
-    slotValues.forEach((val, idx) => {
-      const slot  = document.createElement('div');
-      const state = slotStates[idx];
-      const filled = val !== null;
-
+    slots.forEach((wordId, idx) => {
+      const slot = document.createElement('div');
       slot.className = 'slot';
-      if (filled)              slot.classList.add('filled');
-      if (state === 'correct')   slot.classList.add('correct');
-      if (state === 'incorrect') slot.classList.add('incorrect');
       slot.dataset.idx = idx;
+      const state = slotStates[idx];
+      if (wordId !== null) {
+        const word = wordById(wordId);
+        slot.classList.add('filled');
+        if (state === 'green')  slot.classList.add('correct');
+        if (state === 'yellow') slot.classList.add('misplaced');
+        slot.innerHTML = chipInnerHtml(word);
 
-      if (filled) {
-        slot.innerHTML = chipContent(val, mode === 'zh');
-        const rm = document.createElement('button');
-        rm.className = 'remove-btn';
-        rm.textContent = '✕';
-        rm.setAttribute('aria-label', 'Remove');
-        rm.addEventListener('click', e => { e.stopPropagation(); removeSlot(idx); });
-        slot.appendChild(rm);
-        // Tapping a filled slot removes it (mobile-friendly — no hover needed)
-        slot.addEventListener('click', () => removeSlot(idx));
+        if (!solvedLock) {
+          const rm = document.createElement('button');
+          rm.className = 'remove-btn';
+          rm.textContent = '✕';
+          rm.setAttribute('aria-label', 'Remove');
+          rm.addEventListener('pointerdown', e => e.stopPropagation());
+          rm.addEventListener('click', e => { e.stopPropagation(); removeSlot(idx); });
+          slot.appendChild(rm);
+          // Drag to move between slots; tap to remove.
+          slot.addEventListener('pointerdown', e => startDrag(e, { word, fromSlot: idx, el: slot }));
+        }
       }
-
       slotsArea.appendChild(slot);
     });
   }
 
   function renderBank() {
     wordBank.innerHTML = '';
-    const usedZh = new Set(slotValues.filter(v => v && mode === 'zh').map(v => (typeof v === 'object' ? v.zh : v)));
-    const usedEn = new Set(slotValues.filter(v => v && mode === 'en'));
-
-    bankWords.forEach(w => {
-      const used = mode === 'zh' ? usedZh.has(w.zh) : usedEn.has(w.en);
+    bank.forEach(w => {
+      const used = w.slot !== null;
       const chip = document.createElement('div');
-      chip.className = 'word-chip' + (used ? ' used' : '');
+      chip.className = 'word-chip'
+        + (used ? ' used' : '')
+        + (!used && w.status === 'red'    ? ' red'    : '')
+        + (!used && w.status === 'yellow' ? ' yellow' : '');
       chip.dataset.wid = w.id;
-      chip.innerHTML = mode === 'zh'
-        ? `<span class="chip-zh">${w.zh}</span>${w.py ? `<span class="chip-py">${w.py}</span>` : ''}`
-        : `<span class="chip-en">${w.en}</span>`;
-
-      // Unified pointer drag (works for mouse AND touch). Falls back to
-      // tap-to-place-in-first-empty-slot when the pointer barely moves.
-      if (!used) chip.addEventListener('pointerdown', e => startDrag(e, chip, w));
-
+      chip.innerHTML = chipInnerHtml(w);
+      if (!used && !solvedLock) {
+        chip.addEventListener('pointerdown', e => startDrag(e, { word: w, fromSlot: null, el: chip }));
+      }
       wordBank.appendChild(chip);
     });
   }
 
-  // ── Place / remove ─────────────────────────────────────────────────────────
-  function placeWord(slotIdx, bankWord) {
-    slotValues[slotIdx] = mode === 'zh' ? { zh: bankWord.zh, py: bankWord.py } : bankWord.en;
-    slotStates[slotIdx] = 'pending';
-    hideFeedback();
-    render();
-    // Auto-check only when every slot is filled
-    if (slotValues.every(v => v !== null)) runCheck();
-    saveState();
-  }
-
-  // ── Pointer drag engine (mouse + touch) ─────────────────────────────────────
-  function startDrag(e, chip, word) {
-    if (e.button && e.button !== 0) return;       // ignore non-primary mouse buttons
+  // ── Drag engine (pointer capture + rAF + translate3d) ──────────────────────
+  function startDrag(e, source) {
+    if (solvedLock) return;
+    if (e.button && e.button !== 0) return;
     e.preventDefault();
 
+    const el = source.el;
     const startX = e.clientX, startY = e.clientY;
-    let ghost = null, dragging = false, lastSlot = null;
-    const THRESHOLD = 6; // px before it counts as a drag rather than a tap
+    const THRESHOLD = 5;
+
+    let dragging = false;
+    let ghost = null, ghostW = 0, ghostH = 0;
+    let lastX = startX, lastY = startY;
+    let rafId = null;
+    let lastSlot = null;
+
+    try { el.setPointerCapture(e.pointerId); } catch {}
 
     function slotUnder(x, y) {
-      const el = document.elementFromPoint(x, y);
-      return el ? el.closest('.slot') : null;
+      const hit = document.elementFromPoint(x, y);
+      return hit ? hit.closest('.slot') : null;
     }
 
     function makeGhost() {
-      ghost = chip.cloneNode(true);
-      ghost.classList.add('drag-ghost');
-      const r = chip.getBoundingClientRect();
-      ghost.style.width = r.width + 'px';
+      ghost = document.createElement('div');
+      ghost.className = 'drag-ghost';
+      ghost.innerHTML = chipInnerHtml(source.word);
+      const r = el.getBoundingClientRect();
+      ghostW = r.width; ghostH = r.height;
+      ghost.style.width = ghostW + 'px';
       document.body.appendChild(ghost);
-      chip.classList.add('dragging');
+      el.classList.add('dragging');
+      applyGhost();
     }
 
-    function moveGhost(x, y) {
-      if (ghost) { ghost.style.left = x + 'px'; ghost.style.top = y + 'px'; }
-      const slot = slotUnder(x, y);
+    function applyGhost() {
+      rafId = null;
+      if (!ghost) return;
+      // translate3d keeps the ghost on the compositor — no layout/paint per
+      // move, so it tracks the pointer without trailing.
+      ghost.style.transform =
+        `translate3d(${lastX - ghostW / 2}px, ${lastY - ghostH / 2}px, 0)`;
+      const slot = slotUnder(lastX, lastY);
       if (slot !== lastSlot) {
         lastSlot?.classList.remove('drag-over');
-        if (slot && slot.classList.contains('filled') === false) slot.classList.add('drag-over');
+        if (slot && !slot.classList.contains('filled')) slot.classList.add('drag-over');
         lastSlot = slot;
       }
     }
 
     function onMove(ev) {
-      const x = ev.clientX, y = ev.clientY;
-      if (!dragging && Math.hypot(x - startX, y - startY) > THRESHOLD) {
+      lastX = ev.clientX; lastY = ev.clientY;
+      if (!dragging && Math.hypot(lastX - startX, lastY - startY) > THRESHOLD) {
         dragging = true;
         makeGhost();
       }
-      if (dragging) { ev.preventDefault(); moveGhost(x, y); }
-    }
-
-    function onUp(ev) {
-      document.removeEventListener('pointermove', onMove);
-      document.removeEventListener('pointerup', onUp);
-      document.removeEventListener('pointercancel', onUp);
-      lastSlot?.classList.remove('drag-over');
-      chip.classList.remove('dragging');
-      if (ghost) { ghost.remove(); ghost = null; }
-
-      const target = dragging ? slotUnder(ev.clientX, ev.clientY) : null;
-      if (target) {
-        placeWord(+target.dataset.idx, word);
-      } else if (!dragging) {
-        // Treat as a tap → first empty slot
-        const first = slotValues.findIndex(v => v === null);
-        if (first !== -1) placeWord(first, word);
+      if (dragging) {
+        ev.preventDefault();
+        if (rafId === null) rafId = requestAnimationFrame(applyGhost);
       }
     }
 
-    document.addEventListener('pointermove', onMove, { passive: false });
-    document.addEventListener('pointerup', onUp);
-    document.addEventListener('pointercancel', onUp);
+    function cleanup() {
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onCancel);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      lastSlot?.classList.remove('drag-over');
+      el.classList.remove('dragging');
+    }
+
+    function killGhost() { if (ghost) { ghost.remove(); ghost = null; } }
+
+    // Animate the ghost flying back to a bank chip, then re-render.
+    function bounceBack() {
+      const chipEl = wordBank.querySelector(`[data-wid="${source.word.id}"]`);
+      const target = chipEl ? chipEl.getBoundingClientRect() : el.getBoundingClientRect();
+      if (!ghost) { render(); return; }
+      const g = ghost; ghost = null;
+      g.classList.add('bounce');
+      g.style.transform = `translate3d(${target.x}px, ${target.y}px, 0)`;
+      const done = () => {
+        g.remove();
+        render();
+        wordBank.querySelector(`[data-wid="${source.word.id}"]`)?.classList.add('shake');
+      };
+      g.addEventListener('transitionend', done, { once: true });
+      setTimeout(() => { if (g.isConnected) done(); }, 350);
+    }
+
+    function onUp(ev) {
+      cleanup();
+      const target = dragging ? slotUnder(ev.clientX, ev.clientY) : null;
+
+      if (dragging) {
+        if (target) {
+          const idx = +target.dataset.idx;
+          if (source.fromSlot !== null) {
+            killGhost();
+            moveSlotToSlot(source.fromSlot, idx);
+            render();
+          } else {
+            const verdict = placeFromBank(source.word, idx);
+            if (verdict === 'red') { bounceBack(); return; }
+            killGhost();
+            render();
+          }
+        } else if (source.fromSlot !== null) {
+          // Dragged out of the sentence → back to the bank (yellow).
+          killGhost();
+          removeSlot(source.fromSlot);
+        } else {
+          killGhost();
+          render();
+        }
+      } else {
+        // Tap
+        if (source.fromSlot !== null) {
+          removeSlot(source.fromSlot);
+        } else {
+          const first = slots.findIndex(v => v === null);
+          if (first !== -1) {
+            const verdict = placeFromBank(source.word, first);
+            render();
+            if (verdict === 'red') {
+              wordBank.querySelector(`[data-wid="${source.word.id}"]`)?.classList.add('shake');
+            }
+          }
+        }
+      }
+    }
+
+    function onCancel() { cleanup(); killGhost(); render(); }
+
+    el.addEventListener('pointermove', onMove, { passive: false });
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onCancel);
   }
 
-  function removeSlot(idx) {
-    slotValues[idx] = null;
-    slotStates[idx] = null;  // only this slot resets; others keep their colour
-    hideFeedback();
-    render();
-    saveState();
-  }
-
-  // ── Check ──────────────────────────────────────────────────────────────────
-  function runCheck() {
-    let ok = true;
-    slotValues.forEach((val, i) => {
-      if (val === null) return;
-      const isCorrect = mode === 'zh'
-        ? (typeof val === 'object' ? val.zh : val) === tokens[i].zh
-        : val === tokens[i];
-      slotStates[i] = isCorrect ? 'correct' : 'incorrect';
-      if (!isCorrect) ok = false;
-    });
-    renderSlots();
-    if (ok) { showFeedback('✅ Correct!', 'correct'); score.correct++; }
-    else    { showFeedback('❌ Not quite — red slots are wrong.', 'incorrect'); }
-    score.total++;
-    saveScore();
-    updateProgress();
-  }
-
-  // Manual re-check button
-  $('checkBtn')?.addEventListener('click', () => {
-    if (slotValues.some(v => v === null)) { showFeedback('Fill all slots first.', 'incorrect'); return; }
-    runCheck();
-  });
+  // ── Buttons ────────────────────────────────────────────────────────────────
+  $('hintBtn')?.addEventListener('click', hint);
 
   $('clearBtn')?.addEventListener('click', () => {
-    slotValues = new Array(tokens.length).fill(null);
-    slotStates = new Array(tokens.length).fill(null);
-    hideFeedback(); render(); saveState();
+    if (solvedLock) return;
+    slots.forEach((id, i) => { if (id !== null) returnToBank(id); });
+    hideFeedback();
+    render();
   });
 
   $('nextBtn')?.addEventListener('click', () => loadSentence(pickRandom()));
 
-  $('revealBtn')?.addEventListener('click', () => {
-    tokens.forEach((t, i) => {
-      slotValues[i] = mode === 'zh' ? { zh: t.zh, py: t.pinyin } : t;
-      slotStates[i] = 'incorrect';
-    });
-    renderSlots();
-    showFeedback('Answer: ' + (mode === 'zh' ? tokens.map(t => t.zh).join(' ') : tokens.join(' ')), 'incorrect');
-  });
-
   $('resetProgress')?.addEventListener('click', () => {
-    score = { correct: 0, total: 0 }; saveScore(); updateProgress();
+    stats = { attempts: 0, correct: 0, solved: 0 };
+    saveStats();
+    updateProgress();
   });
 
   // ── Feedback ───────────────────────────────────────────────────────────────
@@ -402,43 +547,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Progress ───────────────────────────────────────────────────────────────
   function updateProgress() {
-    const pct = score.total ? Math.round(score.correct / score.total * 100) : 0;
+    const pct = stats.attempts ? Math.round(stats.correct / stats.attempts * 100) : 0;
     const pt = $('progressText'); const pf = $('progressFill');
-    if (pt) pt.textContent = `${score.correct} / ${score.total} correct (${pct}%)`;
+    if (pt) pt.textContent = stats.attempts
+      ? `Accuracy: ${pct}% (${stats.correct}/${stats.attempts} placements) · ${stats.solved} solved`
+      : `Accuracy: — · ${stats.solved} solved`;
     if (pf) pf.style.width = pct + '%';
   }
 
   // ── Persist ────────────────────────────────────────────────────────────────
-  function saveState() {
-    try { localStorage.setItem(STORE + '-state', JSON.stringify({ mode, currentIdx, tokens, slotValues, slotStates, bankWords })); } catch {}
+  function saveStats() {
+    try { localStorage.setItem(STORE + '-stats', JSON.stringify(stats)); } catch {}
   }
-  function saveScore() {
-    try { localStorage.setItem(STORE + '-score', JSON.stringify(score)); } catch {}
-  }
-
-  function loadSaved() {
+  function loadStats() {
     try {
-      const sc = JSON.parse(localStorage.getItem(STORE + '-score') || 'null');
-      if (sc) score = sc;
-      const st = JSON.parse(localStorage.getItem(STORE + '-state') || 'null');
-      if (st && st.currentIdx >= 0 && st.currentIdx < sentences.length) {
-        ({ mode, currentIdx, tokens, slotValues, bankWords } = st);
-        slotStates = st.slotStates || new Array(tokens.length).fill(null);
-        $('tabZh')?.classList.toggle('active', mode === 'zh');
-        $('tabEn')?.classList.toggle('active', mode === 'en');
-        const s = sentences[currentIdx];
-        if (promptLabel)  promptLabel.textContent  = mode === 'zh' ? 'Arrange the Chinese words to match this English:' : 'Arrange the English words to match this Chinese:';
-        if (promptText)   promptText.textContent   = mode === 'zh' ? s.en : s.zh;
-        if (promptPinyin) promptPinyin.textContent = mode === 'zh' ? '' : s.pinyin;
-        render(); return true;
-      }
+      const s = JSON.parse(localStorage.getItem(STORE + '-stats') || 'null');
+      if (s && typeof s.attempts === 'number') stats = s;
     } catch {}
-    return false;
   }
 
   // ── Init ───────────────────────────────────────────────────────────────────
-  // Clear stale localStorage so old single-char state doesn't persist
-  localStorage.removeItem(STORE + '-state');
-  if (!loadSaved()) loadSentence(pickRandom());
+  localStorage.removeItem(STORE + '-state');  // legacy keys from old versions
+  localStorage.removeItem(STORE + '-score');
+  loadStats();
+  loadSentence(pickRandom());
   updateProgress();
 });
