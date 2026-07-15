@@ -6,9 +6,9 @@
 Build a single-page, static HTML/CSS/JS website (no backend needed) that serves as a personal review tool for Chinese vocabulary. The site must include a tag-filterable glossary, an Anki deck download, and two interactive drag-and-drop sentence builders.
 
 ## 2. Input Files (Provided)
-- `Chinese Vocab.md` (Textbook lessons 2-15)
-- `Expanded Vocab.md` (8 bonus lessons + expanded core lessons with tags & sentences)
-- `Bonus vocab.md` (Original bonus lists)
+- `ChineseVocab.md` (Textbook lessons 1-24, aligned to Speak Chinese Together 1)
+- `ExpandedVocab.md` (all 24 textbook lessons + 8 bonus lessons, expanded with tags & sentences)
+- `Bonusvocab.md` (original bonus lists, no sentences)
 
 ## 3. Output Files to Generate (by Claude Code)
 
@@ -18,7 +18,7 @@ Build a single-page, static HTML/CSS/JS website (no backend needed) that serves 
 | `sentence-builder.html` | The drag-and-drop sentence builder tool (English mode & Chinese mode) |
 | `glossary.html` | Standalone glossary (or embed in index.html as a hidden div) |
 | `css/style.css` | All styling, including light/dark theme variables |
-| `js/data.js` | JavaScript array containing all vocabulary from Expanded Vocab.md with tags |
+| `js/data.js` | JavaScript array containing all vocabulary from ExpandedVocab.md with tags |
 | `js/glossary.js` | Filtering and search logic |
 | `js/sentence-builder.js` | Drag-and-drop logic, validation, word bank generation |
 | `js/main.js` | Accordion toggles, sidebar navigation, random sentence display |
@@ -64,14 +64,14 @@ const vocab = [
 ];
 ```
 
-**Claude Code should generate this file by parsing `Expanded Vocab.md`.** The markdown tables already contain all needed fields. The "Example Sentences" section in each entry can be parsed as shown above.
+**Claude Code should generate this file by parsing `ExpandedVocab.md`.** The markdown tables already contain all needed fields. The "Example Sentences" section in each entry can be parsed as shown above.
 
 ---
 
 ## 6. Sentence Builder: Technical Specifications
 
 ### Data Requirements
-To build the sentence builder, Claude Code needs to extract **every sentence pair** from `Expanded Vocab.md`. For each sentence, store:
+To build the sentence builder, Claude Code needs to extract **every sentence pair** from `ExpandedVocab.md`. For each sentence, store:
 - English text
 - Chinese text (Hanzi)
 - Pinyin (optional, for Chinese mode display)
@@ -117,7 +117,7 @@ Example sentence object:
 - Clicking a lesson link opens that accordion and scrolls to it.
 
 ### Accordions
-- One accordion per lesson from `Expanded Vocab.md` (Lessons 2-15 + Bonus 1-8).
+- One accordion per lesson from `ExpandedVocab.md` (Lessons 1-24 + Bonus 1-8).
 - Each accordion contains the vocabulary table for that lesson.
 - Tables should be sortable by Hanzi/Pinyin/Definition (nice to have but not critical).
 
@@ -135,7 +135,7 @@ Example sentence object:
 
 Claude Code should perform these tasks in order:
 
-1. **Parse `Expanded Vocab.md`** and generate `js/data.js` with full tag structure and sentence extraction.
+1. **Parse `ExpandedVocab.md`** and generate `js/data.js` with full tag structure and sentence extraction.
 2. **Build `index.html`** with sidebar, accordions, glossary container, random sentence widget.
 3. **Build `glossary.html`** (or embed glossary in index.html) with tag filter dropdown and live search input.
 4. **Build `sentence-builder.html`** with two modes, drag-and-drop using HTML5 Drag & Drop API or JavaScript mouse events (recommend JS mouse events for cross-browser reliability).
@@ -166,7 +166,7 @@ Anki's `.apkg` file is a SQLite database + media zip. **Simpler approach:** Gene
 - **Tags:** lesson name + topic
 
 ### Which vocab to include?
-- All entries from `Expanded Vocab.md` (core lessons + bonus lessons).
+- All entries from `ExpandedVocab.md` (core lessons + bonus lessons).
 
 ---
 
@@ -179,7 +179,7 @@ Save the current state of the sentence builder (which sentence, filled slots) to
 Drag-and-drop is painful on touchscreens. Add a fallback: tapping a word in the bank inserts it into the first empty slot. Also provide a "Clear All" button.
 
 ### c. Sentence Builder Sentence Pool Size
-The `Expanded Vocab.md` file contains approximately **250-300 example sentences**. That is more than enough. Random selection for practice mode would be a nice addition (e.g., "Random Sentence" button in the builder).
+The `ExpandedVocab.md` file contains approximately **250-300 example sentences**. That is more than enough. Random selection for practice mode would be a nice addition (e.g., "Random Sentence" button in the builder).
 
 ### d. Pinyin Tone Colors
 A "nice to have" but not required. Style Pinyin text with colors for each tone (e.g., red for 1st, green for 2nd, etc.) to reinforce tone recognition.
@@ -211,4 +211,4 @@ Everything is static HTML/CSS/JS. Hosting can be on GitHub Pages, Netlify, or an
 
 ## 12. Suggested Claude Code Prompt
 
-> "Using the attached `Expanded Vocab.md`, `Chinese Vocab.md`, and `Bonus vocab.md`, build a complete static website according to the project plan above. Generate all HTML, CSS, and JS files. Parse the markdown to create `js/data.js` with full sentence extraction. Build the drag-and-drop sentence builder with two modes. Generate `anki_import.csv` and `build_anki.py`. Include a tone trainer as the third activity. Output all files in a clearly organized directory structure."
+> "Using the attached `ExpandedVocab.md`, `ChineseVocab.md`, and `Bonusvocab.md`, build a complete static website according to the project plan above. Generate all HTML, CSS, and JS files. Parse the markdown to create `js/data.js` with full sentence extraction. Build the drag-and-drop sentence builder with two modes. Generate `anki_import.csv` and `build_anki.py`. Include a tone trainer as the third activity. Output all files in a clearly organized directory structure."

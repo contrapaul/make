@@ -1,12 +1,12 @@
 """
-Parse Expanded Vocab.md → js/data.js and anki_import.csv
+Parse ExpandedVocab.md → js/data.js and anki_import.csv
 """
 import re
 import json
 import csv
 import os
 
-SRC = os.path.join(os.path.dirname(__file__), '..', 'Learning Chinese', 'Expanded Vocab.md')
+SRC = os.path.join(os.path.dirname(__file__), '..', 'LearningChinese', 'ExpandedVocab.md')
 OUT_JS = os.path.join(os.path.dirname(__file__), 'js', 'data.js')
 OUT_CSV = os.path.join(os.path.dirname(__file__), 'anki_import.csv')
 
@@ -34,6 +34,35 @@ def lesson_display_name(header_text):
 def parse_tags(tag_str):
     """Parse `type:noun` `lesson:bonus1` ... → list of strings."""
     return re.findall(r'`([^`]+)`', tag_str)
+
+
+# Controlled vocabulary for the `type:` facet. Raw values in the markdown are
+# sometimes compound ("verb (modal)", "noun/verb", "noun (location)") which
+# would otherwise fragment the Glossary's type filter into dozens of near-
+# duplicate one-off options. We normalize by stripping parenthetical notes
+# and splitting slash-separated compounds into multiple (deduped) type tags,
+# so filtering by "verb" still finds modal verbs, "noun" still finds location
+# nouns, etc.
+def normalize_type_tags(tags):
+    out = []
+    seen = set()
+    for t in tags:
+        if not t.startswith('type:'):
+            if t not in seen:
+                out.append(t)
+                seen.add(t)
+            continue
+        raw = t[len('type:'):]
+        raw = re.sub(r'\([^)]*\)', '', raw)  # drop "(modal)", "(location)" etc.
+        for piece in raw.split('/'):
+            piece = piece.strip().lower()
+            if not piece:
+                continue
+            norm = f'type:{piece}'
+            if norm not in seen:
+                out.append(norm)
+                seen.add(norm)
+    return out
 
 
 def parse_sentences(raw):
@@ -77,7 +106,7 @@ def parse_table_rows(block_text):
         if not hanzi or hanzi == 'Hanzi':
             continue
         sentences = parse_sentences(example_raw)
-        tags = parse_tags(tag_raw)
+        tags = normalize_type_tags(parse_tags(tag_raw))
         entries.append({
             'hanzi': hanzi,
             'pinyin': pinyin,
@@ -96,8 +125,7 @@ def main():
     sections = re.split(r'\n(?=# )', content)
 
     vocab = []
-    lessons_meta = []  # [{id, name, entries:[indices]}]
-    sentence_id = 0
+    lessons_meta = []  # [{id, name, group, entries:[indices]}]
 
     for section in sections:
         lines = section.strip().split('\n')
@@ -108,6 +136,7 @@ def main():
             continue
         lesson_id = slugify_lesson(header)
         lesson_name = lesson_display_name(header)
+        group = 'bonus' if lesson_id.startswith('bonus') else 'core'
         body = '\n'.join(lines[1:])
         entries = parse_table_rows(body)
         start_idx = len(vocab)
@@ -120,6 +149,7 @@ def main():
         lessons_meta.append({
             'id': lesson_id,
             'name': lesson_name,
+            'group': group,
             'indices': list(range(start_idx, len(vocab))),
         })
 
@@ -150,18 +180,22 @@ def main():
         f.write(json.dumps(sentences, ensure_ascii=False, indent=2))
         f.write(';\n')
 
-    print(f'Wrote {len(vocab)} vocab entries and {len(sentences)} sentences to {OUT_JS}')
+    print(f'Wrote {len(vocab)} vocab entries, {len(sentences)} sentences, '
+          f'{len(lessons_meta)} lessons to {OUT_JS}')
 
-    # Write Anki CSV
+    # Write Anki CSV — front combines hanzi + pinyin (per user preference: always
+    # show both), back is the meaning + first example sentence.
     with open(OUT_CSV, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['Front', 'Back', 'Tags'])
         for entry in vocab:
             front = entry['hanzi']
-            back = f"{entry['pinyin']} ({entry['definition']})"
+            if entry['pinyin']:
+                front += f"<br><span style=\"font-size:0.55em;color:#666\">{entry['pinyin']}</span>"
+            back = entry['definition']
             if entry['sentences']:
                 s = entry['sentences'][0]
-                back += f"\n\n{s['zh']}\n{s['pinyin']}\n{s['en']}"
+                back += f"<br><br>{s['zh']}<br>{s['pinyin']}<br>{s['en']}"
             tag_str = ' '.join(
                 t.replace(':', '::').replace(' ', '_')
                 for t in entry['tags']

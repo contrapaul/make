@@ -3,6 +3,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof vocab === 'undefined') return;
 
+  document.querySelectorAll('#countVocab').forEach(el => el.textContent = vocab.length);
+
   const searchInput   = document.getElementById('searchInput');
   const filterLesson  = document.getElementById('filterLesson');
   const filterType    = document.getElementById('filterType');
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Sort lessons sensibly: lesson2 < lesson3 ... < bonus1 < bonus2 ...
+  // Sort lessons sensibly: lesson1 < lesson2 ... < bonus1 < bonus2 ...
   const lessonOrder = [...lessons].sort((a, b) => {
     const aIsBonus = a.startsWith('bonus'), bIsBonus = b.startsWith('bonus');
     if (!aIsBonus && bIsBonus) return -1;
@@ -50,7 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
     return meta ? meta.name : v;
   }
 
-  addOptions(filterLesson, lessonOrder, lessonLabel);
+  // Lesson filter: grouped into Textbook (1-24) vs Bonus (Personal Interests)
+  // so the two don't get visually confused in one long flat list.
+  const coreLessons  = lessonOrder.filter(v => !v.startsWith('bonus'));
+  const bonusLessons = lessonOrder.filter(v => v.startsWith('bonus'));
+  function addOptGroup(select, label, values, labelFn) {
+    if (!values.length) return;
+    const og = document.createElement('optgroup');
+    og.label = label;
+    addOptions(og, values, labelFn);
+    select.appendChild(og);
+  }
+  addOptGroup(filterLesson, 'Textbook (Lessons 1–24)', coreLessons, lessonLabel);
+  addOptGroup(filterLesson, 'Bonus (Personal Interests)', bonusLessons, lessonLabel);
+
   addOptions(filterType,   [...types].sort(),  v => v);
   addOptions(filterTopic,  [...topics].sort(), v => v);
   addOptions(filterHsk,    [...hsks].sort((a,b)=>+a-+b), v => `HSK ${v}`);

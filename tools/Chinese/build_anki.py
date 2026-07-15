@@ -19,7 +19,10 @@ model = genanki.Model(
     ],
     templates=[{
         'name': 'Card 1',
-        'qfmt': '<div style="font-size:2em;text-align:center;">{{Front}}</div>',
+        # Front = hanzi (large) + pinyin (small, muted), stacked — pinyin is
+        # always visible per user preference, since characters alone are hard
+        # to retain. Back reveals the meaning + an example sentence.
+        'qfmt': '<div style="font-size:2.4em;text-align:center;line-height:1.3;">{{Front}}</div>',
         'afmt': '''{{FrontSide}}<hr>
 <div style="text-align:center;font-size:1.1em;">{{Back}}</div>''',
     }],

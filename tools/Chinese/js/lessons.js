@@ -26,16 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof LESSONS_META === 'undefined' || typeof vocab === 'undefined') return;
 
   const isBonus = id => /^bonus/i.test(id);
+  const core  = LESSONS_META.filter(l => !isBonus(l.id));
+  const bonus = LESSONS_META.filter(l => isBonus(l.id));
 
-  // ── Table-of-contents dropdown ───────────────────────────────────────────────
+  // ── Table-of-contents dropdown (grouped: Textbook vs Bonus) ────────────────
   const toc = document.getElementById('lessonToc');
   if (toc) {
-    LESSONS_META.forEach(lesson => {
-      const opt = document.createElement('option');
-      opt.value = lesson.id;
-      opt.textContent = lesson.name + (isBonus(lesson.id) ? '  ★' : '');
-      toc.appendChild(opt);
-    });
+    function fillGroup(label, lessons) {
+      if (!lessons.length) return;
+      const og = document.createElement('optgroup');
+      og.label = label;
+      lessons.forEach(lesson => {
+        const opt = document.createElement('option');
+        opt.value = lesson.id;
+        opt.textContent = lesson.name;
+        og.appendChild(opt);
+      });
+      toc.appendChild(og);
+    }
+    fillGroup('Textbook (Lessons 1–24)', core);
+    fillGroup('Bonus (Personal Interests)', bonus);
+
     toc.addEventListener('change', () => {
       const id = toc.value;
       if (!id) return;
@@ -64,12 +75,22 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('collapseAll')?.addEventListener('click', () =>
     document.querySelectorAll('.lesson-block').forEach(b => openBlock(b, false)));
 
-  // ── Build lesson blocks ───────────────────────────────────────────────────────
+  // ── Build lesson blocks (grouped: Textbook vs Bonus) ───────────────────────
   const container = document.getElementById('lessonsContainer');
-  LESSONS_META.forEach(lesson => {
-    const entries = lesson.indices.map(i => vocab[i]).filter(Boolean);
-    container.appendChild(buildLessonBlock(lesson, entries));
-  });
+
+  function addGroup(label, lessons) {
+    if (!lessons.length) return;
+    const h = document.createElement('h3');
+    h.className = 'lesson-group-heading';
+    h.textContent = label;
+    container.appendChild(h);
+    lessons.forEach(lesson => {
+      const entries = lesson.indices.map(i => vocab[i]).filter(Boolean);
+      container.appendChild(buildLessonBlock(lesson, entries));
+    });
+  }
+  addGroup('📘 Textbook — Speak Chinese Together 1 (Lessons 1–24)', core);
+  addGroup('🛠️ Bonus — Personal Interests (Not from the Textbook)', bonus);
 
   function buildLessonBlock(lesson, entries) {
     const wrap = document.createElement('div');

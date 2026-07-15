@@ -274,6 +274,17 @@ a:hover { text-decoration: underline; }
   margin-bottom: 20px;
 }
 
+/* --- Lesson group heading (Textbook vs Bonus) --- */
+.lesson-group-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin: 28px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-card);
+}
+.lesson-group-heading:first-child { margin-top: 0; }
+
 /* --- Random Sentence Widget --- */
 .sentence-widget {
   background: var(--bg-card);

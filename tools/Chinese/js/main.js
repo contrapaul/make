@@ -30,6 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
   toggle?.addEventListener('click', openSidebar);
   overlay?.addEventListener('click', closeSidebar);
 
+  // ── Live entry/sentence counts (avoid hardcoded numbers going stale) ───────
+  if (typeof vocab !== 'undefined') {
+    document.querySelectorAll('#countVocab, #countVocab2').forEach(el => el.textContent = vocab.length);
+  }
+  if (typeof sentences !== 'undefined') {
+    document.querySelectorAll('#countSentences').forEach(el => el.textContent = sentences.length);
+  }
+
   // ── Random sentence ───────────────────────────────────────────────────────
   const zhEl  = document.getElementById('randomZh');
   const pyEl  = document.getElementById('randomPinyin');
@@ -47,10 +55,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newBtn) newBtn.addEventListener('click', pickRandom);
   pickRandom();
 
-  // ── Build sidebar lesson links ────────────────────────────────────────────
+  // ── Build sidebar lesson links (grouped: Textbook vs Bonus) ────────────────
   const sidebarLessons = document.getElementById('sidebarLessons');
   if (sidebarLessons && typeof LESSONS_META !== 'undefined') {
-    LESSONS_META.forEach(lesson => {
+    const core  = LESSONS_META.filter(l => l.group !== 'bonus');
+    const bonus = LESSONS_META.filter(l => l.group === 'bonus');
+
+    function addLessonLink(lesson) {
       const a = document.createElement('button');
       a.className = 'sidebar-link';
       a.dataset.lesson = lesson.id;
@@ -65,17 +76,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       sidebarLessons.appendChild(a);
-    });
+    }
+
+    if (core.length) {
+      const label = document.createElement('div');
+      label.className = 'sidebar-section-label';
+      label.textContent = 'Textbook (Lessons 1–24)';
+      sidebarLessons.appendChild(label);
+      core.forEach(addLessonLink);
+    }
+    if (bonus.length) {
+      const label = document.createElement('div');
+      label.className = 'sidebar-section-label';
+      label.style.marginTop = '8px';
+      label.textContent = 'Bonus (Personal Interests)';
+      sidebarLessons.appendChild(label);
+      bonus.forEach(addLessonLink);
+    }
   }
 
-  // ── Build accordions ──────────────────────────────────────────────────────
+  // ── Build accordions (grouped: Textbook vs Bonus) ──────────────────────────
   const group = document.getElementById('accordionGroup');
   if (group && typeof LESSONS_META !== 'undefined' && typeof vocab !== 'undefined') {
-    LESSONS_META.forEach(lesson => {
-      const entries = lesson.indices.map(i => vocab[i]);
-      const acc = buildAccordion(lesson, entries);
-      group.appendChild(acc);
-    });
+    const core  = LESSONS_META.filter(l => l.group !== 'bonus');
+    const bonus = LESSONS_META.filter(l => l.group === 'bonus');
+
+    function addAccordions(lessons) {
+      lessons.forEach(lesson => {
+        const entries = lesson.indices.map(i => vocab[i]);
+        group.appendChild(buildAccordion(lesson, entries));
+      });
+    }
+
+    if (core.length) {
+      const h = document.createElement('h3');
+      h.className = 'lesson-group-heading';
+      h.textContent = '📘 Textbook — Speak Chinese Together 1 (Lessons 1–24)';
+      group.appendChild(h);
+      addAccordions(core);
+    }
+    if (bonus.length) {
+      const h = document.createElement('h3');
+      h.className = 'lesson-group-heading';
+      h.textContent = '🛠️ Bonus — Personal Interests (Not from the Textbook)';
+      group.appendChild(h);
+      addAccordions(bonus);
+    }
   }
 
 });

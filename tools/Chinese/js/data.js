@@ -2,8 +2,9 @@
 
 const LESSONS_META = [
   {
-    "id": "lesson2",
-    "name": "Lesson 2 — Classroom Expressions",
+    "id": "lesson1",
+    "name": "Lesson 1 — You, Me and Him",
+    "group": "core",
     "indices": [
       0,
       1,
@@ -20,18 +21,19 @@ const LESSONS_META = [
       12,
       13,
       14,
-      15
-    ]
-  },
-  {
-    "id": "lesson3",
-    "name": "Lesson 3 — Names, Age, Nationality",
-    "indices": [
+      15,
       16,
       17,
       18,
       19,
-      20,
+      20
+    ]
+  },
+  {
+    "id": "lesson2",
+    "name": "Lesson 2 — I Come to China to Learn Chinese",
+    "group": "core",
+    "indices": [
       21,
       22,
       23,
@@ -45,13 +47,7 @@ const LESSONS_META = [
       31,
       32,
       33,
-      34
-    ]
-  },
-  {
-    "id": "bonus1",
-    "name": "Bonus Lesson 1 — Computer Parts & Building PCs",
-    "indices": [
+      34,
       35,
       36,
       37,
@@ -71,28 +67,23 @@ const LESSONS_META = [
       51,
       52,
       53,
-      54
-    ]
-  },
-  {
-    "id": "lesson4",
-    "name": "Lesson 4 — Future Jobs",
-    "indices": [
+      54,
       55,
       56,
       57,
       58,
-      59,
-      60,
-      61,
-      62,
-      63
+      59
     ]
   },
   {
-    "id": "lesson5",
-    "name": "Lesson 5 — Seasons",
+    "id": "lesson3",
+    "name": "Lesson 3 — How Are You?",
+    "group": "core",
     "indices": [
+      60,
+      61,
+      62,
+      63,
       64,
       65,
       66,
@@ -106,20 +97,21 @@ const LESSONS_META = [
       74,
       75,
       76,
-      77
-    ]
-  },
-  {
-    "id": "bonus2",
-    "name": "Bonus Lesson 2 — 3D Printing (FDM)",
-    "indices": [
+      77,
       78,
       79,
       80,
       81,
       82,
       83,
-      84,
+      84
+    ]
+  },
+  {
+    "id": "lesson4",
+    "name": "Lesson 4 — What's the Date Today?",
+    "group": "core",
+    "indices": [
       85,
       86,
       87,
@@ -132,13 +124,7 @@ const LESSONS_META = [
       94,
       95,
       96,
-      97
-    ]
-  },
-  {
-    "id": "lesson6",
-    "name": "Lesson 6 — Weather",
-    "indices": [
+      97,
       98,
       99,
       100,
@@ -151,7 +137,14 @@ const LESSONS_META = [
       107,
       108,
       109,
-      110,
+      110
+    ]
+  },
+  {
+    "id": "lesson5",
+    "name": "Lesson 5 — What's Your Name?",
+    "group": "core",
+    "indices": [
       111,
       112,
       113,
@@ -167,28 +160,23 @@ const LESSONS_META = [
       123,
       124,
       125,
-      126
+      126,
+      127,
+      128,
+      129
     ]
   },
   {
-    "id": "lesson7",
-    "name": "Lesson 7 — Classroom Objects",
+    "id": "lesson6",
+    "name": "Lesson 6 — How Many People Are There in Your Family?",
+    "group": "core",
     "indices": [
-      127,
-      128,
-      129,
       130,
       131,
       132,
       133,
       134,
-      135
-    ]
-  },
-  {
-    "id": "bonus3",
-    "name": "Bonus Lesson 3 — 3D Modeling & CAD (Fusion)",
-    "indices": [
+      135,
       136,
       137,
       138,
@@ -206,15 +194,16 @@ const LESSONS_META = [
       150,
       151,
       152,
-      153,
-      154,
-      155
+      153
     ]
   },
   {
-    "id": "lesson8",
-    "name": "Lesson 8 — Class Schedule",
+    "id": "lesson7",
+    "name": "Lesson 7 — What Does Your Father Do?",
+    "group": "core",
     "indices": [
+      154,
+      155,
       156,
       157,
       158,
@@ -228,7 +217,14 @@ const LESSONS_META = [
       166,
       167,
       168,
-      169,
+      169
+    ]
+  },
+  {
+    "id": "lesson8",
+    "name": "Lesson 8 — What Nationality Are You?",
+    "group": "core",
+    "indices": [
       170,
       171,
       172,
@@ -236,13 +232,7 @@ const LESSONS_META = [
       174,
       175,
       176,
-      177
-    ]
-  },
-  {
-    "id": "lesson9",
-    "name": "Lesson 9 — Homework & Completion",
-    "indices": [
+      177,
       178,
       179,
       180,
@@ -251,13 +241,7 @@ const LESSONS_META = [
       183,
       184,
       185,
-      186
-    ]
-  },
-  {
-    "id": "bonus4",
-    "name": "Bonus Lesson 4 — Teaching Design Technology",
-    "indices": [
+      186,
       187,
       188,
       189,
@@ -268,7 +252,14 @@ const LESSONS_META = [
       194,
       195,
       196,
-      197,
+      197
+    ]
+  },
+  {
+    "id": "lesson9",
+    "name": "Lesson 9 — What Time Is It Now?",
+    "group": "core",
+    "indices": [
       198,
       199,
       200,
@@ -277,13 +268,7 @@ const LESSONS_META = [
       203,
       204,
       205,
-      206
-    ]
-  },
-  {
-    "id": "lesson10",
-    "name": "Lesson 10 — Fruits & Buying",
-    "indices": [
+      206,
       207,
       208,
       209,
@@ -295,27 +280,22 @@ const LESSONS_META = [
       215,
       216,
       217,
-      218
-    ]
-  },
-  {
-    "id": "lesson11",
-    "name": "Lesson 11 — Ordering Food",
-    "indices": [
+      218,
       219,
       220,
       221,
       222,
-      223,
-      224,
-      225,
-      226
+      223
     ]
   },
   {
-    "id": "bonus5",
-    "name": "Bonus Lesson 5 — Microcontrollers & Electronics",
+    "id": "lesson10",
+    "name": "Lesson 10 — Do You Like Summer or Winter?",
+    "group": "core",
     "indices": [
+      224,
+      225,
+      226,
       227,
       228,
       229,
@@ -336,16 +316,17 @@ const LESSONS_META = [
       244,
       245,
       246,
-      247
+      247,
+      248,
+      249,
+      250
     ]
   },
   {
-    "id": "lesson12",
-    "name": "Lesson 12 — Clothing",
+    "id": "lesson11",
+    "name": "Lesson 11 — How's the Weather Tomorrow?",
+    "group": "core",
     "indices": [
-      248,
-      249,
-      250,
       251,
       252,
       253,
@@ -357,13 +338,7 @@ const LESSONS_META = [
       259,
       260,
       261,
-      262
-    ]
-  },
-  {
-    "id": "lesson13",
-    "name": "Lesson 13 — Travel & Comparison",
-    "indices": [
+      262,
       263,
       264,
       265,
@@ -376,13 +351,7 @@ const LESSONS_META = [
       272,
       273,
       274,
-      275
-    ]
-  },
-  {
-    "id": "bonus6",
-    "name": "Bonus Lesson 6 — Coding & Building Websites",
-    "indices": [
+      275,
       276,
       277,
       278,
@@ -394,7 +363,14 @@ const LESSONS_META = [
       284,
       285,
       286,
-      287,
+      287
+    ]
+  },
+  {
+    "id": "lesson12",
+    "name": "Lesson 12 — What's in the Classroom?",
+    "group": "core",
+    "indices": [
       288,
       289,
       290,
@@ -403,13 +379,7 @@ const LESSONS_META = [
       293,
       294,
       295,
-      296
-    ]
-  },
-  {
-    "id": "lesson14",
-    "name": "Lesson 14 — Famous Places & Experience",
-    "indices": [
+      296,
       297,
       298,
       299,
@@ -426,7 +396,14 @@ const LESSONS_META = [
       310,
       311,
       312,
-      313,
+      313
+    ]
+  },
+  {
+    "id": "lesson13",
+    "name": "Lesson 13 — What's Your Hobby?",
+    "group": "core",
+    "indices": [
       314,
       315,
       316,
@@ -436,13 +413,7 @@ const LESSONS_META = [
       320,
       321,
       322,
-      323
-    ]
-  },
-  {
-    "id": "lesson15",
-    "name": "Lesson 15 — Birthday Party",
-    "indices": [
+      323,
       324,
       325,
       326,
@@ -452,7 +423,14 @@ const LESSONS_META = [
       330,
       331,
       332,
-      333,
+      333
+    ]
+  },
+  {
+    "id": "lesson14",
+    "name": "Lesson 14 — What Classes Do We Have Today?",
+    "group": "core",
+    "indices": [
       334,
       335,
       336,
@@ -469,16 +447,17 @@ const LESSONS_META = [
       347,
       348,
       349,
-      350,
-      351,
-      352,
-      353
+      350
     ]
   },
   {
-    "id": "bonus7",
-    "name": "Bonus Lesson 7 — PC Gaming",
+    "id": "lesson15",
+    "name": "Lesson 15 — Have You Finished Your Homework?",
+    "group": "core",
     "indices": [
+      351,
+      352,
+      353,
       354,
       355,
       356,
@@ -492,20 +471,21 @@ const LESSONS_META = [
       364,
       365,
       366,
-      367,
+      367
+    ]
+  },
+  {
+    "id": "lesson16",
+    "name": "Lesson 16 — Excuse Me, How Do I Get to the International Institute?",
+    "group": "core",
+    "indices": [
       368,
       369,
       370,
       371,
       372,
       373,
-      374
-    ]
-  },
-  {
-    "id": "bonus8",
-    "name": "Bonus Lesson 8 — Painting Miniatures & Blood Bowl",
-    "indices": [
+      374,
       375,
       376,
       377,
@@ -524,22 +504,1586 @@ const LESSONS_META = [
       390,
       391,
       392,
-      393,
+      393
+    ]
+  },
+  {
+    "id": "lesson17",
+    "name": "Lesson 17 — How Much Is a Kilogram of Apples?",
+    "group": "core",
+    "indices": [
       394,
       395,
       396,
       397,
       398,
-      399
+      399,
+      400,
+      401,
+      402,
+      403,
+      404,
+      405,
+      406,
+      407,
+      408,
+      409,
+      410,
+      411,
+      412,
+      413,
+      414,
+      415,
+      416,
+      417
+    ]
+  },
+  {
+    "id": "lesson18",
+    "name": "Lesson 18 — What Do You Want to Eat?",
+    "group": "core",
+    "indices": [
+      418,
+      419,
+      420,
+      421,
+      422,
+      423,
+      424,
+      425,
+      426,
+      427,
+      428,
+      429,
+      430,
+      431,
+      432,
+      433,
+      434,
+      435,
+      436,
+      437,
+      438,
+      439,
+      440,
+      441,
+      442,
+      443,
+      444,
+      445,
+      446,
+      447,
+      448,
+      449,
+      450,
+      451,
+      452
+    ]
+  },
+  {
+    "id": "lesson19",
+    "name": "Lesson 19 — What's Your Size?",
+    "group": "core",
+    "indices": [
+      453,
+      454,
+      455,
+      456,
+      457,
+      458,
+      459,
+      460,
+      461,
+      462,
+      463,
+      464,
+      465,
+      466,
+      467,
+      468,
+      469,
+      470,
+      471,
+      472,
+      473,
+      474,
+      475,
+      476,
+      477,
+      478,
+      479,
+      480,
+      481,
+      482,
+      483,
+      484,
+      485,
+      486,
+      487,
+      488,
+      489
+    ]
+  },
+  {
+    "id": "lesson20",
+    "name": "Lesson 20 — Where Are You Feeling Unwell?",
+    "group": "core",
+    "indices": [
+      490,
+      491,
+      492,
+      493,
+      494,
+      495,
+      496,
+      497,
+      498,
+      499,
+      500,
+      501,
+      502,
+      503,
+      504,
+      505,
+      506,
+      507,
+      508,
+      509,
+      510,
+      511,
+      512
+    ]
+  },
+  {
+    "id": "lesson21",
+    "name": "Lesson 21 — Why Do You Like Taking the Underground to Work?",
+    "group": "core",
+    "indices": [
+      513,
+      514,
+      515,
+      516,
+      517,
+      518,
+      519,
+      520,
+      521,
+      522,
+      523,
+      524,
+      525,
+      526,
+      527,
+      528,
+      529,
+      530,
+      531,
+      532,
+      533,
+      534,
+      535,
+      536,
+      537,
+      538,
+      539,
+      540
+    ]
+  },
+  {
+    "id": "lesson22",
+    "name": "Lesson 22 — Have You Ever Been to Beijing?",
+    "group": "core",
+    "indices": [
+      541,
+      542,
+      543,
+      544,
+      545,
+      546,
+      547,
+      548,
+      549,
+      550,
+      551,
+      552,
+      553,
+      554,
+      555,
+      556,
+      557,
+      558,
+      559,
+      560,
+      561,
+      562,
+      563,
+      564,
+      565,
+      566,
+      567
+    ]
+  },
+  {
+    "id": "lesson23",
+    "name": "Lesson 23 — What Does She Look Like?",
+    "group": "core",
+    "indices": [
+      568,
+      569,
+      570,
+      571,
+      572,
+      573,
+      574,
+      575,
+      576,
+      577,
+      578,
+      579,
+      580,
+      581,
+      582,
+      583,
+      584,
+      585,
+      586,
+      587,
+      588,
+      589,
+      590,
+      591
+    ]
+  },
+  {
+    "id": "lesson24",
+    "name": "Lesson 24 — Will You Come to My Birthday Party?",
+    "group": "core",
+    "indices": [
+      592,
+      593,
+      594,
+      595,
+      596,
+      597,
+      598,
+      599,
+      600,
+      601,
+      602,
+      603,
+      604,
+      605,
+      606,
+      607,
+      608,
+      609,
+      610,
+      611,
+      612,
+      613,
+      614,
+      615,
+      616,
+      617,
+      618,
+      619,
+      620,
+      621
+    ]
+  },
+  {
+    "id": "bonus1",
+    "name": "Bonus Lesson 1 — Computer Parts & Building PCs",
+    "group": "bonus",
+    "indices": [
+      622,
+      623,
+      624,
+      625,
+      626,
+      627,
+      628,
+      629,
+      630,
+      631,
+      632,
+      633,
+      634,
+      635,
+      636,
+      637,
+      638,
+      639,
+      640,
+      641
+    ]
+  },
+  {
+    "id": "bonus2",
+    "name": "Bonus Lesson 2 — 3D Printing (FDM)",
+    "group": "bonus",
+    "indices": [
+      642,
+      643,
+      644,
+      645,
+      646,
+      647,
+      648,
+      649,
+      650,
+      651,
+      652,
+      653,
+      654,
+      655,
+      656,
+      657,
+      658,
+      659,
+      660,
+      661
+    ]
+  },
+  {
+    "id": "bonus3",
+    "name": "Bonus Lesson 3 — 3D Modeling & CAD (Fusion)",
+    "group": "bonus",
+    "indices": [
+      662,
+      663,
+      664,
+      665,
+      666,
+      667,
+      668,
+      669,
+      670,
+      671,
+      672,
+      673,
+      674,
+      675,
+      676,
+      677,
+      678,
+      679,
+      680,
+      681
+    ]
+  },
+  {
+    "id": "bonus4",
+    "name": "Bonus Lesson 4 — Teaching Design Technology",
+    "group": "bonus",
+    "indices": [
+      682,
+      683,
+      684,
+      685,
+      686,
+      687,
+      688,
+      689,
+      690,
+      691,
+      692,
+      693,
+      694,
+      695,
+      696,
+      697,
+      698,
+      699,
+      700,
+      701
+    ]
+  },
+  {
+    "id": "bonus5",
+    "name": "Bonus Lesson 5 — Microcontrollers & Electronics",
+    "group": "bonus",
+    "indices": [
+      702,
+      703,
+      704,
+      705,
+      706,
+      707,
+      708,
+      709,
+      710,
+      711,
+      712,
+      713,
+      714,
+      715,
+      716,
+      717,
+      718,
+      719,
+      720,
+      721,
+      722
+    ]
+  },
+  {
+    "id": "bonus6",
+    "name": "Bonus Lesson 6 — Coding & Building Websites",
+    "group": "bonus",
+    "indices": [
+      723,
+      724,
+      725,
+      726,
+      727,
+      728,
+      729,
+      730,
+      731,
+      732,
+      733,
+      734,
+      735,
+      736,
+      737,
+      738,
+      739,
+      740,
+      741,
+      742,
+      743
+    ]
+  },
+  {
+    "id": "bonus7",
+    "name": "Bonus Lesson 7 — PC Gaming",
+    "group": "bonus",
+    "indices": [
+      744,
+      745,
+      746,
+      747,
+      748,
+      749,
+      750,
+      751,
+      752,
+      753,
+      754,
+      755,
+      756,
+      757,
+      758,
+      759,
+      760,
+      761,
+      762,
+      763,
+      764
+    ]
+  },
+  {
+    "id": "bonus8",
+    "name": "Bonus Lesson 8 — Painting Miniatures & Blood Bowl",
+    "group": "bonus",
+    "indices": [
+      765,
+      766,
+      767,
+      768,
+      769,
+      770,
+      771,
+      772,
+      773,
+      774,
+      775,
+      776,
+      777,
+      778,
+      779,
+      780,
+      781,
+      782,
+      783,
+      784,
+      785,
+      786,
+      787,
+      788,
+      789
     ]
   }
 ];
 
 const vocab = [
   {
+    "hanzi": "你",
+    "pinyin": "nǐ",
+    "definition": "you (2nd person singular)",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你好吗？",
+        "pinyin": "Nǐ hǎo ma?",
+        "en": "How are you?"
+      },
+      {
+        "zh": "你是学生吗？",
+        "pinyin": "Nǐ shì xuésheng ma?",
+        "en": "Are you a student?"
+      }
+    ]
+  },
+  {
+    "hanzi": "是",
+    "pinyin": "shì",
+    "definition": "be (am/is/are)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我是老师。",
+        "pinyin": "Wǒ shì lǎoshī.",
+        "en": "I am a teacher."
+      },
+      {
+        "zh": "他是我的朋友。",
+        "pinyin": "Tā shì wǒ de péngyou.",
+        "en": "He is my friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "中国",
+    "pinyin": "Zhōngguó",
+    "definition": "China",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:countries",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我来自中国。",
+        "pinyin": "Wǒ láizì Zhōngguó.",
+        "en": "I come from China."
+      },
+      {
+        "zh": "中国很大。",
+        "pinyin": "Zhōngguó hěn dà.",
+        "en": "China is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "中国人",
+    "pinyin": "Zhōngguórén",
+    "definition": "Chinese (person)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:nationality",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她是中国人。",
+        "pinyin": "Tā shì Zhōngguórén.",
+        "en": "She is Chinese."
+      },
+      {
+        "zh": "我不是中国人。",
+        "pinyin": "Wǒ bú shì Zhōngguórén.",
+        "en": "I am not Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "吗",
+    "pinyin": "ma",
+    "definition": "[used at the end of an interrogative sentence]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:question particle"
+    ],
+    "sentences": [
+      {
+        "zh": "你是老师吗？",
+        "pinyin": "Nǐ shì lǎoshī ma?",
+        "en": "Are you a teacher?"
+      },
+      {
+        "zh": "这是你的书吗？",
+        "pinyin": "Zhè shì nǐ de shū ma?",
+        "en": "Is this your book?"
+      }
+    ]
+  },
+  {
+    "hanzi": "我",
+    "pinyin": "wǒ",
+    "definition": "I; me",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我是学生。",
+        "pinyin": "Wǒ shì xuésheng.",
+        "en": "I am a student."
+      },
+      {
+        "zh": "这是我的手机。",
+        "pinyin": "Zhè shì wǒ de shǒujī.",
+        "en": "This is my phone."
+      }
+    ]
+  },
+  {
+    "hanzi": "老师",
+    "pinyin": "lǎoshī",
+    "definition": "teacher",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:school,people",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他是我的老师。",
+        "pinyin": "Tā shì wǒ de lǎoshī.",
+        "en": "He is my teacher."
+      },
+      {
+        "zh": "老师，你好！",
+        "pinyin": "Lǎoshī, nǐ hǎo!",
+        "en": "Hello, teacher!"
+      }
+    ]
+  },
+  {
+    "hanzi": "不",
+    "pinyin": "bù",
+    "definition": "no; not",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我不是学生。",
+        "pinyin": "Wǒ bú shì xuésheng.",
+        "en": "I am not a student."
+      },
+      {
+        "zh": "她不是中国人。",
+        "pinyin": "Tā bú shì Zhōngguórén.",
+        "en": "She is not Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "学生",
+    "pinyin": "xuésheng",
+    "definition": "student",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:school,people",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我是学生。",
+        "pinyin": "Wǒ shì xuésheng.",
+        "en": "I am a student."
+      },
+      {
+        "zh": "他们是我的学生。",
+        "pinyin": "Tāmen shì wǒ de xuésheng.",
+        "en": "They are my students."
+      }
+    ]
+  },
+  {
+    "hanzi": "他",
+    "pinyin": "tā",
+    "definition": "he; him",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他是谁？",
+        "pinyin": "Tā shì shéi?",
+        "en": "Who is he?"
+      },
+      {
+        "zh": "他是我的老师。",
+        "pinyin": "Tā shì wǒ de lǎoshī.",
+        "en": "He is my teacher."
+      }
+    ]
+  },
+  {
+    "hanzi": "谁",
+    "pinyin": "shéi",
+    "definition": "who",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "这是谁？",
+        "pinyin": "Zhè shì shéi?",
+        "en": "Who is this?"
+      },
+      {
+        "zh": "谁是你的老师？",
+        "pinyin": "Shéi shì nǐ de lǎoshī?",
+        "en": "Who is your teacher?"
+      }
+    ]
+  },
+  {
+    "hanzi": "我的",
+    "pinyin": "wǒ de",
+    "definition": "my; mine",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:possession",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这是我的书。",
+        "pinyin": "Zhè shì wǒ de shū.",
+        "en": "This is my book."
+      },
+      {
+        "zh": "那是我的手机。",
+        "pinyin": "Nà shì wǒ de shǒujī.",
+        "en": "That is my phone."
+      }
+    ]
+  },
+  {
+    "hanzi": "这",
+    "pinyin": "zhè",
+    "definition": "this",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这是我的书。",
+        "pinyin": "Zhè shì wǒ de shū.",
+        "en": "This is my book."
+      },
+      {
+        "zh": "这是谁？",
+        "pinyin": "Zhè shì shéi?",
+        "en": "Who is this?"
+      }
+    ]
+  },
+  {
+    "hanzi": "你们",
+    "pinyin": "nǐmen",
+    "definition": "you (2nd person plural)",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你们好！",
+        "pinyin": "Nǐmen hǎo!",
+        "en": "Hello everyone!"
+      },
+      {
+        "zh": "你们是学生吗？",
+        "pinyin": "Nǐmen shì xuésheng ma?",
+        "en": "Are you (all) students?"
+      }
+    ]
+  },
+  {
+    "hanzi": "书",
+    "pinyin": "shū",
+    "definition": "book",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:objects,school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这是我的书。",
+        "pinyin": "Zhè shì wǒ de shū.",
+        "en": "This is my book."
+      },
+      {
+        "zh": "那本书是你的吗？",
+        "pinyin": "Nà běn shū shì nǐ de ma?",
+        "en": "Is that book yours?"
+      }
+    ]
+  },
+  {
+    "hanzi": "我们",
+    "pinyin": "wǒmen",
+    "definition": "we; us",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们是学生。",
+        "pinyin": "Wǒmen shì xuésheng.",
+        "en": "We are students."
+      },
+      {
+        "zh": "这是我们的书。",
+        "pinyin": "Zhè shì wǒmen de shū.",
+        "en": "This is our book."
+      }
+    ]
+  },
+  {
+    "hanzi": "那",
+    "pinyin": "nà",
+    "definition": "that",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "那是你的手机吗？",
+        "pinyin": "Nà shì nǐ de shǒujī ma?",
+        "en": "Is that your phone?"
+      },
+      {
+        "zh": "那是我的朋友。",
+        "pinyin": "Nà shì wǒ de péngyou.",
+        "en": "That is my friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "你的",
+    "pinyin": "nǐ de",
+    "definition": "your; yours (2nd person singular)",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:possession",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这是你的书吗？",
+        "pinyin": "Zhè shì nǐ de shū ma?",
+        "en": "Is this your book?"
+      },
+      {
+        "zh": "那是你的朋友。",
+        "pinyin": "Nà shì nǐ de péngyou.",
+        "en": "That is your friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "手机",
+    "pinyin": "shǒujī",
+    "definition": "mobile phone",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:electronics",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "那是你的手机吗？",
+        "pinyin": "Nà shì nǐ de shǒujī ma?",
+        "en": "Is that your phone?"
+      },
+      {
+        "zh": "我的手机在这儿。",
+        "pinyin": "Wǒ de shǒujī zài zhèr.",
+        "en": "My phone is here."
+      }
+    ]
+  },
+  {
+    "hanzi": "朋友",
+    "pinyin": "péngyou",
+    "definition": "friend",
+    "tags": [
+      "type:noun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:relationships",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这是我的朋友。",
+        "pinyin": "Zhè shì wǒ de péngyou.",
+        "en": "This is my friend."
+      },
+      {
+        "zh": "她是我朋友的朋友。",
+        "pinyin": "Tā shì wǒ péngyou de péngyou.",
+        "en": "She is my friend's friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "她",
+    "pinyin": "tā",
+    "definition": "she; her",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson1",
+      "frequency:high",
+      "topic:pronouns",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她是谁？",
+        "pinyin": "Tā shì shéi?",
+        "en": "Who is she?"
+      },
+      {
+        "zh": "她是我的朋友。",
+        "pinyin": "Tā shì wǒ de péngyou.",
+        "en": "She is my friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "去",
+    "pinyin": "qù",
+    "definition": "go to",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:movement",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你去学校吗？",
+        "pinyin": "Nǐ qù xuéxiào ma?",
+        "en": "Are you going to school?"
+      },
+      {
+        "zh": "我去中国学习汉语。",
+        "pinyin": "Wǒ qù Zhōngguó xuéxí Hànyǔ.",
+        "en": "I'm going to China to study Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "学校",
+    "pinyin": "xuéxiào",
+    "definition": "school",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我去学校。",
+        "pinyin": "Wǒ qù xuéxiào.",
+        "en": "I'm going to school."
+      },
+      {
+        "zh": "这是一所大学校。",
+        "pinyin": "Zhè shì yī suǒ dà xuéxiào.",
+        "en": "This is a big school."
+      }
+    ]
+  },
+  {
+    "hanzi": "对",
+    "pinyin": "duì",
+    "definition": "right; correct",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:agreement",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "对，我去学校。",
+        "pinyin": "Duì, wǒ qù xuéxiào.",
+        "en": "Right, I'm going to school."
+      },
+      {
+        "zh": "你说得对。",
+        "pinyin": "Nǐ shuō de duì.",
+        "en": "You're right."
+      }
+    ]
+  },
+  {
+    "hanzi": "会",
+    "pinyin": "huì",
+    "definition": "can",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:ability",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "你会说汉语吗？",
+        "pinyin": "Nǐ huì shuō Hànyǔ ma?",
+        "en": "Can you speak Chinese?"
+      },
+      {
+        "zh": "我会说英语。",
+        "pinyin": "Wǒ huì shuō Yīngyǔ.",
+        "en": "I can speak English."
+      }
+    ]
+  },
+  {
+    "hanzi": "说",
+    "pinyin": "shuō",
+    "definition": "speak; say",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:communication",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你会说汉语吗？",
+        "pinyin": "Nǐ huì shuō Hànyǔ ma?",
+        "en": "Can you speak Chinese?"
+      },
+      {
+        "zh": "请慢慢说。",
+        "pinyin": "Qǐng mànmàn shuō.",
+        "en": "Please speak slowly."
+      }
+    ]
+  },
+  {
+    "hanzi": "汉语",
+    "pinyin": "Hànyǔ",
+    "definition": "Chinese (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:language",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我会说汉语。",
+        "pinyin": "Wǒ huì shuō Hànyǔ.",
+        "en": "I can speak Chinese."
+      },
+      {
+        "zh": "我来中国学习汉语。",
+        "pinyin": "Wǒ lái Zhōngguó xuéxí Hànyǔ.",
+        "en": "I came to China to study Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "写",
+    "pinyin": "xiě",
+    "definition": "write",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:writing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我不会写汉字。",
+        "pinyin": "Wǒ bú huì xiě Hànzì.",
+        "en": "I can't write Chinese characters."
+      },
+      {
+        "zh": "请写拼音。",
+        "pinyin": "Qǐng xiě pīnyīn.",
+        "en": "Please write it in Pinyin."
+      }
+    ]
+  },
+  {
+    "hanzi": "汉字",
+    "pinyin": "Hànzì",
+    "definition": "Chinese character",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:language",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我不会写汉字。",
+        "pinyin": "Wǒ bú huì xiě Hànzì.",
+        "en": "I can't write Chinese characters."
+      },
+      {
+        "zh": "这个汉字怎么读？",
+        "pinyin": "Zhège Hànzì zěnme dú?",
+        "en": "How do you read this character?"
+      }
+    ]
+  },
+  {
+    "hanzi": "来",
+    "pinyin": "lái",
+    "definition": "come",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:movement",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你来中国做什么？",
+        "pinyin": "Nǐ lái Zhōngguó zuò shénme?",
+        "en": "What did you come to China to do?"
+      },
+      {
+        "zh": "我来学习汉语。",
+        "pinyin": "Wǒ lái xuéxí Hànyǔ.",
+        "en": "I came to study Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "做",
+    "pinyin": "zuò",
+    "definition": "do",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你来中国做什么？",
+        "pinyin": "Nǐ lái Zhōngguó zuò shénme?",
+        "en": "What did you come to China to do?"
+      },
+      {
+        "zh": "你在做什么？",
+        "pinyin": "Nǐ zài zuò shénme?",
+        "en": "What are you doing?"
+      }
+    ]
+  },
+  {
+    "hanzi": "什么",
+    "pinyin": "shénme",
+    "definition": "what",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "你叫什么名字？",
+        "pinyin": "Nǐ jiào shénme míngzi?",
+        "en": "What is your name?"
+      },
+      {
+        "zh": "你想做什么？",
+        "pinyin": "Nǐ xiǎng zuò shénme?",
+        "en": "What do you want to do?"
+      }
+    ]
+  },
+  {
+    "hanzi": "学习",
+    "pinyin": "xuéxí",
+    "definition": "study; learn",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:education",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我来中国学习汉语。",
+        "pinyin": "Wǒ lái Zhōngguó xuéxí Hànyǔ.",
+        "en": "I came to China to study Chinese."
+      },
+      {
+        "zh": "学习汉语很有意思。",
+        "pinyin": "Xuéxí Hànyǔ hěn yǒuyìsi.",
+        "en": "Learning Chinese is very interesting."
+      }
+    ]
+  },
+  {
+    "hanzi": "看",
+    "pinyin": "kàn",
+    "definition": "see; read; look at",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你看什么书？",
+        "pinyin": "Nǐ kàn shénme shū?",
+        "en": "What book are you reading?"
+      },
+      {
+        "zh": "我看汉语书。",
+        "pinyin": "Wǒ kàn Hànyǔ shū.",
+        "en": "I'm reading a Chinese book."
+      }
+    ]
+  },
+  {
+    "hanzi": "请问",
+    "pinyin": "qǐngwèn",
+    "definition": "excuse me",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:polite expressions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请问，你叫什么名字？",
+        "pinyin": "Qǐngwèn, nǐ jiào shénme míngzi?",
+        "en": "Excuse me, what's your name?"
+      },
+      {
+        "zh": "请问这个字怎么读？",
+        "pinyin": "Qǐngwèn zhège zì zěnme dú?",
+        "en": "Excuse me, how is this character read?"
+      }
+    ]
+  },
+  {
+    "hanzi": "怎么",
+    "pinyin": "zěnme",
+    "definition": "how",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "这个汉字怎么读？",
+        "pinyin": "Zhège Hànzì zěnme dú?",
+        "en": "How do you read this character?"
+      },
+      {
+        "zh": "这个用汉语怎么说？",
+        "pinyin": "Zhège yòng Hànyǔ zěnme shuō?",
+        "en": "How do you say this in Chinese?"
+      }
+    ]
+  },
+  {
+    "hanzi": "读",
+    "pinyin": "dú",
+    "definition": "pronounce; read",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:reading",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请跟我读。",
+        "pinyin": "Qǐng gēn wǒ dú.",
+        "en": "Please read after me."
+      },
+      {
+        "zh": "这个汉字怎么读？",
+        "pinyin": "Zhège Hànzì zěnme dú?",
+        "en": "How do you pronounce this character?"
+      }
+    ]
+  },
+  {
+    "hanzi": "爱",
+    "pinyin": "ài",
+    "definition": "love",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:emotions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爱看书。",
+        "pinyin": "Wǒ ài kàn shū.",
+        "en": "I love reading."
+      },
+      {
+        "zh": "我爱我的家人。",
+        "pinyin": "Wǒ ài wǒ de jiārén.",
+        "en": "I love my family."
+      }
+    ]
+  },
+  {
+    "hanzi": "生词",
+    "pinyin": "shēngcí",
+    "definition": "new word",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:language,school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个生词是什么意思？",
+        "pinyin": "Zhège shēngcí shì shénme yìsi?",
+        "en": "What does this new word mean?"
+      },
+      {
+        "zh": "今天有很多生词。",
+        "pinyin": "Jīntiān yǒu hěn duō shēngcí.",
+        "en": "There are many new words today."
+      }
+    ]
+  },
+  {
+    "hanzi": "意思",
+    "pinyin": "yìsi",
+    "definition": "meaning",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:language",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这个生词是什么意思？",
+        "pinyin": "Zhège shēngcí shì shénme yìsi?",
+        "en": "What does this new word mean?"
+      },
+      {
+        "zh": "我不懂这个意思。",
+        "pinyin": "Wǒ bù dǒng zhège yìsi.",
+        "en": "I don't understand this meaning."
+      }
+    ]
+  },
+  {
+    "hanzi": "想",
+    "pinyin": "xiǎng",
+    "definition": "want",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:desire",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "我想学习汉语。",
+        "pinyin": "Wǒ xiǎng xuéxí Hànyǔ.",
+        "en": "I want to learn Chinese."
+      },
+      {
+        "zh": "你想知道什么？",
+        "pinyin": "Nǐ xiǎng zhīdào shénme?",
+        "en": "What do you want to know?"
+      }
+    ]
+  },
+  {
+    "hanzi": "知道",
+    "pinyin": "zhīdào",
+    "definition": "know",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:cognition",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我想知道你的名字。",
+        "pinyin": "Wǒ xiǎng zhīdào nǐ de míngzi.",
+        "en": "I want to know your name."
+      },
+      {
+        "zh": "我不知道。",
+        "pinyin": "Wǒ bù zhīdào.",
+        "en": "I don't know."
+      }
+    ]
+  },
+  {
+    "hanzi": "听",
+    "pinyin": "tīng",
+    "definition": "listen to",
+    "tags": [
+      "type:verb",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请听我说。",
+        "pinyin": "Qǐng tīng wǒ shuō.",
+        "en": "Please listen to me."
+      },
+      {
+        "zh": "我喜欢听音乐。",
+        "pinyin": "Wǒ xǐhuan tīng yīnyuè.",
+        "en": "I like listening to music."
+      }
+    ]
+  },
+  {
+    "hanzi": "拼音",
+    "pinyin": "pīnyīn",
+    "definition": "Pinyin",
+    "tags": [
+      "type:noun",
+      "lesson:lesson2",
+      "frequency:high",
+      "topic:language",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请写拼音。",
+        "pinyin": "Qǐng xiě pīnyīn.",
+        "en": "Please write it in Pinyin."
+      },
+      {
+        "zh": "拼音帮助我们读汉字。",
+        "pinyin": "Pīnyīn bāngzhù wǒmen dú Hànzì.",
+        "en": "Pinyin helps us read Chinese characters."
+      }
+    ]
+  },
+  {
     "hanzi": "上课",
     "pinyin": "shàngkè",
-    "definition": "Class begins / to attend class",
+    "definition": "Class begins!",
     "tags": [
       "type:verb",
       "lesson:lesson2",
@@ -550,21 +2094,21 @@ const vocab = [
     ],
     "sentences": [
       {
+        "zh": "上课！大家请坐。",
+        "pinyin": "Shàngkè! Dàjiā qǐng zuò.",
+        "en": "Class begins! Everyone please sit."
+      },
+      {
         "zh": "我们八点上课。",
         "pinyin": "Wǒmen bā diǎn shàngkè.",
         "en": "We start class at 8."
-      },
-      {
-        "zh": "上课的时候不要说话。",
-        "pinyin": "Shàngkè de shíhou bú yào shuōhuà.",
-        "en": "Don’t talk during class."
       }
     ]
   },
   {
     "hanzi": "下课",
     "pinyin": "xiàkè",
-    "definition": "Class is over",
+    "definition": "Class is over!",
     "tags": [
       "type:verb",
       "lesson:lesson2",
@@ -575,21 +2119,21 @@ const vocab = [
     ],
     "sentences": [
       {
-        "zh": "下午三点下课。",
-        "pinyin": "Xiàwǔ sān diǎn xiàkè.",
-        "en": "Class ends at 3 PM."
+        "zh": "下课！明天见。",
+        "pinyin": "Xiàkè! Míngtiān jiàn.",
+        "en": "Class is over! See you tomorrow."
       },
       {
-        "zh": "下课以后我们去吃饭。",
-        "pinyin": "Xiàkè yǐhòu wǒmen qù chīfàn.",
-        "en": "After class we go eat."
+        "zh": "下午三点下课。",
+        "pinyin": "Xiàwǔ sān diǎn xiàkè.",
+        "en": "Class ends at 3pm."
       }
     ]
   },
   {
     "hanzi": "休息一下",
-    "pinyin": "xiūxi yīxià",
-    "definition": "Take a break",
+    "pinyin": "xiūxi yíxià",
+    "definition": "Take a break.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -601,12 +2145,12 @@ const vocab = [
     "sentences": [
       {
         "zh": "我们休息一下吧。",
-        "pinyin": "Wǒmen xiūxi yīxià ba.",
-        "en": "Let’s take a break."
+        "pinyin": "Wǒmen xiūxi yíxià ba.",
+        "en": "Let's take a break."
       },
       {
         "zh": "休息一下眼睛。",
-        "pinyin": "Xiūxi yīxià yǎnjing.",
+        "pinyin": "Xiūxi yíxià yǎnjing.",
         "en": "Rest your eyes for a bit."
       }
     ]
@@ -614,7 +2158,7 @@ const vocab = [
   {
     "hanzi": "请听我说",
     "pinyin": "qǐng tīng wǒ shuō",
-    "definition": "Please listen to me",
+    "definition": "Please listen to me.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -626,19 +2170,19 @@ const vocab = [
       {
         "zh": "请听我说完。",
         "pinyin": "Qǐng tīng wǒ shuō wán.",
-        "en": "Please listen to me finish."
+        "en": "Please listen until I'm finished."
       },
       {
-        "zh": "老师请听我说一个问题。",
-        "pinyin": "Lǎoshī qǐng tīng wǒ shuō yí ge wèntí.",
-        "en": "Teacher, please listen to my question."
+        "zh": "老师说：请听我说。",
+        "pinyin": "Lǎoshī shuō: qǐng tīng wǒ shuō.",
+        "en": "The teacher said: please listen to me."
       }
     ]
   },
   {
     "hanzi": "请跟我读",
     "pinyin": "qǐng gēn wǒ dú",
-    "definition": "Please read after me",
+    "definition": "Please read after me.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -661,8 +2205,8 @@ const vocab = [
   },
   {
     "hanzi": "请看白板",
-    "pinyin": "qǐng kàn bái bān",
-    "definition": "Please look at the whiteboard",
+    "pinyin": "qǐng kàn báibǎn",
+    "definition": "Please look at the whiteboard.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -672,20 +2216,20 @@ const vocab = [
     "sentences": [
       {
         "zh": "请看白板上的例句。",
-        "pinyin": "Qǐng kàn bái bān shàng de lìjù.",
+        "pinyin": "Qǐng kàn báibǎn shàng de lìjù.",
         "en": "Please look at the example sentences on the whiteboard."
       },
       {
         "zh": "请看白板，这是今天的语法点。",
-        "pinyin": "Qǐng kàn bái bān, zhè shì jīntiān de yǔfǎ diǎn.",
-        "en": "Look at the whiteboard — here’s today’s grammar point."
+        "pinyin": "Qǐng kàn báibǎn, zhè shì jīntiān de yǔfǎ diǎn.",
+        "en": "Look at the whiteboard — here's today's grammar point."
       }
     ]
   },
   {
-    "hanzi": "请看书写",
+    "hanzi": "请看书",
     "pinyin": "qǐng kàn shū",
-    "definition": "Please look at the book",
+    "definition": "Please look at the book.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -695,9 +2239,9 @@ const vocab = [
     ],
     "sentences": [
       {
-        "zh": "请看书写第五页的练习。",
-        "pinyin": "Qǐng kàn shū xiě dì-wǔ yè de liànxí.",
-        "en": "Look at the book and do the exercises on page 5."
+        "zh": "请看书第五页。",
+        "pinyin": "Qǐng kàn shū dì-wǔ yè.",
+        "en": "Please look at page 5 of the book."
       },
       {
         "zh": "请看书上的图片。",
@@ -708,8 +2252,8 @@ const vocab = [
   },
   {
     "hanzi": "请再说一遍",
-    "pinyin": "qǐng zài shuō yī biàn",
-    "definition": "Please say it again",
+    "pinyin": "qǐng zài shuō yí biàn",
+    "definition": "Please say it again.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -720,12 +2264,12 @@ const vocab = [
     "sentences": [
       {
         "zh": "我没听清，请再说一遍。",
-        "pinyin": "Wǒ méi tīng qīng, qǐng zài shuō yī biàn.",
-        "en": "I didn’t hear clearly, please say it again."
+        "pinyin": "Wǒ méi tīng qīng, qǐng zài shuō yí biàn.",
+        "en": "I didn't hear clearly, please say it again."
       },
       {
         "zh": "请再说一遍你的名字。",
-        "pinyin": "Qǐng zài shuō yī biàn nǐ de míngzi.",
+        "pinyin": "Qǐng zài shuō yí biàn nǐ de míngzi.",
         "en": "Please say your name again."
       }
     ]
@@ -733,7 +2277,7 @@ const vocab = [
   {
     "hanzi": "请写拼音",
     "pinyin": "qǐng xiě pīnyīn",
-    "definition": "Please write it in Pinyin",
+    "definition": "Please write it in Pinyin.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -772,16 +2316,16 @@ const vocab = [
         "en": "Which tone is this character?"
       },
       {
-        "zh": "“妈”和“麻”的第几声不一样？",
-        "pinyin": "“Mā” hé “má” de dì jǐ shēng bù yíyàng?",
-        "en": "Which tones differ between “mā” and “má”?"
+        "zh": "\"妈\"和\"麻\"的第几声不一样？",
+        "pinyin": "\"Mā\" hé \"má\" de dì jǐ shēng bù yíyàng?",
+        "en": "Which tones differ between \"mā\" and \"má\"?"
       }
     ]
   },
   {
     "hanzi": "请慢慢说",
     "pinyin": "qǐng mànmàn shuō",
-    "definition": "Please speak slowly",
+    "definition": "Please speak slowly.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -793,7 +2337,7 @@ const vocab = [
       {
         "zh": "请慢慢说，我在记笔记。",
         "pinyin": "Qǐng mànmàn shuō, wǒ zài jì bǐjì.",
-        "en": "Please speak slowly, I’m taking notes."
+        "en": "Please speak slowly, I'm taking notes."
       },
       {
         "zh": "你的汉语太快了，请慢慢说。",
@@ -805,7 +2349,7 @@ const vocab = [
   {
     "hanzi": "我没听懂",
     "pinyin": "wǒ méi tīngdǒng",
-    "definition": "I didn’t understand",
+    "definition": "I didn't understand.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -818,19 +2362,19 @@ const vocab = [
       {
         "zh": "对不起，我没听懂。",
         "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
-        "en": "Sorry, I didn’t understand."
+        "en": "Sorry, I didn't understand."
       },
       {
         "zh": "老师说得太快了，我没听懂。",
         "pinyin": "Lǎoshī shuō de tài kuài le, wǒ méi tīngdǒng.",
-        "en": "The teacher spoke too fast, I didn’t understand."
+        "en": "The teacher spoke too fast, I didn't understand."
       }
     ]
   },
   {
     "hanzi": "把书翻到第一页",
-    "pinyin": "bǎ shū fān dào dì-yī yè",
-    "definition": "Turn to page 1",
+    "pinyin": "bǎ shū fāndào dì-yī yè",
+    "definition": "Turn to page 1.",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -842,20 +2386,20 @@ const vocab = [
     "sentences": [
       {
         "zh": "请大家把书翻到第一页。",
-        "pinyin": "Qǐng dàjiā bǎ shū fān dào dì-yī yè.",
+        "pinyin": "Qǐng dàjiā bǎ shū fāndào dì-yī yè.",
         "en": "Everyone, turn to page 1."
       },
       {
         "zh": "把书翻到第一页，我们开始读课文。",
-        "pinyin": "Bǎ shū fān dào dì-yī yè, wǒmen kāishǐ dú kèwén.",
-        "en": "Turn to page 1, let’s start reading the text."
+        "pinyin": "Bǎ shū fāndào dì-yī yè, wǒmen kāishǐ dú kèwén.",
+        "en": "Turn to page 1, let's start reading the text."
       }
     ]
   },
   {
     "hanzi": "请问这个用汉语怎么说",
     "pinyin": "qǐngwèn zhège yòng Hànyǔ zěnme shuō",
-    "definition": "How do you say this in Chinese?",
+    "definition": "Excuse me, how do you say this in Chinese?",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -865,21 +2409,21 @@ const vocab = [
     ],
     "sentences": [
       {
-        "zh": "请问“computer”用汉语怎么说？",
-        "pinyin": "Qǐngwèn “computer” yòng Hànyǔ zěnme shuō?",
-        "en": "How do you say “computer” in Chinese?"
+        "zh": "老师，请问这个用汉语怎么说？",
+        "pinyin": "Lǎoshī, qǐngwèn zhège yòng Hànyǔ zěnme shuō?",
+        "en": "Teacher, excuse me, how do you say this in Chinese?"
       },
       {
         "zh": "这个水果的名字用汉语怎么说？",
         "pinyin": "Zhège shuǐguǒ de míngzi yòng Hànyǔ zěnme shuō?",
-        "en": "How do you say this fruit’s name in Chinese?"
+        "en": "How do you say this fruit's name in Chinese?"
       }
     ]
   },
   {
     "hanzi": "请问这个汉字怎么读",
     "pinyin": "qǐngwèn zhège Hànzì zěnme dú",
-    "definition": "How do you pronounce this character?",
+    "definition": "Excuse me, how do you pronounce this Chinese character?",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -903,7 +2447,7 @@ const vocab = [
   {
     "hanzi": "请问这个生词是什么意思",
     "pinyin": "qǐngwèn zhège shēngcí shì shénme yìsi",
-    "definition": "What does this new word mean?",
+    "definition": "Excuse me, what does this new word mean?",
     "tags": [
       "type:phrase",
       "lesson:lesson2",
@@ -913,14 +2457,1241 @@ const vocab = [
     ],
     "sentences": [
       {
-        "zh": "请问“方便”这个生词是什么意思？",
-        "pinyin": "Qǐngwèn “fāngbiàn” zhège shēngcí shì shénme yìsi?",
-        "en": "What does the new word “fāngbiàn” mean?"
+        "zh": "请问\"方便\"这个生词是什么意思？",
+        "pinyin": "Qǐngwèn \"fāngbiàn\" zhège shēngcí shì shénme yìsi?",
+        "en": "What does the new word \"fāngbiàn\" mean?"
       },
       {
         "zh": "我不懂这个生词，请问是什么意思？",
         "pinyin": "Wǒ bù dǒng zhège shēngcí, qǐngwèn shì shénme yìsi?",
-        "en": "I don’t understand this new word — what does it mean?"
+        "en": "I don't understand this new word — what does it mean?"
+      }
+    ]
+  },
+  {
+    "hanzi": "你好",
+    "pinyin": "nǐ hǎo",
+    "definition": "hello",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:greetings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你好！我叫李莉。",
+        "pinyin": "Nǐ hǎo! Wǒ jiào Lǐ Lì.",
+        "en": "Hello! My name is Li Li."
+      },
+      {
+        "zh": "老师，你好！",
+        "pinyin": "Lǎoshī, nǐ hǎo!",
+        "en": "Hello, teacher!"
+      }
+    ]
+  },
+  {
+    "hanzi": "好",
+    "pinyin": "hǎo",
+    "definition": "good; fine; nice",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天天气很好。",
+        "pinyin": "Jīntiān tiānqì hěn hǎo.",
+        "en": "Today's weather is nice."
+      },
+      {
+        "zh": "这个主意很好。",
+        "pinyin": "Zhège zhǔyi hěn hǎo.",
+        "en": "This idea is very good."
+      }
+    ]
+  },
+  {
+    "hanzi": "同学",
+    "pinyin": "tóngxué",
+    "definition": "classmate; fellow student",
+    "tags": [
+      "type:noun",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:school,people",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他是我的同学。",
+        "pinyin": "Tā shì wǒ de tóngxué.",
+        "en": "He is my classmate."
+      },
+      {
+        "zh": "同学们早上好！",
+        "pinyin": "Tóngxuémen zǎoshang hǎo!",
+        "en": "Good morning, classmates!"
+      }
+    ]
+  },
+  {
+    "hanzi": "早上",
+    "pinyin": "zǎoshang",
+    "definition": "(early) morning",
+    "tags": [
+      "type:noun",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "早上好！",
+        "pinyin": "Zǎoshang hǎo!",
+        "en": "Good morning!"
+      },
+      {
+        "zh": "我每天早上七点起床。",
+        "pinyin": "Wǒ měitiān zǎoshang qī diǎn qǐchuáng.",
+        "en": "I get up at 7am every morning."
+      }
+    ]
+  },
+  {
+    "hanzi": "再见",
+    "pinyin": "zàijiàn",
+    "definition": "goodbye",
+    "tags": [
+      "type:verb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:greetings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "老师，再见！",
+        "pinyin": "Lǎoshī, zàijiàn!",
+        "en": "Goodbye, teacher!"
+      },
+      {
+        "zh": "明天见，再见！",
+        "pinyin": "Míngtiān jiàn, zàijiàn!",
+        "en": "See you tomorrow, goodbye!"
+      }
+    ]
+  },
+  {
+    "hanzi": "谢谢",
+    "pinyin": "xièxie",
+    "definition": "thank you",
+    "tags": [
+      "type:verb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:politeness",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "谢谢你的帮助。",
+        "pinyin": "Xièxie nǐ de bāngzhù.",
+        "en": "Thank you for your help."
+      },
+      {
+        "zh": "谢谢，不客气。",
+        "pinyin": "Xièxie, bú kèqi.",
+        "en": "Thank you, you're welcome."
+      }
+    ]
+  },
+  {
+    "hanzi": "不客气",
+    "pinyin": "bú kèqi",
+    "definition": "you're welcome",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:politeness",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "谢谢！——不客气。",
+        "pinyin": "Xièxie! — Bú kèqi.",
+        "en": "Thank you! — You're welcome."
+      },
+      {
+        "zh": "不客气，这是我应该做的。",
+        "pinyin": "Bú kèqi, zhè shì wǒ yīnggāi zuò de.",
+        "en": "You're welcome, this is what I should do."
+      }
+    ]
+  },
+  {
+    "hanzi": "对不起",
+    "pinyin": "duìbuqǐ",
+    "definition": "sorry",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:politeness",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "对不起，我来晚了。",
+        "pinyin": "Duìbuqǐ, wǒ lái wǎn le.",
+        "en": "Sorry, I'm late."
+      },
+      {
+        "zh": "对不起，我没听懂。",
+        "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
+        "en": "Sorry, I didn't understand."
+      }
+    ]
+  },
+  {
+    "hanzi": "没关系",
+    "pinyin": "méi guānxi",
+    "definition": "that's all right",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:politeness",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "对不起！——没关系。",
+        "pinyin": "Duìbuqǐ! — Méi guānxi.",
+        "en": "Sorry! — That's all right."
+      },
+      {
+        "zh": "没关系，慢慢来。",
+        "pinyin": "Méi guānxi, mànmàn lái.",
+        "en": "It's okay, take your time."
+      }
+    ]
+  },
+  {
+    "hanzi": "很",
+    "pinyin": "hěn",
+    "definition": "very",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我很高兴。",
+        "pinyin": "Wǒ hěn gāoxìng.",
+        "en": "I'm very happy."
+      },
+      {
+        "zh": "这个菜很好吃。",
+        "pinyin": "Zhège cài hěn hǎochī.",
+        "en": "This dish is very tasty."
+      }
+    ]
+  },
+  {
+    "hanzi": "呢",
+    "pinyin": "ne",
+    "definition": "[marker of a special, alternative, or rhetorical question]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我很好，你呢？",
+        "pinyin": "Wǒ hěn hǎo, nǐ ne?",
+        "en": "I'm fine, and you?"
+      },
+      {
+        "zh": "他在学校，你妈妈呢？",
+        "pinyin": "Tā zài xuéxiào, nǐ māma ne?",
+        "en": "He's at school, what about your mom?"
+      }
+    ]
+  },
+  {
+    "hanzi": "最近",
+    "pinyin": "zuìjìn",
+    "definition": "recently; lately",
+    "tags": [
+      "type:noun",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你最近怎么样？",
+        "pinyin": "Nǐ zuìjìn zěnmeyàng?",
+        "en": "How have you been recently?"
+      },
+      {
+        "zh": "我最近很忙。",
+        "pinyin": "Wǒ zuìjìn hěn máng.",
+        "en": "I've been busy lately."
+      }
+    ]
+  },
+  {
+    "hanzi": "忙",
+    "pinyin": "máng",
+    "definition": "busy",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我最近很忙。",
+        "pinyin": "Wǒ zuìjìn hěn máng.",
+        "en": "I've been busy lately."
+      },
+      {
+        "zh": "你忙不忙？",
+        "pinyin": "Nǐ máng bù máng?",
+        "en": "Are you busy?"
+      }
+    ]
+  },
+  {
+    "hanzi": "饿",
+    "pinyin": "è",
+    "definition": "hungry",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有点儿饿。",
+        "pinyin": "Wǒ yǒudiǎnr è.",
+        "en": "I'm a bit hungry."
+      },
+      {
+        "zh": "你饿了吗？",
+        "pinyin": "Nǐ è le ma?",
+        "en": "Are you hungry?"
+      }
+    ]
+  },
+  {
+    "hanzi": "有点儿",
+    "pinyin": "yǒudiǎnr",
+    "definition": "somewhat; a bit",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有点儿饿。",
+        "pinyin": "Wǒ yǒudiǎnr è.",
+        "en": "I'm a bit hungry."
+      },
+      {
+        "zh": "这件衣服有点儿贵。",
+        "pinyin": "Zhè jiàn yīfu yǒudiǎnr guì.",
+        "en": "This piece of clothing is a bit expensive."
+      }
+    ]
+  },
+  {
+    "hanzi": "吃饭",
+    "pinyin": "chī fàn",
+    "definition": "have/eat a meal",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:food",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "你吃饭了吗？",
+        "pinyin": "Nǐ chī fàn le ma?",
+        "en": "Have you eaten?"
+      },
+      {
+        "zh": "我们一起吃饭吧。",
+        "pinyin": "Wǒmen yìqǐ chī fàn ba.",
+        "en": "Let's eat together."
+      }
+    ]
+  },
+  {
+    "hanzi": "吧",
+    "pinyin": "ba",
+    "definition": "[used at the end of an imperative sentence to soften the tone]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们走吧。",
+        "pinyin": "Wǒmen zǒu ba.",
+        "en": "Let's go."
+      },
+      {
+        "zh": "你去吧！",
+        "pinyin": "Nǐ qù ba!",
+        "en": "You go!"
+      }
+    ]
+  },
+  {
+    "hanzi": "难",
+    "pinyin": "nán",
+    "definition": "difficult; hard",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "汉语很难吗？",
+        "pinyin": "Hànyǔ hěn nán ma?",
+        "en": "Is Chinese difficult?"
+      },
+      {
+        "zh": "这个问题不难。",
+        "pinyin": "Zhège wèntí bù nán.",
+        "en": "This question isn't hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "非常",
+    "pinyin": "fēicháng",
+    "definition": "very; extremely",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我非常高兴认识你。",
+        "pinyin": "Wǒ fēicháng gāoxìng rènshi nǐ.",
+        "en": "I'm extremely happy to meet you."
+      },
+      {
+        "zh": "这个菜非常好吃。",
+        "pinyin": "Zhège cài fēicháng hǎochī.",
+        "en": "This dish is extremely tasty."
+      }
+    ]
+  },
+  {
+    "hanzi": "高兴",
+    "pinyin": "gāoxìng",
+    "definition": "glad; happy",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "认识你很高兴。",
+        "pinyin": "Rènshi nǐ hěn gāoxìng.",
+        "en": "Glad to meet you."
+      },
+      {
+        "zh": "我今天很高兴。",
+        "pinyin": "Wǒ jīntiān hěn gāoxìng.",
+        "en": "I'm very happy today."
+      }
+    ]
+  },
+  {
+    "hanzi": "认识",
+    "pinyin": "rènshi",
+    "definition": "know; be acquainted with",
+    "tags": [
+      "type:verb",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:social",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "认识你很高兴。",
+        "pinyin": "Rènshi nǐ hěn gāoxìng.",
+        "en": "Nice to meet you."
+      },
+      {
+        "zh": "我认识他。",
+        "pinyin": "Wǒ rènshi tā.",
+        "en": "I know him."
+      }
+    ]
+  },
+  {
+    "hanzi": "漂亮",
+    "pinyin": "piàoliang",
+    "definition": "beautiful",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她很漂亮。",
+        "pinyin": "Tā hěn piàoliang.",
+        "en": "She is very beautiful."
+      },
+      {
+        "zh": "这件衣服很漂亮。",
+        "pinyin": "Zhè jiàn yīfu hěn piàoliang.",
+        "en": "This piece of clothing is very beautiful."
+      }
+    ]
+  },
+  {
+    "hanzi": "累",
+    "pinyin": "lèi",
+    "definition": "tired",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我今天很累。",
+        "pinyin": "Wǒ jīntiān hěn lèi.",
+        "en": "I'm very tired today."
+      },
+      {
+        "zh": "你累不累？",
+        "pinyin": "Nǐ lèi bú lèi?",
+        "en": "Are you tired?"
+      }
+    ]
+  },
+  {
+    "hanzi": "明天见",
+    "pinyin": "míngtiān jiàn",
+    "definition": "see you tomorrow",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:greetings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "明天见！",
+        "pinyin": "Míngtiān jiàn!",
+        "en": "See you tomorrow!"
+      },
+      {
+        "zh": "老师说：明天见。",
+        "pinyin": "Lǎoshī shuō: míngtiān jiàn.",
+        "en": "The teacher said: see you tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "晚安",
+    "pinyin": "wǎn'ān",
+    "definition": "good night",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson3",
+      "frequency:high",
+      "topic:greetings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "晚安，做个好梦。",
+        "pinyin": "Wǎn'ān, zuò ge hǎo mèng.",
+        "en": "Good night, sweet dreams."
+      },
+      {
+        "zh": "妈妈跟我说晚安。",
+        "pinyin": "Māma gēn wǒ shuō wǎn'ān.",
+        "en": "Mom said good night to me."
+      }
+    ]
+  },
+  {
+    "hanzi": "今天",
+    "pinyin": "jīntiān",
+    "definition": "today",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天是几月几号？",
+        "pinyin": "Jīntiān shì jǐ yuè jǐ hào?",
+        "en": "What's the date today?"
+      },
+      {
+        "zh": "今天是九月一号。",
+        "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+        "en": "Today is September 1st."
+      }
+    ]
+  },
+  {
+    "hanzi": "几",
+    "pinyin": "jǐ",
+    "definition": "which; what",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:questions,numbers",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "今天几月几号？",
+        "pinyin": "Jīntiān jǐ yuè jǐ hào?",
+        "en": "What is today's date?"
+      },
+      {
+        "zh": "你家有几口人？",
+        "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+        "en": "How many people are in your family?"
+      }
+    ]
+  },
+  {
+    "hanzi": "月",
+    "pinyin": "yuè",
+    "definition": "month",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "现在是九月。",
+        "pinyin": "Xiànzài shì jiǔyuè.",
+        "en": "It's September now."
+      },
+      {
+        "zh": "一年有十二个月。",
+        "pinyin": "Yī nián yǒu shí'èr ge yuè.",
+        "en": "A year has twelve months."
+      }
+    ]
+  },
+  {
+    "hanzi": "号",
+    "pinyin": "hào",
+    "definition": "date",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天是九月一号。",
+        "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+        "en": "Today is September 1st."
+      },
+      {
+        "zh": "明天是几号？",
+        "pinyin": "Míngtiān shì jǐ hào?",
+        "en": "What's tomorrow's date?"
+      }
+    ]
+  },
+  {
+    "hanzi": "九",
+    "pinyin": "jiǔ",
+    "definition": "nine",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天是九月九号。",
+        "pinyin": "Jīntiān shì jiǔyuè jiǔ hào.",
+        "en": "Today is September 9th."
+      },
+      {
+        "zh": "我有九本书。",
+        "pinyin": "Wǒ yǒu jiǔ běn shū.",
+        "en": "I have nine books."
+      }
+    ]
+  },
+  {
+    "hanzi": "一",
+    "pinyin": "yī",
+    "definition": "one",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天是九月一号。",
+        "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+        "en": "Today is September 1st."
+      },
+      {
+        "zh": "我有一个朋友。",
+        "pinyin": "Wǒ yǒu yī ge péngyou.",
+        "en": "I have one friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "明天",
+    "pinyin": "míngtiān",
+    "definition": "tomorrow",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "明天是几月几号？",
+        "pinyin": "Míngtiān shì jǐ yuè jǐ hào?",
+        "en": "What's tomorrow's date?"
+      },
+      {
+        "zh": "明天见！",
+        "pinyin": "Míngtiān jiàn!",
+        "en": "See you tomorrow!"
+      }
+    ]
+  },
+  {
+    "hanzi": "二",
+    "pinyin": "èr",
+    "definition": "two",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "明天是九月二号。",
+        "pinyin": "Míngtiān shì jiǔyuè èr hào.",
+        "en": "Tomorrow is September 2nd."
+      },
+      {
+        "zh": "我有两个朋友。",
+        "pinyin": "Wǒ yǒu liǎng ge péngyou.",
+        "en": "I have two friends."
+      }
+    ]
+  },
+  {
+    "hanzi": "昨天",
+    "pinyin": "zuótiān",
+    "definition": "yesterday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "昨天星期几？",
+        "pinyin": "Zuótiān xīngqī jǐ?",
+        "en": "What day was yesterday?"
+      },
+      {
+        "zh": "昨天是星期日。",
+        "pinyin": "Zuótiān shì xīngqīrì.",
+        "en": "Yesterday was Sunday."
+      }
+    ]
+  },
+  {
+    "hanzi": "星期",
+    "pinyin": "xīngqī",
+    "definition": "week",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一个星期有七天。",
+        "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+        "en": "A week has seven days."
+      },
+      {
+        "zh": "昨天星期几？",
+        "pinyin": "Zuótiān xīngqī jǐ?",
+        "en": "What day of the week was yesterday?"
+      }
+    ]
+  },
+  {
+    "hanzi": "星期日",
+    "pinyin": "Xīngqīrì",
+    "definition": "Sunday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time,days",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "昨天是星期日。",
+        "pinyin": "Zuótiān shì Xīngqīrì.",
+        "en": "Yesterday was Sunday."
+      },
+      {
+        "zh": "星期日我不上课。",
+        "pinyin": "Xīngqīrì wǒ bú shàngkè.",
+        "en": "I don't have class on Sunday."
+      }
+    ]
+  },
+  {
+    "hanzi": "天",
+    "pinyin": "tiān",
+    "definition": "day",
+    "tags": [
+      "type:measure",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一个星期有七天。",
+        "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+        "en": "A week has seven days."
+      },
+      {
+        "zh": "今天天气很好。",
+        "pinyin": "Jīntiān tiānqì hěn hǎo.",
+        "en": "The weather is nice today."
+      }
+    ]
+  },
+  {
+    "hanzi": "七",
+    "pinyin": "qī",
+    "definition": "seven",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一个星期有七天。",
+        "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+        "en": "A week has seven days."
+      },
+      {
+        "zh": "我七点起床。",
+        "pinyin": "Wǒ qī diǎn qǐchuáng.",
+        "en": "I get up at seven o'clock."
+      }
+    ]
+  },
+  {
+    "hanzi": "年",
+    "pinyin": "nián",
+    "definition": "year",
+    "tags": [
+      "type:measure",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今年是2026年。",
+        "pinyin": "Jīnnián shì èr líng èr liù nián.",
+        "en": "This year is 2026."
+      },
+      {
+        "zh": "一年有十二个月。",
+        "pinyin": "Yī nián yǒu shí'èr ge yuè.",
+        "en": "A year has twelve months."
+      }
+    ]
+  },
+  {
+    "hanzi": "多少",
+    "pinyin": "duōshao",
+    "definition": "how many; how much",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "你有多少书？",
+        "pinyin": "Nǐ yǒu duōshao shū?",
+        "en": "How many books do you have?"
+      },
+      {
+        "zh": "这个多少钱？",
+        "pinyin": "Zhège duōshao qián?",
+        "en": "How much is this?"
+      }
+    ]
+  },
+  {
+    "hanzi": "十",
+    "pinyin": "shí",
+    "definition": "ten",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有十本书。",
+        "pinyin": "Wǒ yǒu shí běn shū.",
+        "en": "I have ten books."
+      },
+      {
+        "zh": "十月是秋天。",
+        "pinyin": "Shíyuè shì qiūtiān.",
+        "en": "October is autumn."
+      }
+    ]
+  },
+  {
+    "hanzi": "八",
+    "pinyin": "bā",
+    "definition": "eight",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我八点上课。",
+        "pinyin": "Wǒ bā diǎn shàngkè.",
+        "en": "I start class at eight o'clock."
+      },
+      {
+        "zh": "今天是八号。",
+        "pinyin": "Jīntiān shì bā hào.",
+        "en": "Today is the 8th."
+      }
+    ]
+  },
+  {
+    "hanzi": "星期一",
+    "pinyin": "Xīngqīyī",
+    "definition": "Monday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time,days",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "星期一我很忙。",
+        "pinyin": "Xīngqīyī wǒ hěn máng.",
+        "en": "I'm busy on Monday."
+      },
+      {
+        "zh": "我们星期一见面吧。",
+        "pinyin": "Wǒmen Xīngqīyī jiànmiàn ba.",
+        "en": "Let's meet on Monday."
+      }
+    ]
+  },
+  {
+    "hanzi": "星期二",
+    "pinyin": "Xīngqī'èr",
+    "definition": "Tuesday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time,days",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "星期二有汉语课。",
+        "pinyin": "Xīngqī'èr yǒu Hànyǔ kè.",
+        "en": "There's Chinese class on Tuesday."
+      },
+      {
+        "zh": "今天是星期二。",
+        "pinyin": "Jīntiān shì Xīngqī'èr.",
+        "en": "Today is Tuesday."
+      }
+    ]
+  },
+  {
+    "hanzi": "后天",
+    "pinyin": "hòutiān",
+    "definition": "the day after tomorrow",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "后天是我的生日。",
+        "pinyin": "Hòutiān shì wǒ de shēngrì.",
+        "en": "The day after tomorrow is my birthday."
+      },
+      {
+        "zh": "我们后天见。",
+        "pinyin": "Wǒmen hòutiān jiàn.",
+        "en": "Let's meet the day after tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "星期三",
+    "pinyin": "Xīngqīsān",
+    "definition": "Wednesday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:time,days",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "星期三下午没课。",
+        "pinyin": "Xīngqīsān xiàwǔ méi kè.",
+        "en": "There's no class on Wednesday afternoon."
+      },
+      {
+        "zh": "今天星期三。",
+        "pinyin": "Jīntiān Xīngqīsān.",
+        "en": "Today is Wednesday."
+      }
+    ]
+  },
+  {
+    "hanzi": "三",
+    "pinyin": "sān",
+    "definition": "three",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我三点下课。",
+        "pinyin": "Wǒ sān diǎn xiàkè.",
+        "en": "I finish class at three."
+      },
+      {
+        "zh": "三月是春天。",
+        "pinyin": "Sānyuè shì chūntiān.",
+        "en": "March is spring."
+      }
+    ]
+  },
+  {
+    "hanzi": "百",
+    "pinyin": "bǎi",
+    "definition": "hundred",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这本书一百块。",
+        "pinyin": "Zhè běn shū yī bǎi kuài.",
+        "en": "This book costs one hundred yuan."
+      },
+      {
+        "zh": "一百个学生。",
+        "pinyin": "Yī bǎi ge xuésheng.",
+        "en": "One hundred students."
+      }
+    ]
+  },
+  {
+    "hanzi": "六",
+    "pinyin": "liù",
+    "definition": "six",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我六点起床。",
+        "pinyin": "Wǒ liù diǎn qǐchuáng.",
+        "en": "I get up at six."
+      },
+      {
+        "zh": "六月很热。",
+        "pinyin": "Liùyuè hěn rè.",
+        "en": "June is very hot."
+      }
+    ]
+  },
+  {
+    "hanzi": "五",
+    "pinyin": "wǔ",
+    "definition": "five",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有五个朋友。",
+        "pinyin": "Wǒ yǒu wǔ ge péngyou.",
+        "en": "I have five friends."
+      },
+      {
+        "zh": "五月七号是我的生日。",
+        "pinyin": "Wǔyuè qī hào shì wǒ de shēngrì.",
+        "en": "May 7th is my birthday."
+      }
+    ]
+  },
+  {
+    "hanzi": "四",
+    "pinyin": "sì",
+    "definition": "four",
+    "tags": [
+      "type:number",
+      "lesson:lesson4",
+      "frequency:high",
+      "topic:numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一年有四个季节。",
+        "pinyin": "Yī nián yǒu sì ge jìjié.",
+        "en": "A year has four seasons."
+      },
+      {
+        "zh": "我有四本书。",
+        "pinyin": "Wǒ yǒu sì běn shū.",
+        "en": "I have four books."
       }
     ]
   },
@@ -930,7 +3701,7 @@ const vocab = [
     "definition": "be surnamed",
     "tags": [
       "type:verb",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:personal",
       "hsk:1"
@@ -951,10 +3722,10 @@ const vocab = [
   {
     "hanzi": "叫",
     "pinyin": "jiào",
-    "definition": "be called",
+    "definition": "be called as",
     "tags": [
       "type:verb",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:personal",
       "hsk:1"
@@ -968,7 +3739,7 @@ const vocab = [
       {
         "zh": "你叫什么名字？",
         "pinyin": "Nǐ jiào shénme míngzi?",
-        "en": "What’s your name?"
+        "en": "What's your name?"
       }
     ]
   },
@@ -978,7 +3749,7 @@ const vocab = [
     "definition": "name",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:personal",
       "hsk:1"
@@ -1002,7 +3773,7 @@ const vocab = [
     "definition": "this year",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:time",
       "hsk:1"
@@ -1011,11 +3782,11 @@ const vocab = [
       {
         "zh": "今年我二十岁。",
         "pinyin": "Jīnnián wǒ èrshí suì.",
-        "en": "I’m 20 years old this year."
+        "en": "I'm 20 years old this year."
       },
       {
         "zh": "今年是2026年。",
-        "pinyin": "Jīnnián shì 2026 nián.",
+        "pinyin": "Jīnnián shì èr líng èr liù nián.",
         "en": "This year is 2026."
       }
     ]
@@ -1023,10 +3794,10 @@ const vocab = [
   {
     "hanzi": "多",
     "pinyin": "duō",
-    "definition": "how (to what extent)",
+    "definition": "[used in questions] how; to what extent",
     "tags": [
       "type:adverb",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:questions",
       "hsk:1",
@@ -1048,10 +3819,10 @@ const vocab = [
   {
     "hanzi": "大",
     "pinyin": "dà",
-    "definition": "old (of age)",
+    "definition": "(of age) old",
     "tags": [
-      "type:adj",
-      "lesson:lesson3",
+      "type:adjective",
+      "lesson:lesson5",
       "frequency:high",
       "topic:personal",
       "hsk:1"
@@ -1075,7 +3846,7 @@ const vocab = [
     "definition": "which",
     "tags": [
       "type:pronoun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:questions",
       "hsk:1",
@@ -1100,7 +3871,7 @@ const vocab = [
     "definition": "country",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:geography",
       "hsk:1"
@@ -1124,7 +3895,7 @@ const vocab = [
     "definition": "Thailand",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:countries",
       "hsk:1"
@@ -1145,10 +3916,10 @@ const vocab = [
   {
     "hanzi": "泰国人",
     "pinyin": "Tàiguórén",
-    "definition": "Thai person",
+    "definition": "Thai; Thailander",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:nationality",
       "hsk:1"
@@ -1169,10 +3940,10 @@ const vocab = [
   {
     "hanzi": "久",
     "pinyin": "jiǔ",
-    "definition": "for a long time",
+    "definition": "for a long time; long",
     "tags": [
-      "type:adj",
-      "lesson:lesson3",
+      "type:adjective",
+      "lesson:lesson5",
       "frequency:high",
       "topic:time",
       "hsk:2"
@@ -1193,10 +3964,10 @@ const vocab = [
   {
     "hanzi": "现在",
     "pinyin": "xiànzài",
-    "definition": "now",
+    "definition": "the time being; the moment",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:time",
       "hsk:1"
@@ -1210,17 +3981,18 @@ const vocab = [
       {
         "zh": "我现在很忙。",
         "pinyin": "Wǒ xiànzài hěn máng.",
-        "en": "I’m busy now."
+        "en": "I'm busy now."
       }
     ]
   },
   {
     "hanzi": "在",
     "pinyin": "zài",
-    "definition": "be at/in",
+    "definition": "be at/in/on (a place); at/in (a place or time)",
     "tags": [
-      "type:verb/prep",
-      "lesson:lesson3",
+      "type:verb",
+      "type:preposition",
+      "lesson:lesson5",
       "frequency:high",
       "topic:location",
       "hsk:1"
@@ -1244,7 +4016,7 @@ const vocab = [
     "definition": "where",
     "tags": [
       "type:pronoun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:questions",
       "hsk:1",
@@ -1269,7 +4041,7 @@ const vocab = [
     "definition": "Wuhan",
     "tags": [
       "type:noun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:cities",
       "hsk:2"
@@ -1293,7 +4065,7 @@ const vocab = [
     "definition": "everybody",
     "tags": [
       "type:pronoun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:greetings",
       "hsk:1"
@@ -1317,7 +4089,7 @@ const vocab = [
     "definition": "introduce",
     "tags": [
       "type:verb",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:social",
       "hsk:2"
@@ -1337,11 +4109,11 @@ const vocab = [
   },
   {
     "hanzi": "一下",
-    "pinyin": "yīxià",
-    "definition": "(complement, an attempt)",
+    "pinyin": "yíxià",
+    "definition": "[used after a verb as its complement, indicating an act or an attempt]",
     "tags": [
-      "type:auxiliary",
-      "lesson:lesson3",
+      "type:complement",
+      "lesson:lesson5",
       "frequency:high",
       "topic:grammar",
       "hsk:2",
@@ -1350,12 +4122,12 @@ const vocab = [
     "sentences": [
       {
         "zh": "你看一下。",
-        "pinyin": "Nǐ kàn yīxià.",
+        "pinyin": "Nǐ kàn yíxià.",
         "en": "Take a look."
       },
       {
         "zh": "我想一下。",
-        "pinyin": "Wǒ xiǎng yīxià.",
+        "pinyin": "Wǒ xiǎng yíxià.",
         "en": "Let me think for a bit."
       }
     ]
@@ -1366,7 +4138,7 @@ const vocab = [
     "definition": "oneself",
     "tags": [
       "type:pronoun",
-      "lesson:lesson3",
+      "lesson:lesson5",
       "frequency:high",
       "topic:self",
       "hsk:2"
@@ -1375,12 +4147,11853 @@ const vocab = [
       {
         "zh": "我自己去。",
         "pinyin": "Wǒ zìjǐ qù.",
-        "en": "I’ll go myself."
+        "en": "I'll go myself."
       },
       {
         "zh": "你要相信自己。",
         "pinyin": "Nǐ yào xiāngxìn zìjǐ.",
         "en": "You need to believe in yourself."
+      }
+    ]
+  },
+  {
+    "hanzi": "家",
+    "pinyin": "jiā",
+    "definition": "family",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你家有几口人？",
+        "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+        "en": "How many people are in your family?"
+      },
+      {
+        "zh": "我家有六口人。",
+        "pinyin": "Wǒ jiā yǒu liù kǒu rén.",
+        "en": "My family has six people."
+      }
+    ]
+  },
+  {
+    "hanzi": "有",
+    "pinyin": "yǒu",
+    "definition": "exist; there be",
+    "tags": [
+      "type:verb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:possession",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我家有六口人。",
+        "pinyin": "Wǒ jiā yǒu liù kǒu rén.",
+        "en": "My family has six people."
+      },
+      {
+        "zh": "你有哥哥吗？",
+        "pinyin": "Nǐ yǒu gēge ma?",
+        "en": "Do you have an older brother?"
+      }
+    ]
+  },
+  {
+    "hanzi": "口",
+    "pinyin": "kǒu",
+    "definition": "[used for family members]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你家有几口人？",
+        "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+        "en": "How many people are in your family?"
+      },
+      {
+        "zh": "我家有四口人。",
+        "pinyin": "Wǒ jiā yǒu sì kǒu rén.",
+        "en": "My family has four people."
+      }
+    ]
+  },
+  {
+    "hanzi": "爷爷",
+    "pinyin": "yéye",
+    "definition": "paternal grandfather",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爷爷七十岁了。",
+        "pinyin": "Wǒ yéye qīshí suì le.",
+        "en": "My grandfather is 70 years old."
+      },
+      {
+        "zh": "爷爷喜欢喝茶。",
+        "pinyin": "Yéye xǐhuan hē chá.",
+        "en": "Grandpa likes drinking tea."
+      }
+    ]
+  },
+  {
+    "hanzi": "奶奶",
+    "pinyin": "nǎinai",
+    "definition": "paternal grandmother",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "奶奶做的饭很好吃。",
+        "pinyin": "Nǎinai zuò de fàn hěn hǎochī.",
+        "en": "The food grandma makes is delicious."
+      },
+      {
+        "zh": "我和奶奶一起住。",
+        "pinyin": "Wǒ hé nǎinai yìqǐ zhù.",
+        "en": "I live with grandma."
+      }
+    ]
+  },
+  {
+    "hanzi": "爸爸",
+    "pinyin": "bàba",
+    "definition": "father",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爸爸是医生。",
+        "pinyin": "Wǒ bàba shì yīshēng.",
+        "en": "My dad is a doctor."
+      },
+      {
+        "zh": "爸爸在哪儿工作？",
+        "pinyin": "Bàba zài nǎr gōngzuò?",
+        "en": "Where does dad work?"
+      }
+    ]
+  },
+  {
+    "hanzi": "妈妈",
+    "pinyin": "māma",
+    "definition": "mother",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我妈妈是老师。",
+        "pinyin": "Wǒ māma shì lǎoshī.",
+        "en": "My mom is a teacher."
+      },
+      {
+        "zh": "妈妈现在在学校吗？",
+        "pinyin": "Māma xiànzài zài xuéxiào ma?",
+        "en": "Is mom at school right now?"
+      }
+    ]
+  },
+  {
+    "hanzi": "弟弟",
+    "pinyin": "dìdi",
+    "definition": "younger brother",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有一个弟弟。",
+        "pinyin": "Wǒ yǒu yí ge dìdi.",
+        "en": "I have a younger brother."
+      },
+      {
+        "zh": "弟弟想做律师。",
+        "pinyin": "Dìdi xiǎng zuò lǜshī.",
+        "en": "My younger brother wants to be a lawyer."
+      }
+    ]
+  },
+  {
+    "hanzi": "和",
+    "pinyin": "hé",
+    "definition": "and",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爱爸爸和妈妈。",
+        "pinyin": "Wǒ ài bàba hé māma.",
+        "en": "I love dad and mom."
+      },
+      {
+        "zh": "哥哥和姐姐都在家。",
+        "pinyin": "Gēge hé jiějie dōu zài jiā.",
+        "en": "Older brother and older sister are both home."
+      }
+    ]
+  },
+  {
+    "hanzi": "哥哥",
+    "pinyin": "gēge",
+    "definition": "elder brother",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你有哥哥吗？",
+        "pinyin": "Nǐ yǒu gēge ma?",
+        "en": "Do you have an older brother?"
+      },
+      {
+        "zh": "我没有哥哥。",
+        "pinyin": "Wǒ méiyǒu gēge.",
+        "en": "I don't have an older brother."
+      }
+    ]
+  },
+  {
+    "hanzi": "姐姐",
+    "pinyin": "jiějie",
+    "definition": "elder sister",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我姐姐是大学生。",
+        "pinyin": "Wǒ jiějie shì dàxuéshēng.",
+        "en": "My older sister is a college student."
+      },
+      {
+        "zh": "姐姐比我大两岁。",
+        "pinyin": "Jiějie bǐ wǒ dà liǎng suì.",
+        "en": "My older sister is two years older than me."
+      }
+    ]
+  },
+  {
+    "hanzi": "没有",
+    "pinyin": "méiyǒu",
+    "definition": "not have",
+    "tags": [
+      "type:verb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:possession",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我没有哥哥。",
+        "pinyin": "Wǒ méiyǒu gēge.",
+        "en": "I don't have an older brother."
+      },
+      {
+        "zh": "我没有妹妹。",
+        "pinyin": "Wǒ méiyǒu mèimei.",
+        "en": "I don't have a younger sister."
+      }
+    ]
+  },
+  {
+    "hanzi": "也",
+    "pinyin": "yě",
+    "definition": "also; too",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我也没有姐姐。",
+        "pinyin": "Wǒ yě méiyǒu jiějie.",
+        "en": "I don't have an older sister either."
+      },
+      {
+        "zh": "他也是学生。",
+        "pinyin": "Tā yě shì xuésheng.",
+        "en": "He's also a student."
+      }
+    ]
+  },
+  {
+    "hanzi": "妹妹",
+    "pinyin": "mèimei",
+    "definition": "younger sister",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:family",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你有没有妹妹？",
+        "pinyin": "Nǐ yǒu méiyǒu mèimei?",
+        "en": "Do you have a younger sister?"
+      },
+      {
+        "zh": "我有一个妹妹。",
+        "pinyin": "Wǒ yǒu yí ge mèimei.",
+        "en": "I have a younger sister."
+      }
+    ]
+  },
+  {
+    "hanzi": "个",
+    "pinyin": "gè",
+    "definition": "[used before a noun which does not have a fixed measure word of its own]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有一个弟弟。",
+        "pinyin": "Wǒ yǒu yí ge dìdi.",
+        "en": "I have a younger brother."
+      },
+      {
+        "zh": "一个学生在读书。",
+        "pinyin": "Yí ge xuésheng zài dúshū.",
+        "en": "A student is reading."
+      }
+    ]
+  },
+  {
+    "hanzi": "猫",
+    "pinyin": "māo",
+    "definition": "cat",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:animals",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我家有一只猫。",
+        "pinyin": "Wǒ jiā yǒu yī zhī māo.",
+        "en": "My family has a cat."
+      },
+      {
+        "zh": "这只猫很可爱。",
+        "pinyin": "Zhè zhī māo hěn kě'ài.",
+        "en": "This cat is very cute."
+      }
+    ]
+  },
+  {
+    "hanzi": "只",
+    "pinyin": "zhī",
+    "definition": "[measure word for certain animals]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我家有一只猫。",
+        "pinyin": "Wǒ jiā yǒu yī zhī māo.",
+        "en": "My family has a cat."
+      },
+      {
+        "zh": "那只狗很大。",
+        "pinyin": "Nà zhī gǒu hěn dà.",
+        "en": "That dog is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "还",
+    "pinyin": "hái",
+    "definition": "also; too",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我还有一只狗。",
+        "pinyin": "Wǒ hái yǒu yī zhī gǒu.",
+        "en": "I also have a dog."
+      },
+      {
+        "zh": "他还没来。",
+        "pinyin": "Tā hái méi lái.",
+        "en": "He hasn't come yet."
+      }
+    ]
+  },
+  {
+    "hanzi": "条",
+    "pinyin": "tiáo",
+    "definition": "[for sth long, narrow or thin]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我家有一条狗。",
+        "pinyin": "Wǒ jiā yǒu yī tiáo gǒu.",
+        "en": "My family has a dog."
+      },
+      {
+        "zh": "这条路很长。",
+        "pinyin": "Zhè tiáo lù hěn cháng.",
+        "en": "This road is very long."
+      }
+    ]
+  },
+  {
+    "hanzi": "狗",
+    "pinyin": "gǒu",
+    "definition": "dog",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:animals",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我有一条狗。",
+        "pinyin": "Wǒ yǒu yī tiáo gǒu.",
+        "en": "I have a dog."
+      },
+      {
+        "zh": "那条狗很可爱。",
+        "pinyin": "Nà tiáo gǒu hěn kě'ài.",
+        "en": "That dog is very cute."
+      }
+    ]
+  },
+  {
+    "hanzi": "中学生",
+    "pinyin": "zhōngxuéshēng",
+    "definition": "secondary school student",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:medium",
+      "topic:school,people",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我弟弟是中学生。",
+        "pinyin": "Wǒ dìdi shì zhōngxuéshēng.",
+        "en": "My younger brother is a secondary school student."
+      },
+      {
+        "zh": "中学生要上很多课。",
+        "pinyin": "Zhōngxuéshēng yào shàng hěn duō kè.",
+        "en": "Secondary school students have a lot of classes."
+      }
+    ]
+  },
+  {
+    "hanzi": "留学",
+    "pinyin": "liúxué",
+    "definition": "study abroad",
+    "tags": [
+      "type:verb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我来中国留学。",
+        "pinyin": "Wǒ lái Zhōngguó liúxué.",
+        "en": "I came to China to study abroad."
+      },
+      {
+        "zh": "姐姐去美国留学了。",
+        "pinyin": "Jiějie qù Měiguó liúxué le.",
+        "en": "My older sister went to the US to study abroad."
+      }
+    ]
+  },
+  {
+    "hanzi": "大学生",
+    "pinyin": "dàxuéshēng",
+    "definition": "college student",
+    "tags": [
+      "type:noun",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:school,people",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我姐姐是大学生。",
+        "pinyin": "Wǒ jiějie shì dàxuéshēng.",
+        "en": "My older sister is a college student."
+      },
+      {
+        "zh": "大学生要很努力学习。",
+        "pinyin": "Dàxuéshēng yào hěn nǔlì xuéxí.",
+        "en": "College students need to study hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "都",
+    "pinyin": "dōu",
+    "definition": "all; both",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson6",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们都是学生。",
+        "pinyin": "Wǒmen dōu shì xuésheng.",
+        "en": "We are all students."
+      },
+      {
+        "zh": "哥哥和姐姐都在家。",
+        "pinyin": "Gēge hé jiějie dōu zài jiā.",
+        "en": "Older brother and older sister are both home."
+      }
+    ]
+  },
+  {
+    "hanzi": "工作",
+    "pinyin": "gōngzuò",
+    "definition": "job; work",
+    "tags": [
+      "type:noun",
+      "type:verb",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爸爸做什么工作？",
+        "pinyin": "Wǒ bàba zuò shénme gōngzuò?",
+        "en": "What job does my dad do?"
+      },
+      {
+        "zh": "你在哪儿工作？",
+        "pinyin": "Nǐ zài nǎr gōngzuò?",
+        "en": "Where do you work?"
+      }
+    ]
+  },
+  {
+    "hanzi": "医生",
+    "pinyin": "yīshēng",
+    "definition": "doctor",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爸爸是医生。",
+        "pinyin": "Wǒ bàba shì yīshēng.",
+        "en": "My dad is a doctor."
+      },
+      {
+        "zh": "医生很辛苦。",
+        "pinyin": "Yīshēng hěn xīnkǔ.",
+        "en": "Doctors work very hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "医院",
+    "pinyin": "yīyuàn",
+    "definition": "hospital",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:places",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我爸爸在医院工作。",
+        "pinyin": "Wǒ bàba zài yīyuàn gōngzuò.",
+        "en": "My dad works at a hospital."
+      },
+      {
+        "zh": "医院离这儿不远。",
+        "pinyin": "Yīyuàn lí zhèr bù yuǎn.",
+        "en": "The hospital isn't far from here."
+      }
+    ]
+  },
+  {
+    "hanzi": "当",
+    "pinyin": "dāng",
+    "definition": "serve/work as",
+    "tags": [
+      "type:verb",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我妹妹想当律师。",
+        "pinyin": "Wǒ mèimei xiǎng dāng lǜshī.",
+        "en": "My younger sister wants to be a lawyer."
+      },
+      {
+        "zh": "他当了十年老师。",
+        "pinyin": "Tā dāng le shí nián lǎoshī.",
+        "en": "He's been a teacher for ten years."
+      }
+    ]
+  },
+  {
+    "hanzi": "律师",
+    "pinyin": "lǜshī",
+    "definition": "lawyer",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我妹妹想当律师。",
+        "pinyin": "Wǒ mèimei xiǎng dāng lǜshī.",
+        "en": "My younger sister wants to be a lawyer."
+      },
+      {
+        "zh": "律师工作很忙。",
+        "pinyin": "Lǜshī gōngzuò hěn máng.",
+        "en": "Lawyers' work is very busy."
+      }
+    ]
+  },
+  {
+    "hanzi": "以后",
+    "pinyin": "yǐhòu",
+    "definition": "afterwards",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你以后想做什么工作？",
+        "pinyin": "Nǐ yǐhòu xiǎng zuò shénme gōngzuò?",
+        "en": "What job do you want in the future?"
+      },
+      {
+        "zh": "以后我想当老师。",
+        "pinyin": "Yǐhòu wǒ xiǎng dāng lǎoshī.",
+        "en": "In the future I want to be a teacher."
+      }
+    ]
+  },
+  {
+    "hanzi": "银行",
+    "pinyin": "yínháng",
+    "definition": "bank",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:places,jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我爸爸在银行工作。",
+        "pinyin": "Wǒ bàba zài yínháng gōngzuò.",
+        "en": "My dad works at a bank."
+      },
+      {
+        "zh": "银行几点开门？",
+        "pinyin": "Yínháng jǐ diǎn kāimén?",
+        "en": "What time does the bank open?"
+      }
+    ]
+  },
+  {
+    "hanzi": "经理",
+    "pinyin": "jīnglǐ",
+    "definition": "manager",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他是公司的经理。",
+        "pinyin": "Tā shì gōngsī de jīnglǐ.",
+        "en": "He is the company's manager."
+      },
+      {
+        "zh": "经理今天不在。",
+        "pinyin": "Jīnglǐ jīntiān bú zài.",
+        "en": "The manager isn't in today."
+      }
+    ]
+  },
+  {
+    "hanzi": "公司",
+    "pinyin": "gōngsī",
+    "definition": "company",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs,places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我在一家公司工作。",
+        "pinyin": "Wǒ zài yī jiā gōngsī gōngzuò.",
+        "en": "I work at a company."
+      },
+      {
+        "zh": "这家公司很有名。",
+        "pinyin": "Zhè jiā gōngsī hěn yǒumíng.",
+        "en": "This company is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "会计",
+    "pinyin": "kuàijì",
+    "definition": "accountant",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:medium",
+      "topic:jobs",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我姐姐是会计。",
+        "pinyin": "Wǒ jiějie shì kuàijì.",
+        "en": "My older sister is an accountant."
+      },
+      {
+        "zh": "会计的工作很仔细。",
+        "pinyin": "Kuàijì de gōngzuò hěn zǐxì.",
+        "en": "An accountant's work requires care."
+      }
+    ]
+  },
+  {
+    "hanzi": "警察",
+    "pinyin": "jǐngchá",
+    "definition": "police",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他是一名警察。",
+        "pinyin": "Tā shì yī míng jǐngchá.",
+        "en": "He is a police officer."
+      },
+      {
+        "zh": "警察帮助我们找到了手机。",
+        "pinyin": "Jǐngchá bāngzhù wǒmen zhǎodào le shǒujī.",
+        "en": "The police helped us find the phone."
+      }
+    ]
+  },
+  {
+    "hanzi": "派出所",
+    "pinyin": "pàichūsuǒ",
+    "definition": "police substation",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:low",
+      "topic:places"
+    ],
+    "sentences": [
+      {
+        "zh": "派出所就在学校附近。",
+        "pinyin": "Pàichūsuǒ jiù zài xuéxiào fùjìn.",
+        "en": "The police substation is right near the school."
+      },
+      {
+        "zh": "有事可以去派出所。",
+        "pinyin": "Yǒu shì kěyǐ qù pàichūsuǒ.",
+        "en": "If something happens, you can go to the police substation."
+      }
+    ]
+  },
+  {
+    "hanzi": "收银员",
+    "pinyin": "shōuyínyuán",
+    "definition": "cashier",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:medium",
+      "topic:jobs"
+    ],
+    "sentences": [
+      {
+        "zh": "收银员在收钱。",
+        "pinyin": "Shōuyínyuán zài shōu qián.",
+        "en": "The cashier is taking payment."
+      },
+      {
+        "zh": "她是超市的收银员。",
+        "pinyin": "Tā shì chāoshì de shōuyínyuán.",
+        "en": "She is the supermarket's cashier."
+      }
+    ]
+  },
+  {
+    "hanzi": "超市",
+    "pinyin": "chāoshì",
+    "definition": "supermarket",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我去超市买水果。",
+        "pinyin": "Wǒ qù chāoshì mǎi shuǐguǒ.",
+        "en": "I'm going to the supermarket to buy fruit."
+      },
+      {
+        "zh": "超市离宿舍很近。",
+        "pinyin": "Chāoshì lí sùshè hěn jìn.",
+        "en": "The supermarket is close to the dorm."
+      }
+    ]
+  },
+  {
+    "hanzi": "厨师",
+    "pinyin": "chúshī",
+    "definition": "cook; chef",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:jobs",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他想当厨师。",
+        "pinyin": "Tā xiǎng dāng chúshī.",
+        "en": "He wants to be a chef."
+      },
+      {
+        "zh": "这家饭馆的厨师做菜很好吃。",
+        "pinyin": "Zhè jiā fànguǎn de chúshī zuò cài hěn hǎochī.",
+        "en": "This restaurant's chef cooks delicious food."
+      }
+    ]
+  },
+  {
+    "hanzi": "饭馆",
+    "pinyin": "fànguǎn",
+    "definition": "restaurant",
+    "tags": [
+      "type:noun",
+      "lesson:lesson7",
+      "frequency:high",
+      "topic:places,food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这家饭馆的菜很好吃。",
+        "pinyin": "Zhè jiā fànguǎn de cài hěn hǎochī.",
+        "en": "The food at this restaurant is delicious."
+      },
+      {
+        "zh": "我们去饭馆吃饭吧。",
+        "pinyin": "Wǒmen qù fànguǎn chīfàn ba.",
+        "en": "Let's go eat at the restaurant."
+      }
+    ]
+  },
+  {
+    "hanzi": "美国",
+    "pinyin": "Měiguó",
+    "definition": "United States of America (USA)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我来自美国。",
+        "pinyin": "Wǒ láizì Měiguó.",
+        "en": "I come from the USA."
+      },
+      {
+        "zh": "美国很大。",
+        "pinyin": "Měiguó hěn dà.",
+        "en": "The USA is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "美国人",
+    "pinyin": "Měiguórén",
+    "definition": "American",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:nationality",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你是美国人吧？",
+        "pinyin": "Nǐ shì Měiguórén ba?",
+        "en": "You're American, right?"
+      },
+      {
+        "zh": "他不是美国人。",
+        "pinyin": "Tā bú shì Měiguórén.",
+        "en": "He is not American."
+      }
+    ]
+  },
+  {
+    "hanzi": "英国",
+    "pinyin": "Yīngguó",
+    "definition": "United Kingdom (UK)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我是英国人。",
+        "pinyin": "Wǒ shì Yīngguórén.",
+        "en": "I am British."
+      },
+      {
+        "zh": "英国有很多博物馆。",
+        "pinyin": "Yīngguó yǒu hěn duō bówùguǎn.",
+        "en": "The UK has many museums."
+      }
+    ]
+  },
+  {
+    "hanzi": "英国人",
+    "pinyin": "Yīngguórén",
+    "definition": "the British",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:nationality",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "不是，我是英国人。",
+        "pinyin": "Bú shì, wǒ shì Yīngguórén.",
+        "en": "No, I am British."
+      },
+      {
+        "zh": "她是英国人。",
+        "pinyin": "Tā shì Yīngguórén.",
+        "en": "She is British."
+      }
+    ]
+  },
+  {
+    "hanzi": "英语",
+    "pinyin": "Yīngyǔ",
+    "definition": "English",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:language",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你会说英语吗？",
+        "pinyin": "Nǐ huì shuō Yīngyǔ ma?",
+        "en": "Can you speak English?"
+      },
+      {
+        "zh": "我会说英语，还会说日语。",
+        "pinyin": "Wǒ huì shuō Yīngyǔ, hái huì shuō Rìyǔ.",
+        "en": "I can speak English, and also Japanese."
+      }
+    ]
+  },
+  {
+    "hanzi": "日语",
+    "pinyin": "Rìyǔ",
+    "definition": "Japanese (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我还会说日语。",
+        "pinyin": "Wǒ hái huì shuō Rìyǔ.",
+        "en": "I can also speak Japanese."
+      },
+      {
+        "zh": "日语和汉语不一样。",
+        "pinyin": "Rìyǔ hé Hànyǔ bù yíyàng.",
+        "en": "Japanese and Chinese are different."
+      }
+    ]
+  },
+  {
+    "hanzi": "来自",
+    "pinyin": "láizì",
+    "definition": "come from",
+    "tags": [
+      "type:verb",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:origin",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你的朋友来自欧洲吗？",
+        "pinyin": "Nǐ de péngyou láizì Ōuzhōu ma?",
+        "en": "Is your friend from Europe?"
+      },
+      {
+        "zh": "我来自中国。",
+        "pinyin": "Wǒ láizì Zhōngguó.",
+        "en": "I come from China."
+      }
+    ]
+  },
+  {
+    "hanzi": "欧洲",
+    "pinyin": "Ōuzhōu",
+    "definition": "Europe",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:geography",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你的朋友来自欧洲吗？",
+        "pinyin": "Nǐ de péngyou láizì Ōuzhōu ma?",
+        "en": "Is your friend from Europe?"
+      },
+      {
+        "zh": "欧洲有很多国家。",
+        "pinyin": "Ōuzhōu yǒu hěn duō guójiā.",
+        "en": "Europe has many countries."
+      }
+    ]
+  },
+  {
+    "hanzi": "德国",
+    "pinyin": "Déguó",
+    "definition": "Germany",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他是德国人。",
+        "pinyin": "Tā shì Déguórén.",
+        "en": "He is German."
+      },
+      {
+        "zh": "德国有很多大学。",
+        "pinyin": "Déguó yǒu hěn duō dàxué.",
+        "en": "Germany has many universities."
+      }
+    ]
+  },
+  {
+    "hanzi": "德国人",
+    "pinyin": "Déguórén",
+    "definition": "German",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:nationality",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "对，他是德国人。",
+        "pinyin": "Duì, tā shì Déguórén.",
+        "en": "Right, he is German."
+      },
+      {
+        "zh": "她的男朋友是德国人。",
+        "pinyin": "Tā de nánpéngyou shì Déguórén.",
+        "en": "Her boyfriend is German."
+      }
+    ]
+  },
+  {
+    "hanzi": "法语",
+    "pinyin": "Fǎyǔ",
+    "definition": "French (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你会说法语吗？",
+        "pinyin": "Nǐ huì shuō Fǎyǔ ma?",
+        "en": "Can you speak French?"
+      },
+      {
+        "zh": "法语听起来很好听。",
+        "pinyin": "Fǎyǔ tīng qǐlai hěn hǎotīng.",
+        "en": "French sounds very nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "一点儿",
+    "pinyin": "yìdiǎnr",
+    "definition": "a bit; a little",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我会说一点儿法语。",
+        "pinyin": "Wǒ huì shuō yìdiǎnr Fǎyǔ.",
+        "en": "I can speak a little French."
+      },
+      {
+        "zh": "请等一点儿。",
+        "pinyin": "Qǐng děng yìdiǎnr.",
+        "en": "Please wait a bit."
+      }
+    ]
+  },
+  {
+    "hanzi": "亚洲",
+    "pinyin": "Yàzhōu",
+    "definition": "Asia",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:geography",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "中国在亚洲。",
+        "pinyin": "Zhōngguó zài Yàzhōu.",
+        "en": "China is in Asia."
+      },
+      {
+        "zh": "亚洲有很多人口。",
+        "pinyin": "Yàzhōu yǒu hěn duō rénkǒu.",
+        "en": "Asia has a large population."
+      }
+    ]
+  },
+  {
+    "hanzi": "日本",
+    "pinyin": "Rìběn",
+    "definition": "Japan",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他来自日本。",
+        "pinyin": "Tā láizì Rìběn.",
+        "en": "He is from Japan."
+      },
+      {
+        "zh": "日本的美食很有名。",
+        "pinyin": "Rìběn de měishí hěn yǒumíng.",
+        "en": "Japanese cuisine is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "日本人",
+    "pinyin": "Rìběnrén",
+    "definition": "Japanese",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:nationality",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她是日本人。",
+        "pinyin": "Tā shì Rìběnrén.",
+        "en": "She is Japanese."
+      },
+      {
+        "zh": "我认识一个日本人。",
+        "pinyin": "Wǒ rènshi yí ge Rìběnrén.",
+        "en": "I know a Japanese person."
+      }
+    ]
+  },
+  {
+    "hanzi": "韩语",
+    "pinyin": "Hányǔ",
+    "definition": "Korean (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我在学韩语。",
+        "pinyin": "Wǒ zài xué Hányǔ.",
+        "en": "I'm learning Korean."
+      },
+      {
+        "zh": "韩语的语法有点儿难。",
+        "pinyin": "Hányǔ de yǔfǎ yǒudiǎnr nán.",
+        "en": "Korean grammar is a bit hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "非洲",
+    "pinyin": "Fēizhōu",
+    "definition": "Africa",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:geography",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "埃及在非洲。",
+        "pinyin": "Āijí zài Fēizhōu.",
+        "en": "Egypt is in Africa."
+      },
+      {
+        "zh": "非洲有很多国家。",
+        "pinyin": "Fēizhōu yǒu hěn duō guójiā.",
+        "en": "Africa has many countries."
+      }
+    ]
+  },
+  {
+    "hanzi": "埃及",
+    "pinyin": "Āijí",
+    "definition": "Egypt",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:countries",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "埃及有很有名的金字塔。",
+        "pinyin": "Āijí yǒu hěn yǒumíng de jīnzìtǎ.",
+        "en": "Egypt has very famous pyramids."
+      },
+      {
+        "zh": "他来自埃及。",
+        "pinyin": "Tā láizì Āijí.",
+        "en": "He is from Egypt."
+      }
+    ]
+  },
+  {
+    "hanzi": "埃及人",
+    "pinyin": "Āijírén",
+    "definition": "Egyptian",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:nationality",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他是埃及人。",
+        "pinyin": "Tā shì Āijírén.",
+        "en": "He is Egyptian."
+      },
+      {
+        "zh": "我朋友是埃及人。",
+        "pinyin": "Wǒ péngyou shì Āijírén.",
+        "en": "My friend is Egyptian."
+      }
+    ]
+  },
+  {
+    "hanzi": "阿拉伯语",
+    "pinyin": "Ālābóyǔ",
+    "definition": "Arabic (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:language",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "埃及人说阿拉伯语。",
+        "pinyin": "Āijírén shuō Ālābóyǔ.",
+        "en": "Egyptians speak Arabic."
+      },
+      {
+        "zh": "阿拉伯语的字母很特别。",
+        "pinyin": "Ālābóyǔ de zìmǔ hěn tèbié.",
+        "en": "Arabic letters are very special."
+      }
+    ]
+  },
+  {
+    "hanzi": "法国",
+    "pinyin": "Fǎguó",
+    "definition": "France",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他来自法国。",
+        "pinyin": "Tā láizì Fǎguó.",
+        "en": "He comes from France."
+      },
+      {
+        "zh": "法国的美食很有名。",
+        "pinyin": "Fǎguó de měishí hěn yǒumíng.",
+        "en": "French cuisine is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "韩国",
+    "pinyin": "Hánguó",
+    "definition": "Republic of Korea",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:high",
+      "topic:countries",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我朋友是韩国人。",
+        "pinyin": "Wǒ péngyou shì Hánguórén.",
+        "en": "My friend is from South Korea."
+      },
+      {
+        "zh": "韩国离中国很近。",
+        "pinyin": "Hánguó lí Zhōngguó hěn jìn.",
+        "en": "South Korea is close to China."
+      }
+    ]
+  },
+  {
+    "hanzi": "德语",
+    "pinyin": "Déyǔ",
+    "definition": "German (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:language",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "他会说德语。",
+        "pinyin": "Tā huì shuō Déyǔ.",
+        "en": "He can speak German."
+      },
+      {
+        "zh": "德语的发音有点儿难。",
+        "pinyin": "Déyǔ de fāyīn yǒudiǎnr nán.",
+        "en": "German pronunciation is a bit hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "西班牙",
+    "pinyin": "Xībānyá",
+    "definition": "Spain",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:countries",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我想去西班牙旅行。",
+        "pinyin": "Wǒ xiǎng qù Xībānyá lǚxíng.",
+        "en": "I want to travel to Spain."
+      },
+      {
+        "zh": "西班牙的美食很好吃。",
+        "pinyin": "Xībānyá de měishí hěn hǎochī.",
+        "en": "Spanish food is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "西班牙语",
+    "pinyin": "Xībānyáyǔ",
+    "definition": "Spanish (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:language",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你会不会说西班牙语？",
+        "pinyin": "Nǐ huì bú huì shuō Xībānyáyǔ?",
+        "en": "Can you speak Spanish?"
+      },
+      {
+        "zh": "我不会说西班牙语。",
+        "pinyin": "Wǒ bú huì shuō Xībānyáyǔ.",
+        "en": "I can't speak Spanish."
+      }
+    ]
+  },
+  {
+    "hanzi": "俄罗斯",
+    "pinyin": "Éluósī",
+    "definition": "Russia",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:countries",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "俄罗斯很大。",
+        "pinyin": "Éluósī hěn dà.",
+        "en": "Russia is very big."
+      },
+      {
+        "zh": "她来自俄罗斯。",
+        "pinyin": "Tā láizì Éluósī.",
+        "en": "She comes from Russia."
+      }
+    ]
+  },
+  {
+    "hanzi": "俄语",
+    "pinyin": "Éyǔ",
+    "definition": "Russian (language)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:language",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我在学俄语。",
+        "pinyin": "Wǒ zài xué Éyǔ.",
+        "en": "I'm learning Russian."
+      },
+      {
+        "zh": "俄语的字母跟英语不一样。",
+        "pinyin": "Éyǔ de zìmǔ gēn Yīngyǔ bù yíyàng.",
+        "en": "Russian letters are different from English."
+      }
+    ]
+  },
+  {
+    "hanzi": "美洲",
+    "pinyin": "Měizhōu",
+    "definition": "America",
+    "tags": [
+      "type:noun",
+      "lesson:lesson8",
+      "frequency:medium",
+      "topic:geography",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "美国在美洲。",
+        "pinyin": "Měiguó zài Měizhōu.",
+        "en": "The USA is in America."
+      },
+      {
+        "zh": "美洲有很多国家。",
+        "pinyin": "Měizhōu yǒu hěn duō guójiā.",
+        "en": "The Americas have many countries."
+      }
+    ]
+  },
+  {
+    "hanzi": "点",
+    "pinyin": "diǎn",
+    "definition": "o'clock",
+    "tags": [
+      "type:measure",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "现在几点？",
+        "pinyin": "Xiànzài jǐ diǎn?",
+        "en": "What time is it now?"
+      },
+      {
+        "zh": "现在上午九点。",
+        "pinyin": "Xiànzài shàngwǔ jiǔ diǎn.",
+        "en": "It's 9am now."
+      }
+    ]
+  },
+  {
+    "hanzi": "上午",
+    "pinyin": "shàngwǔ",
+    "definition": "morning",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "现在上午九点。",
+        "pinyin": "Xiànzài shàngwǔ jiǔ diǎn.",
+        "en": "It's 9am now."
+      },
+      {
+        "zh": "我上午有课。",
+        "pinyin": "Wǒ shàngwǔ yǒu kè.",
+        "en": "I have class in the morning."
+      }
+    ]
+  },
+  {
+    "hanzi": "每天",
+    "pinyin": "měitiān",
+    "definition": "every day",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time,habits",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你每天几点起床？",
+        "pinyin": "Nǐ měitiān jǐ diǎn qǐchuáng?",
+        "en": "What time do you get up every day?"
+      },
+      {
+        "zh": "我每天早上七点半起床。",
+        "pinyin": "Wǒ měitiān zǎoshang qī diǎn bàn qǐchuáng.",
+        "en": "I get up at 7:30 every morning."
+      }
+    ]
+  },
+  {
+    "hanzi": "起床",
+    "pinyin": "qǐchuáng",
+    "definition": "get up",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:daily routine",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "你每天几点起床？",
+        "pinyin": "Nǐ měitiān jǐ diǎn qǐchuáng?",
+        "en": "What time do you get up every day?"
+      },
+      {
+        "zh": "我七点起床。",
+        "pinyin": "Wǒ qī diǎn qǐchuáng.",
+        "en": "I get up at seven."
+      }
+    ]
+  },
+  {
+    "hanzi": "半",
+    "pinyin": "bàn",
+    "definition": "half",
+    "tags": [
+      "type:number",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我七点半起床。",
+        "pinyin": "Wǒ qī diǎn bàn qǐchuáng.",
+        "en": "I get up at 7:30."
+      },
+      {
+        "zh": "现在是三点半。",
+        "pinyin": "Xiànzài shì sān diǎn bàn.",
+        "en": "It's 3:30 now."
+      }
+    ]
+  },
+  {
+    "hanzi": "晚上",
+    "pinyin": "wǎnshang",
+    "definition": "evening; night",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "晚上我喜欢看书。",
+        "pinyin": "Wǎnshang wǒ xǐhuan kàn shū.",
+        "en": "I like reading in the evening."
+      },
+      {
+        "zh": "晚上十点我睡觉。",
+        "pinyin": "Wǎnshang shí diǎn wǒ shuìjiào.",
+        "en": "I go to sleep at 10pm."
+      }
+    ]
+  },
+  {
+    "hanzi": "睡觉",
+    "pinyin": "shuìjiào",
+    "definition": "sleep; go to bed",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:daily routine",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我晚上十点睡觉。",
+        "pinyin": "Wǒ wǎnshang shí diǎn shuìjiào.",
+        "en": "I go to bed at 10pm."
+      },
+      {
+        "zh": "你几点睡觉？",
+        "pinyin": "Nǐ jǐ diǎn shuìjiào?",
+        "en": "What time do you go to bed?"
+      }
+    ]
+  },
+  {
+    "hanzi": "以前",
+    "pinyin": "yǐqián",
+    "definition": "before",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "睡觉以前我洗澡。",
+        "pinyin": "Shuìjiào yǐqián wǒ xǐzǎo.",
+        "en": "Before going to bed I take a bath."
+      },
+      {
+        "zh": "以前我不喜欢运动。",
+        "pinyin": "Yǐqián wǒ bù xǐhuan yùndòng.",
+        "en": "Before, I didn't like exercising."
+      }
+    ]
+  },
+  {
+    "hanzi": "先",
+    "pinyin": "xiān",
+    "definition": "first",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:sequence",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我先吃早饭，然后上学。",
+        "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+        "en": "I eat breakfast first, then go to school."
+      },
+      {
+        "zh": "请先坐一下。",
+        "pinyin": "Qǐng xiān zuò yīxià.",
+        "en": "Please sit down first."
+      }
+    ]
+  },
+  {
+    "hanzi": "早饭",
+    "pinyin": "zǎofàn",
+    "definition": "breakfast",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:food,daily routine",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我先吃早饭。",
+        "pinyin": "Wǒ xiān chī zǎofàn.",
+        "en": "I eat breakfast first."
+      },
+      {
+        "zh": "你吃早饭了吗？",
+        "pinyin": "Nǐ chī zǎofàn le ma?",
+        "en": "Have you eaten breakfast?"
+      }
+    ]
+  },
+  {
+    "hanzi": "然后",
+    "pinyin": "ránhòu",
+    "definition": "then; after that",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:sequence",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我先吃早饭，然后上学。",
+        "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+        "en": "I eat breakfast first, then go to school."
+      },
+      {
+        "zh": "先做作业，然后玩电脑。",
+        "pinyin": "Xiān zuò zuòyè, ránhòu wán diànnǎo.",
+        "en": "Do homework first, then play on the computer."
+      }
+    ]
+  },
+  {
+    "hanzi": "上学",
+    "pinyin": "shàngxué",
+    "definition": "go to school",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:school,daily routine",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我先吃早饭，然后上学。",
+        "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+        "en": "I eat breakfast first, then go to school."
+      },
+      {
+        "zh": "你几点上学？",
+        "pinyin": "Nǐ jǐ diǎn shàngxué?",
+        "en": "What time do you go to school?"
+      }
+    ]
+  },
+  {
+    "hanzi": "时候",
+    "pinyin": "shíhou",
+    "definition": "time; moment",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你什么时候上课？",
+        "pinyin": "Nǐ shénme shíhou shàngkè?",
+        "en": "When do you have class?"
+      },
+      {
+        "zh": "睡觉的时候不要玩手机。",
+        "pinyin": "Shuìjiào de shíhou bú yào wán shǒujī.",
+        "en": "Don't play with your phone when it's time to sleep."
+      }
+    ]
+  },
+  {
+    "hanzi": "下课",
+    "pinyin": "xiàkè",
+    "definition": "dismiss a class",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:school",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我们下午三点下课。",
+        "pinyin": "Wǒmen xiàwǔ sān diǎn xiàkè.",
+        "en": "Our class ends at 3pm."
+      },
+      {
+        "zh": "下课以后我们去吃饭。",
+        "pinyin": "Xiàkè yǐhòu wǒmen qù chīfàn.",
+        "en": "After class we go eat."
+      }
+    ]
+  },
+  {
+    "hanzi": "洗澡",
+    "pinyin": "xǐzǎo",
+    "definition": "take a bath",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:daily routine",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "睡觉以前我洗澡。",
+        "pinyin": "Shuìjiào yǐqián wǒ xǐzǎo.",
+        "en": "Before going to bed I take a bath."
+      },
+      {
+        "zh": "我每天晚上洗澡。",
+        "pinyin": "Wǒ měitiān wǎnshang xǐzǎo.",
+        "en": "I take a bath every night."
+      }
+    ]
+  },
+  {
+    "hanzi": "音乐",
+    "pinyin": "yīnyuè",
+    "definition": "music",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:hobbies",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢听音乐。",
+        "pinyin": "Wǒ xǐhuan tīng yīnyuè.",
+        "en": "I like listening to music."
+      },
+      {
+        "zh": "这首音乐很好听。",
+        "pinyin": "Zhè shǒu yīnyuè hěn hǎotīng.",
+        "en": "This piece of music is very nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "玩",
+    "pinyin": "wán",
+    "definition": "play",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:activities",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢玩电脑。",
+        "pinyin": "Wǒ xǐhuan wán diànnǎo.",
+        "en": "I like playing on the computer."
+      },
+      {
+        "zh": "我们一起玩吧。",
+        "pinyin": "Wǒmen yìqǐ wán ba.",
+        "en": "Let's play together."
+      }
+    ]
+  },
+  {
+    "hanzi": "电脑",
+    "pinyin": "diànnǎo",
+    "definition": "computer",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:electronics",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢玩电脑。",
+        "pinyin": "Wǒ xǐhuan wán diànnǎo.",
+        "en": "I like playing on the computer."
+      },
+      {
+        "zh": "我的电脑坏了。",
+        "pinyin": "Wǒ de diànnǎo huài le.",
+        "en": "My computer is broken."
+      }
+    ]
+  },
+  {
+    "hanzi": "上课",
+    "pinyin": "shàngkè",
+    "definition": "go to class; attend a class",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:school",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我上午九点上课。",
+        "pinyin": "Wǒ shàngwǔ jiǔ diǎn shàngkè.",
+        "en": "I go to class at 9am."
+      },
+      {
+        "zh": "我们八点上课。",
+        "pinyin": "Wǒmen bā diǎn shàngkè.",
+        "en": "We start class at 8."
+      }
+    ]
+  },
+  {
+    "hanzi": "午饭",
+    "pinyin": "wǔfàn",
+    "definition": "lunch",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:food,daily routine",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我十二点吃午饭。",
+        "pinyin": "Wǒ shí'èr diǎn chī wǔfàn.",
+        "en": "I eat lunch at noon."
+      },
+      {
+        "zh": "午饭你想吃什么？",
+        "pinyin": "Wǔfàn nǐ xiǎng chī shénme?",
+        "en": "What do you want to eat for lunch?"
+      }
+    ]
+  },
+  {
+    "hanzi": "分",
+    "pinyin": "fēn",
+    "definition": "minute",
+    "tags": [
+      "type:measure",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "现在九点十五分。",
+        "pinyin": "Xiànzài jiǔ diǎn shíwǔ fēn.",
+        "en": "It's now 9:15."
+      },
+      {
+        "zh": "请等五分钟。",
+        "pinyin": "Qǐng děng wǔ fēnzhōng.",
+        "en": "Please wait five minutes."
+      }
+    ]
+  },
+  {
+    "hanzi": "放学",
+    "pinyin": "fàngxué",
+    "definition": "dismiss school",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:school",
+      "hsk:2",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我们下午四点放学。",
+        "pinyin": "Wǒmen xiàwǔ sì diǎn fàngxué.",
+        "en": "We finish school at 4pm."
+      },
+      {
+        "zh": "放学以后我做作业。",
+        "pinyin": "Fàngxué yǐhòu wǒ zuò zuòyè.",
+        "en": "After school I do homework."
+      }
+    ]
+  },
+  {
+    "hanzi": "打扫",
+    "pinyin": "dǎsǎo",
+    "definition": "sweep; clean",
+    "tags": [
+      "type:verb",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:chores",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我打扫我的房间。",
+        "pinyin": "Wǒ dǎsǎo wǒ de fángjiān.",
+        "en": "I clean my room."
+      },
+      {
+        "zh": "周末我们一起打扫。",
+        "pinyin": "Zhōumò wǒmen yìqǐ dǎsǎo.",
+        "en": "We clean together on the weekend."
+      }
+    ]
+  },
+  {
+    "hanzi": "房间",
+    "pinyin": "fángjiān",
+    "definition": "room",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:home",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我打扫我的房间。",
+        "pinyin": "Wǒ dǎsǎo wǒ de fángjiān.",
+        "en": "I clean my room."
+      },
+      {
+        "zh": "这个房间很大。",
+        "pinyin": "Zhège fángjiān hěn dà.",
+        "en": "This room is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "做饭",
+    "pinyin": "zuò fàn",
+    "definition": "cook",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:food,chores",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "妈妈在做饭。",
+        "pinyin": "Māma zài zuò fàn.",
+        "en": "Mom is cooking."
+      },
+      {
+        "zh": "我不会做饭。",
+        "pinyin": "Wǒ bú huì zuò fàn.",
+        "en": "I don't know how to cook."
+      }
+    ]
+  },
+  {
+    "hanzi": "作业",
+    "pinyin": "zuòyè",
+    "definition": "homework",
+    "tags": [
+      "type:noun",
+      "lesson:lesson9",
+      "frequency:high",
+      "topic:school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你写作业了吗？",
+        "pinyin": "Nǐ xiě zuòyè le ma?",
+        "en": "Have you done your homework?"
+      },
+      {
+        "zh": "今天的作业很多。",
+        "pinyin": "Jīntiān de zuòyè hěn duō.",
+        "en": "Today's homework is a lot."
+      }
+    ]
+  },
+  {
+    "hanzi": "季节",
+    "pinyin": "jìjié",
+    "definition": "season",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "在中国，一年有几个季节？",
+        "pinyin": "Zài Zhōngguó, yī nián yǒu jǐ ge jìjié?",
+        "en": "In China, how many seasons are there in a year?"
+      },
+      {
+        "zh": "你最喜欢哪个季节？",
+        "pinyin": "Nǐ zuì xǐhuan nǎ ge jìjié?",
+        "en": "Which season do you like best?"
+      }
+    ]
+  },
+  {
+    "hanzi": "春天",
+    "pinyin": "chūntiān",
+    "definition": "spring",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:seasons",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "三月到五月是春天。",
+        "pinyin": "Sānyuè dào wǔyuè shì chūntiān.",
+        "en": "March to May is spring."
+      },
+      {
+        "zh": "春天花开了。",
+        "pinyin": "Chūntiān huā kāi le.",
+        "en": "Flowers bloom in spring."
+      }
+    ]
+  },
+  {
+    "hanzi": "夏天",
+    "pinyin": "xiàtiān",
+    "definition": "summer",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:seasons",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你喜欢夏天还是冬天？",
+        "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+        "en": "Do you like summer or winter?"
+      },
+      {
+        "zh": "夏天很热。",
+        "pinyin": "Xiàtiān hěn rè.",
+        "en": "Summer is very hot."
+      }
+    ]
+  },
+  {
+    "hanzi": "秋天",
+    "pinyin": "qiūtiān",
+    "definition": "autumn",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:seasons",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "秋天树叶变黄了。",
+        "pinyin": "Qiūtiān shùyè biàn huáng le.",
+        "en": "Leaves turn yellow in autumn."
+      },
+      {
+        "zh": "秋天天气很凉爽。",
+        "pinyin": "Qiūtiān tiānqì hěn liángshuǎng.",
+        "en": "The weather is nice and cool in autumn."
+      }
+    ]
+  },
+  {
+    "hanzi": "冬天",
+    "pinyin": "dōngtiān",
+    "definition": "winter",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:seasons",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "冬天很冷。",
+        "pinyin": "Dōngtiān hěn lěng.",
+        "en": "Winter is very cold."
+      },
+      {
+        "zh": "你喜欢夏天还是冬天？",
+        "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+        "en": "Do you like summer or winter?"
+      }
+    ]
+  },
+  {
+    "hanzi": "到",
+    "pinyin": "dào",
+    "definition": "get to",
+    "tags": [
+      "type:verb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:movement",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "三月到五月是春天。",
+        "pinyin": "Sānyuè dào wǔyuè shì chūntiān.",
+        "en": "March to May is spring."
+      },
+      {
+        "zh": "我们几点到？",
+        "pinyin": "Wǒmen jǐ diǎn dào?",
+        "en": "What time will we arrive?"
+      }
+    ]
+  },
+  {
+    "hanzi": "气候",
+    "pinyin": "qìhòu",
+    "definition": "climate",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:weather",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "武汉的气候怎么样？",
+        "pinyin": "Wǔhàn de qìhòu zěnmeyàng?",
+        "en": "What's the climate like in Wuhan?"
+      },
+      {
+        "zh": "这个城市气候很暖和。",
+        "pinyin": "Zhège chéngshì qìhòu hěn nuǎnhuo.",
+        "en": "This city's climate is very warm."
+      }
+    ]
+  },
+  {
+    "hanzi": "怎么样",
+    "pinyin": "zěnmeyàng",
+    "definition": "how",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "武汉的气候怎么样？",
+        "pinyin": "Wǔhàn de qìhòu zěnmeyàng?",
+        "en": "What's the climate like in Wuhan?"
+      },
+      {
+        "zh": "今天天气怎么样？",
+        "pinyin": "Jīntiān tiānqì zěnmeyàng?",
+        "en": "How's the weather today?"
+      }
+    ]
+  },
+  {
+    "hanzi": "暖和",
+    "pinyin": "nuǎnhuo",
+    "definition": "nice and warm",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "春天很暖和。",
+        "pinyin": "Chūntiān hěn nuǎnhuo.",
+        "en": "Spring is nice and warm."
+      },
+      {
+        "zh": "今天天气很暖和。",
+        "pinyin": "Jīntiān tiānqì hěn nuǎnhuo.",
+        "en": "Today's weather is warm and nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "喜欢",
+    "pinyin": "xǐhuan",
+    "definition": "like",
+    "tags": [
+      "type:verb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:preferences",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你喜欢夏天还是冬天？",
+        "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+        "en": "Do you like summer or winter?"
+      },
+      {
+        "zh": "我喜欢春天。",
+        "pinyin": "Wǒ xǐhuan chūntiān.",
+        "en": "I like spring."
+      }
+    ]
+  },
+  {
+    "hanzi": "还是",
+    "pinyin": "háishi",
+    "definition": "or",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你喜欢夏天还是冬天？",
+        "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+        "en": "Do you like summer or winter?"
+      },
+      {
+        "zh": "你想喝茶还是咖啡？",
+        "pinyin": "Nǐ xiǎng hē chá háishi kāfēi?",
+        "en": "Would you like tea or coffee?"
+      }
+    ]
+  },
+  {
+    "hanzi": "为什么",
+    "pinyin": "wèishénme",
+    "definition": "why",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:questions",
+      "hsk:1",
+      "grammar:question word"
+    ],
+    "sentences": [
+      {
+        "zh": "你为什么喜欢秋天？",
+        "pinyin": "Nǐ wèishénme xǐhuan qiūtiān?",
+        "en": "Why do you like autumn?"
+      },
+      {
+        "zh": "为什么天气这么冷？",
+        "pinyin": "Wèishénme tiānqì zhème lěng?",
+        "en": "Why is the weather so cold?"
+      }
+    ]
+  },
+  {
+    "hanzi": "因为",
+    "pinyin": "yīnwèi",
+    "definition": "because",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "因为秋天很凉爽，所以我喜欢秋天。",
+        "pinyin": "Yīnwèi qiūtiān hěn liángshuǎng, suǒyǐ wǒ xǐhuan qiūtiān.",
+        "en": "Because autumn is nice and cool, I like autumn."
+      },
+      {
+        "zh": "因为下雨，我们不能出去。",
+        "pinyin": "Yīnwèi xià yǔ, wǒmen bùnéng chūqù.",
+        "en": "Because it's raining, we can't go out."
+      }
+    ]
+  },
+  {
+    "hanzi": "可以",
+    "pinyin": "kěyǐ",
+    "definition": "can",
+    "tags": [
+      "type:verb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:permission",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "春天可以去春游。",
+        "pinyin": "Chūntiān kěyǐ qù chūnyóu.",
+        "en": "In spring you can go on a spring outing."
+      },
+      {
+        "zh": "我可以坐这儿吗？",
+        "pinyin": "Wǒ kěyǐ zuò zhèr ma?",
+        "en": "Can I sit here?"
+      }
+    ]
+  },
+  {
+    "hanzi": "跟",
+    "pinyin": "gēn",
+    "definition": "with",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我跟朋友一起春游。",
+        "pinyin": "Wǒ gēn péngyou yìqǐ chūnyóu.",
+        "en": "I go on a spring outing with friends."
+      },
+      {
+        "zh": "你跟他一起去吗？",
+        "pinyin": "Nǐ gēn tā yìqǐ qù ma?",
+        "en": "Are you going with him?"
+      }
+    ]
+  },
+  {
+    "hanzi": "一起",
+    "pinyin": "yìqǐ",
+    "definition": "together",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:social",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们一起去春游吧。",
+        "pinyin": "Wǒmen yìqǐ qù chūnyóu ba.",
+        "en": "Let's go on a spring outing together."
+      },
+      {
+        "zh": "一起吃饭吧。",
+        "pinyin": "Yìqǐ chī fàn ba.",
+        "en": "Let's eat together."
+      }
+    ]
+  },
+  {
+    "hanzi": "春游",
+    "pinyin": "chūnyóu",
+    "definition": "go on a spring outing",
+    "tags": [
+      "type:verb",
+      "lesson:lesson10",
+      "frequency:medium",
+      "topic:activities"
+    ],
+    "sentences": [
+      {
+        "zh": "我们一起去春游吧。",
+        "pinyin": "Wǒmen yìqǐ qù chūnyóu ba.",
+        "en": "Let's go on a spring outing together."
+      },
+      {
+        "zh": "学校组织了一次春游。",
+        "pinyin": "Xuéxiào zǔzhī le yī cì chūnyóu.",
+        "en": "The school organized a spring outing."
+      }
+    ]
+  },
+  {
+    "hanzi": "太",
+    "pinyin": "tài",
+    "definition": "excessively; too",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "夏天太热了。",
+        "pinyin": "Xiàtiān tài rè le.",
+        "en": "Summer is too hot."
+      },
+      {
+        "zh": "这件衣服太贵了。",
+        "pinyin": "Zhè jiàn yīfu tài guì le.",
+        "en": "This piece of clothing is too expensive."
+      }
+    ]
+  },
+  {
+    "hanzi": "冷",
+    "pinyin": "lěng",
+    "definition": "cold",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:weather",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "冬天很冷。",
+        "pinyin": "Dōngtiān hěn lěng.",
+        "en": "Winter is very cold."
+      },
+      {
+        "zh": "今天有点儿冷。",
+        "pinyin": "Jīntiān yǒudiǎnr lěng.",
+        "en": "It's a bit cold today."
+      }
+    ]
+  },
+  {
+    "hanzi": "最",
+    "pinyin": "zuì",
+    "definition": "most",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我最喜欢秋天。",
+        "pinyin": "Wǒ zuì xǐhuan qiūtiān.",
+        "en": "I like autumn the most."
+      },
+      {
+        "zh": "这是最好的办法。",
+        "pinyin": "Zhè shì zuì hǎo de bànfǎ.",
+        "en": "This is the best way."
+      }
+    ]
+  },
+  {
+    "hanzi": "热",
+    "pinyin": "rè",
+    "definition": "hot",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:weather",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "夏天很热。",
+        "pinyin": "Xiàtiān hěn rè.",
+        "en": "Summer is very hot."
+      },
+      {
+        "zh": "这碗汤很热。",
+        "pinyin": "Zhè wǎn tāng hěn rè.",
+        "en": "This bowl of soup is very hot."
+      }
+    ]
+  },
+  {
+    "hanzi": "凉爽",
+    "pinyin": "liángshuǎng",
+    "definition": "nice and cool",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:medium",
+      "topic:weather",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "秋天很凉爽。",
+        "pinyin": "Qiūtiān hěn liángshuǎng.",
+        "en": "Autumn is nice and cool."
+      },
+      {
+        "zh": "晚上比较凉爽。",
+        "pinyin": "Wǎnshang bǐjiào liángshuǎng.",
+        "en": "It's cooler in the evening."
+      }
+    ]
+  },
+  {
+    "hanzi": "花",
+    "pinyin": "huā",
+    "definition": "flower",
+    "tags": [
+      "type:noun",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:nature",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "春天花开了。",
+        "pinyin": "Chūntiān huā kāi le.",
+        "en": "Flowers bloom in spring."
+      },
+      {
+        "zh": "这些花很漂亮。",
+        "pinyin": "Zhèxiē huā hěn piàoliang.",
+        "en": "These flowers are very beautiful."
+      }
+    ]
+  },
+  {
+    "hanzi": "开",
+    "pinyin": "kāi",
+    "definition": "open out",
+    "tags": [
+      "type:verb",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "春天花开了。",
+        "pinyin": "Chūntiān huā kāi le.",
+        "en": "Flowers bloom in spring."
+      },
+      {
+        "zh": "请把窗户开开。",
+        "pinyin": "Qǐng bǎ chuānghu kāi kāi.",
+        "en": "Please open the window."
+      }
+    ]
+  },
+  {
+    "hanzi": "又……又……",
+    "pinyin": "yòu…yòu…",
+    "definition": "both...and...; not only...but also...",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "夏天又热又潮湿。",
+        "pinyin": "Xiàtiān yòu rè yòu cháoshī.",
+        "en": "Summer is both hot and humid."
+      },
+      {
+        "zh": "这个菜又便宜又好吃。",
+        "pinyin": "Zhège cài yòu piányi yòu hǎochī.",
+        "en": "This dish is both cheap and delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "舒服",
+    "pinyin": "shūfu",
+    "definition": "comfortable",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "春天的天气很舒服。",
+        "pinyin": "Chūntiān de tiānqì hěn shūfu.",
+        "en": "The weather in spring is very comfortable."
+      },
+      {
+        "zh": "这张椅子很舒服。",
+        "pinyin": "Zhè zhāng yǐzi hěn shūfu.",
+        "en": "This chair is very comfortable."
+      }
+    ]
+  },
+  {
+    "hanzi": "开心",
+    "pinyin": "kāixīn",
+    "definition": "happy",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson10",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "春游让我很开心。",
+        "pinyin": "Chūnyóu ràng wǒ hěn kāixīn.",
+        "en": "The spring outing made me very happy."
+      },
+      {
+        "zh": "我们玩得很开心。",
+        "pinyin": "Wǒmen wán de hěn kāixīn.",
+        "en": "We had a great time."
+      }
+    ]
+  },
+  {
+    "hanzi": "天气",
+    "pinyin": "tiānqì",
+    "definition": "weather",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "今天天气很好，不冷不热。",
+        "pinyin": "Jīntiān tiānqì hěn hǎo, bù lěng bú rè.",
+        "en": "Nice weather today, not cold, not hot."
+      },
+      {
+        "zh": "你查一下明天的天气。",
+        "pinyin": "Nǐ chá yīxià míngtiān de tiānqì.",
+        "en": "Check tomorrow's weather."
+      }
+    ]
+  },
+  {
+    "hanzi": "预报",
+    "pinyin": "yùbào",
+    "definition": "forecast",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "天气预报说今天晴天。",
+        "pinyin": "Tiānqì yùbào shuō jīntiān qíngtiān.",
+        "en": "The weather forecast says sunny today."
+      },
+      {
+        "zh": "你相信天气预报吗？",
+        "pinyin": "Nǐ xiāngxìn tiānqì yùbào ma?",
+        "en": "Do you trust the weather forecast?"
+      }
+    ]
+  },
+  {
+    "hanzi": "晴天",
+    "pinyin": "qíngtiān",
+    "definition": "sunny day",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "天气预报说今天晴天。",
+        "pinyin": "Tiānqì yùbào shuō jīntiān qíngtiān.",
+        "en": "The forecast says sunny today."
+      },
+      {
+        "zh": "晴天适合出去玩。",
+        "pinyin": "Qíngtiān shìhé chūqù wán.",
+        "en": "Sunny days are good for going out."
+      }
+    ]
+  },
+  {
+    "hanzi": "下雨",
+    "pinyin": "xià yǔ",
+    "definition": "rain",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "今天会下雨。",
+        "pinyin": "Jīntiān huì xià yǔ.",
+        "en": "It will rain today."
+      },
+      {
+        "zh": "下雨了，记得带伞。",
+        "pinyin": "Xià yǔ le, jìde dài sǎn.",
+        "en": "It's raining, remember to bring an umbrella."
+      }
+    ]
+  },
+  {
+    "hanzi": "了",
+    "pinyin": "le",
+    "definition": "[used at the end of a sentence to indicate a change of situation or state]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:aspect particle"
+    ],
+    "sentences": [
+      {
+        "zh": "下雨了。",
+        "pinyin": "Xià yǔ le.",
+        "en": "It's raining now (change)."
+      },
+      {
+        "zh": "我吃了饭。",
+        "pinyin": "Wǒ chī le fàn.",
+        "en": "I ate (completion)."
+      }
+    ]
+  },
+  {
+    "hanzi": "还",
+    "pinyin": "hái",
+    "definition": "still; even",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他还没来。",
+        "pinyin": "Tā hái méi lái.",
+        "en": "He still hasn't come."
+      },
+      {
+        "zh": "我还想再吃一个。",
+        "pinyin": "Wǒ hái xiǎng zài chī yí ge.",
+        "en": "I even want to eat another one."
+      }
+    ]
+  },
+  {
+    "hanzi": "出去",
+    "pinyin": "chūqù",
+    "definition": "go out",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1",
+      "grammar:directional complement"
+    ],
+    "sentences": [
+      {
+        "zh": "我要出去买东西。",
+        "pinyin": "Wǒ yào chūqù mǎi dōngxi.",
+        "en": "I'm going out to buy things."
+      },
+      {
+        "zh": "太冷了，不想出去。",
+        "pinyin": "Tài lěng le, bù xiǎng chūqù.",
+        "en": "It's too cold, I don't want to go out."
+      }
+    ]
+  },
+  {
+    "hanzi": "度",
+    "pinyin": "dù",
+    "definition": "degree [unit of measurement for angles, temperature, latitude or longitude]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather,measurement",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "今天三十度。",
+        "pinyin": "Jīntiān sānshí dù.",
+        "en": "Today is 30 degrees."
+      },
+      {
+        "zh": "水温多少度？",
+        "pinyin": "Shuǐwēn duōshao dù?",
+        "en": "What's the water temperature?"
+      }
+    ]
+  },
+  {
+    "hanzi": "高",
+    "pinyin": "gāo",
+    "definition": "high",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "温度很高。",
+        "pinyin": "Wēndù hěn gāo.",
+        "en": "The temperature is high."
+      },
+      {
+        "zh": "这座山很高。",
+        "pinyin": "Zhè zuò shān hěn gāo.",
+        "en": "This mountain is very tall."
+      }
+    ]
+  },
+  {
+    "hanzi": "温度",
+    "pinyin": "wēndù",
+    "definition": "temperature",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "室内温度正好。",
+        "pinyin": "Shìnèi wēndù zhènghǎo.",
+        "en": "The indoor temperature is just right."
+      },
+      {
+        "zh": "测量一下水温。",
+        "pinyin": "Cèliáng yīxià shuǐwēn.",
+        "en": "Measure the water temperature."
+      }
+    ]
+  },
+  {
+    "hanzi": "低",
+    "pinyin": "dī",
+    "definition": "low",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "气温很低。",
+        "pinyin": "Qìwēn hěn dī.",
+        "en": "The temperature is very low."
+      },
+      {
+        "zh": "声音太低了。",
+        "pinyin": "Shēngyīn tài dī le.",
+        "en": "The volume is too low."
+      }
+    ]
+  },
+  {
+    "hanzi": "零下",
+    "pinyin": "língxià",
+    "definition": "below zero",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:medium",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "冬天零下十度。",
+        "pinyin": "Dōngtiān língxià shí dù.",
+        "en": "In winter it's minus ten degrees."
+      },
+      {
+        "zh": "零下的时候会结冰。",
+        "pinyin": "Língxià de shíhou huì jiébīng.",
+        "en": "Below zero it freezes."
+      }
+    ]
+  },
+  {
+    "hanzi": "会",
+    "pinyin": "huì",
+    "definition": "be likely to",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "明天会下雨。",
+        "pinyin": "Míngtiān huì xià yǔ.",
+        "en": "It will likely rain tomorrow."
+      },
+      {
+        "zh": "我会说汉语。",
+        "pinyin": "Wǒ huì shuō Hànyǔ.",
+        "en": "I can speak Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "下雪",
+    "pinyin": "xià xuě",
+    "definition": "snow",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:medium",
+      "topic:weather",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "北方冬天经常下雪。",
+        "pinyin": "Běifāng dōngtiān jīngcháng xià xuě.",
+        "en": "Northern winters often have snow."
+      },
+      {
+        "zh": "昨晚下雪了。",
+        "pinyin": "Zuówǎn xià xuě le.",
+        "en": "It snowed last night."
+      }
+    ]
+  },
+  {
+    "hanzi": "游泳",
+    "pinyin": "yóuyǒng",
+    "definition": "swim",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:sports",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢游泳。",
+        "pinyin": "Wǒ xǐhuan yóuyǒng.",
+        "en": "I like swimming."
+      },
+      {
+        "zh": "夏天去游泳很舒服。",
+        "pinyin": "Xiàtiān qù yóuyǒng hěn shūfu.",
+        "en": "Swimming in summer is very comfortable."
+      }
+    ]
+  },
+  {
+    "hanzi": "能",
+    "pinyin": "néng",
+    "definition": "can",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "我能试试吗？",
+        "pinyin": "Wǒ néng shìshi ma?",
+        "en": "Can I try?"
+      },
+      {
+        "zh": "明天能出去玩吗？",
+        "pinyin": "Míngtiān néng chūqù wán ma?",
+        "en": "Can we go out and play tomorrow?"
+      }
+    ]
+  },
+  {
+    "hanzi": "阳光",
+    "pinyin": "yángguāng",
+    "definition": "sunshine",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "今天阳光很好。",
+        "pinyin": "Jīntiān yángguāng hěn hǎo.",
+        "en": "The sunshine is nice today."
+      },
+      {
+        "zh": "阳光照在脸上。",
+        "pinyin": "Yángguāng zhào zài liǎn shàng.",
+        "en": "Sunshine shines on the face."
+      }
+    ]
+  },
+  {
+    "hanzi": "约",
+    "pinyin": "yuē",
+    "definition": "make an appointment; arrange",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:social",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们约个时间见面吧。",
+        "pinyin": "Wǒmen yuē ge shíjiān jiànmiàn ba.",
+        "en": "Let's arrange a time to meet."
+      },
+      {
+        "zh": "你约了医生吗？",
+        "pinyin": "Nǐ yuē le yīshēng ma?",
+        "en": "Did you make an appointment with the doctor?"
+      }
+    ]
+  },
+  {
+    "hanzi": "散步",
+    "pinyin": "sànbù",
+    "definition": "take a walk",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:activities",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "晚饭后我们去散步。",
+        "pinyin": "Wǎnfàn hòu wǒmen qù sànbù.",
+        "en": "After dinner we go for a walk."
+      },
+      {
+        "zh": "散步对身体好。",
+        "pinyin": "Sànbù duì shēntǐ hǎo.",
+        "en": "Walking is good for your health."
+      }
+    ]
+  },
+  {
+    "hanzi": "聊天儿",
+    "pinyin": "liáotiānr",
+    "definition": "chat",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:social",
+      "hsk:2",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "朋友一起聊天儿很开心。",
+        "pinyin": "Péngyou yìqǐ liáotiānr hěn kāixīn.",
+        "en": "Chatting with friends is very happy."
+      },
+      {
+        "zh": "我们聊了一会儿天儿。",
+        "pinyin": "Wǒmen liáo le yīhuǐr tiānr.",
+        "en": "We chatted for a while."
+      }
+    ]
+  },
+  {
+    "hanzi": "或者",
+    "pinyin": "huòzhě",
+    "definition": "or; either...or...",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "喝茶或者咖啡都可以。",
+        "pinyin": "Hē chá huòzhě kāfēi dōu kěyǐ.",
+        "en": "Drinking tea or coffee is fine."
+      },
+      {
+        "zh": "你可以今天来，或者明天来。",
+        "pinyin": "Nǐ kěyǐ jīntiān lái, huòzhě míngtiān lái.",
+        "en": "You can come today or tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "骑车",
+    "pinyin": "qí chē",
+    "definition": "ride a bike",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我每天骑车上班。",
+        "pinyin": "Wǒ měitiān qí chē shàngbān.",
+        "en": "I ride a bike to work every day."
+      },
+      {
+        "zh": "骑车比走路快。",
+        "pinyin": "Qí chē bǐ zǒulù kuài.",
+        "en": "Riding a bike is faster than walking."
+      }
+    ]
+  },
+  {
+    "hanzi": "运动",
+    "pinyin": "yùndòng",
+    "definition": "do exercise",
+    "tags": [
+      "type:verb",
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:sports",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你每天运动吗？",
+        "pinyin": "Nǐ měitiān yùndòng ma?",
+        "en": "Do you exercise every day?"
+      },
+      {
+        "zh": "跑步是个好运动。",
+        "pinyin": "Pǎobù shì ge hǎo yùndòng.",
+        "en": "Running is a good sport."
+      }
+    ]
+  },
+  {
+    "hanzi": "放松",
+    "pinyin": "fàngsōng",
+    "definition": "relax",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "听音乐可以放松心情。",
+        "pinyin": "Tīng yīnyuè kěyǐ fàngsōng xīnqíng.",
+        "en": "Listening to music can relax your mood."
+      },
+      {
+        "zh": "周末好好放松一下。",
+        "pinyin": "Zhōumò hǎohāo fàngsōng yīxià.",
+        "en": "Relax well on the weekend."
+      }
+    ]
+  },
+  {
+    "hanzi": "可能",
+    "pinyin": "kěnéng",
+    "definition": "probably; maybe",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他可能不来了。",
+        "pinyin": "Tā kěnéng bù lái le.",
+        "en": "He probably isn't coming."
+      },
+      {
+        "zh": "明天可能会下雨。",
+        "pinyin": "Míngtiān kěnéng huì xià yǔ.",
+        "en": "It might rain tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "如果",
+    "pinyin": "rúguǒ",
+    "definition": "if",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "如果明天下雨，我们就不去公园。",
+        "pinyin": "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù gōngyuán.",
+        "en": "If it rains tomorrow, we won't go to the park."
+      },
+      {
+        "zh": "如果你累了就休息。",
+        "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi.",
+        "en": "If you're tired, rest."
+      }
+    ]
+  },
+  {
+    "hanzi": "只",
+    "pinyin": "zhǐ",
+    "definition": "only",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我只买了一个。",
+        "pinyin": "Wǒ zhǐ mǎi le yí ge.",
+        "en": "I only bought one."
+      },
+      {
+        "zh": "他只会说一点汉语。",
+        "pinyin": "Tā zhǐ huì shuō yīdiǎn Hànyǔ.",
+        "en": "He can only speak a little Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "上网",
+    "pinyin": "shàngwǎng",
+    "definition": "get onto the Internet",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:internet",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我每天晚上上网看视频。",
+        "pinyin": "Wǒ měitiān wǎnshang shàngwǎng kàn shìpín.",
+        "en": "I go online every night to watch videos."
+      },
+      {
+        "zh": "少上网对眼睛好。",
+        "pinyin": "Shǎo shàngwǎng duì yǎnjing hǎo.",
+        "en": "Less internet is good for your eyes."
+      }
+    ]
+  },
+  {
+    "hanzi": "不过",
+    "pinyin": "búguò",
+    "definition": "but; however",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢吃辣，不过不能吃太多。",
+        "pinyin": "Wǒ xǐhuan chī là, búguò bùnéng chī tài duō.",
+        "en": "I like spicy food, but I can't eat too much."
+      },
+      {
+        "zh": "他很好，不过有时候很忙。",
+        "pinyin": "Tā hěn hǎo, búguò yǒu shíhou hěn máng.",
+        "en": "He's nice, but sometimes very busy."
+      }
+    ]
+  },
+  {
+    "hanzi": "刮风",
+    "pinyin": "guā fēng",
+    "definition": "windy",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "今天刮风。",
+        "pinyin": "Jīntiān guā fēng.",
+        "en": "It's windy today."
+      },
+      {
+        "zh": "刮风的时候不要骑车。",
+        "pinyin": "Guā fēng de shíhou bú yào qí chē.",
+        "en": "Don't ride a bike when it's windy."
+      }
+    ]
+  },
+  {
+    "hanzi": "阴天",
+    "pinyin": "yīntiān",
+    "definition": "cloudy day",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:weather",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "明天是阴天。",
+        "pinyin": "Míngtiān shì yīntiān.",
+        "en": "Tomorrow will be cloudy."
+      },
+      {
+        "zh": "阴天没有阳光。",
+        "pinyin": "Yīntiān méiyǒu yángguāng.",
+        "en": "There's no sunshine on cloudy days."
+      }
+    ]
+  },
+  {
+    "hanzi": "跑步",
+    "pinyin": "pǎobù",
+    "definition": "run",
+    "tags": [
+      "type:verb",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:sports",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我每天早上跑步。",
+        "pinyin": "Wǒ měitiān zǎoshang pǎobù.",
+        "en": "I run every morning."
+      },
+      {
+        "zh": "跑步对身体很好。",
+        "pinyin": "Pǎobù duì shēntǐ hěn hǎo.",
+        "en": "Running is very good for your health."
+      }
+    ]
+  },
+  {
+    "hanzi": "打篮球",
+    "pinyin": "dǎ lánqiú",
+    "definition": "play basketball",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:sports",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我周末打篮球。",
+        "pinyin": "Wǒ zhōumò dǎ lánqiú.",
+        "en": "I play basketball on weekends."
+      },
+      {
+        "zh": "你会打篮球吗？",
+        "pinyin": "Nǐ huì dǎ lánqiú ma?",
+        "en": "Can you play basketball?"
+      }
+    ]
+  },
+  {
+    "hanzi": "踢足球",
+    "pinyin": "tī zúqiú",
+    "definition": "play football",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:sports",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他喜欢踢足球。",
+        "pinyin": "Tā xǐhuan tī zúqiú.",
+        "en": "He likes playing football."
+      },
+      {
+        "zh": "我们一起踢足球吧。",
+        "pinyin": "Wǒmen yìqǐ tī zúqiú ba.",
+        "en": "Let's play football together."
+      }
+    ]
+  },
+  {
+    "hanzi": "看电视",
+    "pinyin": "kàn diànshì",
+    "definition": "watch TV",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:activities",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "晚上我喜欢看电视。",
+        "pinyin": "Wǎnshang wǒ xǐhuan kàn diànshì.",
+        "en": "I like watching TV at night."
+      },
+      {
+        "zh": "你看电视了吗？",
+        "pinyin": "Nǐ kàn diànshì le ma?",
+        "en": "Did you watch TV?"
+      }
+    ]
+  },
+  {
+    "hanzi": "玩游戏",
+    "pinyin": "wán yóuxì",
+    "definition": "play games",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson11",
+      "frequency:high",
+      "topic:activities",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他喜欢玩游戏。",
+        "pinyin": "Tā xǐhuan wán yóuxì.",
+        "en": "He likes playing games."
+      },
+      {
+        "zh": "我们一起玩游戏吧。",
+        "pinyin": "Wǒmen yìqǐ wán yóuxì ba.",
+        "en": "Let's play games together."
+      }
+    ]
+  },
+  {
+    "hanzi": "圣诞节",
+    "pinyin": "Shèngdànjié",
+    "definition": "Christmas (Day)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson11",
+      "frequency:medium",
+      "topic:holidays",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "圣诞节快乐！",
+        "pinyin": "Shèngdànjié kuàilè!",
+        "en": "Merry Christmas!"
+      },
+      {
+        "zh": "圣诞节在十二月。",
+        "pinyin": "Shèngdànjié zài shí'èr yuè.",
+        "en": "Christmas is in December."
+      }
+    ]
+  },
+  {
+    "hanzi": "教室",
+    "pinyin": "jiàoshì",
+    "definition": "classroom",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里面有什么？",
+        "pinyin": "Jiàoshì lǐmiàn yǒu shénme?",
+        "en": "What's inside the classroom?"
+      },
+      {
+        "zh": "我们在教室上课。",
+        "pinyin": "Wǒmen zài jiàoshì shàngkè.",
+        "en": "We have class in the classroom."
+      }
+    ]
+  },
+  {
+    "hanzi": "里面",
+    "pinyin": "lǐmiàn",
+    "definition": "inside",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里面有桌子、椅子和电脑。",
+        "pinyin": "Jiàoshì lǐmiàn yǒu zhuōzi, yǐzi hé diànnǎo.",
+        "en": "Inside the classroom there are desks, chairs and computers."
+      },
+      {
+        "zh": "书包里面有什么？",
+        "pinyin": "Shūbāo lǐmiàn yǒu shénme?",
+        "en": "What's inside the backpack?"
+      }
+    ]
+  },
+  {
+    "hanzi": "桌子",
+    "pinyin": "zhuōzi",
+    "definition": "desk",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:furniture",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里面有桌子。",
+        "pinyin": "Jiàoshì lǐmiàn yǒu zhuōzi.",
+        "en": "There are desks in the classroom."
+      },
+      {
+        "zh": "桌子上有一本书。",
+        "pinyin": "Zhuōzi shàng yǒu yī běn shū.",
+        "en": "There's a book on the desk."
+      }
+    ]
+  },
+  {
+    "hanzi": "椅子",
+    "pinyin": "yǐzi",
+    "definition": "chair",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:furniture",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里面有椅子。",
+        "pinyin": "Jiàoshì lǐmiàn yǒu yǐzi.",
+        "en": "There are chairs in the classroom."
+      },
+      {
+        "zh": "这把椅子很舒服。",
+        "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
+        "en": "This chair is very comfortable."
+      }
+    ]
+  },
+  {
+    "hanzi": "前面",
+    "pinyin": "qiánmiàn",
+    "definition": "front",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室前面是一块黑板。",
+        "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+        "en": "In front of the classroom there's a blackboard."
+      },
+      {
+        "zh": "我坐在他的前面。",
+        "pinyin": "Wǒ zuò zài tā de qiánmiàn.",
+        "en": "I sit in front of him."
+      }
+    ]
+  },
+  {
+    "hanzi": "块",
+    "pinyin": "kuài",
+    "definition": "piece",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室前面是一块黑板。",
+        "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+        "en": "In front of the classroom there's a blackboard."
+      },
+      {
+        "zh": "这里有一块橡皮。",
+        "pinyin": "Zhèlǐ yǒu yī kuài xiàngpí.",
+        "en": "There's an eraser here."
+      }
+    ]
+  },
+  {
+    "hanzi": "黑板",
+    "pinyin": "hēibǎn",
+    "definition": "blackboard",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "老师在黑板上写字。",
+        "pinyin": "Lǎoshī zài hēibǎn shàng xiě zì.",
+        "en": "The teacher writes on the blackboard."
+      },
+      {
+        "zh": "教室前面是一块黑板。",
+        "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+        "en": "In front of the classroom there's a blackboard."
+      }
+    ]
+  },
+  {
+    "hanzi": "地图",
+    "pinyin": "dìtú",
+    "definition": "map",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "墙上有一张世界地图。",
+        "pinyin": "Qiáng shàng yǒu yī zhāng shìjiè dìtú.",
+        "en": "There's a world map on the wall."
+      },
+      {
+        "zh": "请看地图。",
+        "pinyin": "Qǐng kàn dìtú.",
+        "en": "Please look at the map."
+      }
+    ]
+  },
+  {
+    "hanzi": "后面",
+    "pinyin": "hòumiàn",
+    "definition": "back",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我坐在教室后面。",
+        "pinyin": "Wǒ zuò zài jiàoshì hòumiàn.",
+        "en": "I sit at the back of the classroom."
+      },
+      {
+        "zh": "黑板后面是墙。",
+        "pinyin": "Hēibǎn hòumiàn shì qiáng.",
+        "en": "Behind the blackboard is the wall."
+      }
+    ]
+  },
+  {
+    "hanzi": "墙",
+    "pinyin": "qiáng",
+    "definition": "wall",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "墙上有一张地图。",
+        "pinyin": "Qiáng shàng yǒu yī zhāng dìtú.",
+        "en": "There's a map on the wall."
+      },
+      {
+        "zh": "这面墙是白色的。",
+        "pinyin": "Zhè miàn qiáng shì báisè de.",
+        "en": "This wall is white."
+      }
+    ]
+  },
+  {
+    "hanzi": "上面",
+    "pinyin": "shàngmiàn",
+    "definition": "surface of an object",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "桌子上面有一本书。",
+        "pinyin": "Zhuōzi shàngmiàn yǒu yī běn shū.",
+        "en": "There's a book on the desk."
+      },
+      {
+        "zh": "墙上面有一张地图。",
+        "pinyin": "Qiáng shàngmiàn yǒu yī zhāng dìtú.",
+        "en": "There's a map on the wall."
+      }
+    ]
+  },
+  {
+    "hanzi": "笔",
+    "pinyin": "bǐ",
+    "definition": "pen",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我的笔在桌子上。",
+        "pinyin": "Wǒ de bǐ zài zhuōzi shàng.",
+        "en": "My pen is on the desk."
+      },
+      {
+        "zh": "请借我一支笔。",
+        "pinyin": "Qǐng jiè wǒ yī zhī bǐ.",
+        "en": "Please lend me a pen."
+      }
+    ]
+  },
+  {
+    "hanzi": "本子",
+    "pinyin": "běnzi",
+    "definition": "notebook",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "请拿出你的本子。",
+        "pinyin": "Qǐng ná chū nǐ de běnzi.",
+        "en": "Please take out your notebook."
+      },
+      {
+        "zh": "我在本子上写生词。",
+        "pinyin": "Wǒ zài běnzi shàng xiě shēngcí.",
+        "en": "I write new words in my notebook."
+      }
+    ]
+  },
+  {
+    "hanzi": "本",
+    "pinyin": "běn",
+    "definition": "[used for books]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这本书很有意思。",
+        "pinyin": "Zhè běn shū hěn yǒuyìsi.",
+        "en": "This book is very interesting."
+      },
+      {
+        "zh": "我有五本书。",
+        "pinyin": "Wǒ yǒu wǔ běn shū.",
+        "en": "I have five books."
+      }
+    ]
+  },
+  {
+    "hanzi": "楼",
+    "pinyin": "lóu",
+    "definition": "floor",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:buildings",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "教室在三楼。",
+        "pinyin": "Jiàoshì zài sān lóu.",
+        "en": "The classroom is on the third floor."
+      },
+      {
+        "zh": "这栋楼有十层。",
+        "pinyin": "Zhè dòng lóu yǒu shí céng.",
+        "en": "This building has ten floors."
+      }
+    ]
+  },
+  {
+    "hanzi": "旁边",
+    "pinyin": "pángbiān",
+    "definition": "side",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "椅子在桌子旁边。",
+        "pinyin": "Yǐzi zài zhuōzi pángbiān.",
+        "en": "The chair is next to the desk."
+      },
+      {
+        "zh": "我坐在他旁边。",
+        "pinyin": "Wǒ zuò zài tā pángbiān.",
+        "en": "I sit next to him."
+      }
+    ]
+  },
+  {
+    "hanzi": "台",
+    "pinyin": "tái",
+    "definition": "[used for certain machinery, apparatus, etc]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里有一台电脑。",
+        "pinyin": "Jiàoshì lǐ yǒu yī tái diànnǎo.",
+        "en": "There's a computer in the classroom."
+      },
+      {
+        "zh": "这台电脑是新的。",
+        "pinyin": "Zhè tái diànnǎo shì xīn de.",
+        "en": "This computer is new."
+      }
+    ]
+  },
+  {
+    "hanzi": "张",
+    "pinyin": "zhāng",
+    "definition": "[used for tables, chairs, etc]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "教室里有一张地图。",
+        "pinyin": "Jiàoshì lǐ yǒu yī zhāng dìtú.",
+        "en": "There's a map in the classroom."
+      },
+      {
+        "zh": "这张桌子很大。",
+        "pinyin": "Zhè zhāng zhuōzi hěn dà.",
+        "en": "This desk is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "世界",
+    "pinyin": "shìjiè",
+    "definition": "world",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:geography",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "墙上有一张世界地图。",
+        "pinyin": "Qiáng shàng yǒu yī zhāng shìjiè dìtú.",
+        "en": "There's a world map on the wall."
+      },
+      {
+        "zh": "世界很大。",
+        "pinyin": "Shìjiè hěn dà.",
+        "en": "The world is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "把",
+    "pinyin": "bǎ",
+    "definition": "[for sth in a bunch, or with a handle]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "请借我一把笔。",
+        "pinyin": "Qǐng jiè wǒ yī bǎ bǐ.",
+        "en": "Please lend me a pen."
+      },
+      {
+        "zh": "这把椅子很舒服。",
+        "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
+        "en": "This chair is very comfortable."
+      }
+    ]
+  },
+  {
+    "hanzi": "座位",
+    "pinyin": "zuòwèi",
+    "definition": "seat",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这是我的座位。",
+        "pinyin": "Zhè shì wǒ de zuòwèi.",
+        "en": "This is my seat."
+      },
+      {
+        "zh": "请回到你的座位。",
+        "pinyin": "Qǐng huí dào nǐ de zuòwèi.",
+        "en": "Please go back to your seat."
+      }
+    ]
+  },
+  {
+    "hanzi": "排",
+    "pinyin": "pái",
+    "definition": "row; line",
+    "tags": [
+      "type:measure",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我坐在第一排。",
+        "pinyin": "Wǒ zuò zài dì-yī pái.",
+        "en": "I sit in the first row."
+      },
+      {
+        "zh": "请排好队。",
+        "pinyin": "Qǐng pái hǎo duì.",
+        "en": "Please line up."
+      }
+    ]
+  },
+  {
+    "hanzi": "对面",
+    "pinyin": "duìmiàn",
+    "definition": "opposite side",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "图书馆在食堂对面。",
+        "pinyin": "Túshūguǎn zài shítáng duìmiàn.",
+        "en": "The library is opposite the dining hall."
+      },
+      {
+        "zh": "他坐在我对面。",
+        "pinyin": "Tā zuò zài wǒ duìmiàn.",
+        "en": "He sits opposite me."
+      }
+    ]
+  },
+  {
+    "hanzi": "讲桌",
+    "pinyin": "jiǎngzhuō",
+    "definition": "lectern",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:medium",
+      "topic:classroom"
+    ],
+    "sentences": [
+      {
+        "zh": "老师站在讲桌前面。",
+        "pinyin": "Lǎoshī zhàn zài jiǎngzhuō qiánmiàn.",
+        "en": "The teacher stands in front of the lectern."
+      },
+      {
+        "zh": "书放在讲桌上。",
+        "pinyin": "Shū fàng zài jiǎngzhuō shàng.",
+        "en": "The book is placed on the lectern."
+      }
+    ]
+  },
+  {
+    "hanzi": "休息",
+    "pinyin": "xiūxi",
+    "definition": "have a rest",
+    "tags": [
+      "type:verb",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:classroom",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们休息一下吧。",
+        "pinyin": "Wǒmen xiūxi yīxià ba.",
+        "en": "Let's take a break."
+      },
+      {
+        "zh": "下课后大家休息。",
+        "pinyin": "Xiàkè hòu dàjiā xiūxi.",
+        "en": "After class, everyone rests."
+      }
+    ]
+  },
+  {
+    "hanzi": "外面",
+    "pinyin": "wàimiàn",
+    "definition": "outside",
+    "tags": [
+      "type:noun",
+      "lesson:lesson12",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "外面在下雨。",
+        "pinyin": "Wàimiàn zài xià yǔ.",
+        "en": "It's raining outside."
+      },
+      {
+        "zh": "我们去外面玩吧。",
+        "pinyin": "Wǒmen qù wàimiàn wán ba.",
+        "en": "Let's go play outside."
+      }
+    ]
+  },
+  {
+    "hanzi": "爱好",
+    "pinyin": "àihào",
+    "definition": "hobby",
+    "tags": [
+      "type:noun",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:hobbies",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你有什么爱好？",
+        "pinyin": "Nǐ yǒu shénme àihào?",
+        "en": "What are your hobbies?"
+      },
+      {
+        "zh": "我的爱好是看书和旅行。",
+        "pinyin": "Wǒ de àihào shì kàn shū hé lǚxíng.",
+        "en": "My hobbies are reading and traveling."
+      }
+    ]
+  },
+  {
+    "hanzi": "旅行",
+    "pinyin": "lǚxíng",
+    "definition": "travel",
+    "tags": [
+      "type:verb",
+      "type:noun",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:travel",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我的爱好是看书和旅行。",
+        "pinyin": "Wǒ de àihào shì kàn shū hé lǚxíng.",
+        "en": "My hobbies are reading and traveling."
+      },
+      {
+        "zh": "我喜欢一个人旅行。",
+        "pinyin": "Wǒ xǐhuan yī ge rén lǚxíng.",
+        "en": "I like traveling alone."
+      }
+    ]
+  },
+  {
+    "hanzi": "对",
+    "pinyin": "duì",
+    "definition": "concerning",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你对什么感兴趣？",
+        "pinyin": "Nǐ duì shénme gǎn xìngqù?",
+        "en": "What are you interested in?"
+      },
+      {
+        "zh": "我对游泳很感兴趣。",
+        "pinyin": "Wǒ duì yóuyǒng hěn gǎn xìngqù.",
+        "en": "I'm very interested in swimming."
+      }
+    ]
+  },
+  {
+    "hanzi": "感兴趣",
+    "pinyin": "gǎn xìngqù",
+    "definition": "be interested in",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:preferences",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你对什么感兴趣？",
+        "pinyin": "Nǐ duì shénme gǎn xìngqù?",
+        "en": "What are you interested in?"
+      },
+      {
+        "zh": "我对打篮球不感兴趣。",
+        "pinyin": "Wǒ duì dǎ lánqiú bù gǎn xìngqù.",
+        "en": "I'm not interested in playing basketball."
+      }
+    ]
+  },
+  {
+    "hanzi": "打篮球",
+    "pinyin": "dǎ lánqiú",
+    "definition": "play basketball",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:sports",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你对打篮球感兴趣吗？",
+        "pinyin": "Nǐ duì dǎ lánqiú gǎn xìngqù ma?",
+        "en": "Are you interested in playing basketball?"
+      },
+      {
+        "zh": "我周末喜欢打篮球。",
+        "pinyin": "Wǒ zhōumò xǐhuan dǎ lánqiú.",
+        "en": "I like playing basketball on weekends."
+      }
+    ]
+  },
+  {
+    "hanzi": "平时",
+    "pinyin": "píngshí",
+    "definition": "ordinary times",
+    "tags": [
+      "type:noun",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:habits",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你平时喜欢做什么？",
+        "pinyin": "Nǐ píngshí xǐhuan zuò shénme?",
+        "en": "What do you usually like to do?"
+      },
+      {
+        "zh": "平时我很忙。",
+        "pinyin": "Píngshí wǒ hěn máng.",
+        "en": "I'm usually busy."
+      }
+    ]
+  },
+  {
+    "hanzi": "一边",
+    "pinyin": "yìbiān",
+    "definition": "while; as",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢一边唱歌，一边弹吉他。",
+        "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+        "en": "I like singing while playing the guitar."
+      },
+      {
+        "zh": "他一边吃饭一边看电视。",
+        "pinyin": "Tā yìbiān chīfàn yìbiān kàn diànshì.",
+        "en": "He eats while watching TV."
+      }
+    ]
+  },
+  {
+    "hanzi": "唱歌",
+    "pinyin": "chànggē",
+    "definition": "sing (a song)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:hobbies",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢一边唱歌，一边弹吉他。",
+        "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+        "en": "I like singing while playing the guitar."
+      },
+      {
+        "zh": "她唱歌唱得很好。",
+        "pinyin": "Tā chànggē chàng de hěn hǎo.",
+        "en": "She sings very well."
+      }
+    ]
+  },
+  {
+    "hanzi": "弹吉他",
+    "pinyin": "tán jítā",
+    "definition": "play the guitar",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:hobbies,music",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢一边唱歌，一边弹吉他。",
+        "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+        "en": "I like singing while playing the guitar."
+      },
+      {
+        "zh": "他会弹吉他。",
+        "pinyin": "Tā huì tán jítā.",
+        "en": "He can play the guitar."
+      }
+    ]
+  },
+  {
+    "hanzi": "得",
+    "pinyin": "de",
+    "definition": "[used between a verb or an adjective and its complement to indicate the result or degree]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2",
+      "grammar:complement marker"
+    ],
+    "sentences": [
+      {
+        "zh": "她唱歌唱得很好。",
+        "pinyin": "Tā chànggē chàng de hěn hǎo.",
+        "en": "She sings very well."
+      },
+      {
+        "zh": "他跑步跑得很快。",
+        "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+        "en": "He runs very fast."
+      }
+    ]
+  },
+  {
+    "hanzi": "不错",
+    "pinyin": "búcuò",
+    "definition": "not bad; pretty good",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他弹吉他弹得不错。",
+        "pinyin": "Tā tán jítā tán de búcuò.",
+        "en": "He plays the guitar pretty well."
+      },
+      {
+        "zh": "这个主意不错。",
+        "pinyin": "Zhège zhǔyi búcuò.",
+        "en": "This idea is pretty good."
+      }
+    ]
+  },
+  {
+    "hanzi": "比如",
+    "pinyin": "bǐrú",
+    "definition": "such as",
+    "tags": [
+      "type:verb",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我有很多爱好，比如唱歌、跑步。",
+        "pinyin": "Wǒ yǒu hěn duō àihào, bǐrú chànggē, pǎobù.",
+        "en": "I have many hobbies, such as singing and running."
+      },
+      {
+        "zh": "比如说，你喜欢什么运动？",
+        "pinyin": "Bǐrú shuō, nǐ xǐhuan shénme yùndòng?",
+        "en": "For example, what sports do you like?"
+      }
+    ]
+  },
+  {
+    "hanzi": "等",
+    "pinyin": "děng",
+    "definition": "etc",
+    "tags": [
+      "type:particle",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢很多运动，比如篮球、足球等。",
+        "pinyin": "Wǒ xǐhuan hěn duō yùndòng, bǐrú lánqiú, zúqiú děng.",
+        "en": "I like many sports, such as basketball, football, etc."
+      },
+      {
+        "zh": "桌子上有书、笔等东西。",
+        "pinyin": "Zhuōzi shàng yǒu shū, bǐ děng dōngxi.",
+        "en": "There are books, pens, etc. on the desk."
+      }
+    ]
+  },
+  {
+    "hanzi": "但是",
+    "pinyin": "dànshì",
+    "definition": "but",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢运动，但是没有时间。",
+        "pinyin": "Wǒ xǐhuan yùndòng, dànshì méiyǒu shíjiān.",
+        "en": "I like exercising, but I don't have time."
+      },
+      {
+        "zh": "他很聪明，但是不努力。",
+        "pinyin": "Tā hěn cōngmíng, dànshì bù nǔlì.",
+        "en": "He's smart, but not hardworking."
+      }
+    ]
+  },
+  {
+    "hanzi": "周末",
+    "pinyin": "zhōumò",
+    "definition": "weekend",
+    "tags": [
+      "type:noun",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我周末喜欢打篮球。",
+        "pinyin": "Wǒ zhōumò xǐhuan dǎ lánqiú.",
+        "en": "I like playing basketball on weekends."
+      },
+      {
+        "zh": "你周末做什么？",
+        "pinyin": "Nǐ zhōumò zuò shénme?",
+        "en": "What do you do on weekends?"
+      }
+    ]
+  },
+  {
+    "hanzi": "经常",
+    "pinyin": "jīngcháng",
+    "definition": "often",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我经常跑步。",
+        "pinyin": "Wǒ jīngcháng pǎobù.",
+        "en": "I often go running."
+      },
+      {
+        "zh": "他经常玩游戏。",
+        "pinyin": "Tā jīngcháng wán yóuxì.",
+        "en": "He often plays games."
+      }
+    ]
+  },
+  {
+    "hanzi": "另外",
+    "pinyin": "lìngwài",
+    "definition": "in addition",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "另外，我还喜欢唱歌。",
+        "pinyin": "Lìngwài, wǒ hái xǐhuan chànggē.",
+        "en": "In addition, I also like singing."
+      },
+      {
+        "zh": "另外一个问题是价格。",
+        "pinyin": "Lìngwài yí ge wèntí shì jiàgé.",
+        "en": "Another issue is the price."
+      }
+    ]
+  },
+  {
+    "hanzi": "跑步",
+    "pinyin": "pǎobù",
+    "definition": "run",
+    "tags": [
+      "type:verb",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:sports",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我经常跑步。",
+        "pinyin": "Wǒ jīngcháng pǎobù.",
+        "en": "I often go running."
+      },
+      {
+        "zh": "他跑步跑得很快。",
+        "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+        "en": "He runs very fast."
+      }
+    ]
+  },
+  {
+    "hanzi": "快",
+    "pinyin": "kuài",
+    "definition": "fast",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "他跑步跑得很快。",
+        "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+        "en": "He runs very fast."
+      },
+      {
+        "zh": "请说快一点。",
+        "pinyin": "Qǐng shuō kuài yīdiǎn.",
+        "en": "Please speak a little faster."
+      }
+    ]
+  },
+  {
+    "hanzi": "玩游戏",
+    "pinyin": "wán yóuxì",
+    "definition": "play games",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson13",
+      "frequency:high",
+      "topic:hobbies",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "周末我喜欢玩游戏。",
+        "pinyin": "Zhōumò wǒ xǐhuan wán yóuxì.",
+        "en": "I like playing games on weekends."
+      },
+      {
+        "zh": "他经常玩游戏。",
+        "pinyin": "Tā jīngcháng wán yóuxì.",
+        "en": "He often plays games."
+      }
+    ]
+  },
+  {
+    "hanzi": "第",
+    "pinyin": "dì",
+    "definition": "[marker of ordinal numerals]",
+    "tags": [
+      "type:prefix",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:grammar,numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "第一个学生到了。",
+        "pinyin": "Dì-yī ge xuésheng dào le.",
+        "en": "The first student arrived."
+      },
+      {
+        "zh": "星期一的第一节课是什么课？",
+        "pinyin": "Xīngqīyī de dì-yī jié kè shì shénme kè?",
+        "en": "What's the first class on Monday?"
+      }
+    ]
+  },
+  {
+    "hanzi": "节",
+    "pinyin": "jié",
+    "definition": "section; length",
+    "tags": [
+      "type:measure",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:school,time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "今天有四节课。",
+        "pinyin": "Jīntiān yǒu sì jié kè.",
+        "en": "There are four class periods today."
+      },
+      {
+        "zh": "星期一的第一节课是综合课。",
+        "pinyin": "Xīngqīyī de dì-yī jié kè shì zōnghé kè.",
+        "en": "Monday's first period is comprehensive class."
+      }
+    ]
+  },
+  {
+    "hanzi": "课",
+    "pinyin": "kè",
+    "definition": "class; lesson",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这节课很难。",
+        "pinyin": "Zhè jié kè hěn nán.",
+        "en": "This class is very hard."
+      },
+      {
+        "zh": "星期五有什么课？",
+        "pinyin": "Xīngqīwǔ yǒu shénme kè?",
+        "en": "What classes are there on Friday?"
+      }
+    ]
+  },
+  {
+    "hanzi": "综合",
+    "pinyin": "zōnghé",
+    "definition": "synthesize",
+    "tags": [
+      "type:verb",
+      "lesson:lesson14",
+      "frequency:medium",
+      "topic:school",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "星期一的第一节课是综合课。",
+        "pinyin": "Xīngqīyī de dì-yī jié kè shì zōnghé kè.",
+        "en": "Monday's first period is comprehensive class."
+      },
+      {
+        "zh": "这是综合练习。",
+        "pinyin": "Zhè shì zōnghé liànxí.",
+        "en": "This is comprehensive practice."
+      }
+    ]
+  },
+  {
+    "hanzi": "口语",
+    "pinyin": "kǒuyǔ",
+    "definition": "spoken language",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "星期五有口语课。",
+        "pinyin": "Xīngqīwǔ yǒu kǒuyǔ kè.",
+        "en": "There's a spoken language class on Friday."
+      },
+      {
+        "zh": "你的口语进步很大。",
+        "pinyin": "Nǐ de kǒuyǔ jìnbù hěn dà.",
+        "en": "Your spoken Chinese has improved a lot."
+      }
+    ]
+  },
+  {
+    "hanzi": "听力",
+    "pinyin": "tīnglì",
+    "definition": "listening comprehension",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "下午有听力课。",
+        "pinyin": "Xiàwǔ yǒu tīnglì kè.",
+        "en": "There's a listening class in the afternoon."
+      },
+      {
+        "zh": "多听可以练习听力。",
+        "pinyin": "Duō tīng kěyǐ liànxí tīnglì.",
+        "en": "Listening more can practice your listening comprehension."
+      }
+    ]
+  },
+  {
+    "hanzi": "位",
+    "pinyin": "wèi",
+    "definition": "[used to refer to people]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:polite measure"
+    ],
+    "sentences": [
+      {
+        "zh": "三位老师参加了会议。",
+        "pinyin": "Sān wèi lǎoshī cānjiā le huìyì.",
+        "en": "Three teachers attended the meeting."
+      },
+      {
+        "zh": "这有一位客人。",
+        "pinyin": "Zhè yǒu yí wèi kèrén.",
+        "en": "There is one guest here."
+      }
+    ]
+  },
+  {
+    "hanzi": "教",
+    "pinyin": "jiāo",
+    "definition": "teach",
+    "tags": [
+      "type:verb",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:education",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "王老师教我们汉语。",
+        "pinyin": "Wáng lǎoshī jiāo wǒmen Hànyǔ.",
+        "en": "Teacher Wang teaches us Chinese."
+      },
+      {
+        "zh": "你教我做这道菜吧。",
+        "pinyin": "Nǐ jiāo wǒ zuò zhè dào cài ba.",
+        "en": "Teach me how to make this dish."
+      }
+    ]
+  },
+  {
+    "hanzi": "长",
+    "pinyin": "cháng",
+    "definition": "long",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这节课很长。",
+        "pinyin": "Zhè jié kè hěn cháng.",
+        "en": "This class is very long."
+      },
+      {
+        "zh": "她的头发很长。",
+        "pinyin": "Tā de tóufa hěn cháng.",
+        "en": "Her hair is very long."
+      }
+    ]
+  },
+  {
+    "hanzi": "分钟",
+    "pinyin": "fēnzhōng",
+    "definition": "minute",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "十分钟后开始。",
+        "pinyin": "Shí fēnzhōng hòu kāishǐ.",
+        "en": "It starts in ten minutes."
+      },
+      {
+        "zh": "每节课四十五分钟。",
+        "pinyin": "Měi jié kè sìshíwǔ fēnzhōng.",
+        "en": "Each class period is 45 minutes."
+      }
+    ]
+  },
+  {
+    "hanzi": "小时",
+    "pinyin": "xiǎoshí",
+    "definition": "hour",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一小时有六十分钟。",
+        "pinyin": "Yī xiǎoshí yǒu liùshí fēnzhōng.",
+        "en": "One hour has sixty minutes."
+      },
+      {
+        "zh": "我每天学习两小时。",
+        "pinyin": "Wǒ měitiān xuéxí liǎng xiǎoshí.",
+        "en": "I study for two hours every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "正在",
+    "pinyin": "zhèngzài",
+    "definition": "in the process of",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:grammar,time",
+      "hsk:2",
+      "grammar:progressive aspect"
+    ],
+    "sentences": [
+      {
+        "zh": "他正在上课。",
+        "pinyin": "Tā zhèngzài shàngkè.",
+        "en": "He is in class right now."
+      },
+      {
+        "zh": "我正在写作业。",
+        "pinyin": "Wǒ zhèngzài xiě zuòyè.",
+        "en": "I am doing homework right now."
+      }
+    ]
+  },
+  {
+    "hanzi": "开学",
+    "pinyin": "kāixué",
+    "definition": "school begins",
+    "tags": [
+      "type:verb",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:school",
+      "hsk:2",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "九月一号开学。",
+        "pinyin": "Jiǔyuè yī hào kāixué.",
+        "en": "School starts on September 1st."
+      },
+      {
+        "zh": "我们已经开学了。",
+        "pinyin": "Wǒmen yǐjīng kāixué le.",
+        "en": "Our school has already started."
+      }
+    ]
+  },
+  {
+    "hanzi": "已经",
+    "pinyin": "yǐjīng",
+    "definition": "already",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:grammar,time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们已经开学了。",
+        "pinyin": "Wǒmen yǐjīng kāixué le.",
+        "en": "Our school has already started."
+      },
+      {
+        "zh": "他已经到了。",
+        "pinyin": "Tā yǐjīng dào le.",
+        "en": "He has already arrived."
+      }
+    ]
+  },
+  {
+    "hanzi": "学期",
+    "pinyin": "xuéqī",
+    "definition": "semester",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个学期有十六周。",
+        "pinyin": "Zhège xuéqī yǒu shíliù zhōu.",
+        "en": "This semester has sixteen weeks."
+      },
+      {
+        "zh": "下学期我要学中文。",
+        "pinyin": "Xià xuéqī wǒ yào xué Zhōngwén.",
+        "en": "Next semester I will study Chinese."
+      }
+    ]
+  },
+  {
+    "hanzi": "班",
+    "pinyin": "bān",
+    "definition": "class",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们班有二十个学生。",
+        "pinyin": "Wǒmen bān yǒu èrshí ge xuésheng.",
+        "en": "Our class has twenty students."
+      },
+      {
+        "zh": "你在哪个班？",
+        "pinyin": "Nǐ zài nǎ ge bān?",
+        "en": "Which class are you in?"
+      }
+    ]
+  },
+  {
+    "hanzi": "周",
+    "pinyin": "zhōu",
+    "definition": "week",
+    "tags": [
+      "type:noun",
+      "lesson:lesson14",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一周有七天。",
+        "pinyin": "Yī zhōu yǒu qī tiān.",
+        "en": "One week has seven days."
+      },
+      {
+        "zh": "我下周考试。",
+        "pinyin": "Wǒ xià zhōu kǎoshì.",
+        "en": "I have an exam next week."
+      }
+    ]
+  },
+  {
+    "hanzi": "完",
+    "pinyin": "wán",
+    "definition": "come to an end; end",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:completion",
+      "hsk:2",
+      "grammar:resultative complement"
+    ],
+    "sentences": [
+      {
+        "zh": "作业写完了吗？",
+        "pinyin": "Zuòyè xiě wán le ma?",
+        "en": "Have you finished writing the homework?"
+      },
+      {
+        "zh": "我吃完饭了。",
+        "pinyin": "Wǒ chī wán fàn le.",
+        "en": "I've finished eating."
+      }
+    ]
+  },
+  {
+    "hanzi": "看见",
+    "pinyin": "kànjiàn",
+    "definition": "see",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:perception",
+      "hsk:1",
+      "grammar:resultative complement"
+    ],
+    "sentences": [
+      {
+        "zh": "你看见黄老师了吗？",
+        "pinyin": "Nǐ kànjiàn Huáng lǎoshī le ma?",
+        "en": "Did you see Teacher Huang?"
+      },
+      {
+        "zh": "我没看见。",
+        "pinyin": "Wǒ méi kànjiàn.",
+        "en": "I didn't see (him/her)."
+      }
+    ]
+  },
+  {
+    "hanzi": "找",
+    "pinyin": "zhǎo",
+    "definition": "find",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你找到你的手机了吗？",
+        "pinyin": "Nǐ zhǎodào nǐ de shǒujī le ma?",
+        "en": "Did you find your phone?"
+      },
+      {
+        "zh": "我在找我的书。",
+        "pinyin": "Wǒ zài zhǎo wǒ de shū.",
+        "en": "I'm looking for my book."
+      }
+    ]
+  },
+  {
+    "hanzi": "准备",
+    "pinyin": "zhǔnbèi",
+    "definition": "prepare; get ready",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你准备好了吗？",
+        "pinyin": "Nǐ zhǔnbèi hǎo le ma?",
+        "en": "Are you ready?"
+      },
+      {
+        "zh": "我在准备考试。",
+        "pinyin": "Wǒ zài zhǔnbèi kǎoshì.",
+        "en": "I'm preparing for the exam."
+      }
+    ]
+  },
+  {
+    "hanzi": "要",
+    "pinyin": "yào",
+    "definition": "must; should",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:modal verb"
+    ],
+    "sentences": [
+      {
+        "zh": "我们要努力学习。",
+        "pinyin": "Wǒmen yào nǔlì xuéxí.",
+        "en": "We must study hard."
+      },
+      {
+        "zh": "你要记住这个语法。",
+        "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+        "en": "You need to remember this grammar."
+      }
+    ]
+  },
+  {
+    "hanzi": "努力",
+    "pinyin": "nǔlì",
+    "definition": "make an effort (to do sth)",
+    "tags": [
+      "type:verb",
+      "type:adjective",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school,work",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们要努力学习。",
+        "pinyin": "Wǒmen yào nǔlì xuéxí.",
+        "en": "We must study hard."
+      },
+      {
+        "zh": "他很努力工作。",
+        "pinyin": "Tā hěn nǔlì gōngzuò.",
+        "en": "He works very hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "考试",
+    "pinyin": "kǎoshì",
+    "definition": "take an examination",
+    "tags": [
+      "type:verb",
+      "type:noun",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我在准备考试。",
+        "pinyin": "Wǒ zài zhǔnbèi kǎoshì.",
+        "en": "I'm preparing for the exam."
+      },
+      {
+        "zh": "明天有一个汉语考试。",
+        "pinyin": "Míngtiān yǒu yí ge Hànyǔ kǎoshì.",
+        "en": "There's a Chinese exam tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "记住",
+    "pinyin": "jìzhù",
+    "definition": "memorise; remember",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:memory",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你要记住这个语法。",
+        "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+        "en": "You need to remember this grammar."
+      },
+      {
+        "zh": "请记住我的名字。",
+        "pinyin": "Qǐng jìzhù wǒ de míngzi.",
+        "en": "Please remember my name."
+      }
+    ]
+  },
+  {
+    "hanzi": "语法",
+    "pinyin": "yǔfǎ",
+    "definition": "grammar",
+    "tags": [
+      "type:noun",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:language",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你要记住这个语法。",
+        "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+        "en": "You need to remember this grammar."
+      },
+      {
+        "zh": "汉语语法不太难。",
+        "pinyin": "Hànyǔ yǔfǎ bú tài nán.",
+        "en": "Chinese grammar isn't too hard."
+      }
+    ]
+  },
+  {
+    "hanzi": "复习",
+    "pinyin": "fùxí",
+    "definition": "review",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们要复习语法。",
+        "pinyin": "Wǒmen yào fùxí yǔfǎ.",
+        "en": "We need to review the grammar."
+      },
+      {
+        "zh": "考试前请复习课文。",
+        "pinyin": "Kǎoshì qián qǐng fùxí kèwén.",
+        "en": "Please review the text before the exam."
+      }
+    ]
+  },
+  {
+    "hanzi": "加油",
+    "pinyin": "jiāyóu",
+    "definition": "step up efforts",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:encouragement",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "加油！你一定可以的。",
+        "pinyin": "Jiāyóu! Nǐ yídìng kěyǐ de.",
+        "en": "Keep going! You can do it."
+      },
+      {
+        "zh": "考试加油！",
+        "pinyin": "Kǎoshì jiāyóu!",
+        "en": "Good luck on the exam!"
+      }
+    ]
+  },
+  {
+    "hanzi": "好好",
+    "pinyin": "hǎohǎo",
+    "definition": "seriously; carefully",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "好好复习，明天考试。",
+        "pinyin": "Hǎohǎo fùxí, míngtiān kǎoshì.",
+        "en": "Review carefully, there's an exam tomorrow."
+      },
+      {
+        "zh": "你要好好休息。",
+        "pinyin": "Nǐ yào hǎohǎo xiūxi.",
+        "en": "You need to rest well."
+      }
+    ]
+  },
+  {
+    "hanzi": "懂",
+    "pinyin": "dǒng",
+    "definition": "understand",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:cognition",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我不懂这个语法。",
+        "pinyin": "Wǒ bù dǒng zhège yǔfǎ.",
+        "en": "I don't understand this grammar."
+      },
+      {
+        "zh": "你懂了吗？",
+        "pinyin": "Nǐ dǒng le ma?",
+        "en": "Do you understand?"
+      }
+    ]
+  },
+  {
+    "hanzi": "作文",
+    "pinyin": "zuòwén",
+    "definition": "composition",
+    "tags": [
+      "type:noun",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school,writing",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我在写作文。",
+        "pinyin": "Wǒ zài xiě zuòwén.",
+        "en": "I'm writing a composition."
+      },
+      {
+        "zh": "这篇作文写得很好。",
+        "pinyin": "Zhè piān zuòwén xiě de hěn hǎo.",
+        "en": "This composition is written very well."
+      }
+    ]
+  },
+  {
+    "hanzi": "阅读",
+    "pinyin": "yuèdú",
+    "definition": "read",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school,reading",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "阅读可以帮助学习汉语。",
+        "pinyin": "Yuèdú kěyǐ bāngzhù xuéxí Hànyǔ.",
+        "en": "Reading can help you learn Chinese."
+      },
+      {
+        "zh": "我喜欢阅读中文小说。",
+        "pinyin": "Wǒ xǐhuan yuèdú Zhōngwén xiǎoshuō.",
+        "en": "I like reading Chinese novels."
+      }
+    ]
+  },
+  {
+    "hanzi": "答案",
+    "pinyin": "dá'àn",
+    "definition": "answer",
+    "tags": [
+      "type:noun",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你知道这道题的答案吗？",
+        "pinyin": "Nǐ zhīdào zhè dào tí de dá'àn ma?",
+        "en": "Do you know the answer to this question?"
+      },
+      {
+        "zh": "答案写在本子上。",
+        "pinyin": "Dá'àn xiě zài běnzi shàng.",
+        "en": "The answer is written in the notebook."
+      }
+    ]
+  },
+  {
+    "hanzi": "过",
+    "pinyin": "guò",
+    "definition": "pass",
+    "tags": [
+      "type:verb",
+      "lesson:lesson15",
+      "frequency:high",
+      "topic:school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "考试过了吗？",
+        "pinyin": "Kǎoshì guò le ma?",
+        "en": "Did you pass the exam?"
+      },
+      {
+        "zh": "他考试过了。",
+        "pinyin": "Tā kǎoshì guò le.",
+        "en": "He passed the exam."
+      }
+    ]
+  },
+  {
+    "hanzi": "超市",
+    "pinyin": "chāoshì",
+    "definition": "supermarket",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "超市在图书馆旁边。",
+        "pinyin": "Chāoshì zài túshūguǎn pángbiān.",
+        "en": "The supermarket is next to the library."
+      },
+      {
+        "zh": "我去超市买水果。",
+        "pinyin": "Wǒ qù chāoshì mǎi shuǐguǒ.",
+        "en": "I'm going to the supermarket to buy fruit."
+      }
+    ]
+  },
+  {
+    "hanzi": "食堂",
+    "pinyin": "shítáng",
+    "definition": "dining hall",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "食堂的饭很便宜。",
+        "pinyin": "Shítáng de fàn hěn piányi.",
+        "en": "The food at the dining hall is cheap."
+      },
+      {
+        "zh": "我们在食堂吃午饭。",
+        "pinyin": "Wǒmen zài shítáng chī wǔfàn.",
+        "en": "We eat lunch at the dining hall."
+      }
+    ]
+  },
+  {
+    "hanzi": "教学楼",
+    "pinyin": "jiàoxuélóu",
+    "definition": "teaching building",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school"
+    ],
+    "sentences": [
+      {
+        "zh": "教室在教学楼里。",
+        "pinyin": "Jiàoshì zài jiàoxuélóu lǐ.",
+        "en": "The classroom is in the teaching building."
+      },
+      {
+        "zh": "教学楼离宿舍不远。",
+        "pinyin": "Jiàoxuélóu lí sùshè bù yuǎn.",
+        "en": "The teaching building isn't far from the dorm."
+      }
+    ]
+  },
+  {
+    "hanzi": "书店",
+    "pinyin": "shūdiàn",
+    "definition": "bookstore",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我去书店买书。",
+        "pinyin": "Wǒ qù shūdiàn mǎi shū.",
+        "en": "I'm going to the bookstore to buy books."
+      },
+      {
+        "zh": "学校附近有一家书店。",
+        "pinyin": "Xuéxiào fùjìn yǒu yī jiā shūdiàn.",
+        "en": "There's a bookstore near the school."
+      }
+    ]
+  },
+  {
+    "hanzi": "体育馆",
+    "pinyin": "tǐyùguǎn",
+    "definition": "gymnasium",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,sports",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "体育馆在操场旁边。",
+        "pinyin": "Tǐyùguǎn zài cāochǎng pángbiān.",
+        "en": "The gymnasium is next to the playground."
+      },
+      {
+        "zh": "我们在体育馆打篮球。",
+        "pinyin": "Wǒmen zài tǐyùguǎn dǎ lánqiú.",
+        "en": "We play basketball in the gymnasium."
+      }
+    ]
+  },
+  {
+    "hanzi": "国际学院",
+    "pinyin": "guójì xuéyuàn",
+    "definition": "International Institute",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school"
+    ],
+    "sentences": [
+      {
+        "zh": "请问国际学院怎么走？",
+        "pinyin": "Qǐngwèn guójì xuéyuàn zěnme zǒu?",
+        "en": "Excuse me, how do I get to the International Institute?"
+      },
+      {
+        "zh": "国际学院在学校北边。",
+        "pinyin": "Guójì xuéyuàn zài xuéxiào běibian.",
+        "en": "The International Institute is on the north side of the school."
+      }
+    ]
+  },
+  {
+    "hanzi": "操场",
+    "pinyin": "cāochǎng",
+    "definition": "playground",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "学生们在操场跑步。",
+        "pinyin": "Xuéshengmen zài cāochǎng pǎobù.",
+        "en": "Students are running on the playground."
+      },
+      {
+        "zh": "操场旁边是体育馆。",
+        "pinyin": "Cāochǎng pángbiān shì tǐyùguǎn.",
+        "en": "Next to the playground is the gymnasium."
+      }
+    ]
+  },
+  {
+    "hanzi": "宿舍楼",
+    "pinyin": "sùshèlóu",
+    "definition": "dormitory building",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school"
+    ],
+    "sentences": [
+      {
+        "zh": "我住在宿舍楼三层。",
+        "pinyin": "Wǒ zhù zài sùshèlóu sān céng.",
+        "en": "I live on the third floor of the dormitory building."
+      },
+      {
+        "zh": "宿舍楼离食堂很近。",
+        "pinyin": "Sùshèlóu lí shítáng hěn jìn.",
+        "en": "The dormitory building is close to the dining hall."
+      }
+    ]
+  },
+  {
+    "hanzi": "图书馆",
+    "pinyin": "túshūguǎn",
+    "definition": "library",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "图书馆在教学楼对面。",
+        "pinyin": "Túshūguǎn zài jiàoxuélóu duìmiàn.",
+        "en": "The library is opposite the teaching building."
+      },
+      {
+        "zh": "我在图书馆看书。",
+        "pinyin": "Wǒ zài túshūguǎn kàn shū.",
+        "en": "I read in the library."
+      }
+    ]
+  },
+  {
+    "hanzi": "校门",
+    "pinyin": "xiàomén",
+    "definition": "school gate",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:places,school"
+    ],
+    "sentences": [
+      {
+        "zh": "校门口有很多学生。",
+        "pinyin": "Xiàomén kǒu yǒu hěn duō xuésheng.",
+        "en": "There are many students at the school gate."
+      },
+      {
+        "zh": "我在校门等你。",
+        "pinyin": "Wǒ zài xiàomén děng nǐ.",
+        "en": "I'll wait for you at the school gate."
+      }
+    ]
+  },
+  {
+    "hanzi": "北边",
+    "pinyin": "běibian",
+    "definition": "north",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "国际学院在学校北边。",
+        "pinyin": "Guójì xuéyuàn zài xuéxiào běibian.",
+        "en": "The International Institute is on the north side of the school."
+      },
+      {
+        "zh": "图书馆在北边。",
+        "pinyin": "Túshūguǎn zài běibian.",
+        "en": "The library is to the north."
+      }
+    ]
+  },
+  {
+    "hanzi": "从",
+    "pinyin": "cóng",
+    "definition": "from (a particular time, place or limit)",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "从这儿一直往前走。",
+        "pinyin": "Cóng zhèr yìzhí wǎng qián zǒu.",
+        "en": "Go straight ahead from here."
+      },
+      {
+        "zh": "我从中国来。",
+        "pinyin": "Wǒ cóng Zhōngguó lái.",
+        "en": "I come from China."
+      }
+    ]
+  },
+  {
+    "hanzi": "一直",
+    "pinyin": "yìzhí",
+    "definition": "straight",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "从这儿一直往前走。",
+        "pinyin": "Cóng zhèr yìzhí wǎng qián zǒu.",
+        "en": "Go straight ahead from here."
+      },
+      {
+        "zh": "一直往北走就到了。",
+        "pinyin": "Yìzhí wǎng běi zǒu jiù dào le.",
+        "en": "Keep going north and you'll arrive."
+      }
+    ]
+  },
+  {
+    "hanzi": "往",
+    "pinyin": "wǎng",
+    "definition": "in the direction of; towards; to",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "一直往前走。",
+        "pinyin": "Yìzhí wǎng qián zǒu.",
+        "en": "Go straight ahead."
+      },
+      {
+        "zh": "往东转。",
+        "pinyin": "Wǎng dōng zhuǎn.",
+        "en": "Turn east."
+      }
+    ]
+  },
+  {
+    "hanzi": "转",
+    "pinyin": "zhuǎn",
+    "definition": "turn",
+    "tags": [
+      "type:verb",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "往东转就到了。",
+        "pinyin": "Wǎng dōng zhuǎn jiù dào le.",
+        "en": "Turn east and you'll arrive."
+      },
+      {
+        "zh": "在图书馆前面转弯。",
+        "pinyin": "Zài túshūguǎn qiánmiàn zhuǎnwān.",
+        "en": "Turn at the library."
+      }
+    ]
+  },
+  {
+    "hanzi": "西边",
+    "pinyin": "xībian",
+    "definition": "west",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "书店在西边。",
+        "pinyin": "Shūdiàn zài xībian.",
+        "en": "The bookstore is to the west."
+      },
+      {
+        "zh": "太阳从西边落下。",
+        "pinyin": "Tàiyáng cóng xībian luòxià.",
+        "en": "The sun sets in the west."
+      }
+    ]
+  },
+  {
+    "hanzi": "附近",
+    "pinyin": "fùjìn",
+    "definition": "neighbourhood",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:location",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "学校附近有一家书店。",
+        "pinyin": "Xuéxiào fùjìn yǒu yī jiā shūdiàn.",
+        "en": "There's a bookstore near the school."
+      },
+      {
+        "zh": "附近有超市吗？",
+        "pinyin": "Fùjìn yǒu chāoshì ma?",
+        "en": "Is there a supermarket nearby?"
+      }
+    ]
+  },
+  {
+    "hanzi": "离",
+    "pinyin": "lí",
+    "definition": "be away from",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:location",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "图书馆离宿舍很近。",
+        "pinyin": "Túshūguǎn lí sùshè hěn jìn.",
+        "en": "The library is close to the dorm."
+      },
+      {
+        "zh": "学校离市中心不远。",
+        "pinyin": "Xuéxiào lí shì zhōngxīn bù yuǎn.",
+        "en": "The school isn't far from downtown."
+      }
+    ]
+  },
+  {
+    "hanzi": "远",
+    "pinyin": "yuǎn",
+    "definition": "[in time or space] far away",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "图书馆离宿舍不远。",
+        "pinyin": "Túshūguǎn lí sùshè bù yuǎn.",
+        "en": "The library isn't far from the dorm."
+      },
+      {
+        "zh": "你家离学校远吗？",
+        "pinyin": "Nǐ jiā lí xuéxiào yuǎn ma?",
+        "en": "Is your home far from school?"
+      }
+    ]
+  },
+  {
+    "hanzi": "大概",
+    "pinyin": "dàgài",
+    "definition": "approximately",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:estimation",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "大概走五分钟就到了。",
+        "pinyin": "Dàgài zǒu wǔ fēnzhōng jiù dào le.",
+        "en": "It takes about five minutes to walk there."
+      },
+      {
+        "zh": "大概有一百米远。",
+        "pinyin": "Dàgài yǒu yī bǎi mǐ yuǎn.",
+        "en": "It's about 100 meters away."
+      }
+    ]
+  },
+  {
+    "hanzi": "米",
+    "pinyin": "mǐ",
+    "definition": "metre",
+    "tags": [
+      "type:measure",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:measurement",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "大概有一百米远。",
+        "pinyin": "Dàgài yǒu yī bǎi mǐ yuǎn.",
+        "en": "It's about 100 meters away."
+      },
+      {
+        "zh": "他有一米八高。",
+        "pinyin": "Tā yǒu yī mǐ bā gāo.",
+        "en": "He is 1.8 meters tall."
+      }
+    ]
+  },
+  {
+    "hanzi": "东边",
+    "pinyin": "dōngbian",
+    "definition": "east",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "教学楼在东边。",
+        "pinyin": "Jiàoxuélóu zài dōngbian.",
+        "en": "The teaching building is to the east."
+      },
+      {
+        "zh": "太阳从东边升起。",
+        "pinyin": "Tàiyáng cóng dōngbian shēngqǐ.",
+        "en": "The sun rises in the east."
+      }
+    ]
+  },
+  {
+    "hanzi": "南边",
+    "pinyin": "nánbian",
+    "definition": "south",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:directions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "操场在南边。",
+        "pinyin": "Cāochǎng zài nánbian.",
+        "en": "The playground is to the south."
+      },
+      {
+        "zh": "南边天气比较暖和。",
+        "pinyin": "Nánbian tiānqì bǐjiào nuǎnhuo.",
+        "en": "The weather in the south is warmer."
+      }
+    ]
+  },
+  {
+    "hanzi": "近",
+    "pinyin": "jìn",
+    "definition": "near; close",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "图书馆离宿舍很近。",
+        "pinyin": "Túshūguǎn lí sùshè hěn jìn.",
+        "en": "The library is close to the dorm."
+      },
+      {
+        "zh": "超市离这儿很近。",
+        "pinyin": "Chāoshì lí zhèr hěn jìn.",
+        "en": "The supermarket is very close to here."
+      }
+    ]
+  },
+  {
+    "hanzi": "生活",
+    "pinyin": "shēnghuó",
+    "definition": "life",
+    "tags": [
+      "type:noun",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:daily life",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这里的生活很方便。",
+        "pinyin": "Zhèlǐ de shēnghuó hěn fāngbiàn.",
+        "en": "Life here is very convenient."
+      },
+      {
+        "zh": "我喜欢这里的生活。",
+        "pinyin": "Wǒ xǐhuan zhèlǐ de shēnghuó.",
+        "en": "I like life here."
+      }
+    ]
+  },
+  {
+    "hanzi": "方便",
+    "pinyin": "fāngbiàn",
+    "definition": "convenient",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson16",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这里的生活很方便。",
+        "pinyin": "Zhèlǐ de shēnghuó hěn fāngbiàn.",
+        "en": "Life here is very convenient."
+      },
+      {
+        "zh": "学校附近购物很方便。",
+        "pinyin": "Xuéxiào fùjìn gòuwù hěn fāngbiàn.",
+        "en": "Shopping near the school is very convenient."
+      }
+    ]
+  },
+  {
+    "hanzi": "买",
+    "pinyin": "mǎi",
+    "definition": "buy; purchase",
+    "tags": [
+      "type:verb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:shopping",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "您要买什么水果？",
+        "pinyin": "Nín yào mǎi shénme shuǐguǒ?",
+        "en": "What fruit would you like to buy?"
+      },
+      {
+        "zh": "我想买一杯咖啡。",
+        "pinyin": "Wǒ xiǎng mǎi yī bēi kāfēi.",
+        "en": "I want to buy a cup of coffee."
+      }
+    ]
+  },
+  {
+    "hanzi": "水果",
+    "pinyin": "shuǐguǒ",
+    "definition": "fruit",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "您要买什么水果？",
+        "pinyin": "Nín yào mǎi shénme shuǐguǒ?",
+        "en": "What fruit would you like to buy?"
+      },
+      {
+        "zh": "我喜欢吃水果。",
+        "pinyin": "Wǒ xǐhuan chī shuǐguǒ.",
+        "en": "I like eating fruit."
+      }
+    ]
+  },
+  {
+    "hanzi": "香蕉",
+    "pinyin": "xiāngjiāo",
+    "definition": "banana",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我买几个香蕉和苹果。",
+        "pinyin": "Wǒ mǎi jǐ ge xiāngjiāo hé píngguǒ.",
+        "en": "I'll buy a few bananas and apples."
+      },
+      {
+        "zh": "香蕉三块一斤。",
+        "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+        "en": "Bananas are 3 yuan per jin."
+      }
+    ]
+  },
+  {
+    "hanzi": "苹果",
+    "pinyin": "píngguǒ",
+    "definition": "apple",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这几个苹果有多重？",
+        "pinyin": "Zhè jǐ ge píngguǒ yǒu duō zhòng?",
+        "en": "How heavy are these apples?"
+      },
+      {
+        "zh": "我每天吃一个苹果。",
+        "pinyin": "Wǒ měitiān chī yí ge píngguǒ.",
+        "en": "I eat an apple every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "卖",
+    "pinyin": "mài",
+    "definition": "sell",
+    "tags": [
+      "type:verb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:shopping",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "香蕉怎么卖？",
+        "pinyin": "Xiāngjiāo zěnme mài?",
+        "en": "How are the bananas sold?"
+      },
+      {
+        "zh": "这里卖水果。",
+        "pinyin": "Zhèlǐ mài shuǐguǒ.",
+        "en": "Fruit is sold here."
+      }
+    ]
+  },
+  {
+    "hanzi": "块",
+    "pinyin": "kuài",
+    "definition": "[for silver dollars or paper money]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:money",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "香蕉三块一斤。",
+        "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+        "en": "Bananas are 3 yuan per jin."
+      },
+      {
+        "zh": "这个多少块钱？",
+        "pinyin": "Zhège duōshao kuài qián?",
+        "en": "How much is this?"
+      }
+    ]
+  },
+  {
+    "hanzi": "斤",
+    "pinyin": "jīn",
+    "definition": "jin [a traditional unit of weight, equivalent to 0.5 kilogram]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:measurement,shopping",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "香蕉三块一斤。",
+        "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+        "en": "Bananas are 3 yuan per jin."
+      },
+      {
+        "zh": "我要两斤苹果。",
+        "pinyin": "Wǒ yào liǎng jīn píngguǒ.",
+        "en": "I want two jin of apples."
+      }
+    ]
+  },
+  {
+    "hanzi": "重",
+    "pinyin": "zhòng",
+    "definition": "weight",
+    "tags": [
+      "type:noun",
+      "type:adjective",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:measurement",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这几个苹果有多重？",
+        "pinyin": "Zhè jǐ ge píngguǒ yǒu duō zhòng?",
+        "en": "How heavy are these apples?"
+      },
+      {
+        "zh": "这个西瓜很重。",
+        "pinyin": "Zhège xīguā hěn zhòng.",
+        "en": "This watermelon is very heavy."
+      }
+    ]
+  },
+  {
+    "hanzi": "正好",
+    "pinyin": "zhènghǎo",
+    "definition": "just right/enough",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:measurement",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "正好两斤重。",
+        "pinyin": "Zhènghǎo liǎng jīn zhòng.",
+        "en": "It's exactly two jin."
+      },
+      {
+        "zh": "这个价钱正好。",
+        "pinyin": "Zhège jiàqián zhènghǎo.",
+        "en": "This price is just right."
+      }
+    ]
+  },
+  {
+    "hanzi": "一共",
+    "pinyin": "yígòng",
+    "definition": "altogether",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:shopping,numbers",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "一共多少钱？",
+        "pinyin": "Yígòng duōshao qián?",
+        "en": "How much in total?"
+      },
+      {
+        "zh": "一共五十块。",
+        "pinyin": "Yígòng wǔshí kuài.",
+        "en": "Fifty yuan total."
+      }
+    ]
+  },
+  {
+    "hanzi": "便宜",
+    "pinyin": "piányi",
+    "definition": "cheap",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:shopping",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这里的水果很便宜。",
+        "pinyin": "Zhèlǐ de shuǐguǒ hěn piányi.",
+        "en": "The fruit here is cheap."
+      },
+      {
+        "zh": "便宜点儿吧。",
+        "pinyin": "Piányi diǎnr ba.",
+        "en": "Make it a bit cheaper please."
+      }
+    ]
+  },
+  {
+    "hanzi": "下次",
+    "pinyin": "xià cì",
+    "definition": "next time",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "下次再来买吧。",
+        "pinyin": "Xià cì zài lái mǎi ba.",
+        "en": "Come buy again next time."
+      },
+      {
+        "zh": "下次我请客。",
+        "pinyin": "Xià cì wǒ qǐngkè.",
+        "en": "Next time it's my treat."
+      }
+    ]
+  },
+  {
+    "hanzi": "水果店",
+    "pinyin": "shuǐguǒdiàn",
+    "definition": "fruit shop",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:places,shopping"
+    ],
+    "sentences": [
+      {
+        "zh": "我去水果店买苹果。",
+        "pinyin": "Wǒ qù shuǐguǒdiàn mǎi píngguǒ.",
+        "en": "I'm going to the fruit shop to buy apples."
+      },
+      {
+        "zh": "水果店离学校很近。",
+        "pinyin": "Shuǐguǒdiàn lí xuéxiào hěn jìn.",
+        "en": "The fruit shop is close to the school."
+      }
+    ]
+  },
+  {
+    "hanzi": "种",
+    "pinyin": "zhǒng",
+    "definition": "kind; type",
+    "tags": [
+      "type:measure",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这种水果很甜。",
+        "pinyin": "Zhè zhǒng shuǐguǒ hěn tián.",
+        "en": "This kind of fruit is very sweet."
+      },
+      {
+        "zh": "我喜欢这种颜色。",
+        "pinyin": "Wǒ xǐhuan zhè zhǒng yánsè.",
+        "en": "I like this kind of color."
+      }
+    ]
+  },
+  {
+    "hanzi": "草莓",
+    "pinyin": "cǎoméi",
+    "definition": "strawberry",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "草莓很好吃。",
+        "pinyin": "Cǎoméi hěn hǎochī.",
+        "en": "Strawberries are delicious."
+      },
+      {
+        "zh": "我想买一斤草莓。",
+        "pinyin": "Wǒ xiǎng mǎi yī jīn cǎoméi.",
+        "en": "I want to buy a jin of strawberries."
+      }
+    ]
+  },
+  {
+    "hanzi": "回答",
+    "pinyin": "huídá",
+    "definition": "answer",
+    "tags": [
+      "type:verb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:communication",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "请回答我的问题。",
+        "pinyin": "Qǐng huídá wǒ de wèntí.",
+        "en": "Please answer my question."
+      },
+      {
+        "zh": "他回答得很好。",
+        "pinyin": "Tā huídá de hěn hǎo.",
+        "en": "He answered very well."
+      }
+    ]
+  },
+  {
+    "hanzi": "又",
+    "pinyin": "yòu",
+    "definition": "[used for the repetition and continuation of an actual action happening again]",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他又来了。",
+        "pinyin": "Tā yòu lái le.",
+        "en": "He came again."
+      },
+      {
+        "zh": "今天又下雨了。",
+        "pinyin": "Jīntiān yòu xià yǔ le.",
+        "en": "It's raining again today."
+      }
+    ]
+  },
+  {
+    "hanzi": "找",
+    "pinyin": "zhǎo",
+    "definition": "give change",
+    "tags": [
+      "type:verb",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:shopping,money",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "找您五块钱。",
+        "pinyin": "Zhǎo nín wǔ kuài qián.",
+        "en": "Here's 5 yuan change."
+      },
+      {
+        "zh": "老板找了我十块钱。",
+        "pinyin": "Lǎobǎn zhǎo le wǒ shí kuài qián.",
+        "en": "The shopkeeper gave me 10 yuan in change."
+      }
+    ]
+  },
+  {
+    "hanzi": "葡萄",
+    "pinyin": "pútao",
+    "definition": "grape",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "葡萄很甜。",
+        "pinyin": "Pútao hěn tián.",
+        "en": "Grapes are very sweet."
+      },
+      {
+        "zh": "我买了一斤葡萄。",
+        "pinyin": "Wǒ mǎi le yī jīn pútao.",
+        "en": "I bought a jin of grapes."
+      }
+    ]
+  },
+  {
+    "hanzi": "西瓜",
+    "pinyin": "xīguā",
+    "definition": "watermelon",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "夏天吃西瓜很凉快。",
+        "pinyin": "Xiàtiān chī xīguā hěn liángkuai.",
+        "en": "Eating watermelon in summer is very refreshing."
+      },
+      {
+        "zh": "这个西瓜很重。",
+        "pinyin": "Zhège xīguā hěn zhòng.",
+        "en": "This watermelon is very heavy."
+      }
+    ]
+  },
+  {
+    "hanzi": "菠萝",
+    "pinyin": "bōluó",
+    "definition": "pineapple",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:medium",
+      "topic:food,fruit",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "菠萝有点酸。",
+        "pinyin": "Bōluó yǒudiǎn suān.",
+        "en": "Pineapples are a bit sour."
+      },
+      {
+        "zh": "菠萝炒饭很好吃。",
+        "pinyin": "Bōluó chǎofàn hěn hǎochī.",
+        "en": "Pineapple fried rice is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "芒果",
+    "pinyin": "mángguǒ",
+    "definition": "mango",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "芒果是热带水果。",
+        "pinyin": "Mángguǒ shì rèdài shuǐguǒ.",
+        "en": "Mangoes are tropical fruits."
+      },
+      {
+        "zh": "我喜欢吃芒果冰沙。",
+        "pinyin": "Wǒ xǐhuan chī mángguǒ bīngshā.",
+        "en": "I like eating mango smoothies."
+      }
+    ]
+  },
+  {
+    "hanzi": "椰子",
+    "pinyin": "yēzi",
+    "definition": "coconut",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:medium",
+      "topic:food,fruit",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "椰子汁很好喝。",
+        "pinyin": "Yēzi zhī hěn hǎohē.",
+        "en": "Coconut water is very tasty."
+      },
+      {
+        "zh": "椰子壳可以做手工。",
+        "pinyin": "Yēzi ké kěyǐ zuò shǒugōng.",
+        "en": "Coconut shells can be used for crafts."
+      }
+    ]
+  },
+  {
+    "hanzi": "橙子",
+    "pinyin": "chéngzi",
+    "definition": "orange",
+    "tags": [
+      "type:noun",
+      "lesson:lesson17",
+      "frequency:high",
+      "topic:food,fruit",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "橙子富含维生素C。",
+        "pinyin": "Chéngzi fùhán wéishēngsù C.",
+        "en": "Oranges are rich in vitamin C."
+      },
+      {
+        "zh": "我每天吃一个橙子。",
+        "pinyin": "Wǒ měitiān chī yí ge chéngzi.",
+        "en": "I eat one orange every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "菜单",
+    "pinyin": "càidān",
+    "definition": "menu",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:restaurant",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "给我们看一下菜单吧。",
+        "pinyin": "Gěi wǒmen kàn yīxià càidān ba.",
+        "en": "Let us take a look at the menu."
+      },
+      {
+        "zh": "菜单上有图片。",
+        "pinyin": "Càidān shàng yǒu túpiàn.",
+        "en": "The menu has pictures."
+      }
+    ]
+  },
+  {
+    "hanzi": "喝",
+    "pinyin": "hē",
+    "definition": "drink",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "您喝点儿什么？",
+        "pinyin": "Nín hē diǎnr shénme?",
+        "en": "What would you like to drink?"
+      },
+      {
+        "zh": "我想喝一杯果汁。",
+        "pinyin": "Wǒ xiǎng hē yī bēi guǒzhī.",
+        "en": "I want to drink a glass of juice."
+      }
+    ]
+  },
+  {
+    "hanzi": "杯",
+    "pinyin": "bēi",
+    "definition": "cup; glass",
+    "tags": [
+      "type:measure",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "来一杯果汁、一杯奶茶。",
+        "pinyin": "Lái yī bēi guǒzhī, yī bēi nǎichá.",
+        "en": "One glass of juice and one cup of milk tea, please."
+      },
+      {
+        "zh": "我要一杯水。",
+        "pinyin": "Wǒ yào yī bēi shuǐ.",
+        "en": "I want a glass of water."
+      }
+    ]
+  },
+  {
+    "hanzi": "果汁",
+    "pinyin": "guǒzhī",
+    "definition": "fruit juice",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "来一杯果汁。",
+        "pinyin": "Lái yī bēi guǒzhī.",
+        "en": "One glass of juice, please."
+      },
+      {
+        "zh": "我喜欢喝果汁。",
+        "pinyin": "Wǒ xǐhuan hē guǒzhī.",
+        "en": "I like drinking fruit juice."
+      }
+    ]
+  },
+  {
+    "hanzi": "奶茶",
+    "pinyin": "nǎichá",
+    "definition": "milk tea",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想点一杯奶茶。",
+        "pinyin": "Wǒ xiǎng diǎn yī bēi nǎichá.",
+        "en": "I want to order a cup of milk tea."
+      },
+      {
+        "zh": "奶茶很好喝。",
+        "pinyin": "Nǎichá hěn hǎohē.",
+        "en": "Milk tea is very tasty."
+      }
+    ]
+  },
+  {
+    "hanzi": "点",
+    "pinyin": "diǎn",
+    "definition": "order",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:restaurant",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "您吃点儿什么？",
+        "pinyin": "Nín chī diǎnr shénme?",
+        "en": "What would you like to eat?"
+      },
+      {
+        "zh": "我们点两个菜吧。",
+        "pinyin": "Wǒmen diǎn liǎng ge cài ba.",
+        "en": "Let's order two dishes."
+      }
+    ]
+  },
+  {
+    "hanzi": "主食",
+    "pinyin": "zhǔshí",
+    "definition": "staple/principal food",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:medium",
+      "topic:food",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "米饭是中国人的主食。",
+        "pinyin": "Mǐfàn shì Zhōngguórén de zhǔshí.",
+        "en": "Rice is the Chinese staple food."
+      },
+      {
+        "zh": "您想吃什么主食？",
+        "pinyin": "Nín xiǎng chī shénme zhǔshí?",
+        "en": "What staple food would you like?"
+      }
+    ]
+  },
+  {
+    "hanzi": "盘",
+    "pinyin": "pán",
+    "definition": "[used for dishes, millstones, etc]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "一盘炒饭多少钱？",
+        "pinyin": "Yī pán chǎofàn duōshao qián?",
+        "en": "How much is a plate of fried rice?"
+      },
+      {
+        "zh": "桌子上有一盘饺子。",
+        "pinyin": "Zhuōzi shàng yǒu yī pán jiǎozi.",
+        "en": "There's a plate of dumplings on the table."
+      }
+    ]
+  },
+  {
+    "hanzi": "炒饭",
+    "pinyin": "chǎofàn",
+    "definition": "fried rice",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想吃炒饭。",
+        "pinyin": "Wǒ xiǎng chī chǎofàn.",
+        "en": "I want to eat fried rice."
+      },
+      {
+        "zh": "这个炒饭很好吃。",
+        "pinyin": "Zhège chǎofàn hěn hǎochī.",
+        "en": "This fried rice is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "饺子",
+    "pinyin": "jiǎozi",
+    "definition": "Chinese dumpling",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢吃饺子。",
+        "pinyin": "Wǒ xǐhuan chī jiǎozi.",
+        "en": "I like eating dumplings."
+      },
+      {
+        "zh": "妈妈在包饺子。",
+        "pinyin": "Māma zài bāo jiǎozi.",
+        "en": "Mom is making dumplings."
+      }
+    ]
+  },
+  {
+    "hanzi": "辣椒",
+    "pinyin": "làjiāo",
+    "definition": "hot/chilli pepper",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你能吃辣椒吗？",
+        "pinyin": "Nǐ néng chī làjiāo ma?",
+        "en": "Can you eat chili peppers?"
+      },
+      {
+        "zh": "这个菜有很多辣椒。",
+        "pinyin": "Zhège cài yǒu hěn duō làjiāo.",
+        "en": "This dish has a lot of chili peppers."
+      }
+    ]
+  },
+  {
+    "hanzi": "味道",
+    "pinyin": "wèidào",
+    "definition": "taste; flavour",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "味道怎么样？",
+        "pinyin": "Wèidào zěnmeyàng?",
+        "en": "How does it taste?"
+      },
+      {
+        "zh": "这个菜味道很好。",
+        "pinyin": "Zhège cài wèidào hěn hǎo.",
+        "en": "This dish tastes very good."
+      }
+    ]
+  },
+  {
+    "hanzi": "辣",
+    "pinyin": "là",
+    "definition": "hot; spicy",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "您可以吃辣椒吗？",
+        "pinyin": "Nín kěyǐ chī làjiāo ma?",
+        "en": "Can you eat spicy food?"
+      },
+      {
+        "zh": "这个菜很辣。",
+        "pinyin": "Zhège cài hěn là.",
+        "en": "This dish is very spicy."
+      }
+    ]
+  },
+  {
+    "hanzi": "买单",
+    "pinyin": "mǎidān",
+    "definition": "pay the bill",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:restaurant,money",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "在哪儿买单？",
+        "pinyin": "Zài nǎr mǎidān?",
+        "en": "Where do I pay the bill?"
+      },
+      {
+        "zh": "服务员，买单！",
+        "pinyin": "Fúwùyuán, mǎidān!",
+        "en": "Waiter, the bill please!"
+      }
+    ]
+  },
+  {
+    "hanzi": "带",
+    "pinyin": "dài",
+    "definition": "take",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:actions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "请带我们去饭馆。",
+        "pinyin": "Qǐng dài wǒmen qù fànguǎn.",
+        "en": "Please take us to the restaurant."
+      },
+      {
+        "zh": "别忘了带雨伞。",
+        "pinyin": "Bié wàng le dài yǔsǎn.",
+        "en": "Don't forget to bring an umbrella."
+      }
+    ]
+  },
+  {
+    "hanzi": "过去",
+    "pinyin": "guòqù",
+    "definition": "go over",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:movement",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们过去看看菜单。",
+        "pinyin": "Wǒmen guòqù kànkan càidān.",
+        "en": "Let's go over and look at the menu."
+      },
+      {
+        "zh": "他走过去打招呼。",
+        "pinyin": "Tā zǒu guòqù dǎ zhāohu.",
+        "en": "He walked over to say hello."
+      }
+    ]
+  },
+  {
+    "hanzi": "家",
+    "pinyin": "jiā",
+    "definition": "[used for families or enterprises]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我们去那家饭馆吧。",
+        "pinyin": "Wǒmen qù nà jiā fànguǎn ba.",
+        "en": "Let's go to that restaurant."
+      },
+      {
+        "zh": "这家书店很有名。",
+        "pinyin": "Zhè jiā shūdiàn hěn yǒumíng.",
+        "en": "This bookstore is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "饭馆",
+    "pinyin": "fànguǎn",
+    "definition": "restaurant",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:places,food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们去那家饭馆吃饭吧。",
+        "pinyin": "Wǒmen qù nà jiā fànguǎn chīfàn ba.",
+        "en": "Let's go eat at that restaurant."
+      },
+      {
+        "zh": "这家饭馆的菜很好吃。",
+        "pinyin": "Zhè jiā fànguǎn de cài hěn hǎochī.",
+        "en": "The food at this restaurant is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "西红柿",
+    "pinyin": "xīhóngshì",
+    "definition": "tomato",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想吃西红柿炒鸡蛋。",
+        "pinyin": "Wǒ xiǎng chī xīhóngshì chǎo jīdàn.",
+        "en": "I want to eat stir-fried tomato and eggs."
+      },
+      {
+        "zh": "西红柿很酸。",
+        "pinyin": "Xīhóngshì hěn suān.",
+        "en": "Tomatoes are sour."
+      }
+    ]
+  },
+  {
+    "hanzi": "炒",
+    "pinyin": "chǎo",
+    "definition": "fry",
+    "tags": [
+      "type:verb",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,cooking",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "妈妈在炒西红柿鸡蛋。",
+        "pinyin": "Māma zài chǎo xīhóngshì jīdàn.",
+        "en": "Mom is stir-frying tomato and eggs."
+      },
+      {
+        "zh": "这个菜是炒的。",
+        "pinyin": "Zhège cài shì chǎo de.",
+        "en": "This dish is stir-fried."
+      }
+    ]
+  },
+  {
+    "hanzi": "鸡蛋",
+    "pinyin": "jīdàn",
+    "definition": "(hen's) egg",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "西红柿炒鸡蛋很好吃。",
+        "pinyin": "Xīhóngshì chǎo jīdàn hěn hǎochī.",
+        "en": "Stir-fried tomato and eggs is delicious."
+      },
+      {
+        "zh": "我每天吃一个鸡蛋。",
+        "pinyin": "Wǒ měitiān chī yí ge jīdàn.",
+        "en": "I eat an egg every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "青椒",
+    "pinyin": "qīngjiāo",
+    "definition": "green pepper",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:medium",
+      "topic:food",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "青椒肉丝很好吃。",
+        "pinyin": "Qīngjiāo ròusī hěn hǎochī.",
+        "en": "Green pepper with shredded pork is delicious."
+      },
+      {
+        "zh": "我不喜欢吃青椒。",
+        "pinyin": "Wǒ bù xǐhuan chī qīngjiāo.",
+        "en": "I don't like eating green peppers."
+      }
+    ]
+  },
+  {
+    "hanzi": "牛肉",
+    "pinyin": "niúròu",
+    "definition": "beef",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想吃牛肉面。",
+        "pinyin": "Wǒ xiǎng chī niúròu miàn.",
+        "en": "I want to eat beef noodles."
+      },
+      {
+        "zh": "牛肉很贵。",
+        "pinyin": "Niúròu hěn guì.",
+        "en": "Beef is expensive."
+      }
+    ]
+  },
+  {
+    "hanzi": "虽然",
+    "pinyin": "suīrán",
+    "definition": "though; although",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "虽然辣，但是很好吃。",
+        "pinyin": "Suīrán là, dànshì hěn hǎochī.",
+        "en": "Although it's spicy, it's very delicious."
+      },
+      {
+        "zh": "虽然贵，我还是想买。",
+        "pinyin": "Suīrán guì, wǒ háishi xiǎng mǎi.",
+        "en": "Although it's expensive, I still want to buy it."
+      }
+    ]
+  },
+  {
+    "hanzi": "不但",
+    "pinyin": "búdàn",
+    "definition": "not only... (but also...)",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这个菜不但好看，而且好吃。",
+        "pinyin": "Zhège cài búdàn hǎokàn, érqiě hǎochī.",
+        "en": "This dish is not only good-looking, but also delicious."
+      },
+      {
+        "zh": "他不但会说汉语，而且会写汉字。",
+        "pinyin": "Tā búdàn huì shuō Hànyǔ, érqiě huì xiě Hànzì.",
+        "en": "He can not only speak Chinese, but also write characters."
+      }
+    ]
+  },
+  {
+    "hanzi": "而且",
+    "pinyin": "érqiě",
+    "definition": "but also",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这个菜不但好看，而且好吃。",
+        "pinyin": "Zhège cài búdàn hǎokàn, érqiě hǎochī.",
+        "en": "This dish is not only good-looking, but also delicious."
+      },
+      {
+        "zh": "这里方便，而且便宜。",
+        "pinyin": "Zhèlǐ fāngbiàn, érqiě piányi.",
+        "en": "It's convenient here, and also cheap."
+      }
+    ]
+  },
+  {
+    "hanzi": "价格",
+    "pinyin": "jiàgé",
+    "definition": "price",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:money,shopping",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这里的价格很便宜。",
+        "pinyin": "Zhèlǐ de jiàgé hěn piányi.",
+        "en": "The prices here are cheap."
+      },
+      {
+        "zh": "你知道这个的价格吗？",
+        "pinyin": "Nǐ zhīdào zhège de jiàgé ma?",
+        "en": "Do you know the price of this?"
+      }
+    ]
+  },
+  {
+    "hanzi": "烤鸭",
+    "pinyin": "kǎoyā",
+    "definition": "roast(ed) duck",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "北京烤鸭很有名。",
+        "pinyin": "Běijīng kǎoyā hěn yǒumíng.",
+        "en": "Peking roast duck is very famous."
+      },
+      {
+        "zh": "我们点一份烤鸭吧。",
+        "pinyin": "Wǒmen diǎn yī fèn kǎoyā ba.",
+        "en": "Let's order a roast duck."
+      }
+    ]
+  },
+  {
+    "hanzi": "鱼",
+    "pinyin": "yú",
+    "definition": "fish",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这条鱼很新鲜。",
+        "pinyin": "Zhè tiáo yú hěn xīnxiān.",
+        "en": "This fish is very fresh."
+      },
+      {
+        "zh": "我想吃清蒸鱼。",
+        "pinyin": "Wǒ xiǎng chī qīngzhēng yú.",
+        "en": "I want to eat steamed fish."
+      }
+    ]
+  },
+  {
+    "hanzi": "猪肉",
+    "pinyin": "zhūròu",
+    "definition": "pork",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我买了一斤猪肉。",
+        "pinyin": "Wǒ mǎi le yī jīn zhūròu.",
+        "en": "I bought a jin of pork."
+      },
+      {
+        "zh": "猪肉炒青椒很好吃。",
+        "pinyin": "Zhūròu chǎo qīngjiāo hěn hǎochī.",
+        "en": "Pork stir-fried with green peppers is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "面条儿",
+    "pinyin": "miàntiáor",
+    "definition": "noodles",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想吃牛肉面条儿。",
+        "pinyin": "Wǒ xiǎng chī niúròu miàntiáor.",
+        "en": "I want to eat beef noodles."
+      },
+      {
+        "zh": "这碗面条儿很好吃。",
+        "pinyin": "Zhè wǎn miàntiáor hěn hǎochī.",
+        "en": "This bowl of noodles is delicious."
+      }
+    ]
+  },
+  {
+    "hanzi": "包子",
+    "pinyin": "bāozi",
+    "definition": "steamed stuffed bun",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "早饭我吃包子。",
+        "pinyin": "Zǎofàn wǒ chī bāozi.",
+        "en": "I eat steamed buns for breakfast."
+      },
+      {
+        "zh": "这家店的包子很有名。",
+        "pinyin": "Zhè jiā diàn de bāozi hěn yǒumíng.",
+        "en": "This shop's steamed buns are very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "饮料",
+    "pinyin": "yǐnliào",
+    "definition": "drink; beverage",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "您喝什么饮料？",
+        "pinyin": "Nín hē shénme yǐnliào?",
+        "en": "What drink would you like?"
+      },
+      {
+        "zh": "这些饮料都很好喝。",
+        "pinyin": "Zhèxiē yǐnliào dōu hěn hǎohē.",
+        "en": "These drinks are all tasty."
+      }
+    ]
+  },
+  {
+    "hanzi": "咖啡",
+    "pinyin": "kāfēi",
+    "definition": "coffee",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想喝一杯咖啡。",
+        "pinyin": "Wǒ xiǎng hē yī bēi kāfēi.",
+        "en": "I want a cup of coffee."
+      },
+      {
+        "zh": "这家咖啡很好喝。",
+        "pinyin": "Zhè jiā kāfēi hěn hǎohē.",
+        "en": "This shop's coffee is tasty."
+      }
+    ]
+  },
+  {
+    "hanzi": "牛奶",
+    "pinyin": "niúnǎi",
+    "definition": "milk",
+    "tags": [
+      "type:noun",
+      "lesson:lesson18",
+      "frequency:high",
+      "topic:food,drinks",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我每天喝牛奶。",
+        "pinyin": "Wǒ měitiān hē niúnǎi.",
+        "en": "I drink milk every day."
+      },
+      {
+        "zh": "这杯牛奶是热的。",
+        "pinyin": "Zhè bēi niúnǎi shì rè de.",
+        "en": "This glass of milk is hot."
+      }
+    ]
+  },
+  {
+    "hanzi": "件",
+    "pinyin": "jiàn",
+    "definition": "piece",
+    "tags": [
+      "type:measure",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这件衣服怎么样？",
+        "pinyin": "Zhè jiàn yīfu zěnmeyàng?",
+        "en": "How's this piece of clothing?"
+      },
+      {
+        "zh": "我买了两件衣服。",
+        "pinyin": "Wǒ mǎi le liǎng jiàn yīfu.",
+        "en": "I bought two pieces of clothing."
+      }
+    ]
+  },
+  {
+    "hanzi": "衣服",
+    "pinyin": "yīfu",
+    "definition": "clothes",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这件衣服怎么样？",
+        "pinyin": "Zhè jiàn yīfu zěnmeyàng?",
+        "en": "How's this piece of clothing?"
+      },
+      {
+        "zh": "我想买新衣服。",
+        "pinyin": "Wǒ xiǎng mǎi xīn yīfu.",
+        "en": "I want to buy new clothes."
+      }
+    ]
+  },
+  {
+    "hanzi": "合适",
+    "pinyin": "héshì",
+    "definition": "suitable",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这件衣服不大不小，很合适。",
+        "pinyin": "Zhè jiàn yīfu bú dà bù xiǎo, hěn héshì.",
+        "en": "This piece of clothing is neither too big nor small — it fits well."
+      },
+      {
+        "zh": "这个时间合适吗？",
+        "pinyin": "Zhège shíjiān héshì ma?",
+        "en": "Is this time suitable?"
+      }
+    ]
+  },
+  {
+    "hanzi": "裤子",
+    "pinyin": "kùzi",
+    "definition": "trousers",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这条裤子有点儿短。",
+        "pinyin": "Zhè tiáo kùzi yǒudiǎnr duǎn.",
+        "en": "These pants are a bit short."
+      },
+      {
+        "zh": "我想买一条新裤子。",
+        "pinyin": "Wǒ xiǎng mǎi yī tiáo xīn kùzi.",
+        "en": "I want to buy new pants."
+      }
+    ]
+  },
+  {
+    "hanzi": "短",
+    "pinyin": "duǎn",
+    "definition": "short (in distance/length)",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这条裤子有点儿短。",
+        "pinyin": "Zhè tiáo kùzi yǒudiǎnr duǎn.",
+        "en": "These pants are a bit short."
+      },
+      {
+        "zh": "她的头发很短。",
+        "pinyin": "Tā de tóufa hěn duǎn.",
+        "en": "Her hair is very short."
+      }
+    ]
+  },
+  {
+    "hanzi": "穿",
+    "pinyin": "chuān",
+    "definition": "wear",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你穿多大码？",
+        "pinyin": "Nǐ chuān duō dà mǎ?",
+        "en": "What size do you wear?"
+      },
+      {
+        "zh": "今天她穿了一条裙子。",
+        "pinyin": "Jīntiān tā chuān le yī tiáo qúnzi.",
+        "en": "Today she wore a skirt."
+      }
+    ]
+  },
+  {
+    "hanzi": "码",
+    "pinyin": "mǎ",
+    "definition": "size",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing,shopping",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你穿多大码？",
+        "pinyin": "Nǐ chuān duō dà mǎ?",
+        "en": "What size do you wear?"
+      },
+      {
+        "zh": "这双鞋是什么码？",
+        "pinyin": "Zhè shuāng xié shì shénme mǎ?",
+        "en": "What size are these shoes?"
+      }
+    ]
+  },
+  {
+    "hanzi": "双",
+    "pinyin": "shuāng",
+    "definition": "pair",
+    "tags": [
+      "type:measure",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这双鞋子很舒服。",
+        "pinyin": "Zhè shuāng xiézi hěn shūfu.",
+        "en": "These shoes are very comfortable."
+      },
+      {
+        "zh": "我要买一双鞋。",
+        "pinyin": "Wǒ yào mǎi yī shuāng xié.",
+        "en": "I want to buy a pair of shoes."
+      }
+    ]
+  },
+  {
+    "hanzi": "鞋子",
+    "pinyin": "xiézi",
+    "definition": "shoe",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这双鞋子很舒服。",
+        "pinyin": "Zhè shuāng xiézi hěn shūfu.",
+        "en": "These shoes are very comfortable."
+      },
+      {
+        "zh": "这双鞋子多少钱？",
+        "pinyin": "Zhè shuāng xiézi duōshao qián?",
+        "en": "How much are these shoes?"
+      }
+    ]
+  },
+  {
+    "hanzi": "稍等",
+    "pinyin": "shāo děng",
+    "definition": "wait a moment",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:shopping,politeness",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "请稍等，我去找找。",
+        "pinyin": "Qǐng shāo děng, wǒ qù zhǎozhao.",
+        "en": "Please wait a moment, I'll go find it."
+      },
+      {
+        "zh": "稍等一下，马上就好。",
+        "pinyin": "Shāo děng yīxià, mǎshàng jiù hǎo.",
+        "en": "Wait a moment, it'll be ready soon."
+      }
+    ]
+  },
+  {
+    "hanzi": "拿",
+    "pinyin": "ná",
+    "definition": "take",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请帮我拿一下这件衣服。",
+        "pinyin": "Qǐng bāng wǒ ná yīxià zhè jiàn yīfu.",
+        "en": "Please help me take this piece of clothing."
+      },
+      {
+        "zh": "我拿了两本书。",
+        "pinyin": "Wǒ ná le liǎng běn shū.",
+        "en": "I took two books."
+      }
+    ]
+  },
+  {
+    "hanzi": "样子",
+    "pinyin": "yàngzi",
+    "definition": "pattern; appearance",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing,description",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这件衣服的样子很好看。",
+        "pinyin": "Zhè jiàn yīfu de yàngzi hěn hǎokàn.",
+        "en": "The style of this clothing looks nice."
+      },
+      {
+        "zh": "我喜欢这个样子。",
+        "pinyin": "Wǒ xǐhuan zhège yàngzi.",
+        "en": "I like this style."
+      }
+    ]
+  },
+  {
+    "hanzi": "试",
+    "pinyin": "shì",
+    "definition": "try",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:actions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我能试一下吗？",
+        "pinyin": "Wǒ néng shì yīxià ma?",
+        "en": "Can I try it on?"
+      },
+      {
+        "zh": "你试试这个吧。",
+        "pinyin": "Nǐ shìshi zhège ba.",
+        "en": "Try this."
+      }
+    ]
+  },
+  {
+    "hanzi": "试衣间",
+    "pinyin": "shì yī jiān",
+    "definition": "fitting room",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:shopping,places"
+    ],
+    "sentences": [
+      {
+        "zh": "试衣间在那边。",
+        "pinyin": "Shì yī jiān zài nàbiān.",
+        "en": "The fitting room is over there."
+      },
+      {
+        "zh": "我去试衣间试一下。",
+        "pinyin": "Wǒ qù shì yī jiān shì yīxià.",
+        "en": "I'll go to the fitting room to try it on."
+      }
+    ]
+  },
+  {
+    "hanzi": "打折",
+    "pinyin": "dǎzhé",
+    "definition": "give a discount",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:shopping",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个打折吗？",
+        "pinyin": "Zhège dǎzhé ma?",
+        "en": "Is there a discount on this?"
+      },
+      {
+        "zh": "今天全场打折。",
+        "pinyin": "Jīntiān quánchǎng dǎzhé.",
+        "en": "Everything is discounted today."
+      }
+    ]
+  },
+  {
+    "hanzi": "商场",
+    "pinyin": "shāngchǎng",
+    "definition": "market; mall",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:places,shopping",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我们去商场买衣服吧。",
+        "pinyin": "Wǒmen qù shāngchǎng mǎi yīfu ba.",
+        "en": "Let's go to the mall to buy clothes."
+      },
+      {
+        "zh": "这个商场很大。",
+        "pinyin": "Zhège shāngchǎng hěn dà.",
+        "en": "This mall is very big."
+      }
+    ]
+  },
+  {
+    "hanzi": "活动",
+    "pinyin": "huódòng",
+    "definition": "activity; event",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:events",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "商场有打折活动。",
+        "pinyin": "Shāngchǎng yǒu dǎzhé huódòng.",
+        "en": "The mall has a discount promotion."
+      },
+      {
+        "zh": "学校有很多活动。",
+        "pinyin": "Xuéxiào yǒu hěn duō huódòng.",
+        "en": "The school has many activities."
+      }
+    ]
+  },
+  {
+    "hanzi": "刷卡",
+    "pinyin": "shuākǎ",
+    "definition": "swipe a card",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:shopping,money",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我可以刷卡吗？",
+        "pinyin": "Wǒ kěyǐ shuākǎ ma?",
+        "en": "Can I pay by card?"
+      },
+      {
+        "zh": "这里可以刷卡。",
+        "pinyin": "Zhèlǐ kěyǐ shuākǎ.",
+        "en": "You can pay by card here."
+      }
+    ]
+  },
+  {
+    "hanzi": "支付",
+    "pinyin": "zhīfù",
+    "definition": "pay",
+    "tags": [
+      "type:verb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:shopping,money",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "能用手机支付吗？",
+        "pinyin": "Néng yòng shǒujī zhīfù ma?",
+        "en": "Can I pay by phone?"
+      },
+      {
+        "zh": "现在大部分商店都能用手机支付。",
+        "pinyin": "Xiànzài dà bùfen shāngdiàn dōu néng yòng shǒujī zhīfù.",
+        "en": "Now most stores accept phone payment."
+      }
+    ]
+  },
+  {
+    "hanzi": "越来越……",
+    "pinyin": "yuè lái yuè…",
+    "definition": "more and more",
+    "tags": [
+      "type:phrase",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "天气越来越冷了。",
+        "pinyin": "Tiānqì yuè lái yuè lěng le.",
+        "en": "The weather is getting colder and colder."
+      },
+      {
+        "zh": "手机支付越来越方便。",
+        "pinyin": "Shǒujī zhīfù yuè lái yuè fāngbiàn.",
+        "en": "Phone payment is becoming more and more convenient."
+      }
+    ]
+  },
+  {
+    "hanzi": "打算",
+    "pinyin": "dǎsuàn",
+    "definition": "plan",
+    "tags": [
+      "type:verb",
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:plans",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你打算买什么？",
+        "pinyin": "Nǐ dǎsuàn mǎi shénme?",
+        "en": "What do you plan to buy?"
+      },
+      {
+        "zh": "我打算明天去商场。",
+        "pinyin": "Wǒ dǎsuàn míngtiān qù shāngchǎng.",
+        "en": "I plan to go to the mall tomorrow."
+      }
+    ]
+  },
+  {
+    "hanzi": "蓝色",
+    "pinyin": "lánsè",
+    "definition": "blue",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:colors",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢蓝色的衣服。",
+        "pinyin": "Wǒ xǐhuan lánsè de yīfu.",
+        "en": "I like blue clothes."
+      },
+      {
+        "zh": "这条围巾是蓝色的。",
+        "pinyin": "Zhè tiáo wéijīn shì lánsè de.",
+        "en": "This scarf is blue."
+      }
+    ]
+  },
+  {
+    "hanzi": "围巾",
+    "pinyin": "wéijīn",
+    "definition": "scarf",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这条围巾是蓝色的。",
+        "pinyin": "Zhè tiáo wéijīn shì lánsè de.",
+        "en": "This scarf is blue."
+      },
+      {
+        "zh": "冬天戴围巾很暖和。",
+        "pinyin": "Dōngtiān dài wéijīn hěn nuǎnhuo.",
+        "en": "Wearing a scarf in winter is very warm."
+      }
+    ]
+  },
+  {
+    "hanzi": "顶",
+    "pinyin": "dǐng",
+    "definition": "[used for sth that has a top]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我想买一顶帽子。",
+        "pinyin": "Wǒ xiǎng mǎi yī dǐng màozi.",
+        "en": "I want to buy a hat."
+      },
+      {
+        "zh": "这顶帽子很好看。",
+        "pinyin": "Zhè dǐng màozi hěn hǎokàn.",
+        "en": "This hat looks nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "白色",
+    "pinyin": "báisè",
+    "definition": "white",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:colors",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我想买一顶白色的帽子。",
+        "pinyin": "Wǒ xiǎng mǎi yī dǐng báisè de màozi.",
+        "en": "I want to buy a white hat."
+      },
+      {
+        "zh": "白色很好搭配。",
+        "pinyin": "Báisè hěn hǎo dāpèi.",
+        "en": "White goes well with everything."
+      }
+    ]
+  },
+  {
+    "hanzi": "帽子",
+    "pinyin": "màozi",
+    "definition": "cap; hat",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我想买一顶帽子。",
+        "pinyin": "Wǒ xiǎng mǎi yī dǐng màozi.",
+        "en": "I want to buy a hat."
+      },
+      {
+        "zh": "冬天戴帽子很暖和。",
+        "pinyin": "Dōngtiān dài màozi hěn nuǎnhuo.",
+        "en": "Wearing a hat in winter is very warm."
+      }
+    ]
+  },
+  {
+    "hanzi": "黑色",
+    "pinyin": "hēisè",
+    "definition": "black",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:colors",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢黑色的衣服。",
+        "pinyin": "Wǒ xǐhuan hēisè de yīfu.",
+        "en": "I like black clothes."
+      },
+      {
+        "zh": "这双鞋子是黑色的。",
+        "pinyin": "Zhè shuāng xiézi shì hēisè de.",
+        "en": "These shoes are black."
+      }
+    ]
+  },
+  {
+    "hanzi": "羽绒服",
+    "pinyin": "yǔróngfú",
+    "definition": "down garment",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:medium",
+      "topic:clothing"
+    ],
+    "sentences": [
+      {
+        "zh": "冬天要穿羽绒服。",
+        "pinyin": "Dōngtiān yào chuān yǔróngfú.",
+        "en": "You need to wear a down jacket in winter."
+      },
+      {
+        "zh": "这件羽绒服很暖和。",
+        "pinyin": "Zhè jiàn yǔróngfú hěn nuǎnhuo.",
+        "en": "This down jacket is very warm."
+      }
+    ]
+  },
+  {
+    "hanzi": "厚",
+    "pinyin": "hòu",
+    "definition": "thick",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这件羽绒服很厚。",
+        "pinyin": "Zhè jiàn yǔróngfú hěn hòu.",
+        "en": "This down jacket is very thick."
+      },
+      {
+        "zh": "冬天要穿厚一点的衣服。",
+        "pinyin": "Dōngtiān yào chuān hòu yīdiǎn de yīfu.",
+        "en": "You should wear thicker clothes in winter."
+      }
+    ]
+  },
+  {
+    "hanzi": "棕色",
+    "pinyin": "zōngsè",
+    "definition": "brown",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:medium",
+      "topic:colors",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "这双鞋子是棕色的。",
+        "pinyin": "Zhè shuāng xiézi shì zōngsè de.",
+        "en": "These shoes are brown."
+      },
+      {
+        "zh": "我喜欢棕色的围巾。",
+        "pinyin": "Wǒ xǐhuan zōngsè de wéijīn.",
+        "en": "I like the brown scarf."
+      }
+    ]
+  },
+  {
+    "hanzi": "差不多",
+    "pinyin": "chàbuduō",
+    "definition": "almost",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我们差不多到了。",
+        "pinyin": "Wǒmen chàbuduō dào le.",
+        "en": "We're almost there."
+      },
+      {
+        "zh": "这两件衣服差不多。",
+        "pinyin": "Zhè liǎng jiàn yīfu chàbuduō.",
+        "en": "These two pieces of clothing are almost the same."
+      }
+    ]
+  },
+  {
+    "hanzi": "现金",
+    "pinyin": "xiànjīn",
+    "definition": "cash",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:money",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我没有现金。",
+        "pinyin": "Wǒ méiyǒu xiànjīn.",
+        "en": "I don't have cash."
+      },
+      {
+        "zh": "可以用现金付款吗？",
+        "pinyin": "Kěyǐ yòng xiànjīn fùkuǎn ma?",
+        "en": "Can I pay with cash?"
+      }
+    ]
+  },
+  {
+    "hanzi": "特别",
+    "pinyin": "tèbié",
+    "definition": "especially",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这件衣服特别合适。",
+        "pinyin": "Zhè jiàn yīfu tèbié héshì.",
+        "en": "This piece of clothing fits especially well."
+      },
+      {
+        "zh": "我特别喜欢蓝色。",
+        "pinyin": "Wǒ tèbié xǐhuan lánsè.",
+        "en": "I especially like blue."
+      }
+    ]
+  },
+  {
+    "hanzi": "毛衣",
+    "pinyin": "máoyī",
+    "definition": "sweater",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "冬天穿毛衣很暖和。",
+        "pinyin": "Dōngtiān chuān máoyī hěn nuǎnhuo.",
+        "en": "Wearing a sweater in winter is very warm."
+      },
+      {
+        "zh": "这件毛衣是羊毛的。",
+        "pinyin": "Zhè jiàn máoyī shì yángmáo de.",
+        "en": "This sweater is made of wool."
+      }
+    ]
+  },
+  {
+    "hanzi": "裙子",
+    "pinyin": "qúnzi",
+    "definition": "dress",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这条裙子很好看。",
+        "pinyin": "Zhè tiáo qúnzi hěn hǎokàn.",
+        "en": "This dress looks very nice."
+      },
+      {
+        "zh": "夏天女生喜欢穿裙子。",
+        "pinyin": "Xiàtiān nǚshēng xǐhuan chuān qúnzi.",
+        "en": "In summer, girls like to wear dresses."
+      }
+    ]
+  },
+  {
+    "hanzi": "红色",
+    "pinyin": "hóngsè",
+    "definition": "red",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:colors",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "红色很喜庆。",
+        "pinyin": "Hóngsè hěn xǐqìng.",
+        "en": "Red is very festive."
+      },
+      {
+        "zh": "她穿红色很好看。",
+        "pinyin": "Tā chuān hóngsè hěn hǎokàn.",
+        "en": "She looks good in red."
+      }
+    ]
+  },
+  {
+    "hanzi": "绿色",
+    "pinyin": "lǜsè",
+    "definition": "green",
+    "tags": [
+      "type:noun",
+      "lesson:lesson19",
+      "frequency:high",
+      "topic:colors",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "绿色代表自然。",
+        "pinyin": "Lǜsè dàibiǎo zìrán.",
+        "en": "Green represents nature."
+      },
+      {
+        "zh": "这件绿色的外套很好看。",
+        "pinyin": "Zhè jiàn lǜsè de wàitào hěn hǎokàn.",
+        "en": "This green coat looks very nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "头疼",
+    "pinyin": "tóuténg",
+    "definition": "have a headache",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我头疼、咳嗽，还有点儿发烧。",
+        "pinyin": "Wǒ tóuténg, késou, hái yǒudiǎnr fāshāo.",
+        "en": "I have a headache, a cough, and a slight fever."
+      },
+      {
+        "zh": "你头疼吗？",
+        "pinyin": "Nǐ tóuténg ma?",
+        "en": "Do you have a headache?"
+      }
+    ]
+  },
+  {
+    "hanzi": "咳嗽",
+    "pinyin": "késou",
+    "definition": "cough",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "咳嗽得厉害吗？",
+        "pinyin": "Késou de lìhai ma?",
+        "en": "Is the cough severe?"
+      },
+      {
+        "zh": "我咳嗽了两天了。",
+        "pinyin": "Wǒ késou le liǎng tiān le.",
+        "en": "I've had a cough for two days."
+      }
+    ]
+  },
+  {
+    "hanzi": "发烧",
+    "pinyin": "fāshāo",
+    "definition": "have a fever",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我有点儿发烧。",
+        "pinyin": "Wǒ yǒudiǎnr fāshāo.",
+        "en": "I have a slight fever."
+      },
+      {
+        "zh": "他发烧三十九度。",
+        "pinyin": "Tā fāshāo sānshíjiǔ dù.",
+        "en": "He has a fever of 39 degrees."
+      }
+    ]
+  },
+  {
+    "hanzi": "厉害",
+    "pinyin": "lìhai",
+    "definition": "(of illness) severe; terrible",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "咳嗽得很厉害。",
+        "pinyin": "Késou de hěn lìhai.",
+        "en": "The cough is very severe."
+      },
+      {
+        "zh": "他病得很厉害。",
+        "pinyin": "Tā bìng de hěn lìhai.",
+        "en": "He's very seriously ill."
+      }
+    ]
+  },
+  {
+    "hanzi": "开",
+    "pinyin": "kāi",
+    "definition": "write out",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我给您开点儿药吧。",
+        "pinyin": "Wǒ gěi nín kāi diǎnr yào ba.",
+        "en": "Let me prescribe you some medicine."
+      },
+      {
+        "zh": "医生给我开了药。",
+        "pinyin": "Yīshēng gěi wǒ kāi le yào.",
+        "en": "The doctor prescribed medicine for me."
+      }
+    ]
+  },
+  {
+    "hanzi": "药",
+    "pinyin": "yào",
+    "definition": "medicine",
+    "tags": [
+      "type:noun",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我给您开点儿药吧。",
+        "pinyin": "Wǒ gěi nín kāi diǎnr yào ba.",
+        "en": "Let me prescribe you some medicine."
+      },
+      {
+        "zh": "这个药怎么吃？",
+        "pinyin": "Zhège yào zěnme chī?",
+        "en": "How do I take this medicine?"
+      }
+    ]
+  },
+  {
+    "hanzi": "片",
+    "pinyin": "piàn",
+    "definition": "tablet",
+    "tags": [
+      "type:measure",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "一次吃两片。",
+        "pinyin": "Yī cì chī liǎng piàn.",
+        "en": "Take two tablets each time."
+      },
+      {
+        "zh": "这种药一片多少钱？",
+        "pinyin": "Zhè zhǒng yào yī piàn duōshao qián?",
+        "en": "How much is one tablet of this medicine?"
+      }
+    ]
+  },
+  {
+    "hanzi": "感冒",
+    "pinyin": "gǎnmào",
+    "definition": "catch cold",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我感冒了。",
+        "pinyin": "Wǒ gǎnmào le.",
+        "en": "I've caught a cold."
+      },
+      {
+        "zh": "感冒了要多喝水。",
+        "pinyin": "Gǎnmào le yào duō hē shuǐ.",
+        "en": "When you have a cold, drink more water."
+      }
+    ]
+  },
+  {
+    "hanzi": "检查",
+    "pinyin": "jiǎnchá",
+    "definition": "check (up)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "医生给我做检查。",
+        "pinyin": "Yīshēng gěi wǒ zuò jiǎnchá.",
+        "en": "The doctor gave me a check-up."
+      },
+      {
+        "zh": "请检查一下我的体温。",
+        "pinyin": "Qǐng jiǎnchá yīxià wǒ de tǐwēn.",
+        "en": "Please check my temperature."
+      }
+    ]
+  },
+  {
+    "hanzi": "量",
+    "pinyin": "liáng",
+    "definition": "measure",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "护士给我量体温。",
+        "pinyin": "Hùshi gěi wǒ liáng tǐwēn.",
+        "en": "The nurse measured my temperature."
+      },
+      {
+        "zh": "请量一下你的体重。",
+        "pinyin": "Qǐng liáng yīxià nǐ de tǐzhòng.",
+        "en": "Please measure your weight."
+      }
+    ]
+  },
+  {
+    "hanzi": "体温",
+    "pinyin": "tǐwēn",
+    "definition": "(body) temperature",
+    "tags": [
+      "type:noun",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "护士给我量体温。",
+        "pinyin": "Hùshi gěi wǒ liáng tǐwēn.",
+        "en": "The nurse measured my temperature."
+      },
+      {
+        "zh": "我的体温正常。",
+        "pinyin": "Wǒ de tǐwēn zhèngcháng.",
+        "en": "My temperature is normal."
+      }
+    ]
+  },
+  {
+    "hanzi": "放心",
+    "pinyin": "fàngxīn",
+    "definition": "set one's mind at rest",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health,emotions",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你放心，没有大问题。",
+        "pinyin": "Nǐ fàngxīn, méiyǒu dà wèntí.",
+        "en": "Don't worry, there's no big problem."
+      },
+      {
+        "zh": "放心吧，我会照顾好自己。",
+        "pinyin": "Fàngxīn ba, wǒ huì zhàogù hǎo zìjǐ.",
+        "en": "Don't worry, I'll take good care of myself."
+      }
+    ]
+  },
+  {
+    "hanzi": "严重",
+    "pinyin": "yánzhòng",
+    "definition": "serious; grave",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你的病不严重。",
+        "pinyin": "Nǐ de bìng bù yánzhòng.",
+        "en": "Your illness isn't serious."
+      },
+      {
+        "zh": "情况变得很严重。",
+        "pinyin": "Qíngkuàng biàn de hěn yánzhòng.",
+        "en": "The situation became very serious."
+      }
+    ]
+  },
+  {
+    "hanzi": "于是",
+    "pinyin": "yúshì",
+    "definition": "so; then",
+    "tags": [
+      "type:conjunction",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我头疼，于是去看病了。",
+        "pinyin": "Wǒ tóuténg, yúshì qù kànbìng le.",
+        "en": "I had a headache, so I went to see a doctor."
+      },
+      {
+        "zh": "天气冷了，于是我穿上了羽绒服。",
+        "pinyin": "Tiānqì lěng le, yúshì wǒ chuān shàng le yǔróngfú.",
+        "en": "The weather turned cold, so I put on my down jacket."
+      }
+    ]
+  },
+  {
+    "hanzi": "向",
+    "pinyin": "xiàng",
+    "definition": "to; towards",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他向老师请假。",
+        "pinyin": "Tā xiàng lǎoshī qǐngjià.",
+        "en": "He asked the teacher for leave."
+      },
+      {
+        "zh": "一直向前走。",
+        "pinyin": "Yìzhí xiàng qián zǒu.",
+        "en": "Go straight ahead."
+      }
+    ]
+  },
+  {
+    "hanzi": "请假",
+    "pinyin": "qǐngjià",
+    "definition": "ask for leave (of absence)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health,school",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "他向老师请假。",
+        "pinyin": "Tā xiàng lǎoshī qǐngjià.",
+        "en": "He asked the teacher for leave."
+      },
+      {
+        "zh": "我今天要请假去医院。",
+        "pinyin": "Wǒ jīntiān yào qǐngjià qù yīyuàn.",
+        "en": "I need to take leave today to go to the hospital."
+      }
+    ]
+  },
+  {
+    "hanzi": "让",
+    "pinyin": "ràng",
+    "definition": "let",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "让我陪你去医院吧。",
+        "pinyin": "Ràng wǒ péi nǐ qù yīyuàn ba.",
+        "en": "Let me accompany you to the hospital."
+      },
+      {
+        "zh": "妈妈让我早点睡觉。",
+        "pinyin": "Māma ràng wǒ zǎodiǎn shuìjiào.",
+        "en": "Mom told me to go to bed early."
+      }
+    ]
+  },
+  {
+    "hanzi": "陪",
+    "pinyin": "péi",
+    "definition": "accompany",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:social,health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "让我陪你去医院吧。",
+        "pinyin": "Ràng wǒ péi nǐ qù yīyuàn ba.",
+        "en": "Let me accompany you to the hospital."
+      },
+      {
+        "zh": "我陪妈妈去看病。",
+        "pinyin": "Wǒ péi māma qù kànbìng.",
+        "en": "I accompanied mom to see the doctor."
+      }
+    ]
+  },
+  {
+    "hanzi": "看病",
+    "pinyin": "kànbìng",
+    "definition": "(of a patient) see a doctor",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我陪妈妈去看病。",
+        "pinyin": "Wǒ péi māma qù kànbìng.",
+        "en": "I accompanied mom to see the doctor."
+      },
+      {
+        "zh": "你应该去看病。",
+        "pinyin": "Nǐ yīnggāi qù kànbìng.",
+        "en": "You should go see a doctor."
+      }
+    ]
+  },
+  {
+    "hanzi": "变化",
+    "pinyin": "biànhuà",
+    "definition": "change",
+    "tags": [
+      "type:noun",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "我的病情有变化。",
+        "pinyin": "Wǒ de bìngqíng yǒu biànhuà.",
+        "en": "My condition has changed."
+      },
+      {
+        "zh": "天气变化很大。",
+        "pinyin": "Tiānqì biànhuà hěn dà.",
+        "en": "The weather has changed a lot."
+      }
+    ]
+  },
+  {
+    "hanzi": "不用",
+    "pinyin": "búyòng",
+    "definition": "need not",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "不用担心，休息一下就好了。",
+        "pinyin": "Búyòng dānxīn, xiūxi yīxià jiù hǎo le.",
+        "en": "No need to worry, you'll be fine after a rest."
+      },
+      {
+        "zh": "不用谢。",
+        "pinyin": "Búyòng xiè.",
+        "en": "No need to thank me."
+      }
+    ]
+  },
+  {
+    "hanzi": "打针",
+    "pinyin": "dǎzhēn",
+    "definition": "have an injection",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:health",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "医生给我打针了。",
+        "pinyin": "Yīshēng gěi wǒ dǎzhēn le.",
+        "en": "The doctor gave me an injection."
+      },
+      {
+        "zh": "我不喜欢打针。",
+        "pinyin": "Wǒ bù xǐhuan dǎzhēn.",
+        "en": "I don't like getting injections."
+      }
+    ]
+  },
+  {
+    "hanzi": "担心",
+    "pinyin": "dānxīn",
+    "definition": "worry",
+    "tags": [
+      "type:verb",
+      "lesson:lesson20",
+      "frequency:high",
+      "topic:emotions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "不用担心，休息一下就好了。",
+        "pinyin": "Búyòng dānxīn, xiūxi yīxià jiù hǎo le.",
+        "en": "No need to worry, you'll be fine after a rest."
+      },
+      {
+        "zh": "妈妈很担心我。",
+        "pinyin": "Māma hěn dānxīn wǒ.",
+        "en": "Mom worries about me a lot."
+      }
+    ]
+  },
+  {
+    "hanzi": "坐",
+    "pinyin": "zuò",
+    "definition": "travel by",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你喜欢坐飞机还是坐火车？",
+        "pinyin": "Nǐ xǐhuan zuò fēijī háishi zuò huǒchē?",
+        "en": "Do you like taking planes or trains?"
+      },
+      {
+        "zh": "我每天坐地铁上班。",
+        "pinyin": "Wǒ měitiān zuò dìtiě shàngbān.",
+        "en": "I take the subway to work every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "飞机",
+    "pinyin": "fēijī",
+    "definition": "aeroplane",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你上飞机了吗？",
+        "pinyin": "Nǐ shàng fēijī le ma?",
+        "en": "Have you boarded the plane?"
+      },
+      {
+        "zh": "坐飞机比坐火车快。",
+        "pinyin": "Zuò fēijī bǐ zuò huǒchē kuài.",
+        "en": "Taking a plane is faster than taking a train."
+      }
+    ]
+  },
+  {
+    "hanzi": "火车",
+    "pinyin": "huǒchē",
+    "definition": "train",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "火车比坐飞机舒服。",
+        "pinyin": "Huǒchē bǐ zuò fēijī shūfu.",
+        "en": "Trains are more comfortable than planes."
+      },
+      {
+        "zh": "我买了一张火车票。",
+        "pinyin": "Wǒ mǎi le yī zhāng huǒchēpiào.",
+        "en": "I bought a train ticket."
+      }
+    ]
+  },
+  {
+    "hanzi": "比",
+    "pinyin": "bǐ",
+    "definition": "than",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2",
+      "grammar:comparison"
+    ],
+    "sentences": [
+      {
+        "zh": "坐飞机比坐火车快。",
+        "pinyin": "Zuò fēijī bǐ zuò huǒchē kuài.",
+        "en": "Taking a plane is faster than taking a train."
+      },
+      {
+        "zh": "今天比昨天冷。",
+        "pinyin": "Jīntiān bǐ zuótiān lěng.",
+        "en": "Today is colder than yesterday."
+      }
+    ]
+  },
+  {
+    "hanzi": "上",
+    "pinyin": "shàng",
+    "definition": "get on",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你上飞机了吗？",
+        "pinyin": "Nǐ shàng fēijī le ma?",
+        "en": "Have you boarded the plane?"
+      },
+      {
+        "zh": "请上车吧。",
+        "pinyin": "Qǐng shàng chē ba.",
+        "en": "Please get on the vehicle."
+      }
+    ]
+  },
+  {
+    "hanzi": "下",
+    "pinyin": "xià",
+    "definition": "get off",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "下飞机后给你打电话。",
+        "pinyin": "Xià fēijī hòu gěi nǐ dǎ diànhuà.",
+        "en": "I'll call you after getting off the plane."
+      },
+      {
+        "zh": "请在下一站下车。",
+        "pinyin": "Qǐng zài xià yī zhàn xiàchē.",
+        "en": "Please get off at the next stop."
+      }
+    ]
+  },
+  {
+    "hanzi": "打电话",
+    "pinyin": "dǎ diànhuà",
+    "definition": "make a phone call",
+    "tags": [
+      "type:verb phrase",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:communication",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "下飞机后给你打电话。",
+        "pinyin": "Xià fēijī hòu gěi nǐ dǎ diànhuà.",
+        "en": "I'll call you after getting off the plane."
+      },
+      {
+        "zh": "我给你打电话。",
+        "pinyin": "Wǒ gěi nǐ dǎ diànhuà.",
+        "en": "I'll call you."
+      }
+    ]
+  },
+  {
+    "hanzi": "地铁站",
+    "pinyin": "dìtiězhàn",
+    "definition": "underground station",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport,places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "地铁站离我家很近。",
+        "pinyin": "Dìtiězhàn lí wǒ jiā hěn jìn.",
+        "en": "The subway station is close to my home."
+      },
+      {
+        "zh": "我在地铁站等你。",
+        "pinyin": "Wǒ zài dìtiězhàn děng nǐ.",
+        "en": "I'll wait for you at the subway station."
+      }
+    ]
+  },
+  {
+    "hanzi": "上班",
+    "pinyin": "shàngbān",
+    "definition": "go to work",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:work",
+      "hsk:1",
+      "grammar:separable"
+    ],
+    "sentences": [
+      {
+        "zh": "你为什么喜欢坐地铁上班？",
+        "pinyin": "Nǐ wèishénme xǐhuan zuò dìtiě shàngbān?",
+        "en": "Why do you like taking the subway to work?"
+      },
+      {
+        "zh": "我每天九点上班。",
+        "pinyin": "Wǒ měitiān jiǔ diǎn shàngbān.",
+        "en": "I start work at 9 every day."
+      }
+    ]
+  },
+  {
+    "hanzi": "堵车",
+    "pinyin": "dǔchē",
+    "definition": "be traffic-jammed",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "早上开车常常堵车。",
+        "pinyin": "Zǎoshang kāichē chángcháng dǔchē.",
+        "en": "There's often traffic in the morning driving."
+      },
+      {
+        "zh": "堵车的时候坐地铁更快。",
+        "pinyin": "Dǔchē de shíhou zuò dìtiě gèng kuài.",
+        "en": "Taking the subway is faster during traffic jams."
+      }
+    ]
+  },
+  {
+    "hanzi": "来得及",
+    "pinyin": "láidejí",
+    "definition": "have enough time to do sth",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:time",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "坐地铁来得及吗？",
+        "pinyin": "Zuò dìtiě láidejí ma?",
+        "en": "Is there enough time if I take the subway?"
+      },
+      {
+        "zh": "现在出发还来得及。",
+        "pinyin": "Xiànzài chūfā hái láidejí.",
+        "en": "There's still enough time if we leave now."
+      }
+    ]
+  },
+  {
+    "hanzi": "来不及",
+    "pinyin": "láibují",
+    "definition": "not have enough time to do sth",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:time",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "堵车了，来不及了。",
+        "pinyin": "Dǔchē le, láibují le.",
+        "en": "There's traffic, we won't make it in time."
+      },
+      {
+        "zh": "现在出门也来不及了。",
+        "pinyin": "Xiànzài chūmén yě láibují le.",
+        "en": "Even leaving now, we won't make it."
+      }
+    ]
+  },
+  {
+    "hanzi": "打车",
+    "pinyin": "dǎchē",
+    "definition": "take a taxi",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "堵车了，我们打车吧。",
+        "pinyin": "Dǔchē le, wǒmen dǎchē ba.",
+        "en": "There's traffic, let's take a taxi."
+      },
+      {
+        "zh": "打车比坐公交车贵。",
+        "pinyin": "Dǎchē bǐ zuò gōngjiāochē guì.",
+        "en": "Taking a taxi is more expensive than taking the bus."
+      }
+    ]
+  },
+  {
+    "hanzi": "比较",
+    "pinyin": "bǐjiào",
+    "definition": "comparatively",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "坐地铁比较快。",
+        "pinyin": "Zuò dìtiě bǐjiào kuài.",
+        "en": "Taking the subway is comparatively fast."
+      },
+      {
+        "zh": "这个问题比较难。",
+        "pinyin": "Zhège wèntí bǐjiào nán.",
+        "en": "This question is fairly difficult."
+      }
+    ]
+  },
+  {
+    "hanzi": "地方",
+    "pinyin": "dìfang",
+    "definition": "place",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:location",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你要去什么地方？",
+        "pinyin": "Nǐ yào qù shénme dìfang?",
+        "en": "Where do you want to go?"
+      },
+      {
+        "zh": "这个地方很漂亮。",
+        "pinyin": "Zhège dìfang hěn piàoliang.",
+        "en": "This place is very beautiful."
+      }
+    ]
+  },
+  {
+    "hanzi": "选择",
+    "pinyin": "xuǎnzé",
+    "definition": "select; choose",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:decisions",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你选择坐飞机还是坐火车？",
+        "pinyin": "Nǐ xuǎnzé zuò fēijī háishi zuò huǒchē?",
+        "en": "Do you choose to fly or take the train?"
+      },
+      {
+        "zh": "我选择坐地铁上班。",
+        "pinyin": "Wǒ xuǎnzé zuò dìtiě shàngbān.",
+        "en": "I choose to take the subway to work."
+      }
+    ]
+  },
+  {
+    "hanzi": "火车票",
+    "pinyin": "huǒchēpiào",
+    "definition": "train ticket",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我买了一张火车票。",
+        "pinyin": "Wǒ mǎi le yī zhāng huǒchēpiào.",
+        "en": "I bought a train ticket."
+      },
+      {
+        "zh": "火车票多少钱？",
+        "pinyin": "Huǒchēpiào duōshao qián?",
+        "en": "How much is a train ticket?"
+      }
+    ]
+  },
+  {
+    "hanzi": "飞机票",
+    "pinyin": "fēijīpiào",
+    "definition": "air ticket",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "飞机票比火车票贵。",
+        "pinyin": "Fēijīpiào bǐ huǒchēpiào guì.",
+        "en": "Air tickets are more expensive than train tickets."
+      },
+      {
+        "zh": "我订了两张飞机票。",
+        "pinyin": "Wǒ dìng le liǎng zhāng fēijīpiào.",
+        "en": "I booked two plane tickets."
+      }
+    ]
+  },
+  {
+    "hanzi": "那么",
+    "pinyin": "nàme",
+    "definition": "like that; so",
+    "tags": [
+      "type:pronoun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "火车没有那么快。",
+        "pinyin": "Huǒchē méiyǒu nàme kuài.",
+        "en": "Trains aren't as fast as that."
+      },
+      {
+        "zh": "别那么担心。",
+        "pinyin": "Bié nàme dānxīn.",
+        "en": "Don't worry so much."
+      }
+    ]
+  },
+  {
+    "hanzi": "走路",
+    "pinyin": "zǒulù",
+    "definition": "walk",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "走路比坐车慢。",
+        "pinyin": "Zǒulù bǐ zuò chē màn.",
+        "en": "Walking is slower than driving."
+      },
+      {
+        "zh": "我喜欢走路上学。",
+        "pinyin": "Wǒ xǐhuan zǒulù shàngxué.",
+        "en": "I like walking to school."
+      }
+    ]
+  },
+  {
+    "hanzi": "更",
+    "pinyin": "gèng",
+    "definition": "more",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "坐地铁更快。",
+        "pinyin": "Zuò dìtiě gèng kuài.",
+        "en": "Taking the subway is even faster."
+      },
+      {
+        "zh": "今天更冷了。",
+        "pinyin": "Jīntiān gèng lěng le.",
+        "en": "Today is even colder."
+      }
+    ]
+  },
+  {
+    "hanzi": "公交车",
+    "pinyin": "gōngjiāochē",
+    "definition": "bus",
+    "tags": [
+      "type:noun",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我坐公交车上班。",
+        "pinyin": "Wǒ zuò gōngjiāochē shàngbān.",
+        "en": "I take the bus to work."
+      },
+      {
+        "zh": "公交车站在哪儿？",
+        "pinyin": "Gōngjiāochē zhàn zài nǎr?",
+        "en": "Where's the bus stop?"
+      }
+    ]
+  },
+  {
+    "hanzi": "慢",
+    "pinyin": "màn",
+    "definition": "slow",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:description",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "火车比飞机慢。",
+        "pinyin": "Huǒchē bǐ fēijī màn.",
+        "en": "Trains are slower than planes."
+      },
+      {
+        "zh": "请说慢一点。",
+        "pinyin": "Qǐng shuō màn yīdiǎn.",
+        "en": "Please speak a little slower."
+      }
+    ]
+  },
+  {
+    "hanzi": "开车",
+    "pinyin": "kāichē",
+    "definition": "drive (a vehicle)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:transport",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "早上开车常常堵车。",
+        "pinyin": "Zǎoshang kāichē chángcháng dǔchē.",
+        "en": "There's often traffic when driving in the morning."
+      },
+      {
+        "zh": "你会开车吗？",
+        "pinyin": "Nǐ huì kāichē ma?",
+        "en": "Can you drive?"
+      }
+    ]
+  },
+  {
+    "hanzi": "一样",
+    "pinyin": "yíyàng",
+    "definition": "the same; equal",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:comparison",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "坐火车和坐飞机的时间不一样。",
+        "pinyin": "Zuò huǒchē hé zuò fēijī de shíjiān bù yíyàng.",
+        "en": "The time for taking a train and a plane isn't the same."
+      },
+      {
+        "zh": "我们的想法一样。",
+        "pinyin": "Wǒmen de xiǎngfǎ yíyàng.",
+        "en": "Our ideas are the same."
+      }
+    ]
+  },
+  {
+    "hanzi": "矮",
+    "pinyin": "ǎi",
+    "definition": "short (in stature)",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我妹妹比我矮。",
+        "pinyin": "Wǒ mèimei bǐ wǒ ǎi.",
+        "en": "My younger sister is shorter than me."
+      },
+      {
+        "zh": "他个子很矮。",
+        "pinyin": "Tā gèzi hěn ǎi.",
+        "en": "He is quite short."
+      }
+    ]
+  },
+  {
+    "hanzi": "轻",
+    "pinyin": "qīng",
+    "definition": "light",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个包很轻。",
+        "pinyin": "Zhège bāo hěn qīng.",
+        "en": "This bag is very light."
+      },
+      {
+        "zh": "妈妈比爸爸轻。",
+        "pinyin": "Māma bǐ bàba qīng.",
+        "en": "Mom is lighter than dad."
+      }
+    ]
+  },
+  {
+    "hanzi": "重",
+    "pinyin": "zhòng",
+    "definition": "heavy",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson21",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个西瓜很重。",
+        "pinyin": "Zhège xīguā hěn zhòng.",
+        "en": "This watermelon is very heavy."
+      },
+      {
+        "zh": "这个箱子太重了。",
+        "pinyin": "Zhège xiāngzi tài zhòng le.",
+        "en": "This box is too heavy."
+      }
+    ]
+  },
+  {
+    "hanzi": "听说",
+    "pinyin": "tīngshuō",
+    "definition": "hear about; be told",
+    "tags": [
+      "type:verb",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:communication",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你听说过黄鹤楼吗？",
+        "pinyin": "Nǐ tīngshuōguo Huánghè Lóu ma?",
+        "en": "Have you heard of the Yellow Crane Tower?"
+      },
+      {
+        "zh": "听说那家餐厅很好吃。",
+        "pinyin": "Tīngshuō nà jiā cāntīng hěn hǎochī.",
+        "en": "I heard that restaurant is very good."
+      }
+    ]
+  },
+  {
+    "hanzi": "过",
+    "pinyin": "guo",
+    "definition": "[used after a verb to indicate a past action or state]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1",
+      "grammar:experience particle"
+    ],
+    "sentences": [
+      {
+        "zh": "我不但听说过，还去过。",
+        "pinyin": "Wǒ búdàn tīngshuōguo, hái qùguo.",
+        "en": "Not only have I heard of it, I've also been there."
+      },
+      {
+        "zh": "你吃过火锅吗？",
+        "pinyin": "Nǐ chīguo huǒguō ma?",
+        "en": "Have you ever eaten hotpot?"
+      }
+    ]
+  },
+  {
+    "hanzi": "黄鹤楼",
+    "pinyin": "Huánghè Lóu",
+    "definition": "Yellow Crane Tower",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:landmarks,travel",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "你听说过黄鹤楼吗？",
+        "pinyin": "Nǐ tīngshuōguo Huánghè Lóu ma?",
+        "en": "Have you heard of the Yellow Crane Tower?"
+      },
+      {
+        "zh": "黄鹤楼在武汉。",
+        "pinyin": "Huánghè Lóu zài Wǔhàn.",
+        "en": "The Yellow Crane Tower is in Wuhan."
+      }
+    ]
+  },
+  {
+    "hanzi": "北京",
+    "pinyin": "Běijīng",
+    "definition": "Beijing",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:cities,travel",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你来武汉多久了？",
+        "pinyin": "Nǐ lái Wǔhàn duō jiǔ le?",
+        "en": "How long have you been in Wuhan?"
+      },
+      {
+        "zh": "北京是中国的首都。",
+        "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
+        "en": "Beijing is the capital of China."
+      }
+    ]
+  },
+  {
+    "hanzi": "有名",
+    "pinyin": "yǒumíng",
+    "definition": "well-known; famous",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "长城很有名。",
+        "pinyin": "Chángchéng hěn yǒumíng.",
+        "en": "The Great Wall is very famous."
+      },
+      {
+        "zh": "这家店的面包很有名。",
+        "pinyin": "Zhè jiā diàn de miànbāo hěn yǒumíng.",
+        "en": "This shop's bread is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "天安门",
+    "pinyin": "Tiān'ān Mén",
+    "definition": "Tian'anmen",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:landmarks,travel",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "天安门广场很大。",
+        "pinyin": "Tiān'ān Mén Guǎngchǎng hěn dà.",
+        "en": "Tian'anmen Square is very large."
+      },
+      {
+        "zh": "很多游客在天安门拍照。",
+        "pinyin": "Hěn duō yóukè zài Tiān'ān Mén pāizhào.",
+        "en": "Many tourists take photos at Tian'anmen."
+      }
+    ]
+  },
+  {
+    "hanzi": "故宫",
+    "pinyin": "Gùgōng",
+    "definition": "Imperial Palace (in Beijing)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:landmarks,travel",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "故宫有六百年历史。",
+        "pinyin": "Gùgōng yǒu liù bǎi nián lìshǐ.",
+        "en": "The Imperial Palace has 600 years of history."
+      },
+      {
+        "zh": "故宫在北京的中心。",
+        "pinyin": "Gùgōng zài Běijīng de zhōngxīn.",
+        "en": "The Imperial Palace is in the center of Beijing."
+      }
+    ]
+  },
+  {
+    "hanzi": "长城",
+    "pinyin": "Chángchéng",
+    "definition": "Great Wall",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:landmarks,travel",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "长城非常壮观。",
+        "pinyin": "Chángchéng fēicháng zhuàngguān.",
+        "en": "The Great Wall is very magnificent."
+      },
+      {
+        "zh": "不到长城非好汉。",
+        "pinyin": "Bú dào Chángchéng fēi hǎohàn.",
+        "en": "He who hasn't been to the Great Wall is not a true hero."
+      }
+    ]
+  },
+  {
+    "hanzi": "美食",
+    "pinyin": "měishí",
+    "definition": "choice food",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "成都是美食之都。",
+        "pinyin": "Chéngdū shì měishí zhī dū.",
+        "en": "Chengdu is the capital of delicious food."
+      },
+      {
+        "zh": "中国美食很有名。",
+        "pinyin": "Zhōngguó měishí hěn yǒumíng.",
+        "en": "Chinese cuisine is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "火锅",
+    "pinyin": "huǒguō",
+    "definition": "hotpot",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:food",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我不但听说过，还去吃过火锅。",
+        "pinyin": "Wǒ búdàn tīngshuōguo, hái qù chīguo huǒguō.",
+        "en": "Not only have I heard of it, I've also eaten hotpot."
+      },
+      {
+        "zh": "冬天吃火锅很暖和。",
+        "pinyin": "Dōngtiān chī huǒguō hěn nuǎnhuo.",
+        "en": "Eating hotpot in winter is very warming."
+      }
+    ]
+  },
+  {
+    "hanzi": "暑假",
+    "pinyin": "shǔjià",
+    "definition": "summer vacation",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:time,school",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "暑假你去哪儿了？",
+        "pinyin": "Shǔjià nǐ qù nǎr le?",
+        "en": "Where did you go for summer vacation?"
+      },
+      {
+        "zh": "暑假有两个月。",
+        "pinyin": "Shǔjià yǒu liǎng ge yuè.",
+        "en": "Summer vacation is two months long."
+      }
+    ]
+  },
+  {
+    "hanzi": "城市",
+    "pinyin": "chéngshì",
+    "definition": "city",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:places",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "上海是个大城市。",
+        "pinyin": "Shànghǎi shì ge dà chéngshì.",
+        "en": "Shanghai is a big city."
+      },
+      {
+        "zh": "我喜欢住在小城市。",
+        "pinyin": "Wǒ xǐhuan zhù zài xiǎo chéngshì.",
+        "en": "I like living in small cities."
+      }
+    ]
+  },
+  {
+    "hanzi": "旅游",
+    "pinyin": "lǚyóu",
+    "definition": "travel",
+    "tags": [
+      "type:verb",
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:travel",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我喜欢旅游。",
+        "pinyin": "Wǒ xǐhuan lǚyóu.",
+        "en": "I like to travel."
+      },
+      {
+        "zh": "云南是个旅游的好地方。",
+        "pinyin": "Yúnnán shì ge lǚyóu de hǎo dìfang.",
+        "en": "Yunnan is a good place to travel."
+      }
+    ]
+  },
+  {
+    "hanzi": "上海",
+    "pinyin": "Shànghǎi",
+    "definition": "Shanghai",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:cities,travel",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "上海很现代化。",
+        "pinyin": "Shànghǎi hěn xiàndàihuà.",
+        "en": "Shanghai is very modern."
+      },
+      {
+        "zh": "除了北京，我还去过上海。",
+        "pinyin": "Chúle Běijīng, wǒ hái qùguo Shànghǎi.",
+        "en": "Besides Beijing, I've also been to Shanghai."
+      }
+    ]
+  },
+  {
+    "hanzi": "西安",
+    "pinyin": "Xī'ān",
+    "definition": "Xi'an",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:cities,travel",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "西安有兵马俑。",
+        "pinyin": "Xī'ān yǒu bīngmǎyǒng.",
+        "en": "Xi'an has the Terracotta Warriors."
+      },
+      {
+        "zh": "西安是古代都城。",
+        "pinyin": "Xī'ān shì gǔdài dūchéng.",
+        "en": "Xi'an was an ancient capital."
+      }
+    ]
+  },
+  {
+    "hanzi": "首都",
+    "pinyin": "shǒudū",
+    "definition": "capital (of a country)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:places",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "北京是中国的首都。",
+        "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
+        "en": "Beijing is the capital of China."
+      },
+      {
+        "zh": "首都是一个国家的中心。",
+        "pinyin": "Shǒudū shì yí ge guójiā de zhōngxīn.",
+        "en": "The capital is the center of a country."
+      }
+    ]
+  },
+  {
+    "hanzi": "一定",
+    "pinyin": "yídìng",
+    "definition": "certainly; surely",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你能来参加我的生日聚会吗？——当然，我一定去。",
+        "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma? — Dāngrán, wǒ yídìng qù.",
+        "en": "Can you come to my birthday party? — Of course, I'll definitely go."
+      },
+      {
+        "zh": "你一定要来！",
+        "pinyin": "Nǐ yídìng yào lái!",
+        "en": "You must come for sure!"
+      }
+    ]
+  },
+  {
+    "hanzi": "所",
+    "pinyin": "suǒ",
+    "definition": "[used for schools, colleges, hospitals, etc]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这是一所大学。",
+        "pinyin": "Zhè shì yī suǒ dàxué.",
+        "en": "This is a university."
+      },
+      {
+        "zh": "北京有很多所好学校。",
+        "pinyin": "Běijīng yǒu hěn duō suǒ hǎo xuéxiào.",
+        "en": "Beijing has many good schools."
+      }
+    ]
+  },
+  {
+    "hanzi": "大学",
+    "pinyin": "dàxué",
+    "definition": "university; college",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:education",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我明年上大学。",
+        "pinyin": "Wǒ míngnián shàng dàxué.",
+        "en": "I will go to university next year."
+      },
+      {
+        "zh": "北京大学很有名。",
+        "pinyin": "Běijīng Dàxué hěn yǒumíng.",
+        "en": "Peking University is very famous."
+      }
+    ]
+  },
+  {
+    "hanzi": "举办",
+    "pinyin": "jǔbàn",
+    "definition": "conduct; hold",
+    "tags": [
+      "type:verb",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:events",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "北京举办了2008年奥运会。",
+        "pinyin": "Běijīng jǔbàn le èr líng líng bā nián Àoyùnhuì.",
+        "en": "Beijing hosted the 2008 Olympics."
+      },
+      {
+        "zh": "学校举办了一个晚会。",
+        "pinyin": "Xuéxiào jǔbàn le yí ge wǎnhuì.",
+        "en": "The school held a party."
+      }
+    ]
+  },
+  {
+    "hanzi": "奥运会",
+    "pinyin": "Àoyùnhuì",
+    "definition": "Olympic Games",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:sports,events",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "北京举办了2008年奥运会。",
+        "pinyin": "Běijīng jǔbàn le èr líng líng bā nián Àoyùnhuì.",
+        "en": "Beijing hosted the 2008 Olympics."
+      },
+      {
+        "zh": "我喜欢看奥运会。",
+        "pinyin": "Wǒ xǐhuan kàn Àoyùnhuì.",
+        "en": "I like watching the Olympics."
+      }
+    ]
+  },
+  {
+    "hanzi": "除了",
+    "pinyin": "chúle",
+    "definition": "except; besides",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "除了北京，我还去过上海。",
+        "pinyin": "Chúle Běijīng, wǒ hái qùguo Shànghǎi.",
+        "en": "Besides Beijing, I have also been to Shanghai."
+      },
+      {
+        "zh": "除了他，大家都来了。",
+        "pinyin": "Chúle tā, dàjiā dōu lái le.",
+        "en": "Everyone came except him."
+      }
+    ]
+  },
+  {
+    "hanzi": "奥林匹克",
+    "pinyin": "Àolínpǐkè",
+    "definition": "Olympic",
+    "tags": [
+      "type:adjective",
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:sports",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "奥林匹克公园很大。",
+        "pinyin": "Àolínpǐkè Gōngyuán hěn dà.",
+        "en": "Olympic Park is very large."
+      },
+      {
+        "zh": "奥林匹克精神是和平。",
+        "pinyin": "Àolínpǐkè jīngshén shì hépíng.",
+        "en": "The Olympic spirit is peace."
+      }
+    ]
+  },
+  {
+    "hanzi": "公园",
+    "pinyin": "gōngyuán",
+    "definition": "park",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:places",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "鸟巢在北京奥林匹克公园。",
+        "pinyin": "Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.",
+        "en": "The Bird's Nest is in Beijing Olympic Park."
+      },
+      {
+        "zh": "这个公园有很多花。",
+        "pinyin": "Zhège gōngyuán yǒu hěn duō huā.",
+        "en": "This park has many flowers."
+      }
+    ]
+  },
+  {
+    "hanzi": "鸟巢",
+    "pinyin": "Niǎocháo",
+    "definition": "Bird's Nest (officially known as the National Stadium)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:landmarks,sports",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "鸟巢在北京奥林匹克公园。",
+        "pinyin": "Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.",
+        "en": "The Bird's Nest is in Beijing Olympic Park."
+      },
+      {
+        "zh": "鸟巢的设计很独特。",
+        "pinyin": "Niǎocháo de shèjì hěn dútè.",
+        "en": "The design of the Bird's Nest is very unique."
+      }
+    ]
+  },
+  {
+    "hanzi": "水立方",
+    "pinyin": "Shuǐlìfāng",
+    "definition": "National Aquatics Center",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:medium",
+      "topic:landmarks,sports",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "水立方是游泳比赛场馆。",
+        "pinyin": "Shuǐlìfāng shì yóuyǒng bǐsài chǎngguǎn.",
+        "en": "The Water Cube is a swimming competition venue."
+      },
+      {
+        "zh": "晚上水立方会亮灯。",
+        "pinyin": "Wǎnshang Shuǐlìfāng huì liàng dēng.",
+        "en": "At night, the Water Cube lights up."
+      }
+    ]
+  },
+  {
+    "hanzi": "北京烤鸭",
+    "pinyin": "Běijīng kǎoyā",
+    "definition": "Beijing roast duck",
+    "tags": [
+      "type:noun",
+      "lesson:lesson22",
+      "frequency:high",
+      "topic:food,travel",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "来北京一定要吃北京烤鸭。",
+        "pinyin": "Lái Běijīng yídìng yào chī Běijīng kǎoyā.",
+        "en": "When you come to Beijing, you must eat Peking duck."
+      },
+      {
+        "zh": "北京烤鸭皮脆肉嫩。",
+        "pinyin": "Běijīng kǎoyā pí cuì ròu nèn.",
+        "en": "Peking duck has crispy skin and tender meat."
+      }
+    ]
+  },
+  {
+    "hanzi": "头发",
+    "pinyin": "tóufa",
+    "definition": "hair (on the human head)",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她的头发是金色的。",
+        "pinyin": "Tā de tóufa shì jīnsè de.",
+        "en": "Her hair is golden."
+      },
+      {
+        "zh": "我今天剪头发了。",
+        "pinyin": "Wǒ jīntiān jiǎn tóufa le.",
+        "en": "I got a haircut today."
+      }
+    ]
+  },
+  {
+    "hanzi": "颜色",
+    "pinyin": "yánsè",
+    "definition": "colour",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance,colors",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你喜欢什么颜色？",
+        "pinyin": "Nǐ xǐhuan shénme yánsè?",
+        "en": "What color do you like?"
+      },
+      {
+        "zh": "她的头发是什么颜色？",
+        "pinyin": "Tā de tóufa shì shénme yánsè?",
+        "en": "What color is her hair?"
+      }
+    ]
+  },
+  {
+    "hanzi": "头",
+    "pinyin": "tóu",
+    "definition": "head",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她的头有点儿疼。",
+        "pinyin": "Tā de tóu yǒudiǎnr téng.",
+        "en": "Her head hurts a little."
+      },
+      {
+        "zh": "请把头抬起来。",
+        "pinyin": "Qǐng bǎ tóu tái qǐlai.",
+        "en": "Please lift your head up."
+      }
+    ]
+  },
+  {
+    "hanzi": "金色",
+    "pinyin": "jīnsè",
+    "definition": "colour of gold",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:medium",
+      "topic:colors",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "她的头发是金色的。",
+        "pinyin": "Tā de tóufa shì jīnsè de.",
+        "en": "Her hair is golden."
+      },
+      {
+        "zh": "这枚戒指是金色的。",
+        "pinyin": "Zhè méi jièzhi shì jīnsè de.",
+        "en": "This ring is gold-colored."
+      }
+    ]
+  },
+  {
+    "hanzi": "像",
+    "pinyin": "xiàng",
+    "definition": "be like; look like",
+    "tags": [
+      "type:verb",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance,comparison",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她长得像公主。",
+        "pinyin": "Tā zhǎng de xiàng gōngzhǔ.",
+        "en": "She looks like a princess."
+      },
+      {
+        "zh": "你像你妈妈。",
+        "pinyin": "Nǐ xiàng nǐ māma.",
+        "en": "You look like your mother."
+      }
+    ]
+  },
+  {
+    "hanzi": "公主",
+    "pinyin": "gōngzhǔ",
+    "definition": "princess",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:medium",
+      "topic:appearance",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "她长得像公主。",
+        "pinyin": "Tā zhǎng de xiàng gōngzhǔ.",
+        "en": "She looks like a princess."
+      },
+      {
+        "zh": "这个故事里有一位公主。",
+        "pinyin": "Zhège gùshi lǐ yǒu yī wèi gōngzhǔ.",
+        "en": "There is a princess in this story."
+      }
+    ]
+  },
+  {
+    "hanzi": "长",
+    "pinyin": "zhǎng",
+    "definition": "grow",
+    "tags": [
+      "type:verb",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她长得很漂亮。",
+        "pinyin": "Tā zhǎng de hěn piàoliang.",
+        "en": "She grew up to be very beautiful."
+      },
+      {
+        "zh": "她长什么样子？",
+        "pinyin": "Tā zhǎng shénme yàngzi?",
+        "en": "What does she look like?"
+      }
+    ]
+  },
+  {
+    "hanzi": "眼睛",
+    "pinyin": "yǎnjing",
+    "definition": "eye",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body,appearance",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她的眼睛很大。",
+        "pinyin": "Tā de yǎnjing hěn dà.",
+        "en": "Her eyes are big."
+      },
+      {
+        "zh": "我的眼睛有点儿累。",
+        "pinyin": "Wǒ de yǎnjing yǒudiǎnr lèi.",
+        "en": "My eyes are a bit tired."
+      }
+    ]
+  },
+  {
+    "hanzi": "鼻子",
+    "pinyin": "bízi",
+    "definition": "nose",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body,appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她的鼻子很好看。",
+        "pinyin": "Tā de bízi hěn hǎokàn.",
+        "en": "Her nose looks very nice."
+      },
+      {
+        "zh": "他的鼻子有点儿大。",
+        "pinyin": "Tā de bízi yǒudiǎnr dà.",
+        "en": "His nose is a bit big."
+      }
+    ]
+  },
+  {
+    "hanzi": "嘴巴",
+    "pinyin": "zuǐba",
+    "definition": "mouth",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body,appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她的嘴巴很小。",
+        "pinyin": "Tā de zuǐba hěn xiǎo.",
+        "en": "Her mouth is small."
+      },
+      {
+        "zh": "请把嘴巴张开。",
+        "pinyin": "Qǐng bǎ zuǐba zhāng kāi.",
+        "en": "Please open your mouth."
+      }
+    ]
+  },
+  {
+    "hanzi": "个子",
+    "pinyin": "gèzi",
+    "definition": "height",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她的个子很高。",
+        "pinyin": "Tā de gèzi hěn gāo.",
+        "en": "She is quite tall."
+      },
+      {
+        "zh": "你的个子多高？",
+        "pinyin": "Nǐ de gèzi duō gāo?",
+        "en": "How tall are you?"
+      }
+    ]
+  },
+  {
+    "hanzi": "皮肤",
+    "pinyin": "pífū",
+    "definition": "skin",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body,appearance",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她的皮肤很白。",
+        "pinyin": "Tā de pífū hěn bái.",
+        "en": "Her skin is very fair."
+      },
+      {
+        "zh": "夏天要保护皮肤。",
+        "pinyin": "Xiàtiān yào bǎohù pífū.",
+        "en": "You need to protect your skin in summer."
+      }
+    ]
+  },
+  {
+    "hanzi": "笑",
+    "pinyin": "xiào",
+    "definition": "smile; laugh",
+    "tags": [
+      "type:verb",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:emotions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她笑起来很甜。",
+        "pinyin": "Tā xiào qǐlai hěn tián.",
+        "en": "Her smile is very sweet."
+      },
+      {
+        "zh": "大家都笑了。",
+        "pinyin": "Dàjiā dōu xiào le.",
+        "en": "Everyone laughed."
+      }
+    ]
+  },
+  {
+    "hanzi": "甜",
+    "pinyin": "tián",
+    "definition": "sweet; pleasant",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她笑起来很甜。",
+        "pinyin": "Tā xiào qǐlai hěn tián.",
+        "en": "Her smile is very sweet."
+      },
+      {
+        "zh": "这个水果很甜。",
+        "pinyin": "Zhège shuǐguǒ hěn tián.",
+        "en": "This fruit is very sweet."
+      }
+    ]
+  },
+  {
+    "hanzi": "着",
+    "pinyin": "zhe",
+    "definition": "[used after a verb or an adjective to indicate the continuation of an action or a state]",
+    "tags": [
+      "type:particle",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2",
+      "grammar:continuous aspect"
+    ],
+    "sentences": [
+      {
+        "zh": "她戴着一顶帽子。",
+        "pinyin": "Tā dài zhe yī dǐng màozi.",
+        "en": "She is wearing a hat."
+      },
+      {
+        "zh": "门开着呢。",
+        "pinyin": "Mén kāi zhe ne.",
+        "en": "The door is open."
+      }
+    ]
+  },
+  {
+    "hanzi": "粉红色",
+    "pinyin": "fěnhóngsè",
+    "definition": "pink",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:colors",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "她穿着一条粉红色的裙子。",
+        "pinyin": "Tā chuān zhe yī tiáo fěnhóngsè de qúnzi.",
+        "en": "She's wearing a pink skirt."
+      },
+      {
+        "zh": "我喜欢粉红色。",
+        "pinyin": "Wǒ xǐhuan fěnhóngsè.",
+        "en": "I like pink."
+      }
+    ]
+  },
+  {
+    "hanzi": "裙子",
+    "pinyin": "qúnzi",
+    "definition": "dress; skirt",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她穿着一条粉红色的裙子。",
+        "pinyin": "Tā chuān zhe yī tiáo fěnhóngsè de qúnzi.",
+        "en": "She's wearing a pink skirt."
+      },
+      {
+        "zh": "这条裙子很好看。",
+        "pinyin": "Zhè tiáo qúnzi hěn hǎokàn.",
+        "en": "This dress looks very nice."
+      }
+    ]
+  },
+  {
+    "hanzi": "戴",
+    "pinyin": "dài",
+    "definition": "put on; wear",
+    "tags": [
+      "type:verb",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:clothing",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "她戴着一朵花。",
+        "pinyin": "Tā dài zhe yī duǒ huā.",
+        "en": "She is wearing a flower."
+      },
+      {
+        "zh": "冬天要戴帽子。",
+        "pinyin": "Dōngtiān yào dài màozi.",
+        "en": "You should wear a hat in winter."
+      }
+    ]
+  },
+  {
+    "hanzi": "朵",
+    "pinyin": "duǒ",
+    "definition": "[of flowers, clouds, etc]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "她戴着一朵花。",
+        "pinyin": "Tā dài zhe yī duǒ huā.",
+        "en": "She is wearing a flower."
+      },
+      {
+        "zh": "天上有一朵云。",
+        "pinyin": "Tiān shàng yǒu yī duǒ yún.",
+        "en": "There's a cloud in the sky."
+      }
+    ]
+  },
+  {
+    "hanzi": "手",
+    "pinyin": "shǒu",
+    "definition": "hand",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:body",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "她牵着妈妈的手。",
+        "pinyin": "Tā qiān zhe māma de shǒu.",
+        "en": "She is holding her mother's hand."
+      },
+      {
+        "zh": "请举手。",
+        "pinyin": "Qǐng jǔ shǒu.",
+        "en": "Please raise your hand."
+      }
+    ]
+  },
+  {
+    "hanzi": "牵",
+    "pinyin": "qiān",
+    "definition": "lead along",
+    "tags": [
+      "type:verb",
+      "lesson:lesson23",
+      "frequency:medium",
+      "topic:actions",
+      "hsk:3"
+    ],
+    "sentences": [
+      {
+        "zh": "她牵着妈妈的手。",
+        "pinyin": "Tā qiān zhe māma de shǒu.",
+        "en": "She is holding her mother's hand."
+      },
+      {
+        "zh": "他牵着一条狗散步。",
+        "pinyin": "Tā qiān zhe yī tiáo gǒu sànbù.",
+        "en": "He is walking a dog."
+      }
+    ]
+  },
+  {
+    "hanzi": "可爱",
+    "pinyin": "kě'ài",
+    "definition": "lovely",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance,description",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "这个孩子很可爱。",
+        "pinyin": "Zhège háizi hěn kě'ài.",
+        "en": "This child is very lovely."
+      },
+      {
+        "zh": "她笑起来很可爱。",
+        "pinyin": "Tā xiào qǐlai hěn kě'ài.",
+        "en": "Her smile is very cute."
+      }
+    ]
+  },
+  {
+    "hanzi": "T恤衫",
+    "pinyin": "T xù shān",
+    "definition": "T-shirt",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:clothing"
+    ],
+    "sentences": [
+      {
+        "zh": "他穿着一件白色的T恤衫。",
+        "pinyin": "Tā chuān zhe yī jiàn báisè de T xù shān.",
+        "en": "He's wearing a white T-shirt."
+      },
+      {
+        "zh": "这件T恤衫很舒服。",
+        "pinyin": "Zhè jiàn T xù shān hěn shūfu.",
+        "en": "This T-shirt is very comfortable."
+      }
+    ]
+  },
+  {
+    "hanzi": "眼镜",
+    "pinyin": "yǎnjìng",
+    "definition": "glasses",
+    "tags": [
+      "type:noun",
+      "lesson:lesson23",
+      "frequency:high",
+      "topic:appearance,objects",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他戴着一副眼镜。",
+        "pinyin": "Tā dài zhe yī fù yǎnjìng.",
+        "en": "He's wearing a pair of glasses."
+      },
+      {
+        "zh": "我的眼镜找不到了。",
+        "pinyin": "Wǒ de yǎnjìng zhǎo bú dào le.",
+        "en": "I can't find my glasses."
+      }
+    ]
+  },
+  {
+    "hanzi": "生日",
+    "pinyin": "shēngrì",
+    "definition": "birthday",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:celebrations",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "祝你生日快乐！",
+        "pinyin": "Zhù nǐ shēngrì kuàilè!",
+        "en": "Happy birthday to you!"
+      },
+      {
+        "zh": "我的生日是五月七号。",
+        "pinyin": "Wǒ de shēngrì shì wǔ yuè qī hào.",
+        "en": "My birthday is May 7th."
+      }
+    ]
+  },
+  {
+    "hanzi": "参加",
+    "pinyin": "cānjiā",
+    "definition": "join",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:social,activities",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "你能来参加我的生日聚会吗？",
+        "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma?",
+        "en": "Can you come to my birthday party?"
+      },
+      {
+        "zh": "很多人参加了比赛。",
+        "pinyin": "Hěn duō rén cānjiā le bǐsài.",
+        "en": "Many people participated in the competition."
+      }
+    ]
+  },
+  {
+    "hanzi": "聚会",
+    "pinyin": "jùhuì",
+    "definition": "party",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:social",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "你能来参加我的生日聚会吗？",
+        "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma?",
+        "en": "Can you come to my birthday party?"
+      },
+      {
+        "zh": "朋友聚会很开心。",
+        "pinyin": "Péngyou jùhuì hěn kāixīn.",
+        "en": "Gathering with friends is very happy."
+      }
+    ]
+  },
+  {
+    "hanzi": "当然",
+    "pinyin": "dāngrán",
+    "definition": "certainly; of course",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "当然，我一定去。",
+        "pinyin": "Dāngrán, wǒ yídìng qù.",
+        "en": "Of course, I'll definitely go."
+      },
+      {
+        "zh": "当然可以！",
+        "pinyin": "Dāngrán kěyǐ!",
+        "en": "Of course you can!"
+      }
+    ]
+  },
+  {
+    "hanzi": "地址",
+    "pinyin": "dìzhǐ",
+    "definition": "address",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:communication,location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "请把你的地址发给我。",
+        "pinyin": "Qǐng bǎ nǐ de dìzhǐ fā gěi wǒ.",
+        "en": "Please send me your address."
+      },
+      {
+        "zh": "这个地址不对。",
+        "pinyin": "Zhège dìzhǐ bú duì.",
+        "en": "This address is incorrect."
+      }
+    ]
+  },
+  {
+    "hanzi": "发",
+    "pinyin": "fā",
+    "definition": "send out",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:communication",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我给你发了地址。",
+        "pinyin": "Wǒ gěi nǐ fā le dìzhǐ.",
+        "en": "I sent you the address."
+      },
+      {
+        "zh": "请发邮件给我。",
+        "pinyin": "Qǐng fā yóujiàn gěi wǒ.",
+        "en": "Please send me an email."
+      }
+    ]
+  },
+  {
+    "hanzi": "送",
+    "pinyin": "sòng",
+    "definition": "give (as a gift)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:gifts,social",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我送了你一个礼物。",
+        "pinyin": "Wǒ sòng le nǐ yí ge lǐwù.",
+        "en": "I gave you a gift."
+      },
+      {
+        "zh": "你送什么给他？",
+        "pinyin": "Nǐ sòng shénme gěi tā?",
+        "en": "What are you giving him?"
+      }
+    ]
+  },
+  {
+    "hanzi": "礼物",
+    "pinyin": "lǐwù",
+    "definition": "gift; present",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:gifts",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "谢谢你的礼物。",
+        "pinyin": "Xièxie nǐ de lǐwù.",
+        "en": "Thank you for your gift."
+      },
+      {
+        "zh": "我买了一份生日礼物。",
+        "pinyin": "Wǒ mǎi le yī fèn shēngrì lǐwù.",
+        "en": "I bought a birthday gift."
+      }
+    ]
+  },
+  {
+    "hanzi": "电梯",
+    "pinyin": "diàntī",
+    "definition": "lift",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:buildings",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "电梯在右边。",
+        "pinyin": "Diàntī zài yòubiān.",
+        "en": "The elevator is on the right."
+      },
+      {
+        "zh": "电梯坏了，我们走楼梯吧。",
+        "pinyin": "Diàntī huài le, wǒmen zǒu lóutī ba.",
+        "en": "The elevator is broken, let's take the stairs."
+      }
+    ]
+  },
+  {
+    "hanzi": "上去",
+    "pinyin": "shàngqù",
+    "definition": "go up; [used after a verb, indicating upward movement]",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:movement",
+      "hsk:2",
+      "grammar:directional complement"
+    ],
+    "sentences": [
+      {
+        "zh": "我们坐电梯上去。",
+        "pinyin": "Wǒmen zuò diàntī shàngqù.",
+        "en": "Let's take the elevator up."
+      },
+      {
+        "zh": "他上楼去了。",
+        "pinyin": "Tā shànglóu qù le.",
+        "en": "He went upstairs."
+      }
+    ]
+  },
+  {
+    "hanzi": "把",
+    "pinyin": "bǎ",
+    "definition": "[used to advance the object of a verb to the position before it]",
+    "tags": [
+      "type:preposition",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:grammar",
+      "hsk:2",
+      "grammar:把-sentence"
+    ],
+    "sentences": [
+      {
+        "zh": "把蛋糕放在冰箱里。",
+        "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
+        "en": "Put the cake in the refrigerator."
+      },
+      {
+        "zh": "把门关上。",
+        "pinyin": "Bǎ mén guān shàng.",
+        "en": "Close the door."
+      }
+    ]
+  },
+  {
+    "hanzi": "蛋糕",
+    "pinyin": "dàngāo",
+    "definition": "cake",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:food,celebrations",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "这个蛋糕很好吃。",
+        "pinyin": "Zhège dàngāo hěn hǎochī.",
+        "en": "This cake is very tasty."
+      },
+      {
+        "zh": "生日蛋糕上插着蜡烛。",
+        "pinyin": "Shēngrì dàngāo shàng chā zhe làzhú.",
+        "en": "There are candles on the birthday cake."
+      }
+    ]
+  },
+  {
+    "hanzi": "放",
+    "pinyin": "fàng",
+    "definition": "put; place",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "把蛋糕放在冰箱里。",
+        "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
+        "en": "Put the cake in the refrigerator."
+      },
+      {
+        "zh": "包放在哪儿了？",
+        "pinyin": "Bāo fàng zài nǎr le?",
+        "en": "Where did you put the bag?"
+      }
+    ]
+  },
+  {
+    "hanzi": "冰箱",
+    "pinyin": "bīngxiāng",
+    "definition": "refrigerator",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:home,appliances",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "冰箱里有牛奶。",
+        "pinyin": "Bīngxiāng lǐ yǒu niúnǎi.",
+        "en": "There's milk in the refrigerator."
+      },
+      {
+        "zh": "把蛋糕放在冰箱里。",
+        "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
+        "en": "Put the cake in the refrigerator."
+      }
+    ]
+  },
+  {
+    "hanzi": "邀请",
+    "pinyin": "yāoqǐng",
+    "definition": "invite",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:social",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他邀请我去他的生日聚会。",
+        "pinyin": "Tā yāoqǐng wǒ qù tā de shēngrì jùhuì.",
+        "en": "He invited me to his birthday party."
+      },
+      {
+        "zh": "你邀请了多少人？",
+        "pinyin": "Nǐ yāoqǐng le duōshao rén?",
+        "en": "How many people did you invite?"
+      }
+    ]
+  },
+  {
+    "hanzi": "小区",
+    "pinyin": "xiǎoqū",
+    "definition": "residential quarter",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:places,home",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我住在一个安静的小区。",
+        "pinyin": "Wǒ zhù zài yí ge ānjìng de xiǎoqū.",
+        "en": "I live in a quiet residential area."
+      },
+      {
+        "zh": "小区门口有一个超市。",
+        "pinyin": "Xiǎoqū ménkǒu yǒu yí ge chāoshì.",
+        "en": "There's a supermarket at the entrance of the community."
+      }
+    ]
+  },
+  {
+    "hanzi": "门口",
+    "pinyin": "ménkǒu",
+    "definition": "doorway; entrance",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:location",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我在门口等你。",
+        "pinyin": "Wǒ zài ménkǒu děng nǐ.",
+        "en": "I'll wait for you at the entrance."
+      },
+      {
+        "zh": "小区门口有一个超市。",
+        "pinyin": "Xiǎoqū ménkǒu yǒu yí ge chāoshì.",
+        "en": "There's a supermarket at the entrance of the community."
+      }
+    ]
+  },
+  {
+    "hanzi": "栋",
+    "pinyin": "dòng",
+    "definition": "[used for housing]",
+    "tags": [
+      "type:measure",
+      "lesson:lesson24",
+      "frequency:medium",
+      "topic:grammar",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我们住在一栋楼里。",
+        "pinyin": "Wǒmen zhù zài yī dòng lóu lǐ.",
+        "en": "We live in one building."
+      },
+      {
+        "zh": "这栋楼有十层。",
+        "pinyin": "Zhè dòng lóu yǒu shí céng.",
+        "en": "This building has ten floors."
+      }
+    ]
+  },
+  {
+    "hanzi": "马上",
+    "pinyin": "mǎshàng",
+    "definition": "at once; immediately",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:time",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "我马上到。",
+        "pinyin": "Wǒ mǎshàng dào.",
+        "en": "I'll be there right away."
+      },
+      {
+        "zh": "电影马上开始了。",
+        "pinyin": "Diànyǐng mǎshàng kāishǐ le.",
+        "en": "The movie is about to start."
+      }
+    ]
+  },
+  {
+    "hanzi": "下来",
+    "pinyin": "xiàlái",
+    "definition": "come down",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:movement",
+      "hsk:2",
+      "grammar:directional complement"
+    ],
+    "sentences": [
+      {
+        "zh": "你快下来吧。",
+        "pinyin": "Nǐ kuài xiàlái ba.",
+        "en": "Come down quickly."
+      },
+      {
+        "zh": "他从楼上下来了。",
+        "pinyin": "Tā cóng lóu shàng xiàlái le.",
+        "en": "He came down from upstairs."
+      }
+    ]
+  },
+  {
+    "hanzi": "才",
+    "pinyin": "cái",
+    "definition": "not until",
+    "tags": [
+      "type:adverb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:grammar,time",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他十点才来。",
+        "pinyin": "Tā shí diǎn cái lái.",
+        "en": "He didn't come until ten o'clock."
+      },
+      {
+        "zh": "我吃完饭才做作业。",
+        "pinyin": "Wǒ chī wán fàn cái zuò zuòyè.",
+        "en": "I only do homework after finishing dinner."
+      }
+    ]
+  },
+  {
+    "hanzi": "发现",
+    "pinyin": "fāxiàn",
+    "definition": "discover; find",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:perception",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我发现了一个秘密。",
+        "pinyin": "Wǒ fāxiàn le yí ge mìmì.",
+        "en": "I discovered a secret."
+      },
+      {
+        "zh": "你发现有什么不同吗？",
+        "pinyin": "Nǐ fāxiàn yǒu shénme bùtóng ma?",
+        "en": "Did you notice any difference?"
+      }
+    ]
+  },
+  {
+    "hanzi": "热情",
+    "pinyin": "rèqíng",
+    "definition": "enthusiastic",
+    "tags": [
+      "type:adjective",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:personality",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他很热情地欢迎我们。",
+        "pinyin": "Tā hěn rèqíng de huānyíng wǒmen.",
+        "en": "He welcomed us warmly."
+      },
+      {
+        "zh": "这位服务员很热情。",
+        "pinyin": "Zhè wèi fúwùyuán hěn rèqíng.",
+        "en": "This waiter is very enthusiastic."
+      }
+    ]
+  },
+  {
+    "hanzi": "欢迎",
+    "pinyin": "huānyíng",
+    "definition": "welcome; greet",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:social",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "欢迎来我家！",
+        "pinyin": "Huānyíng lái wǒ jiā!",
+        "en": "Welcome to my home!"
+      },
+      {
+        "zh": "大家热烈欢迎新同学。",
+        "pinyin": "Dàjiā rèliè huānyíng xīn tóngxué.",
+        "en": "Everyone warmly welcomes the new classmate."
+      }
+    ]
+  },
+  {
+    "hanzi": "点",
+    "pinyin": "diǎn",
+    "definition": "light (a candle)",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:actions",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "点蜡烛。",
+        "pinyin": "Diǎn làzhú.",
+        "en": "Light the candles."
+      },
+      {
+        "zh": "他点了一根烟。",
+        "pinyin": "Tā diǎn le yī gēn yān.",
+        "en": "He lit a cigarette."
+      }
+    ]
+  },
+  {
+    "hanzi": "蜡烛",
+    "pinyin": "làzhú",
+    "definition": "(wax) candle",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:medium",
+      "topic:celebrations,home",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "生日蜡烛吹灭了。",
+        "pinyin": "Shēngrì làzhú chuī miè le.",
+        "en": "The birthday candles were blown out."
+      },
+      {
+        "zh": "停电的时候我们点了蜡烛。",
+        "pinyin": "Tíngdiàn de shíhou wǒmen diǎn le làzhú.",
+        "en": "When the power went out, we lit candles."
+      }
+    ]
+  },
+  {
+    "hanzi": "祝",
+    "pinyin": "zhù",
+    "definition": "express good wishes",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:greetings",
+      "hsk:1"
+    ],
+    "sentences": [
+      {
+        "zh": "祝你成功！",
+        "pinyin": "Zhù nǐ chénggōng!",
+        "en": "Wishing you success!"
+      },
+      {
+        "zh": "祝你们幸福。",
+        "pinyin": "Zhù nǐmen xìngfú.",
+        "en": "Wishing you happiness."
+      }
+    ]
+  },
+  {
+    "hanzi": "感动",
+    "pinyin": "gǎndòng",
+    "definition": "be moved; be touched",
+    "tags": [
+      "type:verb",
+      "type:adjective",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:emotions",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "他的故事让我很感动。",
+        "pinyin": "Tā de gùshi ràng wǒ hěn gǎndòng.",
+        "en": "His story moved me deeply."
+      },
+      {
+        "zh": "收到礼物后她感动得哭了。",
+        "pinyin": "Shōudào lǐwù hòu tā gǎndòng de kū le.",
+        "en": "After receiving the gift, she was so moved she cried."
+      }
+    ]
+  },
+  {
+    "hanzi": "感谢",
+    "pinyin": "gǎnxiè",
+    "definition": "thank; be grateful",
+    "tags": [
+      "type:verb",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:emotions,social",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "感谢你的帮助。",
+        "pinyin": "Gǎnxiè nǐ de bāngzhù.",
+        "en": "Thank you for your help."
+      },
+      {
+        "zh": "我感谢每一位朋友。",
+        "pinyin": "Wǒ gǎnxiè měi yī wèi péngyou.",
+        "en": "I am grateful to every friend."
+      }
+    ]
+  },
+  {
+    "hanzi": "心里",
+    "pinyin": "xīnlǐ",
+    "definition": "heart; mind",
+    "tags": [
+      "type:noun",
+      "lesson:lesson24",
+      "frequency:high",
+      "topic:feelings",
+      "hsk:2"
+    ],
+    "sentences": [
+      {
+        "zh": "我心里很开心。",
+        "pinyin": "Wǒ xīnlǐ hěn kāixīn.",
+        "en": "I am very happy in my heart."
+      },
+      {
+        "zh": "他说的话让我心里暖暖的。",
+        "pinyin": "Tā shuō de huà ràng wǒ xīnlǐ nuǎn nuǎn de.",
+        "en": "His words warmed my heart."
       }
     ]
   },
@@ -1427,7 +16040,7 @@ const vocab = [
       {
         "zh": "组装电脑不难。",
         "pinyin": "Zǔzhuāng diànnǎo bù nán.",
-        "en": "Assembling a PC isn’t hard."
+        "en": "Assembling a PC isn't hard."
       }
     ]
   },
@@ -1542,7 +16155,7 @@ const vocab = [
       {
         "zh": "内存不够用。",
         "pinyin": "Nèicún bú gòu yòng.",
-        "en": "The RAM isn’t enough."
+        "en": "The RAM isn't enough."
       }
     ]
   },
@@ -1606,7 +16219,7 @@ const vocab = [
       {
         "zh": "电源坏了电脑就开不了机。",
         "pinyin": "Diànyuán huài le diànnǎo jiù kāi bù liǎo jī.",
-        "en": "If the PSU breaks, the PC won’t turn on."
+        "en": "If the PSU breaks, the PC won't turn on."
       },
       {
         "zh": "买电源要看功率。",
@@ -1791,7 +16404,7 @@ const vocab = [
       {
         "zh": "电脑开不了机。",
         "pinyin": "Diànnǎo kāi bù liǎo jī.",
-        "en": "The PC won’t power on."
+        "en": "The PC won't power on."
       },
       {
         "zh": "开机以后要输密码。",
@@ -1815,7 +16428,7 @@ const vocab = [
       {
         "zh": "别忘了关机。",
         "pinyin": "Bié wàng le guānjī.",
-        "en": "Don’t forget to shut down."
+        "en": "Don't forget to shut down."
       },
       {
         "zh": "电脑自动关机了。",
@@ -1844,561 +16457,6 @@ const vocab = [
         "zh": "我的电脑卡住了，我重启了一下。",
         "pinyin": "Wǒ de diànnǎo kǎ zhù le, wǒ chóngqǐ le yīxià.",
         "en": "My PC froze, so I restarted it."
-      }
-    ]
-  },
-  {
-    "hanzi": "工作",
-    "pinyin": "gōngzuò",
-    "definition": "job / to work",
-    "tags": [
-      "type:noun/verb",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:jobs",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我的工作很忙。",
-        "pinyin": "Wǒ de gōngzuò hěn máng.",
-        "en": "My job is very busy."
-      },
-      {
-        "zh": "你在哪儿工作？",
-        "pinyin": "Nǐ zài nǎr gōngzuò?",
-        "en": "Where do you work?"
-      }
-    ]
-  },
-  {
-    "hanzi": "以后",
-    "pinyin": "yǐhòu",
-    "definition": "in the future / later",
-    "tags": [
-      "type:noun",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "以后我想当医生。",
-        "pinyin": "Yǐhòu wǒ xiǎng dāng yīshēng.",
-        "en": "In the future I want to be a doctor."
-      },
-      {
-        "zh": "我们以后再见。",
-        "pinyin": "Wǒmen yǐhòu zàijiàn.",
-        "en": "See you later."
-      }
-    ]
-  },
-  {
-    "hanzi": "想",
-    "pinyin": "xiǎng",
-    "definition": "want to / would like to / think",
-    "tags": [
-      "type:verb",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:desire",
-      "hsk:1",
-      "grammar:modal verb"
-    ],
-    "sentences": [
-      {
-        "zh": "我想学汉语。",
-        "pinyin": "Wǒ xiǎng xué Hànyǔ.",
-        "en": "I want to learn Chinese."
-      },
-      {
-        "zh": "你想吃什么？",
-        "pinyin": "Nǐ xiǎng chī shénme?",
-        "en": "What would you like to eat?"
-      }
-    ]
-  },
-  {
-    "hanzi": "做",
-    "pinyin": "zuò",
-    "definition": "to do / to be (a job)",
-    "tags": [
-      "type:verb",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:actions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "你做什么工作？",
-        "pinyin": "Nǐ zuò shénme gōngzuò?",
-        "en": "What job do you do?"
-      },
-      {
-        "zh": "我想做老师。",
-        "pinyin": "Wǒ xiǎng zuò lǎoshī.",
-        "en": "I want to be a teacher."
-      }
-    ]
-  },
-  {
-    "hanzi": "什么",
-    "pinyin": "shénme",
-    "definition": "what",
-    "tags": [
-      "type:pronoun",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1",
-      "grammar:question word"
-    ],
-    "sentences": [
-      {
-        "zh": "你叫什么名字？",
-        "pinyin": "Nǐ jiào shénme míngzi?",
-        "en": "What is your name?"
-      },
-      {
-        "zh": "你想做什么？",
-        "pinyin": "Nǐ xiǎng zuò shénme?",
-        "en": "What do you want to do?"
-      }
-    ]
-  },
-  {
-    "hanzi": "表格",
-    "pinyin": "biǎogé",
-    "definition": "form / table",
-    "tags": [
-      "type:noun",
-      "lesson:lesson4",
-      "frequency:medium",
-      "topic:school",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "请填写这张表格。",
-        "pinyin": "Qǐng tiánxiě zhè zhāng biǎogé.",
-        "en": "Please fill out this form."
-      },
-      {
-        "zh": "表格里有很多信息。",
-        "pinyin": "Biǎogé lǐ yǒu hěn duō xìnxī.",
-        "en": "There is a lot of information in the form."
-      }
-    ]
-  },
-  {
-    "hanzi": "老师",
-    "pinyin": "lǎoshī",
-    "definition": "teacher",
-    "tags": [
-      "type:noun",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:jobs",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "李老师教中文。",
-        "pinyin": "Lǐ lǎoshī jiāo Zhōngwén.",
-        "en": "Teacher Li teaches Chinese."
-      },
-      {
-        "zh": "我想当老师。",
-        "pinyin": "Wǒ xiǎng dāng lǎoshī.",
-        "en": "I want to be a teacher."
-      }
-    ]
-  },
-  {
-    "hanzi": "医生",
-    "pinyin": "yīshēng",
-    "definition": "doctor",
-    "tags": [
-      "type:noun",
-      "lesson:lesson4",
-      "frequency:high",
-      "topic:jobs",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "医生很辛苦。",
-        "pinyin": "Yīshēng hěn xīnkǔ.",
-        "en": "Doctors work very hard."
-      },
-      {
-        "zh": "生病了要去看医生。",
-        "pinyin": "Shēngbìng le yào qù kàn yīshēng.",
-        "en": "If you’re sick, go see a doctor."
-      }
-    ]
-  },
-  {
-    "hanzi": "工程师",
-    "pinyin": "gōngchéngshī",
-    "definition": "engineer",
-    "tags": [
-      "type:noun",
-      "lesson:lesson4",
-      "frequency:medium",
-      "topic:jobs",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "我爸爸是软件工程师。",
-        "pinyin": "Wǒ bàba shì ruǎnjiàn gōngchéngshī.",
-        "en": "My dad is a software engineer."
-      },
-      {
-        "zh": "工程师需要会设计。",
-        "pinyin": "Gōngchéngshī xūyào huì shèjì.",
-        "en": "Engineers need to know design."
-      }
-    ]
-  },
-  {
-    "hanzi": "中国",
-    "pinyin": "Zhōngguó",
-    "definition": "China",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:countries",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "中国很大。",
-        "pinyin": "Zhōngguó hěn dà.",
-        "en": "China is very big."
-      },
-      {
-        "zh": "我来自中国。",
-        "pinyin": "Wǒ láizì Zhōngguó.",
-        "en": "I come from China."
-      }
-    ]
-  },
-  {
-    "hanzi": "一年",
-    "pinyin": "yī nián",
-    "definition": "one year",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "一年有十二个月。",
-        "pinyin": "Yī nián yǒu shí’èr ge yuè.",
-        "en": "One year has twelve months."
-      },
-      {
-        "zh": "他在中国待了一年。",
-        "pinyin": "Tā zài Zhōngguó dāi le yī nián.",
-        "en": "He stayed in China for one year."
-      }
-    ]
-  },
-  {
-    "hanzi": "有",
-    "pinyin": "yǒu",
-    "definition": "have / there is",
-    "tags": [
-      "type:verb",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:possession",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我有一只猫。",
-        "pinyin": "Wǒ yǒu yī zhī māo.",
-        "en": "I have a cat."
-      },
-      {
-        "zh": "教室里有很多桌子。",
-        "pinyin": "Jiàoshì lǐ yǒu hěn duō zhuōzi.",
-        "en": "There are many desks in the classroom."
-      }
-    ]
-  },
-  {
-    "hanzi": "几个",
-    "pinyin": "jǐ ge",
-    "definition": "how many (few)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "你有几个朋友？",
-        "pinyin": "Nǐ yǒu jǐ ge péngyou?",
-        "en": "How many friends do you have?"
-      },
-      {
-        "zh": "几个都可以。",
-        "pinyin": "Jǐ ge dōu kěyǐ.",
-        "en": "Any number (of them) is fine."
-      }
-    ]
-  },
-  {
-    "hanzi": "季节",
-    "pinyin": "jìjié",
-    "definition": "season",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:medium",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "一年有四个季节。",
-        "pinyin": "Yī nián yǒu sì ge jìjié.",
-        "en": "There are four seasons in a year."
-      },
-      {
-        "zh": "你最喜欢哪个季节？",
-        "pinyin": "Nǐ zuì xǐhuan nǎ ge jìjié?",
-        "en": "Which season do you like best?"
-      }
-    ]
-  },
-  {
-    "hanzi": "四个",
-    "pinyin": "sì ge",
-    "definition": "four (of something)",
-    "tags": [
-      "type:number+measure",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:numbers",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "四个学生迟到了。",
-        "pinyin": "Sì ge xuésheng chídào le.",
-        "en": "Four students were late."
-      },
-      {
-        "zh": "我要买四个苹果。",
-        "pinyin": "Wǒ yào mǎi sì ge píngguǒ.",
-        "en": "I want to buy four apples."
-      }
-    ]
-  },
-  {
-    "hanzi": "春天",
-    "pinyin": "chūntiān",
-    "definition": "spring",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:weather,seasons",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "春天花开了。",
-        "pinyin": "Chūntiān huā kāi le.",
-        "en": "Flowers bloom in spring."
-      },
-      {
-        "zh": "春天不冷不热。",
-        "pinyin": "Chūntiān bù lěng bù rè.",
-        "en": "Spring is neither cold nor hot."
-      }
-    ]
-  },
-  {
-    "hanzi": "夏天",
-    "pinyin": "xiàtiān",
-    "definition": "summer",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:weather,seasons",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "夏天很热。",
-        "pinyin": "Xiàtiān hěn rè.",
-        "en": "Summer is very hot."
-      },
-      {
-        "zh": "夏天我喜欢游泳。",
-        "pinyin": "Xiàtiān wǒ xǐhuan yóuyǒng.",
-        "en": "In summer I like to swim."
-      }
-    ]
-  },
-  {
-    "hanzi": "秋天",
-    "pinyin": "qiūtiān",
-    "definition": "autumn",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:weather,seasons",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "秋天树叶变黄了。",
-        "pinyin": "Qiūtiān shùyè biàn huáng le.",
-        "en": "Leaves turn yellow in autumn."
-      },
-      {
-        "zh": "秋天是收获的季节。",
-        "pinyin": "Qiūtiān shì shōuhuò de jìjié.",
-        "en": "Autumn is the harvest season."
-      }
-    ]
-  },
-  {
-    "hanzi": "冬天",
-    "pinyin": "dōngtiān",
-    "definition": "winter",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:weather,seasons",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "冬天很冷。",
-        "pinyin": "Dōngtiān hěn lěng.",
-        "en": "Winter is very cold."
-      },
-      {
-        "zh": "冬天会下雪。",
-        "pinyin": "Dōngtiān huì xià xuě.",
-        "en": "It snows in winter."
-      }
-    ]
-  },
-  {
-    "hanzi": "什么时候",
-    "pinyin": "shénme shíhou",
-    "definition": "when",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1",
-      "grammar:question phrase"
-    ],
-    "sentences": [
-      {
-        "zh": "你什么时候来？",
-        "pinyin": "Nǐ shénme shíhou lái?",
-        "en": "When are you coming?"
-      },
-      {
-        "zh": "他什么时候走的？",
-        "pinyin": "Tā shénme shíhou zǒu de?",
-        "en": "When did he leave?"
-      }
-    ]
-  },
-  {
-    "hanzi": "三月",
-    "pinyin": "sānyuè",
-    "definition": "March",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:time,months",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "三月是春天。",
-        "pinyin": "Sānyuè shì chūntiān.",
-        "en": "March is spring."
-      },
-      {
-        "zh": "我三月生日。",
-        "pinyin": "Wǒ sānyuè shēngrì.",
-        "en": "My birthday is in March."
-      }
-    ]
-  },
-  {
-    "hanzi": "五月",
-    "pinyin": "wǔyuè",
-    "definition": "May",
-    "tags": [
-      "type:noun",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:time,months",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "五月一号是劳动节。",
-        "pinyin": "Wǔyuè yī hào shì Láodòngjié.",
-        "en": "May 1st is Labor Day."
-      },
-      {
-        "zh": "我们五月考试。",
-        "pinyin": "Wǒmen wǔyuè kǎoshì.",
-        "en": "We have exams in May."
-      }
-    ]
-  },
-  {
-    "hanzi": "到",
-    "pinyin": "dào",
-    "definition": "to / until (from … to)",
-    "tags": [
-      "type:verb/prep",
-      "lesson:lesson5",
-      "frequency:high",
-      "topic:direction,time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "从周一到周五。",
-        "pinyin": "Cóng Zhōuyī dào Zhōuwǔ.",
-        "en": "From Monday to Friday."
-      },
-      {
-        "zh": "走到学校要十分钟。",
-        "pinyin": "Zǒu dào xuéxiào yào shí fēnzhōng.",
-        "en": "Walking to school takes ten minutes."
       }
     ]
   },
@@ -2753,7 +16811,8 @@ const vocab = [
     "pinyin": "qiàoqū",
     "definition": "warping",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus2",
       "frequency:low",
       "topic:3dprinting"
@@ -2776,7 +16835,8 @@ const vocab = [
     "pinyin": "lāsī",
     "definition": "stringing",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus2",
       "frequency:low",
       "topic:3dprinting"
@@ -2822,7 +16882,8 @@ const vocab = [
     "pinyin": "jǐchū",
     "definition": "extrusion",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus2",
       "frequency:low",
       "topic:3dprinting"
@@ -2859,928 +16920,7 @@ const vocab = [
       {
         "zh": "模型不能悬空太多。",
         "pinyin": "Móxíng bùnéng xuánkōng tài duō.",
-        "en": "The model shouldn’t have too many overhangs."
-      }
-    ]
-  },
-  {
-    "hanzi": "天气",
-    "pinyin": "tiānqì",
-    "definition": "weather",
-    "tags": [
-      "type:noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "今天天气很好。",
-        "pinyin": "Jīntiān tiānqì hěn hǎo.",
-        "en": "The weather is nice today."
-      },
-      {
-        "zh": "你查一下明天的天气。",
-        "pinyin": "Nǐ chá yīxià míngtiān de tiānqì.",
-        "en": "Check tomorrow's weather."
-      }
-    ]
-  },
-  {
-    "hanzi": "预报",
-    "pinyin": "yùbào",
-    "definition": "forecast",
-    "tags": [
-      "type:noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "天气预报说下午有雨。",
-        "pinyin": "Tiānqì yùbào shuō xiàwǔ yǒu yǔ.",
-        "en": "The weather forecast says rain in the afternoon."
-      },
-      {
-        "zh": "你相信天气预报吗？",
-        "pinyin": "Nǐ xiāngxìn tiānqì yùbào ma?",
-        "en": "Do you trust the weather forecast?"
-      }
-    ]
-  },
-  {
-    "hanzi": "晴天",
-    "pinyin": "qíngtiān",
-    "definition": "sunny day",
-    "tags": [
-      "type:noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "明天是晴天。",
-        "pinyin": "Míngtiān shì qíngtiān.",
-        "en": "Tomorrow will be sunny."
-      },
-      {
-        "zh": "晴天适合出去玩。",
-        "pinyin": "Qíngtiān shìhé chūqù wán.",
-        "en": "Sunny days are good for going out."
-      }
-    ]
-  },
-  {
-    "hanzi": "下雨",
-    "pinyin": "xià yǔ",
-    "definition": "to rain",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:1",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "今天会下雨。",
-        "pinyin": "Jīntiān huì xià yǔ.",
-        "en": "It will rain today."
-      },
-      {
-        "zh": "下雨了，记得带伞。",
-        "pinyin": "Xià yǔ le, jìde dài sǎn.",
-        "en": "It's raining, remember to bring an umbrella."
-      }
-    ]
-  },
-  {
-    "hanzi": "了",
-    "pinyin": "le",
-    "definition": "change of state / completed action",
-    "tags": [
-      "type:particle",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1",
-      "grammar:aspect particle"
-    ],
-    "sentences": [
-      {
-        "zh": "下雨了。",
-        "pinyin": "Xià yǔ le.",
-        "en": "It's raining now (change)."
-      },
-      {
-        "zh": "我吃了饭。",
-        "pinyin": "Wǒ chī le fàn.",
-        "en": "I ate (completion)."
-      }
-    ]
-  },
-  {
-    "hanzi": "还",
-    "pinyin": "hái",
-    "definition": "still / even",
-    "tags": [
-      "type:adverb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "他还没来。",
-        "pinyin": "Tā hái méi lái.",
-        "en": "He still hasn't come."
-      },
-      {
-        "zh": "我还想再吃一个。",
-        "pinyin": "Wǒ hái xiǎng zài chī yí ge.",
-        "en": "I even want to eat another one."
-      }
-    ]
-  },
-  {
-    "hanzi": "出去",
-    "pinyin": "chūqù",
-    "definition": "to go out",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:actions",
-      "hsk:1",
-      "grammar:directional complement"
-    ],
-    "sentences": [
-      {
-        "zh": "我要出去买东西。",
-        "pinyin": "Wǒ yào chūqù mǎi dōngxi.",
-        "en": "I'm going out to buy things."
-      },
-      {
-        "zh": "太冷了，不想出去。",
-        "pinyin": "Tài lěng le, bù xiǎng chūqù.",
-        "en": "It's too cold, I don't want to go out."
-      }
-    ]
-  },
-  {
-    "hanzi": "度",
-    "pinyin": "dù",
-    "definition": "degree (temperature)",
-    "tags": [
-      "type:measure",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather,measurement",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "今天三十度。",
-        "pinyin": "Jīntiān sānshí dù.",
-        "en": "Today is 30 degrees."
-      },
-      {
-        "zh": "水温多少度？",
-        "pinyin": "Shuǐwēn duōshao dù?",
-        "en": "What's the water temperature?"
-      }
-    ]
-  },
-  {
-    "hanzi": "高",
-    "pinyin": "gāo",
-    "definition": "high",
-    "tags": [
-      "type:adj",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:description",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "温度很高。",
-        "pinyin": "Wēndù hěn gāo.",
-        "en": "The temperature is high."
-      },
-      {
-        "zh": "这座山很高。",
-        "pinyin": "Zhè zuò shān hěn gāo.",
-        "en": "This mountain is very tall."
-      }
-    ]
-  },
-  {
-    "hanzi": "温度",
-    "pinyin": "wēndù",
-    "definition": "temperature",
-    "tags": [
-      "type:noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "室内温度正好。",
-        "pinyin": "Shìnèi wēndù zhènghǎo.",
-        "en": "The indoor temperature is just right."
-      },
-      {
-        "zh": "测量一下水温。",
-        "pinyin": "Cèliáng yīxià shuǐwēn.",
-        "en": "Measure the water temperature."
-      }
-    ]
-  },
-  {
-    "hanzi": "低",
-    "pinyin": "dī",
-    "definition": "low",
-    "tags": [
-      "type:adj",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:description",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "气温很低。",
-        "pinyin": "Qìwēn hěn dī.",
-        "en": "The temperature is very low."
-      },
-      {
-        "zh": "声音太低了。",
-        "pinyin": "Shēngyīn tài dī le.",
-        "en": "The volume is too low."
-      }
-    ]
-  },
-  {
-    "hanzi": "零下",
-    "pinyin": "língxià",
-    "definition": "below zero",
-    "tags": [
-      "type:noun/prefix",
-      "lesson:lesson6",
-      "frequency:medium",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "冬天零下十度。",
-        "pinyin": "Dōngtiān língxià shí dù.",
-        "en": "In winter it's minus ten degrees."
-      },
-      {
-        "zh": "零下的时候会结冰。",
-        "pinyin": "Língxià de shíhou huì jiébīng.",
-        "en": "Below zero it freezes."
-      }
-    ]
-  },
-  {
-    "hanzi": "会",
-    "pinyin": "huì",
-    "definition": "be likely to / can / know how to",
-    "tags": [
-      "type:verb (modal)",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1",
-      "grammar:modal verb"
-    ],
-    "sentences": [
-      {
-        "zh": "明天会下雨。",
-        "pinyin": "Míngtiān huì xià yǔ.",
-        "en": "It will likely rain tomorrow."
-      },
-      {
-        "zh": "我会说汉语。",
-        "pinyin": "Wǒ huì shuō Hànyǔ.",
-        "en": "I can speak Chinese."
-      }
-    ]
-  },
-  {
-    "hanzi": "下雪",
-    "pinyin": "xià xuě",
-    "definition": "to snow",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson6",
-      "frequency:medium",
-      "topic:weather",
-      "hsk:1",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "北方冬天经常下雪。",
-        "pinyin": "Běifāng dōngtiān jīngcháng xià xuě.",
-        "en": "Northern winters often have snow."
-      },
-      {
-        "zh": "昨晚下雪了。",
-        "pinyin": "Zuówǎn xià xuě le.",
-        "en": "It snowed last night."
-      }
-    ]
-  },
-  {
-    "hanzi": "游泳",
-    "pinyin": "yóuyǒng",
-    "definition": "to swim",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:sports",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我喜欢游泳。",
-        "pinyin": "Wǒ xǐhuan yóuyǒng.",
-        "en": "I like swimming."
-      },
-      {
-        "zh": "夏天去游泳很舒服。",
-        "pinyin": "Xiàtiān qù yóuyǒng hěn shūfu.",
-        "en": "Swimming in summer is very comfortable."
-      }
-    ]
-  },
-  {
-    "hanzi": "能",
-    "pinyin": "néng",
-    "definition": "can (ability/permission)",
-    "tags": [
-      "type:verb (modal)",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1",
-      "grammar:modal verb"
-    ],
-    "sentences": [
-      {
-        "zh": "我能试试吗？",
-        "pinyin": "Wǒ néng shìshi ma?",
-        "en": "Can I try?"
-      },
-      {
-        "zh": "小狗能听懂主人的话。",
-        "pinyin": "Xiǎo gǒu néng tīngdǒng zhǔrén de huà.",
-        "en": "Little dogs can understand their owner's words."
-      }
-    ]
-  },
-  {
-    "hanzi": "阳光",
-    "pinyin": "yángguāng",
-    "definition": "sunshine",
-    "tags": [
-      "type:noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:weather",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "今天阳光很好。",
-        "pinyin": "Jīntiān yángguāng hěn hǎo.",
-        "en": "The sunshine is nice today."
-      },
-      {
-        "zh": "阳光照在脸上。",
-        "pinyin": "Yángguāng zhào zài liǎn shàng.",
-        "en": "Sunshine shines on the face."
-      }
-    ]
-  },
-  {
-    "hanzi": "约",
-    "pinyin": "yuē",
-    "definition": "to make an appointment / to arrange",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:social",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我们约个时间见面吧。",
-        "pinyin": "Wǒmen yuē ge shíjiān jiànmiàn ba.",
-        "en": "Let's arrange a time to meet."
-      },
-      {
-        "zh": "你约了医生吗？",
-        "pinyin": "Nǐ yuē le yīshēng ma?",
-        "en": "Did you make an appointment with the doctor?"
-      }
-    ]
-  },
-  {
-    "hanzi": "散步",
-    "pinyin": "sànbù",
-    "definition": "to take a walk",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:activities",
-      "hsk:1",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "晚饭后我们去散步。",
-        "pinyin": "Wǎnfàn hòu wǒmen qù sànbù.",
-        "en": "After dinner we go for a walk."
-      },
-      {
-        "zh": "散步对身体好。",
-        "pinyin": "Sànbù duì shēntǐ hǎo.",
-        "en": "Walking is good for your health."
-      }
-    ]
-  },
-  {
-    "hanzi": "聊天儿",
-    "pinyin": "liáotiānr",
-    "definition": "to chat",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:social",
-      "hsk:2",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "朋友一起聊天儿很开心。",
-        "pinyin": "Péngyou yīqǐ liáotiānr hěn kāixīn.",
-        "en": "Chatting with friends is very happy."
-      },
-      {
-        "zh": "我们聊了一会儿天儿。",
-        "pinyin": "Wǒmen liáo le yīhuǐr tiānr.",
-        "en": "We chatted for a while."
-      }
-    ]
-  },
-  {
-    "hanzi": "或者",
-    "pinyin": "huòzhě",
-    "definition": "or",
-    "tags": [
-      "type:conjunction",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "喝茶或者咖啡都可以。",
-        "pinyin": "Hē chá huòzhě kāfēi dōu kěyǐ.",
-        "en": "Drinking tea or coffee is fine."
-      },
-      {
-        "zh": "你可以今天来，或者明天来。",
-        "pinyin": "Nǐ kěyǐ jīntiān lái, huòzhě míngtiān lái.",
-        "en": "You can come today or tomorrow."
-      }
-    ]
-  },
-  {
-    "hanzi": "骑车",
-    "pinyin": "qí chē",
-    "definition": "to ride a bike",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:transport",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我每天骑车上班。",
-        "pinyin": "Wǒ měitiān qí chē shàngbān.",
-        "en": "I ride a bike to work every day."
-      },
-      {
-        "zh": "骑车比走路快。",
-        "pinyin": "Qí chē bǐ zǒulù kuài.",
-        "en": "Riding a bike is faster than walking."
-      }
-    ]
-  },
-  {
-    "hanzi": "运动",
-    "pinyin": "yùndòng",
-    "definition": "to exercise / sports",
-    "tags": [
-      "type:verb/noun",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:sports",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "你每天运动吗？",
-        "pinyin": "Nǐ měitiān yùndòng ma?",
-        "en": "Do you exercise every day?"
-      },
-      {
-        "zh": "跑步是个好运动。",
-        "pinyin": "Pǎobù shì ge hǎo yùndòng.",
-        "en": "Running is a good sport."
-      }
-    ]
-  },
-  {
-    "hanzi": "放松",
-    "pinyin": "fàngsōng",
-    "definition": "to relax",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:feelings",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "听音乐可以放松心情。",
-        "pinyin": "Tīng yīnyuè kěyǐ fàngsōng xīnqíng.",
-        "en": "Listening to music can relax your mood."
-      },
-      {
-        "zh": "周末好好放松一下。",
-        "pinyin": "Zhōumò hǎohāo fàngsōng yīxià.",
-        "en": "Relax well on the weekend."
-      }
-    ]
-  },
-  {
-    "hanzi": "可能",
-    "pinyin": "kěnéng",
-    "definition": "probably / maybe / possible",
-    "tags": [
-      "type:adv/adj",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "他可能不来了。",
-        "pinyin": "Tā kěnéng bù lái le.",
-        "en": "He probably isn't coming."
-      },
-      {
-        "zh": "这可能是个误会。",
-        "pinyin": "Zhè kěnéng shì ge wùhuì.",
-        "en": "This might be a misunderstanding."
-      }
-    ]
-  },
-  {
-    "hanzi": "如果",
-    "pinyin": "rúguǒ",
-    "definition": "if",
-    "tags": [
-      "type:conjunction",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "如果明天下雨，我们就不去公园。",
-        "pinyin": "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù gōngyuán.",
-        "en": "If it rains tomorrow, we won't go to the park."
-      },
-      {
-        "zh": "如果你累了就休息。",
-        "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi.",
-        "en": "If you're tired, rest."
-      }
-    ]
-  },
-  {
-    "hanzi": "只",
-    "pinyin": "zhǐ",
-    "definition": "only",
-    "tags": [
-      "type:adverb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我只买了一个。",
-        "pinyin": "Wǒ zhǐ mǎi le yí ge.",
-        "en": "I only bought one."
-      },
-      {
-        "zh": "他只会说一点汉语。",
-        "pinyin": "Tā zhǐ huì shuō yīdiǎn Hànyǔ.",
-        "en": "He can only speak a little Chinese."
-      }
-    ]
-  },
-  {
-    "hanzi": "上网",
-    "pinyin": "shàngwǎng",
-    "definition": "to go online",
-    "tags": [
-      "type:verb",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:internet",
-      "hsk:1",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "我每天晚上上网看视频。",
-        "pinyin": "Wǒ měitiān wǎnshàng shàngwǎng kàn shìpín.",
-        "en": "I go online every night to watch videos."
-      },
-      {
-        "zh": "少上网对眼睛好。",
-        "pinyin": "Shǎo shàngwǎng duì yǎnjing hǎo.",
-        "en": "Less internet is good for your eyes."
-      }
-    ]
-  },
-  {
-    "hanzi": "不过",
-    "pinyin": "búguò",
-    "definition": "but / however",
-    "tags": [
-      "type:conjunction",
-      "lesson:lesson6",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我喜欢吃辣，不过不能吃太多。",
-        "pinyin": "Wǒ xǐhuan chī là, búguò bùnéng chī tài duō.",
-        "en": "I like spicy food, but I can't eat too much."
-      },
-      {
-        "zh": "他很好，不过有时候很忙。",
-        "pinyin": "Tā hěn hǎo, búguò yǒu shíhou hěn máng.",
-        "en": "He's nice, but sometimes very busy."
-      }
-    ]
-  },
-  {
-    "hanzi": "教室",
-    "pinyin": "jiàoshì",
-    "definition": "classroom",
-    "tags": [
-      "type:noun",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:classroom",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "教室很干净。",
-        "pinyin": "Jiàoshì hěn gānjìng.",
-        "en": "The classroom is very clean."
-      },
-      {
-        "zh": "我们在教室上课。",
-        "pinyin": "Wǒmen zài jiàoshì shàngkè.",
-        "en": "We have class in the classroom."
-      }
-    ]
-  },
-  {
-    "hanzi": "里面",
-    "pinyin": "lǐmiàn",
-    "definition": "inside",
-    "tags": [
-      "type:noun (location)",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:location",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "书包里面有什么？",
-        "pinyin": "Shūbāo lǐmiàn yǒu shénme?",
-        "en": "What's inside the backpack?"
-      },
-      {
-        "zh": "教室里面有很多学生。",
-        "pinyin": "Jiàoshì lǐmiàn yǒu hěn duō xuésheng.",
-        "en": "There are many students inside the classroom."
-      }
-    ]
-  },
-  {
-    "hanzi": "有什么",
-    "pinyin": "yǒu shénme",
-    "definition": "what is there",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "冰箱里有什么？",
-        "pinyin": "Bīngxiāng lǐ yǒu shénme?",
-        "en": "What's in the fridge?"
-      },
-      {
-        "zh": "你的包里有什么？",
-        "pinyin": "Nǐ de bāo lǐ yǒu shénme?",
-        "en": "What's in your bag?"
-      }
-    ]
-  },
-  {
-    "hanzi": "桌子",
-    "pinyin": "zhuōzi",
-    "definition": "desk / table",
-    "tags": [
-      "type:noun",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:furniture",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "桌子上有一本书。",
-        "pinyin": "Zhuōzi shàng yǒu yī běn shū.",
-        "en": "There is a book on the desk."
-      },
-      {
-        "zh": "请把椅子放在桌子旁边。",
-        "pinyin": "Qǐng bǎ yǐzi fàng zài zhuōzi pángbiān.",
-        "en": "Please put the chair next to the desk."
-      }
-    ]
-  },
-  {
-    "hanzi": "椅子",
-    "pinyin": "yǐzi",
-    "definition": "chair",
-    "tags": [
-      "type:noun",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:furniture",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这把椅子很舒服。",
-        "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
-        "en": "This chair is very comfortable."
-      },
-      {
-        "zh": "椅子不够，再拿几把。",
-        "pinyin": "Yǐzi bú gòu, zài ná jǐ bǎ.",
-        "en": "There aren't enough chairs, get a few more."
-      }
-    ]
-  },
-  {
-    "hanzi": "电脑",
-    "pinyin": "diànnǎo",
-    "definition": "computer",
-    "tags": [
-      "type:noun",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:electronics",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我的电脑坏了。",
-        "pinyin": "Wǒ de diànnǎo huài le.",
-        "en": "My computer is broken."
-      },
-      {
-        "zh": "老师用电脑讲课。",
-        "pinyin": "Lǎoshī yòng diànnǎo jiǎngkè.",
-        "en": "The teacher uses a computer to teach."
-      }
-    ]
-  },
-  {
-    "hanzi": "前面",
-    "pinyin": "qiánmiàn",
-    "definition": "in front of",
-    "tags": [
-      "type:noun (location)",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:location",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "教室前面有一块黑板。",
-        "pinyin": "Jiàoshì qiánmiàn yǒu yī kuài hēibǎn.",
-        "en": "In front of the classroom there is a blackboard."
-      },
-      {
-        "zh": "我坐在他的前面。",
-        "pinyin": "Wǒ zuò zài tā de qiánmiàn.",
-        "en": "I sit in front of him."
-      }
-    ]
-  },
-  {
-    "hanzi": "一块",
-    "pinyin": "yī kuài",
-    "definition": "one (piece of)",
-    "tags": [
-      "type:measure",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:measurement",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "一块蛋糕。",
-        "pinyin": "Yī kuài dàngāo.",
-        "en": "One piece of cake."
-      },
-      {
-        "zh": "这里有一块橡皮。",
-        "pinyin": "Zhèlǐ yǒu yī kuài xiàngpí.",
-        "en": "There is one eraser here."
-      }
-    ]
-  },
-  {
-    "hanzi": "黑板",
-    "pinyin": "hēibǎn",
-    "definition": "blackboard",
-    "tags": [
-      "type:noun",
-      "lesson:lesson7",
-      "frequency:high",
-      "topic:classroom",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "老师在黑板上写字。",
-        "pinyin": "Lǎoshī zài hēibǎn shàng xiě zì.",
-        "en": "The teacher writes on the blackboard."
-      },
-      {
-        "zh": "擦一下黑板。",
-        "pinyin": "Cā yīxià hēibǎn.",
-        "en": "Clean the blackboard."
+        "en": "The model shouldn't have too many overhangs."
       }
     ]
   },
@@ -3974,7 +17114,8 @@ const vocab = [
     "pinyin": "dàojiǎo",
     "definition": "chamfer",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus3",
       "frequency:low",
       "topic:cad"
@@ -3997,7 +17138,8 @@ const vocab = [
     "pinyin": "yuánjiǎo",
     "definition": "fillet",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus3",
       "frequency:low",
       "topic:cad"
@@ -4251,763 +17393,12 @@ const vocab = [
     ]
   },
   {
-    "hanzi": "第",
-    "pinyin": "dì",
-    "definition": "ordinal marker (prefix)",
-    "tags": [
-      "type:prefix",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:grammar,numbers",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "第一个学生到了。",
-        "pinyin": "Dì-yī ge xuésheng dào le.",
-        "en": "The first student arrived."
-      },
-      {
-        "zh": "今天是第三天。",
-        "pinyin": "Jīntiān shì dì-sān tiān.",
-        "en": "Today is the third day."
-      }
-    ]
-  },
-  {
-    "hanzi": "节",
-    "pinyin": "jié",
-    "definition": "section / class period (measure)",
-    "tags": [
-      "type:measure",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:school,time",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "今天有四节课。",
-        "pinyin": "Jīntiān yǒu sì jié kè.",
-        "en": "There are four class periods today."
-      },
-      {
-        "zh": "第一节是语文。",
-        "pinyin": "Dì-yī jié shì Yǔwén.",
-        "en": "The first period is Chinese language."
-      }
-    ]
-  },
-  {
-    "hanzi": "课",
-    "pinyin": "kè",
-    "definition": "class / lesson",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:school",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这节课很难。",
-        "pinyin": "Zhè jié kè hěn nán.",
-        "en": "This class is very hard."
-      },
-      {
-        "zh": "你最喜欢什么课？",
-        "pinyin": "Nǐ zuì xǐhuan shénme kè?",
-        "en": "What class do you like most?"
-      }
-    ]
-  },
-  {
-    "hanzi": "综合",
-    "pinyin": "zōnghé",
-    "definition": "comprehensive / integrated",
-    "tags": [
-      "type:adj",
-      "lesson:lesson8",
-      "frequency:medium",
-      "topic:school",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "综合课包括听说读写。",
-        "pinyin": "Zōnghé kè bāokuò tīng shuō dú xiě.",
-        "en": "Comprehensive class includes listening, speaking, reading, and writing."
-      },
-      {
-        "zh": "这是综合练习。",
-        "pinyin": "Zhè shì zōnghé liànxí.",
-        "en": "This is comprehensive practice."
-      }
-    ]
-  },
-  {
-    "hanzi": "口语",
-    "pinyin": "kǒuyǔ",
-    "definition": "spoken language",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:language",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "口语课要多说话。",
-        "pinyin": "Kǒuyǔ kè yào duō shuōhuà.",
-        "en": "In spoken language class you need to talk more."
-      },
-      {
-        "zh": "你的口语进步很大。",
-        "pinyin": "Nǐ de kǒuyǔ jìnbù hěn dà.",
-        "en": "Your spoken Chinese has improved a lot."
-      }
-    ]
-  },
-  {
-    "hanzi": "听力",
-    "pinyin": "tīnglì",
-    "definition": "listening comprehension",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:language",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "听力考试很难。",
-        "pinyin": "Tīnglì kǎoshì hěn nán.",
-        "en": "The listening test is very hard."
-      },
-      {
-        "zh": "多听可以练习听力。",
-        "pinyin": "Duō tīng kěyǐ liànxí tīnglì.",
-        "en": "Listening more can practice your listening comprehension."
-      }
-    ]
-  },
-  {
-    "hanzi": "位",
-    "pinyin": "wèi",
-    "definition": "measure for people (polite)",
-    "tags": [
-      "type:measure",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1",
-      "grammar:polite measure"
-    ],
-    "sentences": [
-      {
-        "zh": "这有一位客人。",
-        "pinyin": "Zhè yǒu yí wèi kèrén.",
-        "en": "There is one guest (polite)."
-      },
-      {
-        "zh": "三位老师参加了会议。",
-        "pinyin": "Sān wèi lǎoshī cānjiā le huìyì.",
-        "en": "Three teachers attended the meeting."
-      }
-    ]
-  },
-  {
-    "hanzi": "教",
-    "pinyin": "jiāo",
-    "definition": "to teach",
-    "tags": [
-      "type:verb",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:education",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "王老师教我们汉语。",
-        "pinyin": "Wáng lǎoshī jiāo wǒmen Hànyǔ.",
-        "en": "Teacher Wang teaches us Chinese."
-      },
-      {
-        "zh": "你教我做这道菜吧。",
-        "pinyin": "Nǐ jiāo wǒ zuò zhè dào cài ba.",
-        "en": "Teach me how to make this dish."
-      }
-    ]
-  },
-  {
-    "hanzi": "长",
-    "pinyin": "cháng",
-    "definition": "long",
-    "tags": [
-      "type:adj",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:description",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这节课很长。",
-        "pinyin": "Zhè jié kè hěn cháng.",
-        "en": "This class is very long."
-      },
-      {
-        "zh": "她的头发很长。",
-        "pinyin": "Tā de tóufa hěn cháng.",
-        "en": "Her hair is very long."
-      }
-    ]
-  },
-  {
-    "hanzi": "分钟",
-    "pinyin": "fēnzhōng",
-    "definition": "minute",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "十分钟后开始。",
-        "pinyin": "Shí fēnzhōng hòu kāishǐ.",
-        "en": "It starts in ten minutes."
-      },
-      {
-        "zh": "我等了二十分钟。",
-        "pinyin": "Wǒ děng le èrshí fēnzhōng.",
-        "en": "I waited for twenty minutes."
-      }
-    ]
-  },
-  {
-    "hanzi": "小时",
-    "pinyin": "xiǎoshí",
-    "definition": "hour",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "一小时有六十分钟。",
-        "pinyin": "Yī xiǎoshí yǒu liùshí fēnzhōng.",
-        "en": "One hour has sixty minutes."
-      },
-      {
-        "zh": "我每天学习两小时。",
-        "pinyin": "Wǒ měitiān xuéxí liǎng xiǎoshí.",
-        "en": "I study for two hours every day."
-      }
-    ]
-  },
-  {
-    "hanzi": "正在",
-    "pinyin": "zhèngzài",
-    "definition": "in progress (right now)",
-    "tags": [
-      "type:adv",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:grammar,time",
-      "hsk:2",
-      "grammar:progressive aspect"
-    ],
-    "sentences": [
-      {
-        "zh": "他正在上课。",
-        "pinyin": "Tā zhèngzài shàngkè.",
-        "en": "He is in class right now."
-      },
-      {
-        "zh": "我正在写作业。",
-        "pinyin": "Wǒ zhèngzài xiě zuòyè.",
-        "en": "I am doing homework right now."
-      }
-    ]
-  },
-  {
-    "hanzi": "开学",
-    "pinyin": "kāixué",
-    "definition": "school begins",
-    "tags": [
-      "type:verb",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:school",
-      "hsk:2",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "九月一号开学。",
-        "pinyin": "Jiǔyuè yī hào kāixué.",
-        "en": "School starts on September 1st."
-      },
-      {
-        "zh": "开学第一天很兴奋。",
-        "pinyin": "Kāixué dì-yī tiān hěn xīngfèn.",
-        "en": "The first day of school is very exciting."
-      }
-    ]
-  },
-  {
-    "hanzi": "已经",
-    "pinyin": "yǐjīng",
-    "definition": "already",
-    "tags": [
-      "type:adv",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:grammar,time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "他已经到了。",
-        "pinyin": "Tā yǐjīng dào le.",
-        "en": "He has already arrived."
-      },
-      {
-        "zh": "我吃完了。",
-        "pinyin": "Wǒ yǐjīng chī wán le.",
-        "en": "I have already finished eating."
-      }
-    ]
-  },
-  {
-    "hanzi": "学期",
-    "pinyin": "xuéqī",
-    "definition": "semester",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:school",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "这个学期有十六周。",
-        "pinyin": "Zhège xuéqī yǒu shíliù zhōu.",
-        "en": "This semester has sixteen weeks."
-      },
-      {
-        "zh": "下学期我要学中文。",
-        "pinyin": "Xià xuéqī wǒ yào xué Zhōngwén.",
-        "en": "Next semester I will study Chinese."
-      }
-    ]
-  },
-  {
-    "hanzi": "班",
-    "pinyin": "bān",
-    "definition": "class (group of students)",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:school",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我们班有二十个学生。",
-        "pinyin": "Wǒmen bān yǒu èrshí ge xuésheng.",
-        "en": "Our class has twenty students."
-      },
-      {
-        "zh": "你在哪个班？",
-        "pinyin": "Nǐ zài nǎ ge bān?",
-        "en": "Which class are you in?"
-      }
-    ]
-  },
-  {
-    "hanzi": "周",
-    "pinyin": "zhōu",
-    "definition": "week",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "一周有七天。",
-        "pinyin": "Yī zhōu yǒu qī tiān.",
-        "en": "One week has seven days."
-      },
-      {
-        "zh": "我下周考试。",
-        "pinyin": "Wǒ xià zhōu kǎoshì.",
-        "en": "I have an exam next week."
-      }
-    ]
-  },
-  {
-    "hanzi": "星期一",
-    "pinyin": "Xīngqī yī",
-    "definition": "Monday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time,days",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "星期一早上有会议。",
-        "pinyin": "Xīngqī yī zǎoshang yǒu huìyì.",
-        "en": "There is a meeting on Monday morning."
-      },
-      {
-        "zh": "星期一我很忙。",
-        "pinyin": "Xīngqī yī wǒ hěn máng.",
-        "en": "I am very busy on Monday."
-      }
-    ]
-  },
-  {
-    "hanzi": "星期二",
-    "pinyin": "Xīngqī èr",
-    "definition": "Tuesday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time,days",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "星期二有汉语课。",
-        "pinyin": "Xīngqī èr yǒu Hànyǔ kè.",
-        "en": "There is Chinese class on Tuesday."
-      },
-      {
-        "zh": "我们星期二见面吧。",
-        "pinyin": "Wǒmen xīngqī èr jiànmiàn ba.",
-        "en": "Let's meet on Tuesday."
-      }
-    ]
-  },
-  {
-    "hanzi": "星期三",
-    "pinyin": "Xīngqī sān",
-    "definition": "Wednesday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time,days",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "星期三下午没课。",
-        "pinyin": "Xīngqī sān xiàwǔ méi kè.",
-        "en": "There's no class on Wednesday afternoon."
-      },
-      {
-        "zh": "星期三天气怎么样？",
-        "pinyin": "Xīngqī sān tiānqì zěnme yàng?",
-        "en": "What's the weather like on Wednesday?"
-      }
-    ]
-  },
-  {
-    "hanzi": "星期四",
-    "pinyin": "Xīngqī sì",
-    "definition": "Thursday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time,days",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "星期四要交作业。",
-        "pinyin": "Xīngqī sì yào jiāo zuòyè.",
-        "en": "Homework is due on Thursday."
-      },
-      {
-        "zh": "星期四晚上我有空。",
-        "pinyin": "Xīngqī sì wǎnshàng wǒ yǒu kòng.",
-        "en": "I am free on Thursday evening."
-      }
-    ]
-  },
-  {
-    "hanzi": "星期五",
-    "pinyin": "Xīngqī wǔ",
-    "definition": "Friday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson8",
-      "frequency:high",
-      "topic:time,days",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "星期五终于到了。",
-        "pinyin": "Xīngqī wǔ zhōngyú dào le.",
-        "en": "Friday has finally arrived."
-      },
-      {
-        "zh": "星期五晚上我们去吃饭。",
-        "pinyin": "Xīngqī wǔ wǎnshàng wǒmen qù chīfàn.",
-        "en": "On Friday evening we go to eat."
-      }
-    ]
-  },
-  {
-    "hanzi": "作业",
-    "pinyin": "zuòyè",
-    "definition": "homework",
-    "tags": [
-      "type:noun",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:school",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "今天的作业很多。",
-        "pinyin": "Jīntiān de zuòyè hěn duō.",
-        "en": "Today's homework is a lot."
-      },
-      {
-        "zh": "你做完作业了吗？",
-        "pinyin": "Nǐ zuò wán zuòyè le ma?",
-        "en": "Have you finished your homework?"
-      }
-    ]
-  },
-  {
-    "hanzi": "写",
-    "pinyin": "xiě",
-    "definition": "to write",
-    "tags": [
-      "type:verb",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:actions,writing",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我在写汉字。",
-        "pinyin": "Wǒ zài xiě Hànzì.",
-        "en": "I am writing characters."
-      },
-      {
-        "zh": "请写下你的地址。",
-        "pinyin": "Qǐng xiěxià nǐ de dìzhǐ.",
-        "en": "Please write down your address."
-      }
-    ]
-  },
-  {
-    "hanzi": "写完了",
-    "pinyin": "xiě wán le",
-    "definition": "finished writing",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:school,completion",
-      "hsk:1",
-      "grammar:resultative complement"
-    ],
-    "sentences": [
-      {
-        "zh": "我已经写完了信。",
-        "pinyin": "Wǒ yǐjīng xiě wán le xìn.",
-        "en": "I have already finished writing the letter."
-      },
-      {
-        "zh": "作业写完了吗？",
-        "pinyin": "Zuòyè xiě wán le ma?",
-        "en": "Have you finished writing the homework?"
-      }
-    ]
-  },
-  {
-    "hanzi": "看见",
-    "pinyin": "kànjiàn",
-    "definition": "to see",
-    "tags": [
-      "type:verb",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:vision",
-      "hsk:1",
-      "grammar:resultative complement"
-    ],
-    "sentences": [
-      {
-        "zh": "你看见我的手机了吗？",
-        "pinyin": "Nǐ kànjiàn wǒ de shǒujī le ma?",
-        "en": "Did you see my phone?"
-      },
-      {
-        "zh": "我看见他了。",
-        "pinyin": "Wǒ kànjiàn tā le.",
-        "en": "I saw him."
-      }
-    ]
-  },
-  {
-    "hanzi": "老师",
-    "pinyin": "lǎoshī",
-    "definition": "teacher",
-    "tags": [
-      "type:noun",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:school,people",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "老师好！",
-        "pinyin": "Lǎoshī hǎo!",
-        "en": "Hello teacher!"
-      },
-      {
-        "zh": "老师布置了很多作业。",
-        "pinyin": "Lǎoshī bùzhì le hěn duō zuòyè.",
-        "en": "The teacher assigned a lot of homework."
-      }
-    ]
-  },
-  {
-    "hanzi": "没看见",
-    "pinyin": "méi kànjiàn",
-    "definition": "didn't see",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:vision",
-      "hsk:1",
-      "grammar:negative resultative"
-    ],
-    "sentences": [
-      {
-        "zh": "对不起，我没看见你。",
-        "pinyin": "Duìbuqǐ, wǒ méi kànjiàn nǐ.",
-        "en": "Sorry, I didn't see you."
-      },
-      {
-        "zh": "我没看见那个标志。",
-        "pinyin": "Wǒ méi kànjiàn nàge biāozhì.",
-        "en": "I didn't see that sign."
-      }
-    ]
-  },
-  {
-    "hanzi": "找到",
-    "pinyin": "zhǎodào",
-    "definition": "to find (successfully)",
-    "tags": [
-      "type:verb",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:actions",
-      "hsk:1",
-      "grammar:resultative complement"
-    ],
-    "sentences": [
-      {
-        "zh": "你找到钥匙了吗？",
-        "pinyin": "Nǐ zhǎodào yàoshi le ma?",
-        "en": "Did you find the keys?"
-      },
-      {
-        "zh": "我终于找到了答案。",
-        "pinyin": "Wǒ zhōngyú zhǎodào le dá'àn.",
-        "en": "I finally found the answer."
-      }
-    ]
-  },
-  {
-    "hanzi": "手机",
-    "pinyin": "shǒujī",
-    "definition": "cellphone",
-    "tags": [
-      "type:noun",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:electronics",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我的手机没电了。",
-        "pinyin": "Wǒ de shǒujī méi diàn le.",
-        "en": "My phone is out of battery."
-      },
-      {
-        "zh": "请不要在课堂上用手机。",
-        "pinyin": "Qǐng bú yào zài kètáng shàng yòng shǒujī.",
-        "en": "Please don't use your phone in class."
-      }
-    ]
-  },
-  {
-    "hanzi": "找到了",
-    "pinyin": "zhǎodào le",
-    "definition": "found (successfully)",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson9",
-      "frequency:high",
-      "topic:actions,completion",
-      "hsk:1",
-      "grammar:resultative+了"
-    ],
-    "sentences": [
-      {
-        "zh": "太好了，你找到了！",
-        "pinyin": "Tài hǎo le, nǐ zhǎodào le!",
-        "en": "Great, you found it!"
-      },
-      {
-        "zh": "我找到了一本好书。",
-        "pinyin": "Wǒ zhǎodào le yī běn hǎo shū.",
-        "en": "I found a good book."
-      }
-    ]
-  },
-  {
     "hanzi": "设计",
     "pinyin": "shèjì",
     "definition": "design",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus4",
       "frequency:high",
       "topic:design",
@@ -5220,7 +17611,8 @@ const vocab = [
     "pinyin": "diédài",
     "definition": "iteration",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus4",
       "frequency:low",
       "topic:design,process"
@@ -5267,7 +17659,8 @@ const vocab = [
     "pinyin": "hézuò",
     "definition": "collaboration",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus4",
       "frequency:high",
       "topic:teamwork",
@@ -5314,7 +17707,8 @@ const vocab = [
     "pinyin": "cèliáng",
     "definition": "measurement",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus4",
       "frequency:high",
       "topic:measurement",
@@ -5386,7 +17780,8 @@ const vocab = [
     "pinyin": "ānquán",
     "definition": "safety",
     "tags": [
-      "type:noun/adj",
+      "type:noun",
+      "type:adjective",
       "lesson:bonus4",
       "frequency:high",
       "topic:safety",
@@ -5471,487 +17866,6 @@ const vocab = [
         "zh": "作品集展示了你的能力。",
         "pinyin": "Zuòpǐnjí zhǎnshì le nǐ de nénglì.",
         "en": "The portfolio shows your abilities."
-      }
-    ]
-  },
-  {
-    "hanzi": "葡萄",
-    "pinyin": "pútáo",
-    "definition": "grape",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:food,fruit",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "葡萄很甜。",
-        "pinyin": "Pútáo hěn tián.",
-        "en": "Grapes are very sweet."
-      },
-      {
-        "zh": "我买了一串葡萄。",
-        "pinyin": "Wǒ mǎi le yī chuàn pútáo.",
-        "en": "I bought a bunch of grapes."
-      }
-    ]
-  },
-  {
-    "hanzi": "芒果",
-    "pinyin": "mángguǒ",
-    "definition": "mango",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:food,fruit",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "芒果是热带水果。",
-        "pinyin": "Mángguǒ shì rèdài shuǐguǒ.",
-        "en": "Mangoes are tropical fruits."
-      },
-      {
-        "zh": "我喜欢吃芒果冰沙。",
-        "pinyin": "Wǒ xǐhuan chī mángguǒ bīngshā.",
-        "en": "I like eating mango smoothies."
-      }
-    ]
-  },
-  {
-    "hanzi": "西瓜",
-    "pinyin": "xīguā",
-    "definition": "watermelon",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:food,fruit",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "夏天吃西瓜很凉快。",
-        "pinyin": "Xiàtiān chī xīguā hěn liángkuai.",
-        "en": "Eating watermelon in summer is very refreshing."
-      },
-      {
-        "zh": "这个西瓜很重。",
-        "pinyin": "Zhège xīguā hěn zhòng.",
-        "en": "This watermelon is very heavy."
-      }
-    ]
-  },
-  {
-    "hanzi": "椰子",
-    "pinyin": "yēzi",
-    "definition": "coconut",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:medium",
-      "topic:food,fruit",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "椰子汁很好喝。",
-        "pinyin": "Yēzi zhī hěn hǎohē.",
-        "en": "Coconut water is very tasty."
-      },
-      {
-        "zh": "椰子壳可以做手工。",
-        "pinyin": "Yēzi ké kěyǐ zuò shǒugōng.",
-        "en": "Coconut shells can be used for crafts."
-      }
-    ]
-  },
-  {
-    "hanzi": "菠萝",
-    "pinyin": "bōluó",
-    "definition": "pineapple",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:medium",
-      "topic:food,fruit",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "菠萝有点酸。",
-        "pinyin": "Bōluó yǒudiǎn suān.",
-        "en": "Pineapples are a bit sour."
-      },
-      {
-        "zh": "菠萝炒饭很好吃。",
-        "pinyin": "Bōluó chǎofàn hěn hǎochī.",
-        "en": "Pineapple fried rice is delicious."
-      }
-    ]
-  },
-  {
-    "hanzi": "橙子",
-    "pinyin": "chéngzi",
-    "definition": "orange (fruit)",
-    "tags": [
-      "type:noun",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:food,fruit",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "橙子富含维生素C。",
-        "pinyin": "Chéngzi fùhán wéishēngsù C.",
-        "en": "Oranges are rich in vitamin C."
-      },
-      {
-        "zh": "我每天吃一个橙子。",
-        "pinyin": "Wǒ měitiān chī yí ge chéngzi.",
-        "en": "I eat one orange every day."
-      }
-    ]
-  },
-  {
-    "hanzi": "买",
-    "pinyin": "mǎi",
-    "definition": "to buy",
-    "tags": [
-      "type:verb",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:shopping",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我想买一杯咖啡。",
-        "pinyin": "Wǒ xiǎng mǎi yī bēi kāfēi.",
-        "en": "I want to buy a cup of coffee."
-      },
-      {
-        "zh": "你在哪儿买的这本书？",
-        "pinyin": "Nǐ zài nǎr mǎi de zhè běn shū?",
-        "en": "Where did you buy this book?"
-      }
-    ]
-  },
-  {
-    "hanzi": "怎么卖",
-    "pinyin": "zěnme mài",
-    "definition": "how much (how sold)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:shopping",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这个苹果怎么卖？",
-        "pinyin": "Zhège píngguǒ zěnme mài?",
-        "en": "How much are these apples?"
-      },
-      {
-        "zh": "西瓜怎么卖？一斤多少钱？",
-        "pinyin": "Xīguā zěnme mài? Yī jīn duōshao qián?",
-        "en": "How are watermelons sold? How much per jin?"
-      }
-    ]
-  },
-  {
-    "hanzi": "多少",
-    "pinyin": "duōshao",
-    "definition": "how much / how many",
-    "tags": [
-      "type:pronoun",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1",
-      "grammar:question word"
-    ],
-    "sentences": [
-      {
-        "zh": "这个多少钱？",
-        "pinyin": "Zhège duōshao qián?",
-        "en": "How much is this?"
-      },
-      {
-        "zh": "你有多少朋友？",
-        "pinyin": "Nǐ yǒu duōshao péngyou?",
-        "en": "How many friends do you have?"
-      }
-    ]
-  },
-  {
-    "hanzi": "还要别的吗",
-    "pinyin": "hái yào bié de ma",
-    "definition": "anything else?",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:shopping",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "还要别的吗？不用了，谢谢。",
-        "pinyin": "Hái yào bié de ma? Bú yòng le, xièxie.",
-        "en": "Anything else? No, thanks."
-      },
-      {
-        "zh": "买完水果后，老板问还要别的吗。",
-        "pinyin": "Mǎi wán shuǐguǒ hòu, lǎobǎn wèn hái yào bié de ma.",
-        "en": "After buying fruit, the boss asks if you want anything else."
-      }
-    ]
-  },
-  {
-    "hanzi": "一共",
-    "pinyin": "yīgòng",
-    "definition": "total",
-    "tags": [
-      "type:adv",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:shopping,numbers",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "一共多少钱？",
-        "pinyin": "Yīgòng duōshao qián?",
-        "en": "How much in total?"
-      },
-      {
-        "zh": "一共五十块。",
-        "pinyin": "Yīgòng wǔshí kuài.",
-        "en": "Fifty yuan total."
-      }
-    ]
-  },
-  {
-    "hanzi": "便宜点儿吧",
-    "pinyin": "piányi diǎnr ba",
-    "definition": "cheaper please",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson10",
-      "frequency:high",
-      "topic:shopping,bargaining",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "太贵了，便宜点儿吧。",
-        "pinyin": "Tài guì le, piányi diǎnr ba.",
-        "en": "Too expensive, make it cheaper please."
-      },
-      {
-        "zh": "老板，便宜点儿吧，我多买几个。",
-        "pinyin": "Lǎobǎn, piányi diǎnr ba, wǒ duō mǎi jǐ ge.",
-        "en": "Boss, cheaper please, I'll buy several more."
-      }
-    ]
-  },
-  {
-    "hanzi": "请问您几位",
-    "pinyin": "qǐngwèn nín jǐ wèi",
-    "definition": "How many people (polite)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "请问您几位？两位。",
-        "pinyin": "Qǐngwèn nín jǐ wèi? Liǎng wèi.",
-        "en": "How many in your party? Two."
-      },
-      {
-        "zh": "服务员问：请问您几位？",
-        "pinyin": "Fúwùyuán wèn: qǐngwèn nín jǐ wèi?",
-        "en": "The waiter asks: how many people?"
-      }
-    ]
-  },
-  {
-    "hanzi": "两位",
-    "pinyin": "liǎng wèi",
-    "definition": "two people (polite)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant,numbers",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我们有两位。",
-        "pinyin": "Wǒmen yǒu liǎng wèi.",
-        "en": "We have two people."
-      },
-      {
-        "zh": "两位请坐这边。",
-        "pinyin": "Liǎng wèi qǐng zuò zhè biān.",
-        "en": "Two people, please sit over here."
-      }
-    ]
-  },
-  {
-    "hanzi": "您吃点儿什么",
-    "pinyin": "nín chī diǎnr shénme",
-    "definition": "What would you like to eat? (polite)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "您吃点儿什么？给我看看菜单。",
-        "pinyin": "Nín chī diǎnr shénme? Gěi wǒ kànkan càidān.",
-        "en": "What would you like to eat? Let me see the menu."
-      },
-      {
-        "zh": "服务员走过来问您吃点儿什么。",
-        "pinyin": "Fúwùyuán zǒu guòlai wèn nín chī diǎnr shénme.",
-        "en": "The waiter comes over and asks what you'd like to eat."
-      }
-    ]
-  },
-  {
-    "hanzi": "菜单",
-    "pinyin": "càidān",
-    "definition": "menu",
-    "tags": [
-      "type:noun",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "请给我菜单。",
-        "pinyin": "Qǐng gěi wǒ càidān.",
-        "en": "Please give me the menu."
-      },
-      {
-        "zh": "菜单上有图片。",
-        "pinyin": "Càidān shàng yǒu túpiàn.",
-        "en": "The menu has pictures."
-      }
-    ]
-  },
-  {
-    "hanzi": "给我们看一下菜单吧",
-    "pinyin": "gěi wǒmen kàn yīxià càidān ba",
-    "definition": "Let us see the menu",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "给我们看一下菜单吧。",
-        "pinyin": "Gěi wǒmen kàn yīxià càidān ba.",
-        "en": "Let us take a look at the menu."
-      },
-      {
-        "zh": "服务员，给我们看一下菜单吧。",
-        "pinyin": "Fúwùyuán, gěi wǒmen kàn yīxià càidān ba.",
-        "en": "Waiter, let us see the menu."
-      }
-    ]
-  },
-  {
-    "hanzi": "您喝点儿什么",
-    "pinyin": "nín hē diǎnr shénme",
-    "definition": "What would you like to drink? (polite)",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:restaurant",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "您喝点儿什么？水就行。",
-        "pinyin": "Nín hē diǎnr shénme? Shuǐ jiù xíng.",
-        "en": "What would you like to drink? Water is fine."
-      },
-      {
-        "zh": "服务员问您喝点儿什么。",
-        "pinyin": "Fúwùyuán wèn nín hē diǎnr shénme.",
-        "en": "The waiter asks what you'd like to drink."
-      }
-    ]
-  },
-  {
-    "hanzi": "一杯果汁",
-    "pinyin": "yī bēi guǒzhī",
-    "definition": "one glass of juice",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:food,drinks",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我要一杯果汁。",
-        "pinyin": "Wǒ yào yī bēi guǒzhī.",
-        "en": "I want a glass of juice."
-      },
-      {
-        "zh": "一杯果汁多少钱？",
-        "pinyin": "Yī bēi guǒzhī duōshao qián?",
-        "en": "How much is one glass of juice?"
-      }
-    ]
-  },
-  {
-    "hanzi": "一杯奶茶",
-    "pinyin": "yī bēi nǎichá",
-    "definition": "one cup of milk tea",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson11",
-      "frequency:high",
-      "topic:food,drinks",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "奶茶很好喝。",
-        "pinyin": "Nǎichá hěn hǎohē.",
-        "en": "Milk tea is very tasty."
-      },
-      {
-        "zh": "我想点一杯奶茶。",
-        "pinyin": "Wǒ xiǎng diǎn yī bēi nǎichá.",
-        "en": "I want to order a cup of milk tea."
       }
     ]
   },
@@ -6354,7 +18268,8 @@ const vocab = [
     "pinyin": "jiēdì",
     "definition": "ground",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus5",
       "frequency:medium",
       "topic:electronics"
@@ -6377,7 +18292,8 @@ const vocab = [
     "pinyin": "shùzì",
     "definition": "digital",
     "tags": [
-      "type:adj/noun",
+      "type:adjective",
+      "type:noun",
       "lesson:bonus5",
       "frequency:high",
       "topic:electronics,math",
@@ -6401,7 +18317,8 @@ const vocab = [
     "pinyin": "mónǐ",
     "definition": "analog",
     "tags": [
-      "type:adj/noun",
+      "type:adjective",
+      "type:noun",
       "lesson:bonus5",
       "frequency:high",
       "topic:electronics",
@@ -6444,685 +18361,12 @@ const vocab = [
     ]
   },
   {
-    "hanzi": "这件衣服",
-    "pinyin": "zhè jiàn yīfu",
-    "definition": "this piece of clothing",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing,shopping",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这件衣服很漂亮。",
-        "pinyin": "Zhè jiàn yīfu hěn piàoliang.",
-        "en": "This piece of clothing is very pretty."
-      },
-      {
-        "zh": "这件衣服多少钱？",
-        "pinyin": "Zhè jiàn yīfu duōshao qián?",
-        "en": "How much is this piece of clothing?"
-      }
-    ]
-  },
-  {
-    "hanzi": "怎么样",
-    "pinyin": "zěnme yàng",
-    "definition": "how is it",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:questions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "你觉得这件衣服怎么样？",
-        "pinyin": "Nǐ juéde zhè jiàn yīfu zěnme yàng?",
-        "en": "What do you think of this clothing?"
-      },
-      {
-        "zh": "今天天气怎么样？",
-        "pinyin": "Jīntiān tiānqì zěnme yàng?",
-        "en": "How's the weather today?"
-      }
-    ]
-  },
-  {
-    "hanzi": "不大不小",
-    "pinyin": "bù dà bù xiǎo",
-    "definition": "not too big, not too small",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:medium",
-      "topic:clothing,description",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "这双鞋不大不小，正合适。",
-        "pinyin": "Zhè shuāng xié bù dà bù xiǎo, zhèng héshì.",
-        "en": "These shoes are neither too big nor too small — just right."
-      },
-      {
-        "zh": "这件T恤不大不小，穿着很舒服。",
-        "pinyin": "Zhè jiàn T-xù bù dà bù xiǎo, chuān zhe hěn shūfu.",
-        "en": "This T-shirt is not too big or small — it's very comfortable to wear."
-      }
-    ]
-  },
-  {
-    "hanzi": "很合适",
-    "pinyin": "hěn héshì",
-    "definition": "very suitable / fitting",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "这条裤子很合适。",
-        "pinyin": "Zhè tiáo kùzi hěn héshì.",
-        "en": "These pants fit very well."
-      },
-      {
-        "zh": "这个时间很合适。",
-        "pinyin": "Zhège shíjiān hěn héshì.",
-        "en": "This time is very suitable."
-      }
-    ]
-  },
-  {
-    "hanzi": "毛衣",
-    "pinyin": "máoyī",
-    "definition": "sweater",
-    "tags": [
-      "type:noun",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "冬天穿毛衣很暖和。",
-        "pinyin": "Dōngtiān chuān máoyī hěn nuǎnhuo.",
-        "en": "Wearing a sweater in winter is very warm."
-      },
-      {
-        "zh": "这件毛衣是羊毛的。",
-        "pinyin": "Zhè jiàn máoyī shì yángmáo de.",
-        "en": "This sweater is made of wool."
-      }
-    ]
-  },
-  {
-    "hanzi": "红色",
-    "pinyin": "hóngsè",
-    "definition": "red",
-    "tags": [
-      "type:noun/adj",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:colors",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "红色很喜庆。",
-        "pinyin": "Hóngsè hěn xǐqìng.",
-        "en": "Red is very festive."
-      },
-      {
-        "zh": "她穿红色很好看。",
-        "pinyin": "Tā chuān hóngsè hěn hǎokàn.",
-        "en": "She looks good in red."
-      }
-    ]
-  },
-  {
-    "hanzi": "裙子",
-    "pinyin": "qúnzi",
-    "definition": "skirt / dress",
-    "tags": [
-      "type:noun",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这条裙子很优雅。",
-        "pinyin": "Zhè tiáo qúnzi hěn yōuyǎ.",
-        "en": "This skirt/dress is very elegant."
-      },
-      {
-        "zh": "夏天女生喜欢穿裙子。",
-        "pinyin": "Xiàtiān nǚshēng xǐhuan chuān qúnzi.",
-        "en": "In summer, girls like to wear skirts."
-      }
-    ]
-  },
-  {
-    "hanzi": "绿色",
-    "pinyin": "lǜsè",
-    "definition": "green",
-    "tags": [
-      "type:noun/adj",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:colors",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "绿色代表自然。",
-        "pinyin": "Lǜsè dàibiǎo zìrán.",
-        "en": "Green represents nature."
-      },
-      {
-        "zh": "这件绿色的外套很好看。",
-        "pinyin": "Zhè jiàn lǜsè de wàitào hěn hǎokàn.",
-        "en": "This green coat looks very nice."
-      }
-    ]
-  },
-  {
-    "hanzi": "这条裤子",
-    "pinyin": "zhè tiáo kùzi",
-    "definition": "these pants",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这条裤子太长了。",
-        "pinyin": "Zhè tiáo kùzi tài cháng le.",
-        "en": "These pants are too long."
-      },
-      {
-        "zh": "我想试一下这条裤子。",
-        "pinyin": "Wǒ xiǎng shì yīxià zhè tiáo kùzi.",
-        "en": "I want to try on these pants."
-      }
-    ]
-  },
-  {
-    "hanzi": "这双鞋子",
-    "pinyin": "zhè shuāng xiézi",
-    "definition": "these shoes",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这双鞋子很舒服。",
-        "pinyin": "Zhè shuāng xiézi hěn shūfu.",
-        "en": "These shoes are very comfortable."
-      },
-      {
-        "zh": "这双鞋子是什么尺码？",
-        "pinyin": "Zhè shuāng xiézi shì shénme chǐmǎ?",
-        "en": "What size are these shoes?"
-      }
-    ]
-  },
-  {
-    "hanzi": "有点儿",
-    "pinyin": "yǒudiǎnr",
-    "definition": "a little",
-    "tags": [
-      "type:adv",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:description",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这件衣服有点儿贵。",
-        "pinyin": "Zhè jiàn yīfu yǒudiǎnr guì.",
-        "en": "This clothing is a little expensive."
-      },
-      {
-        "zh": "我有点儿累了。",
-        "pinyin": "Wǒ yǒudiǎnr lèi le.",
-        "en": "I'm a little tired."
-      }
-    ]
-  },
-  {
-    "hanzi": "你穿多大码",
-    "pinyin": "nǐ chuān duō dà mǎ",
-    "definition": "what size do you wear",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing,shopping",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "你穿多大码？我穿中号。",
-        "pinyin": "Nǐ chuān duō dà mǎ? Wǒ chuān zhōng hào.",
-        "en": "What size do you wear? I wear medium."
-      },
-      {
-        "zh": "买鞋前要先问清楚你穿多大码。",
-        "pinyin": "Mǎi xié qián yào xiān wèn qīngchu nǐ chuān duō dà mǎ.",
-        "en": "Before buying shoes, ask clearly what size you wear."
-      }
-    ]
-  },
-  {
-    "hanzi": "能试一下吗",
-    "pinyin": "néng shì yīxià ma",
-    "definition": "can I try it on",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:clothing,shopping",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "能试一下这件衣服吗？",
-        "pinyin": "Néng shì yīxià zhè jiàn yīfu ma?",
-        "en": "Can I try on this piece of clothing?"
-      },
-      {
-        "zh": "当然可以，试衣间在那边。",
-        "pinyin": "Dāngrán kěyǐ, shìyījiān zài nàbiān.",
-        "en": "Of course, the fitting room is over there."
-      }
-    ]
-  },
-  {
-    "hanzi": "打折吗",
-    "pinyin": "dǎzhé ma",
-    "definition": "discount?",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:shopping",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "这个有打折吗？",
-        "pinyin": "Zhège yǒu dǎzhé ma?",
-        "en": "Is there a discount on this?"
-      },
-      {
-        "zh": "打折吗？今天全场八折。",
-        "pinyin": "Dǎzhé ma? Jīntiān quánchǎng bā zhé.",
-        "en": "Discount? Today everything is 20% off."
-      }
-    ]
-  },
-  {
-    "hanzi": "能用手机支付吗",
-    "pinyin": "néng yòng shǒujī zhīfù ma",
-    "definition": "can I pay by phone",
-    "tags": [
-      "type:phrase",
-      "lesson:lesson12",
-      "frequency:high",
-      "topic:shopping,technology",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "能用手机支付吗？可以，扫码就行。",
-        "pinyin": "Néng yòng shǒujī zhīfù ma? Kěyǐ, sǎo mǎ jiù xíng.",
-        "en": "Can I pay by phone? Yes, just scan the code."
-      },
-      {
-        "zh": "现在大部分商店都能用手机支付。",
-        "pinyin": "Xiànzài dà bùfen shāngdiàn dōu néng yòng shǒujī zhīfù.",
-        "en": "Now most stores accept phone payment."
-      }
-    ]
-  },
-  {
-    "hanzi": "如果",
-    "pinyin": "rúguǒ",
-    "definition": "if",
-    "tags": [
-      "type:conjunction",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "如果明天下雨，我就不去了。",
-        "pinyin": "Rúguǒ míngtiān xià yǔ, wǒ jiù bú qù le.",
-        "en": "If it rains tomorrow, I won't go."
-      },
-      {
-        "zh": "如果你累了就休息一下。",
-        "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi yīxià.",
-        "en": "If you're tired, take a rest."
-      }
-    ]
-  },
-  {
-    "hanzi": "旅行",
-    "pinyin": "lǚxíng",
-    "definition": "travel",
-    "tags": [
-      "type:verb/noun",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我喜欢旅行。",
-        "pinyin": "Wǒ xǐhuan lǚxíng.",
-        "en": "I like to travel."
-      },
-      {
-        "zh": "这个假期我们去旅行吧。",
-        "pinyin": "Zhège jiàqī wǒmen qù lǚxíng ba.",
-        "en": "Let's go traveling this holiday."
-      }
-    ]
-  },
-  {
-    "hanzi": "喜欢",
-    "pinyin": "xǐhuan",
-    "definition": "like",
-    "tags": [
-      "type:verb",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:emotions,preferences",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我喜欢吃中餐。",
-        "pinyin": "Wǒ xǐhuan chī Zhōngcān.",
-        "en": "I like eating Chinese food."
-      },
-      {
-        "zh": "你喜欢什么颜色？",
-        "pinyin": "Nǐ xǐhuan shénme yánsè?",
-        "en": "What color do you like?"
-      }
-    ]
-  },
-  {
-    "hanzi": "坐飞机",
-    "pinyin": "zuò fēijī",
-    "definition": "take a plane",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:transport,travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "去美国要坐飞机。",
-        "pinyin": "Qù Měiguó yào zuò fēijī.",
-        "en": "Going to the US requires taking a plane."
-      },
-      {
-        "zh": "我第一次坐飞机很紧张。",
-        "pinyin": "Wǒ dì-yī cì zuò fēijī hěn jǐnzhāng.",
-        "en": "I was very nervous the first time I took a plane."
-      }
-    ]
-  },
-  {
-    "hanzi": "坐火车",
-    "pinyin": "zuò huǒchē",
-    "definition": "take a train",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:transport,travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "坐火车比坐飞机便宜。",
-        "pinyin": "Zuò huǒchē bǐ zuò fēijī piányi.",
-        "en": "Taking a train is cheaper than taking a plane."
-      },
-      {
-        "zh": "我喜欢坐火车看风景。",
-        "pinyin": "Wǒ xǐhuan zuò huǒchē kàn fēngjǐng.",
-        "en": "I like taking the train to see the scenery."
-      }
-    ]
-  },
-  {
-    "hanzi": "虽然…但是…",
-    "pinyin": "suīrán…dànshì…",
-    "definition": "although…but…",
-    "tags": [
-      "type:conjunction",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2",
-      "grammar:contrasting conjunction"
-    ],
-    "sentences": [
-      {
-        "zh": "虽然很贵，但是我想买。",
-        "pinyin": "Suīrán hěn guì, dànshì wǒ xiǎng mǎi.",
-        "en": "Although it's expensive, I want to buy it."
-      },
-      {
-        "zh": "虽然下雨了，但是我们还是去了公园。",
-        "pinyin": "Suīrán xià yǔ le, dànshì wǒmen háishì qù le gōngyuán.",
-        "en": "Although it rained, we still went to the park."
-      }
-    ]
-  },
-  {
-    "hanzi": "快",
-    "pinyin": "kuài",
-    "definition": "fast",
-    "tags": [
-      "type:adj",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:description,speed",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "飞机很快。",
-        "pinyin": "Fēijī hěn kuài.",
-        "en": "The plane is very fast."
-      },
-      {
-        "zh": "你走得太快了，我跟不上。",
-        "pinyin": "Nǐ zǒu de tài kuài le, wǒ gēn bú shàng.",
-        "en": "You're walking too fast, I can't keep up."
-      }
-    ]
-  },
-  {
-    "hanzi": "慢",
-    "pinyin": "màn",
-    "definition": "slow",
-    "tags": [
-      "type:adj",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:description,speed",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "火车比飞机慢。",
-        "pinyin": "Huǒchē bǐ fēijī màn.",
-        "en": "Trains are slower than planes."
-      },
-      {
-        "zh": "请说慢一点。",
-        "pinyin": "Qǐng shuō màn yīdiǎn.",
-        "en": "Please speak a little slower."
-      }
-    ]
-  },
-  {
-    "hanzi": "舒服",
-    "pinyin": "shūfu",
-    "definition": "comfortable",
-    "tags": [
-      "type:adj",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:feelings",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这双鞋很舒服。",
-        "pinyin": "Zhè shuāng xié hěn shūfu.",
-        "en": "These shoes are very comfortable."
-      },
-      {
-        "zh": "火车上可以躺下，很舒服。",
-        "pinyin": "Huǒchē shàng kěyǐ tǎngxià, hěn shūfu.",
-        "en": "You can lie down on the train — very comfortable."
-      }
-    ]
-  },
-  {
-    "hanzi": "上飞机",
-    "pinyin": "shàng fēijī",
-    "definition": "board the plane",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我们提前两小时上飞机。",
-        "pinyin": "Wǒmen tíqián liǎng xiǎoshí shàng fēijī.",
-        "en": "We board the plane two hours early."
-      },
-      {
-        "zh": "请准备好登机牌上飞机。",
-        "pinyin": "Qǐng zhǔnbèi hǎo dēngjīpái shàng fēijī.",
-        "en": "Please have your boarding pass ready to board."
-      }
-    ]
-  },
-  {
-    "hanzi": "下飞机",
-    "pinyin": "xià fēijī",
-    "definition": "get off the plane",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "下飞机后给我打电话。",
-        "pinyin": "Xià fēijī hòu gěi wǒ dǎ diànhuà.",
-        "en": "Call me after you get off the plane."
-      },
-      {
-        "zh": "下飞机时别忘了行李。",
-        "pinyin": "Xià fēijī shí bié wàng le xíngli.",
-        "en": "Don't forget your luggage when you get off the plane."
-      }
-    ]
-  },
-  {
-    "hanzi": "给",
-    "pinyin": "gěi",
-    "definition": "to give / to (someone)",
-    "tags": [
-      "type:verb/prep",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:actions,grammar",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "请给我一杯水。",
-        "pinyin": "Qǐng gěi wǒ yī bēi shuǐ.",
-        "en": "Please give me a glass of water."
-      },
-      {
-        "zh": "我给你打电话。",
-        "pinyin": "Wǒ gěi nǐ dǎ diànhuà.",
-        "en": "I'll call you."
-      }
-    ]
-  },
-  {
-    "hanzi": "打电话",
-    "pinyin": "dǎ diànhuà",
-    "definition": "make a phone call",
-    "tags": [
-      "type:verb phrase",
-      "lesson:lesson13",
-      "frequency:high",
-      "topic:communication",
-      "hsk:1",
-      "grammar:separable"
-    ],
-    "sentences": [
-      {
-        "zh": "我晚上给你打电话。",
-        "pinyin": "Wǒ wǎnshàng gěi nǐ dǎ diànhuà.",
-        "en": "I'll call you in the evening."
-      },
-      {
-        "zh": "别在电影院打电话。",
-        "pinyin": "Bié zài diànyǐngyuàn dǎ diànhuà.",
-        "en": "Don't make phone calls in the movie theater."
-      }
-    ]
-  },
-  {
     "hanzi": "编程",
     "pinyin": "biānchéng",
     "definition": "programming",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus6",
       "frequency:high",
       "topic:programming",
@@ -7309,7 +18553,7 @@ const vocab = [
     "pinyin": "xiǎngyìng shì",
     "definition": "responsive",
     "tags": [
-      "type:adj",
+      "type:adjective",
       "lesson:bonus6",
       "frequency:medium",
       "topic:webdev"
@@ -7403,7 +18647,8 @@ const vocab = [
     "pinyin": "tuōguǎn",
     "definition": "hosting",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus6",
       "frequency:low",
       "topic:webdev"
@@ -7567,7 +18812,8 @@ const vocab = [
     "pinyin": "xúnhuán",
     "definition": "loop",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus6",
       "frequency:high",
       "topic:programming",
@@ -7606,1378 +18852,6 @@ const vocab = [
         "zh": "访问数组的第一个元素。",
         "pinyin": "Fǎngwèn shùzǔ de dì-yī ge yuánsù.",
         "en": "Access the first element of the array."
-      }
-    ]
-  },
-  {
-    "hanzi": "听说",
-    "pinyin": "tīngshuō",
-    "definition": "hear about / be told",
-    "tags": [
-      "type:verb",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:communication",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "听说你要去北京旅行？",
-        "pinyin": "Tīngshuō nǐ yào qù Běijīng lǚxíng?",
-        "en": "I heard you're going to Beijing?"
-      },
-      {
-        "zh": "听说那家餐厅很好吃。",
-        "pinyin": "Tīngshuō nà jiā cāntīng hěn hǎochī.",
-        "en": "I heard that restaurant is very good."
-      }
-    ]
-  },
-  {
-    "hanzi": "过",
-    "pinyin": "guò",
-    "definition": "past experience (particle)",
-    "tags": [
-      "type:particle",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1",
-      "grammar:experience particle"
-    ],
-    "sentences": [
-      {
-        "zh": "我去过上海。",
-        "pinyin": "Wǒ qù guo Shànghǎi.",
-        "en": "I have been to Shanghai."
-      },
-      {
-        "zh": "你吃过火锅吗？",
-        "pinyin": "Nǐ chī guo huǒguō ma?",
-        "en": "Have you ever eaten hotpot?"
-      }
-    ]
-  },
-  {
-    "hanzi": "黄鹤楼",
-    "pinyin": "Huánghè Lóu",
-    "definition": "Yellow Crane Tower",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:landmarks,travel",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "黄鹤楼在武汉。",
-        "pinyin": "Huánghè Lóu zài Wǔhàn.",
-        "en": "Yellow Crane Tower is in Wuhan."
-      },
-      {
-        "zh": "很多诗人写过黄鹤楼。",
-        "pinyin": "Hěn duō shīrén xiě guo Huánghè Lóu.",
-        "en": "Many poets have written about Yellow Crane Tower."
-      }
-    ]
-  },
-  {
-    "hanzi": "北京",
-    "pinyin": "Běijīng",
-    "definition": "Beijing",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:cities,travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "北京是中国的首都。",
-        "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
-        "en": "Beijing is the capital of China."
-      },
-      {
-        "zh": "北京有很多名胜古迹。",
-        "pinyin": "Běijīng yǒu hěn duō míngshèng gǔjì.",
-        "en": "Beijing has many famous historical sites."
-      }
-    ]
-  },
-  {
-    "hanzi": "有名",
-    "pinyin": "yǒumíng",
-    "definition": "famous",
-    "tags": [
-      "type:adj",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:description",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "长城很有名。",
-        "pinyin": "Chángchéng hěn yǒumíng.",
-        "en": "The Great Wall is very famous."
-      },
-      {
-        "zh": "这家店的面包很有名。",
-        "pinyin": "Zhè jiā diàn de miànbāo hěn yǒumíng.",
-        "en": "This shop's bread is very famous."
-      }
-    ]
-  },
-  {
-    "hanzi": "天安门",
-    "pinyin": "Tiān'ānmén",
-    "definition": "Tian'anmen",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:landmarks,travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "天安门广场很大。",
-        "pinyin": "Tiān'ānmén Guǎngchǎng hěn dà.",
-        "en": "Tian'anmen Square is very large."
-      },
-      {
-        "zh": "很多游客在天安门拍照。",
-        "pinyin": "Hěn duō yóukè zài Tiān'ānmén pāizhào.",
-        "en": "Many tourists take photos at Tian'anmen."
-      }
-    ]
-  },
-  {
-    "hanzi": "故宫",
-    "pinyin": "Gùgōng",
-    "definition": "Forbidden City / Imperial Palace",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:landmarks,travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "故宫有六百年历史。",
-        "pinyin": "Gùgōng yǒu liù bǎi nián lìshǐ.",
-        "en": "The Forbidden City has 600 years of history."
-      },
-      {
-        "zh": "故宫在北京的中心。",
-        "pinyin": "Gùgōng zài Běijīng de zhōngxīn.",
-        "en": "The Forbidden City is in the center of Beijing."
-      }
-    ]
-  },
-  {
-    "hanzi": "长城",
-    "pinyin": "Chángchéng",
-    "definition": "Great Wall",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:landmarks,travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "长城非常壮观。",
-        "pinyin": "Chángchéng fēicháng zhuàngguān.",
-        "en": "The Great Wall is very magnificent."
-      },
-      {
-        "zh": "不到长城非好汉。",
-        "pinyin": "Bú dào Chángchéng fēi hǎohàn.",
-        "en": "He who hasn't been to the Great Wall is not a true man."
-      }
-    ]
-  },
-  {
-    "hanzi": "美食",
-    "pinyin": "měishí",
-    "definition": "delicious food / cuisine",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:food",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "成都是美食之都。",
-        "pinyin": "Chéngdū shì měishí zhī dū.",
-        "en": "Chengdu is the capital of delicious food."
-      },
-      {
-        "zh": "中国美食很有名。",
-        "pinyin": "Zhōngguó měishí hěn yǒumíng.",
-        "en": "Chinese cuisine is very famous."
-      }
-    ]
-  },
-  {
-    "hanzi": "火锅",
-    "pinyin": "huǒguō",
-    "definition": "hotpot",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:food",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "冬天吃火锅很暖和。",
-        "pinyin": "Dōngtiān chī huǒguō hěn nuǎnhuo.",
-        "en": "Eating hotpot in winter is very warming."
-      },
-      {
-        "zh": "四川火锅很辣。",
-        "pinyin": "Sìchuān huǒguō hěn là.",
-        "en": "Sichuan hotpot is very spicy."
-      }
-    ]
-  },
-  {
-    "hanzi": "暑假",
-    "pinyin": "shǔjià",
-    "definition": "summer vacation",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:time,school",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "暑假你去哪儿了？",
-        "pinyin": "Shǔjià nǐ qù nǎr le?",
-        "en": "Where did you go for summer vacation?"
-      },
-      {
-        "zh": "暑假有两个月。",
-        "pinyin": "Shǔjià yǒu liǎng ge yuè.",
-        "en": "Summer vacation is two months long."
-      }
-    ]
-  },
-  {
-    "hanzi": "城市",
-    "pinyin": "chéngshì",
-    "definition": "city",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:places",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "上海是个大城市。",
-        "pinyin": "Shànghǎi shì ge dà chéngshì.",
-        "en": "Shanghai is a big city."
-      },
-      {
-        "zh": "我喜欢住在小城市。",
-        "pinyin": "Wǒ xǐhuan zhù zài xiǎo chéngshì.",
-        "en": "I like living in small cities."
-      }
-    ]
-  },
-  {
-    "hanzi": "旅游",
-    "pinyin": "lǚyóu",
-    "definition": "travel",
-    "tags": [
-      "type:verb/noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我喜欢旅游。",
-        "pinyin": "Wǒ xǐhuan lǚyóu.",
-        "en": "I like to travel."
-      },
-      {
-        "zh": "云南是个旅游的好地方。",
-        "pinyin": "Yúnnán shì ge lǚyóu de hǎo dìfang.",
-        "en": "Yunnan is a good place to travel."
-      }
-    ]
-  },
-  {
-    "hanzi": "上海",
-    "pinyin": "Shànghǎi",
-    "definition": "Shanghai",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:cities,travel",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "上海很现代化。",
-        "pinyin": "Shànghǎi hěn xiàndàihuà.",
-        "en": "Shanghai is very modern."
-      },
-      {
-        "zh": "外滩是上海的标志。",
-        "pinyin": "Wàitān shì Shànghǎi de biāozhì.",
-        "en": "The Bund is a symbol of Shanghai."
-      }
-    ]
-  },
-  {
-    "hanzi": "西安",
-    "pinyin": "Xī'ān",
-    "definition": "Xi'an",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:cities,travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "西安有兵马俑。",
-        "pinyin": "Xī'ān yǒu bīngmǎyǒng.",
-        "en": "Xi'an has the Terracotta Warriors."
-      },
-      {
-        "zh": "西安是古代都城。",
-        "pinyin": "Xī'ān shì gǔdài dūchéng.",
-        "en": "Xi'an was an ancient capital."
-      }
-    ]
-  },
-  {
-    "hanzi": "首都",
-    "pinyin": "shǒudū",
-    "definition": "capital",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:places",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "北京是中国的首都。",
-        "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
-        "en": "Beijing is the capital of China."
-      },
-      {
-        "zh": "首都是一个国家的中心。",
-        "pinyin": "Shǒudū shì yí ge guójiā de zhōngxīn.",
-        "en": "The capital is the center of a country."
-      }
-    ]
-  },
-  {
-    "hanzi": "一定",
-    "pinyin": "yídìng",
-    "definition": "certainly / surely",
-    "tags": [
-      "type:adv",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我一定努力学习。",
-        "pinyin": "Wǒ yídìng nǔlì xuéxí.",
-        "en": "I will certainly study hard."
-      },
-      {
-        "zh": "你一定要来！",
-        "pinyin": "Nǐ yídìng yào lái!",
-        "en": "You must come for sure!"
-      }
-    ]
-  },
-  {
-    "hanzi": "所",
-    "pinyin": "suǒ",
-    "definition": "measure for schools, hospitals, etc.",
-    "tags": [
-      "type:measure",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "这是一所大学。",
-        "pinyin": "Zhè shì yī suǒ dàxué.",
-        "en": "This is a university."
-      },
-      {
-        "zh": "北京有很多所好学校。",
-        "pinyin": "Běijīng yǒu hěn duō suǒ hǎo xuéxiào.",
-        "en": "Beijing has many good schools."
-      }
-    ]
-  },
-  {
-    "hanzi": "大学",
-    "pinyin": "dàxué",
-    "definition": "university / college",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:education",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我明年上大学。",
-        "pinyin": "Wǒ míngnián shàng dàxué.",
-        "en": "I will go to university next year."
-      },
-      {
-        "zh": "北京大学很有名。",
-        "pinyin": "Běijīng Dàxué hěn yǒumíng.",
-        "en": "Peking University is very famous."
-      }
-    ]
-  },
-  {
-    "hanzi": "举办",
-    "pinyin": "jǔbàn",
-    "definition": "to conduct / hold (event)",
-    "tags": [
-      "type:verb",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:events",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "北京举办了2008年奥运会。",
-        "pinyin": "Běijīng jǔbàn le 2008 nián Àoyùnhuì.",
-        "en": "Beijing hosted the 2008 Olympics."
-      },
-      {
-        "zh": "学校举办了一个晚会。",
-        "pinyin": "Xuéxiào jǔbàn le yí ge wǎnhuì.",
-        "en": "The school held a party."
-      }
-    ]
-  },
-  {
-    "hanzi": "奥运会",
-    "pinyin": "Àoyùnhuì",
-    "definition": "Olympic Games",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:sports,events",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "奥运会四年一次。",
-        "pinyin": "Àoyùnhuì sì nián yī cì.",
-        "en": "The Olympics happen once every four years."
-      },
-      {
-        "zh": "我喜欢看奥运会。",
-        "pinyin": "Wǒ xǐhuan kàn Àoyùnhuì.",
-        "en": "I like watching the Olympics."
-      }
-    ]
-  },
-  {
-    "hanzi": "除了",
-    "pinyin": "chúle",
-    "definition": "except / besides",
-    "tags": [
-      "type:prep",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "除了北京，我还去过上海。",
-        "pinyin": "Chúle Běijīng, wǒ hái qù guo Shànghǎi.",
-        "en": "Besides Beijing, I have also been to Shanghai."
-      },
-      {
-        "zh": "除了他，大家都来了。",
-        "pinyin": "Chúle tā, dàjiā dōu lái le.",
-        "en": "Everyone came except him."
-      }
-    ]
-  },
-  {
-    "hanzi": "奥林匹克",
-    "pinyin": "Àolínpǐkè",
-    "definition": "Olympic",
-    "tags": [
-      "type:adj/noun",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:sports",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "奥林匹克公园很大。",
-        "pinyin": "Àolínpǐkè Gōngyuán hěn dà.",
-        "en": "Olympic Park is very large."
-      },
-      {
-        "zh": "奥林匹克精神是和平。",
-        "pinyin": "Àolínpǐkè jīngshén shì hépíng.",
-        "en": "The Olympic spirit is peace."
-      }
-    ]
-  },
-  {
-    "hanzi": "公园",
-    "pinyin": "gōngyuán",
-    "definition": "park",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:places",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我们去公园散步吧。",
-        "pinyin": "Wǒmen qù gōngyuán sànbù ba.",
-        "en": "Let's go for a walk in the park."
-      },
-      {
-        "zh": "这个公园有很多花。",
-        "pinyin": "Zhège gōngyuán yǒu hěn duō huā.",
-        "en": "This park has many flowers."
-      }
-    ]
-  },
-  {
-    "hanzi": "鸟巢",
-    "pinyin": "Niǎocháo",
-    "definition": "Bird's Nest (National Stadium)",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:landmarks,sports",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "鸟巢在北京奥林匹克公园。",
-        "pinyin": "Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.",
-        "en": "The Bird's Nest is in Beijing Olympic Park."
-      },
-      {
-        "zh": "鸟巢的设计很独特。",
-        "pinyin": "Niǎocháo de shèjì hěn dútè.",
-        "en": "The design of the Bird's Nest is very unique."
-      }
-    ]
-  },
-  {
-    "hanzi": "水立方",
-    "pinyin": "Shuǐlìfāng",
-    "definition": "Water Cube (National Aquatics Center)",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:medium",
-      "topic:landmarks,sports",
-      "hsk:3"
-    ],
-    "sentences": [
-      {
-        "zh": "水立方是游泳比赛场馆。",
-        "pinyin": "Shuǐlìfāng shì yóuyǒng bǐsài chǎngguǎn.",
-        "en": "The Water Cube is a swimming competition venue."
-      },
-      {
-        "zh": "晚上水立方会亮灯。",
-        "pinyin": "Wǎnshàng Shuǐlìfāng huì liàng dēng.",
-        "en": "At night, the Water Cube lights up."
-      }
-    ]
-  },
-  {
-    "hanzi": "北京烤鸭",
-    "pinyin": "Běijīng kǎoyā",
-    "definition": "Peking duck",
-    "tags": [
-      "type:noun",
-      "lesson:lesson14",
-      "frequency:high",
-      "topic:food,travel",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "来北京一定要吃北京烤鸭。",
-        "pinyin": "Lái Běijīng yídìng yào chī Běijīng kǎoyā.",
-        "en": "When you come to Beijing, you must eat Peking duck."
-      },
-      {
-        "zh": "北京烤鸭皮脆肉嫩。",
-        "pinyin": "Běijīng kǎoyā pí cuì ròu nèn.",
-        "en": "Peking duck has crispy skin and tender meat."
-      }
-    ]
-  },
-  {
-    "hanzi": "生日",
-    "pinyin": "shēngrì",
-    "definition": "birthday",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:celebrations",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "祝你生日快乐！",
-        "pinyin": "Zhù nǐ shēngrì kuàilè!",
-        "en": "Happy birthday to you!"
-      },
-      {
-        "zh": "我的生日是五月七号。",
-        "pinyin": "Wǒ de shēngrì shì wǔ yuè qī hào.",
-        "en": "My birthday is May 7th."
-      }
-    ]
-  },
-  {
-    "hanzi": "参加",
-    "pinyin": "cānjiā",
-    "definition": "to join / participate in",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:social,activities",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "你想参加我的生日聚会吗？",
-        "pinyin": "Nǐ xiǎng cānjiā wǒ de shēngrì jùhuì ma?",
-        "en": "Do you want to come to my birthday party?"
-      },
-      {
-        "zh": "很多人参加了比赛。",
-        "pinyin": "Hěn duō rén cānjiā le bǐsài.",
-        "en": "Many people participated in the competition."
-      }
-    ]
-  },
-  {
-    "hanzi": "聚会",
-    "pinyin": "jùhuì",
-    "definition": "party / gathering",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:social",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "周末有一个聚会。",
-        "pinyin": "Zhōumò yǒu yí ge jùhuì.",
-        "en": "There's a party on the weekend."
-      },
-      {
-        "zh": "朋友聚会很开心。",
-        "pinyin": "Péngyou jùhuì hěn kāixīn.",
-        "en": "Gathering with friends is very happy."
-      }
-    ]
-  },
-  {
-    "hanzi": "当然",
-    "pinyin": "dāngrán",
-    "definition": "certainly / of course",
-    "tags": [
-      "type:adv",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "当然可以！",
-        "pinyin": "Dāngrán kěyǐ!",
-        "en": "Of course you can!"
-      },
-      {
-        "zh": "我当然会来。",
-        "pinyin": "Wǒ dāngrán huì lái.",
-        "en": "Of course I will come."
-      }
-    ]
-  },
-  {
-    "hanzi": "地址",
-    "pinyin": "dìzhǐ",
-    "definition": "address",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:communication,location",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "请把你的地址发给我。",
-        "pinyin": "Qǐng bǎ nǐ de dìzhǐ fā gěi wǒ.",
-        "en": "Please send me your address."
-      },
-      {
-        "zh": "这个地址不对。",
-        "pinyin": "Zhège dìzhǐ bú duì.",
-        "en": "This address is incorrect."
-      }
-    ]
-  },
-  {
-    "hanzi": "发",
-    "pinyin": "fā",
-    "definition": "to send out",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:communication",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我给你发了一条信息。",
-        "pinyin": "Wǒ gěi nǐ fā le yī tiáo xìnxī.",
-        "en": "I sent you a message."
-      },
-      {
-        "zh": "请发邮件给我。",
-        "pinyin": "Qǐng fā yóujiàn gěi wǒ.",
-        "en": "Please send me an email."
-      }
-    ]
-  },
-  {
-    "hanzi": "送",
-    "pinyin": "sòng",
-    "definition": "to give (as a gift)",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:gifts,social",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我送了你一个礼物。",
-        "pinyin": "Wǒ sòng le nǐ yí ge lǐwù.",
-        "en": "I gave you a gift."
-      },
-      {
-        "zh": "你送什么给他？",
-        "pinyin": "Nǐ sòng shénme gěi tā?",
-        "en": "What are you giving him?"
-      }
-    ]
-  },
-  {
-    "hanzi": "礼物",
-    "pinyin": "lǐwù",
-    "definition": "gift / present",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:gifts",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "谢谢你的礼物。",
-        "pinyin": "Xièxie nǐ de lǐwù.",
-        "en": "Thank you for your gift."
-      },
-      {
-        "zh": "我买了一份生日礼物。",
-        "pinyin": "Wǒ mǎi le yī fèn shēngrì lǐwù.",
-        "en": "I bought a birthday gift."
-      }
-    ]
-  },
-  {
-    "hanzi": "电梯",
-    "pinyin": "diàntī",
-    "definition": "elevator / lift",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:buildings",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "电梯在右边。",
-        "pinyin": "Diàntī zài yòubiān.",
-        "en": "The elevator is on the right."
-      },
-      {
-        "zh": "电梯坏了，我们走楼梯吧。",
-        "pinyin": "Diàntī huài le, wǒmen zǒu lóutī ba.",
-        "en": "The elevator is broken, let's take the stairs."
-      }
-    ]
-  },
-  {
-    "hanzi": "上去",
-    "pinyin": "shàngqù",
-    "definition": "to go up",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:movement",
-      "hsk:2",
-      "grammar:directional complement"
-    ],
-    "sentences": [
-      {
-        "zh": "我们坐电梯上去。",
-        "pinyin": "Wǒmen zuò diàntī shàngqù.",
-        "en": "Let's take the elevator up."
-      },
-      {
-        "zh": "他上楼去了。",
-        "pinyin": "Tā shànglóu qù le.",
-        "en": "He went upstairs."
-      }
-    ]
-  },
-  {
-    "hanzi": "把",
-    "pinyin": "bǎ",
-    "definition": "object marker (disposal)",
-    "tags": [
-      "type:prep",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:grammar",
-      "hsk:2",
-      "grammar:把-sentence"
-    ],
-    "sentences": [
-      {
-        "zh": "把门关上。",
-        "pinyin": "Bǎ mén guān shàng.",
-        "en": "Close the door."
-      },
-      {
-        "zh": "把蛋糕放在冰箱里。",
-        "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
-        "en": "Put the cake in the refrigerator."
-      }
-    ]
-  },
-  {
-    "hanzi": "蛋糕",
-    "pinyin": "dàngāo",
-    "definition": "cake",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:food,celebrations",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "这个蛋糕很好吃。",
-        "pinyin": "Zhège dàngāo hěn hǎochī.",
-        "en": "This cake is very tasty."
-      },
-      {
-        "zh": "生日蛋糕上插着蜡烛。",
-        "pinyin": "Shēngrì dàngāo shàng chā zhe làzhú.",
-        "en": "There are candles on the birthday cake."
-      }
-    ]
-  },
-  {
-    "hanzi": "放",
-    "pinyin": "fàng",
-    "definition": "to put / place",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:actions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "请把书放在桌子上。",
-        "pinyin": "Qǐng bǎ shū fàng zài zhuōzi shàng.",
-        "en": "Please put the book on the desk."
-      },
-      {
-        "zh": "包放在哪儿了？",
-        "pinyin": "Bāo fàng zài nǎr le?",
-        "en": "Where did you put the bag?"
-      }
-    ]
-  },
-  {
-    "hanzi": "冰箱",
-    "pinyin": "bīngxiāng",
-    "definition": "refrigerator",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:home,appliances",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "冰箱里有牛奶。",
-        "pinyin": "Bīngxiāng lǐ yǒu niúnǎi.",
-        "en": "There's milk in the refrigerator."
-      },
-      {
-        "zh": "把水果放冰箱里保鲜。",
-        "pinyin": "Bǎ shuǐguǒ fàng bīngxiāng lǐ bǎoxiān.",
-        "en": "Put the fruit in the fridge to keep it fresh."
-      }
-    ]
-  },
-  {
-    "hanzi": "邀请",
-    "pinyin": "yāoqǐng",
-    "definition": "to invite",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:social",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "他邀请我去他的生日聚会。",
-        "pinyin": "Tā yāoqǐng wǒ qù tā de shēngrì jùhuì.",
-        "en": "He invited me to his birthday party."
-      },
-      {
-        "zh": "你邀请了多少人？",
-        "pinyin": "Nǐ yāoqǐng le duōshao rén?",
-        "en": "How many people did you invite?"
-      }
-    ]
-  },
-  {
-    "hanzi": "小区",
-    "pinyin": "xiǎoqū",
-    "definition": "residential area / community",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:places,home",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我住在一个安静的小区。",
-        "pinyin": "Wǒ zhù zài yí ge ānjìng de xiǎoqū.",
-        "en": "I live in a quiet residential area."
-      },
-      {
-        "zh": "小区门口有一个超市。",
-        "pinyin": "Xiǎoqū ménkǒu yǒu yí ge chāoshì.",
-        "en": "There's a supermarket at the entrance of the community."
-      }
-    ]
-  },
-  {
-    "hanzi": "门口",
-    "pinyin": "ménkǒu",
-    "definition": "doorway / entrance",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:location",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我在门口等你。",
-        "pinyin": "Wǒ zài ménkǒu děng nǐ.",
-        "en": "I'll wait for you at the entrance."
-      },
-      {
-        "zh": "学校门口有很多车。",
-        "pinyin": "Xuéxiào ménkǒu yǒu hěn duō chē.",
-        "en": "There are many cars at the school entrance."
-      }
-    ]
-  },
-  {
-    "hanzi": "栋",
-    "pinyin": "dòng",
-    "definition": "measure for buildings",
-    "tags": [
-      "type:measure",
-      "lesson:lesson15",
-      "frequency:medium",
-      "topic:grammar",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我们住在一栋楼里。",
-        "pinyin": "Wǒmen zhù zài yī dòng lóu lǐ.",
-        "en": "We live in one building."
-      },
-      {
-        "zh": "这栋楼有十层。",
-        "pinyin": "Zhè dòng lóu yǒu shí céng.",
-        "en": "This building has ten floors."
-      }
-    ]
-  },
-  {
-    "hanzi": "马上",
-    "pinyin": "mǎshàng",
-    "definition": "at once / immediately",
-    "tags": [
-      "type:adv",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:time",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "我马上到。",
-        "pinyin": "Wǒ mǎshàng dào.",
-        "en": "I'll be there right away."
-      },
-      {
-        "zh": "电影马上开始了。",
-        "pinyin": "Diànyǐng mǎshàng kāishǐ le.",
-        "en": "The movie is about to start."
-      }
-    ]
-  },
-  {
-    "hanzi": "下来",
-    "pinyin": "xiàlái",
-    "definition": "to come down",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:movement",
-      "hsk:2",
-      "grammar:directional complement"
-    ],
-    "sentences": [
-      {
-        "zh": "你快下来吧。",
-        "pinyin": "Nǐ kuài xiàlái ba.",
-        "en": "Come down quickly."
-      },
-      {
-        "zh": "他从楼上下来了。",
-        "pinyin": "Tā cóng lóu shàng xiàlái le.",
-        "en": "He came down from upstairs."
-      }
-    ]
-  },
-  {
-    "hanzi": "才",
-    "pinyin": "cái",
-    "definition": "not until / only then",
-    "tags": [
-      "type:adv",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:grammar,time",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "他十点才来。",
-        "pinyin": "Tā shí diǎn cái lái.",
-        "en": "He didn't come until ten o'clock."
-      },
-      {
-        "zh": "我吃完饭才做作业。",
-        "pinyin": "Wǒ chī wán fàn cái zuò zuòyè.",
-        "en": "I only do homework after finishing dinner."
-      }
-    ]
-  },
-  {
-    "hanzi": "发现",
-    "pinyin": "fāxiàn",
-    "definition": "to discover / find",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:perception",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我发现了一个秘密。",
-        "pinyin": "Wǒ fāxiàn le yí ge mìmì.",
-        "en": "I discovered a secret."
-      },
-      {
-        "zh": "你发现有什么不同吗？",
-        "pinyin": "Nǐ fāxiàn yǒu shénme bùtóng ma?",
-        "en": "Did you notice any difference?"
-      }
-    ]
-  },
-  {
-    "hanzi": "热情",
-    "pinyin": "rèqíng",
-    "definition": "enthusiastic / warm",
-    "tags": [
-      "type:adj",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:personality",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "他很热情地欢迎我们。",
-        "pinyin": "Tā hěn rèqíng de huānyíng wǒmen.",
-        "en": "He welcomed us warmly."
-      },
-      {
-        "zh": "这位服务员很热情。",
-        "pinyin": "Zhè wèi fúwùyuán hěn rèqíng.",
-        "en": "This waiter is very enthusiastic."
-      }
-    ]
-  },
-  {
-    "hanzi": "欢迎",
-    "pinyin": "huānyíng",
-    "definition": "to welcome / greet",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:social",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "欢迎来我家！",
-        "pinyin": "Huānyíng lái wǒ jiā!",
-        "en": "Welcome to my home!"
-      },
-      {
-        "zh": "大家热烈欢迎新同学。",
-        "pinyin": "Dàjiā rèliè huānyíng xīn tóngxué.",
-        "en": "Everyone warmly welcomes the new classmate."
-      }
-    ]
-  },
-  {
-    "hanzi": "点",
-    "pinyin": "diǎn",
-    "definition": "to light (candle)",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:actions",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "点蜡烛。",
-        "pinyin": "Diǎn làzhú.",
-        "en": "Light the candles."
-      },
-      {
-        "zh": "他点了一根烟。",
-        "pinyin": "Tā diǎn le yī gēn yān.",
-        "en": "He lit a cigarette."
-      }
-    ]
-  },
-  {
-    "hanzi": "蜡烛",
-    "pinyin": "làzhú",
-    "definition": "candle",
-    "tags": [
-      "type:noun",
-      "lesson:lesson15",
-      "frequency:medium",
-      "topic:celebrations,home",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "生日蜡烛吹灭了。",
-        "pinyin": "Shēngrì làzhú chuī miè le.",
-        "en": "The birthday candles were blown out."
-      },
-      {
-        "zh": "停电的时候我们点了蜡烛。",
-        "pinyin": "Tíngdiàn de shíhou wǒmen diǎn le làzhú.",
-        "en": "When the power went out, we lit candles."
-      }
-    ]
-  },
-  {
-    "hanzi": "祝",
-    "pinyin": "zhù",
-    "definition": "to express good wishes",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:greetings",
-      "hsk:1"
-    ],
-    "sentences": [
-      {
-        "zh": "祝你成功！",
-        "pinyin": "Zhù nǐ chénggōng!",
-        "en": "Wishing you success!"
-      },
-      {
-        "zh": "祝你们幸福。",
-        "pinyin": "Zhù nǐmen xìngfú.",
-        "en": "Wishing you happiness."
-      }
-    ]
-  },
-  {
-    "hanzi": "感动",
-    "pinyin": "gǎndòng",
-    "definition": "to be moved / touched",
-    "tags": [
-      "type:verb/adj",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:emotions",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "他的故事让我很感动。",
-        "pinyin": "Tā de gùshi ràng wǒ hěn gǎndòng.",
-        "en": "His story moved me deeply."
-      },
-      {
-        "zh": "收到礼物后她感动得哭了。",
-        "pinyin": "Shōudào lǐwù hòu tā gǎndòng de kū le.",
-        "en": "After receiving the gift, she was so moved she cried."
-      }
-    ]
-  },
-  {
-    "hanzi": "感谢",
-    "pinyin": "gǎnxiè",
-    "definition": "to thank / be grateful",
-    "tags": [
-      "type:verb",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:emotions,social",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "感谢你的帮助。",
-        "pinyin": "Gǎnxiè nǐ de bāngzhù.",
-        "en": "Thank you for your help."
-      },
-      {
-        "zh": "我感谢每一位朋友。",
-        "pinyin": "Wǒ gǎnxiè měi yī wèi péngyou.",
-        "en": "I am grateful to every friend."
-      }
-    ]
-  },
-  {
-    "hanzi": "心里",
-    "pinyin": "xīnli",
-    "definition": "in one's heart / mind",
-    "tags": [
-      "type:noun (location)",
-      "lesson:lesson15",
-      "frequency:high",
-      "topic:feelings",
-      "hsk:2"
-    ],
-    "sentences": [
-      {
-        "zh": "我心里很开心。",
-        "pinyin": "Wǒ xīnli hěn kāixīn.",
-        "en": "I am very happy in my heart."
-      },
-      {
-        "zh": "他说的话让我心里暖暖的。",
-        "pinyin": "Tā shuō de huà ràng wǒ xīnli nuǎn nuǎn de.",
-        "en": "His words warmed my heart."
       }
     ]
   },
@@ -9313,7 +19187,8 @@ const vocab = [
     "pinyin": "zhíbō",
     "definition": "live stream",
     "tags": [
-      "type:noun/verb",
+      "type:noun",
+      "type:verb",
       "lesson:bonus7",
       "frequency:high",
       "topic:internet,gaming",
@@ -9322,7 +19197,7 @@ const vocab = [
     "sentences": [
       {
         "zh": "我晚上八点开直播。",
-        "pinyin": "Wǒ wǎnshàng bā diǎn kāi zhíbō.",
+        "pinyin": "Wǒ wǎnshang bā diǎn kāi zhíbō.",
         "en": "I start my live stream at 8 PM."
       },
       {
@@ -9361,7 +19236,8 @@ const vocab = [
     "pinyin": "gēngxīn",
     "definition": "to update",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus7",
       "frequency:high",
       "topic:computers,gaming",
@@ -9432,7 +19308,8 @@ const vocab = [
     "pinyin": "duōrén",
     "definition": "multiplayer",
     "tags": [
-      "type:adj/noun",
+      "type:adjective",
+      "type:noun",
       "lesson:bonus7",
       "frequency:high",
       "topic:gaming"
@@ -9455,7 +19332,8 @@ const vocab = [
     "pinyin": "dānrén",
     "definition": "single player",
     "tags": [
-      "type:adj/noun",
+      "type:adjective",
+      "type:noun",
       "lesson:bonus7",
       "frequency:high",
       "topic:gaming"
@@ -9501,7 +19379,8 @@ const vocab = [
     "pinyin": "túzhuāng",
     "definition": "painting (miniatures)",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus8",
       "frequency:low",
       "topic:miniatures,painting"
@@ -9594,7 +19473,8 @@ const vocab = [
     "pinyin": "gānsǎo",
     "definition": "dry brushing",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus8",
       "frequency:low",
       "topic:miniatures,painting"
@@ -9617,7 +19497,8 @@ const vocab = [
     "pinyin": "zìxǐ",
     "definition": "wash",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus8",
       "frequency:low",
       "topic:miniatures,painting"
@@ -9756,7 +19637,8 @@ const vocab = [
     "pinyin": "zhēgài",
     "definition": "masking",
     "tags": [
-      "type:verb/noun",
+      "type:verb",
+      "type:noun",
       "lesson:bonus8",
       "frequency:low",
       "topic:painting"
@@ -10061,5599 +19943,11059 @@ const vocab = [
 const sentences = [
   {
     "id": "sent_0000",
-    "zh": "我们八点上课。",
-    "pinyin": "Wǒmen bā diǎn shàngkè.",
-    "en": "We start class at 8.",
-    "hanzi_source": "上课"
+    "zh": "你好吗？",
+    "pinyin": "Nǐ hǎo ma?",
+    "en": "How are you?",
+    "hanzi_source": "你"
   },
   {
     "id": "sent_0001",
-    "zh": "上课的时候不要说话。",
-    "pinyin": "Shàngkè de shíhou bú yào shuōhuà.",
-    "en": "Don’t talk during class.",
-    "hanzi_source": "上课"
+    "zh": "你是学生吗？",
+    "pinyin": "Nǐ shì xuésheng ma?",
+    "en": "Are you a student?",
+    "hanzi_source": "你"
   },
   {
     "id": "sent_0002",
-    "zh": "下午三点下课。",
-    "pinyin": "Xiàwǔ sān diǎn xiàkè.",
-    "en": "Class ends at 3 PM.",
-    "hanzi_source": "下课"
+    "zh": "我是老师。",
+    "pinyin": "Wǒ shì lǎoshī.",
+    "en": "I am a teacher.",
+    "hanzi_source": "是"
   },
   {
     "id": "sent_0003",
-    "zh": "下课以后我们去吃饭。",
-    "pinyin": "Xiàkè yǐhòu wǒmen qù chīfàn.",
-    "en": "After class we go eat.",
-    "hanzi_source": "下课"
+    "zh": "他是我的朋友。",
+    "pinyin": "Tā shì wǒ de péngyou.",
+    "en": "He is my friend.",
+    "hanzi_source": "是"
   },
   {
     "id": "sent_0004",
-    "zh": "我们休息一下吧。",
-    "pinyin": "Wǒmen xiūxi yīxià ba.",
-    "en": "Let’s take a break.",
-    "hanzi_source": "休息一下"
-  },
-  {
-    "id": "sent_0005",
-    "zh": "休息一下眼睛。",
-    "pinyin": "Xiūxi yīxià yǎnjing.",
-    "en": "Rest your eyes for a bit.",
-    "hanzi_source": "休息一下"
-  },
-  {
-    "id": "sent_0006",
-    "zh": "请听我说完。",
-    "pinyin": "Qǐng tīng wǒ shuō wán.",
-    "en": "Please listen to me finish.",
-    "hanzi_source": "请听我说"
-  },
-  {
-    "id": "sent_0007",
-    "zh": "老师请听我说一个问题。",
-    "pinyin": "Lǎoshī qǐng tīng wǒ shuō yí ge wèntí.",
-    "en": "Teacher, please listen to my question.",
-    "hanzi_source": "请听我说"
-  },
-  {
-    "id": "sent_0008",
-    "zh": "请跟我读这个生词。",
-    "pinyin": "Qǐng gēn wǒ dú zhège shēngcí.",
-    "en": "Please read this new word after me.",
-    "hanzi_source": "请跟我读"
-  },
-  {
-    "id": "sent_0009",
-    "zh": "大家请跟我读一遍。",
-    "pinyin": "Dàjiā qǐng gēn wǒ dú yí biàn.",
-    "en": "Everyone, read after me once.",
-    "hanzi_source": "请跟我读"
-  },
-  {
-    "id": "sent_0010",
-    "zh": "请看白板上的例句。",
-    "pinyin": "Qǐng kàn bái bān shàng de lìjù.",
-    "en": "Please look at the example sentences on the whiteboard.",
-    "hanzi_source": "请看白板"
-  },
-  {
-    "id": "sent_0011",
-    "zh": "请看白板，这是今天的语法点。",
-    "pinyin": "Qǐng kàn bái bān, zhè shì jīntiān de yǔfǎ diǎn.",
-    "en": "Look at the whiteboard — here’s today’s grammar point.",
-    "hanzi_source": "请看白板"
-  },
-  {
-    "id": "sent_0012",
-    "zh": "请看书写第五页的练习。",
-    "pinyin": "Qǐng kàn shū xiě dì-wǔ yè de liànxí.",
-    "en": "Look at the book and do the exercises on page 5.",
-    "hanzi_source": "请看书写"
-  },
-  {
-    "id": "sent_0013",
-    "zh": "请看书上的图片。",
-    "pinyin": "Qǐng kàn shū shàng de túpiàn.",
-    "en": "Please look at the pictures in the book.",
-    "hanzi_source": "请看书写"
-  },
-  {
-    "id": "sent_0014",
-    "zh": "我没听清，请再说一遍。",
-    "pinyin": "Wǒ méi tīng qīng, qǐng zài shuō yī biàn.",
-    "en": "I didn’t hear clearly, please say it again.",
-    "hanzi_source": "请再说一遍"
-  },
-  {
-    "id": "sent_0015",
-    "zh": "请再说一遍你的名字。",
-    "pinyin": "Qǐng zài shuō yī biàn nǐ de míngzi.",
-    "en": "Please say your name again.",
-    "hanzi_source": "请再说一遍"
-  },
-  {
-    "id": "sent_0016",
-    "zh": "请写拼音，不要写汉字。",
-    "pinyin": "Qǐng xiě pīnyīn, bú yào xiě Hànzì.",
-    "en": "Please write Pinyin, not characters.",
-    "hanzi_source": "请写拼音"
-  },
-  {
-    "id": "sent_0017",
-    "zh": "每个生词请写拼音在旁边。",
-    "pinyin": "Měi ge shēngcí qǐng xiě pīnyīn zài pángbiān.",
-    "en": "Please write Pinyin next to each new word.",
-    "hanzi_source": "请写拼音"
-  },
-  {
-    "id": "sent_0018",
-    "zh": "这个字第几声？",
-    "pinyin": "Zhège zì dì jǐ shēng?",
-    "en": "Which tone is this character?",
-    "hanzi_source": "第几声"
-  },
-  {
-    "id": "sent_0019",
-    "zh": "“妈”和“麻”的第几声不一样？",
-    "pinyin": "“Mā” hé “má” de dì jǐ shēng bù yíyàng?",
-    "en": "Which tones differ between “mā” and “má”?",
-    "hanzi_source": "第几声"
-  },
-  {
-    "id": "sent_0020",
-    "zh": "请慢慢说，我在记笔记。",
-    "pinyin": "Qǐng mànmàn shuō, wǒ zài jì bǐjì.",
-    "en": "Please speak slowly, I’m taking notes.",
-    "hanzi_source": "请慢慢说"
-  },
-  {
-    "id": "sent_0021",
-    "zh": "你的汉语太快了，请慢慢说。",
-    "pinyin": "Nǐ de Hànyǔ tài kuài le, qǐng mànmàn shuō.",
-    "en": "Your Chinese is too fast, please speak slowly.",
-    "hanzi_source": "请慢慢说"
-  },
-  {
-    "id": "sent_0022",
-    "zh": "对不起，我没听懂。",
-    "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
-    "en": "Sorry, I didn’t understand.",
-    "hanzi_source": "我没听懂"
-  },
-  {
-    "id": "sent_0023",
-    "zh": "老师说得太快了，我没听懂。",
-    "pinyin": "Lǎoshī shuō de tài kuài le, wǒ méi tīngdǒng.",
-    "en": "The teacher spoke too fast, I didn’t understand.",
-    "hanzi_source": "我没听懂"
-  },
-  {
-    "id": "sent_0024",
-    "zh": "请大家把书翻到第一页。",
-    "pinyin": "Qǐng dàjiā bǎ shū fān dào dì-yī yè.",
-    "en": "Everyone, turn to page 1.",
-    "hanzi_source": "把书翻到第一页"
-  },
-  {
-    "id": "sent_0025",
-    "zh": "把书翻到第一页，我们开始读课文。",
-    "pinyin": "Bǎ shū fān dào dì-yī yè, wǒmen kāishǐ dú kèwén.",
-    "en": "Turn to page 1, let’s start reading the text.",
-    "hanzi_source": "把书翻到第一页"
-  },
-  {
-    "id": "sent_0026",
-    "zh": "请问“computer”用汉语怎么说？",
-    "pinyin": "Qǐngwèn “computer” yòng Hànyǔ zěnme shuō?",
-    "en": "How do you say “computer” in Chinese?",
-    "hanzi_source": "请问这个用汉语怎么说"
-  },
-  {
-    "id": "sent_0027",
-    "zh": "这个水果的名字用汉语怎么说？",
-    "pinyin": "Zhège shuǐguǒ de míngzi yòng Hànyǔ zěnme shuō?",
-    "en": "How do you say this fruit’s name in Chinese?",
-    "hanzi_source": "请问这个用汉语怎么说"
-  },
-  {
-    "id": "sent_0028",
-    "zh": "请问这个汉字怎么读？是第三声吗？",
-    "pinyin": "Qǐngwèn zhège Hànzì zěnme dú? Shì dì-sān shēng ma?",
-    "en": "How do you read this character? Is it third tone?",
-    "hanzi_source": "请问这个汉字怎么读"
-  },
-  {
-    "id": "sent_0029",
-    "zh": "这个汉字很难，请问怎么读？",
-    "pinyin": "Zhège Hànzì hěn nán, qǐngwèn zěnme dú?",
-    "en": "This character is hard — how do you pronounce it?",
-    "hanzi_source": "请问这个汉字怎么读"
-  },
-  {
-    "id": "sent_0030",
-    "zh": "请问“方便”这个生词是什么意思？",
-    "pinyin": "Qǐngwèn “fāngbiàn” zhège shēngcí shì shénme yìsi?",
-    "en": "What does the new word “fāngbiàn” mean?",
-    "hanzi_source": "请问这个生词是什么意思"
-  },
-  {
-    "id": "sent_0031",
-    "zh": "我不懂这个生词，请问是什么意思？",
-    "pinyin": "Wǒ bù dǒng zhège shēngcí, qǐngwèn shì shénme yìsi?",
-    "en": "I don’t understand this new word — what does it mean?",
-    "hanzi_source": "请问这个生词是什么意思"
-  },
-  {
-    "id": "sent_0032",
-    "zh": "我姓王。",
-    "pinyin": "Wǒ xìng Wáng.",
-    "en": "My surname is Wang.",
-    "hanzi_source": "姓"
-  },
-  {
-    "id": "sent_0033",
-    "zh": "请问您贵姓？",
-    "pinyin": "Qǐngwèn nín guì xìng?",
-    "en": "May I ask your surname?",
-    "hanzi_source": "姓"
-  },
-  {
-    "id": "sent_0034",
-    "zh": "她叫李芳。",
-    "pinyin": "Tā jiào Lǐ Fāng.",
-    "en": "She is called Li Fang.",
-    "hanzi_source": "叫"
-  },
-  {
-    "id": "sent_0035",
-    "zh": "你叫什么名字？",
-    "pinyin": "Nǐ jiào shénme míngzi?",
-    "en": "What’s your name?",
-    "hanzi_source": "叫"
-  },
-  {
-    "id": "sent_0036",
-    "zh": "我的名字是张伟。",
-    "pinyin": "Wǒ de míngzi shì Zhāng Wěi.",
-    "en": "My name is Zhang Wei.",
-    "hanzi_source": "名字"
-  },
-  {
-    "id": "sent_0037",
-    "zh": "请写下你的名字。",
-    "pinyin": "Qǐng xiěxià nǐ de míngzi.",
-    "en": "Please write down your name.",
-    "hanzi_source": "名字"
-  },
-  {
-    "id": "sent_0038",
-    "zh": "今年我二十岁。",
-    "pinyin": "Jīnnián wǒ èrshí suì.",
-    "en": "I’m 20 years old this year.",
-    "hanzi_source": "今年"
-  },
-  {
-    "id": "sent_0039",
-    "zh": "今年是2026年。",
-    "pinyin": "Jīnnián shì 2026 nián.",
-    "en": "This year is 2026.",
-    "hanzi_source": "今年"
-  },
-  {
-    "id": "sent_0040",
-    "zh": "你多大了？",
-    "pinyin": "Nǐ duō dà le?",
-    "en": "How old are you?",
-    "hanzi_source": "多"
-  },
-  {
-    "id": "sent_0041",
-    "zh": "这条路多长？",
-    "pinyin": "Zhè tiáo lù duō cháng?",
-    "en": "How long is this road?",
-    "hanzi_source": "多"
-  },
-  {
-    "id": "sent_0042",
-    "zh": "我哥哥比我大三岁。",
-    "pinyin": "Wǒ gēge bǐ wǒ dà sān suì.",
-    "en": "My older brother is three years older than me.",
-    "hanzi_source": "大"
-  },
-  {
-    "id": "sent_0043",
-    "zh": "你多大？",
-    "pinyin": "Nǐ duō dà?",
-    "en": "How old are you?",
-    "hanzi_source": "大"
-  },
-  {
-    "id": "sent_0044",
-    "zh": "你是哪国人？",
-    "pinyin": "Nǐ shì nǎ guó rén?",
-    "en": "Which country are you from?",
-    "hanzi_source": "哪"
-  },
-  {
-    "id": "sent_0045",
-    "zh": "哪本书是你的？",
-    "pinyin": "Nǎ běn shū shì nǐ de?",
-    "en": "Which book is yours?",
-    "hanzi_source": "哪"
-  },
-  {
-    "id": "sent_0046",
-    "zh": "中国很大。",
-    "pinyin": "Zhōngguó hěn dà.",
-    "en": "China is very big.",
-    "hanzi_source": "国"
-  },
-  {
-    "id": "sent_0047",
-    "zh": "你去过哪些国家？",
-    "pinyin": "Nǐ qù guo nǎxiē guójiā?",
-    "en": "Which countries have you been to?",
-    "hanzi_source": "国"
-  },
-  {
-    "id": "sent_0048",
-    "zh": "泰国有很多水果。",
-    "pinyin": "Tàiguó yǒu hěn duō shuǐguǒ.",
-    "en": "Thailand has a lot of fruit.",
-    "hanzi_source": "泰国"
-  },
-  {
-    "id": "sent_0049",
-    "zh": "我来自泰国。",
-    "pinyin": "Wǒ láizì Tàiguó.",
-    "en": "I come from Thailand.",
-    "hanzi_source": "泰国"
-  },
-  {
-    "id": "sent_0050",
-    "zh": "她是泰国人。",
-    "pinyin": "Tā shì Tàiguórén.",
-    "en": "She is Thai.",
-    "hanzi_source": "泰国人"
-  },
-  {
-    "id": "sent_0051",
-    "zh": "我的室友是泰国人。",
-    "pinyin": "Wǒ de shìyǒu shì Tàiguórén.",
-    "en": "My roommate is Thai.",
-    "hanzi_source": "泰国人"
-  },
-  {
-    "id": "sent_0052",
-    "zh": "好久不见。",
-    "pinyin": "Hǎo jiǔ bú jiàn.",
-    "en": "Long time no see.",
-    "hanzi_source": "久"
-  },
-  {
-    "id": "sent_0053",
-    "zh": "你等了多久？",
-    "pinyin": "Nǐ děng le duō jiǔ?",
-    "en": "How long have you waited?",
-    "hanzi_source": "久"
-  },
-  {
-    "id": "sent_0054",
-    "zh": "现在几点了？",
-    "pinyin": "Xiànzài jǐ diǎn le?",
-    "en": "What time is it now?",
-    "hanzi_source": "现在"
-  },
-  {
-    "id": "sent_0055",
-    "zh": "我现在很忙。",
-    "pinyin": "Wǒ xiànzài hěn máng.",
-    "en": "I’m busy now.",
-    "hanzi_source": "现在"
-  },
-  {
-    "id": "sent_0056",
-    "zh": "我在家里。",
-    "pinyin": "Wǒ zài jiā lǐ.",
-    "en": "I am at home.",
-    "hanzi_source": "在"
-  },
-  {
-    "id": "sent_0057",
-    "zh": "你在哪儿？",
-    "pinyin": "Nǐ zài nǎr?",
-    "en": "Where are you?",
-    "hanzi_source": "在"
-  },
-  {
-    "id": "sent_0058",
-    "zh": "你去哪儿？",
-    "pinyin": "Nǐ qù nǎr?",
-    "en": "Where are you going?",
-    "hanzi_source": "哪儿"
-  },
-  {
-    "id": "sent_0059",
-    "zh": "我的手机在哪儿？",
-    "pinyin": "Wǒ de shǒujī zài nǎr?",
-    "en": "Where is my phone?",
-    "hanzi_source": "哪儿"
-  },
-  {
-    "id": "sent_0060",
-    "zh": "武汉大学很有名。",
-    "pinyin": "Wǔhàn Dàxué hěn yǒumíng.",
-    "en": "Wuhan University is very famous.",
-    "hanzi_source": "武汉"
-  },
-  {
-    "id": "sent_0061",
-    "zh": "我住在武汉。",
-    "pinyin": "Wǒ zhù zài Wǔhàn.",
-    "en": "I live in Wuhan.",
-    "hanzi_source": "武汉"
-  },
-  {
-    "id": "sent_0062",
-    "zh": "大家好！",
-    "pinyin": "Dàjiā hǎo!",
-    "en": "Hello everyone!",
-    "hanzi_source": "大家"
-  },
-  {
-    "id": "sent_0063",
-    "zh": "请大家安静。",
-    "pinyin": "Qǐng dàjiā ānjìng.",
-    "en": "Everyone, please be quiet.",
-    "hanzi_source": "大家"
-  },
-  {
-    "id": "sent_0064",
-    "zh": "我来介绍一下我的朋友。",
-    "pinyin": "Wǒ lái jièshào yīxià wǒ de péngyou.",
-    "en": "Let me introduce my friend.",
-    "hanzi_source": "介绍"
-  },
-  {
-    "id": "sent_0065",
-    "zh": "请你介绍一下自己。",
-    "pinyin": "Qǐng nǐ jièshào yīxià zìjǐ.",
-    "en": "Please introduce yourself.",
-    "hanzi_source": "介绍"
-  },
-  {
-    "id": "sent_0066",
-    "zh": "你看一下。",
-    "pinyin": "Nǐ kàn yīxià.",
-    "en": "Take a look.",
-    "hanzi_source": "一下"
-  },
-  {
-    "id": "sent_0067",
-    "zh": "我想一下。",
-    "pinyin": "Wǒ xiǎng yīxià.",
-    "en": "Let me think for a bit.",
-    "hanzi_source": "一下"
-  },
-  {
-    "id": "sent_0068",
-    "zh": "我自己去。",
-    "pinyin": "Wǒ zìjǐ qù.",
-    "en": "I’ll go myself.",
-    "hanzi_source": "自己"
-  },
-  {
-    "id": "sent_0069",
-    "zh": "你要相信自己。",
-    "pinyin": "Nǐ yào xiāngxìn zìjǐ.",
-    "en": "You need to believe in yourself.",
-    "hanzi_source": "自己"
-  },
-  {
-    "id": "sent_0070",
-    "zh": "我的电脑很快。",
-    "pinyin": "Wǒ de diànnǎo hěn kuài.",
-    "en": "My computer is very fast.",
-    "hanzi_source": "电脑"
-  },
-  {
-    "id": "sent_0071",
-    "zh": "你每天用几个小时电脑？",
-    "pinyin": "Nǐ měitiān yòng jǐ ge xiǎoshí diànnǎo?",
-    "en": "How many hours a day do you use the computer?",
-    "hanzi_source": "电脑"
-  },
-  {
-    "id": "sent_0072",
-    "zh": "我自己组装了一台电脑。",
-    "pinyin": "Wǒ zìjǐ zǔzhuāng le yī tái diànnǎo.",
-    "en": "I assembled a computer myself.",
-    "hanzi_source": "组装"
-  },
-  {
-    "id": "sent_0073",
-    "zh": "组装电脑不难。",
-    "pinyin": "Zǔzhuāng diànnǎo bù nán.",
-    "en": "Assembling a PC isn’t hard.",
-    "hanzi_source": "组装"
-  },
-  {
-    "id": "sent_0074",
-    "zh": "电脑硬件越来越便宜。",
-    "pinyin": "Diànnǎo yìngjiàn yuè lái yuè piányi.",
-    "en": "Computer hardware is getting cheaper.",
-    "hanzi_source": "硬件"
-  },
-  {
-    "id": "sent_0075",
-    "zh": "你需要升级硬件吗？",
-    "pinyin": "Nǐ xūyào shēngjí yìngjiàn ma?",
-    "en": "Do you need to upgrade hardware?",
-    "hanzi_source": "硬件"
-  },
-  {
-    "id": "sent_0076",
-    "zh": "中央处理器是电脑的大脑。",
-    "pinyin": "Zhōngyāng chǔlǐqì shì diànnǎo de dànǎo.",
-    "en": "The CPU is the brain of the computer.",
-    "hanzi_source": "中央处理器"
-  },
-  {
-    "id": "sent_0077",
-    "zh": "这个中央处理器性能很强。",
-    "pinyin": "Zhège zhōngyāng chǔlǐqì xìngnéng hěn qiáng.",
-    "en": "This CPU has very strong performance.",
-    "hanzi_source": "中央处理器"
-  },
-  {
-    "id": "sent_0078",
-    "zh": "我的显卡坏了。",
-    "pinyin": "Wǒ de xiǎnkǎ huài le.",
-    "en": "My graphics card is broken.",
-    "hanzi_source": "显卡"
-  },
-  {
-    "id": "sent_0079",
-    "zh": "玩游戏需要好显卡。",
-    "pinyin": "Wán yóuxì xūyào hǎo xiǎnkǎ.",
-    "en": "You need a good graphics card to play games.",
-    "hanzi_source": "显卡"
-  },
-  {
-    "id": "sent_0080",
-    "zh": "所有零件都插在主板上。",
-    "pinyin": "Suǒyǒu língjiàn dōu chā zài zhǔbǎn shàng.",
-    "en": "All components plug into the motherboard.",
-    "hanzi_source": "主板"
-  },
-  {
-    "id": "sent_0081",
-    "zh": "这个主板支持DDR5内存。",
-    "pinyin": "Zhège zhǔbǎn zhīchí DDR5 nèicún.",
-    "en": "This motherboard supports DDR5 RAM.",
-    "hanzi_source": "主板"
-  },
-  {
-    "id": "sent_0082",
-    "zh": "十六G内存就够了。",
-    "pinyin": "Shíliù G nèicún jiù gòu le.",
-    "en": "16GB of RAM is enough.",
-    "hanzi_source": "内存"
-  },
-  {
-    "id": "sent_0083",
-    "zh": "内存不够用。",
-    "pinyin": "Nèicún bú gòu yòng.",
-    "en": "The RAM isn’t enough.",
-    "hanzi_source": "内存"
-  },
-  {
-    "id": "sent_0084",
-    "zh": "我的硬盘满了。",
-    "pinyin": "Wǒ de yìngpán mǎn le.",
-    "en": "My hard drive is full.",
-    "hanzi_source": "硬盘"
-  },
-  {
-    "id": "sent_0085",
-    "zh": "换一个大硬盘。",
-    "pinyin": "Huàn yí ge dà yìngpán.",
-    "en": "Swap for a bigger hard drive.",
-    "hanzi_source": "硬盘"
-  },
-  {
-    "id": "sent_0086",
-    "zh": "固态硬盘开机很快。",
-    "pinyin": "Gùtài yìngpán kāijī hěn kuài.",
-    "en": "An SSD boots up very fast.",
-    "hanzi_source": "固态硬盘"
-  },
-  {
-    "id": "sent_0087",
-    "zh": "我把系统装在固态硬盘上。",
-    "pinyin": "Wǒ bǎ xìtǒng zhuāng zài gùtài yìngpán shàng.",
-    "en": "I installed the system on the SSD.",
-    "hanzi_source": "固态硬盘"
-  },
-  {
-    "id": "sent_0088",
-    "zh": "电源坏了电脑就开不了机。",
-    "pinyin": "Diànyuán huài le diànnǎo jiù kāi bù liǎo jī.",
-    "en": "If the PSU breaks, the PC won’t turn on.",
-    "hanzi_source": "电源"
-  },
-  {
-    "id": "sent_0089",
-    "zh": "买电源要看功率。",
-    "pinyin": "Mǎi diànyuán yào kàn gōnglǜ.",
-    "en": "When buying a power supply, check the wattage.",
-    "hanzi_source": "电源"
-  },
-  {
-    "id": "sent_0090",
-    "zh": "这个机箱很漂亮。",
-    "pinyin": "Zhège jīxiāng hěn piàoliang.",
-    "en": "This case is very pretty.",
-    "hanzi_source": "机箱"
-  },
-  {
-    "id": "sent_0091",
-    "zh": "我把主板放进机箱里。",
-    "pinyin": "Wǒ bǎ zhǔbǎn fàng jìn jīxiāng lǐ.",
-    "en": "I put the motherboard into the case.",
-    "hanzi_source": "机箱"
-  },
-  {
-    "id": "sent_0092",
-    "zh": "风扇噪音很大。",
-    "pinyin": "Fēngshàn zàoyīn hěn dà.",
-    "en": "The fan is very loud.",
-    "hanzi_source": "风扇"
-  },
-  {
-    "id": "sent_0093",
-    "zh": "机箱里装了三个风扇。",
-    "pinyin": "Jīxiāng lǐ zhuāng le sān ge fēngshàn.",
-    "en": "Three fans are installed in the case.",
-    "hanzi_source": "风扇"
-  },
-  {
-    "id": "sent_0094",
-    "zh": "散热器上涂了硅脂。",
-    "pinyin": "Sànrèqì shàng tú le guīzhī.",
-    "en": "Thermal paste is applied on the heatsink.",
-    "hanzi_source": "散热器"
-  },
-  {
-    "id": "sent_0095",
-    "zh": "CPU需要好的散热器。",
-    "pinyin": "CPU xūyào hǎo de sànrèqì.",
-    "en": "The CPU needs a good cooler.",
-    "hanzi_source": "散热器"
-  },
-  {
-    "id": "sent_0096",
-    "zh": "用螺丝刀拧螺丝。",
-    "pinyin": "Yòng luósīdāo níng luósī.",
-    "en": "Use a screwdriver to turn the screws.",
-    "hanzi_source": "螺丝刀"
-  },
-  {
-    "id": "sent_0097",
-    "zh": "十字螺丝刀很常用。",
-    "pinyin": "Shízì luósīdāo hěn chángyòng.",
-    "en": "Phillips screwdrivers are very common.",
-    "hanzi_source": "螺丝刀"
-  },
-  {
-    "id": "sent_0098",
-    "zh": "显卡插在PCIe插槽上。",
-    "pinyin": "Xiǎnkǎ chā zài PCIe chācáo shàng.",
-    "en": "The graphics card plugs into the PCIe slot.",
-    "hanzi_source": "插槽"
-  },
-  {
-    "id": "sent_0099",
-    "zh": "内存插槽有四个。",
-    "pinyin": "Nèicún chācáo yǒu sì ge.",
-    "en": "There are four RAM slots.",
-    "hanzi_source": "插槽"
-  },
-  {
-    "id": "sent_0100",
-    "zh": "USB接口很方便。",
-    "pinyin": "USB jiēkǒu hěn fāngbiàn.",
-    "en": "USB ports are very convenient.",
-    "hanzi_source": "接口"
-  },
-  {
-    "id": "sent_0101",
-    "zh": "这个接口坏了。",
-    "pinyin": "Zhège jiēkǒu huài le.",
-    "en": "This port is broken.",
-    "hanzi_source": "接口"
-  },
-  {
-    "id": "sent_0102",
-    "zh": "电缆太短了。",
-    "pinyin": "Diànlǎn tài duǎn le.",
-    "en": "The cable is too short.",
-    "hanzi_source": "电缆"
-  },
-  {
-    "id": "sent_0103",
-    "zh": "整理电缆可以改善散热。",
-    "pinyin": "Zhěnglǐ diànlǎn kěyǐ gǎishàn sànrè.",
-    "en": "Managing cables improves cooling.",
-    "hanzi_source": "电缆"
-  },
-  {
-    "id": "sent_0104",
-    "zh": "电脑开不了机。",
-    "pinyin": "Diànnǎo kāi bù liǎo jī.",
-    "en": "The PC won’t power on.",
-    "hanzi_source": "开机"
-  },
-  {
-    "id": "sent_0105",
-    "zh": "开机以后要输密码。",
-    "pinyin": "Kāijī yǐhòu yào shū mìmǎ.",
-    "en": "After powering on, you need to enter the password.",
-    "hanzi_source": "开机"
-  },
-  {
-    "id": "sent_0106",
-    "zh": "别忘了关机。",
-    "pinyin": "Bié wàng le guānjī.",
-    "en": "Don’t forget to shut down.",
-    "hanzi_source": "关机"
-  },
-  {
-    "id": "sent_0107",
-    "zh": "电脑自动关机了。",
-    "pinyin": "Diànnǎo zìdòng guānjī le.",
-    "en": "The computer shut down automatically.",
-    "hanzi_source": "关机"
-  },
-  {
-    "id": "sent_0108",
-    "zh": "更新以后需要重启电脑。",
-    "pinyin": "Gēngxīn yǐhòu xūyào chóngqǐ diànnǎo.",
-    "en": "You need to restart after an update.",
-    "hanzi_source": "重启"
-  },
-  {
-    "id": "sent_0109",
-    "zh": "我的电脑卡住了，我重启了一下。",
-    "pinyin": "Wǒ de diànnǎo kǎ zhù le, wǒ chóngqǐ le yīxià.",
-    "en": "My PC froze, so I restarted it.",
-    "hanzi_source": "重启"
-  },
-  {
-    "id": "sent_0110",
-    "zh": "我的工作很忙。",
-    "pinyin": "Wǒ de gōngzuò hěn máng.",
-    "en": "My job is very busy.",
-    "hanzi_source": "工作"
-  },
-  {
-    "id": "sent_0111",
-    "zh": "你在哪儿工作？",
-    "pinyin": "Nǐ zài nǎr gōngzuò?",
-    "en": "Where do you work?",
-    "hanzi_source": "工作"
-  },
-  {
-    "id": "sent_0112",
-    "zh": "以后我想当医生。",
-    "pinyin": "Yǐhòu wǒ xiǎng dāng yīshēng.",
-    "en": "In the future I want to be a doctor.",
-    "hanzi_source": "以后"
-  },
-  {
-    "id": "sent_0113",
-    "zh": "我们以后再见。",
-    "pinyin": "Wǒmen yǐhòu zàijiàn.",
-    "en": "See you later.",
-    "hanzi_source": "以后"
-  },
-  {
-    "id": "sent_0114",
-    "zh": "我想学汉语。",
-    "pinyin": "Wǒ xiǎng xué Hànyǔ.",
-    "en": "I want to learn Chinese.",
-    "hanzi_source": "想"
-  },
-  {
-    "id": "sent_0115",
-    "zh": "你想吃什么？",
-    "pinyin": "Nǐ xiǎng chī shénme?",
-    "en": "What would you like to eat?",
-    "hanzi_source": "想"
-  },
-  {
-    "id": "sent_0116",
-    "zh": "你做什么工作？",
-    "pinyin": "Nǐ zuò shénme gōngzuò?",
-    "en": "What job do you do?",
-    "hanzi_source": "做"
-  },
-  {
-    "id": "sent_0117",
-    "zh": "我想做老师。",
-    "pinyin": "Wǒ xiǎng zuò lǎoshī.",
-    "en": "I want to be a teacher.",
-    "hanzi_source": "做"
-  },
-  {
-    "id": "sent_0118",
-    "zh": "你叫什么名字？",
-    "pinyin": "Nǐ jiào shénme míngzi?",
-    "en": "What is your name?",
-    "hanzi_source": "什么"
-  },
-  {
-    "id": "sent_0119",
-    "zh": "你想做什么？",
-    "pinyin": "Nǐ xiǎng zuò shénme?",
-    "en": "What do you want to do?",
-    "hanzi_source": "什么"
-  },
-  {
-    "id": "sent_0120",
-    "zh": "请填写这张表格。",
-    "pinyin": "Qǐng tiánxiě zhè zhāng biǎogé.",
-    "en": "Please fill out this form.",
-    "hanzi_source": "表格"
-  },
-  {
-    "id": "sent_0121",
-    "zh": "表格里有很多信息。",
-    "pinyin": "Biǎogé lǐ yǒu hěn duō xìnxī.",
-    "en": "There is a lot of information in the form.",
-    "hanzi_source": "表格"
-  },
-  {
-    "id": "sent_0122",
-    "zh": "李老师教中文。",
-    "pinyin": "Lǐ lǎoshī jiāo Zhōngwén.",
-    "en": "Teacher Li teaches Chinese.",
-    "hanzi_source": "老师"
-  },
-  {
-    "id": "sent_0123",
-    "zh": "我想当老师。",
-    "pinyin": "Wǒ xiǎng dāng lǎoshī.",
-    "en": "I want to be a teacher.",
-    "hanzi_source": "老师"
-  },
-  {
-    "id": "sent_0124",
-    "zh": "医生很辛苦。",
-    "pinyin": "Yīshēng hěn xīnkǔ.",
-    "en": "Doctors work very hard.",
-    "hanzi_source": "医生"
-  },
-  {
-    "id": "sent_0125",
-    "zh": "生病了要去看医生。",
-    "pinyin": "Shēngbìng le yào qù kàn yīshēng.",
-    "en": "If you’re sick, go see a doctor.",
-    "hanzi_source": "医生"
-  },
-  {
-    "id": "sent_0126",
-    "zh": "我爸爸是软件工程师。",
-    "pinyin": "Wǒ bàba shì ruǎnjiàn gōngchéngshī.",
-    "en": "My dad is a software engineer.",
-    "hanzi_source": "工程师"
-  },
-  {
-    "id": "sent_0127",
-    "zh": "工程师需要会设计。",
-    "pinyin": "Gōngchéngshī xūyào huì shèjì.",
-    "en": "Engineers need to know design.",
-    "hanzi_source": "工程师"
-  },
-  {
-    "id": "sent_0128",
-    "zh": "中国很大。",
-    "pinyin": "Zhōngguó hěn dà.",
-    "en": "China is very big.",
-    "hanzi_source": "中国"
-  },
-  {
-    "id": "sent_0129",
     "zh": "我来自中国。",
     "pinyin": "Wǒ láizì Zhōngguó.",
     "en": "I come from China.",
     "hanzi_source": "中国"
   },
   {
-    "id": "sent_0130",
-    "zh": "一年有十二个月。",
-    "pinyin": "Yī nián yǒu shí’èr ge yuè.",
-    "en": "One year has twelve months.",
-    "hanzi_source": "一年"
+    "id": "sent_0005",
+    "zh": "中国很大。",
+    "pinyin": "Zhōngguó hěn dà.",
+    "en": "China is very big.",
+    "hanzi_source": "中国"
   },
   {
-    "id": "sent_0131",
-    "zh": "他在中国待了一年。",
-    "pinyin": "Tā zài Zhōngguó dāi le yī nián.",
-    "en": "He stayed in China for one year.",
-    "hanzi_source": "一年"
+    "id": "sent_0006",
+    "zh": "她是中国人。",
+    "pinyin": "Tā shì Zhōngguórén.",
+    "en": "She is Chinese.",
+    "hanzi_source": "中国人"
   },
   {
-    "id": "sent_0132",
-    "zh": "我有一只猫。",
-    "pinyin": "Wǒ yǒu yī zhī māo.",
-    "en": "I have a cat.",
-    "hanzi_source": "有"
+    "id": "sent_0007",
+    "zh": "我不是中国人。",
+    "pinyin": "Wǒ bú shì Zhōngguórén.",
+    "en": "I am not Chinese.",
+    "hanzi_source": "中国人"
   },
   {
-    "id": "sent_0133",
-    "zh": "教室里有很多桌子。",
-    "pinyin": "Jiàoshì lǐ yǒu hěn duō zhuōzi.",
-    "en": "There are many desks in the classroom.",
-    "hanzi_source": "有"
+    "id": "sent_0008",
+    "zh": "你是老师吗？",
+    "pinyin": "Nǐ shì lǎoshī ma?",
+    "en": "Are you a teacher?",
+    "hanzi_source": "吗"
   },
   {
-    "id": "sent_0134",
-    "zh": "你有几个朋友？",
-    "pinyin": "Nǐ yǒu jǐ ge péngyou?",
-    "en": "How many friends do you have?",
-    "hanzi_source": "几个"
+    "id": "sent_0009",
+    "zh": "这是你的书吗？",
+    "pinyin": "Zhè shì nǐ de shū ma?",
+    "en": "Is this your book?",
+    "hanzi_source": "吗"
   },
   {
-    "id": "sent_0135",
-    "zh": "几个都可以。",
-    "pinyin": "Jǐ ge dōu kěyǐ.",
-    "en": "Any number (of them) is fine.",
-    "hanzi_source": "几个"
+    "id": "sent_0010",
+    "zh": "我是学生。",
+    "pinyin": "Wǒ shì xuésheng.",
+    "en": "I am a student.",
+    "hanzi_source": "我"
   },
   {
-    "id": "sent_0136",
-    "zh": "一年有四个季节。",
-    "pinyin": "Yī nián yǒu sì ge jìjié.",
-    "en": "There are four seasons in a year.",
-    "hanzi_source": "季节"
+    "id": "sent_0011",
+    "zh": "这是我的手机。",
+    "pinyin": "Zhè shì wǒ de shǒujī.",
+    "en": "This is my phone.",
+    "hanzi_source": "我"
   },
   {
-    "id": "sent_0137",
-    "zh": "你最喜欢哪个季节？",
-    "pinyin": "Nǐ zuì xǐhuan nǎ ge jìjié?",
-    "en": "Which season do you like best?",
-    "hanzi_source": "季节"
+    "id": "sent_0012",
+    "zh": "他是我的老师。",
+    "pinyin": "Tā shì wǒ de lǎoshī.",
+    "en": "He is my teacher.",
+    "hanzi_source": "老师"
   },
   {
-    "id": "sent_0138",
-    "zh": "四个学生迟到了。",
-    "pinyin": "Sì ge xuésheng chídào le.",
-    "en": "Four students were late.",
-    "hanzi_source": "四个"
+    "id": "sent_0013",
+    "zh": "老师，你好！",
+    "pinyin": "Lǎoshī, nǐ hǎo!",
+    "en": "Hello, teacher!",
+    "hanzi_source": "老师"
   },
   {
-    "id": "sent_0139",
-    "zh": "我要买四个苹果。",
-    "pinyin": "Wǒ yào mǎi sì ge píngguǒ.",
-    "en": "I want to buy four apples.",
-    "hanzi_source": "四个"
+    "id": "sent_0014",
+    "zh": "我不是学生。",
+    "pinyin": "Wǒ bú shì xuésheng.",
+    "en": "I am not a student.",
+    "hanzi_source": "不"
   },
   {
-    "id": "sent_0140",
-    "zh": "春天花开了。",
-    "pinyin": "Chūntiān huā kāi le.",
-    "en": "Flowers bloom in spring.",
-    "hanzi_source": "春天"
+    "id": "sent_0015",
+    "zh": "她不是中国人。",
+    "pinyin": "Tā bú shì Zhōngguórén.",
+    "en": "She is not Chinese.",
+    "hanzi_source": "不"
   },
   {
-    "id": "sent_0141",
-    "zh": "春天不冷不热。",
-    "pinyin": "Chūntiān bù lěng bù rè.",
-    "en": "Spring is neither cold nor hot.",
-    "hanzi_source": "春天"
+    "id": "sent_0016",
+    "zh": "我是学生。",
+    "pinyin": "Wǒ shì xuésheng.",
+    "en": "I am a student.",
+    "hanzi_source": "学生"
   },
   {
-    "id": "sent_0142",
-    "zh": "夏天很热。",
-    "pinyin": "Xiàtiān hěn rè.",
-    "en": "Summer is very hot.",
-    "hanzi_source": "夏天"
+    "id": "sent_0017",
+    "zh": "他们是我的学生。",
+    "pinyin": "Tāmen shì wǒ de xuésheng.",
+    "en": "They are my students.",
+    "hanzi_source": "学生"
   },
   {
-    "id": "sent_0143",
-    "zh": "夏天我喜欢游泳。",
-    "pinyin": "Xiàtiān wǒ xǐhuan yóuyǒng.",
-    "en": "In summer I like to swim.",
-    "hanzi_source": "夏天"
+    "id": "sent_0018",
+    "zh": "他是谁？",
+    "pinyin": "Tā shì shéi?",
+    "en": "Who is he?",
+    "hanzi_source": "他"
   },
   {
-    "id": "sent_0144",
-    "zh": "秋天树叶变黄了。",
-    "pinyin": "Qiūtiān shùyè biàn huáng le.",
-    "en": "Leaves turn yellow in autumn.",
-    "hanzi_source": "秋天"
+    "id": "sent_0019",
+    "zh": "他是我的老师。",
+    "pinyin": "Tā shì wǒ de lǎoshī.",
+    "en": "He is my teacher.",
+    "hanzi_source": "他"
   },
   {
-    "id": "sent_0145",
-    "zh": "秋天是收获的季节。",
-    "pinyin": "Qiūtiān shì shōuhuò de jìjié.",
-    "en": "Autumn is the harvest season.",
-    "hanzi_source": "秋天"
+    "id": "sent_0020",
+    "zh": "这是谁？",
+    "pinyin": "Zhè shì shéi?",
+    "en": "Who is this?",
+    "hanzi_source": "谁"
   },
   {
-    "id": "sent_0146",
-    "zh": "冬天很冷。",
-    "pinyin": "Dōngtiān hěn lěng.",
-    "en": "Winter is very cold.",
-    "hanzi_source": "冬天"
+    "id": "sent_0021",
+    "zh": "谁是你的老师？",
+    "pinyin": "Shéi shì nǐ de lǎoshī?",
+    "en": "Who is your teacher?",
+    "hanzi_source": "谁"
   },
   {
-    "id": "sent_0147",
-    "zh": "冬天会下雪。",
-    "pinyin": "Dōngtiān huì xià xuě.",
-    "en": "It snows in winter.",
-    "hanzi_source": "冬天"
+    "id": "sent_0022",
+    "zh": "这是我的书。",
+    "pinyin": "Zhè shì wǒ de shū.",
+    "en": "This is my book.",
+    "hanzi_source": "我的"
   },
   {
-    "id": "sent_0148",
-    "zh": "你什么时候来？",
-    "pinyin": "Nǐ shénme shíhou lái?",
-    "en": "When are you coming?",
-    "hanzi_source": "什么时候"
+    "id": "sent_0023",
+    "zh": "那是我的手机。",
+    "pinyin": "Nà shì wǒ de shǒujī.",
+    "en": "That is my phone.",
+    "hanzi_source": "我的"
   },
   {
-    "id": "sent_0149",
-    "zh": "他什么时候走的？",
-    "pinyin": "Tā shénme shíhou zǒu de?",
-    "en": "When did he leave?",
-    "hanzi_source": "什么时候"
+    "id": "sent_0024",
+    "zh": "这是我的书。",
+    "pinyin": "Zhè shì wǒ de shū.",
+    "en": "This is my book.",
+    "hanzi_source": "这"
   },
   {
-    "id": "sent_0150",
-    "zh": "三月是春天。",
-    "pinyin": "Sānyuè shì chūntiān.",
-    "en": "March is spring.",
-    "hanzi_source": "三月"
+    "id": "sent_0025",
+    "zh": "这是谁？",
+    "pinyin": "Zhè shì shéi?",
+    "en": "Who is this?",
+    "hanzi_source": "这"
   },
   {
-    "id": "sent_0151",
-    "zh": "我三月生日。",
-    "pinyin": "Wǒ sānyuè shēngrì.",
-    "en": "My birthday is in March.",
-    "hanzi_source": "三月"
+    "id": "sent_0026",
+    "zh": "你们好！",
+    "pinyin": "Nǐmen hǎo!",
+    "en": "Hello everyone!",
+    "hanzi_source": "你们"
   },
   {
-    "id": "sent_0152",
-    "zh": "五月一号是劳动节。",
-    "pinyin": "Wǔyuè yī hào shì Láodòngjié.",
-    "en": "May 1st is Labor Day.",
-    "hanzi_source": "五月"
+    "id": "sent_0027",
+    "zh": "你们是学生吗？",
+    "pinyin": "Nǐmen shì xuésheng ma?",
+    "en": "Are you (all) students?",
+    "hanzi_source": "你们"
   },
   {
-    "id": "sent_0153",
-    "zh": "我们五月考试。",
-    "pinyin": "Wǒmen wǔyuè kǎoshì.",
-    "en": "We have exams in May.",
-    "hanzi_source": "五月"
+    "id": "sent_0028",
+    "zh": "这是我的书。",
+    "pinyin": "Zhè shì wǒ de shū.",
+    "en": "This is my book.",
+    "hanzi_source": "书"
   },
   {
-    "id": "sent_0154",
-    "zh": "从周一到周五。",
-    "pinyin": "Cóng Zhōuyī dào Zhōuwǔ.",
-    "en": "From Monday to Friday.",
-    "hanzi_source": "到"
+    "id": "sent_0029",
+    "zh": "那本书是你的吗？",
+    "pinyin": "Nà běn shū shì nǐ de ma?",
+    "en": "Is that book yours?",
+    "hanzi_source": "书"
   },
   {
-    "id": "sent_0155",
-    "zh": "走到学校要十分钟。",
-    "pinyin": "Zǒu dào xuéxiào yào shí fēnzhōng.",
-    "en": "Walking to school takes ten minutes.",
-    "hanzi_source": "到"
+    "id": "sent_0030",
+    "zh": "我们是学生。",
+    "pinyin": "Wǒmen shì xuésheng.",
+    "en": "We are students.",
+    "hanzi_source": "我们"
   },
   {
-    "id": "sent_0156",
-    "zh": "三维打印可以制造玩具。",
-    "pinyin": "Sānwéi dǎyìn kěyǐ zhìzào wánjù.",
-    "en": "3D printing can make toys.",
-    "hanzi_source": "三维打印"
+    "id": "sent_0031",
+    "zh": "这是我们的书。",
+    "pinyin": "Zhè shì wǒmen de shū.",
+    "en": "This is our book.",
+    "hanzi_source": "我们"
   },
   {
-    "id": "sent_0157",
-    "zh": "我在学习三维打印技术。",
-    "pinyin": "Wǒ zài xuéxí sānwéi dǎyìn jìshù.",
-    "en": "I am learning 3D printing technology.",
-    "hanzi_source": "三维打印"
+    "id": "sent_0032",
+    "zh": "那是你的手机吗？",
+    "pinyin": "Nà shì nǐ de shǒujī ma?",
+    "en": "Is that your phone?",
+    "hanzi_source": "那"
   },
   {
-    "id": "sent_0158",
-    "zh": "打印机没纸了。",
-    "pinyin": "Dǎyìnjī méi zhǐ le.",
-    "en": "The printer is out of paper.",
-    "hanzi_source": "打印机"
+    "id": "sent_0033",
+    "zh": "那是我的朋友。",
+    "pinyin": "Nà shì wǒ de péngyou.",
+    "en": "That is my friend.",
+    "hanzi_source": "那"
   },
   {
-    "id": "sent_0159",
-    "zh": "这台打印机很慢。",
-    "pinyin": "Zhè tái dǎyìnjī hěn màn.",
-    "en": "This printer is very slow.",
-    "hanzi_source": "打印机"
+    "id": "sent_0034",
+    "zh": "这是你的书吗？",
+    "pinyin": "Zhè shì nǐ de shū ma?",
+    "en": "Is this your book?",
+    "hanzi_source": "你的"
   },
   {
-    "id": "sent_0160",
-    "zh": "熔融沉积成型是最常见的三维打印技术。",
-    "pinyin": "Róngróng chénjī chéngxíng shì zuì chángjiàn de sānwéi dǎyìn jìshù.",
-    "en": "FDM is the most common 3D printing technology.",
-    "hanzi_source": "熔融沉积成型"
+    "id": "sent_0035",
+    "zh": "那是你的朋友。",
+    "pinyin": "Nà shì nǐ de péngyou.",
+    "en": "That is your friend.",
+    "hanzi_source": "你的"
   },
   {
-    "id": "sent_0161",
-    "zh": "我的打印机使用熔融沉积成型。",
-    "pinyin": "Wǒ de dǎyìnjī shǐyòng róngróng chénjī chéngxíng.",
-    "en": "My printer uses FDM.",
-    "hanzi_source": "熔融沉积成型"
+    "id": "sent_0036",
+    "zh": "那是你的手机吗？",
+    "pinyin": "Nà shì nǐ de shǒujī ma?",
+    "en": "Is that your phone?",
+    "hanzi_source": "手机"
   },
   {
-    "id": "sent_0162",
-    "zh": "喷嘴堵住了。",
-    "pinyin": "Pēnzuǐ dǔ zhù le.",
-    "en": "The nozzle is clogged.",
-    "hanzi_source": "喷嘴"
+    "id": "sent_0037",
+    "zh": "我的手机在这儿。",
+    "pinyin": "Wǒ de shǒujī zài zhèr.",
+    "en": "My phone is here.",
+    "hanzi_source": "手机"
   },
   {
-    "id": "sent_0163",
-    "zh": "换一个更细的喷嘴。",
-    "pinyin": "Huàn yí ge gèng xì de pēnzuǐ.",
-    "en": "Swap to a finer nozzle.",
-    "hanzi_source": "喷嘴"
+    "id": "sent_0038",
+    "zh": "这是我的朋友。",
+    "pinyin": "Zhè shì wǒ de péngyou.",
+    "en": "This is my friend.",
+    "hanzi_source": "朋友"
   },
   {
-    "id": "sent_0164",
-    "zh": "热床可以防止翘曲。",
-    "pinyin": "Rèchuáng kěyǐ fángzhǐ qiàoqū.",
-    "en": "The heated bed prevents warping.",
-    "hanzi_source": "热床"
+    "id": "sent_0039",
+    "zh": "她是我朋友的朋友。",
+    "pinyin": "Tā shì wǒ péngyou de péngyou.",
+    "en": "She is my friend's friend.",
+    "hanzi_source": "朋友"
   },
   {
-    "id": "sent_0165",
-    "zh": "打印前要把热床调平。",
-    "pinyin": "Dǎyìn qián yào bǎ rèchuáng tiáopíng.",
-    "en": "Level the heated bed before printing.",
-    "hanzi_source": "热床"
+    "id": "sent_0040",
+    "zh": "她是谁？",
+    "pinyin": "Tā shì shéi?",
+    "en": "Who is she?",
+    "hanzi_source": "她"
   },
   {
-    "id": "sent_0166",
-    "zh": "喷头温度太高了。",
-    "pinyin": "Pēntóu wēndù tài gāo le.",
-    "en": "The extruder temperature is too high.",
-    "hanzi_source": "喷头"
+    "id": "sent_0041",
+    "zh": "她是我的朋友。",
+    "pinyin": "Tā shì wǒ de péngyou.",
+    "en": "She is my friend.",
+    "hanzi_source": "她"
   },
   {
-    "id": "sent_0167",
-    "zh": "清理喷头里的残留塑料。",
-    "pinyin": "Qīnglǐ pēntóu lǐ de cánliú sùliào.",
-    "en": "Clean the leftover plastic in the extruder.",
-    "hanzi_source": "喷头"
+    "id": "sent_0042",
+    "zh": "你去学校吗？",
+    "pinyin": "Nǐ qù xuéxiào ma?",
+    "en": "Are you going to school?",
+    "hanzi_source": "去"
   },
   {
-    "id": "sent_0168",
-    "zh": "我买了新的耗材。",
-    "pinyin": "Wǒ mǎi le xīn de hàocái.",
-    "en": "I bought new filament.",
-    "hanzi_source": "耗材"
+    "id": "sent_0043",
+    "zh": "我去中国学习汉语。",
+    "pinyin": "Wǒ qù Zhōngguó xuéxí Hànyǔ.",
+    "en": "I'm going to China to study Chinese.",
+    "hanzi_source": "去"
   },
   {
-    "id": "sent_0169",
-    "zh": "哪种耗材最结实？",
-    "pinyin": "Nǎ zhǒng hàocái zuì jiēshi?",
-    "en": "Which filament is strongest?",
-    "hanzi_source": "耗材"
+    "id": "sent_0044",
+    "zh": "我去学校。",
+    "pinyin": "Wǒ qù xuéxiào.",
+    "en": "I'm going to school.",
+    "hanzi_source": "学校"
   },
   {
-    "id": "sent_0170",
-    "zh": "聚乳酸是最常用的材料。",
-    "pinyin": "Jùrǔsuān shì zuì chángyòng de cáiliào.",
-    "en": "PLA is the most commonly used material.",
-    "hanzi_source": "聚乳酸"
+    "id": "sent_0045",
+    "zh": "这是一所大学校。",
+    "pinyin": "Zhè shì yī suǒ dà xuéxiào.",
+    "en": "This is a big school.",
+    "hanzi_source": "学校"
   },
   {
-    "id": "sent_0171",
-    "zh": "聚乳酸容易打印。",
-    "pinyin": "Jùrǔsuān róngyì dǎyìn.",
-    "en": "PLA is easy to print.",
-    "hanzi_source": "聚乳酸"
+    "id": "sent_0046",
+    "zh": "对，我去学校。",
+    "pinyin": "Duì, wǒ qù xuéxiào.",
+    "en": "Right, I'm going to school.",
+    "hanzi_source": "对"
   },
   {
-    "id": "sent_0172",
-    "zh": "丙烯腈丁二烯苯乙烯比聚乳酸更结实。",
-    "pinyin": "Bǐngxījīng dīngèrxī běnyǐxī bǐ jùrǔsuān gèng jiēshi.",
-    "en": "ABS is stronger than PLA.",
-    "hanzi_source": "丙烯腈丁二烯苯乙烯"
+    "id": "sent_0047",
+    "zh": "你说得对。",
+    "pinyin": "Nǐ shuō de duì.",
+    "en": "You're right.",
+    "hanzi_source": "对"
   },
   {
-    "id": "sent_0173",
-    "zh": "打印丙烯腈丁二烯苯乙烯需要通风。",
-    "pinyin": "Dǎyìn bǐngxījīng dīngèrxī běnyǐxī xūyào tōngfēng.",
-    "en": "Printing ABS needs ventilation.",
-    "hanzi_source": "丙烯腈丁二烯苯乙烯"
-  },
-  {
-    "id": "sent_0174",
-    "zh": "层高越小打印越慢。",
-    "pinyin": "Cénggāo yuè xiǎo dǎyìn yuè màn.",
-    "en": "The smaller the layer height, the slower the print.",
-    "hanzi_source": "层高"
-  },
-  {
-    "id": "sent_0175",
-    "zh": "0.2毫米的层高很常用。",
-    "pinyin": "0.2 háomǐ de cénggāo hěn chángyòng.",
-    "en": "0.2mm layer height is very common.",
-    "hanzi_source": "层高"
-  },
-  {
-    "id": "sent_0176",
-    "zh": "百分之二十的填充就够了。",
-    "pinyin": "Bǎi fēn zhī èrshí de tiánchōng jiù gòu le.",
-    "en": "20% infill is enough.",
-    "hanzi_source": "填充"
-  },
-  {
-    "id": "sent_0177",
-    "zh": "填充密度越高越结实。",
-    "pinyin": "Tiánchōng mìdù yuè gāo yuè jiēshi.",
-    "en": "The higher the infill density, the stronger it is.",
-    "hanzi_source": "填充"
-  },
-  {
-    "id": "sent_0178",
-    "zh": "悬空的部分需要支撑。",
-    "pinyin": "Xuánkōng de bùfen xūyào zhīchēng.",
-    "en": "Overhanging parts need supports.",
-    "hanzi_source": "支撑"
-  },
-  {
-    "id": "sent_0179",
-    "zh": "支撑很难拆掉。",
-    "pinyin": "Zhīchēng hěn nán chāi diào.",
-    "en": "Supports are hard to remove.",
-    "hanzi_source": "支撑"
-  },
-  {
-    "id": "sent_0180",
-    "zh": "把模型导入切片软件。",
-    "pinyin": "Bǎ móxíng dǎorù qiēpiàn ruǎnjiàn.",
-    "en": "Import the model into the slicer.",
-    "hanzi_source": "切片软件"
-  },
-  {
-    "id": "sent_0181",
-    "zh": "切片软件可以设置层高和填充。",
-    "pinyin": "Qiēpiàn ruǎnjiàn kěyǐ shèzhì cénggāo hé tiánchōng.",
-    "en": "The slicer can set layer height and infill.",
-    "hanzi_source": "切片软件"
-  },
-  {
-    "id": "sent_0182",
-    "zh": "打印床要干净。",
-    "pinyin": "Dǎyìn chuáng yào gānjìng.",
-    "en": "The print bed needs to be clean.",
-    "hanzi_source": "打印床"
-  },
-  {
-    "id": "sent_0183",
-    "zh": "模型粘在打印床上了。",
-    "pinyin": "Móxíng zhān zài dǎyìn chuáng shàng le.",
-    "en": "The model stuck to the print bed.",
-    "hanzi_source": "打印床"
-  },
-  {
-    "id": "sent_0184",
-    "zh": "第一层的粘附很重要。",
-    "pinyin": "Dì-yī céng de zhānfù hěn zhòngyào.",
-    "en": "First layer adhesion is very important.",
-    "hanzi_source": "粘附"
-  },
-  {
-    "id": "sent_0185",
-    "zh": "用胶水可以增强粘附。",
-    "pinyin": "Yòng jiāoshuǐ kěyǐ zēngqiáng zhānfù.",
-    "en": "Using glue can improve adhesion.",
-    "hanzi_source": "粘附"
-  },
-  {
-    "id": "sent_0186",
-    "zh": "翘曲会导致打印失败。",
-    "pinyin": "Qiàoqū huì dǎozhì dǎyìn shībài.",
-    "en": "Warping will cause the print to fail.",
-    "hanzi_source": "翘曲"
-  },
-  {
-    "id": "sent_0187",
-    "zh": "热床可以减少翘曲。",
-    "pinyin": "Rèchuáng kěyǐ jiǎnshǎo qiàoqū.",
-    "en": "A heated bed reduces warping.",
-    "hanzi_source": "翘曲"
-  },
-  {
-    "id": "sent_0188",
-    "zh": "拉丝很影响外观。",
-    "pinyin": "Lāsī hěn yǐngxiǎng wàiguān.",
-    "en": "Stringing affects the appearance a lot.",
-    "hanzi_source": "拉丝"
-  },
-  {
-    "id": "sent_0189",
-    "zh": "降低温度可以减少拉丝。",
-    "pinyin": "Jiàngdī wēndù kěyǐ jiǎnshǎo lāsī.",
-    "en": "Lowering the temperature reduces stringing.",
-    "hanzi_source": "拉丝"
-  },
-  {
-    "id": "sent_0190",
-    "zh": "打印前要先调平。",
-    "pinyin": "Dǎyìn qián yào xiān tiáopíng.",
-    "en": "Level the bed before printing.",
-    "hanzi_source": "调平"
-  },
-  {
-    "id": "sent_0191",
-    "zh": "自动调平很方便。",
-    "pinyin": "Zìdòng tiáopíng hěn fāngbiàn.",
-    "en": "Auto-leveling is very convenient.",
-    "hanzi_source": "调平"
-  },
-  {
-    "id": "sent_0192",
-    "zh": "挤出太慢会缺料。",
-    "pinyin": "Jǐchū tài màn huì quē liào.",
-    "en": "If extrusion is too slow, there will be under-extrusion.",
-    "hanzi_source": "挤出"
-  },
-  {
-    "id": "sent_0193",
-    "zh": "检查挤出是否顺畅。",
-    "pinyin": "Jiǎnchá jǐchū shìfǒu shùnchàng.",
-    "en": "Check if extrusion is smooth.",
-    "hanzi_source": "挤出"
-  },
-  {
-    "id": "sent_0194",
-    "zh": "我下载了一个玩具模型。",
-    "pinyin": "Wǒ xiàzài le yí ge wánjù móxíng.",
-    "en": "I downloaded a toy model.",
-    "hanzi_source": "模型"
-  },
-  {
-    "id": "sent_0195",
-    "zh": "模型不能悬空太多。",
-    "pinyin": "Móxíng bùnéng xuánkōng tài duō.",
-    "en": "The model shouldn’t have too many overhangs.",
-    "hanzi_source": "模型"
-  },
-  {
-    "id": "sent_0196",
-    "zh": "今天天气很好。",
-    "pinyin": "Jīntiān tiānqì hěn hǎo.",
-    "en": "The weather is nice today.",
-    "hanzi_source": "天气"
-  },
-  {
-    "id": "sent_0197",
-    "zh": "你查一下明天的天气。",
-    "pinyin": "Nǐ chá yīxià míngtiān de tiānqì.",
-    "en": "Check tomorrow's weather.",
-    "hanzi_source": "天气"
-  },
-  {
-    "id": "sent_0198",
-    "zh": "天气预报说下午有雨。",
-    "pinyin": "Tiānqì yùbào shuō xiàwǔ yǒu yǔ.",
-    "en": "The weather forecast says rain in the afternoon.",
-    "hanzi_source": "预报"
-  },
-  {
-    "id": "sent_0199",
-    "zh": "你相信天气预报吗？",
-    "pinyin": "Nǐ xiāngxìn tiānqì yùbào ma?",
-    "en": "Do you trust the weather forecast?",
-    "hanzi_source": "预报"
-  },
-  {
-    "id": "sent_0200",
-    "zh": "明天是晴天。",
-    "pinyin": "Míngtiān shì qíngtiān.",
-    "en": "Tomorrow will be sunny.",
-    "hanzi_source": "晴天"
-  },
-  {
-    "id": "sent_0201",
-    "zh": "晴天适合出去玩。",
-    "pinyin": "Qíngtiān shìhé chūqù wán.",
-    "en": "Sunny days are good for going out.",
-    "hanzi_source": "晴天"
-  },
-  {
-    "id": "sent_0202",
-    "zh": "今天会下雨。",
-    "pinyin": "Jīntiān huì xià yǔ.",
-    "en": "It will rain today.",
-    "hanzi_source": "下雨"
-  },
-  {
-    "id": "sent_0203",
-    "zh": "下雨了，记得带伞。",
-    "pinyin": "Xià yǔ le, jìde dài sǎn.",
-    "en": "It's raining, remember to bring an umbrella.",
-    "hanzi_source": "下雨"
-  },
-  {
-    "id": "sent_0204",
-    "zh": "下雨了。",
-    "pinyin": "Xià yǔ le.",
-    "en": "It's raining now (change).",
-    "hanzi_source": "了"
-  },
-  {
-    "id": "sent_0205",
-    "zh": "我吃了饭。",
-    "pinyin": "Wǒ chī le fàn.",
-    "en": "I ate (completion).",
-    "hanzi_source": "了"
-  },
-  {
-    "id": "sent_0206",
-    "zh": "他还没来。",
-    "pinyin": "Tā hái méi lái.",
-    "en": "He still hasn't come.",
-    "hanzi_source": "还"
-  },
-  {
-    "id": "sent_0207",
-    "zh": "我还想再吃一个。",
-    "pinyin": "Wǒ hái xiǎng zài chī yí ge.",
-    "en": "I even want to eat another one.",
-    "hanzi_source": "还"
-  },
-  {
-    "id": "sent_0208",
-    "zh": "我要出去买东西。",
-    "pinyin": "Wǒ yào chūqù mǎi dōngxi.",
-    "en": "I'm going out to buy things.",
-    "hanzi_source": "出去"
-  },
-  {
-    "id": "sent_0209",
-    "zh": "太冷了，不想出去。",
-    "pinyin": "Tài lěng le, bù xiǎng chūqù.",
-    "en": "It's too cold, I don't want to go out.",
-    "hanzi_source": "出去"
-  },
-  {
-    "id": "sent_0210",
-    "zh": "今天三十度。",
-    "pinyin": "Jīntiān sānshí dù.",
-    "en": "Today is 30 degrees.",
-    "hanzi_source": "度"
-  },
-  {
-    "id": "sent_0211",
-    "zh": "水温多少度？",
-    "pinyin": "Shuǐwēn duōshao dù?",
-    "en": "What's the water temperature?",
-    "hanzi_source": "度"
-  },
-  {
-    "id": "sent_0212",
-    "zh": "温度很高。",
-    "pinyin": "Wēndù hěn gāo.",
-    "en": "The temperature is high.",
-    "hanzi_source": "高"
-  },
-  {
-    "id": "sent_0213",
-    "zh": "这座山很高。",
-    "pinyin": "Zhè zuò shān hěn gāo.",
-    "en": "This mountain is very tall.",
-    "hanzi_source": "高"
-  },
-  {
-    "id": "sent_0214",
-    "zh": "室内温度正好。",
-    "pinyin": "Shìnèi wēndù zhènghǎo.",
-    "en": "The indoor temperature is just right.",
-    "hanzi_source": "温度"
-  },
-  {
-    "id": "sent_0215",
-    "zh": "测量一下水温。",
-    "pinyin": "Cèliáng yīxià shuǐwēn.",
-    "en": "Measure the water temperature.",
-    "hanzi_source": "温度"
-  },
-  {
-    "id": "sent_0216",
-    "zh": "气温很低。",
-    "pinyin": "Qìwēn hěn dī.",
-    "en": "The temperature is very low.",
-    "hanzi_source": "低"
-  },
-  {
-    "id": "sent_0217",
-    "zh": "声音太低了。",
-    "pinyin": "Shēngyīn tài dī le.",
-    "en": "The volume is too low.",
-    "hanzi_source": "低"
-  },
-  {
-    "id": "sent_0218",
-    "zh": "冬天零下十度。",
-    "pinyin": "Dōngtiān língxià shí dù.",
-    "en": "In winter it's minus ten degrees.",
-    "hanzi_source": "零下"
-  },
-  {
-    "id": "sent_0219",
-    "zh": "零下的时候会结冰。",
-    "pinyin": "Língxià de shíhou huì jiébīng.",
-    "en": "Below zero it freezes.",
-    "hanzi_source": "零下"
-  },
-  {
-    "id": "sent_0220",
-    "zh": "明天会下雨。",
-    "pinyin": "Míngtiān huì xià yǔ.",
-    "en": "It will likely rain tomorrow.",
+    "id": "sent_0048",
+    "zh": "你会说汉语吗？",
+    "pinyin": "Nǐ huì shuō Hànyǔ ma?",
+    "en": "Can you speak Chinese?",
     "hanzi_source": "会"
   },
   {
-    "id": "sent_0221",
+    "id": "sent_0049",
+    "zh": "我会说英语。",
+    "pinyin": "Wǒ huì shuō Yīngyǔ.",
+    "en": "I can speak English.",
+    "hanzi_source": "会"
+  },
+  {
+    "id": "sent_0050",
+    "zh": "你会说汉语吗？",
+    "pinyin": "Nǐ huì shuō Hànyǔ ma?",
+    "en": "Can you speak Chinese?",
+    "hanzi_source": "说"
+  },
+  {
+    "id": "sent_0051",
+    "zh": "请慢慢说。",
+    "pinyin": "Qǐng mànmàn shuō.",
+    "en": "Please speak slowly.",
+    "hanzi_source": "说"
+  },
+  {
+    "id": "sent_0052",
     "zh": "我会说汉语。",
     "pinyin": "Wǒ huì shuō Hànyǔ.",
     "en": "I can speak Chinese.",
-    "hanzi_source": "会"
+    "hanzi_source": "汉语"
   },
   {
-    "id": "sent_0222",
-    "zh": "北方冬天经常下雪。",
-    "pinyin": "Běifāng dōngtiān jīngcháng xià xuě.",
-    "en": "Northern winters often have snow.",
-    "hanzi_source": "下雪"
+    "id": "sent_0053",
+    "zh": "我来中国学习汉语。",
+    "pinyin": "Wǒ lái Zhōngguó xuéxí Hànyǔ.",
+    "en": "I came to China to study Chinese.",
+    "hanzi_source": "汉语"
   },
   {
-    "id": "sent_0223",
-    "zh": "昨晚下雪了。",
-    "pinyin": "Zuówǎn xià xuě le.",
-    "en": "It snowed last night.",
-    "hanzi_source": "下雪"
-  },
-  {
-    "id": "sent_0224",
-    "zh": "我喜欢游泳。",
-    "pinyin": "Wǒ xǐhuan yóuyǒng.",
-    "en": "I like swimming.",
-    "hanzi_source": "游泳"
-  },
-  {
-    "id": "sent_0225",
-    "zh": "夏天去游泳很舒服。",
-    "pinyin": "Xiàtiān qù yóuyǒng hěn shūfu.",
-    "en": "Swimming in summer is very comfortable.",
-    "hanzi_source": "游泳"
-  },
-  {
-    "id": "sent_0226",
-    "zh": "我能试试吗？",
-    "pinyin": "Wǒ néng shìshi ma?",
-    "en": "Can I try?",
-    "hanzi_source": "能"
-  },
-  {
-    "id": "sent_0227",
-    "zh": "小狗能听懂主人的话。",
-    "pinyin": "Xiǎo gǒu néng tīngdǒng zhǔrén de huà.",
-    "en": "Little dogs can understand their owner's words.",
-    "hanzi_source": "能"
-  },
-  {
-    "id": "sent_0228",
-    "zh": "今天阳光很好。",
-    "pinyin": "Jīntiān yángguāng hěn hǎo.",
-    "en": "The sunshine is nice today.",
-    "hanzi_source": "阳光"
-  },
-  {
-    "id": "sent_0229",
-    "zh": "阳光照在脸上。",
-    "pinyin": "Yángguāng zhào zài liǎn shàng.",
-    "en": "Sunshine shines on the face.",
-    "hanzi_source": "阳光"
-  },
-  {
-    "id": "sent_0230",
-    "zh": "我们约个时间见面吧。",
-    "pinyin": "Wǒmen yuē ge shíjiān jiànmiàn ba.",
-    "en": "Let's arrange a time to meet.",
-    "hanzi_source": "约"
-  },
-  {
-    "id": "sent_0231",
-    "zh": "你约了医生吗？",
-    "pinyin": "Nǐ yuē le yīshēng ma?",
-    "en": "Did you make an appointment with the doctor?",
-    "hanzi_source": "约"
-  },
-  {
-    "id": "sent_0232",
-    "zh": "晚饭后我们去散步。",
-    "pinyin": "Wǎnfàn hòu wǒmen qù sànbù.",
-    "en": "After dinner we go for a walk.",
-    "hanzi_source": "散步"
-  },
-  {
-    "id": "sent_0233",
-    "zh": "散步对身体好。",
-    "pinyin": "Sànbù duì shēntǐ hǎo.",
-    "en": "Walking is good for your health.",
-    "hanzi_source": "散步"
-  },
-  {
-    "id": "sent_0234",
-    "zh": "朋友一起聊天儿很开心。",
-    "pinyin": "Péngyou yīqǐ liáotiānr hěn kāixīn.",
-    "en": "Chatting with friends is very happy.",
-    "hanzi_source": "聊天儿"
-  },
-  {
-    "id": "sent_0235",
-    "zh": "我们聊了一会儿天儿。",
-    "pinyin": "Wǒmen liáo le yīhuǐr tiānr.",
-    "en": "We chatted for a while.",
-    "hanzi_source": "聊天儿"
-  },
-  {
-    "id": "sent_0236",
-    "zh": "喝茶或者咖啡都可以。",
-    "pinyin": "Hē chá huòzhě kāfēi dōu kěyǐ.",
-    "en": "Drinking tea or coffee is fine.",
-    "hanzi_source": "或者"
-  },
-  {
-    "id": "sent_0237",
-    "zh": "你可以今天来，或者明天来。",
-    "pinyin": "Nǐ kěyǐ jīntiān lái, huòzhě míngtiān lái.",
-    "en": "You can come today or tomorrow.",
-    "hanzi_source": "或者"
-  },
-  {
-    "id": "sent_0238",
-    "zh": "我每天骑车上班。",
-    "pinyin": "Wǒ měitiān qí chē shàngbān.",
-    "en": "I ride a bike to work every day.",
-    "hanzi_source": "骑车"
-  },
-  {
-    "id": "sent_0239",
-    "zh": "骑车比走路快。",
-    "pinyin": "Qí chē bǐ zǒulù kuài.",
-    "en": "Riding a bike is faster than walking.",
-    "hanzi_source": "骑车"
-  },
-  {
-    "id": "sent_0240",
-    "zh": "你每天运动吗？",
-    "pinyin": "Nǐ měitiān yùndòng ma?",
-    "en": "Do you exercise every day?",
-    "hanzi_source": "运动"
-  },
-  {
-    "id": "sent_0241",
-    "zh": "跑步是个好运动。",
-    "pinyin": "Pǎobù shì ge hǎo yùndòng.",
-    "en": "Running is a good sport.",
-    "hanzi_source": "运动"
-  },
-  {
-    "id": "sent_0242",
-    "zh": "听音乐可以放松心情。",
-    "pinyin": "Tīng yīnyuè kěyǐ fàngsōng xīnqíng.",
-    "en": "Listening to music can relax your mood.",
-    "hanzi_source": "放松"
-  },
-  {
-    "id": "sent_0243",
-    "zh": "周末好好放松一下。",
-    "pinyin": "Zhōumò hǎohāo fàngsōng yīxià.",
-    "en": "Relax well on the weekend.",
-    "hanzi_source": "放松"
-  },
-  {
-    "id": "sent_0244",
-    "zh": "他可能不来了。",
-    "pinyin": "Tā kěnéng bù lái le.",
-    "en": "He probably isn't coming.",
-    "hanzi_source": "可能"
-  },
-  {
-    "id": "sent_0245",
-    "zh": "这可能是个误会。",
-    "pinyin": "Zhè kěnéng shì ge wùhuì.",
-    "en": "This might be a misunderstanding.",
-    "hanzi_source": "可能"
-  },
-  {
-    "id": "sent_0246",
-    "zh": "如果明天下雨，我们就不去公园。",
-    "pinyin": "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù gōngyuán.",
-    "en": "If it rains tomorrow, we won't go to the park.",
-    "hanzi_source": "如果"
-  },
-  {
-    "id": "sent_0247",
-    "zh": "如果你累了就休息。",
-    "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi.",
-    "en": "If you're tired, rest.",
-    "hanzi_source": "如果"
-  },
-  {
-    "id": "sent_0248",
-    "zh": "我只买了一个。",
-    "pinyin": "Wǒ zhǐ mǎi le yí ge.",
-    "en": "I only bought one.",
-    "hanzi_source": "只"
-  },
-  {
-    "id": "sent_0249",
-    "zh": "他只会说一点汉语。",
-    "pinyin": "Tā zhǐ huì shuō yīdiǎn Hànyǔ.",
-    "en": "He can only speak a little Chinese.",
-    "hanzi_source": "只"
-  },
-  {
-    "id": "sent_0250",
-    "zh": "我每天晚上上网看视频。",
-    "pinyin": "Wǒ měitiān wǎnshàng shàngwǎng kàn shìpín.",
-    "en": "I go online every night to watch videos.",
-    "hanzi_source": "上网"
-  },
-  {
-    "id": "sent_0251",
-    "zh": "少上网对眼睛好。",
-    "pinyin": "Shǎo shàngwǎng duì yǎnjing hǎo.",
-    "en": "Less internet is good for your eyes.",
-    "hanzi_source": "上网"
-  },
-  {
-    "id": "sent_0252",
-    "zh": "我喜欢吃辣，不过不能吃太多。",
-    "pinyin": "Wǒ xǐhuan chī là, búguò bùnéng chī tài duō.",
-    "en": "I like spicy food, but I can't eat too much.",
-    "hanzi_source": "不过"
-  },
-  {
-    "id": "sent_0253",
-    "zh": "他很好，不过有时候很忙。",
-    "pinyin": "Tā hěn hǎo, búguò yǒu shíhou hěn máng.",
-    "en": "He's nice, but sometimes very busy.",
-    "hanzi_source": "不过"
-  },
-  {
-    "id": "sent_0254",
-    "zh": "教室很干净。",
-    "pinyin": "Jiàoshì hěn gānjìng.",
-    "en": "The classroom is very clean.",
-    "hanzi_source": "教室"
-  },
-  {
-    "id": "sent_0255",
-    "zh": "我们在教室上课。",
-    "pinyin": "Wǒmen zài jiàoshì shàngkè.",
-    "en": "We have class in the classroom.",
-    "hanzi_source": "教室"
-  },
-  {
-    "id": "sent_0256",
-    "zh": "书包里面有什么？",
-    "pinyin": "Shūbāo lǐmiàn yǒu shénme?",
-    "en": "What's inside the backpack?",
-    "hanzi_source": "里面"
-  },
-  {
-    "id": "sent_0257",
-    "zh": "教室里面有很多学生。",
-    "pinyin": "Jiàoshì lǐmiàn yǒu hěn duō xuésheng.",
-    "en": "There are many students inside the classroom.",
-    "hanzi_source": "里面"
-  },
-  {
-    "id": "sent_0258",
-    "zh": "冰箱里有什么？",
-    "pinyin": "Bīngxiāng lǐ yǒu shénme?",
-    "en": "What's in the fridge?",
-    "hanzi_source": "有什么"
-  },
-  {
-    "id": "sent_0259",
-    "zh": "你的包里有什么？",
-    "pinyin": "Nǐ de bāo lǐ yǒu shénme?",
-    "en": "What's in your bag?",
-    "hanzi_source": "有什么"
-  },
-  {
-    "id": "sent_0260",
-    "zh": "桌子上有一本书。",
-    "pinyin": "Zhuōzi shàng yǒu yī běn shū.",
-    "en": "There is a book on the desk.",
-    "hanzi_source": "桌子"
-  },
-  {
-    "id": "sent_0261",
-    "zh": "请把椅子放在桌子旁边。",
-    "pinyin": "Qǐng bǎ yǐzi fàng zài zhuōzi pángbiān.",
-    "en": "Please put the chair next to the desk.",
-    "hanzi_source": "桌子"
-  },
-  {
-    "id": "sent_0262",
-    "zh": "这把椅子很舒服。",
-    "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
-    "en": "This chair is very comfortable.",
-    "hanzi_source": "椅子"
-  },
-  {
-    "id": "sent_0263",
-    "zh": "椅子不够，再拿几把。",
-    "pinyin": "Yǐzi bú gòu, zài ná jǐ bǎ.",
-    "en": "There aren't enough chairs, get a few more.",
-    "hanzi_source": "椅子"
-  },
-  {
-    "id": "sent_0264",
-    "zh": "我的电脑坏了。",
-    "pinyin": "Wǒ de diànnǎo huài le.",
-    "en": "My computer is broken.",
-    "hanzi_source": "电脑"
-  },
-  {
-    "id": "sent_0265",
-    "zh": "老师用电脑讲课。",
-    "pinyin": "Lǎoshī yòng diànnǎo jiǎngkè.",
-    "en": "The teacher uses a computer to teach.",
-    "hanzi_source": "电脑"
-  },
-  {
-    "id": "sent_0266",
-    "zh": "教室前面有一块黑板。",
-    "pinyin": "Jiàoshì qiánmiàn yǒu yī kuài hēibǎn.",
-    "en": "In front of the classroom there is a blackboard.",
-    "hanzi_source": "前面"
-  },
-  {
-    "id": "sent_0267",
-    "zh": "我坐在他的前面。",
-    "pinyin": "Wǒ zuò zài tā de qiánmiàn.",
-    "en": "I sit in front of him.",
-    "hanzi_source": "前面"
-  },
-  {
-    "id": "sent_0268",
-    "zh": "一块蛋糕。",
-    "pinyin": "Yī kuài dàngāo.",
-    "en": "One piece of cake.",
-    "hanzi_source": "一块"
-  },
-  {
-    "id": "sent_0269",
-    "zh": "这里有一块橡皮。",
-    "pinyin": "Zhèlǐ yǒu yī kuài xiàngpí.",
-    "en": "There is one eraser here.",
-    "hanzi_source": "一块"
-  },
-  {
-    "id": "sent_0270",
-    "zh": "老师在黑板上写字。",
-    "pinyin": "Lǎoshī zài hēibǎn shàng xiě zì.",
-    "en": "The teacher writes on the blackboard.",
-    "hanzi_source": "黑板"
-  },
-  {
-    "id": "sent_0271",
-    "zh": "擦一下黑板。",
-    "pinyin": "Cā yīxià hēibǎn.",
-    "en": "Clean the blackboard.",
-    "hanzi_source": "黑板"
-  },
-  {
-    "id": "sent_0272",
-    "zh": "他在学三维建模。",
-    "pinyin": "Tā zài xué sānwéi jiànmó.",
-    "en": "He is learning 3D modeling.",
-    "hanzi_source": "三维建模"
-  },
-  {
-    "id": "sent_0273",
-    "zh": "三维建模需要很多练习。",
-    "pinyin": "Sānwéi jiànmó xūyào hěn duō liànxí.",
-    "en": "3D modeling needs a lot of practice.",
-    "hanzi_source": "三维建模"
-  },
-  {
-    "id": "sent_0274",
-    "zh": "工程师用计算机辅助设计画图。",
-    "pinyin": "Gōngchéngshī yòng jìsuànjī fǔzhù shèjì huà tú.",
-    "en": "Engineers use CAD to draw.",
-    "hanzi_source": "计算机辅助设计"
-  },
-  {
-    "id": "sent_0275",
-    "zh": "计算机辅助设计让设计更快。",
-    "pinyin": "Jìsuànjī fǔzhù shèjì ràng shèjì gèng kuài.",
-    "en": "CAD makes designing faster.",
-    "hanzi_source": "计算机辅助设计"
-  },
-  {
-    "id": "sent_0276",
-    "zh": "我用融合软件建模。",
-    "pinyin": "Wǒ yòng rónghé ruǎnjiàn jiànmó.",
-    "en": "I use Fusion software to model.",
-    "hanzi_source": "融合"
-  },
-  {
-    "id": "sent_0277",
-    "zh": "融合可以免费使用。",
-    "pinyin": "Rónghé kěyǐ miǎnfèi shǐyòng.",
-    "en": "Fusion can be used for free.",
-    "hanzi_source": "融合"
-  },
-  {
-    "id": "sent_0278",
-    "zh": "先画一个草图。",
-    "pinyin": "Xiān huà yí ge cǎotú.",
-    "en": "First draw a sketch.",
-    "hanzi_source": "草图"
-  },
-  {
-    "id": "sent_0279",
-    "zh": "草图是建模的基础。",
-    "pinyin": "Cǎotú shì jiànmó de jīchǔ.",
-    "en": "The sketch is the foundation of modeling.",
-    "hanzi_source": "草图"
-  },
-  {
-    "id": "sent_0280",
-    "zh": "把这个圆拉伸成立方体。",
-    "pinyin": "Bǎ zhège yuán lāshēn chéng lìfāngtǐ.",
-    "en": "Extrude this circle into a cube.",
-    "hanzi_source": "拉伸"
-  },
-  {
-    "id": "sent_0281",
-    "zh": "拉伸的方向很重要。",
-    "pinyin": "Lāshēn de fāngxiàng hěn zhòngyào.",
-    "en": "The direction of extrusion is important.",
-    "hanzi_source": "拉伸"
-  },
-  {
-    "id": "sent_0282",
-    "zh": "旋转草图可以生成圆柱。",
-    "pinyin": "Xuánzhuǎn cǎotú kěyǐ shēngchéng yuánzhù.",
-    "en": "Revolving a sketch creates a cylinder.",
-    "hanzi_source": "旋转"
-  },
-  {
-    "id": "sent_0283",
-    "zh": "把曲线旋转360度。",
-    "pinyin": "Bǎ qūxiàn xuánzhuǎn sānbǎi liùshí dù.",
-    "en": "Revolve the curve 360 degrees.",
-    "hanzi_source": "旋转"
-  },
-  {
-    "id": "sent_0284",
-    "zh": "用扫掠功能做管道。",
-    "pinyin": "Yòng sǎolüè gōngnéng zuò guǎndào.",
-    "en": "Use the sweep function to make a pipe.",
-    "hanzi_source": "扫掠"
-  },
-  {
-    "id": "sent_0285",
-    "zh": "扫掠需要一条路径和一个轮廓。",
-    "pinyin": "Sǎolüè xūyào yī tiáo lùjìng hé yí ge lúnkuò.",
-    "en": "Sweep needs a path and a profile.",
-    "hanzi_source": "扫掠"
-  },
-  {
-    "id": "sent_0286",
-    "zh": "放样可以把两个形状连接起来。",
-    "pinyin": "Fàngyàng kěyǐ bǎ liǎng ge xíngzhuàng liánjiē qǐlai.",
-    "en": "Loft connects two shapes together.",
-    "hanzi_source": "放样"
-  },
-  {
-    "id": "sent_0287",
-    "zh": "放样适合做复杂曲面。",
-    "pinyin": "Fàngyàng shìhé zuò fùzá qūmiàn.",
-    "en": "Loft is good for complex curved surfaces.",
-    "hanzi_source": "放样"
-  },
-  {
-    "id": "sent_0288",
-    "zh": "给边缘倒角更安全。",
-    "pinyin": "Gěi biānyuán dàojiǎo gèng ānquán.",
-    "en": "Chamfering the edge is safer.",
-    "hanzi_source": "倒角"
-  },
-  {
-    "id": "sent_0289",
-    "zh": "倒角可以消除锋利边缘。",
-    "pinyin": "Dàojiǎo kěyǐ xiāochú fēnglì biānyuán.",
-    "en": "Chamfering removes sharp edges.",
-    "hanzi_source": "倒角"
-  },
-  {
-    "id": "sent_0290",
-    "zh": "给直角做圆角更美观。",
-    "pinyin": "Gěi zhíjiǎo zuò yuánjiǎo gèng měiguān.",
-    "en": "Adding fillets to right angles looks better.",
-    "hanzi_source": "圆角"
-  },
-  {
-    "id": "sent_0291",
-    "zh": "圆角可以减少应力集中。",
-    "pinyin": "Yuánjiǎo kěyǐ jiǎnshǎo yìnglì jízhōng.",
-    "en": "Fillets reduce stress concentration.",
-    "hanzi_source": "圆角"
-  },
-  {
-    "id": "sent_0292",
-    "zh": "抽壳可以把实心变成空心。",
-    "pinyin": "Chōuké kěyǐ bǎ shíxīn biàn chéng kōngxīn.",
-    "en": "Shelling turns a solid body hollow.",
-    "hanzi_source": "抽壳"
-  },
-  {
-    "id": "sent_0293",
-    "zh": "抽壳厚度设为两毫米。",
-    "pinyin": "Chōuké hòudù shè wéi liǎng háomǐ.",
-    "en": "Set shell thickness to 2mm.",
-    "hanzi_source": "抽壳"
-  },
-  {
-    "id": "sent_0294",
-    "zh": "布尔运算可以合并或切割物体。",
-    "pinyin": "Bù'ěr yùnsuàn kěyǐ hébìng huò qiēgē wùtǐ.",
-    "en": "Boolean operations can combine or cut objects.",
-    "hanzi_source": "布尔运算"
-  },
-  {
-    "id": "sent_0295",
-    "zh": "用布尔运算挖一个洞。",
-    "pinyin": "Yòng bù'ěr yùnsuàn wā yí ge dòng.",
-    "en": "Use a Boolean operation to dig a hole.",
-    "hanzi_source": "布尔运算"
-  },
-  {
-    "id": "sent_0296",
-    "zh": "把这两个物体合并成一个。",
-    "pinyin": "Bǎ zhè liǎng ge wùtǐ hébìng chéng yí ge.",
-    "en": "Union these two objects into one.",
-    "hanzi_source": "合并"
-  },
-  {
-    "id": "sent_0297",
-    "zh": "合并后就不能分开了。",
-    "pinyin": "Hébìng hòu jiù bùnéng fēn kāi le.",
-    "en": "After union, they can't be separated.",
-    "hanzi_source": "合并"
-  },
-  {
-    "id": "sent_0298",
-    "zh": "用A减去B得到孔。",
-    "pinyin": "Yòng A jiǎnqù B dédào kǒng.",
-    "en": "Subtract B from A to get a hole.",
-    "hanzi_source": "减去"
-  },
-  {
-    "id": "sent_0299",
-    "zh": "减去多余的部分。",
-    "pinyin": "Jiǎnqù duōyú de bùfen.",
-    "en": "Subtract the extra parts.",
-    "hanzi_source": "减去"
-  },
-  {
-    "id": "sent_0300",
-    "zh": "相交运算只保留重叠部分。",
-    "pinyin": "Xiāngjiāo yùnsuàn zhǐ bǎoliú chóngdié bùfen.",
-    "en": "Intersect keeps only the overlapping part.",
-    "hanzi_source": "相交"
-  },
-  {
-    "id": "sent_0301",
-    "zh": "两条线相交于一点。",
-    "pinyin": "Liǎng tiáo xiàn xiāngjiāo yú yī diǎn.",
-    "en": "Two lines intersect at one point.",
-    "hanzi_source": "相交"
-  },
-  {
-    "id": "sent_0302",
-    "zh": "修改参数模型会自动更新。",
-    "pinyin": "Xiūgǎi cānshù móxíng huì zìdòng gēngxīn.",
-    "en": "Change a parameter and the model updates automatically.",
-    "hanzi_source": "参数"
-  },
-  {
-    "id": "sent_0303",
-    "zh": "参数化设计很方便。",
-    "pinyin": "Cānshù huà shèjì hěn fāngbiàn.",
-    "en": "Parametric design is very convenient.",
-    "hanzi_source": "参数"
-  },
-  {
-    "id": "sent_0304",
-    "zh": "拉伸是一个特征。",
-    "pinyin": "Lāshēn shì yí ge tèzhēng.",
-    "en": "Extrude is a feature.",
-    "hanzi_source": "特征"
-  },
-  {
-    "id": "sent_0305",
-    "zh": "每个特征在时间轴上都可以编辑。",
-    "pinyin": "Měi ge tèzhēng zài shíjiān zhóu shàng dōu kěyǐ biānjí.",
-    "en": "Every feature can be edited in the timeline.",
-    "hanzi_source": "特征"
-  },
-  {
-    "id": "sent_0306",
-    "zh": "在时间轴上删除一个特征。",
-    "pinyin": "Zài shíjiān zhóu shàng shānchú yí ge tèzhēng.",
-    "en": "Delete a feature in the timeline.",
-    "hanzi_source": "时间轴"
-  },
-  {
-    "id": "sent_0307",
-    "zh": "时间轴记录了建模步骤。",
-    "pinyin": "Shíjiān zhóu jìlù le jiànmó bùzhòu.",
-    "en": "The timeline records the modeling steps.",
-    "hanzi_source": "时间轴"
-  },
-  {
-    "id": "sent_0308",
-    "zh": "加材质然后渲染。",
-    "pinyin": "Jiā cáizhì ránhòu xuànrǎn.",
-    "en": "Add materials then render.",
-    "hanzi_source": "渲染"
-  },
-  {
-    "id": "sent_0309",
-    "zh": "渲染图看起来像照片。",
-    "pinyin": "Xuànrǎn tú kàn qǐlai xiàng zhàopiàn.",
-    "en": "The rendered image looks like a photo.",
-    "hanzi_source": "渲染"
-  },
-  {
-    "id": "sent_0310",
-    "zh": "把模型导出为STL文件。",
-    "pinyin": "Bǎ móxíng dǎochū wéi STL wénjiàn.",
-    "en": "Export the model as an STL file.",
-    "hanzi_source": "导出"
-  },
-  {
-    "id": "sent_0311",
-    "zh": "导出前检查一下单位。",
-    "pinyin": "Dǎochū qián jiǎnchá yīxià dānwèi.",
-    "en": "Check the units before exporting.",
-    "hanzi_source": "导出"
-  },
-  {
-    "id": "sent_0312",
-    "zh": "第一个学生到了。",
-    "pinyin": "Dì-yī ge xuésheng dào le.",
-    "en": "The first student arrived.",
-    "hanzi_source": "第"
-  },
-  {
-    "id": "sent_0313",
-    "zh": "今天是第三天。",
-    "pinyin": "Jīntiān shì dì-sān tiān.",
-    "en": "Today is the third day.",
-    "hanzi_source": "第"
-  },
-  {
-    "id": "sent_0314",
-    "zh": "今天有四节课。",
-    "pinyin": "Jīntiān yǒu sì jié kè.",
-    "en": "There are four class periods today.",
-    "hanzi_source": "节"
-  },
-  {
-    "id": "sent_0315",
-    "zh": "第一节是语文。",
-    "pinyin": "Dì-yī jié shì Yǔwén.",
-    "en": "The first period is Chinese language.",
-    "hanzi_source": "节"
-  },
-  {
-    "id": "sent_0316",
-    "zh": "这节课很难。",
-    "pinyin": "Zhè jié kè hěn nán.",
-    "en": "This class is very hard.",
-    "hanzi_source": "课"
-  },
-  {
-    "id": "sent_0317",
-    "zh": "你最喜欢什么课？",
-    "pinyin": "Nǐ zuì xǐhuan shénme kè?",
-    "en": "What class do you like most?",
-    "hanzi_source": "课"
-  },
-  {
-    "id": "sent_0318",
-    "zh": "综合课包括听说读写。",
-    "pinyin": "Zōnghé kè bāokuò tīng shuō dú xiě.",
-    "en": "Comprehensive class includes listening, speaking, reading, and writing.",
-    "hanzi_source": "综合"
-  },
-  {
-    "id": "sent_0319",
-    "zh": "这是综合练习。",
-    "pinyin": "Zhè shì zōnghé liànxí.",
-    "en": "This is comprehensive practice.",
-    "hanzi_source": "综合"
-  },
-  {
-    "id": "sent_0320",
-    "zh": "口语课要多说话。",
-    "pinyin": "Kǒuyǔ kè yào duō shuōhuà.",
-    "en": "In spoken language class you need to talk more.",
-    "hanzi_source": "口语"
-  },
-  {
-    "id": "sent_0321",
-    "zh": "你的口语进步很大。",
-    "pinyin": "Nǐ de kǒuyǔ jìnbù hěn dà.",
-    "en": "Your spoken Chinese has improved a lot.",
-    "hanzi_source": "口语"
-  },
-  {
-    "id": "sent_0322",
-    "zh": "听力考试很难。",
-    "pinyin": "Tīnglì kǎoshì hěn nán.",
-    "en": "The listening test is very hard.",
-    "hanzi_source": "听力"
-  },
-  {
-    "id": "sent_0323",
-    "zh": "多听可以练习听力。",
-    "pinyin": "Duō tīng kěyǐ liànxí tīnglì.",
-    "en": "Listening more can practice your listening comprehension.",
-    "hanzi_source": "听力"
-  },
-  {
-    "id": "sent_0324",
-    "zh": "这有一位客人。",
-    "pinyin": "Zhè yǒu yí wèi kèrén.",
-    "en": "There is one guest (polite).",
-    "hanzi_source": "位"
-  },
-  {
-    "id": "sent_0325",
-    "zh": "三位老师参加了会议。",
-    "pinyin": "Sān wèi lǎoshī cānjiā le huìyì.",
-    "en": "Three teachers attended the meeting.",
-    "hanzi_source": "位"
-  },
-  {
-    "id": "sent_0326",
-    "zh": "王老师教我们汉语。",
-    "pinyin": "Wáng lǎoshī jiāo wǒmen Hànyǔ.",
-    "en": "Teacher Wang teaches us Chinese.",
-    "hanzi_source": "教"
-  },
-  {
-    "id": "sent_0327",
-    "zh": "你教我做这道菜吧。",
-    "pinyin": "Nǐ jiāo wǒ zuò zhè dào cài ba.",
-    "en": "Teach me how to make this dish.",
-    "hanzi_source": "教"
-  },
-  {
-    "id": "sent_0328",
-    "zh": "这节课很长。",
-    "pinyin": "Zhè jié kè hěn cháng.",
-    "en": "This class is very long.",
-    "hanzi_source": "长"
-  },
-  {
-    "id": "sent_0329",
-    "zh": "她的头发很长。",
-    "pinyin": "Tā de tóufa hěn cháng.",
-    "en": "Her hair is very long.",
-    "hanzi_source": "长"
-  },
-  {
-    "id": "sent_0330",
-    "zh": "十分钟后开始。",
-    "pinyin": "Shí fēnzhōng hòu kāishǐ.",
-    "en": "It starts in ten minutes.",
-    "hanzi_source": "分钟"
-  },
-  {
-    "id": "sent_0331",
-    "zh": "我等了二十分钟。",
-    "pinyin": "Wǒ děng le èrshí fēnzhōng.",
-    "en": "I waited for twenty minutes.",
-    "hanzi_source": "分钟"
-  },
-  {
-    "id": "sent_0332",
-    "zh": "一小时有六十分钟。",
-    "pinyin": "Yī xiǎoshí yǒu liùshí fēnzhōng.",
-    "en": "One hour has sixty minutes.",
-    "hanzi_source": "小时"
-  },
-  {
-    "id": "sent_0333",
-    "zh": "我每天学习两小时。",
-    "pinyin": "Wǒ měitiān xuéxí liǎng xiǎoshí.",
-    "en": "I study for two hours every day.",
-    "hanzi_source": "小时"
-  },
-  {
-    "id": "sent_0334",
-    "zh": "他正在上课。",
-    "pinyin": "Tā zhèngzài shàngkè.",
-    "en": "He is in class right now.",
-    "hanzi_source": "正在"
-  },
-  {
-    "id": "sent_0335",
-    "zh": "我正在写作业。",
-    "pinyin": "Wǒ zhèngzài xiě zuòyè.",
-    "en": "I am doing homework right now.",
-    "hanzi_source": "正在"
-  },
-  {
-    "id": "sent_0336",
-    "zh": "九月一号开学。",
-    "pinyin": "Jiǔyuè yī hào kāixué.",
-    "en": "School starts on September 1st.",
-    "hanzi_source": "开学"
-  },
-  {
-    "id": "sent_0337",
-    "zh": "开学第一天很兴奋。",
-    "pinyin": "Kāixué dì-yī tiān hěn xīngfèn.",
-    "en": "The first day of school is very exciting.",
-    "hanzi_source": "开学"
-  },
-  {
-    "id": "sent_0338",
-    "zh": "他已经到了。",
-    "pinyin": "Tā yǐjīng dào le.",
-    "en": "He has already arrived.",
-    "hanzi_source": "已经"
-  },
-  {
-    "id": "sent_0339",
-    "zh": "我吃完了。",
-    "pinyin": "Wǒ yǐjīng chī wán le.",
-    "en": "I have already finished eating.",
-    "hanzi_source": "已经"
-  },
-  {
-    "id": "sent_0340",
-    "zh": "这个学期有十六周。",
-    "pinyin": "Zhège xuéqī yǒu shíliù zhōu.",
-    "en": "This semester has sixteen weeks.",
-    "hanzi_source": "学期"
-  },
-  {
-    "id": "sent_0341",
-    "zh": "下学期我要学中文。",
-    "pinyin": "Xià xuéqī wǒ yào xué Zhōngwén.",
-    "en": "Next semester I will study Chinese.",
-    "hanzi_source": "学期"
-  },
-  {
-    "id": "sent_0342",
-    "zh": "我们班有二十个学生。",
-    "pinyin": "Wǒmen bān yǒu èrshí ge xuésheng.",
-    "en": "Our class has twenty students.",
-    "hanzi_source": "班"
-  },
-  {
-    "id": "sent_0343",
-    "zh": "你在哪个班？",
-    "pinyin": "Nǐ zài nǎ ge bān?",
-    "en": "Which class are you in?",
-    "hanzi_source": "班"
-  },
-  {
-    "id": "sent_0344",
-    "zh": "一周有七天。",
-    "pinyin": "Yī zhōu yǒu qī tiān.",
-    "en": "One week has seven days.",
-    "hanzi_source": "周"
-  },
-  {
-    "id": "sent_0345",
-    "zh": "我下周考试。",
-    "pinyin": "Wǒ xià zhōu kǎoshì.",
-    "en": "I have an exam next week.",
-    "hanzi_source": "周"
-  },
-  {
-    "id": "sent_0346",
-    "zh": "星期一早上有会议。",
-    "pinyin": "Xīngqī yī zǎoshang yǒu huìyì.",
-    "en": "There is a meeting on Monday morning.",
-    "hanzi_source": "星期一"
-  },
-  {
-    "id": "sent_0347",
-    "zh": "星期一我很忙。",
-    "pinyin": "Xīngqī yī wǒ hěn máng.",
-    "en": "I am very busy on Monday.",
-    "hanzi_source": "星期一"
-  },
-  {
-    "id": "sent_0348",
-    "zh": "星期二有汉语课。",
-    "pinyin": "Xīngqī èr yǒu Hànyǔ kè.",
-    "en": "There is Chinese class on Tuesday.",
-    "hanzi_source": "星期二"
-  },
-  {
-    "id": "sent_0349",
-    "zh": "我们星期二见面吧。",
-    "pinyin": "Wǒmen xīngqī èr jiànmiàn ba.",
-    "en": "Let's meet on Tuesday.",
-    "hanzi_source": "星期二"
-  },
-  {
-    "id": "sent_0350",
-    "zh": "星期三下午没课。",
-    "pinyin": "Xīngqī sān xiàwǔ méi kè.",
-    "en": "There's no class on Wednesday afternoon.",
-    "hanzi_source": "星期三"
-  },
-  {
-    "id": "sent_0351",
-    "zh": "星期三天气怎么样？",
-    "pinyin": "Xīngqī sān tiānqì zěnme yàng?",
-    "en": "What's the weather like on Wednesday?",
-    "hanzi_source": "星期三"
-  },
-  {
-    "id": "sent_0352",
-    "zh": "星期四要交作业。",
-    "pinyin": "Xīngqī sì yào jiāo zuòyè.",
-    "en": "Homework is due on Thursday.",
-    "hanzi_source": "星期四"
-  },
-  {
-    "id": "sent_0353",
-    "zh": "星期四晚上我有空。",
-    "pinyin": "Xīngqī sì wǎnshàng wǒ yǒu kòng.",
-    "en": "I am free on Thursday evening.",
-    "hanzi_source": "星期四"
-  },
-  {
-    "id": "sent_0354",
-    "zh": "星期五终于到了。",
-    "pinyin": "Xīngqī wǔ zhōngyú dào le.",
-    "en": "Friday has finally arrived.",
-    "hanzi_source": "星期五"
-  },
-  {
-    "id": "sent_0355",
-    "zh": "星期五晚上我们去吃饭。",
-    "pinyin": "Xīngqī wǔ wǎnshàng wǒmen qù chīfàn.",
-    "en": "On Friday evening we go to eat.",
-    "hanzi_source": "星期五"
-  },
-  {
-    "id": "sent_0356",
-    "zh": "今天的作业很多。",
-    "pinyin": "Jīntiān de zuòyè hěn duō.",
-    "en": "Today's homework is a lot.",
-    "hanzi_source": "作业"
-  },
-  {
-    "id": "sent_0357",
-    "zh": "你做完作业了吗？",
-    "pinyin": "Nǐ zuò wán zuòyè le ma?",
-    "en": "Have you finished your homework?",
-    "hanzi_source": "作业"
-  },
-  {
-    "id": "sent_0358",
-    "zh": "我在写汉字。",
-    "pinyin": "Wǒ zài xiě Hànzì.",
-    "en": "I am writing characters.",
+    "id": "sent_0054",
+    "zh": "我不会写汉字。",
+    "pinyin": "Wǒ bú huì xiě Hànzì.",
+    "en": "I can't write Chinese characters.",
     "hanzi_source": "写"
   },
   {
-    "id": "sent_0359",
-    "zh": "请写下你的地址。",
-    "pinyin": "Qǐng xiěxià nǐ de dìzhǐ.",
-    "en": "Please write down your address.",
+    "id": "sent_0055",
+    "zh": "请写拼音。",
+    "pinyin": "Qǐng xiě pīnyīn.",
+    "en": "Please write it in Pinyin.",
     "hanzi_source": "写"
   },
   {
-    "id": "sent_0360",
-    "zh": "我已经写完了信。",
-    "pinyin": "Wǒ yǐjīng xiě wán le xìn.",
-    "en": "I have already finished writing the letter.",
-    "hanzi_source": "写完了"
+    "id": "sent_0056",
+    "zh": "我不会写汉字。",
+    "pinyin": "Wǒ bú huì xiě Hànzì.",
+    "en": "I can't write Chinese characters.",
+    "hanzi_source": "汉字"
   },
   {
-    "id": "sent_0361",
-    "zh": "作业写完了吗？",
-    "pinyin": "Zuòyè xiě wán le ma?",
-    "en": "Have you finished writing the homework?",
-    "hanzi_source": "写完了"
+    "id": "sent_0057",
+    "zh": "这个汉字怎么读？",
+    "pinyin": "Zhège Hànzì zěnme dú?",
+    "en": "How do you read this character?",
+    "hanzi_source": "汉字"
   },
   {
-    "id": "sent_0362",
-    "zh": "你看见我的手机了吗？",
-    "pinyin": "Nǐ kànjiàn wǒ de shǒujī le ma?",
-    "en": "Did you see my phone?",
-    "hanzi_source": "看见"
+    "id": "sent_0058",
+    "zh": "你来中国做什么？",
+    "pinyin": "Nǐ lái Zhōngguó zuò shénme?",
+    "en": "What did you come to China to do?",
+    "hanzi_source": "来"
   },
   {
-    "id": "sent_0363",
-    "zh": "我看见他了。",
-    "pinyin": "Wǒ kànjiàn tā le.",
-    "en": "I saw him.",
-    "hanzi_source": "看见"
+    "id": "sent_0059",
+    "zh": "我来学习汉语。",
+    "pinyin": "Wǒ lái xuéxí Hànyǔ.",
+    "en": "I came to study Chinese.",
+    "hanzi_source": "来"
   },
   {
-    "id": "sent_0364",
-    "zh": "老师好！",
-    "pinyin": "Lǎoshī hǎo!",
-    "en": "Hello teacher!",
-    "hanzi_source": "老师"
+    "id": "sent_0060",
+    "zh": "你来中国做什么？",
+    "pinyin": "Nǐ lái Zhōngguó zuò shénme?",
+    "en": "What did you come to China to do?",
+    "hanzi_source": "做"
   },
   {
-    "id": "sent_0365",
-    "zh": "老师布置了很多作业。",
-    "pinyin": "Lǎoshī bùzhì le hěn duō zuòyè.",
-    "en": "The teacher assigned a lot of homework.",
-    "hanzi_source": "老师"
+    "id": "sent_0061",
+    "zh": "你在做什么？",
+    "pinyin": "Nǐ zài zuò shénme?",
+    "en": "What are you doing?",
+    "hanzi_source": "做"
   },
   {
-    "id": "sent_0366",
-    "zh": "对不起，我没看见你。",
-    "pinyin": "Duìbuqǐ, wǒ méi kànjiàn nǐ.",
-    "en": "Sorry, I didn't see you.",
-    "hanzi_source": "没看见"
+    "id": "sent_0062",
+    "zh": "你叫什么名字？",
+    "pinyin": "Nǐ jiào shénme míngzi?",
+    "en": "What is your name?",
+    "hanzi_source": "什么"
   },
   {
-    "id": "sent_0367",
-    "zh": "我没看见那个标志。",
-    "pinyin": "Wǒ méi kànjiàn nàge biāozhì.",
-    "en": "I didn't see that sign.",
-    "hanzi_source": "没看见"
+    "id": "sent_0063",
+    "zh": "你想做什么？",
+    "pinyin": "Nǐ xiǎng zuò shénme?",
+    "en": "What do you want to do?",
+    "hanzi_source": "什么"
   },
   {
-    "id": "sent_0368",
-    "zh": "你找到钥匙了吗？",
-    "pinyin": "Nǐ zhǎodào yàoshi le ma?",
-    "en": "Did you find the keys?",
-    "hanzi_source": "找到"
+    "id": "sent_0064",
+    "zh": "我来中国学习汉语。",
+    "pinyin": "Wǒ lái Zhōngguó xuéxí Hànyǔ.",
+    "en": "I came to China to study Chinese.",
+    "hanzi_source": "学习"
   },
   {
-    "id": "sent_0369",
-    "zh": "我终于找到了答案。",
-    "pinyin": "Wǒ zhōngyú zhǎodào le dá'àn.",
-    "en": "I finally found the answer.",
-    "hanzi_source": "找到"
+    "id": "sent_0065",
+    "zh": "学习汉语很有意思。",
+    "pinyin": "Xuéxí Hànyǔ hěn yǒuyìsi.",
+    "en": "Learning Chinese is very interesting.",
+    "hanzi_source": "学习"
   },
   {
-    "id": "sent_0370",
-    "zh": "我的手机没电了。",
-    "pinyin": "Wǒ de shǒujī méi diàn le.",
-    "en": "My phone is out of battery.",
-    "hanzi_source": "手机"
+    "id": "sent_0066",
+    "zh": "你看什么书？",
+    "pinyin": "Nǐ kàn shénme shū?",
+    "en": "What book are you reading?",
+    "hanzi_source": "看"
   },
   {
-    "id": "sent_0371",
-    "zh": "请不要在课堂上用手机。",
-    "pinyin": "Qǐng bú yào zài kètáng shàng yòng shǒujī.",
-    "en": "Please don't use your phone in class.",
-    "hanzi_source": "手机"
+    "id": "sent_0067",
+    "zh": "我看汉语书。",
+    "pinyin": "Wǒ kàn Hànyǔ shū.",
+    "en": "I'm reading a Chinese book.",
+    "hanzi_source": "看"
   },
   {
-    "id": "sent_0372",
-    "zh": "太好了，你找到了！",
-    "pinyin": "Tài hǎo le, nǐ zhǎodào le!",
-    "en": "Great, you found it!",
-    "hanzi_source": "找到了"
+    "id": "sent_0068",
+    "zh": "请问，你叫什么名字？",
+    "pinyin": "Qǐngwèn, nǐ jiào shénme míngzi?",
+    "en": "Excuse me, what's your name?",
+    "hanzi_source": "请问"
   },
   {
-    "id": "sent_0373",
-    "zh": "我找到了一本好书。",
-    "pinyin": "Wǒ zhǎodào le yī běn hǎo shū.",
-    "en": "I found a good book.",
-    "hanzi_source": "找到了"
+    "id": "sent_0069",
+    "zh": "请问这个字怎么读？",
+    "pinyin": "Qǐngwèn zhège zì zěnme dú?",
+    "en": "Excuse me, how is this character read?",
+    "hanzi_source": "请问"
   },
   {
-    "id": "sent_0374",
-    "zh": "他在学设计。",
-    "pinyin": "Tā zài xué shèjì.",
-    "en": "He is studying design.",
-    "hanzi_source": "设计"
+    "id": "sent_0070",
+    "zh": "这个汉字怎么读？",
+    "pinyin": "Zhège Hànzì zěnme dú?",
+    "en": "How do you read this character?",
+    "hanzi_source": "怎么"
   },
   {
-    "id": "sent_0375",
-    "zh": "这个设计很漂亮。",
-    "pinyin": "Zhège shèjì hěn piàoliang.",
-    "en": "This design is very beautiful.",
-    "hanzi_source": "设计"
+    "id": "sent_0071",
+    "zh": "这个用汉语怎么说？",
+    "pinyin": "Zhège yòng Hànyǔ zěnme shuō?",
+    "en": "How do you say this in Chinese?",
+    "hanzi_source": "怎么"
   },
   {
-    "id": "sent_0376",
-    "zh": "现代技术发展很快。",
-    "pinyin": "Xiàndài jìshù fāzhǎn hěn kuài.",
-    "en": "Modern technology develops very fast.",
-    "hanzi_source": "技术"
+    "id": "sent_0072",
+    "zh": "请跟我读。",
+    "pinyin": "Qǐng gēn wǒ dú.",
+    "en": "Please read after me.",
+    "hanzi_source": "读"
   },
   {
-    "id": "sent_0377",
-    "zh": "学习技术很重要。",
-    "pinyin": "Xuéxí jìshù hěn zhòngyào.",
-    "en": "Learning technology is very important.",
-    "hanzi_source": "技术"
+    "id": "sent_0073",
+    "zh": "这个汉字怎么读？",
+    "pinyin": "Zhège Hànzì zěnme dú?",
+    "en": "How do you pronounce this character?",
+    "hanzi_source": "读"
   },
   {
-    "id": "sent_0378",
-    "zh": "他的教学方法很好。",
-    "pinyin": "Tā de jiàoxué fāngfǎ hěn hǎo.",
-    "en": "His teaching method is very good.",
-    "hanzi_source": "教学"
+    "id": "sent_0074",
+    "zh": "我爱看书。",
+    "pinyin": "Wǒ ài kàn shū.",
+    "en": "I love reading.",
+    "hanzi_source": "爱"
   },
   {
-    "id": "sent_0379",
-    "zh": "在线教学越来越流行。",
-    "pinyin": "Zàixiàn jiàoxué yuè lái yuè liúxíng.",
-    "en": "Online teaching is becoming more popular.",
-    "hanzi_source": "教学"
+    "id": "sent_0075",
+    "zh": "我爱我的家人。",
+    "pinyin": "Wǒ ài wǒ de jiārén.",
+    "en": "I love my family.",
+    "hanzi_source": "爱"
   },
   {
-    "id": "sent_0380",
-    "zh": "这个学生很努力。",
-    "pinyin": "Zhège xuésheng hěn nǔlì.",
-    "en": "This student is very hardworking.",
-    "hanzi_source": "学生"
+    "id": "sent_0076",
+    "zh": "这个生词是什么意思？",
+    "pinyin": "Zhège shēngcí shì shénme yìsi?",
+    "en": "What does this new word mean?",
+    "hanzi_source": "生词"
   },
   {
-    "id": "sent_0381",
-    "zh": "学生们都在考试。",
-    "pinyin": "Xuéshengmen dōu zài kǎoshì.",
-    "en": "The students are all taking an exam.",
-    "hanzi_source": "学生"
+    "id": "sent_0077",
+    "zh": "今天有很多生词。",
+    "pinyin": "Jīntiān yǒu hěn duō shēngcí.",
+    "en": "There are many new words today.",
+    "hanzi_source": "生词"
   },
   {
-    "id": "sent_0382",
-    "zh": "我们正在做一个项目。",
-    "pinyin": "Wǒmen zhèngzài zuò yí ge xiàngmù.",
-    "en": "We are working on a project.",
-    "hanzi_source": "项目"
+    "id": "sent_0078",
+    "zh": "这个生词是什么意思？",
+    "pinyin": "Zhège shēngcí shì shénme yìsi?",
+    "en": "What does this new word mean?",
+    "hanzi_source": "意思"
   },
   {
-    "id": "sent_0383",
-    "zh": "这个项目需要两周完成。",
-    "pinyin": "Zhège xiàngmù xūyào liǎng zhōu wánchéng.",
-    "en": "This project needs two weeks to complete.",
-    "hanzi_source": "项目"
+    "id": "sent_0079",
+    "zh": "我不懂这个意思。",
+    "pinyin": "Wǒ bù dǒng zhège yìsi.",
+    "en": "I don't understand this meaning.",
+    "hanzi_source": "意思"
   },
   {
-    "id": "sent_0384",
-    "zh": "工程师每天都要解决问题。",
-    "pinyin": "Gōngchéngshī měitiān dōu yào jiějué wèntí.",
-    "en": "Engineers solve problems every day.",
-    "hanzi_source": "解决问题"
+    "id": "sent_0080",
+    "zh": "我想学习汉语。",
+    "pinyin": "Wǒ xiǎng xuéxí Hànyǔ.",
+    "en": "I want to learn Chinese.",
+    "hanzi_source": "想"
   },
   {
-    "id": "sent_0385",
-    "zh": "我们一起解决这个问题。",
-    "pinyin": "Wǒmen yīqǐ jiějué zhège wèntí.",
-    "en": "Let's solve this problem together.",
-    "hanzi_source": "解决问题"
+    "id": "sent_0081",
+    "zh": "你想知道什么？",
+    "pinyin": "Nǐ xiǎng zhīdào shénme?",
+    "en": "What do you want to know?",
+    "hanzi_source": "想"
   },
   {
-    "id": "sent_0386",
-    "zh": "批判性思维很重要。",
-    "pinyin": "Pīpànxìng sīwéi hěn zhòngyào.",
-    "en": "Critical thinking is very important.",
-    "hanzi_source": "批判性思维"
+    "id": "sent_0082",
+    "zh": "我想知道你的名字。",
+    "pinyin": "Wǒ xiǎng zhīdào nǐ de míngzi.",
+    "en": "I want to know your name.",
+    "hanzi_source": "知道"
   },
   {
-    "id": "sent_0387",
-    "zh": "老师教我们批判性思维。",
-    "pinyin": "Lǎoshī jiāo wǒmen pīpànxìng sīwéi.",
-    "en": "The teacher teaches us critical thinking.",
-    "hanzi_source": "批判性思维"
+    "id": "sent_0083",
+    "zh": "我不知道。",
+    "pinyin": "Wǒ bù zhīdào.",
+    "en": "I don't know.",
+    "hanzi_source": "知道"
   },
   {
-    "id": "sent_0388",
-    "zh": "孩子很有创造力。",
-    "pinyin": "Háizi hěn yǒu chuàngzàolì.",
-    "en": "Children have a lot of creativity.",
-    "hanzi_source": "创造力"
+    "id": "sent_0084",
+    "zh": "请听我说。",
+    "pinyin": "Qǐng tīng wǒ shuō.",
+    "en": "Please listen to me.",
+    "hanzi_source": "听"
   },
   {
-    "id": "sent_0389",
-    "zh": "设计需要创造力。",
-    "pinyin": "Shèjì xūyào chuàngzàolì.",
-    "en": "Design needs creativity.",
-    "hanzi_source": "创造力"
+    "id": "sent_0085",
+    "zh": "我喜欢听音乐。",
+    "pinyin": "Wǒ xǐhuan tīng yīnyuè.",
+    "en": "I like listening to music.",
+    "hanzi_source": "听"
   },
   {
-    "id": "sent_0390",
-    "zh": "我们先做一个原型。",
-    "pinyin": "Wǒmen xiān zuò yí ge yuánxíng.",
-    "en": "Let's make a prototype first.",
-    "hanzi_source": "原型"
+    "id": "sent_0086",
+    "zh": "请写拼音。",
+    "pinyin": "Qǐng xiě pīnyīn.",
+    "en": "Please write it in Pinyin.",
+    "hanzi_source": "拼音"
   },
   {
-    "id": "sent_0391",
-    "zh": "原型测试很重要。",
-    "pinyin": "Yuánxíng cèshì hěn zhòngyào.",
-    "en": "Prototype testing is very important.",
-    "hanzi_source": "原型"
+    "id": "sent_0087",
+    "zh": "拼音帮助我们读汉字。",
+    "pinyin": "Pīnyīn bāngzhù wǒmen dú Hànzì.",
+    "en": "Pinyin helps us read Chinese characters.",
+    "hanzi_source": "拼音"
   },
   {
-    "id": "sent_0392",
-    "zh": "设计需要多次迭代。",
-    "pinyin": "Shèjì xūyào duō cì diédài.",
-    "en": "Design needs many iterations.",
-    "hanzi_source": "迭代"
+    "id": "sent_0088",
+    "zh": "上课！大家请坐。",
+    "pinyin": "Shàngkè! Dàjiā qǐng zuò.",
+    "en": "Class begins! Everyone please sit.",
+    "hanzi_source": "上课"
   },
   {
-    "id": "sent_0393",
-    "zh": "第二次迭代改进了很多。",
-    "pinyin": "Dì-èr cì diédài gǎijìn le hěn duō.",
-    "en": "The second iteration improved a lot.",
-    "hanzi_source": "迭代"
+    "id": "sent_0089",
+    "zh": "我们八点上课。",
+    "pinyin": "Wǒmen bā diǎn shàngkè.",
+    "en": "We start class at 8.",
+    "hanzi_source": "上课"
   },
   {
-    "id": "sent_0394",
-    "zh": "谢谢你的反馈。",
-    "pinyin": "Xièxie nǐ de fǎnkuì.",
-    "en": "Thank you for your feedback.",
-    "hanzi_source": "反馈"
+    "id": "sent_0090",
+    "zh": "下课！明天见。",
+    "pinyin": "Xiàkè! Míngtiān jiàn.",
+    "en": "Class is over! See you tomorrow.",
+    "hanzi_source": "下课"
   },
   {
-    "id": "sent_0395",
-    "zh": "老师给了很多反馈。",
-    "pinyin": "Lǎoshī gěi le hěn duō fǎnkuì.",
-    "en": "The teacher gave a lot of feedback.",
-    "hanzi_source": "反馈"
+    "id": "sent_0091",
+    "zh": "下午三点下课。",
+    "pinyin": "Xiàwǔ sān diǎn xiàkè.",
+    "en": "Class ends at 3pm.",
+    "hanzi_source": "下课"
   },
   {
-    "id": "sent_0396",
-    "zh": "团队合作很重要。",
-    "pinyin": "Tuánduì hézuò hěn zhòngyào.",
-    "en": "Team collaboration is very important.",
-    "hanzi_source": "合作"
+    "id": "sent_0092",
+    "zh": "我们休息一下吧。",
+    "pinyin": "Wǒmen xiūxi yíxià ba.",
+    "en": "Let's take a break.",
+    "hanzi_source": "休息一下"
   },
   {
-    "id": "sent_0397",
-    "zh": "我们一起合作完成项目。",
-    "pinyin": "Wǒmen yīqǐ hézuò wánchéng xiàngmù.",
-    "en": "We collaborate together to complete the project.",
-    "hanzi_source": "合作"
+    "id": "sent_0093",
+    "zh": "休息一下眼睛。",
+    "pinyin": "Xiūxi yíxià yǎnjing.",
+    "en": "Rest your eyes for a bit.",
+    "hanzi_source": "休息一下"
   },
   {
-    "id": "sent_0398",
-    "zh": "先画一个草图。",
-    "pinyin": "Xiān huà yí ge cǎotú.",
-    "en": "First draw a rough sketch.",
-    "hanzi_source": "草图"
+    "id": "sent_0094",
+    "zh": "请听我说完。",
+    "pinyin": "Qǐng tīng wǒ shuō wán.",
+    "en": "Please listen until I'm finished.",
+    "hanzi_source": "请听我说"
   },
   {
-    "id": "sent_0399",
-    "zh": "草图不用太精细。",
-    "pinyin": "Cǎotú bú yòng tài jīngxì.",
-    "en": "Rough sketches don't need to be too detailed.",
-    "hanzi_source": "草图"
+    "id": "sent_0095",
+    "zh": "老师说：请听我说。",
+    "pinyin": "Lǎoshī shuō: qǐng tīng wǒ shuō.",
+    "en": "The teacher said: please listen to me.",
+    "hanzi_source": "请听我说"
   },
   {
-    "id": "sent_0400",
-    "zh": "先测量长度。",
-    "pinyin": "Xiān cèliáng chángdù.",
-    "en": "First measure the length.",
-    "hanzi_source": "测量"
+    "id": "sent_0096",
+    "zh": "请跟我读这个生词。",
+    "pinyin": "Qǐng gēn wǒ dú zhège shēngcí.",
+    "en": "Please read this new word after me.",
+    "hanzi_source": "请跟我读"
   },
   {
-    "id": "sent_0401",
-    "zh": "测量要准确。",
-    "pinyin": "Cèliáng yào zhǔnquè.",
-    "en": "Measurements need to be accurate.",
-    "hanzi_source": "测量"
+    "id": "sent_0097",
+    "zh": "大家请跟我读一遍。",
+    "pinyin": "Dàjiā qǐng gēn wǒ dú yí biàn.",
+    "en": "Everyone, read after me once.",
+    "hanzi_source": "请跟我读"
   },
   {
-    "id": "sent_0402",
-    "zh": "这些工具很有用。",
-    "pinyin": "Zhèxiē gōngjù hěn yǒuyòng.",
-    "en": "These tools are very useful.",
-    "hanzi_source": "工具"
+    "id": "sent_0098",
+    "zh": "请看白板上的例句。",
+    "pinyin": "Qǐng kàn báibǎn shàng de lìjù.",
+    "en": "Please look at the example sentences on the whiteboard.",
+    "hanzi_source": "请看白板"
   },
   {
-    "id": "sent_0403",
-    "zh": "锤子是个基本工具。",
-    "pinyin": "Chuízi shì ge jīběn gōngjù.",
-    "en": "A hammer is a basic tool.",
-    "hanzi_source": "工具"
+    "id": "sent_0099",
+    "zh": "请看白板，这是今天的语法点。",
+    "pinyin": "Qǐng kàn báibǎn, zhè shì jīntiān de yǔfǎ diǎn.",
+    "en": "Look at the whiteboard — here's today's grammar point.",
+    "hanzi_source": "请看白板"
   },
   {
-    "id": "sent_0404",
-    "zh": "我们需要买材料。",
-    "pinyin": "Wǒmen xūyào mǎi cáiliào.",
-    "en": "We need to buy materials.",
-    "hanzi_source": "材料"
+    "id": "sent_0100",
+    "zh": "请看书第五页。",
+    "pinyin": "Qǐng kàn shū dì-wǔ yè.",
+    "en": "Please look at page 5 of the book.",
+    "hanzi_source": "请看书"
   },
   {
-    "id": "sent_0405",
-    "zh": "这个材料很轻。",
-    "pinyin": "Zhège cáiliào hěn qīng.",
-    "en": "This material is very light.",
-    "hanzi_source": "材料"
+    "id": "sent_0101",
+    "zh": "请看书上的图片。",
+    "pinyin": "Qǐng kàn shū shàng de túpiàn.",
+    "en": "Please look at the pictures in the book.",
+    "hanzi_source": "请看书"
   },
   {
-    "id": "sent_0406",
-    "zh": "安全第一。",
-    "pinyin": "Ānquán dì-yī.",
-    "en": "Safety first.",
-    "hanzi_source": "安全"
+    "id": "sent_0102",
+    "zh": "我没听清，请再说一遍。",
+    "pinyin": "Wǒ méi tīng qīng, qǐng zài shuō yí biàn.",
+    "en": "I didn't hear clearly, please say it again.",
+    "hanzi_source": "请再说一遍"
   },
   {
-    "id": "sent_0407",
-    "zh": "戴好安全装备。",
-    "pinyin": "Dài hǎo ānquán zhuāngbèi.",
-    "en": "Put on your safety equipment properly.",
-    "hanzi_source": "安全"
+    "id": "sent_0103",
+    "zh": "请再说一遍你的名字。",
+    "pinyin": "Qǐng zài shuō yí biàn nǐ de míngzi.",
+    "en": "Please say your name again.",
+    "hanzi_source": "请再说一遍"
   },
   {
-    "id": "sent_0408",
-    "zh": "请戴上护目镜。",
-    "pinyin": "Qǐng dài shàng hùmùjìng.",
-    "en": "Please put on safety goggles.",
-    "hanzi_source": "护目镜"
+    "id": "sent_0104",
+    "zh": "请写拼音，不要写汉字。",
+    "pinyin": "Qǐng xiě pīnyīn, bú yào xiě Hànzì.",
+    "en": "Please write Pinyin, not characters.",
+    "hanzi_source": "请写拼音"
   },
   {
-    "id": "sent_0409",
-    "zh": "护目镜保护眼睛。",
-    "pinyin": "Hùmùjìng bǎohù yǎnjing.",
-    "en": "Goggles protect your eyes.",
-    "hanzi_source": "护目镜"
+    "id": "sent_0105",
+    "zh": "每个生词请写拼音在旁边。",
+    "pinyin": "Měi ge shēngcí qǐng xiě pīnyīn zài pángbiān.",
+    "en": "Please write Pinyin next to each new word.",
+    "hanzi_source": "请写拼音"
   },
   {
-    "id": "sent_0410",
-    "zh": "我们在工作坊做手工。",
-    "pinyin": "Wǒmen zài gōngzuòfāng zuò shǒugōng.",
-    "en": "We do hands-on work in the workshop.",
-    "hanzi_source": "工作坊"
+    "id": "sent_0106",
+    "zh": "这个字第几声？",
+    "pinyin": "Zhège zì dì jǐ shēng?",
+    "en": "Which tone is this character?",
+    "hanzi_source": "第几声"
   },
   {
-    "id": "sent_0411",
-    "zh": "这个工作坊很大。",
-    "pinyin": "Zhège gōngzuòfāng hěn dà.",
-    "en": "This workshop is very large.",
-    "hanzi_source": "工作坊"
+    "id": "sent_0107",
+    "zh": "\"妈\"和\"麻\"的第几声不一样？",
+    "pinyin": "\"Mā\" hé \"má\" de dì jǐ shēng bù yíyàng?",
+    "en": "Which tones differ between \"mā\" and \"má\"?",
+    "hanzi_source": "第几声"
   },
   {
-    "id": "sent_0412",
-    "zh": "学生要准备作品集。",
-    "pinyin": "Xuésheng yào zhǔnbèi zuòpǐnjí.",
-    "en": "Students need to prepare a portfolio.",
-    "hanzi_source": "作品集"
+    "id": "sent_0108",
+    "zh": "请慢慢说，我在记笔记。",
+    "pinyin": "Qǐng mànmàn shuō, wǒ zài jì bǐjì.",
+    "en": "Please speak slowly, I'm taking notes.",
+    "hanzi_source": "请慢慢说"
   },
   {
-    "id": "sent_0413",
-    "zh": "作品集展示了你的能力。",
-    "pinyin": "Zuòpǐnjí zhǎnshì le nǐ de nénglì.",
-    "en": "The portfolio shows your abilities.",
-    "hanzi_source": "作品集"
+    "id": "sent_0109",
+    "zh": "你的汉语太快了，请慢慢说。",
+    "pinyin": "Nǐ de Hànyǔ tài kuài le, qǐng mànmàn shuō.",
+    "en": "Your Chinese is too fast, please speak slowly.",
+    "hanzi_source": "请慢慢说"
   },
   {
-    "id": "sent_0414",
-    "zh": "葡萄很甜。",
-    "pinyin": "Pútáo hěn tián.",
-    "en": "Grapes are very sweet.",
-    "hanzi_source": "葡萄"
+    "id": "sent_0110",
+    "zh": "对不起，我没听懂。",
+    "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
+    "en": "Sorry, I didn't understand.",
+    "hanzi_source": "我没听懂"
   },
   {
-    "id": "sent_0415",
-    "zh": "我买了一串葡萄。",
-    "pinyin": "Wǒ mǎi le yī chuàn pútáo.",
-    "en": "I bought a bunch of grapes.",
-    "hanzi_source": "葡萄"
+    "id": "sent_0111",
+    "zh": "老师说得太快了，我没听懂。",
+    "pinyin": "Lǎoshī shuō de tài kuài le, wǒ méi tīngdǒng.",
+    "en": "The teacher spoke too fast, I didn't understand.",
+    "hanzi_source": "我没听懂"
   },
   {
-    "id": "sent_0416",
-    "zh": "芒果是热带水果。",
-    "pinyin": "Mángguǒ shì rèdài shuǐguǒ.",
-    "en": "Mangoes are tropical fruits.",
-    "hanzi_source": "芒果"
+    "id": "sent_0112",
+    "zh": "请大家把书翻到第一页。",
+    "pinyin": "Qǐng dàjiā bǎ shū fāndào dì-yī yè.",
+    "en": "Everyone, turn to page 1.",
+    "hanzi_source": "把书翻到第一页"
   },
   {
-    "id": "sent_0417",
-    "zh": "我喜欢吃芒果冰沙。",
-    "pinyin": "Wǒ xǐhuan chī mángguǒ bīngshā.",
-    "en": "I like eating mango smoothies.",
-    "hanzi_source": "芒果"
+    "id": "sent_0113",
+    "zh": "把书翻到第一页，我们开始读课文。",
+    "pinyin": "Bǎ shū fāndào dì-yī yè, wǒmen kāishǐ dú kèwén.",
+    "en": "Turn to page 1, let's start reading the text.",
+    "hanzi_source": "把书翻到第一页"
   },
   {
-    "id": "sent_0418",
-    "zh": "夏天吃西瓜很凉快。",
-    "pinyin": "Xiàtiān chī xīguā hěn liángkuai.",
-    "en": "Eating watermelon in summer is very refreshing.",
-    "hanzi_source": "西瓜"
+    "id": "sent_0114",
+    "zh": "老师，请问这个用汉语怎么说？",
+    "pinyin": "Lǎoshī, qǐngwèn zhège yòng Hànyǔ zěnme shuō?",
+    "en": "Teacher, excuse me, how do you say this in Chinese?",
+    "hanzi_source": "请问这个用汉语怎么说"
   },
   {
-    "id": "sent_0419",
-    "zh": "这个西瓜很重。",
-    "pinyin": "Zhège xīguā hěn zhòng.",
-    "en": "This watermelon is very heavy.",
-    "hanzi_source": "西瓜"
+    "id": "sent_0115",
+    "zh": "这个水果的名字用汉语怎么说？",
+    "pinyin": "Zhège shuǐguǒ de míngzi yòng Hànyǔ zěnme shuō?",
+    "en": "How do you say this fruit's name in Chinese?",
+    "hanzi_source": "请问这个用汉语怎么说"
   },
   {
-    "id": "sent_0420",
-    "zh": "椰子汁很好喝。",
-    "pinyin": "Yēzi zhī hěn hǎohē.",
-    "en": "Coconut water is very tasty.",
-    "hanzi_source": "椰子"
+    "id": "sent_0116",
+    "zh": "请问这个汉字怎么读？是第三声吗？",
+    "pinyin": "Qǐngwèn zhège Hànzì zěnme dú? Shì dì-sān shēng ma?",
+    "en": "How do you read this character? Is it third tone?",
+    "hanzi_source": "请问这个汉字怎么读"
   },
   {
-    "id": "sent_0421",
-    "zh": "椰子壳可以做手工。",
-    "pinyin": "Yēzi ké kěyǐ zuò shǒugōng.",
-    "en": "Coconut shells can be used for crafts.",
-    "hanzi_source": "椰子"
+    "id": "sent_0117",
+    "zh": "这个汉字很难，请问怎么读？",
+    "pinyin": "Zhège Hànzì hěn nán, qǐngwèn zěnme dú?",
+    "en": "This character is hard — how do you pronounce it?",
+    "hanzi_source": "请问这个汉字怎么读"
   },
   {
-    "id": "sent_0422",
-    "zh": "菠萝有点酸。",
-    "pinyin": "Bōluó yǒudiǎn suān.",
-    "en": "Pineapples are a bit sour.",
-    "hanzi_source": "菠萝"
+    "id": "sent_0118",
+    "zh": "请问\"方便\"这个生词是什么意思？",
+    "pinyin": "Qǐngwèn \"fāngbiàn\" zhège shēngcí shì shénme yìsi?",
+    "en": "What does the new word \"fāngbiàn\" mean?",
+    "hanzi_source": "请问这个生词是什么意思"
   },
   {
-    "id": "sent_0423",
-    "zh": "菠萝炒饭很好吃。",
-    "pinyin": "Bōluó chǎofàn hěn hǎochī.",
-    "en": "Pineapple fried rice is delicious.",
-    "hanzi_source": "菠萝"
+    "id": "sent_0119",
+    "zh": "我不懂这个生词，请问是什么意思？",
+    "pinyin": "Wǒ bù dǒng zhège shēngcí, qǐngwèn shì shénme yìsi?",
+    "en": "I don't understand this new word — what does it mean?",
+    "hanzi_source": "请问这个生词是什么意思"
   },
   {
-    "id": "sent_0424",
-    "zh": "橙子富含维生素C。",
-    "pinyin": "Chéngzi fùhán wéishēngsù C.",
-    "en": "Oranges are rich in vitamin C.",
-    "hanzi_source": "橙子"
+    "id": "sent_0120",
+    "zh": "你好！我叫李莉。",
+    "pinyin": "Nǐ hǎo! Wǒ jiào Lǐ Lì.",
+    "en": "Hello! My name is Li Li.",
+    "hanzi_source": "你好"
   },
   {
-    "id": "sent_0425",
-    "zh": "我每天吃一个橙子。",
-    "pinyin": "Wǒ měitiān chī yí ge chéngzi.",
-    "en": "I eat one orange every day.",
-    "hanzi_source": "橙子"
+    "id": "sent_0121",
+    "zh": "老师，你好！",
+    "pinyin": "Lǎoshī, nǐ hǎo!",
+    "en": "Hello, teacher!",
+    "hanzi_source": "你好"
   },
   {
-    "id": "sent_0426",
-    "zh": "我想买一杯咖啡。",
-    "pinyin": "Wǒ xiǎng mǎi yī bēi kāfēi.",
-    "en": "I want to buy a cup of coffee.",
-    "hanzi_source": "买"
+    "id": "sent_0122",
+    "zh": "今天天气很好。",
+    "pinyin": "Jīntiān tiānqì hěn hǎo.",
+    "en": "Today's weather is nice.",
+    "hanzi_source": "好"
   },
   {
-    "id": "sent_0427",
-    "zh": "你在哪儿买的这本书？",
-    "pinyin": "Nǐ zài nǎr mǎi de zhè běn shū?",
-    "en": "Where did you buy this book?",
-    "hanzi_source": "买"
+    "id": "sent_0123",
+    "zh": "这个主意很好。",
+    "pinyin": "Zhège zhǔyi hěn hǎo.",
+    "en": "This idea is very good.",
+    "hanzi_source": "好"
   },
   {
-    "id": "sent_0428",
-    "zh": "这个苹果怎么卖？",
-    "pinyin": "Zhège píngguǒ zěnme mài?",
-    "en": "How much are these apples?",
-    "hanzi_source": "怎么卖"
+    "id": "sent_0124",
+    "zh": "他是我的同学。",
+    "pinyin": "Tā shì wǒ de tóngxué.",
+    "en": "He is my classmate.",
+    "hanzi_source": "同学"
   },
   {
-    "id": "sent_0429",
-    "zh": "西瓜怎么卖？一斤多少钱？",
-    "pinyin": "Xīguā zěnme mài? Yī jīn duōshao qián?",
-    "en": "How are watermelons sold? How much per jin?",
-    "hanzi_source": "怎么卖"
+    "id": "sent_0125",
+    "zh": "同学们早上好！",
+    "pinyin": "Tóngxuémen zǎoshang hǎo!",
+    "en": "Good morning, classmates!",
+    "hanzi_source": "同学"
   },
   {
-    "id": "sent_0430",
+    "id": "sent_0126",
+    "zh": "早上好！",
+    "pinyin": "Zǎoshang hǎo!",
+    "en": "Good morning!",
+    "hanzi_source": "早上"
+  },
+  {
+    "id": "sent_0127",
+    "zh": "我每天早上七点起床。",
+    "pinyin": "Wǒ měitiān zǎoshang qī diǎn qǐchuáng.",
+    "en": "I get up at 7am every morning.",
+    "hanzi_source": "早上"
+  },
+  {
+    "id": "sent_0128",
+    "zh": "老师，再见！",
+    "pinyin": "Lǎoshī, zàijiàn!",
+    "en": "Goodbye, teacher!",
+    "hanzi_source": "再见"
+  },
+  {
+    "id": "sent_0129",
+    "zh": "明天见，再见！",
+    "pinyin": "Míngtiān jiàn, zàijiàn!",
+    "en": "See you tomorrow, goodbye!",
+    "hanzi_source": "再见"
+  },
+  {
+    "id": "sent_0130",
+    "zh": "谢谢你的帮助。",
+    "pinyin": "Xièxie nǐ de bāngzhù.",
+    "en": "Thank you for your help.",
+    "hanzi_source": "谢谢"
+  },
+  {
+    "id": "sent_0131",
+    "zh": "谢谢，不客气。",
+    "pinyin": "Xièxie, bú kèqi.",
+    "en": "Thank you, you're welcome.",
+    "hanzi_source": "谢谢"
+  },
+  {
+    "id": "sent_0132",
+    "zh": "谢谢！——不客气。",
+    "pinyin": "Xièxie! — Bú kèqi.",
+    "en": "Thank you! — You're welcome.",
+    "hanzi_source": "不客气"
+  },
+  {
+    "id": "sent_0133",
+    "zh": "不客气，这是我应该做的。",
+    "pinyin": "Bú kèqi, zhè shì wǒ yīnggāi zuò de.",
+    "en": "You're welcome, this is what I should do.",
+    "hanzi_source": "不客气"
+  },
+  {
+    "id": "sent_0134",
+    "zh": "对不起，我来晚了。",
+    "pinyin": "Duìbuqǐ, wǒ lái wǎn le.",
+    "en": "Sorry, I'm late.",
+    "hanzi_source": "对不起"
+  },
+  {
+    "id": "sent_0135",
+    "zh": "对不起，我没听懂。",
+    "pinyin": "Duìbuqǐ, wǒ méi tīngdǒng.",
+    "en": "Sorry, I didn't understand.",
+    "hanzi_source": "对不起"
+  },
+  {
+    "id": "sent_0136",
+    "zh": "对不起！——没关系。",
+    "pinyin": "Duìbuqǐ! — Méi guānxi.",
+    "en": "Sorry! — That's all right.",
+    "hanzi_source": "没关系"
+  },
+  {
+    "id": "sent_0137",
+    "zh": "没关系，慢慢来。",
+    "pinyin": "Méi guānxi, mànmàn lái.",
+    "en": "It's okay, take your time.",
+    "hanzi_source": "没关系"
+  },
+  {
+    "id": "sent_0138",
+    "zh": "我很高兴。",
+    "pinyin": "Wǒ hěn gāoxìng.",
+    "en": "I'm very happy.",
+    "hanzi_source": "很"
+  },
+  {
+    "id": "sent_0139",
+    "zh": "这个菜很好吃。",
+    "pinyin": "Zhège cài hěn hǎochī.",
+    "en": "This dish is very tasty.",
+    "hanzi_source": "很"
+  },
+  {
+    "id": "sent_0140",
+    "zh": "我很好，你呢？",
+    "pinyin": "Wǒ hěn hǎo, nǐ ne?",
+    "en": "I'm fine, and you?",
+    "hanzi_source": "呢"
+  },
+  {
+    "id": "sent_0141",
+    "zh": "他在学校，你妈妈呢？",
+    "pinyin": "Tā zài xuéxiào, nǐ māma ne?",
+    "en": "He's at school, what about your mom?",
+    "hanzi_source": "呢"
+  },
+  {
+    "id": "sent_0142",
+    "zh": "你最近怎么样？",
+    "pinyin": "Nǐ zuìjìn zěnmeyàng?",
+    "en": "How have you been recently?",
+    "hanzi_source": "最近"
+  },
+  {
+    "id": "sent_0143",
+    "zh": "我最近很忙。",
+    "pinyin": "Wǒ zuìjìn hěn máng.",
+    "en": "I've been busy lately.",
+    "hanzi_source": "最近"
+  },
+  {
+    "id": "sent_0144",
+    "zh": "我最近很忙。",
+    "pinyin": "Wǒ zuìjìn hěn máng.",
+    "en": "I've been busy lately.",
+    "hanzi_source": "忙"
+  },
+  {
+    "id": "sent_0145",
+    "zh": "你忙不忙？",
+    "pinyin": "Nǐ máng bù máng?",
+    "en": "Are you busy?",
+    "hanzi_source": "忙"
+  },
+  {
+    "id": "sent_0146",
+    "zh": "我有点儿饿。",
+    "pinyin": "Wǒ yǒudiǎnr è.",
+    "en": "I'm a bit hungry.",
+    "hanzi_source": "饿"
+  },
+  {
+    "id": "sent_0147",
+    "zh": "你饿了吗？",
+    "pinyin": "Nǐ è le ma?",
+    "en": "Are you hungry?",
+    "hanzi_source": "饿"
+  },
+  {
+    "id": "sent_0148",
+    "zh": "我有点儿饿。",
+    "pinyin": "Wǒ yǒudiǎnr è.",
+    "en": "I'm a bit hungry.",
+    "hanzi_source": "有点儿"
+  },
+  {
+    "id": "sent_0149",
+    "zh": "这件衣服有点儿贵。",
+    "pinyin": "Zhè jiàn yīfu yǒudiǎnr guì.",
+    "en": "This piece of clothing is a bit expensive.",
+    "hanzi_source": "有点儿"
+  },
+  {
+    "id": "sent_0150",
+    "zh": "你吃饭了吗？",
+    "pinyin": "Nǐ chī fàn le ma?",
+    "en": "Have you eaten?",
+    "hanzi_source": "吃饭"
+  },
+  {
+    "id": "sent_0151",
+    "zh": "我们一起吃饭吧。",
+    "pinyin": "Wǒmen yìqǐ chī fàn ba.",
+    "en": "Let's eat together.",
+    "hanzi_source": "吃饭"
+  },
+  {
+    "id": "sent_0152",
+    "zh": "我们走吧。",
+    "pinyin": "Wǒmen zǒu ba.",
+    "en": "Let's go.",
+    "hanzi_source": "吧"
+  },
+  {
+    "id": "sent_0153",
+    "zh": "你去吧！",
+    "pinyin": "Nǐ qù ba!",
+    "en": "You go!",
+    "hanzi_source": "吧"
+  },
+  {
+    "id": "sent_0154",
+    "zh": "汉语很难吗？",
+    "pinyin": "Hànyǔ hěn nán ma?",
+    "en": "Is Chinese difficult?",
+    "hanzi_source": "难"
+  },
+  {
+    "id": "sent_0155",
+    "zh": "这个问题不难。",
+    "pinyin": "Zhège wèntí bù nán.",
+    "en": "This question isn't hard.",
+    "hanzi_source": "难"
+  },
+  {
+    "id": "sent_0156",
+    "zh": "我非常高兴认识你。",
+    "pinyin": "Wǒ fēicháng gāoxìng rènshi nǐ.",
+    "en": "I'm extremely happy to meet you.",
+    "hanzi_source": "非常"
+  },
+  {
+    "id": "sent_0157",
+    "zh": "这个菜非常好吃。",
+    "pinyin": "Zhège cài fēicháng hǎochī.",
+    "en": "This dish is extremely tasty.",
+    "hanzi_source": "非常"
+  },
+  {
+    "id": "sent_0158",
+    "zh": "认识你很高兴。",
+    "pinyin": "Rènshi nǐ hěn gāoxìng.",
+    "en": "Glad to meet you.",
+    "hanzi_source": "高兴"
+  },
+  {
+    "id": "sent_0159",
+    "zh": "我今天很高兴。",
+    "pinyin": "Wǒ jīntiān hěn gāoxìng.",
+    "en": "I'm very happy today.",
+    "hanzi_source": "高兴"
+  },
+  {
+    "id": "sent_0160",
+    "zh": "认识你很高兴。",
+    "pinyin": "Rènshi nǐ hěn gāoxìng.",
+    "en": "Nice to meet you.",
+    "hanzi_source": "认识"
+  },
+  {
+    "id": "sent_0161",
+    "zh": "我认识他。",
+    "pinyin": "Wǒ rènshi tā.",
+    "en": "I know him.",
+    "hanzi_source": "认识"
+  },
+  {
+    "id": "sent_0162",
+    "zh": "她很漂亮。",
+    "pinyin": "Tā hěn piàoliang.",
+    "en": "She is very beautiful.",
+    "hanzi_source": "漂亮"
+  },
+  {
+    "id": "sent_0163",
+    "zh": "这件衣服很漂亮。",
+    "pinyin": "Zhè jiàn yīfu hěn piàoliang.",
+    "en": "This piece of clothing is very beautiful.",
+    "hanzi_source": "漂亮"
+  },
+  {
+    "id": "sent_0164",
+    "zh": "我今天很累。",
+    "pinyin": "Wǒ jīntiān hěn lèi.",
+    "en": "I'm very tired today.",
+    "hanzi_source": "累"
+  },
+  {
+    "id": "sent_0165",
+    "zh": "你累不累？",
+    "pinyin": "Nǐ lèi bú lèi?",
+    "en": "Are you tired?",
+    "hanzi_source": "累"
+  },
+  {
+    "id": "sent_0166",
+    "zh": "明天见！",
+    "pinyin": "Míngtiān jiàn!",
+    "en": "See you tomorrow!",
+    "hanzi_source": "明天见"
+  },
+  {
+    "id": "sent_0167",
+    "zh": "老师说：明天见。",
+    "pinyin": "Lǎoshī shuō: míngtiān jiàn.",
+    "en": "The teacher said: see you tomorrow.",
+    "hanzi_source": "明天见"
+  },
+  {
+    "id": "sent_0168",
+    "zh": "晚安，做个好梦。",
+    "pinyin": "Wǎn'ān, zuò ge hǎo mèng.",
+    "en": "Good night, sweet dreams.",
+    "hanzi_source": "晚安"
+  },
+  {
+    "id": "sent_0169",
+    "zh": "妈妈跟我说晚安。",
+    "pinyin": "Māma gēn wǒ shuō wǎn'ān.",
+    "en": "Mom said good night to me.",
+    "hanzi_source": "晚安"
+  },
+  {
+    "id": "sent_0170",
+    "zh": "今天是几月几号？",
+    "pinyin": "Jīntiān shì jǐ yuè jǐ hào?",
+    "en": "What's the date today?",
+    "hanzi_source": "今天"
+  },
+  {
+    "id": "sent_0171",
+    "zh": "今天是九月一号。",
+    "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+    "en": "Today is September 1st.",
+    "hanzi_source": "今天"
+  },
+  {
+    "id": "sent_0172",
+    "zh": "今天几月几号？",
+    "pinyin": "Jīntiān jǐ yuè jǐ hào?",
+    "en": "What is today's date?",
+    "hanzi_source": "几"
+  },
+  {
+    "id": "sent_0173",
+    "zh": "你家有几口人？",
+    "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+    "en": "How many people are in your family?",
+    "hanzi_source": "几"
+  },
+  {
+    "id": "sent_0174",
+    "zh": "现在是九月。",
+    "pinyin": "Xiànzài shì jiǔyuè.",
+    "en": "It's September now.",
+    "hanzi_source": "月"
+  },
+  {
+    "id": "sent_0175",
+    "zh": "一年有十二个月。",
+    "pinyin": "Yī nián yǒu shí'èr ge yuè.",
+    "en": "A year has twelve months.",
+    "hanzi_source": "月"
+  },
+  {
+    "id": "sent_0176",
+    "zh": "今天是九月一号。",
+    "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+    "en": "Today is September 1st.",
+    "hanzi_source": "号"
+  },
+  {
+    "id": "sent_0177",
+    "zh": "明天是几号？",
+    "pinyin": "Míngtiān shì jǐ hào?",
+    "en": "What's tomorrow's date?",
+    "hanzi_source": "号"
+  },
+  {
+    "id": "sent_0178",
+    "zh": "今天是九月九号。",
+    "pinyin": "Jīntiān shì jiǔyuè jiǔ hào.",
+    "en": "Today is September 9th.",
+    "hanzi_source": "九"
+  },
+  {
+    "id": "sent_0179",
+    "zh": "我有九本书。",
+    "pinyin": "Wǒ yǒu jiǔ běn shū.",
+    "en": "I have nine books.",
+    "hanzi_source": "九"
+  },
+  {
+    "id": "sent_0180",
+    "zh": "今天是九月一号。",
+    "pinyin": "Jīntiān shì jiǔyuè yī hào.",
+    "en": "Today is September 1st.",
+    "hanzi_source": "一"
+  },
+  {
+    "id": "sent_0181",
+    "zh": "我有一个朋友。",
+    "pinyin": "Wǒ yǒu yī ge péngyou.",
+    "en": "I have one friend.",
+    "hanzi_source": "一"
+  },
+  {
+    "id": "sent_0182",
+    "zh": "明天是几月几号？",
+    "pinyin": "Míngtiān shì jǐ yuè jǐ hào?",
+    "en": "What's tomorrow's date?",
+    "hanzi_source": "明天"
+  },
+  {
+    "id": "sent_0183",
+    "zh": "明天见！",
+    "pinyin": "Míngtiān jiàn!",
+    "en": "See you tomorrow!",
+    "hanzi_source": "明天"
+  },
+  {
+    "id": "sent_0184",
+    "zh": "明天是九月二号。",
+    "pinyin": "Míngtiān shì jiǔyuè èr hào.",
+    "en": "Tomorrow is September 2nd.",
+    "hanzi_source": "二"
+  },
+  {
+    "id": "sent_0185",
+    "zh": "我有两个朋友。",
+    "pinyin": "Wǒ yǒu liǎng ge péngyou.",
+    "en": "I have two friends.",
+    "hanzi_source": "二"
+  },
+  {
+    "id": "sent_0186",
+    "zh": "昨天星期几？",
+    "pinyin": "Zuótiān xīngqī jǐ?",
+    "en": "What day was yesterday?",
+    "hanzi_source": "昨天"
+  },
+  {
+    "id": "sent_0187",
+    "zh": "昨天是星期日。",
+    "pinyin": "Zuótiān shì xīngqīrì.",
+    "en": "Yesterday was Sunday.",
+    "hanzi_source": "昨天"
+  },
+  {
+    "id": "sent_0188",
+    "zh": "一个星期有七天。",
+    "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+    "en": "A week has seven days.",
+    "hanzi_source": "星期"
+  },
+  {
+    "id": "sent_0189",
+    "zh": "昨天星期几？",
+    "pinyin": "Zuótiān xīngqī jǐ?",
+    "en": "What day of the week was yesterday?",
+    "hanzi_source": "星期"
+  },
+  {
+    "id": "sent_0190",
+    "zh": "昨天是星期日。",
+    "pinyin": "Zuótiān shì Xīngqīrì.",
+    "en": "Yesterday was Sunday.",
+    "hanzi_source": "星期日"
+  },
+  {
+    "id": "sent_0191",
+    "zh": "星期日我不上课。",
+    "pinyin": "Xīngqīrì wǒ bú shàngkè.",
+    "en": "I don't have class on Sunday.",
+    "hanzi_source": "星期日"
+  },
+  {
+    "id": "sent_0192",
+    "zh": "一个星期有七天。",
+    "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+    "en": "A week has seven days.",
+    "hanzi_source": "天"
+  },
+  {
+    "id": "sent_0193",
+    "zh": "今天天气很好。",
+    "pinyin": "Jīntiān tiānqì hěn hǎo.",
+    "en": "The weather is nice today.",
+    "hanzi_source": "天"
+  },
+  {
+    "id": "sent_0194",
+    "zh": "一个星期有七天。",
+    "pinyin": "Yī ge xīngqī yǒu qī tiān.",
+    "en": "A week has seven days.",
+    "hanzi_source": "七"
+  },
+  {
+    "id": "sent_0195",
+    "zh": "我七点起床。",
+    "pinyin": "Wǒ qī diǎn qǐchuáng.",
+    "en": "I get up at seven o'clock.",
+    "hanzi_source": "七"
+  },
+  {
+    "id": "sent_0196",
+    "zh": "今年是2026年。",
+    "pinyin": "Jīnnián shì èr líng èr liù nián.",
+    "en": "This year is 2026.",
+    "hanzi_source": "年"
+  },
+  {
+    "id": "sent_0197",
+    "zh": "一年有十二个月。",
+    "pinyin": "Yī nián yǒu shí'èr ge yuè.",
+    "en": "A year has twelve months.",
+    "hanzi_source": "年"
+  },
+  {
+    "id": "sent_0198",
+    "zh": "你有多少书？",
+    "pinyin": "Nǐ yǒu duōshao shū?",
+    "en": "How many books do you have?",
+    "hanzi_source": "多少"
+  },
+  {
+    "id": "sent_0199",
     "zh": "这个多少钱？",
     "pinyin": "Zhège duōshao qián?",
     "en": "How much is this?",
     "hanzi_source": "多少"
   },
   {
+    "id": "sent_0200",
+    "zh": "我有十本书。",
+    "pinyin": "Wǒ yǒu shí běn shū.",
+    "en": "I have ten books.",
+    "hanzi_source": "十"
+  },
+  {
+    "id": "sent_0201",
+    "zh": "十月是秋天。",
+    "pinyin": "Shíyuè shì qiūtiān.",
+    "en": "October is autumn.",
+    "hanzi_source": "十"
+  },
+  {
+    "id": "sent_0202",
+    "zh": "我八点上课。",
+    "pinyin": "Wǒ bā diǎn shàngkè.",
+    "en": "I start class at eight o'clock.",
+    "hanzi_source": "八"
+  },
+  {
+    "id": "sent_0203",
+    "zh": "今天是八号。",
+    "pinyin": "Jīntiān shì bā hào.",
+    "en": "Today is the 8th.",
+    "hanzi_source": "八"
+  },
+  {
+    "id": "sent_0204",
+    "zh": "星期一我很忙。",
+    "pinyin": "Xīngqīyī wǒ hěn máng.",
+    "en": "I'm busy on Monday.",
+    "hanzi_source": "星期一"
+  },
+  {
+    "id": "sent_0205",
+    "zh": "我们星期一见面吧。",
+    "pinyin": "Wǒmen Xīngqīyī jiànmiàn ba.",
+    "en": "Let's meet on Monday.",
+    "hanzi_source": "星期一"
+  },
+  {
+    "id": "sent_0206",
+    "zh": "星期二有汉语课。",
+    "pinyin": "Xīngqī'èr yǒu Hànyǔ kè.",
+    "en": "There's Chinese class on Tuesday.",
+    "hanzi_source": "星期二"
+  },
+  {
+    "id": "sent_0207",
+    "zh": "今天是星期二。",
+    "pinyin": "Jīntiān shì Xīngqī'èr.",
+    "en": "Today is Tuesday.",
+    "hanzi_source": "星期二"
+  },
+  {
+    "id": "sent_0208",
+    "zh": "后天是我的生日。",
+    "pinyin": "Hòutiān shì wǒ de shēngrì.",
+    "en": "The day after tomorrow is my birthday.",
+    "hanzi_source": "后天"
+  },
+  {
+    "id": "sent_0209",
+    "zh": "我们后天见。",
+    "pinyin": "Wǒmen hòutiān jiàn.",
+    "en": "Let's meet the day after tomorrow.",
+    "hanzi_source": "后天"
+  },
+  {
+    "id": "sent_0210",
+    "zh": "星期三下午没课。",
+    "pinyin": "Xīngqīsān xiàwǔ méi kè.",
+    "en": "There's no class on Wednesday afternoon.",
+    "hanzi_source": "星期三"
+  },
+  {
+    "id": "sent_0211",
+    "zh": "今天星期三。",
+    "pinyin": "Jīntiān Xīngqīsān.",
+    "en": "Today is Wednesday.",
+    "hanzi_source": "星期三"
+  },
+  {
+    "id": "sent_0212",
+    "zh": "我三点下课。",
+    "pinyin": "Wǒ sān diǎn xiàkè.",
+    "en": "I finish class at three.",
+    "hanzi_source": "三"
+  },
+  {
+    "id": "sent_0213",
+    "zh": "三月是春天。",
+    "pinyin": "Sānyuè shì chūntiān.",
+    "en": "March is spring.",
+    "hanzi_source": "三"
+  },
+  {
+    "id": "sent_0214",
+    "zh": "这本书一百块。",
+    "pinyin": "Zhè běn shū yī bǎi kuài.",
+    "en": "This book costs one hundred yuan.",
+    "hanzi_source": "百"
+  },
+  {
+    "id": "sent_0215",
+    "zh": "一百个学生。",
+    "pinyin": "Yī bǎi ge xuésheng.",
+    "en": "One hundred students.",
+    "hanzi_source": "百"
+  },
+  {
+    "id": "sent_0216",
+    "zh": "我六点起床。",
+    "pinyin": "Wǒ liù diǎn qǐchuáng.",
+    "en": "I get up at six.",
+    "hanzi_source": "六"
+  },
+  {
+    "id": "sent_0217",
+    "zh": "六月很热。",
+    "pinyin": "Liùyuè hěn rè.",
+    "en": "June is very hot.",
+    "hanzi_source": "六"
+  },
+  {
+    "id": "sent_0218",
+    "zh": "我有五个朋友。",
+    "pinyin": "Wǒ yǒu wǔ ge péngyou.",
+    "en": "I have five friends.",
+    "hanzi_source": "五"
+  },
+  {
+    "id": "sent_0219",
+    "zh": "五月七号是我的生日。",
+    "pinyin": "Wǔyuè qī hào shì wǒ de shēngrì.",
+    "en": "May 7th is my birthday.",
+    "hanzi_source": "五"
+  },
+  {
+    "id": "sent_0220",
+    "zh": "一年有四个季节。",
+    "pinyin": "Yī nián yǒu sì ge jìjié.",
+    "en": "A year has four seasons.",
+    "hanzi_source": "四"
+  },
+  {
+    "id": "sent_0221",
+    "zh": "我有四本书。",
+    "pinyin": "Wǒ yǒu sì běn shū.",
+    "en": "I have four books.",
+    "hanzi_source": "四"
+  },
+  {
+    "id": "sent_0222",
+    "zh": "我姓王。",
+    "pinyin": "Wǒ xìng Wáng.",
+    "en": "My surname is Wang.",
+    "hanzi_source": "姓"
+  },
+  {
+    "id": "sent_0223",
+    "zh": "请问您贵姓？",
+    "pinyin": "Qǐngwèn nín guì xìng?",
+    "en": "May I ask your surname?",
+    "hanzi_source": "姓"
+  },
+  {
+    "id": "sent_0224",
+    "zh": "她叫李芳。",
+    "pinyin": "Tā jiào Lǐ Fāng.",
+    "en": "She is called Li Fang.",
+    "hanzi_source": "叫"
+  },
+  {
+    "id": "sent_0225",
+    "zh": "你叫什么名字？",
+    "pinyin": "Nǐ jiào shénme míngzi?",
+    "en": "What's your name?",
+    "hanzi_source": "叫"
+  },
+  {
+    "id": "sent_0226",
+    "zh": "我的名字是张伟。",
+    "pinyin": "Wǒ de míngzi shì Zhāng Wěi.",
+    "en": "My name is Zhang Wei.",
+    "hanzi_source": "名字"
+  },
+  {
+    "id": "sent_0227",
+    "zh": "请写下你的名字。",
+    "pinyin": "Qǐng xiěxià nǐ de míngzi.",
+    "en": "Please write down your name.",
+    "hanzi_source": "名字"
+  },
+  {
+    "id": "sent_0228",
+    "zh": "今年我二十岁。",
+    "pinyin": "Jīnnián wǒ èrshí suì.",
+    "en": "I'm 20 years old this year.",
+    "hanzi_source": "今年"
+  },
+  {
+    "id": "sent_0229",
+    "zh": "今年是2026年。",
+    "pinyin": "Jīnnián shì èr líng èr liù nián.",
+    "en": "This year is 2026.",
+    "hanzi_source": "今年"
+  },
+  {
+    "id": "sent_0230",
+    "zh": "你多大了？",
+    "pinyin": "Nǐ duō dà le?",
+    "en": "How old are you?",
+    "hanzi_source": "多"
+  },
+  {
+    "id": "sent_0231",
+    "zh": "这条路多长？",
+    "pinyin": "Zhè tiáo lù duō cháng?",
+    "en": "How long is this road?",
+    "hanzi_source": "多"
+  },
+  {
+    "id": "sent_0232",
+    "zh": "我哥哥比我大三岁。",
+    "pinyin": "Wǒ gēge bǐ wǒ dà sān suì.",
+    "en": "My older brother is three years older than me.",
+    "hanzi_source": "大"
+  },
+  {
+    "id": "sent_0233",
+    "zh": "你多大？",
+    "pinyin": "Nǐ duō dà?",
+    "en": "How old are you?",
+    "hanzi_source": "大"
+  },
+  {
+    "id": "sent_0234",
+    "zh": "你是哪国人？",
+    "pinyin": "Nǐ shì nǎ guó rén?",
+    "en": "Which country are you from?",
+    "hanzi_source": "哪"
+  },
+  {
+    "id": "sent_0235",
+    "zh": "哪本书是你的？",
+    "pinyin": "Nǎ běn shū shì nǐ de?",
+    "en": "Which book is yours?",
+    "hanzi_source": "哪"
+  },
+  {
+    "id": "sent_0236",
+    "zh": "中国很大。",
+    "pinyin": "Zhōngguó hěn dà.",
+    "en": "China is very big.",
+    "hanzi_source": "国"
+  },
+  {
+    "id": "sent_0237",
+    "zh": "你去过哪些国家？",
+    "pinyin": "Nǐ qù guo nǎxiē guójiā?",
+    "en": "Which countries have you been to?",
+    "hanzi_source": "国"
+  },
+  {
+    "id": "sent_0238",
+    "zh": "泰国有很多水果。",
+    "pinyin": "Tàiguó yǒu hěn duō shuǐguǒ.",
+    "en": "Thailand has a lot of fruit.",
+    "hanzi_source": "泰国"
+  },
+  {
+    "id": "sent_0239",
+    "zh": "我来自泰国。",
+    "pinyin": "Wǒ láizì Tàiguó.",
+    "en": "I come from Thailand.",
+    "hanzi_source": "泰国"
+  },
+  {
+    "id": "sent_0240",
+    "zh": "她是泰国人。",
+    "pinyin": "Tā shì Tàiguórén.",
+    "en": "She is Thai.",
+    "hanzi_source": "泰国人"
+  },
+  {
+    "id": "sent_0241",
+    "zh": "我的室友是泰国人。",
+    "pinyin": "Wǒ de shìyǒu shì Tàiguórén.",
+    "en": "My roommate is Thai.",
+    "hanzi_source": "泰国人"
+  },
+  {
+    "id": "sent_0242",
+    "zh": "好久不见。",
+    "pinyin": "Hǎo jiǔ bú jiàn.",
+    "en": "Long time no see.",
+    "hanzi_source": "久"
+  },
+  {
+    "id": "sent_0243",
+    "zh": "你等了多久？",
+    "pinyin": "Nǐ děng le duō jiǔ?",
+    "en": "How long have you waited?",
+    "hanzi_source": "久"
+  },
+  {
+    "id": "sent_0244",
+    "zh": "现在几点了？",
+    "pinyin": "Xiànzài jǐ diǎn le?",
+    "en": "What time is it now?",
+    "hanzi_source": "现在"
+  },
+  {
+    "id": "sent_0245",
+    "zh": "我现在很忙。",
+    "pinyin": "Wǒ xiànzài hěn máng.",
+    "en": "I'm busy now.",
+    "hanzi_source": "现在"
+  },
+  {
+    "id": "sent_0246",
+    "zh": "我在家里。",
+    "pinyin": "Wǒ zài jiā lǐ.",
+    "en": "I am at home.",
+    "hanzi_source": "在"
+  },
+  {
+    "id": "sent_0247",
+    "zh": "你在哪儿？",
+    "pinyin": "Nǐ zài nǎr?",
+    "en": "Where are you?",
+    "hanzi_source": "在"
+  },
+  {
+    "id": "sent_0248",
+    "zh": "你去哪儿？",
+    "pinyin": "Nǐ qù nǎr?",
+    "en": "Where are you going?",
+    "hanzi_source": "哪儿"
+  },
+  {
+    "id": "sent_0249",
+    "zh": "我的手机在哪儿？",
+    "pinyin": "Wǒ de shǒujī zài nǎr?",
+    "en": "Where is my phone?",
+    "hanzi_source": "哪儿"
+  },
+  {
+    "id": "sent_0250",
+    "zh": "武汉大学很有名。",
+    "pinyin": "Wǔhàn Dàxué hěn yǒumíng.",
+    "en": "Wuhan University is very famous.",
+    "hanzi_source": "武汉"
+  },
+  {
+    "id": "sent_0251",
+    "zh": "我住在武汉。",
+    "pinyin": "Wǒ zhù zài Wǔhàn.",
+    "en": "I live in Wuhan.",
+    "hanzi_source": "武汉"
+  },
+  {
+    "id": "sent_0252",
+    "zh": "大家好！",
+    "pinyin": "Dàjiā hǎo!",
+    "en": "Hello everyone!",
+    "hanzi_source": "大家"
+  },
+  {
+    "id": "sent_0253",
+    "zh": "请大家安静。",
+    "pinyin": "Qǐng dàjiā ānjìng.",
+    "en": "Everyone, please be quiet.",
+    "hanzi_source": "大家"
+  },
+  {
+    "id": "sent_0254",
+    "zh": "我来介绍一下我的朋友。",
+    "pinyin": "Wǒ lái jièshào yīxià wǒ de péngyou.",
+    "en": "Let me introduce my friend.",
+    "hanzi_source": "介绍"
+  },
+  {
+    "id": "sent_0255",
+    "zh": "请你介绍一下自己。",
+    "pinyin": "Qǐng nǐ jièshào yīxià zìjǐ.",
+    "en": "Please introduce yourself.",
+    "hanzi_source": "介绍"
+  },
+  {
+    "id": "sent_0256",
+    "zh": "你看一下。",
+    "pinyin": "Nǐ kàn yíxià.",
+    "en": "Take a look.",
+    "hanzi_source": "一下"
+  },
+  {
+    "id": "sent_0257",
+    "zh": "我想一下。",
+    "pinyin": "Wǒ xiǎng yíxià.",
+    "en": "Let me think for a bit.",
+    "hanzi_source": "一下"
+  },
+  {
+    "id": "sent_0258",
+    "zh": "我自己去。",
+    "pinyin": "Wǒ zìjǐ qù.",
+    "en": "I'll go myself.",
+    "hanzi_source": "自己"
+  },
+  {
+    "id": "sent_0259",
+    "zh": "你要相信自己。",
+    "pinyin": "Nǐ yào xiāngxìn zìjǐ.",
+    "en": "You need to believe in yourself.",
+    "hanzi_source": "自己"
+  },
+  {
+    "id": "sent_0260",
+    "zh": "你家有几口人？",
+    "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+    "en": "How many people are in your family?",
+    "hanzi_source": "家"
+  },
+  {
+    "id": "sent_0261",
+    "zh": "我家有六口人。",
+    "pinyin": "Wǒ jiā yǒu liù kǒu rén.",
+    "en": "My family has six people.",
+    "hanzi_source": "家"
+  },
+  {
+    "id": "sent_0262",
+    "zh": "我家有六口人。",
+    "pinyin": "Wǒ jiā yǒu liù kǒu rén.",
+    "en": "My family has six people.",
+    "hanzi_source": "有"
+  },
+  {
+    "id": "sent_0263",
+    "zh": "你有哥哥吗？",
+    "pinyin": "Nǐ yǒu gēge ma?",
+    "en": "Do you have an older brother?",
+    "hanzi_source": "有"
+  },
+  {
+    "id": "sent_0264",
+    "zh": "你家有几口人？",
+    "pinyin": "Nǐ jiā yǒu jǐ kǒu rén?",
+    "en": "How many people are in your family?",
+    "hanzi_source": "口"
+  },
+  {
+    "id": "sent_0265",
+    "zh": "我家有四口人。",
+    "pinyin": "Wǒ jiā yǒu sì kǒu rén.",
+    "en": "My family has four people.",
+    "hanzi_source": "口"
+  },
+  {
+    "id": "sent_0266",
+    "zh": "我爷爷七十岁了。",
+    "pinyin": "Wǒ yéye qīshí suì le.",
+    "en": "My grandfather is 70 years old.",
+    "hanzi_source": "爷爷"
+  },
+  {
+    "id": "sent_0267",
+    "zh": "爷爷喜欢喝茶。",
+    "pinyin": "Yéye xǐhuan hē chá.",
+    "en": "Grandpa likes drinking tea.",
+    "hanzi_source": "爷爷"
+  },
+  {
+    "id": "sent_0268",
+    "zh": "奶奶做的饭很好吃。",
+    "pinyin": "Nǎinai zuò de fàn hěn hǎochī.",
+    "en": "The food grandma makes is delicious.",
+    "hanzi_source": "奶奶"
+  },
+  {
+    "id": "sent_0269",
+    "zh": "我和奶奶一起住。",
+    "pinyin": "Wǒ hé nǎinai yìqǐ zhù.",
+    "en": "I live with grandma.",
+    "hanzi_source": "奶奶"
+  },
+  {
+    "id": "sent_0270",
+    "zh": "我爸爸是医生。",
+    "pinyin": "Wǒ bàba shì yīshēng.",
+    "en": "My dad is a doctor.",
+    "hanzi_source": "爸爸"
+  },
+  {
+    "id": "sent_0271",
+    "zh": "爸爸在哪儿工作？",
+    "pinyin": "Bàba zài nǎr gōngzuò?",
+    "en": "Where does dad work?",
+    "hanzi_source": "爸爸"
+  },
+  {
+    "id": "sent_0272",
+    "zh": "我妈妈是老师。",
+    "pinyin": "Wǒ māma shì lǎoshī.",
+    "en": "My mom is a teacher.",
+    "hanzi_source": "妈妈"
+  },
+  {
+    "id": "sent_0273",
+    "zh": "妈妈现在在学校吗？",
+    "pinyin": "Māma xiànzài zài xuéxiào ma?",
+    "en": "Is mom at school right now?",
+    "hanzi_source": "妈妈"
+  },
+  {
+    "id": "sent_0274",
+    "zh": "我有一个弟弟。",
+    "pinyin": "Wǒ yǒu yí ge dìdi.",
+    "en": "I have a younger brother.",
+    "hanzi_source": "弟弟"
+  },
+  {
+    "id": "sent_0275",
+    "zh": "弟弟想做律师。",
+    "pinyin": "Dìdi xiǎng zuò lǜshī.",
+    "en": "My younger brother wants to be a lawyer.",
+    "hanzi_source": "弟弟"
+  },
+  {
+    "id": "sent_0276",
+    "zh": "我爱爸爸和妈妈。",
+    "pinyin": "Wǒ ài bàba hé māma.",
+    "en": "I love dad and mom.",
+    "hanzi_source": "和"
+  },
+  {
+    "id": "sent_0277",
+    "zh": "哥哥和姐姐都在家。",
+    "pinyin": "Gēge hé jiějie dōu zài jiā.",
+    "en": "Older brother and older sister are both home.",
+    "hanzi_source": "和"
+  },
+  {
+    "id": "sent_0278",
+    "zh": "你有哥哥吗？",
+    "pinyin": "Nǐ yǒu gēge ma?",
+    "en": "Do you have an older brother?",
+    "hanzi_source": "哥哥"
+  },
+  {
+    "id": "sent_0279",
+    "zh": "我没有哥哥。",
+    "pinyin": "Wǒ méiyǒu gēge.",
+    "en": "I don't have an older brother.",
+    "hanzi_source": "哥哥"
+  },
+  {
+    "id": "sent_0280",
+    "zh": "我姐姐是大学生。",
+    "pinyin": "Wǒ jiějie shì dàxuéshēng.",
+    "en": "My older sister is a college student.",
+    "hanzi_source": "姐姐"
+  },
+  {
+    "id": "sent_0281",
+    "zh": "姐姐比我大两岁。",
+    "pinyin": "Jiějie bǐ wǒ dà liǎng suì.",
+    "en": "My older sister is two years older than me.",
+    "hanzi_source": "姐姐"
+  },
+  {
+    "id": "sent_0282",
+    "zh": "我没有哥哥。",
+    "pinyin": "Wǒ méiyǒu gēge.",
+    "en": "I don't have an older brother.",
+    "hanzi_source": "没有"
+  },
+  {
+    "id": "sent_0283",
+    "zh": "我没有妹妹。",
+    "pinyin": "Wǒ méiyǒu mèimei.",
+    "en": "I don't have a younger sister.",
+    "hanzi_source": "没有"
+  },
+  {
+    "id": "sent_0284",
+    "zh": "我也没有姐姐。",
+    "pinyin": "Wǒ yě méiyǒu jiějie.",
+    "en": "I don't have an older sister either.",
+    "hanzi_source": "也"
+  },
+  {
+    "id": "sent_0285",
+    "zh": "他也是学生。",
+    "pinyin": "Tā yě shì xuésheng.",
+    "en": "He's also a student.",
+    "hanzi_source": "也"
+  },
+  {
+    "id": "sent_0286",
+    "zh": "你有没有妹妹？",
+    "pinyin": "Nǐ yǒu méiyǒu mèimei?",
+    "en": "Do you have a younger sister?",
+    "hanzi_source": "妹妹"
+  },
+  {
+    "id": "sent_0287",
+    "zh": "我有一个妹妹。",
+    "pinyin": "Wǒ yǒu yí ge mèimei.",
+    "en": "I have a younger sister.",
+    "hanzi_source": "妹妹"
+  },
+  {
+    "id": "sent_0288",
+    "zh": "我有一个弟弟。",
+    "pinyin": "Wǒ yǒu yí ge dìdi.",
+    "en": "I have a younger brother.",
+    "hanzi_source": "个"
+  },
+  {
+    "id": "sent_0289",
+    "zh": "一个学生在读书。",
+    "pinyin": "Yí ge xuésheng zài dúshū.",
+    "en": "A student is reading.",
+    "hanzi_source": "个"
+  },
+  {
+    "id": "sent_0290",
+    "zh": "我家有一只猫。",
+    "pinyin": "Wǒ jiā yǒu yī zhī māo.",
+    "en": "My family has a cat.",
+    "hanzi_source": "猫"
+  },
+  {
+    "id": "sent_0291",
+    "zh": "这只猫很可爱。",
+    "pinyin": "Zhè zhī māo hěn kě'ài.",
+    "en": "This cat is very cute.",
+    "hanzi_source": "猫"
+  },
+  {
+    "id": "sent_0292",
+    "zh": "我家有一只猫。",
+    "pinyin": "Wǒ jiā yǒu yī zhī māo.",
+    "en": "My family has a cat.",
+    "hanzi_source": "只"
+  },
+  {
+    "id": "sent_0293",
+    "zh": "那只狗很大。",
+    "pinyin": "Nà zhī gǒu hěn dà.",
+    "en": "That dog is very big.",
+    "hanzi_source": "只"
+  },
+  {
+    "id": "sent_0294",
+    "zh": "我还有一只狗。",
+    "pinyin": "Wǒ hái yǒu yī zhī gǒu.",
+    "en": "I also have a dog.",
+    "hanzi_source": "还"
+  },
+  {
+    "id": "sent_0295",
+    "zh": "他还没来。",
+    "pinyin": "Tā hái méi lái.",
+    "en": "He hasn't come yet.",
+    "hanzi_source": "还"
+  },
+  {
+    "id": "sent_0296",
+    "zh": "我家有一条狗。",
+    "pinyin": "Wǒ jiā yǒu yī tiáo gǒu.",
+    "en": "My family has a dog.",
+    "hanzi_source": "条"
+  },
+  {
+    "id": "sent_0297",
+    "zh": "这条路很长。",
+    "pinyin": "Zhè tiáo lù hěn cháng.",
+    "en": "This road is very long.",
+    "hanzi_source": "条"
+  },
+  {
+    "id": "sent_0298",
+    "zh": "我有一条狗。",
+    "pinyin": "Wǒ yǒu yī tiáo gǒu.",
+    "en": "I have a dog.",
+    "hanzi_source": "狗"
+  },
+  {
+    "id": "sent_0299",
+    "zh": "那条狗很可爱。",
+    "pinyin": "Nà tiáo gǒu hěn kě'ài.",
+    "en": "That dog is very cute.",
+    "hanzi_source": "狗"
+  },
+  {
+    "id": "sent_0300",
+    "zh": "我弟弟是中学生。",
+    "pinyin": "Wǒ dìdi shì zhōngxuéshēng.",
+    "en": "My younger brother is a secondary school student.",
+    "hanzi_source": "中学生"
+  },
+  {
+    "id": "sent_0301",
+    "zh": "中学生要上很多课。",
+    "pinyin": "Zhōngxuéshēng yào shàng hěn duō kè.",
+    "en": "Secondary school students have a lot of classes.",
+    "hanzi_source": "中学生"
+  },
+  {
+    "id": "sent_0302",
+    "zh": "我来中国留学。",
+    "pinyin": "Wǒ lái Zhōngguó liúxué.",
+    "en": "I came to China to study abroad.",
+    "hanzi_source": "留学"
+  },
+  {
+    "id": "sent_0303",
+    "zh": "姐姐去美国留学了。",
+    "pinyin": "Jiějie qù Měiguó liúxué le.",
+    "en": "My older sister went to the US to study abroad.",
+    "hanzi_source": "留学"
+  },
+  {
+    "id": "sent_0304",
+    "zh": "我姐姐是大学生。",
+    "pinyin": "Wǒ jiějie shì dàxuéshēng.",
+    "en": "My older sister is a college student.",
+    "hanzi_source": "大学生"
+  },
+  {
+    "id": "sent_0305",
+    "zh": "大学生要很努力学习。",
+    "pinyin": "Dàxuéshēng yào hěn nǔlì xuéxí.",
+    "en": "College students need to study hard.",
+    "hanzi_source": "大学生"
+  },
+  {
+    "id": "sent_0306",
+    "zh": "我们都是学生。",
+    "pinyin": "Wǒmen dōu shì xuésheng.",
+    "en": "We are all students.",
+    "hanzi_source": "都"
+  },
+  {
+    "id": "sent_0307",
+    "zh": "哥哥和姐姐都在家。",
+    "pinyin": "Gēge hé jiějie dōu zài jiā.",
+    "en": "Older brother and older sister are both home.",
+    "hanzi_source": "都"
+  },
+  {
+    "id": "sent_0308",
+    "zh": "我爸爸做什么工作？",
+    "pinyin": "Wǒ bàba zuò shénme gōngzuò?",
+    "en": "What job does my dad do?",
+    "hanzi_source": "工作"
+  },
+  {
+    "id": "sent_0309",
+    "zh": "你在哪儿工作？",
+    "pinyin": "Nǐ zài nǎr gōngzuò?",
+    "en": "Where do you work?",
+    "hanzi_source": "工作"
+  },
+  {
+    "id": "sent_0310",
+    "zh": "我爸爸是医生。",
+    "pinyin": "Wǒ bàba shì yīshēng.",
+    "en": "My dad is a doctor.",
+    "hanzi_source": "医生"
+  },
+  {
+    "id": "sent_0311",
+    "zh": "医生很辛苦。",
+    "pinyin": "Yīshēng hěn xīnkǔ.",
+    "en": "Doctors work very hard.",
+    "hanzi_source": "医生"
+  },
+  {
+    "id": "sent_0312",
+    "zh": "我爸爸在医院工作。",
+    "pinyin": "Wǒ bàba zài yīyuàn gōngzuò.",
+    "en": "My dad works at a hospital.",
+    "hanzi_source": "医院"
+  },
+  {
+    "id": "sent_0313",
+    "zh": "医院离这儿不远。",
+    "pinyin": "Yīyuàn lí zhèr bù yuǎn.",
+    "en": "The hospital isn't far from here.",
+    "hanzi_source": "医院"
+  },
+  {
+    "id": "sent_0314",
+    "zh": "我妹妹想当律师。",
+    "pinyin": "Wǒ mèimei xiǎng dāng lǜshī.",
+    "en": "My younger sister wants to be a lawyer.",
+    "hanzi_source": "当"
+  },
+  {
+    "id": "sent_0315",
+    "zh": "他当了十年老师。",
+    "pinyin": "Tā dāng le shí nián lǎoshī.",
+    "en": "He's been a teacher for ten years.",
+    "hanzi_source": "当"
+  },
+  {
+    "id": "sent_0316",
+    "zh": "我妹妹想当律师。",
+    "pinyin": "Wǒ mèimei xiǎng dāng lǜshī.",
+    "en": "My younger sister wants to be a lawyer.",
+    "hanzi_source": "律师"
+  },
+  {
+    "id": "sent_0317",
+    "zh": "律师工作很忙。",
+    "pinyin": "Lǜshī gōngzuò hěn máng.",
+    "en": "Lawyers' work is very busy.",
+    "hanzi_source": "律师"
+  },
+  {
+    "id": "sent_0318",
+    "zh": "你以后想做什么工作？",
+    "pinyin": "Nǐ yǐhòu xiǎng zuò shénme gōngzuò?",
+    "en": "What job do you want in the future?",
+    "hanzi_source": "以后"
+  },
+  {
+    "id": "sent_0319",
+    "zh": "以后我想当老师。",
+    "pinyin": "Yǐhòu wǒ xiǎng dāng lǎoshī.",
+    "en": "In the future I want to be a teacher.",
+    "hanzi_source": "以后"
+  },
+  {
+    "id": "sent_0320",
+    "zh": "我爸爸在银行工作。",
+    "pinyin": "Wǒ bàba zài yínháng gōngzuò.",
+    "en": "My dad works at a bank.",
+    "hanzi_source": "银行"
+  },
+  {
+    "id": "sent_0321",
+    "zh": "银行几点开门？",
+    "pinyin": "Yínháng jǐ diǎn kāimén?",
+    "en": "What time does the bank open?",
+    "hanzi_source": "银行"
+  },
+  {
+    "id": "sent_0322",
+    "zh": "他是公司的经理。",
+    "pinyin": "Tā shì gōngsī de jīnglǐ.",
+    "en": "He is the company's manager.",
+    "hanzi_source": "经理"
+  },
+  {
+    "id": "sent_0323",
+    "zh": "经理今天不在。",
+    "pinyin": "Jīnglǐ jīntiān bú zài.",
+    "en": "The manager isn't in today.",
+    "hanzi_source": "经理"
+  },
+  {
+    "id": "sent_0324",
+    "zh": "我在一家公司工作。",
+    "pinyin": "Wǒ zài yī jiā gōngsī gōngzuò.",
+    "en": "I work at a company.",
+    "hanzi_source": "公司"
+  },
+  {
+    "id": "sent_0325",
+    "zh": "这家公司很有名。",
+    "pinyin": "Zhè jiā gōngsī hěn yǒumíng.",
+    "en": "This company is very famous.",
+    "hanzi_source": "公司"
+  },
+  {
+    "id": "sent_0326",
+    "zh": "我姐姐是会计。",
+    "pinyin": "Wǒ jiějie shì kuàijì.",
+    "en": "My older sister is an accountant.",
+    "hanzi_source": "会计"
+  },
+  {
+    "id": "sent_0327",
+    "zh": "会计的工作很仔细。",
+    "pinyin": "Kuàijì de gōngzuò hěn zǐxì.",
+    "en": "An accountant's work requires care.",
+    "hanzi_source": "会计"
+  },
+  {
+    "id": "sent_0328",
+    "zh": "他是一名警察。",
+    "pinyin": "Tā shì yī míng jǐngchá.",
+    "en": "He is a police officer.",
+    "hanzi_source": "警察"
+  },
+  {
+    "id": "sent_0329",
+    "zh": "警察帮助我们找到了手机。",
+    "pinyin": "Jǐngchá bāngzhù wǒmen zhǎodào le shǒujī.",
+    "en": "The police helped us find the phone.",
+    "hanzi_source": "警察"
+  },
+  {
+    "id": "sent_0330",
+    "zh": "派出所就在学校附近。",
+    "pinyin": "Pàichūsuǒ jiù zài xuéxiào fùjìn.",
+    "en": "The police substation is right near the school.",
+    "hanzi_source": "派出所"
+  },
+  {
+    "id": "sent_0331",
+    "zh": "有事可以去派出所。",
+    "pinyin": "Yǒu shì kěyǐ qù pàichūsuǒ.",
+    "en": "If something happens, you can go to the police substation.",
+    "hanzi_source": "派出所"
+  },
+  {
+    "id": "sent_0332",
+    "zh": "收银员在收钱。",
+    "pinyin": "Shōuyínyuán zài shōu qián.",
+    "en": "The cashier is taking payment.",
+    "hanzi_source": "收银员"
+  },
+  {
+    "id": "sent_0333",
+    "zh": "她是超市的收银员。",
+    "pinyin": "Tā shì chāoshì de shōuyínyuán.",
+    "en": "She is the supermarket's cashier.",
+    "hanzi_source": "收银员"
+  },
+  {
+    "id": "sent_0334",
+    "zh": "我去超市买水果。",
+    "pinyin": "Wǒ qù chāoshì mǎi shuǐguǒ.",
+    "en": "I'm going to the supermarket to buy fruit.",
+    "hanzi_source": "超市"
+  },
+  {
+    "id": "sent_0335",
+    "zh": "超市离宿舍很近。",
+    "pinyin": "Chāoshì lí sùshè hěn jìn.",
+    "en": "The supermarket is close to the dorm.",
+    "hanzi_source": "超市"
+  },
+  {
+    "id": "sent_0336",
+    "zh": "他想当厨师。",
+    "pinyin": "Tā xiǎng dāng chúshī.",
+    "en": "He wants to be a chef.",
+    "hanzi_source": "厨师"
+  },
+  {
+    "id": "sent_0337",
+    "zh": "这家饭馆的厨师做菜很好吃。",
+    "pinyin": "Zhè jiā fànguǎn de chúshī zuò cài hěn hǎochī.",
+    "en": "This restaurant's chef cooks delicious food.",
+    "hanzi_source": "厨师"
+  },
+  {
+    "id": "sent_0338",
+    "zh": "这家饭馆的菜很好吃。",
+    "pinyin": "Zhè jiā fànguǎn de cài hěn hǎochī.",
+    "en": "The food at this restaurant is delicious.",
+    "hanzi_source": "饭馆"
+  },
+  {
+    "id": "sent_0339",
+    "zh": "我们去饭馆吃饭吧。",
+    "pinyin": "Wǒmen qù fànguǎn chīfàn ba.",
+    "en": "Let's go eat at the restaurant.",
+    "hanzi_source": "饭馆"
+  },
+  {
+    "id": "sent_0340",
+    "zh": "我来自美国。",
+    "pinyin": "Wǒ láizì Měiguó.",
+    "en": "I come from the USA.",
+    "hanzi_source": "美国"
+  },
+  {
+    "id": "sent_0341",
+    "zh": "美国很大。",
+    "pinyin": "Měiguó hěn dà.",
+    "en": "The USA is very big.",
+    "hanzi_source": "美国"
+  },
+  {
+    "id": "sent_0342",
+    "zh": "你是美国人吧？",
+    "pinyin": "Nǐ shì Měiguórén ba?",
+    "en": "You're American, right?",
+    "hanzi_source": "美国人"
+  },
+  {
+    "id": "sent_0343",
+    "zh": "他不是美国人。",
+    "pinyin": "Tā bú shì Měiguórén.",
+    "en": "He is not American.",
+    "hanzi_source": "美国人"
+  },
+  {
+    "id": "sent_0344",
+    "zh": "我是英国人。",
+    "pinyin": "Wǒ shì Yīngguórén.",
+    "en": "I am British.",
+    "hanzi_source": "英国"
+  },
+  {
+    "id": "sent_0345",
+    "zh": "英国有很多博物馆。",
+    "pinyin": "Yīngguó yǒu hěn duō bówùguǎn.",
+    "en": "The UK has many museums.",
+    "hanzi_source": "英国"
+  },
+  {
+    "id": "sent_0346",
+    "zh": "不是，我是英国人。",
+    "pinyin": "Bú shì, wǒ shì Yīngguórén.",
+    "en": "No, I am British.",
+    "hanzi_source": "英国人"
+  },
+  {
+    "id": "sent_0347",
+    "zh": "她是英国人。",
+    "pinyin": "Tā shì Yīngguórén.",
+    "en": "She is British.",
+    "hanzi_source": "英国人"
+  },
+  {
+    "id": "sent_0348",
+    "zh": "你会说英语吗？",
+    "pinyin": "Nǐ huì shuō Yīngyǔ ma?",
+    "en": "Can you speak English?",
+    "hanzi_source": "英语"
+  },
+  {
+    "id": "sent_0349",
+    "zh": "我会说英语，还会说日语。",
+    "pinyin": "Wǒ huì shuō Yīngyǔ, hái huì shuō Rìyǔ.",
+    "en": "I can speak English, and also Japanese.",
+    "hanzi_source": "英语"
+  },
+  {
+    "id": "sent_0350",
+    "zh": "我还会说日语。",
+    "pinyin": "Wǒ hái huì shuō Rìyǔ.",
+    "en": "I can also speak Japanese.",
+    "hanzi_source": "日语"
+  },
+  {
+    "id": "sent_0351",
+    "zh": "日语和汉语不一样。",
+    "pinyin": "Rìyǔ hé Hànyǔ bù yíyàng.",
+    "en": "Japanese and Chinese are different.",
+    "hanzi_source": "日语"
+  },
+  {
+    "id": "sent_0352",
+    "zh": "你的朋友来自欧洲吗？",
+    "pinyin": "Nǐ de péngyou láizì Ōuzhōu ma?",
+    "en": "Is your friend from Europe?",
+    "hanzi_source": "来自"
+  },
+  {
+    "id": "sent_0353",
+    "zh": "我来自中国。",
+    "pinyin": "Wǒ láizì Zhōngguó.",
+    "en": "I come from China.",
+    "hanzi_source": "来自"
+  },
+  {
+    "id": "sent_0354",
+    "zh": "你的朋友来自欧洲吗？",
+    "pinyin": "Nǐ de péngyou láizì Ōuzhōu ma?",
+    "en": "Is your friend from Europe?",
+    "hanzi_source": "欧洲"
+  },
+  {
+    "id": "sent_0355",
+    "zh": "欧洲有很多国家。",
+    "pinyin": "Ōuzhōu yǒu hěn duō guójiā.",
+    "en": "Europe has many countries.",
+    "hanzi_source": "欧洲"
+  },
+  {
+    "id": "sent_0356",
+    "zh": "他是德国人。",
+    "pinyin": "Tā shì Déguórén.",
+    "en": "He is German.",
+    "hanzi_source": "德国"
+  },
+  {
+    "id": "sent_0357",
+    "zh": "德国有很多大学。",
+    "pinyin": "Déguó yǒu hěn duō dàxué.",
+    "en": "Germany has many universities.",
+    "hanzi_source": "德国"
+  },
+  {
+    "id": "sent_0358",
+    "zh": "对，他是德国人。",
+    "pinyin": "Duì, tā shì Déguórén.",
+    "en": "Right, he is German.",
+    "hanzi_source": "德国人"
+  },
+  {
+    "id": "sent_0359",
+    "zh": "她的男朋友是德国人。",
+    "pinyin": "Tā de nánpéngyou shì Déguórén.",
+    "en": "Her boyfriend is German.",
+    "hanzi_source": "德国人"
+  },
+  {
+    "id": "sent_0360",
+    "zh": "你会说法语吗？",
+    "pinyin": "Nǐ huì shuō Fǎyǔ ma?",
+    "en": "Can you speak French?",
+    "hanzi_source": "法语"
+  },
+  {
+    "id": "sent_0361",
+    "zh": "法语听起来很好听。",
+    "pinyin": "Fǎyǔ tīng qǐlai hěn hǎotīng.",
+    "en": "French sounds very nice.",
+    "hanzi_source": "法语"
+  },
+  {
+    "id": "sent_0362",
+    "zh": "我会说一点儿法语。",
+    "pinyin": "Wǒ huì shuō yìdiǎnr Fǎyǔ.",
+    "en": "I can speak a little French.",
+    "hanzi_source": "一点儿"
+  },
+  {
+    "id": "sent_0363",
+    "zh": "请等一点儿。",
+    "pinyin": "Qǐng děng yìdiǎnr.",
+    "en": "Please wait a bit.",
+    "hanzi_source": "一点儿"
+  },
+  {
+    "id": "sent_0364",
+    "zh": "中国在亚洲。",
+    "pinyin": "Zhōngguó zài Yàzhōu.",
+    "en": "China is in Asia.",
+    "hanzi_source": "亚洲"
+  },
+  {
+    "id": "sent_0365",
+    "zh": "亚洲有很多人口。",
+    "pinyin": "Yàzhōu yǒu hěn duō rénkǒu.",
+    "en": "Asia has a large population.",
+    "hanzi_source": "亚洲"
+  },
+  {
+    "id": "sent_0366",
+    "zh": "他来自日本。",
+    "pinyin": "Tā láizì Rìběn.",
+    "en": "He is from Japan.",
+    "hanzi_source": "日本"
+  },
+  {
+    "id": "sent_0367",
+    "zh": "日本的美食很有名。",
+    "pinyin": "Rìběn de měishí hěn yǒumíng.",
+    "en": "Japanese cuisine is very famous.",
+    "hanzi_source": "日本"
+  },
+  {
+    "id": "sent_0368",
+    "zh": "她是日本人。",
+    "pinyin": "Tā shì Rìběnrén.",
+    "en": "She is Japanese.",
+    "hanzi_source": "日本人"
+  },
+  {
+    "id": "sent_0369",
+    "zh": "我认识一个日本人。",
+    "pinyin": "Wǒ rènshi yí ge Rìběnrén.",
+    "en": "I know a Japanese person.",
+    "hanzi_source": "日本人"
+  },
+  {
+    "id": "sent_0370",
+    "zh": "我在学韩语。",
+    "pinyin": "Wǒ zài xué Hányǔ.",
+    "en": "I'm learning Korean.",
+    "hanzi_source": "韩语"
+  },
+  {
+    "id": "sent_0371",
+    "zh": "韩语的语法有点儿难。",
+    "pinyin": "Hányǔ de yǔfǎ yǒudiǎnr nán.",
+    "en": "Korean grammar is a bit hard.",
+    "hanzi_source": "韩语"
+  },
+  {
+    "id": "sent_0372",
+    "zh": "埃及在非洲。",
+    "pinyin": "Āijí zài Fēizhōu.",
+    "en": "Egypt is in Africa.",
+    "hanzi_source": "非洲"
+  },
+  {
+    "id": "sent_0373",
+    "zh": "非洲有很多国家。",
+    "pinyin": "Fēizhōu yǒu hěn duō guójiā.",
+    "en": "Africa has many countries.",
+    "hanzi_source": "非洲"
+  },
+  {
+    "id": "sent_0374",
+    "zh": "埃及有很有名的金字塔。",
+    "pinyin": "Āijí yǒu hěn yǒumíng de jīnzìtǎ.",
+    "en": "Egypt has very famous pyramids.",
+    "hanzi_source": "埃及"
+  },
+  {
+    "id": "sent_0375",
+    "zh": "他来自埃及。",
+    "pinyin": "Tā láizì Āijí.",
+    "en": "He is from Egypt.",
+    "hanzi_source": "埃及"
+  },
+  {
+    "id": "sent_0376",
+    "zh": "他是埃及人。",
+    "pinyin": "Tā shì Āijírén.",
+    "en": "He is Egyptian.",
+    "hanzi_source": "埃及人"
+  },
+  {
+    "id": "sent_0377",
+    "zh": "我朋友是埃及人。",
+    "pinyin": "Wǒ péngyou shì Āijírén.",
+    "en": "My friend is Egyptian.",
+    "hanzi_source": "埃及人"
+  },
+  {
+    "id": "sent_0378",
+    "zh": "埃及人说阿拉伯语。",
+    "pinyin": "Āijírén shuō Ālābóyǔ.",
+    "en": "Egyptians speak Arabic.",
+    "hanzi_source": "阿拉伯语"
+  },
+  {
+    "id": "sent_0379",
+    "zh": "阿拉伯语的字母很特别。",
+    "pinyin": "Ālābóyǔ de zìmǔ hěn tèbié.",
+    "en": "Arabic letters are very special.",
+    "hanzi_source": "阿拉伯语"
+  },
+  {
+    "id": "sent_0380",
+    "zh": "他来自法国。",
+    "pinyin": "Tā láizì Fǎguó.",
+    "en": "He comes from France.",
+    "hanzi_source": "法国"
+  },
+  {
+    "id": "sent_0381",
+    "zh": "法国的美食很有名。",
+    "pinyin": "Fǎguó de měishí hěn yǒumíng.",
+    "en": "French cuisine is very famous.",
+    "hanzi_source": "法国"
+  },
+  {
+    "id": "sent_0382",
+    "zh": "我朋友是韩国人。",
+    "pinyin": "Wǒ péngyou shì Hánguórén.",
+    "en": "My friend is from South Korea.",
+    "hanzi_source": "韩国"
+  },
+  {
+    "id": "sent_0383",
+    "zh": "韩国离中国很近。",
+    "pinyin": "Hánguó lí Zhōngguó hěn jìn.",
+    "en": "South Korea is close to China.",
+    "hanzi_source": "韩国"
+  },
+  {
+    "id": "sent_0384",
+    "zh": "他会说德语。",
+    "pinyin": "Tā huì shuō Déyǔ.",
+    "en": "He can speak German.",
+    "hanzi_source": "德语"
+  },
+  {
+    "id": "sent_0385",
+    "zh": "德语的发音有点儿难。",
+    "pinyin": "Déyǔ de fāyīn yǒudiǎnr nán.",
+    "en": "German pronunciation is a bit hard.",
+    "hanzi_source": "德语"
+  },
+  {
+    "id": "sent_0386",
+    "zh": "我想去西班牙旅行。",
+    "pinyin": "Wǒ xiǎng qù Xībānyá lǚxíng.",
+    "en": "I want to travel to Spain.",
+    "hanzi_source": "西班牙"
+  },
+  {
+    "id": "sent_0387",
+    "zh": "西班牙的美食很好吃。",
+    "pinyin": "Xībānyá de měishí hěn hǎochī.",
+    "en": "Spanish food is delicious.",
+    "hanzi_source": "西班牙"
+  },
+  {
+    "id": "sent_0388",
+    "zh": "你会不会说西班牙语？",
+    "pinyin": "Nǐ huì bú huì shuō Xībānyáyǔ?",
+    "en": "Can you speak Spanish?",
+    "hanzi_source": "西班牙语"
+  },
+  {
+    "id": "sent_0389",
+    "zh": "我不会说西班牙语。",
+    "pinyin": "Wǒ bú huì shuō Xībānyáyǔ.",
+    "en": "I can't speak Spanish.",
+    "hanzi_source": "西班牙语"
+  },
+  {
+    "id": "sent_0390",
+    "zh": "俄罗斯很大。",
+    "pinyin": "Éluósī hěn dà.",
+    "en": "Russia is very big.",
+    "hanzi_source": "俄罗斯"
+  },
+  {
+    "id": "sent_0391",
+    "zh": "她来自俄罗斯。",
+    "pinyin": "Tā láizì Éluósī.",
+    "en": "She comes from Russia.",
+    "hanzi_source": "俄罗斯"
+  },
+  {
+    "id": "sent_0392",
+    "zh": "我在学俄语。",
+    "pinyin": "Wǒ zài xué Éyǔ.",
+    "en": "I'm learning Russian.",
+    "hanzi_source": "俄语"
+  },
+  {
+    "id": "sent_0393",
+    "zh": "俄语的字母跟英语不一样。",
+    "pinyin": "Éyǔ de zìmǔ gēn Yīngyǔ bù yíyàng.",
+    "en": "Russian letters are different from English.",
+    "hanzi_source": "俄语"
+  },
+  {
+    "id": "sent_0394",
+    "zh": "美国在美洲。",
+    "pinyin": "Měiguó zài Měizhōu.",
+    "en": "The USA is in America.",
+    "hanzi_source": "美洲"
+  },
+  {
+    "id": "sent_0395",
+    "zh": "美洲有很多国家。",
+    "pinyin": "Měizhōu yǒu hěn duō guójiā.",
+    "en": "The Americas have many countries.",
+    "hanzi_source": "美洲"
+  },
+  {
+    "id": "sent_0396",
+    "zh": "现在几点？",
+    "pinyin": "Xiànzài jǐ diǎn?",
+    "en": "What time is it now?",
+    "hanzi_source": "点"
+  },
+  {
+    "id": "sent_0397",
+    "zh": "现在上午九点。",
+    "pinyin": "Xiànzài shàngwǔ jiǔ diǎn.",
+    "en": "It's 9am now.",
+    "hanzi_source": "点"
+  },
+  {
+    "id": "sent_0398",
+    "zh": "现在上午九点。",
+    "pinyin": "Xiànzài shàngwǔ jiǔ diǎn.",
+    "en": "It's 9am now.",
+    "hanzi_source": "上午"
+  },
+  {
+    "id": "sent_0399",
+    "zh": "我上午有课。",
+    "pinyin": "Wǒ shàngwǔ yǒu kè.",
+    "en": "I have class in the morning.",
+    "hanzi_source": "上午"
+  },
+  {
+    "id": "sent_0400",
+    "zh": "你每天几点起床？",
+    "pinyin": "Nǐ měitiān jǐ diǎn qǐchuáng?",
+    "en": "What time do you get up every day?",
+    "hanzi_source": "每天"
+  },
+  {
+    "id": "sent_0401",
+    "zh": "我每天早上七点半起床。",
+    "pinyin": "Wǒ měitiān zǎoshang qī diǎn bàn qǐchuáng.",
+    "en": "I get up at 7:30 every morning.",
+    "hanzi_source": "每天"
+  },
+  {
+    "id": "sent_0402",
+    "zh": "你每天几点起床？",
+    "pinyin": "Nǐ měitiān jǐ diǎn qǐchuáng?",
+    "en": "What time do you get up every day?",
+    "hanzi_source": "起床"
+  },
+  {
+    "id": "sent_0403",
+    "zh": "我七点起床。",
+    "pinyin": "Wǒ qī diǎn qǐchuáng.",
+    "en": "I get up at seven.",
+    "hanzi_source": "起床"
+  },
+  {
+    "id": "sent_0404",
+    "zh": "我七点半起床。",
+    "pinyin": "Wǒ qī diǎn bàn qǐchuáng.",
+    "en": "I get up at 7:30.",
+    "hanzi_source": "半"
+  },
+  {
+    "id": "sent_0405",
+    "zh": "现在是三点半。",
+    "pinyin": "Xiànzài shì sān diǎn bàn.",
+    "en": "It's 3:30 now.",
+    "hanzi_source": "半"
+  },
+  {
+    "id": "sent_0406",
+    "zh": "晚上我喜欢看书。",
+    "pinyin": "Wǎnshang wǒ xǐhuan kàn shū.",
+    "en": "I like reading in the evening.",
+    "hanzi_source": "晚上"
+  },
+  {
+    "id": "sent_0407",
+    "zh": "晚上十点我睡觉。",
+    "pinyin": "Wǎnshang shí diǎn wǒ shuìjiào.",
+    "en": "I go to sleep at 10pm.",
+    "hanzi_source": "晚上"
+  },
+  {
+    "id": "sent_0408",
+    "zh": "我晚上十点睡觉。",
+    "pinyin": "Wǒ wǎnshang shí diǎn shuìjiào.",
+    "en": "I go to bed at 10pm.",
+    "hanzi_source": "睡觉"
+  },
+  {
+    "id": "sent_0409",
+    "zh": "你几点睡觉？",
+    "pinyin": "Nǐ jǐ diǎn shuìjiào?",
+    "en": "What time do you go to bed?",
+    "hanzi_source": "睡觉"
+  },
+  {
+    "id": "sent_0410",
+    "zh": "睡觉以前我洗澡。",
+    "pinyin": "Shuìjiào yǐqián wǒ xǐzǎo.",
+    "en": "Before going to bed I take a bath.",
+    "hanzi_source": "以前"
+  },
+  {
+    "id": "sent_0411",
+    "zh": "以前我不喜欢运动。",
+    "pinyin": "Yǐqián wǒ bù xǐhuan yùndòng.",
+    "en": "Before, I didn't like exercising.",
+    "hanzi_source": "以前"
+  },
+  {
+    "id": "sent_0412",
+    "zh": "我先吃早饭，然后上学。",
+    "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+    "en": "I eat breakfast first, then go to school.",
+    "hanzi_source": "先"
+  },
+  {
+    "id": "sent_0413",
+    "zh": "请先坐一下。",
+    "pinyin": "Qǐng xiān zuò yīxià.",
+    "en": "Please sit down first.",
+    "hanzi_source": "先"
+  },
+  {
+    "id": "sent_0414",
+    "zh": "我先吃早饭。",
+    "pinyin": "Wǒ xiān chī zǎofàn.",
+    "en": "I eat breakfast first.",
+    "hanzi_source": "早饭"
+  },
+  {
+    "id": "sent_0415",
+    "zh": "你吃早饭了吗？",
+    "pinyin": "Nǐ chī zǎofàn le ma?",
+    "en": "Have you eaten breakfast?",
+    "hanzi_source": "早饭"
+  },
+  {
+    "id": "sent_0416",
+    "zh": "我先吃早饭，然后上学。",
+    "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+    "en": "I eat breakfast first, then go to school.",
+    "hanzi_source": "然后"
+  },
+  {
+    "id": "sent_0417",
+    "zh": "先做作业，然后玩电脑。",
+    "pinyin": "Xiān zuò zuòyè, ránhòu wán diànnǎo.",
+    "en": "Do homework first, then play on the computer.",
+    "hanzi_source": "然后"
+  },
+  {
+    "id": "sent_0418",
+    "zh": "我先吃早饭，然后上学。",
+    "pinyin": "Wǒ xiān chī zǎofàn, ránhòu shàngxué.",
+    "en": "I eat breakfast first, then go to school.",
+    "hanzi_source": "上学"
+  },
+  {
+    "id": "sent_0419",
+    "zh": "你几点上学？",
+    "pinyin": "Nǐ jǐ diǎn shàngxué?",
+    "en": "What time do you go to school?",
+    "hanzi_source": "上学"
+  },
+  {
+    "id": "sent_0420",
+    "zh": "你什么时候上课？",
+    "pinyin": "Nǐ shénme shíhou shàngkè?",
+    "en": "When do you have class?",
+    "hanzi_source": "时候"
+  },
+  {
+    "id": "sent_0421",
+    "zh": "睡觉的时候不要玩手机。",
+    "pinyin": "Shuìjiào de shíhou bú yào wán shǒujī.",
+    "en": "Don't play with your phone when it's time to sleep.",
+    "hanzi_source": "时候"
+  },
+  {
+    "id": "sent_0422",
+    "zh": "我们下午三点下课。",
+    "pinyin": "Wǒmen xiàwǔ sān diǎn xiàkè.",
+    "en": "Our class ends at 3pm.",
+    "hanzi_source": "下课"
+  },
+  {
+    "id": "sent_0423",
+    "zh": "下课以后我们去吃饭。",
+    "pinyin": "Xiàkè yǐhòu wǒmen qù chīfàn.",
+    "en": "After class we go eat.",
+    "hanzi_source": "下课"
+  },
+  {
+    "id": "sent_0424",
+    "zh": "睡觉以前我洗澡。",
+    "pinyin": "Shuìjiào yǐqián wǒ xǐzǎo.",
+    "en": "Before going to bed I take a bath.",
+    "hanzi_source": "洗澡"
+  },
+  {
+    "id": "sent_0425",
+    "zh": "我每天晚上洗澡。",
+    "pinyin": "Wǒ měitiān wǎnshang xǐzǎo.",
+    "en": "I take a bath every night.",
+    "hanzi_source": "洗澡"
+  },
+  {
+    "id": "sent_0426",
+    "zh": "我喜欢听音乐。",
+    "pinyin": "Wǒ xǐhuan tīng yīnyuè.",
+    "en": "I like listening to music.",
+    "hanzi_source": "音乐"
+  },
+  {
+    "id": "sent_0427",
+    "zh": "这首音乐很好听。",
+    "pinyin": "Zhè shǒu yīnyuè hěn hǎotīng.",
+    "en": "This piece of music is very nice.",
+    "hanzi_source": "音乐"
+  },
+  {
+    "id": "sent_0428",
+    "zh": "我喜欢玩电脑。",
+    "pinyin": "Wǒ xǐhuan wán diànnǎo.",
+    "en": "I like playing on the computer.",
+    "hanzi_source": "玩"
+  },
+  {
+    "id": "sent_0429",
+    "zh": "我们一起玩吧。",
+    "pinyin": "Wǒmen yìqǐ wán ba.",
+    "en": "Let's play together.",
+    "hanzi_source": "玩"
+  },
+  {
+    "id": "sent_0430",
+    "zh": "我喜欢玩电脑。",
+    "pinyin": "Wǒ xǐhuan wán diànnǎo.",
+    "en": "I like playing on the computer.",
+    "hanzi_source": "电脑"
+  },
+  {
     "id": "sent_0431",
-    "zh": "你有多少朋友？",
-    "pinyin": "Nǐ yǒu duōshao péngyou?",
-    "en": "How many friends do you have?",
-    "hanzi_source": "多少"
+    "zh": "我的电脑坏了。",
+    "pinyin": "Wǒ de diànnǎo huài le.",
+    "en": "My computer is broken.",
+    "hanzi_source": "电脑"
   },
   {
     "id": "sent_0432",
-    "zh": "还要别的吗？不用了，谢谢。",
-    "pinyin": "Hái yào bié de ma? Bú yòng le, xièxie.",
-    "en": "Anything else? No, thanks.",
-    "hanzi_source": "还要别的吗"
+    "zh": "我上午九点上课。",
+    "pinyin": "Wǒ shàngwǔ jiǔ diǎn shàngkè.",
+    "en": "I go to class at 9am.",
+    "hanzi_source": "上课"
   },
   {
     "id": "sent_0433",
-    "zh": "买完水果后，老板问还要别的吗。",
-    "pinyin": "Mǎi wán shuǐguǒ hòu, lǎobǎn wèn hái yào bié de ma.",
-    "en": "After buying fruit, the boss asks if you want anything else.",
-    "hanzi_source": "还要别的吗"
+    "zh": "我们八点上课。",
+    "pinyin": "Wǒmen bā diǎn shàngkè.",
+    "en": "We start class at 8.",
+    "hanzi_source": "上课"
   },
   {
     "id": "sent_0434",
+    "zh": "我十二点吃午饭。",
+    "pinyin": "Wǒ shí'èr diǎn chī wǔfàn.",
+    "en": "I eat lunch at noon.",
+    "hanzi_source": "午饭"
+  },
+  {
+    "id": "sent_0435",
+    "zh": "午饭你想吃什么？",
+    "pinyin": "Wǔfàn nǐ xiǎng chī shénme?",
+    "en": "What do you want to eat for lunch?",
+    "hanzi_source": "午饭"
+  },
+  {
+    "id": "sent_0436",
+    "zh": "现在九点十五分。",
+    "pinyin": "Xiànzài jiǔ diǎn shíwǔ fēn.",
+    "en": "It's now 9:15.",
+    "hanzi_source": "分"
+  },
+  {
+    "id": "sent_0437",
+    "zh": "请等五分钟。",
+    "pinyin": "Qǐng děng wǔ fēnzhōng.",
+    "en": "Please wait five minutes.",
+    "hanzi_source": "分"
+  },
+  {
+    "id": "sent_0438",
+    "zh": "我们下午四点放学。",
+    "pinyin": "Wǒmen xiàwǔ sì diǎn fàngxué.",
+    "en": "We finish school at 4pm.",
+    "hanzi_source": "放学"
+  },
+  {
+    "id": "sent_0439",
+    "zh": "放学以后我做作业。",
+    "pinyin": "Fàngxué yǐhòu wǒ zuò zuòyè.",
+    "en": "After school I do homework.",
+    "hanzi_source": "放学"
+  },
+  {
+    "id": "sent_0440",
+    "zh": "我打扫我的房间。",
+    "pinyin": "Wǒ dǎsǎo wǒ de fángjiān.",
+    "en": "I clean my room.",
+    "hanzi_source": "打扫"
+  },
+  {
+    "id": "sent_0441",
+    "zh": "周末我们一起打扫。",
+    "pinyin": "Zhōumò wǒmen yìqǐ dǎsǎo.",
+    "en": "We clean together on the weekend.",
+    "hanzi_source": "打扫"
+  },
+  {
+    "id": "sent_0442",
+    "zh": "我打扫我的房间。",
+    "pinyin": "Wǒ dǎsǎo wǒ de fángjiān.",
+    "en": "I clean my room.",
+    "hanzi_source": "房间"
+  },
+  {
+    "id": "sent_0443",
+    "zh": "这个房间很大。",
+    "pinyin": "Zhège fángjiān hěn dà.",
+    "en": "This room is very big.",
+    "hanzi_source": "房间"
+  },
+  {
+    "id": "sent_0444",
+    "zh": "妈妈在做饭。",
+    "pinyin": "Māma zài zuò fàn.",
+    "en": "Mom is cooking.",
+    "hanzi_source": "做饭"
+  },
+  {
+    "id": "sent_0445",
+    "zh": "我不会做饭。",
+    "pinyin": "Wǒ bú huì zuò fàn.",
+    "en": "I don't know how to cook.",
+    "hanzi_source": "做饭"
+  },
+  {
+    "id": "sent_0446",
+    "zh": "你写作业了吗？",
+    "pinyin": "Nǐ xiě zuòyè le ma?",
+    "en": "Have you done your homework?",
+    "hanzi_source": "作业"
+  },
+  {
+    "id": "sent_0447",
+    "zh": "今天的作业很多。",
+    "pinyin": "Jīntiān de zuòyè hěn duō.",
+    "en": "Today's homework is a lot.",
+    "hanzi_source": "作业"
+  },
+  {
+    "id": "sent_0448",
+    "zh": "在中国，一年有几个季节？",
+    "pinyin": "Zài Zhōngguó, yī nián yǒu jǐ ge jìjié?",
+    "en": "In China, how many seasons are there in a year?",
+    "hanzi_source": "季节"
+  },
+  {
+    "id": "sent_0449",
+    "zh": "你最喜欢哪个季节？",
+    "pinyin": "Nǐ zuì xǐhuan nǎ ge jìjié?",
+    "en": "Which season do you like best?",
+    "hanzi_source": "季节"
+  },
+  {
+    "id": "sent_0450",
+    "zh": "三月到五月是春天。",
+    "pinyin": "Sānyuè dào wǔyuè shì chūntiān.",
+    "en": "March to May is spring.",
+    "hanzi_source": "春天"
+  },
+  {
+    "id": "sent_0451",
+    "zh": "春天花开了。",
+    "pinyin": "Chūntiān huā kāi le.",
+    "en": "Flowers bloom in spring.",
+    "hanzi_source": "春天"
+  },
+  {
+    "id": "sent_0452",
+    "zh": "你喜欢夏天还是冬天？",
+    "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+    "en": "Do you like summer or winter?",
+    "hanzi_source": "夏天"
+  },
+  {
+    "id": "sent_0453",
+    "zh": "夏天很热。",
+    "pinyin": "Xiàtiān hěn rè.",
+    "en": "Summer is very hot.",
+    "hanzi_source": "夏天"
+  },
+  {
+    "id": "sent_0454",
+    "zh": "秋天树叶变黄了。",
+    "pinyin": "Qiūtiān shùyè biàn huáng le.",
+    "en": "Leaves turn yellow in autumn.",
+    "hanzi_source": "秋天"
+  },
+  {
+    "id": "sent_0455",
+    "zh": "秋天天气很凉爽。",
+    "pinyin": "Qiūtiān tiānqì hěn liángshuǎng.",
+    "en": "The weather is nice and cool in autumn.",
+    "hanzi_source": "秋天"
+  },
+  {
+    "id": "sent_0456",
+    "zh": "冬天很冷。",
+    "pinyin": "Dōngtiān hěn lěng.",
+    "en": "Winter is very cold.",
+    "hanzi_source": "冬天"
+  },
+  {
+    "id": "sent_0457",
+    "zh": "你喜欢夏天还是冬天？",
+    "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+    "en": "Do you like summer or winter?",
+    "hanzi_source": "冬天"
+  },
+  {
+    "id": "sent_0458",
+    "zh": "三月到五月是春天。",
+    "pinyin": "Sānyuè dào wǔyuè shì chūntiān.",
+    "en": "March to May is spring.",
+    "hanzi_source": "到"
+  },
+  {
+    "id": "sent_0459",
+    "zh": "我们几点到？",
+    "pinyin": "Wǒmen jǐ diǎn dào?",
+    "en": "What time will we arrive?",
+    "hanzi_source": "到"
+  },
+  {
+    "id": "sent_0460",
+    "zh": "武汉的气候怎么样？",
+    "pinyin": "Wǔhàn de qìhòu zěnmeyàng?",
+    "en": "What's the climate like in Wuhan?",
+    "hanzi_source": "气候"
+  },
+  {
+    "id": "sent_0461",
+    "zh": "这个城市气候很暖和。",
+    "pinyin": "Zhège chéngshì qìhòu hěn nuǎnhuo.",
+    "en": "This city's climate is very warm.",
+    "hanzi_source": "气候"
+  },
+  {
+    "id": "sent_0462",
+    "zh": "武汉的气候怎么样？",
+    "pinyin": "Wǔhàn de qìhòu zěnmeyàng?",
+    "en": "What's the climate like in Wuhan?",
+    "hanzi_source": "怎么样"
+  },
+  {
+    "id": "sent_0463",
+    "zh": "今天天气怎么样？",
+    "pinyin": "Jīntiān tiānqì zěnmeyàng?",
+    "en": "How's the weather today?",
+    "hanzi_source": "怎么样"
+  },
+  {
+    "id": "sent_0464",
+    "zh": "春天很暖和。",
+    "pinyin": "Chūntiān hěn nuǎnhuo.",
+    "en": "Spring is nice and warm.",
+    "hanzi_source": "暖和"
+  },
+  {
+    "id": "sent_0465",
+    "zh": "今天天气很暖和。",
+    "pinyin": "Jīntiān tiānqì hěn nuǎnhuo.",
+    "en": "Today's weather is warm and nice.",
+    "hanzi_source": "暖和"
+  },
+  {
+    "id": "sent_0466",
+    "zh": "你喜欢夏天还是冬天？",
+    "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+    "en": "Do you like summer or winter?",
+    "hanzi_source": "喜欢"
+  },
+  {
+    "id": "sent_0467",
+    "zh": "我喜欢春天。",
+    "pinyin": "Wǒ xǐhuan chūntiān.",
+    "en": "I like spring.",
+    "hanzi_source": "喜欢"
+  },
+  {
+    "id": "sent_0468",
+    "zh": "你喜欢夏天还是冬天？",
+    "pinyin": "Nǐ xǐhuan xiàtiān háishi dōngtiān?",
+    "en": "Do you like summer or winter?",
+    "hanzi_source": "还是"
+  },
+  {
+    "id": "sent_0469",
+    "zh": "你想喝茶还是咖啡？",
+    "pinyin": "Nǐ xiǎng hē chá háishi kāfēi?",
+    "en": "Would you like tea or coffee?",
+    "hanzi_source": "还是"
+  },
+  {
+    "id": "sent_0470",
+    "zh": "你为什么喜欢秋天？",
+    "pinyin": "Nǐ wèishénme xǐhuan qiūtiān?",
+    "en": "Why do you like autumn?",
+    "hanzi_source": "为什么"
+  },
+  {
+    "id": "sent_0471",
+    "zh": "为什么天气这么冷？",
+    "pinyin": "Wèishénme tiānqì zhème lěng?",
+    "en": "Why is the weather so cold?",
+    "hanzi_source": "为什么"
+  },
+  {
+    "id": "sent_0472",
+    "zh": "因为秋天很凉爽，所以我喜欢秋天。",
+    "pinyin": "Yīnwèi qiūtiān hěn liángshuǎng, suǒyǐ wǒ xǐhuan qiūtiān.",
+    "en": "Because autumn is nice and cool, I like autumn.",
+    "hanzi_source": "因为"
+  },
+  {
+    "id": "sent_0473",
+    "zh": "因为下雨，我们不能出去。",
+    "pinyin": "Yīnwèi xià yǔ, wǒmen bùnéng chūqù.",
+    "en": "Because it's raining, we can't go out.",
+    "hanzi_source": "因为"
+  },
+  {
+    "id": "sent_0474",
+    "zh": "春天可以去春游。",
+    "pinyin": "Chūntiān kěyǐ qù chūnyóu.",
+    "en": "In spring you can go on a spring outing.",
+    "hanzi_source": "可以"
+  },
+  {
+    "id": "sent_0475",
+    "zh": "我可以坐这儿吗？",
+    "pinyin": "Wǒ kěyǐ zuò zhèr ma?",
+    "en": "Can I sit here?",
+    "hanzi_source": "可以"
+  },
+  {
+    "id": "sent_0476",
+    "zh": "我跟朋友一起春游。",
+    "pinyin": "Wǒ gēn péngyou yìqǐ chūnyóu.",
+    "en": "I go on a spring outing with friends.",
+    "hanzi_source": "跟"
+  },
+  {
+    "id": "sent_0477",
+    "zh": "你跟他一起去吗？",
+    "pinyin": "Nǐ gēn tā yìqǐ qù ma?",
+    "en": "Are you going with him?",
+    "hanzi_source": "跟"
+  },
+  {
+    "id": "sent_0478",
+    "zh": "我们一起去春游吧。",
+    "pinyin": "Wǒmen yìqǐ qù chūnyóu ba.",
+    "en": "Let's go on a spring outing together.",
+    "hanzi_source": "一起"
+  },
+  {
+    "id": "sent_0479",
+    "zh": "一起吃饭吧。",
+    "pinyin": "Yìqǐ chī fàn ba.",
+    "en": "Let's eat together.",
+    "hanzi_source": "一起"
+  },
+  {
+    "id": "sent_0480",
+    "zh": "我们一起去春游吧。",
+    "pinyin": "Wǒmen yìqǐ qù chūnyóu ba.",
+    "en": "Let's go on a spring outing together.",
+    "hanzi_source": "春游"
+  },
+  {
+    "id": "sent_0481",
+    "zh": "学校组织了一次春游。",
+    "pinyin": "Xuéxiào zǔzhī le yī cì chūnyóu.",
+    "en": "The school organized a spring outing.",
+    "hanzi_source": "春游"
+  },
+  {
+    "id": "sent_0482",
+    "zh": "夏天太热了。",
+    "pinyin": "Xiàtiān tài rè le.",
+    "en": "Summer is too hot.",
+    "hanzi_source": "太"
+  },
+  {
+    "id": "sent_0483",
+    "zh": "这件衣服太贵了。",
+    "pinyin": "Zhè jiàn yīfu tài guì le.",
+    "en": "This piece of clothing is too expensive.",
+    "hanzi_source": "太"
+  },
+  {
+    "id": "sent_0484",
+    "zh": "冬天很冷。",
+    "pinyin": "Dōngtiān hěn lěng.",
+    "en": "Winter is very cold.",
+    "hanzi_source": "冷"
+  },
+  {
+    "id": "sent_0485",
+    "zh": "今天有点儿冷。",
+    "pinyin": "Jīntiān yǒudiǎnr lěng.",
+    "en": "It's a bit cold today.",
+    "hanzi_source": "冷"
+  },
+  {
+    "id": "sent_0486",
+    "zh": "我最喜欢秋天。",
+    "pinyin": "Wǒ zuì xǐhuan qiūtiān.",
+    "en": "I like autumn the most.",
+    "hanzi_source": "最"
+  },
+  {
+    "id": "sent_0487",
+    "zh": "这是最好的办法。",
+    "pinyin": "Zhè shì zuì hǎo de bànfǎ.",
+    "en": "This is the best way.",
+    "hanzi_source": "最"
+  },
+  {
+    "id": "sent_0488",
+    "zh": "夏天很热。",
+    "pinyin": "Xiàtiān hěn rè.",
+    "en": "Summer is very hot.",
+    "hanzi_source": "热"
+  },
+  {
+    "id": "sent_0489",
+    "zh": "这碗汤很热。",
+    "pinyin": "Zhè wǎn tāng hěn rè.",
+    "en": "This bowl of soup is very hot.",
+    "hanzi_source": "热"
+  },
+  {
+    "id": "sent_0490",
+    "zh": "秋天很凉爽。",
+    "pinyin": "Qiūtiān hěn liángshuǎng.",
+    "en": "Autumn is nice and cool.",
+    "hanzi_source": "凉爽"
+  },
+  {
+    "id": "sent_0491",
+    "zh": "晚上比较凉爽。",
+    "pinyin": "Wǎnshang bǐjiào liángshuǎng.",
+    "en": "It's cooler in the evening.",
+    "hanzi_source": "凉爽"
+  },
+  {
+    "id": "sent_0492",
+    "zh": "春天花开了。",
+    "pinyin": "Chūntiān huā kāi le.",
+    "en": "Flowers bloom in spring.",
+    "hanzi_source": "花"
+  },
+  {
+    "id": "sent_0493",
+    "zh": "这些花很漂亮。",
+    "pinyin": "Zhèxiē huā hěn piàoliang.",
+    "en": "These flowers are very beautiful.",
+    "hanzi_source": "花"
+  },
+  {
+    "id": "sent_0494",
+    "zh": "春天花开了。",
+    "pinyin": "Chūntiān huā kāi le.",
+    "en": "Flowers bloom in spring.",
+    "hanzi_source": "开"
+  },
+  {
+    "id": "sent_0495",
+    "zh": "请把窗户开开。",
+    "pinyin": "Qǐng bǎ chuānghu kāi kāi.",
+    "en": "Please open the window.",
+    "hanzi_source": "开"
+  },
+  {
+    "id": "sent_0496",
+    "zh": "夏天又热又潮湿。",
+    "pinyin": "Xiàtiān yòu rè yòu cháoshī.",
+    "en": "Summer is both hot and humid.",
+    "hanzi_source": "又……又……"
+  },
+  {
+    "id": "sent_0497",
+    "zh": "这个菜又便宜又好吃。",
+    "pinyin": "Zhège cài yòu piányi yòu hǎochī.",
+    "en": "This dish is both cheap and delicious.",
+    "hanzi_source": "又……又……"
+  },
+  {
+    "id": "sent_0498",
+    "zh": "春天的天气很舒服。",
+    "pinyin": "Chūntiān de tiānqì hěn shūfu.",
+    "en": "The weather in spring is very comfortable.",
+    "hanzi_source": "舒服"
+  },
+  {
+    "id": "sent_0499",
+    "zh": "这张椅子很舒服。",
+    "pinyin": "Zhè zhāng yǐzi hěn shūfu.",
+    "en": "This chair is very comfortable.",
+    "hanzi_source": "舒服"
+  },
+  {
+    "id": "sent_0500",
+    "zh": "春游让我很开心。",
+    "pinyin": "Chūnyóu ràng wǒ hěn kāixīn.",
+    "en": "The spring outing made me very happy.",
+    "hanzi_source": "开心"
+  },
+  {
+    "id": "sent_0501",
+    "zh": "我们玩得很开心。",
+    "pinyin": "Wǒmen wán de hěn kāixīn.",
+    "en": "We had a great time.",
+    "hanzi_source": "开心"
+  },
+  {
+    "id": "sent_0502",
+    "zh": "今天天气很好，不冷不热。",
+    "pinyin": "Jīntiān tiānqì hěn hǎo, bù lěng bú rè.",
+    "en": "Nice weather today, not cold, not hot.",
+    "hanzi_source": "天气"
+  },
+  {
+    "id": "sent_0503",
+    "zh": "你查一下明天的天气。",
+    "pinyin": "Nǐ chá yīxià míngtiān de tiānqì.",
+    "en": "Check tomorrow's weather.",
+    "hanzi_source": "天气"
+  },
+  {
+    "id": "sent_0504",
+    "zh": "天气预报说今天晴天。",
+    "pinyin": "Tiānqì yùbào shuō jīntiān qíngtiān.",
+    "en": "The weather forecast says sunny today.",
+    "hanzi_source": "预报"
+  },
+  {
+    "id": "sent_0505",
+    "zh": "你相信天气预报吗？",
+    "pinyin": "Nǐ xiāngxìn tiānqì yùbào ma?",
+    "en": "Do you trust the weather forecast?",
+    "hanzi_source": "预报"
+  },
+  {
+    "id": "sent_0506",
+    "zh": "天气预报说今天晴天。",
+    "pinyin": "Tiānqì yùbào shuō jīntiān qíngtiān.",
+    "en": "The forecast says sunny today.",
+    "hanzi_source": "晴天"
+  },
+  {
+    "id": "sent_0507",
+    "zh": "晴天适合出去玩。",
+    "pinyin": "Qíngtiān shìhé chūqù wán.",
+    "en": "Sunny days are good for going out.",
+    "hanzi_source": "晴天"
+  },
+  {
+    "id": "sent_0508",
+    "zh": "今天会下雨。",
+    "pinyin": "Jīntiān huì xià yǔ.",
+    "en": "It will rain today.",
+    "hanzi_source": "下雨"
+  },
+  {
+    "id": "sent_0509",
+    "zh": "下雨了，记得带伞。",
+    "pinyin": "Xià yǔ le, jìde dài sǎn.",
+    "en": "It's raining, remember to bring an umbrella.",
+    "hanzi_source": "下雨"
+  },
+  {
+    "id": "sent_0510",
+    "zh": "下雨了。",
+    "pinyin": "Xià yǔ le.",
+    "en": "It's raining now (change).",
+    "hanzi_source": "了"
+  },
+  {
+    "id": "sent_0511",
+    "zh": "我吃了饭。",
+    "pinyin": "Wǒ chī le fàn.",
+    "en": "I ate (completion).",
+    "hanzi_source": "了"
+  },
+  {
+    "id": "sent_0512",
+    "zh": "他还没来。",
+    "pinyin": "Tā hái méi lái.",
+    "en": "He still hasn't come.",
+    "hanzi_source": "还"
+  },
+  {
+    "id": "sent_0513",
+    "zh": "我还想再吃一个。",
+    "pinyin": "Wǒ hái xiǎng zài chī yí ge.",
+    "en": "I even want to eat another one.",
+    "hanzi_source": "还"
+  },
+  {
+    "id": "sent_0514",
+    "zh": "我要出去买东西。",
+    "pinyin": "Wǒ yào chūqù mǎi dōngxi.",
+    "en": "I'm going out to buy things.",
+    "hanzi_source": "出去"
+  },
+  {
+    "id": "sent_0515",
+    "zh": "太冷了，不想出去。",
+    "pinyin": "Tài lěng le, bù xiǎng chūqù.",
+    "en": "It's too cold, I don't want to go out.",
+    "hanzi_source": "出去"
+  },
+  {
+    "id": "sent_0516",
+    "zh": "今天三十度。",
+    "pinyin": "Jīntiān sānshí dù.",
+    "en": "Today is 30 degrees.",
+    "hanzi_source": "度"
+  },
+  {
+    "id": "sent_0517",
+    "zh": "水温多少度？",
+    "pinyin": "Shuǐwēn duōshao dù?",
+    "en": "What's the water temperature?",
+    "hanzi_source": "度"
+  },
+  {
+    "id": "sent_0518",
+    "zh": "温度很高。",
+    "pinyin": "Wēndù hěn gāo.",
+    "en": "The temperature is high.",
+    "hanzi_source": "高"
+  },
+  {
+    "id": "sent_0519",
+    "zh": "这座山很高。",
+    "pinyin": "Zhè zuò shān hěn gāo.",
+    "en": "This mountain is very tall.",
+    "hanzi_source": "高"
+  },
+  {
+    "id": "sent_0520",
+    "zh": "室内温度正好。",
+    "pinyin": "Shìnèi wēndù zhènghǎo.",
+    "en": "The indoor temperature is just right.",
+    "hanzi_source": "温度"
+  },
+  {
+    "id": "sent_0521",
+    "zh": "测量一下水温。",
+    "pinyin": "Cèliáng yīxià shuǐwēn.",
+    "en": "Measure the water temperature.",
+    "hanzi_source": "温度"
+  },
+  {
+    "id": "sent_0522",
+    "zh": "气温很低。",
+    "pinyin": "Qìwēn hěn dī.",
+    "en": "The temperature is very low.",
+    "hanzi_source": "低"
+  },
+  {
+    "id": "sent_0523",
+    "zh": "声音太低了。",
+    "pinyin": "Shēngyīn tài dī le.",
+    "en": "The volume is too low.",
+    "hanzi_source": "低"
+  },
+  {
+    "id": "sent_0524",
+    "zh": "冬天零下十度。",
+    "pinyin": "Dōngtiān língxià shí dù.",
+    "en": "In winter it's minus ten degrees.",
+    "hanzi_source": "零下"
+  },
+  {
+    "id": "sent_0525",
+    "zh": "零下的时候会结冰。",
+    "pinyin": "Língxià de shíhou huì jiébīng.",
+    "en": "Below zero it freezes.",
+    "hanzi_source": "零下"
+  },
+  {
+    "id": "sent_0526",
+    "zh": "明天会下雨。",
+    "pinyin": "Míngtiān huì xià yǔ.",
+    "en": "It will likely rain tomorrow.",
+    "hanzi_source": "会"
+  },
+  {
+    "id": "sent_0527",
+    "zh": "我会说汉语。",
+    "pinyin": "Wǒ huì shuō Hànyǔ.",
+    "en": "I can speak Chinese.",
+    "hanzi_source": "会"
+  },
+  {
+    "id": "sent_0528",
+    "zh": "北方冬天经常下雪。",
+    "pinyin": "Běifāng dōngtiān jīngcháng xià xuě.",
+    "en": "Northern winters often have snow.",
+    "hanzi_source": "下雪"
+  },
+  {
+    "id": "sent_0529",
+    "zh": "昨晚下雪了。",
+    "pinyin": "Zuówǎn xià xuě le.",
+    "en": "It snowed last night.",
+    "hanzi_source": "下雪"
+  },
+  {
+    "id": "sent_0530",
+    "zh": "我喜欢游泳。",
+    "pinyin": "Wǒ xǐhuan yóuyǒng.",
+    "en": "I like swimming.",
+    "hanzi_source": "游泳"
+  },
+  {
+    "id": "sent_0531",
+    "zh": "夏天去游泳很舒服。",
+    "pinyin": "Xiàtiān qù yóuyǒng hěn shūfu.",
+    "en": "Swimming in summer is very comfortable.",
+    "hanzi_source": "游泳"
+  },
+  {
+    "id": "sent_0532",
+    "zh": "我能试试吗？",
+    "pinyin": "Wǒ néng shìshi ma?",
+    "en": "Can I try?",
+    "hanzi_source": "能"
+  },
+  {
+    "id": "sent_0533",
+    "zh": "明天能出去玩吗？",
+    "pinyin": "Míngtiān néng chūqù wán ma?",
+    "en": "Can we go out and play tomorrow?",
+    "hanzi_source": "能"
+  },
+  {
+    "id": "sent_0534",
+    "zh": "今天阳光很好。",
+    "pinyin": "Jīntiān yángguāng hěn hǎo.",
+    "en": "The sunshine is nice today.",
+    "hanzi_source": "阳光"
+  },
+  {
+    "id": "sent_0535",
+    "zh": "阳光照在脸上。",
+    "pinyin": "Yángguāng zhào zài liǎn shàng.",
+    "en": "Sunshine shines on the face.",
+    "hanzi_source": "阳光"
+  },
+  {
+    "id": "sent_0536",
+    "zh": "我们约个时间见面吧。",
+    "pinyin": "Wǒmen yuē ge shíjiān jiànmiàn ba.",
+    "en": "Let's arrange a time to meet.",
+    "hanzi_source": "约"
+  },
+  {
+    "id": "sent_0537",
+    "zh": "你约了医生吗？",
+    "pinyin": "Nǐ yuē le yīshēng ma?",
+    "en": "Did you make an appointment with the doctor?",
+    "hanzi_source": "约"
+  },
+  {
+    "id": "sent_0538",
+    "zh": "晚饭后我们去散步。",
+    "pinyin": "Wǎnfàn hòu wǒmen qù sànbù.",
+    "en": "After dinner we go for a walk.",
+    "hanzi_source": "散步"
+  },
+  {
+    "id": "sent_0539",
+    "zh": "散步对身体好。",
+    "pinyin": "Sànbù duì shēntǐ hǎo.",
+    "en": "Walking is good for your health.",
+    "hanzi_source": "散步"
+  },
+  {
+    "id": "sent_0540",
+    "zh": "朋友一起聊天儿很开心。",
+    "pinyin": "Péngyou yìqǐ liáotiānr hěn kāixīn.",
+    "en": "Chatting with friends is very happy.",
+    "hanzi_source": "聊天儿"
+  },
+  {
+    "id": "sent_0541",
+    "zh": "我们聊了一会儿天儿。",
+    "pinyin": "Wǒmen liáo le yīhuǐr tiānr.",
+    "en": "We chatted for a while.",
+    "hanzi_source": "聊天儿"
+  },
+  {
+    "id": "sent_0542",
+    "zh": "喝茶或者咖啡都可以。",
+    "pinyin": "Hē chá huòzhě kāfēi dōu kěyǐ.",
+    "en": "Drinking tea or coffee is fine.",
+    "hanzi_source": "或者"
+  },
+  {
+    "id": "sent_0543",
+    "zh": "你可以今天来，或者明天来。",
+    "pinyin": "Nǐ kěyǐ jīntiān lái, huòzhě míngtiān lái.",
+    "en": "You can come today or tomorrow.",
+    "hanzi_source": "或者"
+  },
+  {
+    "id": "sent_0544",
+    "zh": "我每天骑车上班。",
+    "pinyin": "Wǒ měitiān qí chē shàngbān.",
+    "en": "I ride a bike to work every day.",
+    "hanzi_source": "骑车"
+  },
+  {
+    "id": "sent_0545",
+    "zh": "骑车比走路快。",
+    "pinyin": "Qí chē bǐ zǒulù kuài.",
+    "en": "Riding a bike is faster than walking.",
+    "hanzi_source": "骑车"
+  },
+  {
+    "id": "sent_0546",
+    "zh": "你每天运动吗？",
+    "pinyin": "Nǐ měitiān yùndòng ma?",
+    "en": "Do you exercise every day?",
+    "hanzi_source": "运动"
+  },
+  {
+    "id": "sent_0547",
+    "zh": "跑步是个好运动。",
+    "pinyin": "Pǎobù shì ge hǎo yùndòng.",
+    "en": "Running is a good sport.",
+    "hanzi_source": "运动"
+  },
+  {
+    "id": "sent_0548",
+    "zh": "听音乐可以放松心情。",
+    "pinyin": "Tīng yīnyuè kěyǐ fàngsōng xīnqíng.",
+    "en": "Listening to music can relax your mood.",
+    "hanzi_source": "放松"
+  },
+  {
+    "id": "sent_0549",
+    "zh": "周末好好放松一下。",
+    "pinyin": "Zhōumò hǎohāo fàngsōng yīxià.",
+    "en": "Relax well on the weekend.",
+    "hanzi_source": "放松"
+  },
+  {
+    "id": "sent_0550",
+    "zh": "他可能不来了。",
+    "pinyin": "Tā kěnéng bù lái le.",
+    "en": "He probably isn't coming.",
+    "hanzi_source": "可能"
+  },
+  {
+    "id": "sent_0551",
+    "zh": "明天可能会下雨。",
+    "pinyin": "Míngtiān kěnéng huì xià yǔ.",
+    "en": "It might rain tomorrow.",
+    "hanzi_source": "可能"
+  },
+  {
+    "id": "sent_0552",
+    "zh": "如果明天下雨，我们就不去公园。",
+    "pinyin": "Rúguǒ míngtiān xià yǔ, wǒmen jiù bú qù gōngyuán.",
+    "en": "If it rains tomorrow, we won't go to the park.",
+    "hanzi_source": "如果"
+  },
+  {
+    "id": "sent_0553",
+    "zh": "如果你累了就休息。",
+    "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi.",
+    "en": "If you're tired, rest.",
+    "hanzi_source": "如果"
+  },
+  {
+    "id": "sent_0554",
+    "zh": "我只买了一个。",
+    "pinyin": "Wǒ zhǐ mǎi le yí ge.",
+    "en": "I only bought one.",
+    "hanzi_source": "只"
+  },
+  {
+    "id": "sent_0555",
+    "zh": "他只会说一点汉语。",
+    "pinyin": "Tā zhǐ huì shuō yīdiǎn Hànyǔ.",
+    "en": "He can only speak a little Chinese.",
+    "hanzi_source": "只"
+  },
+  {
+    "id": "sent_0556",
+    "zh": "我每天晚上上网看视频。",
+    "pinyin": "Wǒ měitiān wǎnshang shàngwǎng kàn shìpín.",
+    "en": "I go online every night to watch videos.",
+    "hanzi_source": "上网"
+  },
+  {
+    "id": "sent_0557",
+    "zh": "少上网对眼睛好。",
+    "pinyin": "Shǎo shàngwǎng duì yǎnjing hǎo.",
+    "en": "Less internet is good for your eyes.",
+    "hanzi_source": "上网"
+  },
+  {
+    "id": "sent_0558",
+    "zh": "我喜欢吃辣，不过不能吃太多。",
+    "pinyin": "Wǒ xǐhuan chī là, búguò bùnéng chī tài duō.",
+    "en": "I like spicy food, but I can't eat too much.",
+    "hanzi_source": "不过"
+  },
+  {
+    "id": "sent_0559",
+    "zh": "他很好，不过有时候很忙。",
+    "pinyin": "Tā hěn hǎo, búguò yǒu shíhou hěn máng.",
+    "en": "He's nice, but sometimes very busy.",
+    "hanzi_source": "不过"
+  },
+  {
+    "id": "sent_0560",
+    "zh": "今天刮风。",
+    "pinyin": "Jīntiān guā fēng.",
+    "en": "It's windy today.",
+    "hanzi_source": "刮风"
+  },
+  {
+    "id": "sent_0561",
+    "zh": "刮风的时候不要骑车。",
+    "pinyin": "Guā fēng de shíhou bú yào qí chē.",
+    "en": "Don't ride a bike when it's windy.",
+    "hanzi_source": "刮风"
+  },
+  {
+    "id": "sent_0562",
+    "zh": "明天是阴天。",
+    "pinyin": "Míngtiān shì yīntiān.",
+    "en": "Tomorrow will be cloudy.",
+    "hanzi_source": "阴天"
+  },
+  {
+    "id": "sent_0563",
+    "zh": "阴天没有阳光。",
+    "pinyin": "Yīntiān méiyǒu yángguāng.",
+    "en": "There's no sunshine on cloudy days.",
+    "hanzi_source": "阴天"
+  },
+  {
+    "id": "sent_0564",
+    "zh": "我每天早上跑步。",
+    "pinyin": "Wǒ měitiān zǎoshang pǎobù.",
+    "en": "I run every morning.",
+    "hanzi_source": "跑步"
+  },
+  {
+    "id": "sent_0565",
+    "zh": "跑步对身体很好。",
+    "pinyin": "Pǎobù duì shēntǐ hěn hǎo.",
+    "en": "Running is very good for your health.",
+    "hanzi_source": "跑步"
+  },
+  {
+    "id": "sent_0566",
+    "zh": "我周末打篮球。",
+    "pinyin": "Wǒ zhōumò dǎ lánqiú.",
+    "en": "I play basketball on weekends.",
+    "hanzi_source": "打篮球"
+  },
+  {
+    "id": "sent_0567",
+    "zh": "你会打篮球吗？",
+    "pinyin": "Nǐ huì dǎ lánqiú ma?",
+    "en": "Can you play basketball?",
+    "hanzi_source": "打篮球"
+  },
+  {
+    "id": "sent_0568",
+    "zh": "他喜欢踢足球。",
+    "pinyin": "Tā xǐhuan tī zúqiú.",
+    "en": "He likes playing football.",
+    "hanzi_source": "踢足球"
+  },
+  {
+    "id": "sent_0569",
+    "zh": "我们一起踢足球吧。",
+    "pinyin": "Wǒmen yìqǐ tī zúqiú ba.",
+    "en": "Let's play football together.",
+    "hanzi_source": "踢足球"
+  },
+  {
+    "id": "sent_0570",
+    "zh": "晚上我喜欢看电视。",
+    "pinyin": "Wǎnshang wǒ xǐhuan kàn diànshì.",
+    "en": "I like watching TV at night.",
+    "hanzi_source": "看电视"
+  },
+  {
+    "id": "sent_0571",
+    "zh": "你看电视了吗？",
+    "pinyin": "Nǐ kàn diànshì le ma?",
+    "en": "Did you watch TV?",
+    "hanzi_source": "看电视"
+  },
+  {
+    "id": "sent_0572",
+    "zh": "他喜欢玩游戏。",
+    "pinyin": "Tā xǐhuan wán yóuxì.",
+    "en": "He likes playing games.",
+    "hanzi_source": "玩游戏"
+  },
+  {
+    "id": "sent_0573",
+    "zh": "我们一起玩游戏吧。",
+    "pinyin": "Wǒmen yìqǐ wán yóuxì ba.",
+    "en": "Let's play games together.",
+    "hanzi_source": "玩游戏"
+  },
+  {
+    "id": "sent_0574",
+    "zh": "圣诞节快乐！",
+    "pinyin": "Shèngdànjié kuàilè!",
+    "en": "Merry Christmas!",
+    "hanzi_source": "圣诞节"
+  },
+  {
+    "id": "sent_0575",
+    "zh": "圣诞节在十二月。",
+    "pinyin": "Shèngdànjié zài shí'èr yuè.",
+    "en": "Christmas is in December.",
+    "hanzi_source": "圣诞节"
+  },
+  {
+    "id": "sent_0576",
+    "zh": "教室里面有什么？",
+    "pinyin": "Jiàoshì lǐmiàn yǒu shénme?",
+    "en": "What's inside the classroom?",
+    "hanzi_source": "教室"
+  },
+  {
+    "id": "sent_0577",
+    "zh": "我们在教室上课。",
+    "pinyin": "Wǒmen zài jiàoshì shàngkè.",
+    "en": "We have class in the classroom.",
+    "hanzi_source": "教室"
+  },
+  {
+    "id": "sent_0578",
+    "zh": "教室里面有桌子、椅子和电脑。",
+    "pinyin": "Jiàoshì lǐmiàn yǒu zhuōzi, yǐzi hé diànnǎo.",
+    "en": "Inside the classroom there are desks, chairs and computers.",
+    "hanzi_source": "里面"
+  },
+  {
+    "id": "sent_0579",
+    "zh": "书包里面有什么？",
+    "pinyin": "Shūbāo lǐmiàn yǒu shénme?",
+    "en": "What's inside the backpack?",
+    "hanzi_source": "里面"
+  },
+  {
+    "id": "sent_0580",
+    "zh": "教室里面有桌子。",
+    "pinyin": "Jiàoshì lǐmiàn yǒu zhuōzi.",
+    "en": "There are desks in the classroom.",
+    "hanzi_source": "桌子"
+  },
+  {
+    "id": "sent_0581",
+    "zh": "桌子上有一本书。",
+    "pinyin": "Zhuōzi shàng yǒu yī běn shū.",
+    "en": "There's a book on the desk.",
+    "hanzi_source": "桌子"
+  },
+  {
+    "id": "sent_0582",
+    "zh": "教室里面有椅子。",
+    "pinyin": "Jiàoshì lǐmiàn yǒu yǐzi.",
+    "en": "There are chairs in the classroom.",
+    "hanzi_source": "椅子"
+  },
+  {
+    "id": "sent_0583",
+    "zh": "这把椅子很舒服。",
+    "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
+    "en": "This chair is very comfortable.",
+    "hanzi_source": "椅子"
+  },
+  {
+    "id": "sent_0584",
+    "zh": "教室前面是一块黑板。",
+    "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+    "en": "In front of the classroom there's a blackboard.",
+    "hanzi_source": "前面"
+  },
+  {
+    "id": "sent_0585",
+    "zh": "我坐在他的前面。",
+    "pinyin": "Wǒ zuò zài tā de qiánmiàn.",
+    "en": "I sit in front of him.",
+    "hanzi_source": "前面"
+  },
+  {
+    "id": "sent_0586",
+    "zh": "教室前面是一块黑板。",
+    "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+    "en": "In front of the classroom there's a blackboard.",
+    "hanzi_source": "块"
+  },
+  {
+    "id": "sent_0587",
+    "zh": "这里有一块橡皮。",
+    "pinyin": "Zhèlǐ yǒu yī kuài xiàngpí.",
+    "en": "There's an eraser here.",
+    "hanzi_source": "块"
+  },
+  {
+    "id": "sent_0588",
+    "zh": "老师在黑板上写字。",
+    "pinyin": "Lǎoshī zài hēibǎn shàng xiě zì.",
+    "en": "The teacher writes on the blackboard.",
+    "hanzi_source": "黑板"
+  },
+  {
+    "id": "sent_0589",
+    "zh": "教室前面是一块黑板。",
+    "pinyin": "Jiàoshì qiánmiàn shì yī kuài hēibǎn.",
+    "en": "In front of the classroom there's a blackboard.",
+    "hanzi_source": "黑板"
+  },
+  {
+    "id": "sent_0590",
+    "zh": "墙上有一张世界地图。",
+    "pinyin": "Qiáng shàng yǒu yī zhāng shìjiè dìtú.",
+    "en": "There's a world map on the wall.",
+    "hanzi_source": "地图"
+  },
+  {
+    "id": "sent_0591",
+    "zh": "请看地图。",
+    "pinyin": "Qǐng kàn dìtú.",
+    "en": "Please look at the map.",
+    "hanzi_source": "地图"
+  },
+  {
+    "id": "sent_0592",
+    "zh": "我坐在教室后面。",
+    "pinyin": "Wǒ zuò zài jiàoshì hòumiàn.",
+    "en": "I sit at the back of the classroom.",
+    "hanzi_source": "后面"
+  },
+  {
+    "id": "sent_0593",
+    "zh": "黑板后面是墙。",
+    "pinyin": "Hēibǎn hòumiàn shì qiáng.",
+    "en": "Behind the blackboard is the wall.",
+    "hanzi_source": "后面"
+  },
+  {
+    "id": "sent_0594",
+    "zh": "墙上有一张地图。",
+    "pinyin": "Qiáng shàng yǒu yī zhāng dìtú.",
+    "en": "There's a map on the wall.",
+    "hanzi_source": "墙"
+  },
+  {
+    "id": "sent_0595",
+    "zh": "这面墙是白色的。",
+    "pinyin": "Zhè miàn qiáng shì báisè de.",
+    "en": "This wall is white.",
+    "hanzi_source": "墙"
+  },
+  {
+    "id": "sent_0596",
+    "zh": "桌子上面有一本书。",
+    "pinyin": "Zhuōzi shàngmiàn yǒu yī běn shū.",
+    "en": "There's a book on the desk.",
+    "hanzi_source": "上面"
+  },
+  {
+    "id": "sent_0597",
+    "zh": "墙上面有一张地图。",
+    "pinyin": "Qiáng shàngmiàn yǒu yī zhāng dìtú.",
+    "en": "There's a map on the wall.",
+    "hanzi_source": "上面"
+  },
+  {
+    "id": "sent_0598",
+    "zh": "我的笔在桌子上。",
+    "pinyin": "Wǒ de bǐ zài zhuōzi shàng.",
+    "en": "My pen is on the desk.",
+    "hanzi_source": "笔"
+  },
+  {
+    "id": "sent_0599",
+    "zh": "请借我一支笔。",
+    "pinyin": "Qǐng jiè wǒ yī zhī bǐ.",
+    "en": "Please lend me a pen.",
+    "hanzi_source": "笔"
+  },
+  {
+    "id": "sent_0600",
+    "zh": "请拿出你的本子。",
+    "pinyin": "Qǐng ná chū nǐ de běnzi.",
+    "en": "Please take out your notebook.",
+    "hanzi_source": "本子"
+  },
+  {
+    "id": "sent_0601",
+    "zh": "我在本子上写生词。",
+    "pinyin": "Wǒ zài běnzi shàng xiě shēngcí.",
+    "en": "I write new words in my notebook.",
+    "hanzi_source": "本子"
+  },
+  {
+    "id": "sent_0602",
+    "zh": "这本书很有意思。",
+    "pinyin": "Zhè běn shū hěn yǒuyìsi.",
+    "en": "This book is very interesting.",
+    "hanzi_source": "本"
+  },
+  {
+    "id": "sent_0603",
+    "zh": "我有五本书。",
+    "pinyin": "Wǒ yǒu wǔ běn shū.",
+    "en": "I have five books.",
+    "hanzi_source": "本"
+  },
+  {
+    "id": "sent_0604",
+    "zh": "教室在三楼。",
+    "pinyin": "Jiàoshì zài sān lóu.",
+    "en": "The classroom is on the third floor.",
+    "hanzi_source": "楼"
+  },
+  {
+    "id": "sent_0605",
+    "zh": "这栋楼有十层。",
+    "pinyin": "Zhè dòng lóu yǒu shí céng.",
+    "en": "This building has ten floors.",
+    "hanzi_source": "楼"
+  },
+  {
+    "id": "sent_0606",
+    "zh": "椅子在桌子旁边。",
+    "pinyin": "Yǐzi zài zhuōzi pángbiān.",
+    "en": "The chair is next to the desk.",
+    "hanzi_source": "旁边"
+  },
+  {
+    "id": "sent_0607",
+    "zh": "我坐在他旁边。",
+    "pinyin": "Wǒ zuò zài tā pángbiān.",
+    "en": "I sit next to him.",
+    "hanzi_source": "旁边"
+  },
+  {
+    "id": "sent_0608",
+    "zh": "教室里有一台电脑。",
+    "pinyin": "Jiàoshì lǐ yǒu yī tái diànnǎo.",
+    "en": "There's a computer in the classroom.",
+    "hanzi_source": "台"
+  },
+  {
+    "id": "sent_0609",
+    "zh": "这台电脑是新的。",
+    "pinyin": "Zhè tái diànnǎo shì xīn de.",
+    "en": "This computer is new.",
+    "hanzi_source": "台"
+  },
+  {
+    "id": "sent_0610",
+    "zh": "教室里有一张地图。",
+    "pinyin": "Jiàoshì lǐ yǒu yī zhāng dìtú.",
+    "en": "There's a map in the classroom.",
+    "hanzi_source": "张"
+  },
+  {
+    "id": "sent_0611",
+    "zh": "这张桌子很大。",
+    "pinyin": "Zhè zhāng zhuōzi hěn dà.",
+    "en": "This desk is very big.",
+    "hanzi_source": "张"
+  },
+  {
+    "id": "sent_0612",
+    "zh": "墙上有一张世界地图。",
+    "pinyin": "Qiáng shàng yǒu yī zhāng shìjiè dìtú.",
+    "en": "There's a world map on the wall.",
+    "hanzi_source": "世界"
+  },
+  {
+    "id": "sent_0613",
+    "zh": "世界很大。",
+    "pinyin": "Shìjiè hěn dà.",
+    "en": "The world is very big.",
+    "hanzi_source": "世界"
+  },
+  {
+    "id": "sent_0614",
+    "zh": "请借我一把笔。",
+    "pinyin": "Qǐng jiè wǒ yī bǎ bǐ.",
+    "en": "Please lend me a pen.",
+    "hanzi_source": "把"
+  },
+  {
+    "id": "sent_0615",
+    "zh": "这把椅子很舒服。",
+    "pinyin": "Zhè bǎ yǐzi hěn shūfu.",
+    "en": "This chair is very comfortable.",
+    "hanzi_source": "把"
+  },
+  {
+    "id": "sent_0616",
+    "zh": "这是我的座位。",
+    "pinyin": "Zhè shì wǒ de zuòwèi.",
+    "en": "This is my seat.",
+    "hanzi_source": "座位"
+  },
+  {
+    "id": "sent_0617",
+    "zh": "请回到你的座位。",
+    "pinyin": "Qǐng huí dào nǐ de zuòwèi.",
+    "en": "Please go back to your seat.",
+    "hanzi_source": "座位"
+  },
+  {
+    "id": "sent_0618",
+    "zh": "我坐在第一排。",
+    "pinyin": "Wǒ zuò zài dì-yī pái.",
+    "en": "I sit in the first row.",
+    "hanzi_source": "排"
+  },
+  {
+    "id": "sent_0619",
+    "zh": "请排好队。",
+    "pinyin": "Qǐng pái hǎo duì.",
+    "en": "Please line up.",
+    "hanzi_source": "排"
+  },
+  {
+    "id": "sent_0620",
+    "zh": "图书馆在食堂对面。",
+    "pinyin": "Túshūguǎn zài shítáng duìmiàn.",
+    "en": "The library is opposite the dining hall.",
+    "hanzi_source": "对面"
+  },
+  {
+    "id": "sent_0621",
+    "zh": "他坐在我对面。",
+    "pinyin": "Tā zuò zài wǒ duìmiàn.",
+    "en": "He sits opposite me.",
+    "hanzi_source": "对面"
+  },
+  {
+    "id": "sent_0622",
+    "zh": "老师站在讲桌前面。",
+    "pinyin": "Lǎoshī zhàn zài jiǎngzhuō qiánmiàn.",
+    "en": "The teacher stands in front of the lectern.",
+    "hanzi_source": "讲桌"
+  },
+  {
+    "id": "sent_0623",
+    "zh": "书放在讲桌上。",
+    "pinyin": "Shū fàng zài jiǎngzhuō shàng.",
+    "en": "The book is placed on the lectern.",
+    "hanzi_source": "讲桌"
+  },
+  {
+    "id": "sent_0624",
+    "zh": "我们休息一下吧。",
+    "pinyin": "Wǒmen xiūxi yīxià ba.",
+    "en": "Let's take a break.",
+    "hanzi_source": "休息"
+  },
+  {
+    "id": "sent_0625",
+    "zh": "下课后大家休息。",
+    "pinyin": "Xiàkè hòu dàjiā xiūxi.",
+    "en": "After class, everyone rests.",
+    "hanzi_source": "休息"
+  },
+  {
+    "id": "sent_0626",
+    "zh": "外面在下雨。",
+    "pinyin": "Wàimiàn zài xià yǔ.",
+    "en": "It's raining outside.",
+    "hanzi_source": "外面"
+  },
+  {
+    "id": "sent_0627",
+    "zh": "我们去外面玩吧。",
+    "pinyin": "Wǒmen qù wàimiàn wán ba.",
+    "en": "Let's go play outside.",
+    "hanzi_source": "外面"
+  },
+  {
+    "id": "sent_0628",
+    "zh": "你有什么爱好？",
+    "pinyin": "Nǐ yǒu shénme àihào?",
+    "en": "What are your hobbies?",
+    "hanzi_source": "爱好"
+  },
+  {
+    "id": "sent_0629",
+    "zh": "我的爱好是看书和旅行。",
+    "pinyin": "Wǒ de àihào shì kàn shū hé lǚxíng.",
+    "en": "My hobbies are reading and traveling.",
+    "hanzi_source": "爱好"
+  },
+  {
+    "id": "sent_0630",
+    "zh": "我的爱好是看书和旅行。",
+    "pinyin": "Wǒ de àihào shì kàn shū hé lǚxíng.",
+    "en": "My hobbies are reading and traveling.",
+    "hanzi_source": "旅行"
+  },
+  {
+    "id": "sent_0631",
+    "zh": "我喜欢一个人旅行。",
+    "pinyin": "Wǒ xǐhuan yī ge rén lǚxíng.",
+    "en": "I like traveling alone.",
+    "hanzi_source": "旅行"
+  },
+  {
+    "id": "sent_0632",
+    "zh": "你对什么感兴趣？",
+    "pinyin": "Nǐ duì shénme gǎn xìngqù?",
+    "en": "What are you interested in?",
+    "hanzi_source": "对"
+  },
+  {
+    "id": "sent_0633",
+    "zh": "我对游泳很感兴趣。",
+    "pinyin": "Wǒ duì yóuyǒng hěn gǎn xìngqù.",
+    "en": "I'm very interested in swimming.",
+    "hanzi_source": "对"
+  },
+  {
+    "id": "sent_0634",
+    "zh": "你对什么感兴趣？",
+    "pinyin": "Nǐ duì shénme gǎn xìngqù?",
+    "en": "What are you interested in?",
+    "hanzi_source": "感兴趣"
+  },
+  {
+    "id": "sent_0635",
+    "zh": "我对打篮球不感兴趣。",
+    "pinyin": "Wǒ duì dǎ lánqiú bù gǎn xìngqù.",
+    "en": "I'm not interested in playing basketball.",
+    "hanzi_source": "感兴趣"
+  },
+  {
+    "id": "sent_0636",
+    "zh": "你对打篮球感兴趣吗？",
+    "pinyin": "Nǐ duì dǎ lánqiú gǎn xìngqù ma?",
+    "en": "Are you interested in playing basketball?",
+    "hanzi_source": "打篮球"
+  },
+  {
+    "id": "sent_0637",
+    "zh": "我周末喜欢打篮球。",
+    "pinyin": "Wǒ zhōumò xǐhuan dǎ lánqiú.",
+    "en": "I like playing basketball on weekends.",
+    "hanzi_source": "打篮球"
+  },
+  {
+    "id": "sent_0638",
+    "zh": "你平时喜欢做什么？",
+    "pinyin": "Nǐ píngshí xǐhuan zuò shénme?",
+    "en": "What do you usually like to do?",
+    "hanzi_source": "平时"
+  },
+  {
+    "id": "sent_0639",
+    "zh": "平时我很忙。",
+    "pinyin": "Píngshí wǒ hěn máng.",
+    "en": "I'm usually busy.",
+    "hanzi_source": "平时"
+  },
+  {
+    "id": "sent_0640",
+    "zh": "我喜欢一边唱歌，一边弹吉他。",
+    "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+    "en": "I like singing while playing the guitar.",
+    "hanzi_source": "一边"
+  },
+  {
+    "id": "sent_0641",
+    "zh": "他一边吃饭一边看电视。",
+    "pinyin": "Tā yìbiān chīfàn yìbiān kàn diànshì.",
+    "en": "He eats while watching TV.",
+    "hanzi_source": "一边"
+  },
+  {
+    "id": "sent_0642",
+    "zh": "我喜欢一边唱歌，一边弹吉他。",
+    "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+    "en": "I like singing while playing the guitar.",
+    "hanzi_source": "唱歌"
+  },
+  {
+    "id": "sent_0643",
+    "zh": "她唱歌唱得很好。",
+    "pinyin": "Tā chànggē chàng de hěn hǎo.",
+    "en": "She sings very well.",
+    "hanzi_source": "唱歌"
+  },
+  {
+    "id": "sent_0644",
+    "zh": "我喜欢一边唱歌，一边弹吉他。",
+    "pinyin": "Wǒ xǐhuan yìbiān chànggē, yìbiān tán jítā.",
+    "en": "I like singing while playing the guitar.",
+    "hanzi_source": "弹吉他"
+  },
+  {
+    "id": "sent_0645",
+    "zh": "他会弹吉他。",
+    "pinyin": "Tā huì tán jítā.",
+    "en": "He can play the guitar.",
+    "hanzi_source": "弹吉他"
+  },
+  {
+    "id": "sent_0646",
+    "zh": "她唱歌唱得很好。",
+    "pinyin": "Tā chànggē chàng de hěn hǎo.",
+    "en": "She sings very well.",
+    "hanzi_source": "得"
+  },
+  {
+    "id": "sent_0647",
+    "zh": "他跑步跑得很快。",
+    "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+    "en": "He runs very fast.",
+    "hanzi_source": "得"
+  },
+  {
+    "id": "sent_0648",
+    "zh": "他弹吉他弹得不错。",
+    "pinyin": "Tā tán jítā tán de búcuò.",
+    "en": "He plays the guitar pretty well.",
+    "hanzi_source": "不错"
+  },
+  {
+    "id": "sent_0649",
+    "zh": "这个主意不错。",
+    "pinyin": "Zhège zhǔyi búcuò.",
+    "en": "This idea is pretty good.",
+    "hanzi_source": "不错"
+  },
+  {
+    "id": "sent_0650",
+    "zh": "我有很多爱好，比如唱歌、跑步。",
+    "pinyin": "Wǒ yǒu hěn duō àihào, bǐrú chànggē, pǎobù.",
+    "en": "I have many hobbies, such as singing and running.",
+    "hanzi_source": "比如"
+  },
+  {
+    "id": "sent_0651",
+    "zh": "比如说，你喜欢什么运动？",
+    "pinyin": "Bǐrú shuō, nǐ xǐhuan shénme yùndòng?",
+    "en": "For example, what sports do you like?",
+    "hanzi_source": "比如"
+  },
+  {
+    "id": "sent_0652",
+    "zh": "我喜欢很多运动，比如篮球、足球等。",
+    "pinyin": "Wǒ xǐhuan hěn duō yùndòng, bǐrú lánqiú, zúqiú děng.",
+    "en": "I like many sports, such as basketball, football, etc.",
+    "hanzi_source": "等"
+  },
+  {
+    "id": "sent_0653",
+    "zh": "桌子上有书、笔等东西。",
+    "pinyin": "Zhuōzi shàng yǒu shū, bǐ děng dōngxi.",
+    "en": "There are books, pens, etc. on the desk.",
+    "hanzi_source": "等"
+  },
+  {
+    "id": "sent_0654",
+    "zh": "我喜欢运动，但是没有时间。",
+    "pinyin": "Wǒ xǐhuan yùndòng, dànshì méiyǒu shíjiān.",
+    "en": "I like exercising, but I don't have time.",
+    "hanzi_source": "但是"
+  },
+  {
+    "id": "sent_0655",
+    "zh": "他很聪明，但是不努力。",
+    "pinyin": "Tā hěn cōngmíng, dànshì bù nǔlì.",
+    "en": "He's smart, but not hardworking.",
+    "hanzi_source": "但是"
+  },
+  {
+    "id": "sent_0656",
+    "zh": "我周末喜欢打篮球。",
+    "pinyin": "Wǒ zhōumò xǐhuan dǎ lánqiú.",
+    "en": "I like playing basketball on weekends.",
+    "hanzi_source": "周末"
+  },
+  {
+    "id": "sent_0657",
+    "zh": "你周末做什么？",
+    "pinyin": "Nǐ zhōumò zuò shénme?",
+    "en": "What do you do on weekends?",
+    "hanzi_source": "周末"
+  },
+  {
+    "id": "sent_0658",
+    "zh": "我经常跑步。",
+    "pinyin": "Wǒ jīngcháng pǎobù.",
+    "en": "I often go running.",
+    "hanzi_source": "经常"
+  },
+  {
+    "id": "sent_0659",
+    "zh": "他经常玩游戏。",
+    "pinyin": "Tā jīngcháng wán yóuxì.",
+    "en": "He often plays games.",
+    "hanzi_source": "经常"
+  },
+  {
+    "id": "sent_0660",
+    "zh": "另外，我还喜欢唱歌。",
+    "pinyin": "Lìngwài, wǒ hái xǐhuan chànggē.",
+    "en": "In addition, I also like singing.",
+    "hanzi_source": "另外"
+  },
+  {
+    "id": "sent_0661",
+    "zh": "另外一个问题是价格。",
+    "pinyin": "Lìngwài yí ge wèntí shì jiàgé.",
+    "en": "Another issue is the price.",
+    "hanzi_source": "另外"
+  },
+  {
+    "id": "sent_0662",
+    "zh": "我经常跑步。",
+    "pinyin": "Wǒ jīngcháng pǎobù.",
+    "en": "I often go running.",
+    "hanzi_source": "跑步"
+  },
+  {
+    "id": "sent_0663",
+    "zh": "他跑步跑得很快。",
+    "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+    "en": "He runs very fast.",
+    "hanzi_source": "跑步"
+  },
+  {
+    "id": "sent_0664",
+    "zh": "他跑步跑得很快。",
+    "pinyin": "Tā pǎobù pǎo de hěn kuài.",
+    "en": "He runs very fast.",
+    "hanzi_source": "快"
+  },
+  {
+    "id": "sent_0665",
+    "zh": "请说快一点。",
+    "pinyin": "Qǐng shuō kuài yīdiǎn.",
+    "en": "Please speak a little faster.",
+    "hanzi_source": "快"
+  },
+  {
+    "id": "sent_0666",
+    "zh": "周末我喜欢玩游戏。",
+    "pinyin": "Zhōumò wǒ xǐhuan wán yóuxì.",
+    "en": "I like playing games on weekends.",
+    "hanzi_source": "玩游戏"
+  },
+  {
+    "id": "sent_0667",
+    "zh": "他经常玩游戏。",
+    "pinyin": "Tā jīngcháng wán yóuxì.",
+    "en": "He often plays games.",
+    "hanzi_source": "玩游戏"
+  },
+  {
+    "id": "sent_0668",
+    "zh": "第一个学生到了。",
+    "pinyin": "Dì-yī ge xuésheng dào le.",
+    "en": "The first student arrived.",
+    "hanzi_source": "第"
+  },
+  {
+    "id": "sent_0669",
+    "zh": "星期一的第一节课是什么课？",
+    "pinyin": "Xīngqīyī de dì-yī jié kè shì shénme kè?",
+    "en": "What's the first class on Monday?",
+    "hanzi_source": "第"
+  },
+  {
+    "id": "sent_0670",
+    "zh": "今天有四节课。",
+    "pinyin": "Jīntiān yǒu sì jié kè.",
+    "en": "There are four class periods today.",
+    "hanzi_source": "节"
+  },
+  {
+    "id": "sent_0671",
+    "zh": "星期一的第一节课是综合课。",
+    "pinyin": "Xīngqīyī de dì-yī jié kè shì zōnghé kè.",
+    "en": "Monday's first period is comprehensive class.",
+    "hanzi_source": "节"
+  },
+  {
+    "id": "sent_0672",
+    "zh": "这节课很难。",
+    "pinyin": "Zhè jié kè hěn nán.",
+    "en": "This class is very hard.",
+    "hanzi_source": "课"
+  },
+  {
+    "id": "sent_0673",
+    "zh": "星期五有什么课？",
+    "pinyin": "Xīngqīwǔ yǒu shénme kè?",
+    "en": "What classes are there on Friday?",
+    "hanzi_source": "课"
+  },
+  {
+    "id": "sent_0674",
+    "zh": "星期一的第一节课是综合课。",
+    "pinyin": "Xīngqīyī de dì-yī jié kè shì zōnghé kè.",
+    "en": "Monday's first period is comprehensive class.",
+    "hanzi_source": "综合"
+  },
+  {
+    "id": "sent_0675",
+    "zh": "这是综合练习。",
+    "pinyin": "Zhè shì zōnghé liànxí.",
+    "en": "This is comprehensive practice.",
+    "hanzi_source": "综合"
+  },
+  {
+    "id": "sent_0676",
+    "zh": "星期五有口语课。",
+    "pinyin": "Xīngqīwǔ yǒu kǒuyǔ kè.",
+    "en": "There's a spoken language class on Friday.",
+    "hanzi_source": "口语"
+  },
+  {
+    "id": "sent_0677",
+    "zh": "你的口语进步很大。",
+    "pinyin": "Nǐ de kǒuyǔ jìnbù hěn dà.",
+    "en": "Your spoken Chinese has improved a lot.",
+    "hanzi_source": "口语"
+  },
+  {
+    "id": "sent_0678",
+    "zh": "下午有听力课。",
+    "pinyin": "Xiàwǔ yǒu tīnglì kè.",
+    "en": "There's a listening class in the afternoon.",
+    "hanzi_source": "听力"
+  },
+  {
+    "id": "sent_0679",
+    "zh": "多听可以练习听力。",
+    "pinyin": "Duō tīng kěyǐ liànxí tīnglì.",
+    "en": "Listening more can practice your listening comprehension.",
+    "hanzi_source": "听力"
+  },
+  {
+    "id": "sent_0680",
+    "zh": "三位老师参加了会议。",
+    "pinyin": "Sān wèi lǎoshī cānjiā le huìyì.",
+    "en": "Three teachers attended the meeting.",
+    "hanzi_source": "位"
+  },
+  {
+    "id": "sent_0681",
+    "zh": "这有一位客人。",
+    "pinyin": "Zhè yǒu yí wèi kèrén.",
+    "en": "There is one guest here.",
+    "hanzi_source": "位"
+  },
+  {
+    "id": "sent_0682",
+    "zh": "王老师教我们汉语。",
+    "pinyin": "Wáng lǎoshī jiāo wǒmen Hànyǔ.",
+    "en": "Teacher Wang teaches us Chinese.",
+    "hanzi_source": "教"
+  },
+  {
+    "id": "sent_0683",
+    "zh": "你教我做这道菜吧。",
+    "pinyin": "Nǐ jiāo wǒ zuò zhè dào cài ba.",
+    "en": "Teach me how to make this dish.",
+    "hanzi_source": "教"
+  },
+  {
+    "id": "sent_0684",
+    "zh": "这节课很长。",
+    "pinyin": "Zhè jié kè hěn cháng.",
+    "en": "This class is very long.",
+    "hanzi_source": "长"
+  },
+  {
+    "id": "sent_0685",
+    "zh": "她的头发很长。",
+    "pinyin": "Tā de tóufa hěn cháng.",
+    "en": "Her hair is very long.",
+    "hanzi_source": "长"
+  },
+  {
+    "id": "sent_0686",
+    "zh": "十分钟后开始。",
+    "pinyin": "Shí fēnzhōng hòu kāishǐ.",
+    "en": "It starts in ten minutes.",
+    "hanzi_source": "分钟"
+  },
+  {
+    "id": "sent_0687",
+    "zh": "每节课四十五分钟。",
+    "pinyin": "Měi jié kè sìshíwǔ fēnzhōng.",
+    "en": "Each class period is 45 minutes.",
+    "hanzi_source": "分钟"
+  },
+  {
+    "id": "sent_0688",
+    "zh": "一小时有六十分钟。",
+    "pinyin": "Yī xiǎoshí yǒu liùshí fēnzhōng.",
+    "en": "One hour has sixty minutes.",
+    "hanzi_source": "小时"
+  },
+  {
+    "id": "sent_0689",
+    "zh": "我每天学习两小时。",
+    "pinyin": "Wǒ měitiān xuéxí liǎng xiǎoshí.",
+    "en": "I study for two hours every day.",
+    "hanzi_source": "小时"
+  },
+  {
+    "id": "sent_0690",
+    "zh": "他正在上课。",
+    "pinyin": "Tā zhèngzài shàngkè.",
+    "en": "He is in class right now.",
+    "hanzi_source": "正在"
+  },
+  {
+    "id": "sent_0691",
+    "zh": "我正在写作业。",
+    "pinyin": "Wǒ zhèngzài xiě zuòyè.",
+    "en": "I am doing homework right now.",
+    "hanzi_source": "正在"
+  },
+  {
+    "id": "sent_0692",
+    "zh": "九月一号开学。",
+    "pinyin": "Jiǔyuè yī hào kāixué.",
+    "en": "School starts on September 1st.",
+    "hanzi_source": "开学"
+  },
+  {
+    "id": "sent_0693",
+    "zh": "我们已经开学了。",
+    "pinyin": "Wǒmen yǐjīng kāixué le.",
+    "en": "Our school has already started.",
+    "hanzi_source": "开学"
+  },
+  {
+    "id": "sent_0694",
+    "zh": "我们已经开学了。",
+    "pinyin": "Wǒmen yǐjīng kāixué le.",
+    "en": "Our school has already started.",
+    "hanzi_source": "已经"
+  },
+  {
+    "id": "sent_0695",
+    "zh": "他已经到了。",
+    "pinyin": "Tā yǐjīng dào le.",
+    "en": "He has already arrived.",
+    "hanzi_source": "已经"
+  },
+  {
+    "id": "sent_0696",
+    "zh": "这个学期有十六周。",
+    "pinyin": "Zhège xuéqī yǒu shíliù zhōu.",
+    "en": "This semester has sixteen weeks.",
+    "hanzi_source": "学期"
+  },
+  {
+    "id": "sent_0697",
+    "zh": "下学期我要学中文。",
+    "pinyin": "Xià xuéqī wǒ yào xué Zhōngwén.",
+    "en": "Next semester I will study Chinese.",
+    "hanzi_source": "学期"
+  },
+  {
+    "id": "sent_0698",
+    "zh": "我们班有二十个学生。",
+    "pinyin": "Wǒmen bān yǒu èrshí ge xuésheng.",
+    "en": "Our class has twenty students.",
+    "hanzi_source": "班"
+  },
+  {
+    "id": "sent_0699",
+    "zh": "你在哪个班？",
+    "pinyin": "Nǐ zài nǎ ge bān?",
+    "en": "Which class are you in?",
+    "hanzi_source": "班"
+  },
+  {
+    "id": "sent_0700",
+    "zh": "一周有七天。",
+    "pinyin": "Yī zhōu yǒu qī tiān.",
+    "en": "One week has seven days.",
+    "hanzi_source": "周"
+  },
+  {
+    "id": "sent_0701",
+    "zh": "我下周考试。",
+    "pinyin": "Wǒ xià zhōu kǎoshì.",
+    "en": "I have an exam next week.",
+    "hanzi_source": "周"
+  },
+  {
+    "id": "sent_0702",
+    "zh": "作业写完了吗？",
+    "pinyin": "Zuòyè xiě wán le ma?",
+    "en": "Have you finished writing the homework?",
+    "hanzi_source": "完"
+  },
+  {
+    "id": "sent_0703",
+    "zh": "我吃完饭了。",
+    "pinyin": "Wǒ chī wán fàn le.",
+    "en": "I've finished eating.",
+    "hanzi_source": "完"
+  },
+  {
+    "id": "sent_0704",
+    "zh": "你看见黄老师了吗？",
+    "pinyin": "Nǐ kànjiàn Huáng lǎoshī le ma?",
+    "en": "Did you see Teacher Huang?",
+    "hanzi_source": "看见"
+  },
+  {
+    "id": "sent_0705",
+    "zh": "我没看见。",
+    "pinyin": "Wǒ méi kànjiàn.",
+    "en": "I didn't see (him/her).",
+    "hanzi_source": "看见"
+  },
+  {
+    "id": "sent_0706",
+    "zh": "你找到你的手机了吗？",
+    "pinyin": "Nǐ zhǎodào nǐ de shǒujī le ma?",
+    "en": "Did you find your phone?",
+    "hanzi_source": "找"
+  },
+  {
+    "id": "sent_0707",
+    "zh": "我在找我的书。",
+    "pinyin": "Wǒ zài zhǎo wǒ de shū.",
+    "en": "I'm looking for my book.",
+    "hanzi_source": "找"
+  },
+  {
+    "id": "sent_0708",
+    "zh": "你准备好了吗？",
+    "pinyin": "Nǐ zhǔnbèi hǎo le ma?",
+    "en": "Are you ready?",
+    "hanzi_source": "准备"
+  },
+  {
+    "id": "sent_0709",
+    "zh": "我在准备考试。",
+    "pinyin": "Wǒ zài zhǔnbèi kǎoshì.",
+    "en": "I'm preparing for the exam.",
+    "hanzi_source": "准备"
+  },
+  {
+    "id": "sent_0710",
+    "zh": "我们要努力学习。",
+    "pinyin": "Wǒmen yào nǔlì xuéxí.",
+    "en": "We must study hard.",
+    "hanzi_source": "要"
+  },
+  {
+    "id": "sent_0711",
+    "zh": "你要记住这个语法。",
+    "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+    "en": "You need to remember this grammar.",
+    "hanzi_source": "要"
+  },
+  {
+    "id": "sent_0712",
+    "zh": "我们要努力学习。",
+    "pinyin": "Wǒmen yào nǔlì xuéxí.",
+    "en": "We must study hard.",
+    "hanzi_source": "努力"
+  },
+  {
+    "id": "sent_0713",
+    "zh": "他很努力工作。",
+    "pinyin": "Tā hěn nǔlì gōngzuò.",
+    "en": "He works very hard.",
+    "hanzi_source": "努力"
+  },
+  {
+    "id": "sent_0714",
+    "zh": "我在准备考试。",
+    "pinyin": "Wǒ zài zhǔnbèi kǎoshì.",
+    "en": "I'm preparing for the exam.",
+    "hanzi_source": "考试"
+  },
+  {
+    "id": "sent_0715",
+    "zh": "明天有一个汉语考试。",
+    "pinyin": "Míngtiān yǒu yí ge Hànyǔ kǎoshì.",
+    "en": "There's a Chinese exam tomorrow.",
+    "hanzi_source": "考试"
+  },
+  {
+    "id": "sent_0716",
+    "zh": "你要记住这个语法。",
+    "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+    "en": "You need to remember this grammar.",
+    "hanzi_source": "记住"
+  },
+  {
+    "id": "sent_0717",
+    "zh": "请记住我的名字。",
+    "pinyin": "Qǐng jìzhù wǒ de míngzi.",
+    "en": "Please remember my name.",
+    "hanzi_source": "记住"
+  },
+  {
+    "id": "sent_0718",
+    "zh": "你要记住这个语法。",
+    "pinyin": "Nǐ yào jìzhù zhège yǔfǎ.",
+    "en": "You need to remember this grammar.",
+    "hanzi_source": "语法"
+  },
+  {
+    "id": "sent_0719",
+    "zh": "汉语语法不太难。",
+    "pinyin": "Hànyǔ yǔfǎ bú tài nán.",
+    "en": "Chinese grammar isn't too hard.",
+    "hanzi_source": "语法"
+  },
+  {
+    "id": "sent_0720",
+    "zh": "我们要复习语法。",
+    "pinyin": "Wǒmen yào fùxí yǔfǎ.",
+    "en": "We need to review the grammar.",
+    "hanzi_source": "复习"
+  },
+  {
+    "id": "sent_0721",
+    "zh": "考试前请复习课文。",
+    "pinyin": "Kǎoshì qián qǐng fùxí kèwén.",
+    "en": "Please review the text before the exam.",
+    "hanzi_source": "复习"
+  },
+  {
+    "id": "sent_0722",
+    "zh": "加油！你一定可以的。",
+    "pinyin": "Jiāyóu! Nǐ yídìng kěyǐ de.",
+    "en": "Keep going! You can do it.",
+    "hanzi_source": "加油"
+  },
+  {
+    "id": "sent_0723",
+    "zh": "考试加油！",
+    "pinyin": "Kǎoshì jiāyóu!",
+    "en": "Good luck on the exam!",
+    "hanzi_source": "加油"
+  },
+  {
+    "id": "sent_0724",
+    "zh": "好好复习，明天考试。",
+    "pinyin": "Hǎohǎo fùxí, míngtiān kǎoshì.",
+    "en": "Review carefully, there's an exam tomorrow.",
+    "hanzi_source": "好好"
+  },
+  {
+    "id": "sent_0725",
+    "zh": "你要好好休息。",
+    "pinyin": "Nǐ yào hǎohǎo xiūxi.",
+    "en": "You need to rest well.",
+    "hanzi_source": "好好"
+  },
+  {
+    "id": "sent_0726",
+    "zh": "我不懂这个语法。",
+    "pinyin": "Wǒ bù dǒng zhège yǔfǎ.",
+    "en": "I don't understand this grammar.",
+    "hanzi_source": "懂"
+  },
+  {
+    "id": "sent_0727",
+    "zh": "你懂了吗？",
+    "pinyin": "Nǐ dǒng le ma?",
+    "en": "Do you understand?",
+    "hanzi_source": "懂"
+  },
+  {
+    "id": "sent_0728",
+    "zh": "我在写作文。",
+    "pinyin": "Wǒ zài xiě zuòwén.",
+    "en": "I'm writing a composition.",
+    "hanzi_source": "作文"
+  },
+  {
+    "id": "sent_0729",
+    "zh": "这篇作文写得很好。",
+    "pinyin": "Zhè piān zuòwén xiě de hěn hǎo.",
+    "en": "This composition is written very well.",
+    "hanzi_source": "作文"
+  },
+  {
+    "id": "sent_0730",
+    "zh": "阅读可以帮助学习汉语。",
+    "pinyin": "Yuèdú kěyǐ bāngzhù xuéxí Hànyǔ.",
+    "en": "Reading can help you learn Chinese.",
+    "hanzi_source": "阅读"
+  },
+  {
+    "id": "sent_0731",
+    "zh": "我喜欢阅读中文小说。",
+    "pinyin": "Wǒ xǐhuan yuèdú Zhōngwén xiǎoshuō.",
+    "en": "I like reading Chinese novels.",
+    "hanzi_source": "阅读"
+  },
+  {
+    "id": "sent_0732",
+    "zh": "你知道这道题的答案吗？",
+    "pinyin": "Nǐ zhīdào zhè dào tí de dá'àn ma?",
+    "en": "Do you know the answer to this question?",
+    "hanzi_source": "答案"
+  },
+  {
+    "id": "sent_0733",
+    "zh": "答案写在本子上。",
+    "pinyin": "Dá'àn xiě zài běnzi shàng.",
+    "en": "The answer is written in the notebook.",
+    "hanzi_source": "答案"
+  },
+  {
+    "id": "sent_0734",
+    "zh": "考试过了吗？",
+    "pinyin": "Kǎoshì guò le ma?",
+    "en": "Did you pass the exam?",
+    "hanzi_source": "过"
+  },
+  {
+    "id": "sent_0735",
+    "zh": "他考试过了。",
+    "pinyin": "Tā kǎoshì guò le.",
+    "en": "He passed the exam.",
+    "hanzi_source": "过"
+  },
+  {
+    "id": "sent_0736",
+    "zh": "超市在图书馆旁边。",
+    "pinyin": "Chāoshì zài túshūguǎn pángbiān.",
+    "en": "The supermarket is next to the library.",
+    "hanzi_source": "超市"
+  },
+  {
+    "id": "sent_0737",
+    "zh": "我去超市买水果。",
+    "pinyin": "Wǒ qù chāoshì mǎi shuǐguǒ.",
+    "en": "I'm going to the supermarket to buy fruit.",
+    "hanzi_source": "超市"
+  },
+  {
+    "id": "sent_0738",
+    "zh": "食堂的饭很便宜。",
+    "pinyin": "Shítáng de fàn hěn piányi.",
+    "en": "The food at the dining hall is cheap.",
+    "hanzi_source": "食堂"
+  },
+  {
+    "id": "sent_0739",
+    "zh": "我们在食堂吃午饭。",
+    "pinyin": "Wǒmen zài shítáng chī wǔfàn.",
+    "en": "We eat lunch at the dining hall.",
+    "hanzi_source": "食堂"
+  },
+  {
+    "id": "sent_0740",
+    "zh": "教室在教学楼里。",
+    "pinyin": "Jiàoshì zài jiàoxuélóu lǐ.",
+    "en": "The classroom is in the teaching building.",
+    "hanzi_source": "教学楼"
+  },
+  {
+    "id": "sent_0741",
+    "zh": "教学楼离宿舍不远。",
+    "pinyin": "Jiàoxuélóu lí sùshè bù yuǎn.",
+    "en": "The teaching building isn't far from the dorm.",
+    "hanzi_source": "教学楼"
+  },
+  {
+    "id": "sent_0742",
+    "zh": "我去书店买书。",
+    "pinyin": "Wǒ qù shūdiàn mǎi shū.",
+    "en": "I'm going to the bookstore to buy books.",
+    "hanzi_source": "书店"
+  },
+  {
+    "id": "sent_0743",
+    "zh": "学校附近有一家书店。",
+    "pinyin": "Xuéxiào fùjìn yǒu yī jiā shūdiàn.",
+    "en": "There's a bookstore near the school.",
+    "hanzi_source": "书店"
+  },
+  {
+    "id": "sent_0744",
+    "zh": "体育馆在操场旁边。",
+    "pinyin": "Tǐyùguǎn zài cāochǎng pángbiān.",
+    "en": "The gymnasium is next to the playground.",
+    "hanzi_source": "体育馆"
+  },
+  {
+    "id": "sent_0745",
+    "zh": "我们在体育馆打篮球。",
+    "pinyin": "Wǒmen zài tǐyùguǎn dǎ lánqiú.",
+    "en": "We play basketball in the gymnasium.",
+    "hanzi_source": "体育馆"
+  },
+  {
+    "id": "sent_0746",
+    "zh": "请问国际学院怎么走？",
+    "pinyin": "Qǐngwèn guójì xuéyuàn zěnme zǒu?",
+    "en": "Excuse me, how do I get to the International Institute?",
+    "hanzi_source": "国际学院"
+  },
+  {
+    "id": "sent_0747",
+    "zh": "国际学院在学校北边。",
+    "pinyin": "Guójì xuéyuàn zài xuéxiào běibian.",
+    "en": "The International Institute is on the north side of the school.",
+    "hanzi_source": "国际学院"
+  },
+  {
+    "id": "sent_0748",
+    "zh": "学生们在操场跑步。",
+    "pinyin": "Xuéshengmen zài cāochǎng pǎobù.",
+    "en": "Students are running on the playground.",
+    "hanzi_source": "操场"
+  },
+  {
+    "id": "sent_0749",
+    "zh": "操场旁边是体育馆。",
+    "pinyin": "Cāochǎng pángbiān shì tǐyùguǎn.",
+    "en": "Next to the playground is the gymnasium.",
+    "hanzi_source": "操场"
+  },
+  {
+    "id": "sent_0750",
+    "zh": "我住在宿舍楼三层。",
+    "pinyin": "Wǒ zhù zài sùshèlóu sān céng.",
+    "en": "I live on the third floor of the dormitory building.",
+    "hanzi_source": "宿舍楼"
+  },
+  {
+    "id": "sent_0751",
+    "zh": "宿舍楼离食堂很近。",
+    "pinyin": "Sùshèlóu lí shítáng hěn jìn.",
+    "en": "The dormitory building is close to the dining hall.",
+    "hanzi_source": "宿舍楼"
+  },
+  {
+    "id": "sent_0752",
+    "zh": "图书馆在教学楼对面。",
+    "pinyin": "Túshūguǎn zài jiàoxuélóu duìmiàn.",
+    "en": "The library is opposite the teaching building.",
+    "hanzi_source": "图书馆"
+  },
+  {
+    "id": "sent_0753",
+    "zh": "我在图书馆看书。",
+    "pinyin": "Wǒ zài túshūguǎn kàn shū.",
+    "en": "I read in the library.",
+    "hanzi_source": "图书馆"
+  },
+  {
+    "id": "sent_0754",
+    "zh": "校门口有很多学生。",
+    "pinyin": "Xiàomén kǒu yǒu hěn duō xuésheng.",
+    "en": "There are many students at the school gate.",
+    "hanzi_source": "校门"
+  },
+  {
+    "id": "sent_0755",
+    "zh": "我在校门等你。",
+    "pinyin": "Wǒ zài xiàomén děng nǐ.",
+    "en": "I'll wait for you at the school gate.",
+    "hanzi_source": "校门"
+  },
+  {
+    "id": "sent_0756",
+    "zh": "国际学院在学校北边。",
+    "pinyin": "Guójì xuéyuàn zài xuéxiào běibian.",
+    "en": "The International Institute is on the north side of the school.",
+    "hanzi_source": "北边"
+  },
+  {
+    "id": "sent_0757",
+    "zh": "图书馆在北边。",
+    "pinyin": "Túshūguǎn zài běibian.",
+    "en": "The library is to the north.",
+    "hanzi_source": "北边"
+  },
+  {
+    "id": "sent_0758",
+    "zh": "从这儿一直往前走。",
+    "pinyin": "Cóng zhèr yìzhí wǎng qián zǒu.",
+    "en": "Go straight ahead from here.",
+    "hanzi_source": "从"
+  },
+  {
+    "id": "sent_0759",
+    "zh": "我从中国来。",
+    "pinyin": "Wǒ cóng Zhōngguó lái.",
+    "en": "I come from China.",
+    "hanzi_source": "从"
+  },
+  {
+    "id": "sent_0760",
+    "zh": "从这儿一直往前走。",
+    "pinyin": "Cóng zhèr yìzhí wǎng qián zǒu.",
+    "en": "Go straight ahead from here.",
+    "hanzi_source": "一直"
+  },
+  {
+    "id": "sent_0761",
+    "zh": "一直往北走就到了。",
+    "pinyin": "Yìzhí wǎng běi zǒu jiù dào le.",
+    "en": "Keep going north and you'll arrive.",
+    "hanzi_source": "一直"
+  },
+  {
+    "id": "sent_0762",
+    "zh": "一直往前走。",
+    "pinyin": "Yìzhí wǎng qián zǒu.",
+    "en": "Go straight ahead.",
+    "hanzi_source": "往"
+  },
+  {
+    "id": "sent_0763",
+    "zh": "往东转。",
+    "pinyin": "Wǎng dōng zhuǎn.",
+    "en": "Turn east.",
+    "hanzi_source": "往"
+  },
+  {
+    "id": "sent_0764",
+    "zh": "往东转就到了。",
+    "pinyin": "Wǎng dōng zhuǎn jiù dào le.",
+    "en": "Turn east and you'll arrive.",
+    "hanzi_source": "转"
+  },
+  {
+    "id": "sent_0765",
+    "zh": "在图书馆前面转弯。",
+    "pinyin": "Zài túshūguǎn qiánmiàn zhuǎnwān.",
+    "en": "Turn at the library.",
+    "hanzi_source": "转"
+  },
+  {
+    "id": "sent_0766",
+    "zh": "书店在西边。",
+    "pinyin": "Shūdiàn zài xībian.",
+    "en": "The bookstore is to the west.",
+    "hanzi_source": "西边"
+  },
+  {
+    "id": "sent_0767",
+    "zh": "太阳从西边落下。",
+    "pinyin": "Tàiyáng cóng xībian luòxià.",
+    "en": "The sun sets in the west.",
+    "hanzi_source": "西边"
+  },
+  {
+    "id": "sent_0768",
+    "zh": "学校附近有一家书店。",
+    "pinyin": "Xuéxiào fùjìn yǒu yī jiā shūdiàn.",
+    "en": "There's a bookstore near the school.",
+    "hanzi_source": "附近"
+  },
+  {
+    "id": "sent_0769",
+    "zh": "附近有超市吗？",
+    "pinyin": "Fùjìn yǒu chāoshì ma?",
+    "en": "Is there a supermarket nearby?",
+    "hanzi_source": "附近"
+  },
+  {
+    "id": "sent_0770",
+    "zh": "图书馆离宿舍很近。",
+    "pinyin": "Túshūguǎn lí sùshè hěn jìn.",
+    "en": "The library is close to the dorm.",
+    "hanzi_source": "离"
+  },
+  {
+    "id": "sent_0771",
+    "zh": "学校离市中心不远。",
+    "pinyin": "Xuéxiào lí shì zhōngxīn bù yuǎn.",
+    "en": "The school isn't far from downtown.",
+    "hanzi_source": "离"
+  },
+  {
+    "id": "sent_0772",
+    "zh": "图书馆离宿舍不远。",
+    "pinyin": "Túshūguǎn lí sùshè bù yuǎn.",
+    "en": "The library isn't far from the dorm.",
+    "hanzi_source": "远"
+  },
+  {
+    "id": "sent_0773",
+    "zh": "你家离学校远吗？",
+    "pinyin": "Nǐ jiā lí xuéxiào yuǎn ma?",
+    "en": "Is your home far from school?",
+    "hanzi_source": "远"
+  },
+  {
+    "id": "sent_0774",
+    "zh": "大概走五分钟就到了。",
+    "pinyin": "Dàgài zǒu wǔ fēnzhōng jiù dào le.",
+    "en": "It takes about five minutes to walk there.",
+    "hanzi_source": "大概"
+  },
+  {
+    "id": "sent_0775",
+    "zh": "大概有一百米远。",
+    "pinyin": "Dàgài yǒu yī bǎi mǐ yuǎn.",
+    "en": "It's about 100 meters away.",
+    "hanzi_source": "大概"
+  },
+  {
+    "id": "sent_0776",
+    "zh": "大概有一百米远。",
+    "pinyin": "Dàgài yǒu yī bǎi mǐ yuǎn.",
+    "en": "It's about 100 meters away.",
+    "hanzi_source": "米"
+  },
+  {
+    "id": "sent_0777",
+    "zh": "他有一米八高。",
+    "pinyin": "Tā yǒu yī mǐ bā gāo.",
+    "en": "He is 1.8 meters tall.",
+    "hanzi_source": "米"
+  },
+  {
+    "id": "sent_0778",
+    "zh": "教学楼在东边。",
+    "pinyin": "Jiàoxuélóu zài dōngbian.",
+    "en": "The teaching building is to the east.",
+    "hanzi_source": "东边"
+  },
+  {
+    "id": "sent_0779",
+    "zh": "太阳从东边升起。",
+    "pinyin": "Tàiyáng cóng dōngbian shēngqǐ.",
+    "en": "The sun rises in the east.",
+    "hanzi_source": "东边"
+  },
+  {
+    "id": "sent_0780",
+    "zh": "操场在南边。",
+    "pinyin": "Cāochǎng zài nánbian.",
+    "en": "The playground is to the south.",
+    "hanzi_source": "南边"
+  },
+  {
+    "id": "sent_0781",
+    "zh": "南边天气比较暖和。",
+    "pinyin": "Nánbian tiānqì bǐjiào nuǎnhuo.",
+    "en": "The weather in the south is warmer.",
+    "hanzi_source": "南边"
+  },
+  {
+    "id": "sent_0782",
+    "zh": "图书馆离宿舍很近。",
+    "pinyin": "Túshūguǎn lí sùshè hěn jìn.",
+    "en": "The library is close to the dorm.",
+    "hanzi_source": "近"
+  },
+  {
+    "id": "sent_0783",
+    "zh": "超市离这儿很近。",
+    "pinyin": "Chāoshì lí zhèr hěn jìn.",
+    "en": "The supermarket is very close to here.",
+    "hanzi_source": "近"
+  },
+  {
+    "id": "sent_0784",
+    "zh": "这里的生活很方便。",
+    "pinyin": "Zhèlǐ de shēnghuó hěn fāngbiàn.",
+    "en": "Life here is very convenient.",
+    "hanzi_source": "生活"
+  },
+  {
+    "id": "sent_0785",
+    "zh": "我喜欢这里的生活。",
+    "pinyin": "Wǒ xǐhuan zhèlǐ de shēnghuó.",
+    "en": "I like life here.",
+    "hanzi_source": "生活"
+  },
+  {
+    "id": "sent_0786",
+    "zh": "这里的生活很方便。",
+    "pinyin": "Zhèlǐ de shēnghuó hěn fāngbiàn.",
+    "en": "Life here is very convenient.",
+    "hanzi_source": "方便"
+  },
+  {
+    "id": "sent_0787",
+    "zh": "学校附近购物很方便。",
+    "pinyin": "Xuéxiào fùjìn gòuwù hěn fāngbiàn.",
+    "en": "Shopping near the school is very convenient.",
+    "hanzi_source": "方便"
+  },
+  {
+    "id": "sent_0788",
+    "zh": "您要买什么水果？",
+    "pinyin": "Nín yào mǎi shénme shuǐguǒ?",
+    "en": "What fruit would you like to buy?",
+    "hanzi_source": "买"
+  },
+  {
+    "id": "sent_0789",
+    "zh": "我想买一杯咖啡。",
+    "pinyin": "Wǒ xiǎng mǎi yī bēi kāfēi.",
+    "en": "I want to buy a cup of coffee.",
+    "hanzi_source": "买"
+  },
+  {
+    "id": "sent_0790",
+    "zh": "您要买什么水果？",
+    "pinyin": "Nín yào mǎi shénme shuǐguǒ?",
+    "en": "What fruit would you like to buy?",
+    "hanzi_source": "水果"
+  },
+  {
+    "id": "sent_0791",
+    "zh": "我喜欢吃水果。",
+    "pinyin": "Wǒ xǐhuan chī shuǐguǒ.",
+    "en": "I like eating fruit.",
+    "hanzi_source": "水果"
+  },
+  {
+    "id": "sent_0792",
+    "zh": "我买几个香蕉和苹果。",
+    "pinyin": "Wǒ mǎi jǐ ge xiāngjiāo hé píngguǒ.",
+    "en": "I'll buy a few bananas and apples.",
+    "hanzi_source": "香蕉"
+  },
+  {
+    "id": "sent_0793",
+    "zh": "香蕉三块一斤。",
+    "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+    "en": "Bananas are 3 yuan per jin.",
+    "hanzi_source": "香蕉"
+  },
+  {
+    "id": "sent_0794",
+    "zh": "这几个苹果有多重？",
+    "pinyin": "Zhè jǐ ge píngguǒ yǒu duō zhòng?",
+    "en": "How heavy are these apples?",
+    "hanzi_source": "苹果"
+  },
+  {
+    "id": "sent_0795",
+    "zh": "我每天吃一个苹果。",
+    "pinyin": "Wǒ měitiān chī yí ge píngguǒ.",
+    "en": "I eat an apple every day.",
+    "hanzi_source": "苹果"
+  },
+  {
+    "id": "sent_0796",
+    "zh": "香蕉怎么卖？",
+    "pinyin": "Xiāngjiāo zěnme mài?",
+    "en": "How are the bananas sold?",
+    "hanzi_source": "卖"
+  },
+  {
+    "id": "sent_0797",
+    "zh": "这里卖水果。",
+    "pinyin": "Zhèlǐ mài shuǐguǒ.",
+    "en": "Fruit is sold here.",
+    "hanzi_source": "卖"
+  },
+  {
+    "id": "sent_0798",
+    "zh": "香蕉三块一斤。",
+    "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+    "en": "Bananas are 3 yuan per jin.",
+    "hanzi_source": "块"
+  },
+  {
+    "id": "sent_0799",
+    "zh": "这个多少块钱？",
+    "pinyin": "Zhège duōshao kuài qián?",
+    "en": "How much is this?",
+    "hanzi_source": "块"
+  },
+  {
+    "id": "sent_0800",
+    "zh": "香蕉三块一斤。",
+    "pinyin": "Xiāngjiāo sān kuài yī jīn.",
+    "en": "Bananas are 3 yuan per jin.",
+    "hanzi_source": "斤"
+  },
+  {
+    "id": "sent_0801",
+    "zh": "我要两斤苹果。",
+    "pinyin": "Wǒ yào liǎng jīn píngguǒ.",
+    "en": "I want two jin of apples.",
+    "hanzi_source": "斤"
+  },
+  {
+    "id": "sent_0802",
+    "zh": "这几个苹果有多重？",
+    "pinyin": "Zhè jǐ ge píngguǒ yǒu duō zhòng?",
+    "en": "How heavy are these apples?",
+    "hanzi_source": "重"
+  },
+  {
+    "id": "sent_0803",
+    "zh": "这个西瓜很重。",
+    "pinyin": "Zhège xīguā hěn zhòng.",
+    "en": "This watermelon is very heavy.",
+    "hanzi_source": "重"
+  },
+  {
+    "id": "sent_0804",
+    "zh": "正好两斤重。",
+    "pinyin": "Zhènghǎo liǎng jīn zhòng.",
+    "en": "It's exactly two jin.",
+    "hanzi_source": "正好"
+  },
+  {
+    "id": "sent_0805",
+    "zh": "这个价钱正好。",
+    "pinyin": "Zhège jiàqián zhènghǎo.",
+    "en": "This price is just right.",
+    "hanzi_source": "正好"
+  },
+  {
+    "id": "sent_0806",
     "zh": "一共多少钱？",
-    "pinyin": "Yīgòng duōshao qián?",
+    "pinyin": "Yígòng duōshao qián?",
     "en": "How much in total?",
     "hanzi_source": "一共"
   },
   {
-    "id": "sent_0435",
+    "id": "sent_0807",
     "zh": "一共五十块。",
-    "pinyin": "Yīgòng wǔshí kuài.",
+    "pinyin": "Yígòng wǔshí kuài.",
     "en": "Fifty yuan total.",
     "hanzi_source": "一共"
   },
   {
-    "id": "sent_0436",
-    "zh": "太贵了，便宜点儿吧。",
-    "pinyin": "Tài guì le, piányi diǎnr ba.",
-    "en": "Too expensive, make it cheaper please.",
-    "hanzi_source": "便宜点儿吧"
+    "id": "sent_0808",
+    "zh": "这里的水果很便宜。",
+    "pinyin": "Zhèlǐ de shuǐguǒ hěn piányi.",
+    "en": "The fruit here is cheap.",
+    "hanzi_source": "便宜"
   },
   {
-    "id": "sent_0437",
-    "zh": "老板，便宜点儿吧，我多买几个。",
-    "pinyin": "Lǎobǎn, piányi diǎnr ba, wǒ duō mǎi jǐ ge.",
-    "en": "Boss, cheaper please, I'll buy several more.",
-    "hanzi_source": "便宜点儿吧"
+    "id": "sent_0809",
+    "zh": "便宜点儿吧。",
+    "pinyin": "Piányi diǎnr ba.",
+    "en": "Make it a bit cheaper please.",
+    "hanzi_source": "便宜"
   },
   {
-    "id": "sent_0438",
-    "zh": "请问您几位？两位。",
-    "pinyin": "Qǐngwèn nín jǐ wèi? Liǎng wèi.",
-    "en": "How many in your party? Two.",
-    "hanzi_source": "请问您几位"
+    "id": "sent_0810",
+    "zh": "下次再来买吧。",
+    "pinyin": "Xià cì zài lái mǎi ba.",
+    "en": "Come buy again next time.",
+    "hanzi_source": "下次"
   },
   {
-    "id": "sent_0439",
-    "zh": "服务员问：请问您几位？",
-    "pinyin": "Fúwùyuán wèn: qǐngwèn nín jǐ wèi?",
-    "en": "The waiter asks: how many people?",
-    "hanzi_source": "请问您几位"
+    "id": "sent_0811",
+    "zh": "下次我请客。",
+    "pinyin": "Xià cì wǒ qǐngkè.",
+    "en": "Next time it's my treat.",
+    "hanzi_source": "下次"
   },
   {
-    "id": "sent_0440",
-    "zh": "我们有两位。",
-    "pinyin": "Wǒmen yǒu liǎng wèi.",
-    "en": "We have two people.",
-    "hanzi_source": "两位"
+    "id": "sent_0812",
+    "zh": "我去水果店买苹果。",
+    "pinyin": "Wǒ qù shuǐguǒdiàn mǎi píngguǒ.",
+    "en": "I'm going to the fruit shop to buy apples.",
+    "hanzi_source": "水果店"
   },
   {
-    "id": "sent_0441",
-    "zh": "两位请坐这边。",
-    "pinyin": "Liǎng wèi qǐng zuò zhè biān.",
-    "en": "Two people, please sit over here.",
-    "hanzi_source": "两位"
+    "id": "sent_0813",
+    "zh": "水果店离学校很近。",
+    "pinyin": "Shuǐguǒdiàn lí xuéxiào hěn jìn.",
+    "en": "The fruit shop is close to the school.",
+    "hanzi_source": "水果店"
   },
   {
-    "id": "sent_0442",
-    "zh": "您吃点儿什么？给我看看菜单。",
-    "pinyin": "Nín chī diǎnr shénme? Gěi wǒ kànkan càidān.",
-    "en": "What would you like to eat? Let me see the menu.",
-    "hanzi_source": "您吃点儿什么"
+    "id": "sent_0814",
+    "zh": "这种水果很甜。",
+    "pinyin": "Zhè zhǒng shuǐguǒ hěn tián.",
+    "en": "This kind of fruit is very sweet.",
+    "hanzi_source": "种"
   },
   {
-    "id": "sent_0443",
-    "zh": "服务员走过来问您吃点儿什么。",
-    "pinyin": "Fúwùyuán zǒu guòlai wèn nín chī diǎnr shénme.",
-    "en": "The waiter comes over and asks what you'd like to eat.",
-    "hanzi_source": "您吃点儿什么"
+    "id": "sent_0815",
+    "zh": "我喜欢这种颜色。",
+    "pinyin": "Wǒ xǐhuan zhè zhǒng yánsè.",
+    "en": "I like this kind of color.",
+    "hanzi_source": "种"
   },
   {
-    "id": "sent_0444",
-    "zh": "请给我菜单。",
-    "pinyin": "Qǐng gěi wǒ càidān.",
-    "en": "Please give me the menu.",
+    "id": "sent_0816",
+    "zh": "草莓很好吃。",
+    "pinyin": "Cǎoméi hěn hǎochī.",
+    "en": "Strawberries are delicious.",
+    "hanzi_source": "草莓"
+  },
+  {
+    "id": "sent_0817",
+    "zh": "我想买一斤草莓。",
+    "pinyin": "Wǒ xiǎng mǎi yī jīn cǎoméi.",
+    "en": "I want to buy a jin of strawberries.",
+    "hanzi_source": "草莓"
+  },
+  {
+    "id": "sent_0818",
+    "zh": "请回答我的问题。",
+    "pinyin": "Qǐng huídá wǒ de wèntí.",
+    "en": "Please answer my question.",
+    "hanzi_source": "回答"
+  },
+  {
+    "id": "sent_0819",
+    "zh": "他回答得很好。",
+    "pinyin": "Tā huídá de hěn hǎo.",
+    "en": "He answered very well.",
+    "hanzi_source": "回答"
+  },
+  {
+    "id": "sent_0820",
+    "zh": "他又来了。",
+    "pinyin": "Tā yòu lái le.",
+    "en": "He came again.",
+    "hanzi_source": "又"
+  },
+  {
+    "id": "sent_0821",
+    "zh": "今天又下雨了。",
+    "pinyin": "Jīntiān yòu xià yǔ le.",
+    "en": "It's raining again today.",
+    "hanzi_source": "又"
+  },
+  {
+    "id": "sent_0822",
+    "zh": "找您五块钱。",
+    "pinyin": "Zhǎo nín wǔ kuài qián.",
+    "en": "Here's 5 yuan change.",
+    "hanzi_source": "找"
+  },
+  {
+    "id": "sent_0823",
+    "zh": "老板找了我十块钱。",
+    "pinyin": "Lǎobǎn zhǎo le wǒ shí kuài qián.",
+    "en": "The shopkeeper gave me 10 yuan in change.",
+    "hanzi_source": "找"
+  },
+  {
+    "id": "sent_0824",
+    "zh": "葡萄很甜。",
+    "pinyin": "Pútao hěn tián.",
+    "en": "Grapes are very sweet.",
+    "hanzi_source": "葡萄"
+  },
+  {
+    "id": "sent_0825",
+    "zh": "我买了一斤葡萄。",
+    "pinyin": "Wǒ mǎi le yī jīn pútao.",
+    "en": "I bought a jin of grapes.",
+    "hanzi_source": "葡萄"
+  },
+  {
+    "id": "sent_0826",
+    "zh": "夏天吃西瓜很凉快。",
+    "pinyin": "Xiàtiān chī xīguā hěn liángkuai.",
+    "en": "Eating watermelon in summer is very refreshing.",
+    "hanzi_source": "西瓜"
+  },
+  {
+    "id": "sent_0827",
+    "zh": "这个西瓜很重。",
+    "pinyin": "Zhège xīguā hěn zhòng.",
+    "en": "This watermelon is very heavy.",
+    "hanzi_source": "西瓜"
+  },
+  {
+    "id": "sent_0828",
+    "zh": "菠萝有点酸。",
+    "pinyin": "Bōluó yǒudiǎn suān.",
+    "en": "Pineapples are a bit sour.",
+    "hanzi_source": "菠萝"
+  },
+  {
+    "id": "sent_0829",
+    "zh": "菠萝炒饭很好吃。",
+    "pinyin": "Bōluó chǎofàn hěn hǎochī.",
+    "en": "Pineapple fried rice is delicious.",
+    "hanzi_source": "菠萝"
+  },
+  {
+    "id": "sent_0830",
+    "zh": "芒果是热带水果。",
+    "pinyin": "Mángguǒ shì rèdài shuǐguǒ.",
+    "en": "Mangoes are tropical fruits.",
+    "hanzi_source": "芒果"
+  },
+  {
+    "id": "sent_0831",
+    "zh": "我喜欢吃芒果冰沙。",
+    "pinyin": "Wǒ xǐhuan chī mángguǒ bīngshā.",
+    "en": "I like eating mango smoothies.",
+    "hanzi_source": "芒果"
+  },
+  {
+    "id": "sent_0832",
+    "zh": "椰子汁很好喝。",
+    "pinyin": "Yēzi zhī hěn hǎohē.",
+    "en": "Coconut water is very tasty.",
+    "hanzi_source": "椰子"
+  },
+  {
+    "id": "sent_0833",
+    "zh": "椰子壳可以做手工。",
+    "pinyin": "Yēzi ké kěyǐ zuò shǒugōng.",
+    "en": "Coconut shells can be used for crafts.",
+    "hanzi_source": "椰子"
+  },
+  {
+    "id": "sent_0834",
+    "zh": "橙子富含维生素C。",
+    "pinyin": "Chéngzi fùhán wéishēngsù C.",
+    "en": "Oranges are rich in vitamin C.",
+    "hanzi_source": "橙子"
+  },
+  {
+    "id": "sent_0835",
+    "zh": "我每天吃一个橙子。",
+    "pinyin": "Wǒ měitiān chī yí ge chéngzi.",
+    "en": "I eat one orange every day.",
+    "hanzi_source": "橙子"
+  },
+  {
+    "id": "sent_0836",
+    "zh": "给我们看一下菜单吧。",
+    "pinyin": "Gěi wǒmen kàn yīxià càidān ba.",
+    "en": "Let us take a look at the menu.",
     "hanzi_source": "菜单"
   },
   {
-    "id": "sent_0445",
+    "id": "sent_0837",
     "zh": "菜单上有图片。",
     "pinyin": "Càidān shàng yǒu túpiàn.",
     "en": "The menu has pictures.",
     "hanzi_source": "菜单"
   },
   {
-    "id": "sent_0446",
-    "zh": "给我们看一下菜单吧。",
-    "pinyin": "Gěi wǒmen kàn yīxià càidān ba.",
-    "en": "Let us take a look at the menu.",
-    "hanzi_source": "给我们看一下菜单吧"
+    "id": "sent_0838",
+    "zh": "您喝点儿什么？",
+    "pinyin": "Nín hē diǎnr shénme?",
+    "en": "What would you like to drink?",
+    "hanzi_source": "喝"
   },
   {
-    "id": "sent_0447",
-    "zh": "服务员，给我们看一下菜单吧。",
-    "pinyin": "Fúwùyuán, gěi wǒmen kàn yīxià càidān ba.",
-    "en": "Waiter, let us see the menu.",
-    "hanzi_source": "给我们看一下菜单吧"
+    "id": "sent_0839",
+    "zh": "我想喝一杯果汁。",
+    "pinyin": "Wǒ xiǎng hē yī bēi guǒzhī.",
+    "en": "I want to drink a glass of juice.",
+    "hanzi_source": "喝"
   },
   {
-    "id": "sent_0448",
-    "zh": "您喝点儿什么？水就行。",
-    "pinyin": "Nín hē diǎnr shénme? Shuǐ jiù xíng.",
-    "en": "What would you like to drink? Water is fine.",
-    "hanzi_source": "您喝点儿什么"
+    "id": "sent_0840",
+    "zh": "来一杯果汁、一杯奶茶。",
+    "pinyin": "Lái yī bēi guǒzhī, yī bēi nǎichá.",
+    "en": "One glass of juice and one cup of milk tea, please.",
+    "hanzi_source": "杯"
   },
   {
-    "id": "sent_0449",
-    "zh": "服务员问您喝点儿什么。",
-    "pinyin": "Fúwùyuán wèn nín hē diǎnr shénme.",
-    "en": "The waiter asks what you'd like to drink.",
-    "hanzi_source": "您喝点儿什么"
+    "id": "sent_0841",
+    "zh": "我要一杯水。",
+    "pinyin": "Wǒ yào yī bēi shuǐ.",
+    "en": "I want a glass of water.",
+    "hanzi_source": "杯"
   },
   {
-    "id": "sent_0450",
-    "zh": "我要一杯果汁。",
-    "pinyin": "Wǒ yào yī bēi guǒzhī.",
-    "en": "I want a glass of juice.",
-    "hanzi_source": "一杯果汁"
+    "id": "sent_0842",
+    "zh": "来一杯果汁。",
+    "pinyin": "Lái yī bēi guǒzhī.",
+    "en": "One glass of juice, please.",
+    "hanzi_source": "果汁"
   },
   {
-    "id": "sent_0451",
-    "zh": "一杯果汁多少钱？",
-    "pinyin": "Yī bēi guǒzhī duōshao qián?",
-    "en": "How much is one glass of juice?",
-    "hanzi_source": "一杯果汁"
+    "id": "sent_0843",
+    "zh": "我喜欢喝果汁。",
+    "pinyin": "Wǒ xǐhuan hē guǒzhī.",
+    "en": "I like drinking fruit juice.",
+    "hanzi_source": "果汁"
   },
   {
-    "id": "sent_0452",
-    "zh": "奶茶很好喝。",
-    "pinyin": "Nǎichá hěn hǎohē.",
-    "en": "Milk tea is very tasty.",
-    "hanzi_source": "一杯奶茶"
-  },
-  {
-    "id": "sent_0453",
+    "id": "sent_0844",
     "zh": "我想点一杯奶茶。",
     "pinyin": "Wǒ xiǎng diǎn yī bēi nǎichá.",
     "en": "I want to order a cup of milk tea.",
-    "hanzi_source": "一杯奶茶"
+    "hanzi_source": "奶茶"
   },
   {
-    "id": "sent_0454",
-    "zh": "微控制器很小但功能强大。",
-    "pinyin": "Wēi kòngzhìqì hěn xiǎo dàn gōngnéng qiángdà.",
-    "en": "Microcontrollers are small but powerful.",
-    "hanzi_source": "微控制器"
+    "id": "sent_0845",
+    "zh": "奶茶很好喝。",
+    "pinyin": "Nǎichá hěn hǎohē.",
+    "en": "Milk tea is very tasty.",
+    "hanzi_source": "奶茶"
   },
   {
-    "id": "sent_0455",
-    "zh": "Arduino是一个常用的微控制器。",
-    "pinyin": "Arduino shì yí ge chángyòng de wēi kòngzhìqì.",
-    "en": "Arduino is a commonly used microcontroller.",
-    "hanzi_source": "微控制器"
+    "id": "sent_0846",
+    "zh": "您吃点儿什么？",
+    "pinyin": "Nín chī diǎnr shénme?",
+    "en": "What would you like to eat?",
+    "hanzi_source": "点"
   },
   {
-    "id": "sent_0456",
-    "zh": "我喜欢学电子。",
-    "pinyin": "Wǒ xǐhuan xué diànzǐ.",
-    "en": "I like learning electronics.",
-    "hanzi_source": "电子"
+    "id": "sent_0847",
+    "zh": "我们点两个菜吧。",
+    "pinyin": "Wǒmen diǎn liǎng ge cài ba.",
+    "en": "Let's order two dishes.",
+    "hanzi_source": "点"
   },
   {
-    "id": "sent_0457",
-    "zh": "电子元件很便宜。",
-    "pinyin": "Diànzǐ yuánjiàn hěn piányi.",
-    "en": "Electronic components are cheap.",
-    "hanzi_source": "电子"
+    "id": "sent_0848",
+    "zh": "米饭是中国人的主食。",
+    "pinyin": "Mǐfàn shì Zhōngguórén de zhǔshí.",
+    "en": "Rice is the Chinese staple food.",
+    "hanzi_source": "主食"
   },
   {
-    "id": "sent_0458",
-    "zh": "这个电路很简单。",
-    "pinyin": "Zhège diànlù hěn jiǎndān.",
-    "en": "This circuit is very simple.",
-    "hanzi_source": "电路"
+    "id": "sent_0849",
+    "zh": "您想吃什么主食？",
+    "pinyin": "Nín xiǎng chī shénme zhǔshí?",
+    "en": "What staple food would you like?",
+    "hanzi_source": "主食"
   },
   {
-    "id": "sent_0459",
-    "zh": "不要短路电路。",
-    "pinyin": "Bú yào duǎnlù diànlù.",
-    "en": "Don't short-circuit the circuit.",
-    "hanzi_source": "电路"
+    "id": "sent_0850",
+    "zh": "一盘炒饭多少钱？",
+    "pinyin": "Yī pán chǎofàn duōshao qián?",
+    "en": "How much is a plate of fried rice?",
+    "hanzi_source": "盘"
   },
   {
-    "id": "sent_0460",
-    "zh": "传感器可以检测温度。",
-    "pinyin": "Chuángǎnqì kěyǐ jiǎncè wēndù.",
-    "en": "Sensors can detect temperature.",
-    "hanzi_source": "传感器"
+    "id": "sent_0851",
+    "zh": "桌子上有一盘饺子。",
+    "pinyin": "Zhuōzi shàng yǒu yī pán jiǎozi.",
+    "en": "There's a plate of dumplings on the table.",
+    "hanzi_source": "盘"
   },
   {
-    "id": "sent_0461",
-    "zh": "超声波传感器测量距离。",
-    "pinyin": "Chāoshēngbō chuángǎnqì cèliáng jùlí.",
-    "en": "Ultrasonic sensors measure distance.",
-    "hanzi_source": "传感器"
+    "id": "sent_0852",
+    "zh": "我想吃炒饭。",
+    "pinyin": "Wǒ xiǎng chī chǎofàn.",
+    "en": "I want to eat fried rice.",
+    "hanzi_source": "炒饭"
   },
   {
-    "id": "sent_0462",
-    "zh": "执行器让机器动起来。",
-    "pinyin": "Zhíxíngqì ràng jīqì dòng qǐlai.",
-    "en": "Actuators make machines move.",
-    "hanzi_source": "执行器"
+    "id": "sent_0853",
+    "zh": "这个炒饭很好吃。",
+    "pinyin": "Zhège chǎofàn hěn hǎochī.",
+    "en": "This fried rice is delicious.",
+    "hanzi_source": "炒饭"
   },
   {
-    "id": "sent_0463",
-    "zh": "电机是一种执行器。",
-    "pinyin": "Diànjī shì yī zhǒng zhíxíngqì.",
-    "en": "Motors are a type of actuator.",
-    "hanzi_source": "执行器"
+    "id": "sent_0854",
+    "zh": "我喜欢吃饺子。",
+    "pinyin": "Wǒ xǐhuan chī jiǎozi.",
+    "en": "I like eating dumplings.",
+    "hanzi_source": "饺子"
   },
   {
-    "id": "sent_0464",
-    "zh": "电压不能太高。",
-    "pinyin": "Diànyā bùnéng tài gāo.",
-    "en": "Voltage can't be too high.",
-    "hanzi_source": "电压"
+    "id": "sent_0855",
+    "zh": "妈妈在包饺子。",
+    "pinyin": "Māma zài bāo jiǎozi.",
+    "en": "Mom is making dumplings.",
+    "hanzi_source": "饺子"
   },
   {
-    "id": "sent_0465",
-    "zh": "这个电池的电压是1.5伏。",
-    "pinyin": "Zhège diànchí de diànyā shì 1.5 fú.",
-    "en": "This battery's voltage is 1.5 volts.",
-    "hanzi_source": "电压"
+    "id": "sent_0856",
+    "zh": "你能吃辣椒吗？",
+    "pinyin": "Nǐ néng chī làjiāo ma?",
+    "en": "Can you eat chili peppers?",
+    "hanzi_source": "辣椒"
   },
   {
-    "id": "sent_0466",
-    "zh": "电流太大可能会烧坏元件。",
-    "pinyin": "Diànliú tài dà kěnéng huì shāohuài yuánjiàn.",
-    "en": "If the current is too high, it might burn components.",
-    "hanzi_source": "电流"
+    "id": "sent_0857",
+    "zh": "这个菜有很多辣椒。",
+    "pinyin": "Zhège cài yǒu hěn duō làjiāo.",
+    "en": "This dish has a lot of chili peppers.",
+    "hanzi_source": "辣椒"
   },
   {
-    "id": "sent_0467",
-    "zh": "万用表可以测量电流。",
-    "pinyin": "Wànyòngbiǎo kěyǐ cèliáng diànliú.",
-    "en": "A multimeter can measure current.",
-    "hanzi_source": "电流"
+    "id": "sent_0858",
+    "zh": "味道怎么样？",
+    "pinyin": "Wèidào zěnmeyàng?",
+    "en": "How does it taste?",
+    "hanzi_source": "味道"
   },
   {
-    "id": "sent_0468",
-    "zh": "电阻限制电流。",
-    "pinyin": "Diànzǔ xiànzhì diànliú.",
-    "en": "Resistors limit current.",
-    "hanzi_source": "电阻"
+    "id": "sent_0859",
+    "zh": "这个菜味道很好。",
+    "pinyin": "Zhège cài wèidào hěn hǎo.",
+    "en": "This dish tastes very good.",
+    "hanzi_source": "味道"
   },
   {
-    "id": "sent_0469",
-    "zh": "这个电阻的阻值是100欧姆。",
-    "pinyin": "Zhège diànzǔ de zǔzhí shì yībǎi ōumǔ.",
-    "en": "This resistor's value is 100 ohms.",
-    "hanzi_source": "电阻"
+    "id": "sent_0860",
+    "zh": "您可以吃辣椒吗？",
+    "pinyin": "Nín kěyǐ chī làjiāo ma?",
+    "en": "Can you eat spicy food?",
+    "hanzi_source": "辣"
   },
   {
-    "id": "sent_0470",
-    "zh": "电容可以储存电能。",
-    "pinyin": "Diànróng kěyǐ chǔcún diànnéng.",
-    "en": "Capacitors can store electrical energy.",
-    "hanzi_source": "电容"
+    "id": "sent_0861",
+    "zh": "这个菜很辣。",
+    "pinyin": "Zhège cài hěn là.",
+    "en": "This dish is very spicy.",
+    "hanzi_source": "辣"
   },
   {
-    "id": "sent_0471",
-    "zh": "这个电容坏了。",
-    "pinyin": "Zhège diànróng huài le.",
-    "en": "This capacitor is broken.",
-    "hanzi_source": "电容"
+    "id": "sent_0862",
+    "zh": "在哪儿买单？",
+    "pinyin": "Zài nǎr mǎidān?",
+    "en": "Where do I pay the bill?",
+    "hanzi_source": "买单"
   },
   {
-    "id": "sent_0472",
-    "zh": "发光二极管很省电。",
-    "pinyin": "Fāguāng èrjíguǎn hěn shěng diàn.",
-    "en": "LEDs are very energy-efficient.",
-    "hanzi_source": "发光二极管"
+    "id": "sent_0863",
+    "zh": "服务员，买单！",
+    "pinyin": "Fúwùyuán, mǎidān!",
+    "en": "Waiter, the bill please!",
+    "hanzi_source": "买单"
   },
   {
-    "id": "sent_0473",
-    "zh": "按下开关，发光二极管亮了。",
-    "pinyin": "Àn xià kāiguān, fāguāng èrjíguǎn liàng le.",
-    "en": "Press the switch, the LED lights up.",
-    "hanzi_source": "发光二极管"
+    "id": "sent_0864",
+    "zh": "请带我们去饭馆。",
+    "pinyin": "Qǐng dài wǒmen qù fànguǎn.",
+    "en": "Please take us to the restaurant.",
+    "hanzi_source": "带"
   },
   {
-    "id": "sent_0474",
-    "zh": "先在面包板上测试电路。",
-    "pinyin": "Xiān zài miànbāobǎn shàng cèshì diànlù.",
-    "en": "First test the circuit on the breadboard.",
-    "hanzi_source": "面包板"
+    "id": "sent_0865",
+    "zh": "别忘了带雨伞。",
+    "pinyin": "Bié wàng le dài yǔsǎn.",
+    "en": "Don't forget to bring an umbrella.",
+    "hanzi_source": "带"
   },
   {
-    "id": "sent_0475",
-    "zh": "面包板不需要焊接。",
-    "pinyin": "Miànbāobǎn bù xūyào hànjiē.",
-    "en": "Breadboards don't require soldering.",
-    "hanzi_source": "面包板"
+    "id": "sent_0866",
+    "zh": "我们过去看看菜单。",
+    "pinyin": "Wǒmen guòqù kànkan càidān.",
+    "en": "Let's go over and look at the menu.",
+    "hanzi_source": "过去"
   },
   {
-    "id": "sent_0476",
-    "zh": "用跳线连接面包板上的元件。",
-    "pinyin": "Yòng tiàoxiàn liánjiē miànbāobǎn shàng de yuánjiàn.",
-    "en": "Use jumper wires to connect components on the breadboard.",
-    "hanzi_source": "跳线"
+    "id": "sent_0867",
+    "zh": "他走过去打招呼。",
+    "pinyin": "Tā zǒu guòqù dǎ zhāohu.",
+    "en": "He walked over to say hello.",
+    "hanzi_source": "过去"
   },
   {
-    "id": "sent_0477",
-    "zh": "跳线有很多颜色。",
-    "pinyin": "Tiàoxiàn yǒu hěn duō yánsè.",
-    "en": "Jumper wires come in many colors.",
-    "hanzi_source": "跳线"
+    "id": "sent_0868",
+    "zh": "我们去那家饭馆吧。",
+    "pinyin": "Wǒmen qù nà jiā fànguǎn ba.",
+    "en": "Let's go to that restaurant.",
+    "hanzi_source": "家"
   },
   {
-    "id": "sent_0478",
-    "zh": "焊接需要练习。",
-    "pinyin": "Hànjiē xūyào liànxí.",
-    "en": "Soldering takes practice.",
-    "hanzi_source": "焊接"
+    "id": "sent_0869",
+    "zh": "这家书店很有名。",
+    "pinyin": "Zhè jiā shūdiàn hěn yǒumíng.",
+    "en": "This bookstore is very famous.",
+    "hanzi_source": "家"
   },
   {
-    "id": "sent_0479",
-    "zh": "小心不要把板子焊坏了。",
-    "pinyin": "Xiǎoxīn bú yào bǎ bǎnzi hàn huài le.",
-    "en": "Be careful not to damage the board while soldering.",
-    "hanzi_source": "焊接"
+    "id": "sent_0870",
+    "zh": "我们去那家饭馆吃饭吧。",
+    "pinyin": "Wǒmen qù nà jiā fànguǎn chīfàn ba.",
+    "en": "Let's go eat at that restaurant.",
+    "hanzi_source": "饭馆"
   },
   {
-    "id": "sent_0480",
-    "zh": "烙铁温度很高。",
-    "pinyin": "Làotiě wēndù hěn gāo.",
-    "en": "The soldering iron is very hot.",
-    "hanzi_source": "烙铁"
+    "id": "sent_0871",
+    "zh": "这家饭馆的菜很好吃。",
+    "pinyin": "Zhè jiā fànguǎn de cài hěn hǎochī.",
+    "en": "The food at this restaurant is delicious.",
+    "hanzi_source": "饭馆"
   },
   {
-    "id": "sent_0481",
-    "zh": "用完烙铁要关掉电源。",
-    "pinyin": "Yòng wán làotiě yào guān diào diànyuán.",
-    "en": "Turn off the soldering iron after use.",
-    "hanzi_source": "烙铁"
+    "id": "sent_0872",
+    "zh": "我想吃西红柿炒鸡蛋。",
+    "pinyin": "Wǒ xiǎng chī xīhóngshì chǎo jīdàn.",
+    "en": "I want to eat stir-fried tomato and eggs.",
+    "hanzi_source": "西红柿"
   },
   {
-    "id": "sent_0482",
-    "zh": "我写了一段代码控制LED灯。",
-    "pinyin": "Wǒ xiě le yī duàn dàimǎ kòngzhì LED dēng.",
-    "en": "I wrote some code to control an LED.",
-    "hanzi_source": "代码"
+    "id": "sent_0873",
+    "zh": "西红柿很酸。",
+    "pinyin": "Xīhóngshì hěn suān.",
+    "en": "Tomatoes are sour.",
+    "hanzi_source": "西红柿"
   },
   {
-    "id": "sent_0483",
-    "zh": "上传代码到微控制器。",
-    "pinyin": "Shàngchuán dàimǎ dào wēi kòngzhìqì.",
-    "en": "Upload code to the microcontroller.",
-    "hanzi_source": "代码"
+    "id": "sent_0874",
+    "zh": "妈妈在炒西红柿鸡蛋。",
+    "pinyin": "Māma zài chǎo xīhóngshì jīdàn.",
+    "en": "Mom is stir-frying tomato and eggs.",
+    "hanzi_source": "炒"
   },
   {
-    "id": "sent_0484",
-    "zh": "把代码上传到开发板。",
-    "pinyin": "Bǎ dàimǎ shàngchuán dào kāifā bǎn.",
-    "en": "Upload the code to the development board.",
-    "hanzi_source": "上传"
+    "id": "sent_0875",
+    "zh": "这个菜是炒的。",
+    "pinyin": "Zhège cài shì chǎo de.",
+    "en": "This dish is stir-fried.",
+    "hanzi_source": "炒"
   },
   {
-    "id": "sent_0485",
-    "zh": "上传成功了。",
-    "pinyin": "Shàngchuán chénggōng le.",
-    "en": "Upload successful.",
-    "hanzi_source": "上传"
+    "id": "sent_0876",
+    "zh": "西红柿炒鸡蛋很好吃。",
+    "pinyin": "Xīhóngshì chǎo jīdàn hěn hǎochī.",
+    "en": "Stir-fried tomato and eggs is delicious.",
+    "hanzi_source": "鸡蛋"
   },
   {
-    "id": "sent_0486",
-    "zh": "这个引脚是正极。",
-    "pinyin": "Zhège yǐnjiǎo shì zhèngjí.",
-    "en": "This pin is positive.",
-    "hanzi_source": "引脚"
+    "id": "sent_0877",
+    "zh": "我每天吃一个鸡蛋。",
+    "pinyin": "Wǒ měitiān chī yí ge jīdàn.",
+    "en": "I eat an egg every day.",
+    "hanzi_source": "鸡蛋"
   },
   {
-    "id": "sent_0487",
-    "zh": "不要接错引脚。",
-    "pinyin": "Bú yào jiē cuò yǐnjiǎo.",
-    "en": "Don't connect the wrong pins.",
-    "hanzi_source": "引脚"
+    "id": "sent_0878",
+    "zh": "青椒肉丝很好吃。",
+    "pinyin": "Qīngjiāo ròusī hěn hǎochī.",
+    "en": "Green pepper with shredded pork is delicious.",
+    "hanzi_source": "青椒"
   },
   {
-    "id": "sent_0488",
-    "zh": "黑线一般接地。",
-    "pinyin": "Hēi xiàn yībān jiēdì.",
-    "en": "The black wire is usually ground.",
-    "hanzi_source": "接地"
+    "id": "sent_0879",
+    "zh": "我不喜欢吃青椒。",
+    "pinyin": "Wǒ bù xǐhuan chī qīngjiāo.",
+    "en": "I don't like eating green peppers.",
+    "hanzi_source": "青椒"
   },
   {
-    "id": "sent_0489",
-    "zh": "别忘了接地线。",
-    "pinyin": "Bié wàng le jiē dìxiàn.",
-    "en": "Don't forget to connect ground.",
-    "hanzi_source": "接地"
+    "id": "sent_0880",
+    "zh": "我想吃牛肉面。",
+    "pinyin": "Wǒ xiǎng chī niúròu miàn.",
+    "en": "I want to eat beef noodles.",
+    "hanzi_source": "牛肉"
   },
   {
-    "id": "sent_0490",
-    "zh": "数字信号只有0和1。",
-    "pinyin": "Shùzì xìnhào zhǐ yǒu 0 hé 1.",
-    "en": "Digital signals are only 0 and 1.",
-    "hanzi_source": "数字"
+    "id": "sent_0881",
+    "zh": "牛肉很贵。",
+    "pinyin": "Niúròu hěn guì.",
+    "en": "Beef is expensive.",
+    "hanzi_source": "牛肉"
   },
   {
-    "id": "sent_0491",
-    "zh": "这个引脚是数字引脚。",
-    "pinyin": "Zhège yǐnjiǎo shì shùzì yǐnjiǎo.",
-    "en": "This pin is a digital pin.",
-    "hanzi_source": "数字"
+    "id": "sent_0882",
+    "zh": "虽然辣，但是很好吃。",
+    "pinyin": "Suīrán là, dànshì hěn hǎochī.",
+    "en": "Although it's spicy, it's very delicious.",
+    "hanzi_source": "虽然"
   },
   {
-    "id": "sent_0492",
-    "zh": "模拟信号可以是任何值。",
-    "pinyin": "Mónǐ xìnhào kěyǐ shì rènhé zhí.",
-    "en": "Analog signals can be any value.",
-    "hanzi_source": "模拟"
+    "id": "sent_0883",
+    "zh": "虽然贵，我还是想买。",
+    "pinyin": "Suīrán guì, wǒ háishi xiǎng mǎi.",
+    "en": "Although it's expensive, I still want to buy it.",
+    "hanzi_source": "虽然"
   },
   {
-    "id": "sent_0493",
-    "zh": "用模拟引脚读取传感器的值。",
-    "pinyin": "Yòng mónǐ yǐnjiǎo dúqǔ chuángǎnqì de zhí.",
-    "en": "Use an analog pin to read sensor values.",
-    "hanzi_source": "模拟"
+    "id": "sent_0884",
+    "zh": "这个菜不但好看，而且好吃。",
+    "pinyin": "Zhège cài búdàn hǎokàn, érqiě hǎochī.",
+    "en": "This dish is not only good-looking, but also delicious.",
+    "hanzi_source": "不但"
   },
   {
-    "id": "sent_0494",
-    "zh": "脉冲宽度调制可以控制电机速度。",
-    "pinyin": "Màichōng kuāndù tiáozhì kěyǐ kòngzhì diànjī sùdù.",
-    "en": "PWM can control motor speed.",
-    "hanzi_source": "脉冲宽度调制"
+    "id": "sent_0885",
+    "zh": "他不但会说汉语，而且会写汉字。",
+    "pinyin": "Tā búdàn huì shuō Hànyǔ, érqiě huì xiě Hànzì.",
+    "en": "He can not only speak Chinese, but also write characters.",
+    "hanzi_source": "不但"
   },
   {
-    "id": "sent_0495",
-    "zh": "这个引脚支持脉冲宽度调制。",
-    "pinyin": "Zhège yǐnjiǎo zhīchí màichōng kuāndù tiáozhì.",
-    "en": "This pin supports PWM.",
-    "hanzi_source": "脉冲宽度调制"
+    "id": "sent_0886",
+    "zh": "这个菜不但好看，而且好吃。",
+    "pinyin": "Zhège cài búdàn hǎokàn, érqiě hǎochī.",
+    "en": "This dish is not only good-looking, but also delicious.",
+    "hanzi_source": "而且"
   },
   {
-    "id": "sent_0496",
-    "zh": "这件衣服很漂亮。",
-    "pinyin": "Zhè jiàn yīfu hěn piàoliang.",
-    "en": "This piece of clothing is very pretty.",
-    "hanzi_source": "这件衣服"
+    "id": "sent_0887",
+    "zh": "这里方便，而且便宜。",
+    "pinyin": "Zhèlǐ fāngbiàn, érqiě piányi.",
+    "en": "It's convenient here, and also cheap.",
+    "hanzi_source": "而且"
   },
   {
-    "id": "sent_0497",
-    "zh": "这件衣服多少钱？",
-    "pinyin": "Zhè jiàn yīfu duōshao qián?",
-    "en": "How much is this piece of clothing?",
-    "hanzi_source": "这件衣服"
+    "id": "sent_0888",
+    "zh": "这里的价格很便宜。",
+    "pinyin": "Zhèlǐ de jiàgé hěn piányi.",
+    "en": "The prices here are cheap.",
+    "hanzi_source": "价格"
   },
   {
-    "id": "sent_0498",
-    "zh": "你觉得这件衣服怎么样？",
-    "pinyin": "Nǐ juéde zhè jiàn yīfu zěnme yàng?",
-    "en": "What do you think of this clothing?",
-    "hanzi_source": "怎么样"
+    "id": "sent_0889",
+    "zh": "你知道这个的价格吗？",
+    "pinyin": "Nǐ zhīdào zhège de jiàgé ma?",
+    "en": "Do you know the price of this?",
+    "hanzi_source": "价格"
   },
   {
-    "id": "sent_0499",
-    "zh": "今天天气怎么样？",
-    "pinyin": "Jīntiān tiānqì zěnme yàng?",
-    "en": "How's the weather today?",
-    "hanzi_source": "怎么样"
+    "id": "sent_0890",
+    "zh": "北京烤鸭很有名。",
+    "pinyin": "Běijīng kǎoyā hěn yǒumíng.",
+    "en": "Peking roast duck is very famous.",
+    "hanzi_source": "烤鸭"
   },
   {
-    "id": "sent_0500",
-    "zh": "这双鞋不大不小，正合适。",
-    "pinyin": "Zhè shuāng xié bù dà bù xiǎo, zhèng héshì.",
-    "en": "These shoes are neither too big nor too small — just right.",
-    "hanzi_source": "不大不小"
+    "id": "sent_0891",
+    "zh": "我们点一份烤鸭吧。",
+    "pinyin": "Wǒmen diǎn yī fèn kǎoyā ba.",
+    "en": "Let's order a roast duck.",
+    "hanzi_source": "烤鸭"
   },
   {
-    "id": "sent_0501",
-    "zh": "这件T恤不大不小，穿着很舒服。",
-    "pinyin": "Zhè jiàn T-xù bù dà bù xiǎo, chuān zhe hěn shūfu.",
-    "en": "This T-shirt is not too big or small — it's very comfortable to wear.",
-    "hanzi_source": "不大不小"
+    "id": "sent_0892",
+    "zh": "这条鱼很新鲜。",
+    "pinyin": "Zhè tiáo yú hěn xīnxiān.",
+    "en": "This fish is very fresh.",
+    "hanzi_source": "鱼"
   },
   {
-    "id": "sent_0502",
-    "zh": "这条裤子很合适。",
-    "pinyin": "Zhè tiáo kùzi hěn héshì.",
-    "en": "These pants fit very well.",
-    "hanzi_source": "很合适"
+    "id": "sent_0893",
+    "zh": "我想吃清蒸鱼。",
+    "pinyin": "Wǒ xiǎng chī qīngzhēng yú.",
+    "en": "I want to eat steamed fish.",
+    "hanzi_source": "鱼"
   },
   {
-    "id": "sent_0503",
-    "zh": "这个时间很合适。",
-    "pinyin": "Zhège shíjiān hěn héshì.",
-    "en": "This time is very suitable.",
-    "hanzi_source": "很合适"
+    "id": "sent_0894",
+    "zh": "我买了一斤猪肉。",
+    "pinyin": "Wǒ mǎi le yī jīn zhūròu.",
+    "en": "I bought a jin of pork.",
+    "hanzi_source": "猪肉"
   },
   {
-    "id": "sent_0504",
+    "id": "sent_0895",
+    "zh": "猪肉炒青椒很好吃。",
+    "pinyin": "Zhūròu chǎo qīngjiāo hěn hǎochī.",
+    "en": "Pork stir-fried with green peppers is delicious.",
+    "hanzi_source": "猪肉"
+  },
+  {
+    "id": "sent_0896",
+    "zh": "我想吃牛肉面条儿。",
+    "pinyin": "Wǒ xiǎng chī niúròu miàntiáor.",
+    "en": "I want to eat beef noodles.",
+    "hanzi_source": "面条儿"
+  },
+  {
+    "id": "sent_0897",
+    "zh": "这碗面条儿很好吃。",
+    "pinyin": "Zhè wǎn miàntiáor hěn hǎochī.",
+    "en": "This bowl of noodles is delicious.",
+    "hanzi_source": "面条儿"
+  },
+  {
+    "id": "sent_0898",
+    "zh": "早饭我吃包子。",
+    "pinyin": "Zǎofàn wǒ chī bāozi.",
+    "en": "I eat steamed buns for breakfast.",
+    "hanzi_source": "包子"
+  },
+  {
+    "id": "sent_0899",
+    "zh": "这家店的包子很有名。",
+    "pinyin": "Zhè jiā diàn de bāozi hěn yǒumíng.",
+    "en": "This shop's steamed buns are very famous.",
+    "hanzi_source": "包子"
+  },
+  {
+    "id": "sent_0900",
+    "zh": "您喝什么饮料？",
+    "pinyin": "Nín hē shénme yǐnliào?",
+    "en": "What drink would you like?",
+    "hanzi_source": "饮料"
+  },
+  {
+    "id": "sent_0901",
+    "zh": "这些饮料都很好喝。",
+    "pinyin": "Zhèxiē yǐnliào dōu hěn hǎohē.",
+    "en": "These drinks are all tasty.",
+    "hanzi_source": "饮料"
+  },
+  {
+    "id": "sent_0902",
+    "zh": "我想喝一杯咖啡。",
+    "pinyin": "Wǒ xiǎng hē yī bēi kāfēi.",
+    "en": "I want a cup of coffee.",
+    "hanzi_source": "咖啡"
+  },
+  {
+    "id": "sent_0903",
+    "zh": "这家咖啡很好喝。",
+    "pinyin": "Zhè jiā kāfēi hěn hǎohē.",
+    "en": "This shop's coffee is tasty.",
+    "hanzi_source": "咖啡"
+  },
+  {
+    "id": "sent_0904",
+    "zh": "我每天喝牛奶。",
+    "pinyin": "Wǒ měitiān hē niúnǎi.",
+    "en": "I drink milk every day.",
+    "hanzi_source": "牛奶"
+  },
+  {
+    "id": "sent_0905",
+    "zh": "这杯牛奶是热的。",
+    "pinyin": "Zhè bēi niúnǎi shì rè de.",
+    "en": "This glass of milk is hot.",
+    "hanzi_source": "牛奶"
+  },
+  {
+    "id": "sent_0906",
+    "zh": "这件衣服怎么样？",
+    "pinyin": "Zhè jiàn yīfu zěnmeyàng?",
+    "en": "How's this piece of clothing?",
+    "hanzi_source": "件"
+  },
+  {
+    "id": "sent_0907",
+    "zh": "我买了两件衣服。",
+    "pinyin": "Wǒ mǎi le liǎng jiàn yīfu.",
+    "en": "I bought two pieces of clothing.",
+    "hanzi_source": "件"
+  },
+  {
+    "id": "sent_0908",
+    "zh": "这件衣服怎么样？",
+    "pinyin": "Zhè jiàn yīfu zěnmeyàng?",
+    "en": "How's this piece of clothing?",
+    "hanzi_source": "衣服"
+  },
+  {
+    "id": "sent_0909",
+    "zh": "我想买新衣服。",
+    "pinyin": "Wǒ xiǎng mǎi xīn yīfu.",
+    "en": "I want to buy new clothes.",
+    "hanzi_source": "衣服"
+  },
+  {
+    "id": "sent_0910",
+    "zh": "这件衣服不大不小，很合适。",
+    "pinyin": "Zhè jiàn yīfu bú dà bù xiǎo, hěn héshì.",
+    "en": "This piece of clothing is neither too big nor small — it fits well.",
+    "hanzi_source": "合适"
+  },
+  {
+    "id": "sent_0911",
+    "zh": "这个时间合适吗？",
+    "pinyin": "Zhège shíjiān héshì ma?",
+    "en": "Is this time suitable?",
+    "hanzi_source": "合适"
+  },
+  {
+    "id": "sent_0912",
+    "zh": "这条裤子有点儿短。",
+    "pinyin": "Zhè tiáo kùzi yǒudiǎnr duǎn.",
+    "en": "These pants are a bit short.",
+    "hanzi_source": "裤子"
+  },
+  {
+    "id": "sent_0913",
+    "zh": "我想买一条新裤子。",
+    "pinyin": "Wǒ xiǎng mǎi yī tiáo xīn kùzi.",
+    "en": "I want to buy new pants.",
+    "hanzi_source": "裤子"
+  },
+  {
+    "id": "sent_0914",
+    "zh": "这条裤子有点儿短。",
+    "pinyin": "Zhè tiáo kùzi yǒudiǎnr duǎn.",
+    "en": "These pants are a bit short.",
+    "hanzi_source": "短"
+  },
+  {
+    "id": "sent_0915",
+    "zh": "她的头发很短。",
+    "pinyin": "Tā de tóufa hěn duǎn.",
+    "en": "Her hair is very short.",
+    "hanzi_source": "短"
+  },
+  {
+    "id": "sent_0916",
+    "zh": "你穿多大码？",
+    "pinyin": "Nǐ chuān duō dà mǎ?",
+    "en": "What size do you wear?",
+    "hanzi_source": "穿"
+  },
+  {
+    "id": "sent_0917",
+    "zh": "今天她穿了一条裙子。",
+    "pinyin": "Jīntiān tā chuān le yī tiáo qúnzi.",
+    "en": "Today she wore a skirt.",
+    "hanzi_source": "穿"
+  },
+  {
+    "id": "sent_0918",
+    "zh": "你穿多大码？",
+    "pinyin": "Nǐ chuān duō dà mǎ?",
+    "en": "What size do you wear?",
+    "hanzi_source": "码"
+  },
+  {
+    "id": "sent_0919",
+    "zh": "这双鞋是什么码？",
+    "pinyin": "Zhè shuāng xié shì shénme mǎ?",
+    "en": "What size are these shoes?",
+    "hanzi_source": "码"
+  },
+  {
+    "id": "sent_0920",
+    "zh": "这双鞋子很舒服。",
+    "pinyin": "Zhè shuāng xiézi hěn shūfu.",
+    "en": "These shoes are very comfortable.",
+    "hanzi_source": "双"
+  },
+  {
+    "id": "sent_0921",
+    "zh": "我要买一双鞋。",
+    "pinyin": "Wǒ yào mǎi yī shuāng xié.",
+    "en": "I want to buy a pair of shoes.",
+    "hanzi_source": "双"
+  },
+  {
+    "id": "sent_0922",
+    "zh": "这双鞋子很舒服。",
+    "pinyin": "Zhè shuāng xiézi hěn shūfu.",
+    "en": "These shoes are very comfortable.",
+    "hanzi_source": "鞋子"
+  },
+  {
+    "id": "sent_0923",
+    "zh": "这双鞋子多少钱？",
+    "pinyin": "Zhè shuāng xiézi duōshao qián?",
+    "en": "How much are these shoes?",
+    "hanzi_source": "鞋子"
+  },
+  {
+    "id": "sent_0924",
+    "zh": "请稍等，我去找找。",
+    "pinyin": "Qǐng shāo děng, wǒ qù zhǎozhao.",
+    "en": "Please wait a moment, I'll go find it.",
+    "hanzi_source": "稍等"
+  },
+  {
+    "id": "sent_0925",
+    "zh": "稍等一下，马上就好。",
+    "pinyin": "Shāo děng yīxià, mǎshàng jiù hǎo.",
+    "en": "Wait a moment, it'll be ready soon.",
+    "hanzi_source": "稍等"
+  },
+  {
+    "id": "sent_0926",
+    "zh": "请帮我拿一下这件衣服。",
+    "pinyin": "Qǐng bāng wǒ ná yīxià zhè jiàn yīfu.",
+    "en": "Please help me take this piece of clothing.",
+    "hanzi_source": "拿"
+  },
+  {
+    "id": "sent_0927",
+    "zh": "我拿了两本书。",
+    "pinyin": "Wǒ ná le liǎng běn shū.",
+    "en": "I took two books.",
+    "hanzi_source": "拿"
+  },
+  {
+    "id": "sent_0928",
+    "zh": "这件衣服的样子很好看。",
+    "pinyin": "Zhè jiàn yīfu de yàngzi hěn hǎokàn.",
+    "en": "The style of this clothing looks nice.",
+    "hanzi_source": "样子"
+  },
+  {
+    "id": "sent_0929",
+    "zh": "我喜欢这个样子。",
+    "pinyin": "Wǒ xǐhuan zhège yàngzi.",
+    "en": "I like this style.",
+    "hanzi_source": "样子"
+  },
+  {
+    "id": "sent_0930",
+    "zh": "我能试一下吗？",
+    "pinyin": "Wǒ néng shì yīxià ma?",
+    "en": "Can I try it on?",
+    "hanzi_source": "试"
+  },
+  {
+    "id": "sent_0931",
+    "zh": "你试试这个吧。",
+    "pinyin": "Nǐ shìshi zhège ba.",
+    "en": "Try this.",
+    "hanzi_source": "试"
+  },
+  {
+    "id": "sent_0932",
+    "zh": "试衣间在那边。",
+    "pinyin": "Shì yī jiān zài nàbiān.",
+    "en": "The fitting room is over there.",
+    "hanzi_source": "试衣间"
+  },
+  {
+    "id": "sent_0933",
+    "zh": "我去试衣间试一下。",
+    "pinyin": "Wǒ qù shì yī jiān shì yīxià.",
+    "en": "I'll go to the fitting room to try it on.",
+    "hanzi_source": "试衣间"
+  },
+  {
+    "id": "sent_0934",
+    "zh": "这个打折吗？",
+    "pinyin": "Zhège dǎzhé ma?",
+    "en": "Is there a discount on this?",
+    "hanzi_source": "打折"
+  },
+  {
+    "id": "sent_0935",
+    "zh": "今天全场打折。",
+    "pinyin": "Jīntiān quánchǎng dǎzhé.",
+    "en": "Everything is discounted today.",
+    "hanzi_source": "打折"
+  },
+  {
+    "id": "sent_0936",
+    "zh": "我们去商场买衣服吧。",
+    "pinyin": "Wǒmen qù shāngchǎng mǎi yīfu ba.",
+    "en": "Let's go to the mall to buy clothes.",
+    "hanzi_source": "商场"
+  },
+  {
+    "id": "sent_0937",
+    "zh": "这个商场很大。",
+    "pinyin": "Zhège shāngchǎng hěn dà.",
+    "en": "This mall is very big.",
+    "hanzi_source": "商场"
+  },
+  {
+    "id": "sent_0938",
+    "zh": "商场有打折活动。",
+    "pinyin": "Shāngchǎng yǒu dǎzhé huódòng.",
+    "en": "The mall has a discount promotion.",
+    "hanzi_source": "活动"
+  },
+  {
+    "id": "sent_0939",
+    "zh": "学校有很多活动。",
+    "pinyin": "Xuéxiào yǒu hěn duō huódòng.",
+    "en": "The school has many activities.",
+    "hanzi_source": "活动"
+  },
+  {
+    "id": "sent_0940",
+    "zh": "我可以刷卡吗？",
+    "pinyin": "Wǒ kěyǐ shuākǎ ma?",
+    "en": "Can I pay by card?",
+    "hanzi_source": "刷卡"
+  },
+  {
+    "id": "sent_0941",
+    "zh": "这里可以刷卡。",
+    "pinyin": "Zhèlǐ kěyǐ shuākǎ.",
+    "en": "You can pay by card here.",
+    "hanzi_source": "刷卡"
+  },
+  {
+    "id": "sent_0942",
+    "zh": "能用手机支付吗？",
+    "pinyin": "Néng yòng shǒujī zhīfù ma?",
+    "en": "Can I pay by phone?",
+    "hanzi_source": "支付"
+  },
+  {
+    "id": "sent_0943",
+    "zh": "现在大部分商店都能用手机支付。",
+    "pinyin": "Xiànzài dà bùfen shāngdiàn dōu néng yòng shǒujī zhīfù.",
+    "en": "Now most stores accept phone payment.",
+    "hanzi_source": "支付"
+  },
+  {
+    "id": "sent_0944",
+    "zh": "天气越来越冷了。",
+    "pinyin": "Tiānqì yuè lái yuè lěng le.",
+    "en": "The weather is getting colder and colder.",
+    "hanzi_source": "越来越……"
+  },
+  {
+    "id": "sent_0945",
+    "zh": "手机支付越来越方便。",
+    "pinyin": "Shǒujī zhīfù yuè lái yuè fāngbiàn.",
+    "en": "Phone payment is becoming more and more convenient.",
+    "hanzi_source": "越来越……"
+  },
+  {
+    "id": "sent_0946",
+    "zh": "你打算买什么？",
+    "pinyin": "Nǐ dǎsuàn mǎi shénme?",
+    "en": "What do you plan to buy?",
+    "hanzi_source": "打算"
+  },
+  {
+    "id": "sent_0947",
+    "zh": "我打算明天去商场。",
+    "pinyin": "Wǒ dǎsuàn míngtiān qù shāngchǎng.",
+    "en": "I plan to go to the mall tomorrow.",
+    "hanzi_source": "打算"
+  },
+  {
+    "id": "sent_0948",
+    "zh": "我喜欢蓝色的衣服。",
+    "pinyin": "Wǒ xǐhuan lánsè de yīfu.",
+    "en": "I like blue clothes.",
+    "hanzi_source": "蓝色"
+  },
+  {
+    "id": "sent_0949",
+    "zh": "这条围巾是蓝色的。",
+    "pinyin": "Zhè tiáo wéijīn shì lánsè de.",
+    "en": "This scarf is blue.",
+    "hanzi_source": "蓝色"
+  },
+  {
+    "id": "sent_0950",
+    "zh": "这条围巾是蓝色的。",
+    "pinyin": "Zhè tiáo wéijīn shì lánsè de.",
+    "en": "This scarf is blue.",
+    "hanzi_source": "围巾"
+  },
+  {
+    "id": "sent_0951",
+    "zh": "冬天戴围巾很暖和。",
+    "pinyin": "Dōngtiān dài wéijīn hěn nuǎnhuo.",
+    "en": "Wearing a scarf in winter is very warm.",
+    "hanzi_source": "围巾"
+  },
+  {
+    "id": "sent_0952",
+    "zh": "我想买一顶帽子。",
+    "pinyin": "Wǒ xiǎng mǎi yī dǐng màozi.",
+    "en": "I want to buy a hat.",
+    "hanzi_source": "顶"
+  },
+  {
+    "id": "sent_0953",
+    "zh": "这顶帽子很好看。",
+    "pinyin": "Zhè dǐng màozi hěn hǎokàn.",
+    "en": "This hat looks nice.",
+    "hanzi_source": "顶"
+  },
+  {
+    "id": "sent_0954",
+    "zh": "我想买一顶白色的帽子。",
+    "pinyin": "Wǒ xiǎng mǎi yī dǐng báisè de màozi.",
+    "en": "I want to buy a white hat.",
+    "hanzi_source": "白色"
+  },
+  {
+    "id": "sent_0955",
+    "zh": "白色很好搭配。",
+    "pinyin": "Báisè hěn hǎo dāpèi.",
+    "en": "White goes well with everything.",
+    "hanzi_source": "白色"
+  },
+  {
+    "id": "sent_0956",
+    "zh": "我想买一顶帽子。",
+    "pinyin": "Wǒ xiǎng mǎi yī dǐng màozi.",
+    "en": "I want to buy a hat.",
+    "hanzi_source": "帽子"
+  },
+  {
+    "id": "sent_0957",
+    "zh": "冬天戴帽子很暖和。",
+    "pinyin": "Dōngtiān dài màozi hěn nuǎnhuo.",
+    "en": "Wearing a hat in winter is very warm.",
+    "hanzi_source": "帽子"
+  },
+  {
+    "id": "sent_0958",
+    "zh": "我喜欢黑色的衣服。",
+    "pinyin": "Wǒ xǐhuan hēisè de yīfu.",
+    "en": "I like black clothes.",
+    "hanzi_source": "黑色"
+  },
+  {
+    "id": "sent_0959",
+    "zh": "这双鞋子是黑色的。",
+    "pinyin": "Zhè shuāng xiézi shì hēisè de.",
+    "en": "These shoes are black.",
+    "hanzi_source": "黑色"
+  },
+  {
+    "id": "sent_0960",
+    "zh": "冬天要穿羽绒服。",
+    "pinyin": "Dōngtiān yào chuān yǔróngfú.",
+    "en": "You need to wear a down jacket in winter.",
+    "hanzi_source": "羽绒服"
+  },
+  {
+    "id": "sent_0961",
+    "zh": "这件羽绒服很暖和。",
+    "pinyin": "Zhè jiàn yǔróngfú hěn nuǎnhuo.",
+    "en": "This down jacket is very warm.",
+    "hanzi_source": "羽绒服"
+  },
+  {
+    "id": "sent_0962",
+    "zh": "这件羽绒服很厚。",
+    "pinyin": "Zhè jiàn yǔróngfú hěn hòu.",
+    "en": "This down jacket is very thick.",
+    "hanzi_source": "厚"
+  },
+  {
+    "id": "sent_0963",
+    "zh": "冬天要穿厚一点的衣服。",
+    "pinyin": "Dōngtiān yào chuān hòu yīdiǎn de yīfu.",
+    "en": "You should wear thicker clothes in winter.",
+    "hanzi_source": "厚"
+  },
+  {
+    "id": "sent_0964",
+    "zh": "这双鞋子是棕色的。",
+    "pinyin": "Zhè shuāng xiézi shì zōngsè de.",
+    "en": "These shoes are brown.",
+    "hanzi_source": "棕色"
+  },
+  {
+    "id": "sent_0965",
+    "zh": "我喜欢棕色的围巾。",
+    "pinyin": "Wǒ xǐhuan zōngsè de wéijīn.",
+    "en": "I like the brown scarf.",
+    "hanzi_source": "棕色"
+  },
+  {
+    "id": "sent_0966",
+    "zh": "我们差不多到了。",
+    "pinyin": "Wǒmen chàbuduō dào le.",
+    "en": "We're almost there.",
+    "hanzi_source": "差不多"
+  },
+  {
+    "id": "sent_0967",
+    "zh": "这两件衣服差不多。",
+    "pinyin": "Zhè liǎng jiàn yīfu chàbuduō.",
+    "en": "These two pieces of clothing are almost the same.",
+    "hanzi_source": "差不多"
+  },
+  {
+    "id": "sent_0968",
+    "zh": "我没有现金。",
+    "pinyin": "Wǒ méiyǒu xiànjīn.",
+    "en": "I don't have cash.",
+    "hanzi_source": "现金"
+  },
+  {
+    "id": "sent_0969",
+    "zh": "可以用现金付款吗？",
+    "pinyin": "Kěyǐ yòng xiànjīn fùkuǎn ma?",
+    "en": "Can I pay with cash?",
+    "hanzi_source": "现金"
+  },
+  {
+    "id": "sent_0970",
+    "zh": "这件衣服特别合适。",
+    "pinyin": "Zhè jiàn yīfu tèbié héshì.",
+    "en": "This piece of clothing fits especially well.",
+    "hanzi_source": "特别"
+  },
+  {
+    "id": "sent_0971",
+    "zh": "我特别喜欢蓝色。",
+    "pinyin": "Wǒ tèbié xǐhuan lánsè.",
+    "en": "I especially like blue.",
+    "hanzi_source": "特别"
+  },
+  {
+    "id": "sent_0972",
     "zh": "冬天穿毛衣很暖和。",
     "pinyin": "Dōngtiān chuān máoyī hěn nuǎnhuo.",
     "en": "Wearing a sweater in winter is very warm.",
     "hanzi_source": "毛衣"
   },
   {
-    "id": "sent_0505",
+    "id": "sent_0973",
     "zh": "这件毛衣是羊毛的。",
     "pinyin": "Zhè jiàn máoyī shì yángmáo de.",
     "en": "This sweater is made of wool.",
     "hanzi_source": "毛衣"
   },
   {
-    "id": "sent_0506",
+    "id": "sent_0974",
+    "zh": "这条裙子很好看。",
+    "pinyin": "Zhè tiáo qúnzi hěn hǎokàn.",
+    "en": "This dress looks very nice.",
+    "hanzi_source": "裙子"
+  },
+  {
+    "id": "sent_0975",
+    "zh": "夏天女生喜欢穿裙子。",
+    "pinyin": "Xiàtiān nǚshēng xǐhuan chuān qúnzi.",
+    "en": "In summer, girls like to wear dresses.",
+    "hanzi_source": "裙子"
+  },
+  {
+    "id": "sent_0976",
     "zh": "红色很喜庆。",
     "pinyin": "Hóngsè hěn xǐqìng.",
     "en": "Red is very festive.",
     "hanzi_source": "红色"
   },
   {
-    "id": "sent_0507",
+    "id": "sent_0977",
     "zh": "她穿红色很好看。",
     "pinyin": "Tā chuān hóngsè hěn hǎokàn.",
     "en": "She looks good in red.",
     "hanzi_source": "红色"
   },
   {
-    "id": "sent_0508",
-    "zh": "这条裙子很优雅。",
-    "pinyin": "Zhè tiáo qúnzi hěn yōuyǎ.",
-    "en": "This skirt/dress is very elegant.",
-    "hanzi_source": "裙子"
-  },
-  {
-    "id": "sent_0509",
-    "zh": "夏天女生喜欢穿裙子。",
-    "pinyin": "Xiàtiān nǚshēng xǐhuan chuān qúnzi.",
-    "en": "In summer, girls like to wear skirts.",
-    "hanzi_source": "裙子"
-  },
-  {
-    "id": "sent_0510",
+    "id": "sent_0978",
     "zh": "绿色代表自然。",
     "pinyin": "Lǜsè dàibiǎo zìrán.",
     "en": "Green represents nature.",
     "hanzi_source": "绿色"
   },
   {
-    "id": "sent_0511",
+    "id": "sent_0979",
     "zh": "这件绿色的外套很好看。",
     "pinyin": "Zhè jiàn lǜsè de wàitào hěn hǎokàn.",
     "en": "This green coat looks very nice.",
     "hanzi_source": "绿色"
   },
   {
-    "id": "sent_0512",
-    "zh": "这条裤子太长了。",
-    "pinyin": "Zhè tiáo kùzi tài cháng le.",
-    "en": "These pants are too long.",
-    "hanzi_source": "这条裤子"
+    "id": "sent_0980",
+    "zh": "我头疼、咳嗽，还有点儿发烧。",
+    "pinyin": "Wǒ tóuténg, késou, hái yǒudiǎnr fāshāo.",
+    "en": "I have a headache, a cough, and a slight fever.",
+    "hanzi_source": "头疼"
   },
   {
-    "id": "sent_0513",
-    "zh": "我想试一下这条裤子。",
-    "pinyin": "Wǒ xiǎng shì yīxià zhè tiáo kùzi.",
-    "en": "I want to try on these pants.",
-    "hanzi_source": "这条裤子"
+    "id": "sent_0981",
+    "zh": "你头疼吗？",
+    "pinyin": "Nǐ tóuténg ma?",
+    "en": "Do you have a headache?",
+    "hanzi_source": "头疼"
   },
   {
-    "id": "sent_0514",
-    "zh": "这双鞋子很舒服。",
-    "pinyin": "Zhè shuāng xiézi hěn shūfu.",
-    "en": "These shoes are very comfortable.",
-    "hanzi_source": "这双鞋子"
+    "id": "sent_0982",
+    "zh": "咳嗽得厉害吗？",
+    "pinyin": "Késou de lìhai ma?",
+    "en": "Is the cough severe?",
+    "hanzi_source": "咳嗽"
   },
   {
-    "id": "sent_0515",
-    "zh": "这双鞋子是什么尺码？",
-    "pinyin": "Zhè shuāng xiézi shì shénme chǐmǎ?",
-    "en": "What size are these shoes?",
-    "hanzi_source": "这双鞋子"
+    "id": "sent_0983",
+    "zh": "我咳嗽了两天了。",
+    "pinyin": "Wǒ késou le liǎng tiān le.",
+    "en": "I've had a cough for two days.",
+    "hanzi_source": "咳嗽"
   },
   {
-    "id": "sent_0516",
-    "zh": "这件衣服有点儿贵。",
-    "pinyin": "Zhè jiàn yīfu yǒudiǎnr guì.",
-    "en": "This clothing is a little expensive.",
-    "hanzi_source": "有点儿"
+    "id": "sent_0984",
+    "zh": "我有点儿发烧。",
+    "pinyin": "Wǒ yǒudiǎnr fāshāo.",
+    "en": "I have a slight fever.",
+    "hanzi_source": "发烧"
   },
   {
-    "id": "sent_0517",
-    "zh": "我有点儿累了。",
-    "pinyin": "Wǒ yǒudiǎnr lèi le.",
-    "en": "I'm a little tired.",
-    "hanzi_source": "有点儿"
+    "id": "sent_0985",
+    "zh": "他发烧三十九度。",
+    "pinyin": "Tā fāshāo sānshíjiǔ dù.",
+    "en": "He has a fever of 39 degrees.",
+    "hanzi_source": "发烧"
   },
   {
-    "id": "sent_0518",
-    "zh": "你穿多大码？我穿中号。",
-    "pinyin": "Nǐ chuān duō dà mǎ? Wǒ chuān zhōng hào.",
-    "en": "What size do you wear? I wear medium.",
-    "hanzi_source": "你穿多大码"
+    "id": "sent_0986",
+    "zh": "咳嗽得很厉害。",
+    "pinyin": "Késou de hěn lìhai.",
+    "en": "The cough is very severe.",
+    "hanzi_source": "厉害"
   },
   {
-    "id": "sent_0519",
-    "zh": "买鞋前要先问清楚你穿多大码。",
-    "pinyin": "Mǎi xié qián yào xiān wèn qīngchu nǐ chuān duō dà mǎ.",
-    "en": "Before buying shoes, ask clearly what size you wear.",
-    "hanzi_source": "你穿多大码"
+    "id": "sent_0987",
+    "zh": "他病得很厉害。",
+    "pinyin": "Tā bìng de hěn lìhai.",
+    "en": "He's very seriously ill.",
+    "hanzi_source": "厉害"
   },
   {
-    "id": "sent_0520",
-    "zh": "能试一下这件衣服吗？",
-    "pinyin": "Néng shì yīxià zhè jiàn yīfu ma?",
-    "en": "Can I try on this piece of clothing?",
-    "hanzi_source": "能试一下吗"
+    "id": "sent_0988",
+    "zh": "我给您开点儿药吧。",
+    "pinyin": "Wǒ gěi nín kāi diǎnr yào ba.",
+    "en": "Let me prescribe you some medicine.",
+    "hanzi_source": "开"
   },
   {
-    "id": "sent_0521",
-    "zh": "当然可以，试衣间在那边。",
-    "pinyin": "Dāngrán kěyǐ, shìyījiān zài nàbiān.",
-    "en": "Of course, the fitting room is over there.",
-    "hanzi_source": "能试一下吗"
+    "id": "sent_0989",
+    "zh": "医生给我开了药。",
+    "pinyin": "Yīshēng gěi wǒ kāi le yào.",
+    "en": "The doctor prescribed medicine for me.",
+    "hanzi_source": "开"
   },
   {
-    "id": "sent_0522",
-    "zh": "这个有打折吗？",
-    "pinyin": "Zhège yǒu dǎzhé ma?",
-    "en": "Is there a discount on this?",
-    "hanzi_source": "打折吗"
+    "id": "sent_0990",
+    "zh": "我给您开点儿药吧。",
+    "pinyin": "Wǒ gěi nín kāi diǎnr yào ba.",
+    "en": "Let me prescribe you some medicine.",
+    "hanzi_source": "药"
   },
   {
-    "id": "sent_0523",
-    "zh": "打折吗？今天全场八折。",
-    "pinyin": "Dǎzhé ma? Jīntiān quánchǎng bā zhé.",
-    "en": "Discount? Today everything is 20% off.",
-    "hanzi_source": "打折吗"
+    "id": "sent_0991",
+    "zh": "这个药怎么吃？",
+    "pinyin": "Zhège yào zěnme chī?",
+    "en": "How do I take this medicine?",
+    "hanzi_source": "药"
   },
   {
-    "id": "sent_0524",
-    "zh": "能用手机支付吗？可以，扫码就行。",
-    "pinyin": "Néng yòng shǒujī zhīfù ma? Kěyǐ, sǎo mǎ jiù xíng.",
-    "en": "Can I pay by phone? Yes, just scan the code.",
-    "hanzi_source": "能用手机支付吗"
+    "id": "sent_0992",
+    "zh": "一次吃两片。",
+    "pinyin": "Yī cì chī liǎng piàn.",
+    "en": "Take two tablets each time.",
+    "hanzi_source": "片"
   },
   {
-    "id": "sent_0525",
-    "zh": "现在大部分商店都能用手机支付。",
-    "pinyin": "Xiànzài dà bùfen shāngdiàn dōu néng yòng shǒujī zhīfù.",
-    "en": "Now most stores accept phone payment.",
-    "hanzi_source": "能用手机支付吗"
+    "id": "sent_0993",
+    "zh": "这种药一片多少钱？",
+    "pinyin": "Zhè zhǒng yào yī piàn duōshao qián?",
+    "en": "How much is one tablet of this medicine?",
+    "hanzi_source": "片"
   },
   {
-    "id": "sent_0526",
-    "zh": "如果明天下雨，我就不去了。",
-    "pinyin": "Rúguǒ míngtiān xià yǔ, wǒ jiù bú qù le.",
-    "en": "If it rains tomorrow, I won't go.",
-    "hanzi_source": "如果"
+    "id": "sent_0994",
+    "zh": "我感冒了。",
+    "pinyin": "Wǒ gǎnmào le.",
+    "en": "I've caught a cold.",
+    "hanzi_source": "感冒"
   },
   {
-    "id": "sent_0527",
-    "zh": "如果你累了就休息一下。",
-    "pinyin": "Rúguǒ nǐ lèi le jiù xiūxi yīxià.",
-    "en": "If you're tired, take a rest.",
-    "hanzi_source": "如果"
+    "id": "sent_0995",
+    "zh": "感冒了要多喝水。",
+    "pinyin": "Gǎnmào le yào duō hē shuǐ.",
+    "en": "When you have a cold, drink more water.",
+    "hanzi_source": "感冒"
   },
   {
-    "id": "sent_0528",
-    "zh": "我喜欢旅行。",
-    "pinyin": "Wǒ xǐhuan lǚxíng.",
-    "en": "I like to travel.",
-    "hanzi_source": "旅行"
+    "id": "sent_0996",
+    "zh": "医生给我做检查。",
+    "pinyin": "Yīshēng gěi wǒ zuò jiǎnchá.",
+    "en": "The doctor gave me a check-up.",
+    "hanzi_source": "检查"
   },
   {
-    "id": "sent_0529",
-    "zh": "这个假期我们去旅行吧。",
-    "pinyin": "Zhège jiàqī wǒmen qù lǚxíng ba.",
-    "en": "Let's go traveling this holiday.",
-    "hanzi_source": "旅行"
+    "id": "sent_0997",
+    "zh": "请检查一下我的体温。",
+    "pinyin": "Qǐng jiǎnchá yīxià wǒ de tǐwēn.",
+    "en": "Please check my temperature.",
+    "hanzi_source": "检查"
   },
   {
-    "id": "sent_0530",
-    "zh": "我喜欢吃中餐。",
-    "pinyin": "Wǒ xǐhuan chī Zhōngcān.",
-    "en": "I like eating Chinese food.",
-    "hanzi_source": "喜欢"
+    "id": "sent_0998",
+    "zh": "护士给我量体温。",
+    "pinyin": "Hùshi gěi wǒ liáng tǐwēn.",
+    "en": "The nurse measured my temperature.",
+    "hanzi_source": "量"
   },
   {
-    "id": "sent_0531",
-    "zh": "你喜欢什么颜色？",
-    "pinyin": "Nǐ xǐhuan shénme yánsè?",
-    "en": "What color do you like?",
-    "hanzi_source": "喜欢"
+    "id": "sent_0999",
+    "zh": "请量一下你的体重。",
+    "pinyin": "Qǐng liáng yīxià nǐ de tǐzhòng.",
+    "en": "Please measure your weight.",
+    "hanzi_source": "量"
   },
   {
-    "id": "sent_0532",
-    "zh": "去美国要坐飞机。",
-    "pinyin": "Qù Měiguó yào zuò fēijī.",
-    "en": "Going to the US requires taking a plane.",
-    "hanzi_source": "坐飞机"
+    "id": "sent_1000",
+    "zh": "护士给我量体温。",
+    "pinyin": "Hùshi gěi wǒ liáng tǐwēn.",
+    "en": "The nurse measured my temperature.",
+    "hanzi_source": "体温"
   },
   {
-    "id": "sent_0533",
-    "zh": "我第一次坐飞机很紧张。",
-    "pinyin": "Wǒ dì-yī cì zuò fēijī hěn jǐnzhāng.",
-    "en": "I was very nervous the first time I took a plane.",
-    "hanzi_source": "坐飞机"
+    "id": "sent_1001",
+    "zh": "我的体温正常。",
+    "pinyin": "Wǒ de tǐwēn zhèngcháng.",
+    "en": "My temperature is normal.",
+    "hanzi_source": "体温"
   },
   {
-    "id": "sent_0534",
-    "zh": "坐火车比坐飞机便宜。",
-    "pinyin": "Zuò huǒchē bǐ zuò fēijī piányi.",
-    "en": "Taking a train is cheaper than taking a plane.",
-    "hanzi_source": "坐火车"
+    "id": "sent_1002",
+    "zh": "你放心，没有大问题。",
+    "pinyin": "Nǐ fàngxīn, méiyǒu dà wèntí.",
+    "en": "Don't worry, there's no big problem.",
+    "hanzi_source": "放心"
   },
   {
-    "id": "sent_0535",
-    "zh": "我喜欢坐火车看风景。",
-    "pinyin": "Wǒ xǐhuan zuò huǒchē kàn fēngjǐng.",
-    "en": "I like taking the train to see the scenery.",
-    "hanzi_source": "坐火车"
+    "id": "sent_1003",
+    "zh": "放心吧，我会照顾好自己。",
+    "pinyin": "Fàngxīn ba, wǒ huì zhàogù hǎo zìjǐ.",
+    "en": "Don't worry, I'll take good care of myself.",
+    "hanzi_source": "放心"
   },
   {
-    "id": "sent_0536",
-    "zh": "虽然很贵，但是我想买。",
-    "pinyin": "Suīrán hěn guì, dànshì wǒ xiǎng mǎi.",
-    "en": "Although it's expensive, I want to buy it.",
-    "hanzi_source": "虽然…但是…"
+    "id": "sent_1004",
+    "zh": "你的病不严重。",
+    "pinyin": "Nǐ de bìng bù yánzhòng.",
+    "en": "Your illness isn't serious.",
+    "hanzi_source": "严重"
   },
   {
-    "id": "sent_0537",
-    "zh": "虽然下雨了，但是我们还是去了公园。",
-    "pinyin": "Suīrán xià yǔ le, dànshì wǒmen háishì qù le gōngyuán.",
-    "en": "Although it rained, we still went to the park.",
-    "hanzi_source": "虽然…但是…"
+    "id": "sent_1005",
+    "zh": "情况变得很严重。",
+    "pinyin": "Qíngkuàng biàn de hěn yánzhòng.",
+    "en": "The situation became very serious.",
+    "hanzi_source": "严重"
   },
   {
-    "id": "sent_0538",
-    "zh": "飞机很快。",
-    "pinyin": "Fēijī hěn kuài.",
-    "en": "The plane is very fast.",
-    "hanzi_source": "快"
+    "id": "sent_1006",
+    "zh": "我头疼，于是去看病了。",
+    "pinyin": "Wǒ tóuténg, yúshì qù kànbìng le.",
+    "en": "I had a headache, so I went to see a doctor.",
+    "hanzi_source": "于是"
   },
   {
-    "id": "sent_0539",
-    "zh": "你走得太快了，我跟不上。",
-    "pinyin": "Nǐ zǒu de tài kuài le, wǒ gēn bú shàng.",
-    "en": "You're walking too fast, I can't keep up.",
-    "hanzi_source": "快"
+    "id": "sent_1007",
+    "zh": "天气冷了，于是我穿上了羽绒服。",
+    "pinyin": "Tiānqì lěng le, yúshì wǒ chuān shàng le yǔróngfú.",
+    "en": "The weather turned cold, so I put on my down jacket.",
+    "hanzi_source": "于是"
   },
   {
-    "id": "sent_0540",
+    "id": "sent_1008",
+    "zh": "他向老师请假。",
+    "pinyin": "Tā xiàng lǎoshī qǐngjià.",
+    "en": "He asked the teacher for leave.",
+    "hanzi_source": "向"
+  },
+  {
+    "id": "sent_1009",
+    "zh": "一直向前走。",
+    "pinyin": "Yìzhí xiàng qián zǒu.",
+    "en": "Go straight ahead.",
+    "hanzi_source": "向"
+  },
+  {
+    "id": "sent_1010",
+    "zh": "他向老师请假。",
+    "pinyin": "Tā xiàng lǎoshī qǐngjià.",
+    "en": "He asked the teacher for leave.",
+    "hanzi_source": "请假"
+  },
+  {
+    "id": "sent_1011",
+    "zh": "我今天要请假去医院。",
+    "pinyin": "Wǒ jīntiān yào qǐngjià qù yīyuàn.",
+    "en": "I need to take leave today to go to the hospital.",
+    "hanzi_source": "请假"
+  },
+  {
+    "id": "sent_1012",
+    "zh": "让我陪你去医院吧。",
+    "pinyin": "Ràng wǒ péi nǐ qù yīyuàn ba.",
+    "en": "Let me accompany you to the hospital.",
+    "hanzi_source": "让"
+  },
+  {
+    "id": "sent_1013",
+    "zh": "妈妈让我早点睡觉。",
+    "pinyin": "Māma ràng wǒ zǎodiǎn shuìjiào.",
+    "en": "Mom told me to go to bed early.",
+    "hanzi_source": "让"
+  },
+  {
+    "id": "sent_1014",
+    "zh": "让我陪你去医院吧。",
+    "pinyin": "Ràng wǒ péi nǐ qù yīyuàn ba.",
+    "en": "Let me accompany you to the hospital.",
+    "hanzi_source": "陪"
+  },
+  {
+    "id": "sent_1015",
+    "zh": "我陪妈妈去看病。",
+    "pinyin": "Wǒ péi māma qù kànbìng.",
+    "en": "I accompanied mom to see the doctor.",
+    "hanzi_source": "陪"
+  },
+  {
+    "id": "sent_1016",
+    "zh": "我陪妈妈去看病。",
+    "pinyin": "Wǒ péi māma qù kànbìng.",
+    "en": "I accompanied mom to see the doctor.",
+    "hanzi_source": "看病"
+  },
+  {
+    "id": "sent_1017",
+    "zh": "你应该去看病。",
+    "pinyin": "Nǐ yīnggāi qù kànbìng.",
+    "en": "You should go see a doctor.",
+    "hanzi_source": "看病"
+  },
+  {
+    "id": "sent_1018",
+    "zh": "我的病情有变化。",
+    "pinyin": "Wǒ de bìngqíng yǒu biànhuà.",
+    "en": "My condition has changed.",
+    "hanzi_source": "变化"
+  },
+  {
+    "id": "sent_1019",
+    "zh": "天气变化很大。",
+    "pinyin": "Tiānqì biànhuà hěn dà.",
+    "en": "The weather has changed a lot.",
+    "hanzi_source": "变化"
+  },
+  {
+    "id": "sent_1020",
+    "zh": "不用担心，休息一下就好了。",
+    "pinyin": "Búyòng dānxīn, xiūxi yīxià jiù hǎo le.",
+    "en": "No need to worry, you'll be fine after a rest.",
+    "hanzi_source": "不用"
+  },
+  {
+    "id": "sent_1021",
+    "zh": "不用谢。",
+    "pinyin": "Búyòng xiè.",
+    "en": "No need to thank me.",
+    "hanzi_source": "不用"
+  },
+  {
+    "id": "sent_1022",
+    "zh": "医生给我打针了。",
+    "pinyin": "Yīshēng gěi wǒ dǎzhēn le.",
+    "en": "The doctor gave me an injection.",
+    "hanzi_source": "打针"
+  },
+  {
+    "id": "sent_1023",
+    "zh": "我不喜欢打针。",
+    "pinyin": "Wǒ bù xǐhuan dǎzhēn.",
+    "en": "I don't like getting injections.",
+    "hanzi_source": "打针"
+  },
+  {
+    "id": "sent_1024",
+    "zh": "不用担心，休息一下就好了。",
+    "pinyin": "Búyòng dānxīn, xiūxi yīxià jiù hǎo le.",
+    "en": "No need to worry, you'll be fine after a rest.",
+    "hanzi_source": "担心"
+  },
+  {
+    "id": "sent_1025",
+    "zh": "妈妈很担心我。",
+    "pinyin": "Māma hěn dānxīn wǒ.",
+    "en": "Mom worries about me a lot.",
+    "hanzi_source": "担心"
+  },
+  {
+    "id": "sent_1026",
+    "zh": "你喜欢坐飞机还是坐火车？",
+    "pinyin": "Nǐ xǐhuan zuò fēijī háishi zuò huǒchē?",
+    "en": "Do you like taking planes or trains?",
+    "hanzi_source": "坐"
+  },
+  {
+    "id": "sent_1027",
+    "zh": "我每天坐地铁上班。",
+    "pinyin": "Wǒ měitiān zuò dìtiě shàngbān.",
+    "en": "I take the subway to work every day.",
+    "hanzi_source": "坐"
+  },
+  {
+    "id": "sent_1028",
+    "zh": "你上飞机了吗？",
+    "pinyin": "Nǐ shàng fēijī le ma?",
+    "en": "Have you boarded the plane?",
+    "hanzi_source": "飞机"
+  },
+  {
+    "id": "sent_1029",
+    "zh": "坐飞机比坐火车快。",
+    "pinyin": "Zuò fēijī bǐ zuò huǒchē kuài.",
+    "en": "Taking a plane is faster than taking a train.",
+    "hanzi_source": "飞机"
+  },
+  {
+    "id": "sent_1030",
+    "zh": "火车比坐飞机舒服。",
+    "pinyin": "Huǒchē bǐ zuò fēijī shūfu.",
+    "en": "Trains are more comfortable than planes.",
+    "hanzi_source": "火车"
+  },
+  {
+    "id": "sent_1031",
+    "zh": "我买了一张火车票。",
+    "pinyin": "Wǒ mǎi le yī zhāng huǒchēpiào.",
+    "en": "I bought a train ticket.",
+    "hanzi_source": "火车"
+  },
+  {
+    "id": "sent_1032",
+    "zh": "坐飞机比坐火车快。",
+    "pinyin": "Zuò fēijī bǐ zuò huǒchē kuài.",
+    "en": "Taking a plane is faster than taking a train.",
+    "hanzi_source": "比"
+  },
+  {
+    "id": "sent_1033",
+    "zh": "今天比昨天冷。",
+    "pinyin": "Jīntiān bǐ zuótiān lěng.",
+    "en": "Today is colder than yesterday.",
+    "hanzi_source": "比"
+  },
+  {
+    "id": "sent_1034",
+    "zh": "你上飞机了吗？",
+    "pinyin": "Nǐ shàng fēijī le ma?",
+    "en": "Have you boarded the plane?",
+    "hanzi_source": "上"
+  },
+  {
+    "id": "sent_1035",
+    "zh": "请上车吧。",
+    "pinyin": "Qǐng shàng chē ba.",
+    "en": "Please get on the vehicle.",
+    "hanzi_source": "上"
+  },
+  {
+    "id": "sent_1036",
+    "zh": "下飞机后给你打电话。",
+    "pinyin": "Xià fēijī hòu gěi nǐ dǎ diànhuà.",
+    "en": "I'll call you after getting off the plane.",
+    "hanzi_source": "下"
+  },
+  {
+    "id": "sent_1037",
+    "zh": "请在下一站下车。",
+    "pinyin": "Qǐng zài xià yī zhàn xiàchē.",
+    "en": "Please get off at the next stop.",
+    "hanzi_source": "下"
+  },
+  {
+    "id": "sent_1038",
+    "zh": "下飞机后给你打电话。",
+    "pinyin": "Xià fēijī hòu gěi nǐ dǎ diànhuà.",
+    "en": "I'll call you after getting off the plane.",
+    "hanzi_source": "打电话"
+  },
+  {
+    "id": "sent_1039",
+    "zh": "我给你打电话。",
+    "pinyin": "Wǒ gěi nǐ dǎ diànhuà.",
+    "en": "I'll call you.",
+    "hanzi_source": "打电话"
+  },
+  {
+    "id": "sent_1040",
+    "zh": "地铁站离我家很近。",
+    "pinyin": "Dìtiězhàn lí wǒ jiā hěn jìn.",
+    "en": "The subway station is close to my home.",
+    "hanzi_source": "地铁站"
+  },
+  {
+    "id": "sent_1041",
+    "zh": "我在地铁站等你。",
+    "pinyin": "Wǒ zài dìtiězhàn děng nǐ.",
+    "en": "I'll wait for you at the subway station.",
+    "hanzi_source": "地铁站"
+  },
+  {
+    "id": "sent_1042",
+    "zh": "你为什么喜欢坐地铁上班？",
+    "pinyin": "Nǐ wèishénme xǐhuan zuò dìtiě shàngbān?",
+    "en": "Why do you like taking the subway to work?",
+    "hanzi_source": "上班"
+  },
+  {
+    "id": "sent_1043",
+    "zh": "我每天九点上班。",
+    "pinyin": "Wǒ měitiān jiǔ diǎn shàngbān.",
+    "en": "I start work at 9 every day.",
+    "hanzi_source": "上班"
+  },
+  {
+    "id": "sent_1044",
+    "zh": "早上开车常常堵车。",
+    "pinyin": "Zǎoshang kāichē chángcháng dǔchē.",
+    "en": "There's often traffic in the morning driving.",
+    "hanzi_source": "堵车"
+  },
+  {
+    "id": "sent_1045",
+    "zh": "堵车的时候坐地铁更快。",
+    "pinyin": "Dǔchē de shíhou zuò dìtiě gèng kuài.",
+    "en": "Taking the subway is faster during traffic jams.",
+    "hanzi_source": "堵车"
+  },
+  {
+    "id": "sent_1046",
+    "zh": "坐地铁来得及吗？",
+    "pinyin": "Zuò dìtiě láidejí ma?",
+    "en": "Is there enough time if I take the subway?",
+    "hanzi_source": "来得及"
+  },
+  {
+    "id": "sent_1047",
+    "zh": "现在出发还来得及。",
+    "pinyin": "Xiànzài chūfā hái láidejí.",
+    "en": "There's still enough time if we leave now.",
+    "hanzi_source": "来得及"
+  },
+  {
+    "id": "sent_1048",
+    "zh": "堵车了，来不及了。",
+    "pinyin": "Dǔchē le, láibují le.",
+    "en": "There's traffic, we won't make it in time.",
+    "hanzi_source": "来不及"
+  },
+  {
+    "id": "sent_1049",
+    "zh": "现在出门也来不及了。",
+    "pinyin": "Xiànzài chūmén yě láibují le.",
+    "en": "Even leaving now, we won't make it.",
+    "hanzi_source": "来不及"
+  },
+  {
+    "id": "sent_1050",
+    "zh": "堵车了，我们打车吧。",
+    "pinyin": "Dǔchē le, wǒmen dǎchē ba.",
+    "en": "There's traffic, let's take a taxi.",
+    "hanzi_source": "打车"
+  },
+  {
+    "id": "sent_1051",
+    "zh": "打车比坐公交车贵。",
+    "pinyin": "Dǎchē bǐ zuò gōngjiāochē guì.",
+    "en": "Taking a taxi is more expensive than taking the bus.",
+    "hanzi_source": "打车"
+  },
+  {
+    "id": "sent_1052",
+    "zh": "坐地铁比较快。",
+    "pinyin": "Zuò dìtiě bǐjiào kuài.",
+    "en": "Taking the subway is comparatively fast.",
+    "hanzi_source": "比较"
+  },
+  {
+    "id": "sent_1053",
+    "zh": "这个问题比较难。",
+    "pinyin": "Zhège wèntí bǐjiào nán.",
+    "en": "This question is fairly difficult.",
+    "hanzi_source": "比较"
+  },
+  {
+    "id": "sent_1054",
+    "zh": "你要去什么地方？",
+    "pinyin": "Nǐ yào qù shénme dìfang?",
+    "en": "Where do you want to go?",
+    "hanzi_source": "地方"
+  },
+  {
+    "id": "sent_1055",
+    "zh": "这个地方很漂亮。",
+    "pinyin": "Zhège dìfang hěn piàoliang.",
+    "en": "This place is very beautiful.",
+    "hanzi_source": "地方"
+  },
+  {
+    "id": "sent_1056",
+    "zh": "你选择坐飞机还是坐火车？",
+    "pinyin": "Nǐ xuǎnzé zuò fēijī háishi zuò huǒchē?",
+    "en": "Do you choose to fly or take the train?",
+    "hanzi_source": "选择"
+  },
+  {
+    "id": "sent_1057",
+    "zh": "我选择坐地铁上班。",
+    "pinyin": "Wǒ xuǎnzé zuò dìtiě shàngbān.",
+    "en": "I choose to take the subway to work.",
+    "hanzi_source": "选择"
+  },
+  {
+    "id": "sent_1058",
+    "zh": "我买了一张火车票。",
+    "pinyin": "Wǒ mǎi le yī zhāng huǒchēpiào.",
+    "en": "I bought a train ticket.",
+    "hanzi_source": "火车票"
+  },
+  {
+    "id": "sent_1059",
+    "zh": "火车票多少钱？",
+    "pinyin": "Huǒchēpiào duōshao qián?",
+    "en": "How much is a train ticket?",
+    "hanzi_source": "火车票"
+  },
+  {
+    "id": "sent_1060",
+    "zh": "飞机票比火车票贵。",
+    "pinyin": "Fēijīpiào bǐ huǒchēpiào guì.",
+    "en": "Air tickets are more expensive than train tickets.",
+    "hanzi_source": "飞机票"
+  },
+  {
+    "id": "sent_1061",
+    "zh": "我订了两张飞机票。",
+    "pinyin": "Wǒ dìng le liǎng zhāng fēijīpiào.",
+    "en": "I booked two plane tickets.",
+    "hanzi_source": "飞机票"
+  },
+  {
+    "id": "sent_1062",
+    "zh": "火车没有那么快。",
+    "pinyin": "Huǒchē méiyǒu nàme kuài.",
+    "en": "Trains aren't as fast as that.",
+    "hanzi_source": "那么"
+  },
+  {
+    "id": "sent_1063",
+    "zh": "别那么担心。",
+    "pinyin": "Bié nàme dānxīn.",
+    "en": "Don't worry so much.",
+    "hanzi_source": "那么"
+  },
+  {
+    "id": "sent_1064",
+    "zh": "走路比坐车慢。",
+    "pinyin": "Zǒulù bǐ zuò chē màn.",
+    "en": "Walking is slower than driving.",
+    "hanzi_source": "走路"
+  },
+  {
+    "id": "sent_1065",
+    "zh": "我喜欢走路上学。",
+    "pinyin": "Wǒ xǐhuan zǒulù shàngxué.",
+    "en": "I like walking to school.",
+    "hanzi_source": "走路"
+  },
+  {
+    "id": "sent_1066",
+    "zh": "坐地铁更快。",
+    "pinyin": "Zuò dìtiě gèng kuài.",
+    "en": "Taking the subway is even faster.",
+    "hanzi_source": "更"
+  },
+  {
+    "id": "sent_1067",
+    "zh": "今天更冷了。",
+    "pinyin": "Jīntiān gèng lěng le.",
+    "en": "Today is even colder.",
+    "hanzi_source": "更"
+  },
+  {
+    "id": "sent_1068",
+    "zh": "我坐公交车上班。",
+    "pinyin": "Wǒ zuò gōngjiāochē shàngbān.",
+    "en": "I take the bus to work.",
+    "hanzi_source": "公交车"
+  },
+  {
+    "id": "sent_1069",
+    "zh": "公交车站在哪儿？",
+    "pinyin": "Gōngjiāochē zhàn zài nǎr?",
+    "en": "Where's the bus stop?",
+    "hanzi_source": "公交车"
+  },
+  {
+    "id": "sent_1070",
     "zh": "火车比飞机慢。",
     "pinyin": "Huǒchē bǐ fēijī màn.",
     "en": "Trains are slower than planes.",
     "hanzi_source": "慢"
   },
   {
-    "id": "sent_0541",
+    "id": "sent_1071",
     "zh": "请说慢一点。",
     "pinyin": "Qǐng shuō màn yīdiǎn.",
     "en": "Please speak a little slower.",
     "hanzi_source": "慢"
   },
   {
-    "id": "sent_0542",
-    "zh": "这双鞋很舒服。",
-    "pinyin": "Zhè shuāng xié hěn shūfu.",
-    "en": "These shoes are very comfortable.",
-    "hanzi_source": "舒服"
+    "id": "sent_1072",
+    "zh": "早上开车常常堵车。",
+    "pinyin": "Zǎoshang kāichē chángcháng dǔchē.",
+    "en": "There's often traffic when driving in the morning.",
+    "hanzi_source": "开车"
   },
   {
-    "id": "sent_0543",
-    "zh": "火车上可以躺下，很舒服。",
-    "pinyin": "Huǒchē shàng kěyǐ tǎngxià, hěn shūfu.",
-    "en": "You can lie down on the train — very comfortable.",
-    "hanzi_source": "舒服"
+    "id": "sent_1073",
+    "zh": "你会开车吗？",
+    "pinyin": "Nǐ huì kāichē ma?",
+    "en": "Can you drive?",
+    "hanzi_source": "开车"
   },
   {
-    "id": "sent_0544",
-    "zh": "我们提前两小时上飞机。",
-    "pinyin": "Wǒmen tíqián liǎng xiǎoshí shàng fēijī.",
-    "en": "We board the plane two hours early.",
-    "hanzi_source": "上飞机"
+    "id": "sent_1074",
+    "zh": "坐火车和坐飞机的时间不一样。",
+    "pinyin": "Zuò huǒchē hé zuò fēijī de shíjiān bù yíyàng.",
+    "en": "The time for taking a train and a plane isn't the same.",
+    "hanzi_source": "一样"
   },
   {
-    "id": "sent_0545",
-    "zh": "请准备好登机牌上飞机。",
-    "pinyin": "Qǐng zhǔnbèi hǎo dēngjīpái shàng fēijī.",
-    "en": "Please have your boarding pass ready to board.",
-    "hanzi_source": "上飞机"
+    "id": "sent_1075",
+    "zh": "我们的想法一样。",
+    "pinyin": "Wǒmen de xiǎngfǎ yíyàng.",
+    "en": "Our ideas are the same.",
+    "hanzi_source": "一样"
   },
   {
-    "id": "sent_0546",
-    "zh": "下飞机后给我打电话。",
-    "pinyin": "Xià fēijī hòu gěi wǒ dǎ diànhuà.",
-    "en": "Call me after you get off the plane.",
-    "hanzi_source": "下飞机"
+    "id": "sent_1076",
+    "zh": "我妹妹比我矮。",
+    "pinyin": "Wǒ mèimei bǐ wǒ ǎi.",
+    "en": "My younger sister is shorter than me.",
+    "hanzi_source": "矮"
   },
   {
-    "id": "sent_0547",
-    "zh": "下飞机时别忘了行李。",
-    "pinyin": "Xià fēijī shí bié wàng le xíngli.",
-    "en": "Don't forget your luggage when you get off the plane.",
-    "hanzi_source": "下飞机"
+    "id": "sent_1077",
+    "zh": "他个子很矮。",
+    "pinyin": "Tā gèzi hěn ǎi.",
+    "en": "He is quite short.",
+    "hanzi_source": "矮"
   },
   {
-    "id": "sent_0548",
-    "zh": "请给我一杯水。",
-    "pinyin": "Qǐng gěi wǒ yī bēi shuǐ.",
-    "en": "Please give me a glass of water.",
-    "hanzi_source": "给"
+    "id": "sent_1078",
+    "zh": "这个包很轻。",
+    "pinyin": "Zhège bāo hěn qīng.",
+    "en": "This bag is very light.",
+    "hanzi_source": "轻"
   },
   {
-    "id": "sent_0549",
-    "zh": "我给你打电话。",
-    "pinyin": "Wǒ gěi nǐ dǎ diànhuà.",
-    "en": "I'll call you.",
-    "hanzi_source": "给"
+    "id": "sent_1079",
+    "zh": "妈妈比爸爸轻。",
+    "pinyin": "Māma bǐ bàba qīng.",
+    "en": "Mom is lighter than dad.",
+    "hanzi_source": "轻"
   },
   {
-    "id": "sent_0550",
-    "zh": "我晚上给你打电话。",
-    "pinyin": "Wǒ wǎnshàng gěi nǐ dǎ diànhuà.",
-    "en": "I'll call you in the evening.",
-    "hanzi_source": "打电话"
+    "id": "sent_1080",
+    "zh": "这个西瓜很重。",
+    "pinyin": "Zhège xīguā hěn zhòng.",
+    "en": "This watermelon is very heavy.",
+    "hanzi_source": "重"
   },
   {
-    "id": "sent_0551",
-    "zh": "别在电影院打电话。",
-    "pinyin": "Bié zài diànyǐngyuàn dǎ diànhuà.",
-    "en": "Don't make phone calls in the movie theater.",
-    "hanzi_source": "打电话"
+    "id": "sent_1081",
+    "zh": "这个箱子太重了。",
+    "pinyin": "Zhège xiāngzi tài zhòng le.",
+    "en": "This box is too heavy.",
+    "hanzi_source": "重"
   },
   {
-    "id": "sent_0552",
-    "zh": "我在学习编程。",
-    "pinyin": "Wǒ zài xuéxí biānchéng.",
-    "en": "I am learning programming.",
-    "hanzi_source": "编程"
-  },
-  {
-    "id": "sent_0553",
-    "zh": "编程很有趣。",
-    "pinyin": "Biānchéng hěn yǒuqù.",
-    "en": "Programming is very interesting.",
-    "hanzi_source": "编程"
-  },
-  {
-    "id": "sent_0554",
-    "zh": "这个网站很有用。",
-    "pinyin": "Zhège wǎngzhàn hěn yǒuyòng.",
-    "en": "This website is very useful.",
-    "hanzi_source": "网站"
-  },
-  {
-    "id": "sent_0555",
-    "zh": "我想建一个自己的网站。",
-    "pinyin": "Wǒ xiǎng jiàn yí ge zìjǐ de wǎngzhàn.",
-    "en": "I want to build my own website.",
-    "hanzi_source": "网站"
-  },
-  {
-    "id": "sent_0556",
-    "zh": "前端开发负责用户界面。",
-    "pinyin": "Qiánduān kāifā fùzé yònghù jièmiàn.",
-    "en": "Front-end development is responsible for the user interface.",
-    "hanzi_source": "前端"
-  },
-  {
-    "id": "sent_0557",
-    "zh": "我想学前端。",
-    "pinyin": "Wǒ xiǎng xué qiánduān.",
-    "en": "I want to learn front-end.",
-    "hanzi_source": "前端"
-  },
-  {
-    "id": "sent_0558",
-    "zh": "后端处理服务器和数据库。",
-    "pinyin": "Hòuduān chǔlǐ fúwùqì hé shùjùkù.",
-    "en": "Back-end handles servers and databases.",
-    "hanzi_source": "后端"
-  },
-  {
-    "id": "sent_0559",
-    "zh": "前端和后端要配合工作。",
-    "pinyin": "Qiánduān hé hòuduān yào pèihé gōngzuò.",
-    "en": "Front-end and back-end need to work together.",
-    "hanzi_source": "后端"
-  },
-  {
-    "id": "sent_0560",
-    "zh": "超文本标记语言是网页的基础。",
-    "pinyin": "Chāowénběn biāojì yǔyán shì wǎngyè de jīchǔ.",
-    "en": "HTML is the foundation of web pages.",
-    "hanzi_source": "超文本标记语言"
-  },
-  {
-    "id": "sent_0561",
-    "zh": "学习编程要先学超文本标记语言。",
-    "pinyin": "Xuéxí biānchéng yào xiān xué chāowénběn biāojì yǔyán.",
-    "en": "When learning programming, learn HTML first.",
-    "hanzi_source": "超文本标记语言"
-  },
-  {
-    "id": "sent_0562",
-    "zh": "层叠样式表控制网页的样式。",
-    "pinyin": "Céngdié yàngshì biǎo kòngzhì wǎngyè de yàngshì.",
-    "en": "CSS controls the style of web pages.",
-    "hanzi_source": "层叠样式表"
-  },
-  {
-    "id": "sent_0563",
-    "zh": "用层叠样式表可以改变颜色和字体。",
-    "pinyin": "Yòng céngdié yàngshì biǎo kěyǐ gǎibiàn yánsè hé zìtǐ.",
-    "en": "You can change colors and fonts with CSS.",
-    "hanzi_source": "层叠样式表"
-  },
-  {
-    "id": "sent_0564",
-    "zh": "脚本语言让网页动起来。",
-    "pinyin": "Jiǎoběn yǔyán ràng wǎngyè dòng qǐlai.",
-    "en": "JavaScript makes web pages interactive.",
-    "hanzi_source": "脚本语言"
-  },
-  {
-    "id": "sent_0565",
-    "zh": "脚本语言很难学。",
-    "pinyin": "Jiǎoběn yǔyán hěn nán xué.",
-    "en": "JavaScript is hard to learn.",
-    "hanzi_source": "脚本语言"
-  },
-  {
-    "id": "sent_0566",
-    "zh": "使用框架可以加快开发速度。",
-    "pinyin": "Shǐyòng kuàngjià kěyǐ jiākuài kāifā sùdù.",
-    "en": "Using a framework speeds up development.",
-    "hanzi_source": "框架"
-  },
-  {
-    "id": "sent_0567",
-    "zh": "React是一个流行的前端框架。",
-    "pinyin": "React shì yí ge liúxíng de qiánduān kuàngjià.",
-    "en": "React is a popular front-end framework.",
-    "hanzi_source": "框架"
-  },
-  {
-    "id": "sent_0568",
-    "zh": "响应式设计适配手机和电脑。",
-    "pinyin": "Xiǎngyìng shì shèjì shìpèi shǒujī hé diànnǎo.",
-    "en": "Responsive design adapts to phones and computers.",
-    "hanzi_source": "响应式"
-  },
-  {
-    "id": "sent_0569",
-    "zh": "这个网站是响应式的。",
-    "pinyin": "Zhège wǎngzhàn shì xiǎngyìng shì de.",
-    "en": "This website is responsive.",
-    "hanzi_source": "响应式"
-  },
-  {
-    "id": "sent_0570",
-    "zh": "服务器不能停机。",
-    "pinyin": "Fúwùqì bùnéng tíngjī.",
-    "en": "The server cannot go down.",
-    "hanzi_source": "服务器"
-  },
-  {
-    "id": "sent_0571",
-    "zh": "网站托管在服务器上。",
-    "pinyin": "Wǎngzhàn tuōguǎn zài fúwùqì shàng.",
-    "en": "The website is hosted on a server.",
-    "hanzi_source": "服务器"
-  },
-  {
-    "id": "sent_0572",
-    "zh": "数据库里存储了用户信息。",
-    "pinyin": "Shùjùkù lǐ cúnchǔ le yònghù xìnxī.",
-    "en": "User information is stored in the database.",
-    "hanzi_source": "数据库"
-  },
-  {
-    "id": "sent_0573",
-    "zh": "学习数据库很有用。",
-    "pinyin": "Xuéxí shùjùkù hěn yǒuyòng.",
-    "en": "Learning databases is very useful.",
-    "hanzi_source": "数据库"
-  },
-  {
-    "id": "sent_0574",
-    "zh": "我买了一个新域名。",
-    "pinyin": "Wǒ mǎi le yí ge xīn yùmíng.",
-    "en": "I bought a new domain name.",
-    "hanzi_source": "域名"
-  },
-  {
-    "id": "sent_0575",
-    "zh": "域名要每年续费。",
-    "pinyin": "Yùmíng yào měi nián xùfèi.",
-    "en": "Domain names need to be renewed every year.",
-    "hanzi_source": "域名"
-  },
-  {
-    "id": "sent_0576",
-    "zh": "网站需要托管。",
-    "pinyin": "Wǎngzhàn xūyào tuōguǎn.",
-    "en": "Websites need hosting.",
-    "hanzi_source": "托管"
-  },
-  {
-    "id": "sent_0577",
-    "zh": "这个托管服务很便宜。",
-    "pinyin": "Zhège tuōguǎn fúwù hěn piányi.",
-    "en": "This hosting service is very cheap.",
-    "hanzi_source": "托管"
-  },
-  {
-    "id": "sent_0578",
-    "zh": "版本控制帮助团队合作。",
-    "pinyin": "Bǎnběn kòngzhì bāngzhù tuánduì hézuò.",
-    "en": "Version control helps teams collaborate.",
-    "hanzi_source": "版本控制"
-  },
-  {
-    "id": "sent_0579",
-    "zh": "Git是一个版本控制系统。",
-    "pinyin": "Git shì yí ge bǎnběn kòngzhì xìtǒng.",
-    "en": "Git is a version control system.",
-    "hanzi_source": "版本控制"
-  },
-  {
-    "id": "sent_0580",
-    "zh": "把代码推送到远程仓库。",
-    "pinyin": "Bǎ dàimǎ tuīsòng dào yuǎnchéng cāngkù.",
-    "en": "Push the code to the remote repository.",
-    "hanzi_source": "仓库"
-  },
-  {
-    "id": "sent_0581",
-    "zh": "创建一个新仓库。",
-    "pinyin": "Chuàngjiàn yí ge xīn cāngkù.",
-    "en": "Create a new repository.",
-    "hanzi_source": "仓库"
-  },
-  {
-    "id": "sent_0582",
-    "zh": "代码写好后要部署到服务器。",
-    "pinyin": "Dàimǎ xiě hǎo hòu yào bùshǔ dào fúwùqì.",
-    "en": "After writing the code, deploy it to the server.",
-    "hanzi_source": "部署"
-  },
-  {
-    "id": "sent_0583",
-    "zh": "部署前先测试一下。",
-    "pinyin": "Bùshǔ qián xiān cèshì yīxià.",
-    "en": "Test before deploying.",
-    "hanzi_source": "部署"
-  },
-  {
-    "id": "sent_0584",
-    "zh": "这个bug很难调试。",
-    "pinyin": "Zhège bug hěn nán tiáoshì.",
-    "en": "This bug is very hard to debug.",
-    "hanzi_source": "调试"
-  },
-  {
-    "id": "sent_0585",
-    "zh": "用控制台调试代码。",
-    "pinyin": "Yòng kòngzhìtái tiáoshì dàimǎ.",
-    "en": "Use the console to debug code.",
-    "hanzi_source": "调试"
-  },
-  {
-    "id": "sent_0586",
-    "zh": "变量可以存储数据。",
-    "pinyin": "Biànliàng kěyǐ cúnchǔ shùjù.",
-    "en": "Variables can store data.",
-    "hanzi_source": "变量"
-  },
-  {
-    "id": "sent_0587",
-    "zh": "给变量起个好名字。",
-    "pinyin": "Gěi biànliàng qǐ ge hǎo míngzi.",
-    "en": "Give the variable a good name.",
-    "hanzi_source": "变量"
-  },
-  {
-    "id": "sent_0588",
-    "zh": "把重复的代码写成函数。",
-    "pinyin": "Bǎ chóngfù de dàimǎ xiě chéng hánshù.",
-    "en": "Write repeated code as a function.",
-    "hanzi_source": "函数"
-  },
-  {
-    "id": "sent_0589",
-    "zh": "调用这个函数会返回结果。",
-    "pinyin": "Diàoyòng zhège hánshù huì fǎnhuí jiéguǒ.",
-    "en": "Calling this function will return a result.",
-    "hanzi_source": "函数"
-  },
-  {
-    "id": "sent_0590",
-    "zh": "循环可以重复执行代码。",
-    "pinyin": "Xúnhuán kěyǐ chóngfù zhíxíng dàimǎ.",
-    "en": "Loops can execute code repeatedly.",
-    "hanzi_source": "循环"
-  },
-  {
-    "id": "sent_0591",
-    "zh": "小心无限循环。",
-    "pinyin": "Xiǎoxīn wúxiàn xúnhuán.",
-    "en": "Beware of infinite loops.",
-    "hanzi_source": "循环"
-  },
-  {
-    "id": "sent_0592",
-    "zh": "数组可以存储多个值。",
-    "pinyin": "Shùzǔ kěyǐ cúnchǔ duō ge zhí.",
-    "en": "An array can store multiple values.",
-    "hanzi_source": "数组"
-  },
-  {
-    "id": "sent_0593",
-    "zh": "访问数组的第一个元素。",
-    "pinyin": "Fǎngwèn shùzǔ de dì-yī ge yuánsù.",
-    "en": "Access the first element of the array.",
-    "hanzi_source": "数组"
-  },
-  {
-    "id": "sent_0594",
-    "zh": "听说你要去北京旅行？",
-    "pinyin": "Tīngshuō nǐ yào qù Běijīng lǚxíng?",
-    "en": "I heard you're going to Beijing?",
+    "id": "sent_1082",
+    "zh": "你听说过黄鹤楼吗？",
+    "pinyin": "Nǐ tīngshuōguo Huánghè Lóu ma?",
+    "en": "Have you heard of the Yellow Crane Tower?",
     "hanzi_source": "听说"
   },
   {
-    "id": "sent_0595",
+    "id": "sent_1083",
     "zh": "听说那家餐厅很好吃。",
     "pinyin": "Tīngshuō nà jiā cāntīng hěn hǎochī.",
     "en": "I heard that restaurant is very good.",
     "hanzi_source": "听说"
   },
   {
-    "id": "sent_0596",
-    "zh": "我去过上海。",
-    "pinyin": "Wǒ qù guo Shànghǎi.",
-    "en": "I have been to Shanghai.",
+    "id": "sent_1084",
+    "zh": "我不但听说过，还去过。",
+    "pinyin": "Wǒ búdàn tīngshuōguo, hái qùguo.",
+    "en": "Not only have I heard of it, I've also been there.",
     "hanzi_source": "过"
   },
   {
-    "id": "sent_0597",
+    "id": "sent_1085",
     "zh": "你吃过火锅吗？",
-    "pinyin": "Nǐ chī guo huǒguō ma?",
+    "pinyin": "Nǐ chīguo huǒguō ma?",
     "en": "Have you ever eaten hotpot?",
     "hanzi_source": "过"
   },
   {
-    "id": "sent_0598",
+    "id": "sent_1086",
+    "zh": "你听说过黄鹤楼吗？",
+    "pinyin": "Nǐ tīngshuōguo Huánghè Lóu ma?",
+    "en": "Have you heard of the Yellow Crane Tower?",
+    "hanzi_source": "黄鹤楼"
+  },
+  {
+    "id": "sent_1087",
     "zh": "黄鹤楼在武汉。",
     "pinyin": "Huánghè Lóu zài Wǔhàn.",
-    "en": "Yellow Crane Tower is in Wuhan.",
+    "en": "The Yellow Crane Tower is in Wuhan.",
     "hanzi_source": "黄鹤楼"
   },
   {
-    "id": "sent_0599",
-    "zh": "很多诗人写过黄鹤楼。",
-    "pinyin": "Hěn duō shīrén xiě guo Huánghè Lóu.",
-    "en": "Many poets have written about Yellow Crane Tower.",
-    "hanzi_source": "黄鹤楼"
+    "id": "sent_1088",
+    "zh": "你来武汉多久了？",
+    "pinyin": "Nǐ lái Wǔhàn duō jiǔ le?",
+    "en": "How long have you been in Wuhan?",
+    "hanzi_source": "北京"
   },
   {
-    "id": "sent_0600",
+    "id": "sent_1089",
     "zh": "北京是中国的首都。",
     "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
     "en": "Beijing is the capital of China.",
     "hanzi_source": "北京"
   },
   {
-    "id": "sent_0601",
-    "zh": "北京有很多名胜古迹。",
-    "pinyin": "Běijīng yǒu hěn duō míngshèng gǔjì.",
-    "en": "Beijing has many famous historical sites.",
-    "hanzi_source": "北京"
-  },
-  {
-    "id": "sent_0602",
+    "id": "sent_1090",
     "zh": "长城很有名。",
     "pinyin": "Chángchéng hěn yǒumíng.",
     "en": "The Great Wall is very famous.",
     "hanzi_source": "有名"
   },
   {
-    "id": "sent_0603",
+    "id": "sent_1091",
     "zh": "这家店的面包很有名。",
     "pinyin": "Zhè jiā diàn de miànbāo hěn yǒumíng.",
     "en": "This shop's bread is very famous.",
     "hanzi_source": "有名"
   },
   {
-    "id": "sent_0604",
+    "id": "sent_1092",
     "zh": "天安门广场很大。",
-    "pinyin": "Tiān'ānmén Guǎngchǎng hěn dà.",
+    "pinyin": "Tiān'ān Mén Guǎngchǎng hěn dà.",
     "en": "Tian'anmen Square is very large.",
     "hanzi_source": "天安门"
   },
   {
-    "id": "sent_0605",
+    "id": "sent_1093",
     "zh": "很多游客在天安门拍照。",
-    "pinyin": "Hěn duō yóukè zài Tiān'ānmén pāizhào.",
+    "pinyin": "Hěn duō yóukè zài Tiān'ān Mén pāizhào.",
     "en": "Many tourists take photos at Tian'anmen.",
     "hanzi_source": "天安门"
   },
   {
-    "id": "sent_0606",
+    "id": "sent_1094",
     "zh": "故宫有六百年历史。",
     "pinyin": "Gùgōng yǒu liù bǎi nián lìshǐ.",
-    "en": "The Forbidden City has 600 years of history.",
+    "en": "The Imperial Palace has 600 years of history.",
     "hanzi_source": "故宫"
   },
   {
-    "id": "sent_0607",
+    "id": "sent_1095",
     "zh": "故宫在北京的中心。",
     "pinyin": "Gùgōng zài Běijīng de zhōngxīn.",
-    "en": "The Forbidden City is in the center of Beijing.",
+    "en": "The Imperial Palace is in the center of Beijing.",
     "hanzi_source": "故宫"
   },
   {
-    "id": "sent_0608",
+    "id": "sent_1096",
     "zh": "长城非常壮观。",
     "pinyin": "Chángchéng fēicháng zhuàngguān.",
     "en": "The Great Wall is very magnificent.",
     "hanzi_source": "长城"
   },
   {
-    "id": "sent_0609",
+    "id": "sent_1097",
     "zh": "不到长城非好汉。",
     "pinyin": "Bú dào Chángchéng fēi hǎohàn.",
-    "en": "He who hasn't been to the Great Wall is not a true man.",
+    "en": "He who hasn't been to the Great Wall is not a true hero.",
     "hanzi_source": "长城"
   },
   {
-    "id": "sent_0610",
+    "id": "sent_1098",
     "zh": "成都是美食之都。",
     "pinyin": "Chéngdū shì měishí zhī dū.",
     "en": "Chengdu is the capital of delicious food.",
     "hanzi_source": "美食"
   },
   {
-    "id": "sent_0611",
+    "id": "sent_1099",
     "zh": "中国美食很有名。",
     "pinyin": "Zhōngguó měishí hěn yǒumíng.",
     "en": "Chinese cuisine is very famous.",
     "hanzi_source": "美食"
   },
   {
-    "id": "sent_0612",
+    "id": "sent_1100",
+    "zh": "我不但听说过，还去吃过火锅。",
+    "pinyin": "Wǒ búdàn tīngshuōguo, hái qù chīguo huǒguō.",
+    "en": "Not only have I heard of it, I've also eaten hotpot.",
+    "hanzi_source": "火锅"
+  },
+  {
+    "id": "sent_1101",
     "zh": "冬天吃火锅很暖和。",
     "pinyin": "Dōngtiān chī huǒguō hěn nuǎnhuo.",
     "en": "Eating hotpot in winter is very warming.",
     "hanzi_source": "火锅"
   },
   {
-    "id": "sent_0613",
-    "zh": "四川火锅很辣。",
-    "pinyin": "Sìchuān huǒguō hěn là.",
-    "en": "Sichuan hotpot is very spicy.",
-    "hanzi_source": "火锅"
-  },
-  {
-    "id": "sent_0614",
+    "id": "sent_1102",
     "zh": "暑假你去哪儿了？",
     "pinyin": "Shǔjià nǐ qù nǎr le?",
     "en": "Where did you go for summer vacation?",
     "hanzi_source": "暑假"
   },
   {
-    "id": "sent_0615",
+    "id": "sent_1103",
     "zh": "暑假有两个月。",
     "pinyin": "Shǔjià yǒu liǎng ge yuè.",
     "en": "Summer vacation is two months long.",
     "hanzi_source": "暑假"
   },
   {
-    "id": "sent_0616",
+    "id": "sent_1104",
     "zh": "上海是个大城市。",
     "pinyin": "Shànghǎi shì ge dà chéngshì.",
     "en": "Shanghai is a big city.",
     "hanzi_source": "城市"
   },
   {
-    "id": "sent_0617",
+    "id": "sent_1105",
     "zh": "我喜欢住在小城市。",
     "pinyin": "Wǒ xǐhuan zhù zài xiǎo chéngshì.",
     "en": "I like living in small cities.",
     "hanzi_source": "城市"
   },
   {
-    "id": "sent_0618",
+    "id": "sent_1106",
     "zh": "我喜欢旅游。",
     "pinyin": "Wǒ xǐhuan lǚyóu.",
     "en": "I like to travel.",
     "hanzi_source": "旅游"
   },
   {
-    "id": "sent_0619",
+    "id": "sent_1107",
     "zh": "云南是个旅游的好地方。",
     "pinyin": "Yúnnán shì ge lǚyóu de hǎo dìfang.",
     "en": "Yunnan is a good place to travel.",
     "hanzi_source": "旅游"
   },
   {
-    "id": "sent_0620",
+    "id": "sent_1108",
     "zh": "上海很现代化。",
     "pinyin": "Shànghǎi hěn xiàndàihuà.",
     "en": "Shanghai is very modern.",
     "hanzi_source": "上海"
   },
   {
-    "id": "sent_0621",
-    "zh": "外滩是上海的标志。",
-    "pinyin": "Wàitān shì Shànghǎi de biāozhì.",
-    "en": "The Bund is a symbol of Shanghai.",
+    "id": "sent_1109",
+    "zh": "除了北京，我还去过上海。",
+    "pinyin": "Chúle Běijīng, wǒ hái qùguo Shànghǎi.",
+    "en": "Besides Beijing, I've also been to Shanghai.",
     "hanzi_source": "上海"
   },
   {
-    "id": "sent_0622",
+    "id": "sent_1110",
     "zh": "西安有兵马俑。",
     "pinyin": "Xī'ān yǒu bīngmǎyǒng.",
     "en": "Xi'an has the Terracotta Warriors.",
     "hanzi_source": "西安"
   },
   {
-    "id": "sent_0623",
+    "id": "sent_1111",
     "zh": "西安是古代都城。",
     "pinyin": "Xī'ān shì gǔdài dūchéng.",
     "en": "Xi'an was an ancient capital.",
     "hanzi_source": "西安"
   },
   {
-    "id": "sent_0624",
+    "id": "sent_1112",
     "zh": "北京是中国的首都。",
     "pinyin": "Běijīng shì Zhōngguó de shǒudū.",
     "en": "Beijing is the capital of China.",
     "hanzi_source": "首都"
   },
   {
-    "id": "sent_0625",
+    "id": "sent_1113",
     "zh": "首都是一个国家的中心。",
     "pinyin": "Shǒudū shì yí ge guójiā de zhōngxīn.",
     "en": "The capital is the center of a country.",
     "hanzi_source": "首都"
   },
   {
-    "id": "sent_0626",
-    "zh": "我一定努力学习。",
-    "pinyin": "Wǒ yídìng nǔlì xuéxí.",
-    "en": "I will certainly study hard.",
+    "id": "sent_1114",
+    "zh": "你能来参加我的生日聚会吗？——当然，我一定去。",
+    "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma? — Dāngrán, wǒ yídìng qù.",
+    "en": "Can you come to my birthday party? — Of course, I'll definitely go.",
     "hanzi_source": "一定"
   },
   {
-    "id": "sent_0627",
+    "id": "sent_1115",
     "zh": "你一定要来！",
     "pinyin": "Nǐ yídìng yào lái!",
     "en": "You must come for sure!",
     "hanzi_source": "一定"
   },
   {
-    "id": "sent_0628",
+    "id": "sent_1116",
     "zh": "这是一所大学。",
     "pinyin": "Zhè shì yī suǒ dàxué.",
     "en": "This is a university.",
     "hanzi_source": "所"
   },
   {
-    "id": "sent_0629",
+    "id": "sent_1117",
     "zh": "北京有很多所好学校。",
     "pinyin": "Běijīng yǒu hěn duō suǒ hǎo xuéxiào.",
     "en": "Beijing has many good schools.",
     "hanzi_source": "所"
   },
   {
-    "id": "sent_0630",
+    "id": "sent_1118",
     "zh": "我明年上大学。",
     "pinyin": "Wǒ míngnián shàng dàxué.",
     "en": "I will go to university next year.",
     "hanzi_source": "大学"
   },
   {
-    "id": "sent_0631",
+    "id": "sent_1119",
     "zh": "北京大学很有名。",
     "pinyin": "Běijīng Dàxué hěn yǒumíng.",
     "en": "Peking University is very famous.",
     "hanzi_source": "大学"
   },
   {
-    "id": "sent_0632",
+    "id": "sent_1120",
     "zh": "北京举办了2008年奥运会。",
-    "pinyin": "Běijīng jǔbàn le 2008 nián Àoyùnhuì.",
+    "pinyin": "Běijīng jǔbàn le èr líng líng bā nián Àoyùnhuì.",
     "en": "Beijing hosted the 2008 Olympics.",
     "hanzi_source": "举办"
   },
   {
-    "id": "sent_0633",
+    "id": "sent_1121",
     "zh": "学校举办了一个晚会。",
     "pinyin": "Xuéxiào jǔbàn le yí ge wǎnhuì.",
     "en": "The school held a party.",
     "hanzi_source": "举办"
   },
   {
-    "id": "sent_0634",
-    "zh": "奥运会四年一次。",
-    "pinyin": "Àoyùnhuì sì nián yī cì.",
-    "en": "The Olympics happen once every four years.",
+    "id": "sent_1122",
+    "zh": "北京举办了2008年奥运会。",
+    "pinyin": "Běijīng jǔbàn le èr líng líng bā nián Àoyùnhuì.",
+    "en": "Beijing hosted the 2008 Olympics.",
     "hanzi_source": "奥运会"
   },
   {
-    "id": "sent_0635",
+    "id": "sent_1123",
     "zh": "我喜欢看奥运会。",
     "pinyin": "Wǒ xǐhuan kàn Àoyùnhuì.",
     "en": "I like watching the Olympics.",
     "hanzi_source": "奥运会"
   },
   {
-    "id": "sent_0636",
+    "id": "sent_1124",
     "zh": "除了北京，我还去过上海。",
-    "pinyin": "Chúle Běijīng, wǒ hái qù guo Shànghǎi.",
+    "pinyin": "Chúle Běijīng, wǒ hái qùguo Shànghǎi.",
     "en": "Besides Beijing, I have also been to Shanghai.",
     "hanzi_source": "除了"
   },
   {
-    "id": "sent_0637",
+    "id": "sent_1125",
     "zh": "除了他，大家都来了。",
     "pinyin": "Chúle tā, dàjiā dōu lái le.",
     "en": "Everyone came except him.",
     "hanzi_source": "除了"
   },
   {
-    "id": "sent_0638",
+    "id": "sent_1126",
     "zh": "奥林匹克公园很大。",
     "pinyin": "Àolínpǐkè Gōngyuán hěn dà.",
     "en": "Olympic Park is very large.",
     "hanzi_source": "奥林匹克"
   },
   {
-    "id": "sent_0639",
+    "id": "sent_1127",
     "zh": "奥林匹克精神是和平。",
     "pinyin": "Àolínpǐkè jīngshén shì hépíng.",
     "en": "The Olympic spirit is peace.",
     "hanzi_source": "奥林匹克"
   },
   {
-    "id": "sent_0640",
-    "zh": "我们去公园散步吧。",
-    "pinyin": "Wǒmen qù gōngyuán sànbù ba.",
-    "en": "Let's go for a walk in the park.",
+    "id": "sent_1128",
+    "zh": "鸟巢在北京奥林匹克公园。",
+    "pinyin": "Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.",
+    "en": "The Bird's Nest is in Beijing Olympic Park.",
     "hanzi_source": "公园"
   },
   {
-    "id": "sent_0641",
+    "id": "sent_1129",
     "zh": "这个公园有很多花。",
     "pinyin": "Zhège gōngyuán yǒu hěn duō huā.",
     "en": "This park has many flowers.",
     "hanzi_source": "公园"
   },
   {
-    "id": "sent_0642",
+    "id": "sent_1130",
     "zh": "鸟巢在北京奥林匹克公园。",
     "pinyin": "Niǎocháo zài Běijīng Àolínpǐkè Gōngyuán.",
     "en": "The Bird's Nest is in Beijing Olympic Park.",
     "hanzi_source": "鸟巢"
   },
   {
-    "id": "sent_0643",
+    "id": "sent_1131",
     "zh": "鸟巢的设计很独特。",
     "pinyin": "Niǎocháo de shèjì hěn dútè.",
     "en": "The design of the Bird's Nest is very unique.",
     "hanzi_source": "鸟巢"
   },
   {
-    "id": "sent_0644",
+    "id": "sent_1132",
     "zh": "水立方是游泳比赛场馆。",
     "pinyin": "Shuǐlìfāng shì yóuyǒng bǐsài chǎngguǎn.",
     "en": "The Water Cube is a swimming competition venue.",
     "hanzi_source": "水立方"
   },
   {
-    "id": "sent_0645",
+    "id": "sent_1133",
     "zh": "晚上水立方会亮灯。",
-    "pinyin": "Wǎnshàng Shuǐlìfāng huì liàng dēng.",
+    "pinyin": "Wǎnshang Shuǐlìfāng huì liàng dēng.",
     "en": "At night, the Water Cube lights up.",
     "hanzi_source": "水立方"
   },
   {
-    "id": "sent_0646",
+    "id": "sent_1134",
     "zh": "来北京一定要吃北京烤鸭。",
     "pinyin": "Lái Běijīng yídìng yào chī Běijīng kǎoyā.",
     "en": "When you come to Beijing, you must eat Peking duck.",
     "hanzi_source": "北京烤鸭"
   },
   {
-    "id": "sent_0647",
+    "id": "sent_1135",
     "zh": "北京烤鸭皮脆肉嫩。",
     "pinyin": "Běijīng kǎoyā pí cuì ròu nèn.",
     "en": "Peking duck has crispy skin and tender meat.",
     "hanzi_source": "北京烤鸭"
   },
   {
-    "id": "sent_0648",
+    "id": "sent_1136",
+    "zh": "她的头发是金色的。",
+    "pinyin": "Tā de tóufa shì jīnsè de.",
+    "en": "Her hair is golden.",
+    "hanzi_source": "头发"
+  },
+  {
+    "id": "sent_1137",
+    "zh": "我今天剪头发了。",
+    "pinyin": "Wǒ jīntiān jiǎn tóufa le.",
+    "en": "I got a haircut today.",
+    "hanzi_source": "头发"
+  },
+  {
+    "id": "sent_1138",
+    "zh": "你喜欢什么颜色？",
+    "pinyin": "Nǐ xǐhuan shénme yánsè?",
+    "en": "What color do you like?",
+    "hanzi_source": "颜色"
+  },
+  {
+    "id": "sent_1139",
+    "zh": "她的头发是什么颜色？",
+    "pinyin": "Tā de tóufa shì shénme yánsè?",
+    "en": "What color is her hair?",
+    "hanzi_source": "颜色"
+  },
+  {
+    "id": "sent_1140",
+    "zh": "她的头有点儿疼。",
+    "pinyin": "Tā de tóu yǒudiǎnr téng.",
+    "en": "Her head hurts a little.",
+    "hanzi_source": "头"
+  },
+  {
+    "id": "sent_1141",
+    "zh": "请把头抬起来。",
+    "pinyin": "Qǐng bǎ tóu tái qǐlai.",
+    "en": "Please lift your head up.",
+    "hanzi_source": "头"
+  },
+  {
+    "id": "sent_1142",
+    "zh": "她的头发是金色的。",
+    "pinyin": "Tā de tóufa shì jīnsè de.",
+    "en": "Her hair is golden.",
+    "hanzi_source": "金色"
+  },
+  {
+    "id": "sent_1143",
+    "zh": "这枚戒指是金色的。",
+    "pinyin": "Zhè méi jièzhi shì jīnsè de.",
+    "en": "This ring is gold-colored.",
+    "hanzi_source": "金色"
+  },
+  {
+    "id": "sent_1144",
+    "zh": "她长得像公主。",
+    "pinyin": "Tā zhǎng de xiàng gōngzhǔ.",
+    "en": "She looks like a princess.",
+    "hanzi_source": "像"
+  },
+  {
+    "id": "sent_1145",
+    "zh": "你像你妈妈。",
+    "pinyin": "Nǐ xiàng nǐ māma.",
+    "en": "You look like your mother.",
+    "hanzi_source": "像"
+  },
+  {
+    "id": "sent_1146",
+    "zh": "她长得像公主。",
+    "pinyin": "Tā zhǎng de xiàng gōngzhǔ.",
+    "en": "She looks like a princess.",
+    "hanzi_source": "公主"
+  },
+  {
+    "id": "sent_1147",
+    "zh": "这个故事里有一位公主。",
+    "pinyin": "Zhège gùshi lǐ yǒu yī wèi gōngzhǔ.",
+    "en": "There is a princess in this story.",
+    "hanzi_source": "公主"
+  },
+  {
+    "id": "sent_1148",
+    "zh": "她长得很漂亮。",
+    "pinyin": "Tā zhǎng de hěn piàoliang.",
+    "en": "She grew up to be very beautiful.",
+    "hanzi_source": "长"
+  },
+  {
+    "id": "sent_1149",
+    "zh": "她长什么样子？",
+    "pinyin": "Tā zhǎng shénme yàngzi?",
+    "en": "What does she look like?",
+    "hanzi_source": "长"
+  },
+  {
+    "id": "sent_1150",
+    "zh": "她的眼睛很大。",
+    "pinyin": "Tā de yǎnjing hěn dà.",
+    "en": "Her eyes are big.",
+    "hanzi_source": "眼睛"
+  },
+  {
+    "id": "sent_1151",
+    "zh": "我的眼睛有点儿累。",
+    "pinyin": "Wǒ de yǎnjing yǒudiǎnr lèi.",
+    "en": "My eyes are a bit tired.",
+    "hanzi_source": "眼睛"
+  },
+  {
+    "id": "sent_1152",
+    "zh": "她的鼻子很好看。",
+    "pinyin": "Tā de bízi hěn hǎokàn.",
+    "en": "Her nose looks very nice.",
+    "hanzi_source": "鼻子"
+  },
+  {
+    "id": "sent_1153",
+    "zh": "他的鼻子有点儿大。",
+    "pinyin": "Tā de bízi yǒudiǎnr dà.",
+    "en": "His nose is a bit big.",
+    "hanzi_source": "鼻子"
+  },
+  {
+    "id": "sent_1154",
+    "zh": "她的嘴巴很小。",
+    "pinyin": "Tā de zuǐba hěn xiǎo.",
+    "en": "Her mouth is small.",
+    "hanzi_source": "嘴巴"
+  },
+  {
+    "id": "sent_1155",
+    "zh": "请把嘴巴张开。",
+    "pinyin": "Qǐng bǎ zuǐba zhāng kāi.",
+    "en": "Please open your mouth.",
+    "hanzi_source": "嘴巴"
+  },
+  {
+    "id": "sent_1156",
+    "zh": "她的个子很高。",
+    "pinyin": "Tā de gèzi hěn gāo.",
+    "en": "She is quite tall.",
+    "hanzi_source": "个子"
+  },
+  {
+    "id": "sent_1157",
+    "zh": "你的个子多高？",
+    "pinyin": "Nǐ de gèzi duō gāo?",
+    "en": "How tall are you?",
+    "hanzi_source": "个子"
+  },
+  {
+    "id": "sent_1158",
+    "zh": "她的皮肤很白。",
+    "pinyin": "Tā de pífū hěn bái.",
+    "en": "Her skin is very fair.",
+    "hanzi_source": "皮肤"
+  },
+  {
+    "id": "sent_1159",
+    "zh": "夏天要保护皮肤。",
+    "pinyin": "Xiàtiān yào bǎohù pífū.",
+    "en": "You need to protect your skin in summer.",
+    "hanzi_source": "皮肤"
+  },
+  {
+    "id": "sent_1160",
+    "zh": "她笑起来很甜。",
+    "pinyin": "Tā xiào qǐlai hěn tián.",
+    "en": "Her smile is very sweet.",
+    "hanzi_source": "笑"
+  },
+  {
+    "id": "sent_1161",
+    "zh": "大家都笑了。",
+    "pinyin": "Dàjiā dōu xiào le.",
+    "en": "Everyone laughed.",
+    "hanzi_source": "笑"
+  },
+  {
+    "id": "sent_1162",
+    "zh": "她笑起来很甜。",
+    "pinyin": "Tā xiào qǐlai hěn tián.",
+    "en": "Her smile is very sweet.",
+    "hanzi_source": "甜"
+  },
+  {
+    "id": "sent_1163",
+    "zh": "这个水果很甜。",
+    "pinyin": "Zhège shuǐguǒ hěn tián.",
+    "en": "This fruit is very sweet.",
+    "hanzi_source": "甜"
+  },
+  {
+    "id": "sent_1164",
+    "zh": "她戴着一顶帽子。",
+    "pinyin": "Tā dài zhe yī dǐng màozi.",
+    "en": "She is wearing a hat.",
+    "hanzi_source": "着"
+  },
+  {
+    "id": "sent_1165",
+    "zh": "门开着呢。",
+    "pinyin": "Mén kāi zhe ne.",
+    "en": "The door is open.",
+    "hanzi_source": "着"
+  },
+  {
+    "id": "sent_1166",
+    "zh": "她穿着一条粉红色的裙子。",
+    "pinyin": "Tā chuān zhe yī tiáo fěnhóngsè de qúnzi.",
+    "en": "She's wearing a pink skirt.",
+    "hanzi_source": "粉红色"
+  },
+  {
+    "id": "sent_1167",
+    "zh": "我喜欢粉红色。",
+    "pinyin": "Wǒ xǐhuan fěnhóngsè.",
+    "en": "I like pink.",
+    "hanzi_source": "粉红色"
+  },
+  {
+    "id": "sent_1168",
+    "zh": "她穿着一条粉红色的裙子。",
+    "pinyin": "Tā chuān zhe yī tiáo fěnhóngsè de qúnzi.",
+    "en": "She's wearing a pink skirt.",
+    "hanzi_source": "裙子"
+  },
+  {
+    "id": "sent_1169",
+    "zh": "这条裙子很好看。",
+    "pinyin": "Zhè tiáo qúnzi hěn hǎokàn.",
+    "en": "This dress looks very nice.",
+    "hanzi_source": "裙子"
+  },
+  {
+    "id": "sent_1170",
+    "zh": "她戴着一朵花。",
+    "pinyin": "Tā dài zhe yī duǒ huā.",
+    "en": "She is wearing a flower.",
+    "hanzi_source": "戴"
+  },
+  {
+    "id": "sent_1171",
+    "zh": "冬天要戴帽子。",
+    "pinyin": "Dōngtiān yào dài màozi.",
+    "en": "You should wear a hat in winter.",
+    "hanzi_source": "戴"
+  },
+  {
+    "id": "sent_1172",
+    "zh": "她戴着一朵花。",
+    "pinyin": "Tā dài zhe yī duǒ huā.",
+    "en": "She is wearing a flower.",
+    "hanzi_source": "朵"
+  },
+  {
+    "id": "sent_1173",
+    "zh": "天上有一朵云。",
+    "pinyin": "Tiān shàng yǒu yī duǒ yún.",
+    "en": "There's a cloud in the sky.",
+    "hanzi_source": "朵"
+  },
+  {
+    "id": "sent_1174",
+    "zh": "她牵着妈妈的手。",
+    "pinyin": "Tā qiān zhe māma de shǒu.",
+    "en": "She is holding her mother's hand.",
+    "hanzi_source": "手"
+  },
+  {
+    "id": "sent_1175",
+    "zh": "请举手。",
+    "pinyin": "Qǐng jǔ shǒu.",
+    "en": "Please raise your hand.",
+    "hanzi_source": "手"
+  },
+  {
+    "id": "sent_1176",
+    "zh": "她牵着妈妈的手。",
+    "pinyin": "Tā qiān zhe māma de shǒu.",
+    "en": "She is holding her mother's hand.",
+    "hanzi_source": "牵"
+  },
+  {
+    "id": "sent_1177",
+    "zh": "他牵着一条狗散步。",
+    "pinyin": "Tā qiān zhe yī tiáo gǒu sànbù.",
+    "en": "He is walking a dog.",
+    "hanzi_source": "牵"
+  },
+  {
+    "id": "sent_1178",
+    "zh": "这个孩子很可爱。",
+    "pinyin": "Zhège háizi hěn kě'ài.",
+    "en": "This child is very lovely.",
+    "hanzi_source": "可爱"
+  },
+  {
+    "id": "sent_1179",
+    "zh": "她笑起来很可爱。",
+    "pinyin": "Tā xiào qǐlai hěn kě'ài.",
+    "en": "Her smile is very cute.",
+    "hanzi_source": "可爱"
+  },
+  {
+    "id": "sent_1180",
+    "zh": "他穿着一件白色的T恤衫。",
+    "pinyin": "Tā chuān zhe yī jiàn báisè de T xù shān.",
+    "en": "He's wearing a white T-shirt.",
+    "hanzi_source": "T恤衫"
+  },
+  {
+    "id": "sent_1181",
+    "zh": "这件T恤衫很舒服。",
+    "pinyin": "Zhè jiàn T xù shān hěn shūfu.",
+    "en": "This T-shirt is very comfortable.",
+    "hanzi_source": "T恤衫"
+  },
+  {
+    "id": "sent_1182",
+    "zh": "他戴着一副眼镜。",
+    "pinyin": "Tā dài zhe yī fù yǎnjìng.",
+    "en": "He's wearing a pair of glasses.",
+    "hanzi_source": "眼镜"
+  },
+  {
+    "id": "sent_1183",
+    "zh": "我的眼镜找不到了。",
+    "pinyin": "Wǒ de yǎnjìng zhǎo bú dào le.",
+    "en": "I can't find my glasses.",
+    "hanzi_source": "眼镜"
+  },
+  {
+    "id": "sent_1184",
     "zh": "祝你生日快乐！",
     "pinyin": "Zhù nǐ shēngrì kuàilè!",
     "en": "Happy birthday to you!",
     "hanzi_source": "生日"
   },
   {
-    "id": "sent_0649",
+    "id": "sent_1185",
     "zh": "我的生日是五月七号。",
     "pinyin": "Wǒ de shēngrì shì wǔ yuè qī hào.",
     "en": "My birthday is May 7th.",
     "hanzi_source": "生日"
   },
   {
-    "id": "sent_0650",
-    "zh": "你想参加我的生日聚会吗？",
-    "pinyin": "Nǐ xiǎng cānjiā wǒ de shēngrì jùhuì ma?",
-    "en": "Do you want to come to my birthday party?",
+    "id": "sent_1186",
+    "zh": "你能来参加我的生日聚会吗？",
+    "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma?",
+    "en": "Can you come to my birthday party?",
     "hanzi_source": "参加"
   },
   {
-    "id": "sent_0651",
+    "id": "sent_1187",
     "zh": "很多人参加了比赛。",
     "pinyin": "Hěn duō rén cānjiā le bǐsài.",
     "en": "Many people participated in the competition.",
     "hanzi_source": "参加"
   },
   {
-    "id": "sent_0652",
-    "zh": "周末有一个聚会。",
-    "pinyin": "Zhōumò yǒu yí ge jùhuì.",
-    "en": "There's a party on the weekend.",
+    "id": "sent_1188",
+    "zh": "你能来参加我的生日聚会吗？",
+    "pinyin": "Nǐ néng lái cānjiā wǒ de shēngrì jùhuì ma?",
+    "en": "Can you come to my birthday party?",
     "hanzi_source": "聚会"
   },
   {
-    "id": "sent_0653",
+    "id": "sent_1189",
     "zh": "朋友聚会很开心。",
     "pinyin": "Péngyou jùhuì hěn kāixīn.",
     "en": "Gathering with friends is very happy.",
     "hanzi_source": "聚会"
   },
   {
-    "id": "sent_0654",
+    "id": "sent_1190",
+    "zh": "当然，我一定去。",
+    "pinyin": "Dāngrán, wǒ yídìng qù.",
+    "en": "Of course, I'll definitely go.",
+    "hanzi_source": "当然"
+  },
+  {
+    "id": "sent_1191",
     "zh": "当然可以！",
     "pinyin": "Dāngrán kěyǐ!",
     "en": "Of course you can!",
     "hanzi_source": "当然"
   },
   {
-    "id": "sent_0655",
-    "zh": "我当然会来。",
-    "pinyin": "Wǒ dāngrán huì lái.",
-    "en": "Of course I will come.",
-    "hanzi_source": "当然"
-  },
-  {
-    "id": "sent_0656",
+    "id": "sent_1192",
     "zh": "请把你的地址发给我。",
     "pinyin": "Qǐng bǎ nǐ de dìzhǐ fā gěi wǒ.",
     "en": "Please send me your address.",
     "hanzi_source": "地址"
   },
   {
-    "id": "sent_0657",
+    "id": "sent_1193",
     "zh": "这个地址不对。",
     "pinyin": "Zhège dìzhǐ bú duì.",
     "en": "This address is incorrect.",
     "hanzi_source": "地址"
   },
   {
-    "id": "sent_0658",
-    "zh": "我给你发了一条信息。",
-    "pinyin": "Wǒ gěi nǐ fā le yī tiáo xìnxī.",
-    "en": "I sent you a message.",
+    "id": "sent_1194",
+    "zh": "我给你发了地址。",
+    "pinyin": "Wǒ gěi nǐ fā le dìzhǐ.",
+    "en": "I sent you the address.",
     "hanzi_source": "发"
   },
   {
-    "id": "sent_0659",
+    "id": "sent_1195",
     "zh": "请发邮件给我。",
     "pinyin": "Qǐng fā yóujiàn gěi wǒ.",
     "en": "Please send me an email.",
     "hanzi_source": "发"
   },
   {
-    "id": "sent_0660",
+    "id": "sent_1196",
     "zh": "我送了你一个礼物。",
     "pinyin": "Wǒ sòng le nǐ yí ge lǐwù.",
     "en": "I gave you a gift.",
     "hanzi_source": "送"
   },
   {
-    "id": "sent_0661",
+    "id": "sent_1197",
     "zh": "你送什么给他？",
     "pinyin": "Nǐ sòng shénme gěi tā?",
     "en": "What are you giving him?",
     "hanzi_source": "送"
   },
   {
-    "id": "sent_0662",
+    "id": "sent_1198",
     "zh": "谢谢你的礼物。",
     "pinyin": "Xièxie nǐ de lǐwù.",
     "en": "Thank you for your gift.",
     "hanzi_source": "礼物"
   },
   {
-    "id": "sent_0663",
+    "id": "sent_1199",
     "zh": "我买了一份生日礼物。",
     "pinyin": "Wǒ mǎi le yī fèn shēngrì lǐwù.",
     "en": "I bought a birthday gift.",
     "hanzi_source": "礼物"
   },
   {
-    "id": "sent_0664",
+    "id": "sent_1200",
     "zh": "电梯在右边。",
     "pinyin": "Diàntī zài yòubiān.",
     "en": "The elevator is on the right.",
     "hanzi_source": "电梯"
   },
   {
-    "id": "sent_0665",
+    "id": "sent_1201",
     "zh": "电梯坏了，我们走楼梯吧。",
     "pinyin": "Diàntī huài le, wǒmen zǒu lóutī ba.",
     "en": "The elevator is broken, let's take the stairs.",
     "hanzi_source": "电梯"
   },
   {
-    "id": "sent_0666",
+    "id": "sent_1202",
     "zh": "我们坐电梯上去。",
     "pinyin": "Wǒmen zuò diàntī shàngqù.",
     "en": "Let's take the elevator up.",
     "hanzi_source": "上去"
   },
   {
-    "id": "sent_0667",
+    "id": "sent_1203",
     "zh": "他上楼去了。",
     "pinyin": "Tā shànglóu qù le.",
     "en": "He went upstairs.",
     "hanzi_source": "上去"
   },
   {
-    "id": "sent_0668",
-    "zh": "把门关上。",
-    "pinyin": "Bǎ mén guān shàng.",
-    "en": "Close the door.",
-    "hanzi_source": "把"
-  },
-  {
-    "id": "sent_0669",
+    "id": "sent_1204",
     "zh": "把蛋糕放在冰箱里。",
     "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
     "en": "Put the cake in the refrigerator.",
     "hanzi_source": "把"
   },
   {
-    "id": "sent_0670",
+    "id": "sent_1205",
+    "zh": "把门关上。",
+    "pinyin": "Bǎ mén guān shàng.",
+    "en": "Close the door.",
+    "hanzi_source": "把"
+  },
+  {
+    "id": "sent_1206",
     "zh": "这个蛋糕很好吃。",
     "pinyin": "Zhège dàngāo hěn hǎochī.",
     "en": "This cake is very tasty.",
     "hanzi_source": "蛋糕"
   },
   {
-    "id": "sent_0671",
+    "id": "sent_1207",
     "zh": "生日蛋糕上插着蜡烛。",
     "pinyin": "Shēngrì dàngāo shàng chā zhe làzhú.",
     "en": "There are candles on the birthday cake.",
     "hanzi_source": "蛋糕"
   },
   {
-    "id": "sent_0672",
-    "zh": "请把书放在桌子上。",
-    "pinyin": "Qǐng bǎ shū fàng zài zhuōzi shàng.",
-    "en": "Please put the book on the desk.",
+    "id": "sent_1208",
+    "zh": "把蛋糕放在冰箱里。",
+    "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
+    "en": "Put the cake in the refrigerator.",
     "hanzi_source": "放"
   },
   {
-    "id": "sent_0673",
+    "id": "sent_1209",
     "zh": "包放在哪儿了？",
     "pinyin": "Bāo fàng zài nǎr le?",
     "en": "Where did you put the bag?",
     "hanzi_source": "放"
   },
   {
-    "id": "sent_0674",
+    "id": "sent_1210",
     "zh": "冰箱里有牛奶。",
     "pinyin": "Bīngxiāng lǐ yǒu niúnǎi.",
     "en": "There's milk in the refrigerator.",
     "hanzi_source": "冰箱"
   },
   {
-    "id": "sent_0675",
-    "zh": "把水果放冰箱里保鲜。",
-    "pinyin": "Bǎ shuǐguǒ fàng bīngxiāng lǐ bǎoxiān.",
-    "en": "Put the fruit in the fridge to keep it fresh.",
+    "id": "sent_1211",
+    "zh": "把蛋糕放在冰箱里。",
+    "pinyin": "Bǎ dàngāo fàng zài bīngxiāng lǐ.",
+    "en": "Put the cake in the refrigerator.",
     "hanzi_source": "冰箱"
   },
   {
-    "id": "sent_0676",
+    "id": "sent_1212",
     "zh": "他邀请我去他的生日聚会。",
     "pinyin": "Tā yāoqǐng wǒ qù tā de shēngrì jùhuì.",
     "en": "He invited me to his birthday party.",
     "hanzi_source": "邀请"
   },
   {
-    "id": "sent_0677",
+    "id": "sent_1213",
     "zh": "你邀请了多少人？",
     "pinyin": "Nǐ yāoqǐng le duōshao rén?",
     "en": "How many people did you invite?",
     "hanzi_source": "邀请"
   },
   {
-    "id": "sent_0678",
+    "id": "sent_1214",
     "zh": "我住在一个安静的小区。",
     "pinyin": "Wǒ zhù zài yí ge ānjìng de xiǎoqū.",
     "en": "I live in a quiet residential area.",
     "hanzi_source": "小区"
   },
   {
-    "id": "sent_0679",
+    "id": "sent_1215",
     "zh": "小区门口有一个超市。",
     "pinyin": "Xiǎoqū ménkǒu yǒu yí ge chāoshì.",
     "en": "There's a supermarket at the entrance of the community.",
     "hanzi_source": "小区"
   },
   {
-    "id": "sent_0680",
+    "id": "sent_1216",
     "zh": "我在门口等你。",
     "pinyin": "Wǒ zài ménkǒu děng nǐ.",
     "en": "I'll wait for you at the entrance.",
     "hanzi_source": "门口"
   },
   {
-    "id": "sent_0681",
-    "zh": "学校门口有很多车。",
-    "pinyin": "Xuéxiào ménkǒu yǒu hěn duō chē.",
-    "en": "There are many cars at the school entrance.",
+    "id": "sent_1217",
+    "zh": "小区门口有一个超市。",
+    "pinyin": "Xiǎoqū ménkǒu yǒu yí ge chāoshì.",
+    "en": "There's a supermarket at the entrance of the community.",
     "hanzi_source": "门口"
   },
   {
-    "id": "sent_0682",
+    "id": "sent_1218",
     "zh": "我们住在一栋楼里。",
     "pinyin": "Wǒmen zhù zài yī dòng lóu lǐ.",
     "en": "We live in one building.",
     "hanzi_source": "栋"
   },
   {
-    "id": "sent_0683",
+    "id": "sent_1219",
     "zh": "这栋楼有十层。",
     "pinyin": "Zhè dòng lóu yǒu shí céng.",
     "en": "This building has ten floors.",
     "hanzi_source": "栋"
   },
   {
-    "id": "sent_0684",
+    "id": "sent_1220",
     "zh": "我马上到。",
     "pinyin": "Wǒ mǎshàng dào.",
     "en": "I'll be there right away.",
     "hanzi_source": "马上"
   },
   {
-    "id": "sent_0685",
+    "id": "sent_1221",
     "zh": "电影马上开始了。",
     "pinyin": "Diànyǐng mǎshàng kāishǐ le.",
     "en": "The movie is about to start.",
     "hanzi_source": "马上"
   },
   {
-    "id": "sent_0686",
+    "id": "sent_1222",
     "zh": "你快下来吧。",
     "pinyin": "Nǐ kuài xiàlái ba.",
     "en": "Come down quickly.",
     "hanzi_source": "下来"
   },
   {
-    "id": "sent_0687",
+    "id": "sent_1223",
     "zh": "他从楼上下来了。",
     "pinyin": "Tā cóng lóu shàng xiàlái le.",
     "en": "He came down from upstairs.",
     "hanzi_source": "下来"
   },
   {
-    "id": "sent_0688",
+    "id": "sent_1224",
     "zh": "他十点才来。",
     "pinyin": "Tā shí diǎn cái lái.",
     "en": "He didn't come until ten o'clock.",
     "hanzi_source": "才"
   },
   {
-    "id": "sent_0689",
+    "id": "sent_1225",
     "zh": "我吃完饭才做作业。",
     "pinyin": "Wǒ chī wán fàn cái zuò zuòyè.",
     "en": "I only do homework after finishing dinner.",
     "hanzi_source": "才"
   },
   {
-    "id": "sent_0690",
+    "id": "sent_1226",
     "zh": "我发现了一个秘密。",
     "pinyin": "Wǒ fāxiàn le yí ge mìmì.",
     "en": "I discovered a secret.",
     "hanzi_source": "发现"
   },
   {
-    "id": "sent_0691",
+    "id": "sent_1227",
     "zh": "你发现有什么不同吗？",
     "pinyin": "Nǐ fāxiàn yǒu shénme bùtóng ma?",
     "en": "Did you notice any difference?",
     "hanzi_source": "发现"
   },
   {
-    "id": "sent_0692",
+    "id": "sent_1228",
     "zh": "他很热情地欢迎我们。",
     "pinyin": "Tā hěn rèqíng de huānyíng wǒmen.",
     "en": "He welcomed us warmly.",
     "hanzi_source": "热情"
   },
   {
-    "id": "sent_0693",
+    "id": "sent_1229",
     "zh": "这位服务员很热情。",
     "pinyin": "Zhè wèi fúwùyuán hěn rèqíng.",
     "en": "This waiter is very enthusiastic.",
     "hanzi_source": "热情"
   },
   {
-    "id": "sent_0694",
+    "id": "sent_1230",
     "zh": "欢迎来我家！",
     "pinyin": "Huānyíng lái wǒ jiā!",
     "en": "Welcome to my home!",
     "hanzi_source": "欢迎"
   },
   {
-    "id": "sent_0695",
+    "id": "sent_1231",
     "zh": "大家热烈欢迎新同学。",
     "pinyin": "Dàjiā rèliè huānyíng xīn tóngxué.",
     "en": "Everyone warmly welcomes the new classmate.",
     "hanzi_source": "欢迎"
   },
   {
-    "id": "sent_0696",
+    "id": "sent_1232",
     "zh": "点蜡烛。",
     "pinyin": "Diǎn làzhú.",
     "en": "Light the candles.",
     "hanzi_source": "点"
   },
   {
-    "id": "sent_0697",
+    "id": "sent_1233",
     "zh": "他点了一根烟。",
     "pinyin": "Tā diǎn le yī gēn yān.",
     "en": "He lit a cigarette.",
     "hanzi_source": "点"
   },
   {
-    "id": "sent_0698",
+    "id": "sent_1234",
     "zh": "生日蜡烛吹灭了。",
     "pinyin": "Shēngrì làzhú chuī miè le.",
     "en": "The birthday candles were blown out.",
     "hanzi_source": "蜡烛"
   },
   {
-    "id": "sent_0699",
+    "id": "sent_1235",
     "zh": "停电的时候我们点了蜡烛。",
     "pinyin": "Tíngdiàn de shíhou wǒmen diǎn le làzhú.",
     "en": "When the power went out, we lit candles.",
     "hanzi_source": "蜡烛"
   },
   {
-    "id": "sent_0700",
+    "id": "sent_1236",
     "zh": "祝你成功！",
     "pinyin": "Zhù nǐ chénggōng!",
     "en": "Wishing you success!",
     "hanzi_source": "祝"
   },
   {
-    "id": "sent_0701",
+    "id": "sent_1237",
     "zh": "祝你们幸福。",
     "pinyin": "Zhù nǐmen xìngfú.",
     "en": "Wishing you happiness.",
     "hanzi_source": "祝"
   },
   {
-    "id": "sent_0702",
+    "id": "sent_1238",
     "zh": "他的故事让我很感动。",
     "pinyin": "Tā de gùshi ràng wǒ hěn gǎndòng.",
     "en": "His story moved me deeply.",
     "hanzi_source": "感动"
   },
   {
-    "id": "sent_0703",
+    "id": "sent_1239",
     "zh": "收到礼物后她感动得哭了。",
     "pinyin": "Shōudào lǐwù hòu tā gǎndòng de kū le.",
     "en": "After receiving the gift, she was so moved she cried.",
     "hanzi_source": "感动"
   },
   {
-    "id": "sent_0704",
+    "id": "sent_1240",
     "zh": "感谢你的帮助。",
     "pinyin": "Gǎnxiè nǐ de bāngzhù.",
     "en": "Thank you for your help.",
     "hanzi_source": "感谢"
   },
   {
-    "id": "sent_0705",
+    "id": "sent_1241",
     "zh": "我感谢每一位朋友。",
     "pinyin": "Wǒ gǎnxiè měi yī wèi péngyou.",
     "en": "I am grateful to every friend.",
     "hanzi_source": "感谢"
   },
   {
-    "id": "sent_0706",
+    "id": "sent_1242",
     "zh": "我心里很开心。",
-    "pinyin": "Wǒ xīnli hěn kāixīn.",
+    "pinyin": "Wǒ xīnlǐ hěn kāixīn.",
     "en": "I am very happy in my heart.",
     "hanzi_source": "心里"
   },
   {
-    "id": "sent_0707",
+    "id": "sent_1243",
     "zh": "他说的话让我心里暖暖的。",
-    "pinyin": "Tā shuō de huà ràng wǒ xīnli nuǎn nuǎn de.",
+    "pinyin": "Tā shuō de huà ràng wǒ xīnlǐ nuǎn nuǎn de.",
     "en": "His words warmed my heart.",
     "hanzi_source": "心里"
   },
   {
-    "id": "sent_0708",
+    "id": "sent_1244",
+    "zh": "我的电脑很快。",
+    "pinyin": "Wǒ de diànnǎo hěn kuài.",
+    "en": "My computer is very fast.",
+    "hanzi_source": "电脑"
+  },
+  {
+    "id": "sent_1245",
+    "zh": "你每天用几个小时电脑？",
+    "pinyin": "Nǐ měitiān yòng jǐ ge xiǎoshí diànnǎo?",
+    "en": "How many hours a day do you use the computer?",
+    "hanzi_source": "电脑"
+  },
+  {
+    "id": "sent_1246",
+    "zh": "我自己组装了一台电脑。",
+    "pinyin": "Wǒ zìjǐ zǔzhuāng le yī tái diànnǎo.",
+    "en": "I assembled a computer myself.",
+    "hanzi_source": "组装"
+  },
+  {
+    "id": "sent_1247",
+    "zh": "组装电脑不难。",
+    "pinyin": "Zǔzhuāng diànnǎo bù nán.",
+    "en": "Assembling a PC isn't hard.",
+    "hanzi_source": "组装"
+  },
+  {
+    "id": "sent_1248",
+    "zh": "电脑硬件越来越便宜。",
+    "pinyin": "Diànnǎo yìngjiàn yuè lái yuè piányi.",
+    "en": "Computer hardware is getting cheaper.",
+    "hanzi_source": "硬件"
+  },
+  {
+    "id": "sent_1249",
+    "zh": "你需要升级硬件吗？",
+    "pinyin": "Nǐ xūyào shēngjí yìngjiàn ma?",
+    "en": "Do you need to upgrade hardware?",
+    "hanzi_source": "硬件"
+  },
+  {
+    "id": "sent_1250",
+    "zh": "中央处理器是电脑的大脑。",
+    "pinyin": "Zhōngyāng chǔlǐqì shì diànnǎo de dànǎo.",
+    "en": "The CPU is the brain of the computer.",
+    "hanzi_source": "中央处理器"
+  },
+  {
+    "id": "sent_1251",
+    "zh": "这个中央处理器性能很强。",
+    "pinyin": "Zhège zhōngyāng chǔlǐqì xìngnéng hěn qiáng.",
+    "en": "This CPU has very strong performance.",
+    "hanzi_source": "中央处理器"
+  },
+  {
+    "id": "sent_1252",
+    "zh": "我的显卡坏了。",
+    "pinyin": "Wǒ de xiǎnkǎ huài le.",
+    "en": "My graphics card is broken.",
+    "hanzi_source": "显卡"
+  },
+  {
+    "id": "sent_1253",
+    "zh": "玩游戏需要好显卡。",
+    "pinyin": "Wán yóuxì xūyào hǎo xiǎnkǎ.",
+    "en": "You need a good graphics card to play games.",
+    "hanzi_source": "显卡"
+  },
+  {
+    "id": "sent_1254",
+    "zh": "所有零件都插在主板上。",
+    "pinyin": "Suǒyǒu língjiàn dōu chā zài zhǔbǎn shàng.",
+    "en": "All components plug into the motherboard.",
+    "hanzi_source": "主板"
+  },
+  {
+    "id": "sent_1255",
+    "zh": "这个主板支持DDR5内存。",
+    "pinyin": "Zhège zhǔbǎn zhīchí DDR5 nèicún.",
+    "en": "This motherboard supports DDR5 RAM.",
+    "hanzi_source": "主板"
+  },
+  {
+    "id": "sent_1256",
+    "zh": "十六G内存就够了。",
+    "pinyin": "Shíliù G nèicún jiù gòu le.",
+    "en": "16GB of RAM is enough.",
+    "hanzi_source": "内存"
+  },
+  {
+    "id": "sent_1257",
+    "zh": "内存不够用。",
+    "pinyin": "Nèicún bú gòu yòng.",
+    "en": "The RAM isn't enough.",
+    "hanzi_source": "内存"
+  },
+  {
+    "id": "sent_1258",
+    "zh": "我的硬盘满了。",
+    "pinyin": "Wǒ de yìngpán mǎn le.",
+    "en": "My hard drive is full.",
+    "hanzi_source": "硬盘"
+  },
+  {
+    "id": "sent_1259",
+    "zh": "换一个大硬盘。",
+    "pinyin": "Huàn yí ge dà yìngpán.",
+    "en": "Swap for a bigger hard drive.",
+    "hanzi_source": "硬盘"
+  },
+  {
+    "id": "sent_1260",
+    "zh": "固态硬盘开机很快。",
+    "pinyin": "Gùtài yìngpán kāijī hěn kuài.",
+    "en": "An SSD boots up very fast.",
+    "hanzi_source": "固态硬盘"
+  },
+  {
+    "id": "sent_1261",
+    "zh": "我把系统装在固态硬盘上。",
+    "pinyin": "Wǒ bǎ xìtǒng zhuāng zài gùtài yìngpán shàng.",
+    "en": "I installed the system on the SSD.",
+    "hanzi_source": "固态硬盘"
+  },
+  {
+    "id": "sent_1262",
+    "zh": "电源坏了电脑就开不了机。",
+    "pinyin": "Diànyuán huài le diànnǎo jiù kāi bù liǎo jī.",
+    "en": "If the PSU breaks, the PC won't turn on.",
+    "hanzi_source": "电源"
+  },
+  {
+    "id": "sent_1263",
+    "zh": "买电源要看功率。",
+    "pinyin": "Mǎi diànyuán yào kàn gōnglǜ.",
+    "en": "When buying a power supply, check the wattage.",
+    "hanzi_source": "电源"
+  },
+  {
+    "id": "sent_1264",
+    "zh": "这个机箱很漂亮。",
+    "pinyin": "Zhège jīxiāng hěn piàoliang.",
+    "en": "This case is very pretty.",
+    "hanzi_source": "机箱"
+  },
+  {
+    "id": "sent_1265",
+    "zh": "我把主板放进机箱里。",
+    "pinyin": "Wǒ bǎ zhǔbǎn fàng jìn jīxiāng lǐ.",
+    "en": "I put the motherboard into the case.",
+    "hanzi_source": "机箱"
+  },
+  {
+    "id": "sent_1266",
+    "zh": "风扇噪音很大。",
+    "pinyin": "Fēngshàn zàoyīn hěn dà.",
+    "en": "The fan is very loud.",
+    "hanzi_source": "风扇"
+  },
+  {
+    "id": "sent_1267",
+    "zh": "机箱里装了三个风扇。",
+    "pinyin": "Jīxiāng lǐ zhuāng le sān ge fēngshàn.",
+    "en": "Three fans are installed in the case.",
+    "hanzi_source": "风扇"
+  },
+  {
+    "id": "sent_1268",
+    "zh": "散热器上涂了硅脂。",
+    "pinyin": "Sànrèqì shàng tú le guīzhī.",
+    "en": "Thermal paste is applied on the heatsink.",
+    "hanzi_source": "散热器"
+  },
+  {
+    "id": "sent_1269",
+    "zh": "CPU需要好的散热器。",
+    "pinyin": "CPU xūyào hǎo de sànrèqì.",
+    "en": "The CPU needs a good cooler.",
+    "hanzi_source": "散热器"
+  },
+  {
+    "id": "sent_1270",
+    "zh": "用螺丝刀拧螺丝。",
+    "pinyin": "Yòng luósīdāo níng luósī.",
+    "en": "Use a screwdriver to turn the screws.",
+    "hanzi_source": "螺丝刀"
+  },
+  {
+    "id": "sent_1271",
+    "zh": "十字螺丝刀很常用。",
+    "pinyin": "Shízì luósīdāo hěn chángyòng.",
+    "en": "Phillips screwdrivers are very common.",
+    "hanzi_source": "螺丝刀"
+  },
+  {
+    "id": "sent_1272",
+    "zh": "显卡插在PCIe插槽上。",
+    "pinyin": "Xiǎnkǎ chā zài PCIe chācáo shàng.",
+    "en": "The graphics card plugs into the PCIe slot.",
+    "hanzi_source": "插槽"
+  },
+  {
+    "id": "sent_1273",
+    "zh": "内存插槽有四个。",
+    "pinyin": "Nèicún chācáo yǒu sì ge.",
+    "en": "There are four RAM slots.",
+    "hanzi_source": "插槽"
+  },
+  {
+    "id": "sent_1274",
+    "zh": "USB接口很方便。",
+    "pinyin": "USB jiēkǒu hěn fāngbiàn.",
+    "en": "USB ports are very convenient.",
+    "hanzi_source": "接口"
+  },
+  {
+    "id": "sent_1275",
+    "zh": "这个接口坏了。",
+    "pinyin": "Zhège jiēkǒu huài le.",
+    "en": "This port is broken.",
+    "hanzi_source": "接口"
+  },
+  {
+    "id": "sent_1276",
+    "zh": "电缆太短了。",
+    "pinyin": "Diànlǎn tài duǎn le.",
+    "en": "The cable is too short.",
+    "hanzi_source": "电缆"
+  },
+  {
+    "id": "sent_1277",
+    "zh": "整理电缆可以改善散热。",
+    "pinyin": "Zhěnglǐ diànlǎn kěyǐ gǎishàn sànrè.",
+    "en": "Managing cables improves cooling.",
+    "hanzi_source": "电缆"
+  },
+  {
+    "id": "sent_1278",
+    "zh": "电脑开不了机。",
+    "pinyin": "Diànnǎo kāi bù liǎo jī.",
+    "en": "The PC won't power on.",
+    "hanzi_source": "开机"
+  },
+  {
+    "id": "sent_1279",
+    "zh": "开机以后要输密码。",
+    "pinyin": "Kāijī yǐhòu yào shū mìmǎ.",
+    "en": "After powering on, you need to enter the password.",
+    "hanzi_source": "开机"
+  },
+  {
+    "id": "sent_1280",
+    "zh": "别忘了关机。",
+    "pinyin": "Bié wàng le guānjī.",
+    "en": "Don't forget to shut down.",
+    "hanzi_source": "关机"
+  },
+  {
+    "id": "sent_1281",
+    "zh": "电脑自动关机了。",
+    "pinyin": "Diànnǎo zìdòng guānjī le.",
+    "en": "The computer shut down automatically.",
+    "hanzi_source": "关机"
+  },
+  {
+    "id": "sent_1282",
+    "zh": "更新以后需要重启电脑。",
+    "pinyin": "Gēngxīn yǐhòu xūyào chóngqǐ diànnǎo.",
+    "en": "You need to restart after an update.",
+    "hanzi_source": "重启"
+  },
+  {
+    "id": "sent_1283",
+    "zh": "我的电脑卡住了，我重启了一下。",
+    "pinyin": "Wǒ de diànnǎo kǎ zhù le, wǒ chóngqǐ le yīxià.",
+    "en": "My PC froze, so I restarted it.",
+    "hanzi_source": "重启"
+  },
+  {
+    "id": "sent_1284",
+    "zh": "三维打印可以制造玩具。",
+    "pinyin": "Sānwéi dǎyìn kěyǐ zhìzào wánjù.",
+    "en": "3D printing can make toys.",
+    "hanzi_source": "三维打印"
+  },
+  {
+    "id": "sent_1285",
+    "zh": "我在学习三维打印技术。",
+    "pinyin": "Wǒ zài xuéxí sānwéi dǎyìn jìshù.",
+    "en": "I am learning 3D printing technology.",
+    "hanzi_source": "三维打印"
+  },
+  {
+    "id": "sent_1286",
+    "zh": "打印机没纸了。",
+    "pinyin": "Dǎyìnjī méi zhǐ le.",
+    "en": "The printer is out of paper.",
+    "hanzi_source": "打印机"
+  },
+  {
+    "id": "sent_1287",
+    "zh": "这台打印机很慢。",
+    "pinyin": "Zhè tái dǎyìnjī hěn màn.",
+    "en": "This printer is very slow.",
+    "hanzi_source": "打印机"
+  },
+  {
+    "id": "sent_1288",
+    "zh": "熔融沉积成型是最常见的三维打印技术。",
+    "pinyin": "Róngróng chénjī chéngxíng shì zuì chángjiàn de sānwéi dǎyìn jìshù.",
+    "en": "FDM is the most common 3D printing technology.",
+    "hanzi_source": "熔融沉积成型"
+  },
+  {
+    "id": "sent_1289",
+    "zh": "我的打印机使用熔融沉积成型。",
+    "pinyin": "Wǒ de dǎyìnjī shǐyòng róngróng chénjī chéngxíng.",
+    "en": "My printer uses FDM.",
+    "hanzi_source": "熔融沉积成型"
+  },
+  {
+    "id": "sent_1290",
+    "zh": "喷嘴堵住了。",
+    "pinyin": "Pēnzuǐ dǔ zhù le.",
+    "en": "The nozzle is clogged.",
+    "hanzi_source": "喷嘴"
+  },
+  {
+    "id": "sent_1291",
+    "zh": "换一个更细的喷嘴。",
+    "pinyin": "Huàn yí ge gèng xì de pēnzuǐ.",
+    "en": "Swap to a finer nozzle.",
+    "hanzi_source": "喷嘴"
+  },
+  {
+    "id": "sent_1292",
+    "zh": "热床可以防止翘曲。",
+    "pinyin": "Rèchuáng kěyǐ fángzhǐ qiàoqū.",
+    "en": "The heated bed prevents warping.",
+    "hanzi_source": "热床"
+  },
+  {
+    "id": "sent_1293",
+    "zh": "打印前要把热床调平。",
+    "pinyin": "Dǎyìn qián yào bǎ rèchuáng tiáopíng.",
+    "en": "Level the heated bed before printing.",
+    "hanzi_source": "热床"
+  },
+  {
+    "id": "sent_1294",
+    "zh": "喷头温度太高了。",
+    "pinyin": "Pēntóu wēndù tài gāo le.",
+    "en": "The extruder temperature is too high.",
+    "hanzi_source": "喷头"
+  },
+  {
+    "id": "sent_1295",
+    "zh": "清理喷头里的残留塑料。",
+    "pinyin": "Qīnglǐ pēntóu lǐ de cánliú sùliào.",
+    "en": "Clean the leftover plastic in the extruder.",
+    "hanzi_source": "喷头"
+  },
+  {
+    "id": "sent_1296",
+    "zh": "我买了新的耗材。",
+    "pinyin": "Wǒ mǎi le xīn de hàocái.",
+    "en": "I bought new filament.",
+    "hanzi_source": "耗材"
+  },
+  {
+    "id": "sent_1297",
+    "zh": "哪种耗材最结实？",
+    "pinyin": "Nǎ zhǒng hàocái zuì jiēshi?",
+    "en": "Which filament is strongest?",
+    "hanzi_source": "耗材"
+  },
+  {
+    "id": "sent_1298",
+    "zh": "聚乳酸是最常用的材料。",
+    "pinyin": "Jùrǔsuān shì zuì chángyòng de cáiliào.",
+    "en": "PLA is the most commonly used material.",
+    "hanzi_source": "聚乳酸"
+  },
+  {
+    "id": "sent_1299",
+    "zh": "聚乳酸容易打印。",
+    "pinyin": "Jùrǔsuān róngyì dǎyìn.",
+    "en": "PLA is easy to print.",
+    "hanzi_source": "聚乳酸"
+  },
+  {
+    "id": "sent_1300",
+    "zh": "丙烯腈丁二烯苯乙烯比聚乳酸更结实。",
+    "pinyin": "Bǐngxījīng dīngèrxī běnyǐxī bǐ jùrǔsuān gèng jiēshi.",
+    "en": "ABS is stronger than PLA.",
+    "hanzi_source": "丙烯腈丁二烯苯乙烯"
+  },
+  {
+    "id": "sent_1301",
+    "zh": "打印丙烯腈丁二烯苯乙烯需要通风。",
+    "pinyin": "Dǎyìn bǐngxījīng dīngèrxī běnyǐxī xūyào tōngfēng.",
+    "en": "Printing ABS needs ventilation.",
+    "hanzi_source": "丙烯腈丁二烯苯乙烯"
+  },
+  {
+    "id": "sent_1302",
+    "zh": "层高越小打印越慢。",
+    "pinyin": "Cénggāo yuè xiǎo dǎyìn yuè màn.",
+    "en": "The smaller the layer height, the slower the print.",
+    "hanzi_source": "层高"
+  },
+  {
+    "id": "sent_1303",
+    "zh": "0.2毫米的层高很常用。",
+    "pinyin": "0.2 háomǐ de cénggāo hěn chángyòng.",
+    "en": "0.2mm layer height is very common.",
+    "hanzi_source": "层高"
+  },
+  {
+    "id": "sent_1304",
+    "zh": "百分之二十的填充就够了。",
+    "pinyin": "Bǎi fēn zhī èrshí de tiánchōng jiù gòu le.",
+    "en": "20% infill is enough.",
+    "hanzi_source": "填充"
+  },
+  {
+    "id": "sent_1305",
+    "zh": "填充密度越高越结实。",
+    "pinyin": "Tiánchōng mìdù yuè gāo yuè jiēshi.",
+    "en": "The higher the infill density, the stronger it is.",
+    "hanzi_source": "填充"
+  },
+  {
+    "id": "sent_1306",
+    "zh": "悬空的部分需要支撑。",
+    "pinyin": "Xuánkōng de bùfen xūyào zhīchēng.",
+    "en": "Overhanging parts need supports.",
+    "hanzi_source": "支撑"
+  },
+  {
+    "id": "sent_1307",
+    "zh": "支撑很难拆掉。",
+    "pinyin": "Zhīchēng hěn nán chāi diào.",
+    "en": "Supports are hard to remove.",
+    "hanzi_source": "支撑"
+  },
+  {
+    "id": "sent_1308",
+    "zh": "把模型导入切片软件。",
+    "pinyin": "Bǎ móxíng dǎorù qiēpiàn ruǎnjiàn.",
+    "en": "Import the model into the slicer.",
+    "hanzi_source": "切片软件"
+  },
+  {
+    "id": "sent_1309",
+    "zh": "切片软件可以设置层高和填充。",
+    "pinyin": "Qiēpiàn ruǎnjiàn kěyǐ shèzhì cénggāo hé tiánchōng.",
+    "en": "The slicer can set layer height and infill.",
+    "hanzi_source": "切片软件"
+  },
+  {
+    "id": "sent_1310",
+    "zh": "打印床要干净。",
+    "pinyin": "Dǎyìn chuáng yào gānjìng.",
+    "en": "The print bed needs to be clean.",
+    "hanzi_source": "打印床"
+  },
+  {
+    "id": "sent_1311",
+    "zh": "模型粘在打印床上了。",
+    "pinyin": "Móxíng zhān zài dǎyìn chuáng shàng le.",
+    "en": "The model stuck to the print bed.",
+    "hanzi_source": "打印床"
+  },
+  {
+    "id": "sent_1312",
+    "zh": "第一层的粘附很重要。",
+    "pinyin": "Dì-yī céng de zhānfù hěn zhòngyào.",
+    "en": "First layer adhesion is very important.",
+    "hanzi_source": "粘附"
+  },
+  {
+    "id": "sent_1313",
+    "zh": "用胶水可以增强粘附。",
+    "pinyin": "Yòng jiāoshuǐ kěyǐ zēngqiáng zhānfù.",
+    "en": "Using glue can improve adhesion.",
+    "hanzi_source": "粘附"
+  },
+  {
+    "id": "sent_1314",
+    "zh": "翘曲会导致打印失败。",
+    "pinyin": "Qiàoqū huì dǎozhì dǎyìn shībài.",
+    "en": "Warping will cause the print to fail.",
+    "hanzi_source": "翘曲"
+  },
+  {
+    "id": "sent_1315",
+    "zh": "热床可以减少翘曲。",
+    "pinyin": "Rèchuáng kěyǐ jiǎnshǎo qiàoqū.",
+    "en": "A heated bed reduces warping.",
+    "hanzi_source": "翘曲"
+  },
+  {
+    "id": "sent_1316",
+    "zh": "拉丝很影响外观。",
+    "pinyin": "Lāsī hěn yǐngxiǎng wàiguān.",
+    "en": "Stringing affects the appearance a lot.",
+    "hanzi_source": "拉丝"
+  },
+  {
+    "id": "sent_1317",
+    "zh": "降低温度可以减少拉丝。",
+    "pinyin": "Jiàngdī wēndù kěyǐ jiǎnshǎo lāsī.",
+    "en": "Lowering the temperature reduces stringing.",
+    "hanzi_source": "拉丝"
+  },
+  {
+    "id": "sent_1318",
+    "zh": "打印前要先调平。",
+    "pinyin": "Dǎyìn qián yào xiān tiáopíng.",
+    "en": "Level the bed before printing.",
+    "hanzi_source": "调平"
+  },
+  {
+    "id": "sent_1319",
+    "zh": "自动调平很方便。",
+    "pinyin": "Zìdòng tiáopíng hěn fāngbiàn.",
+    "en": "Auto-leveling is very convenient.",
+    "hanzi_source": "调平"
+  },
+  {
+    "id": "sent_1320",
+    "zh": "挤出太慢会缺料。",
+    "pinyin": "Jǐchū tài màn huì quē liào.",
+    "en": "If extrusion is too slow, there will be under-extrusion.",
+    "hanzi_source": "挤出"
+  },
+  {
+    "id": "sent_1321",
+    "zh": "检查挤出是否顺畅。",
+    "pinyin": "Jiǎnchá jǐchū shìfǒu shùnchàng.",
+    "en": "Check if extrusion is smooth.",
+    "hanzi_source": "挤出"
+  },
+  {
+    "id": "sent_1322",
+    "zh": "我下载了一个玩具模型。",
+    "pinyin": "Wǒ xiàzài le yí ge wánjù móxíng.",
+    "en": "I downloaded a toy model.",
+    "hanzi_source": "模型"
+  },
+  {
+    "id": "sent_1323",
+    "zh": "模型不能悬空太多。",
+    "pinyin": "Móxíng bùnéng xuánkōng tài duō.",
+    "en": "The model shouldn't have too many overhangs.",
+    "hanzi_source": "模型"
+  },
+  {
+    "id": "sent_1324",
+    "zh": "他在学三维建模。",
+    "pinyin": "Tā zài xué sānwéi jiànmó.",
+    "en": "He is learning 3D modeling.",
+    "hanzi_source": "三维建模"
+  },
+  {
+    "id": "sent_1325",
+    "zh": "三维建模需要很多练习。",
+    "pinyin": "Sānwéi jiànmó xūyào hěn duō liànxí.",
+    "en": "3D modeling needs a lot of practice.",
+    "hanzi_source": "三维建模"
+  },
+  {
+    "id": "sent_1326",
+    "zh": "工程师用计算机辅助设计画图。",
+    "pinyin": "Gōngchéngshī yòng jìsuànjī fǔzhù shèjì huà tú.",
+    "en": "Engineers use CAD to draw.",
+    "hanzi_source": "计算机辅助设计"
+  },
+  {
+    "id": "sent_1327",
+    "zh": "计算机辅助设计让设计更快。",
+    "pinyin": "Jìsuànjī fǔzhù shèjì ràng shèjì gèng kuài.",
+    "en": "CAD makes designing faster.",
+    "hanzi_source": "计算机辅助设计"
+  },
+  {
+    "id": "sent_1328",
+    "zh": "我用融合软件建模。",
+    "pinyin": "Wǒ yòng rónghé ruǎnjiàn jiànmó.",
+    "en": "I use Fusion software to model.",
+    "hanzi_source": "融合"
+  },
+  {
+    "id": "sent_1329",
+    "zh": "融合可以免费使用。",
+    "pinyin": "Rónghé kěyǐ miǎnfèi shǐyòng.",
+    "en": "Fusion can be used for free.",
+    "hanzi_source": "融合"
+  },
+  {
+    "id": "sent_1330",
+    "zh": "先画一个草图。",
+    "pinyin": "Xiān huà yí ge cǎotú.",
+    "en": "First draw a sketch.",
+    "hanzi_source": "草图"
+  },
+  {
+    "id": "sent_1331",
+    "zh": "草图是建模的基础。",
+    "pinyin": "Cǎotú shì jiànmó de jīchǔ.",
+    "en": "The sketch is the foundation of modeling.",
+    "hanzi_source": "草图"
+  },
+  {
+    "id": "sent_1332",
+    "zh": "把这个圆拉伸成立方体。",
+    "pinyin": "Bǎ zhège yuán lāshēn chéng lìfāngtǐ.",
+    "en": "Extrude this circle into a cube.",
+    "hanzi_source": "拉伸"
+  },
+  {
+    "id": "sent_1333",
+    "zh": "拉伸的方向很重要。",
+    "pinyin": "Lāshēn de fāngxiàng hěn zhòngyào.",
+    "en": "The direction of extrusion is important.",
+    "hanzi_source": "拉伸"
+  },
+  {
+    "id": "sent_1334",
+    "zh": "旋转草图可以生成圆柱。",
+    "pinyin": "Xuánzhuǎn cǎotú kěyǐ shēngchéng yuánzhù.",
+    "en": "Revolving a sketch creates a cylinder.",
+    "hanzi_source": "旋转"
+  },
+  {
+    "id": "sent_1335",
+    "zh": "把曲线旋转360度。",
+    "pinyin": "Bǎ qūxiàn xuánzhuǎn sānbǎi liùshí dù.",
+    "en": "Revolve the curve 360 degrees.",
+    "hanzi_source": "旋转"
+  },
+  {
+    "id": "sent_1336",
+    "zh": "用扫掠功能做管道。",
+    "pinyin": "Yòng sǎolüè gōngnéng zuò guǎndào.",
+    "en": "Use the sweep function to make a pipe.",
+    "hanzi_source": "扫掠"
+  },
+  {
+    "id": "sent_1337",
+    "zh": "扫掠需要一条路径和一个轮廓。",
+    "pinyin": "Sǎolüè xūyào yī tiáo lùjìng hé yí ge lúnkuò.",
+    "en": "Sweep needs a path and a profile.",
+    "hanzi_source": "扫掠"
+  },
+  {
+    "id": "sent_1338",
+    "zh": "放样可以把两个形状连接起来。",
+    "pinyin": "Fàngyàng kěyǐ bǎ liǎng ge xíngzhuàng liánjiē qǐlai.",
+    "en": "Loft connects two shapes together.",
+    "hanzi_source": "放样"
+  },
+  {
+    "id": "sent_1339",
+    "zh": "放样适合做复杂曲面。",
+    "pinyin": "Fàngyàng shìhé zuò fùzá qūmiàn.",
+    "en": "Loft is good for complex curved surfaces.",
+    "hanzi_source": "放样"
+  },
+  {
+    "id": "sent_1340",
+    "zh": "给边缘倒角更安全。",
+    "pinyin": "Gěi biānyuán dàojiǎo gèng ānquán.",
+    "en": "Chamfering the edge is safer.",
+    "hanzi_source": "倒角"
+  },
+  {
+    "id": "sent_1341",
+    "zh": "倒角可以消除锋利边缘。",
+    "pinyin": "Dàojiǎo kěyǐ xiāochú fēnglì biānyuán.",
+    "en": "Chamfering removes sharp edges.",
+    "hanzi_source": "倒角"
+  },
+  {
+    "id": "sent_1342",
+    "zh": "给直角做圆角更美观。",
+    "pinyin": "Gěi zhíjiǎo zuò yuánjiǎo gèng měiguān.",
+    "en": "Adding fillets to right angles looks better.",
+    "hanzi_source": "圆角"
+  },
+  {
+    "id": "sent_1343",
+    "zh": "圆角可以减少应力集中。",
+    "pinyin": "Yuánjiǎo kěyǐ jiǎnshǎo yìnglì jízhōng.",
+    "en": "Fillets reduce stress concentration.",
+    "hanzi_source": "圆角"
+  },
+  {
+    "id": "sent_1344",
+    "zh": "抽壳可以把实心变成空心。",
+    "pinyin": "Chōuké kěyǐ bǎ shíxīn biàn chéng kōngxīn.",
+    "en": "Shelling turns a solid body hollow.",
+    "hanzi_source": "抽壳"
+  },
+  {
+    "id": "sent_1345",
+    "zh": "抽壳厚度设为两毫米。",
+    "pinyin": "Chōuké hòudù shè wéi liǎng háomǐ.",
+    "en": "Set shell thickness to 2mm.",
+    "hanzi_source": "抽壳"
+  },
+  {
+    "id": "sent_1346",
+    "zh": "布尔运算可以合并或切割物体。",
+    "pinyin": "Bù'ěr yùnsuàn kěyǐ hébìng huò qiēgē wùtǐ.",
+    "en": "Boolean operations can combine or cut objects.",
+    "hanzi_source": "布尔运算"
+  },
+  {
+    "id": "sent_1347",
+    "zh": "用布尔运算挖一个洞。",
+    "pinyin": "Yòng bù'ěr yùnsuàn wā yí ge dòng.",
+    "en": "Use a Boolean operation to dig a hole.",
+    "hanzi_source": "布尔运算"
+  },
+  {
+    "id": "sent_1348",
+    "zh": "把这两个物体合并成一个。",
+    "pinyin": "Bǎ zhè liǎng ge wùtǐ hébìng chéng yí ge.",
+    "en": "Union these two objects into one.",
+    "hanzi_source": "合并"
+  },
+  {
+    "id": "sent_1349",
+    "zh": "合并后就不能分开了。",
+    "pinyin": "Hébìng hòu jiù bùnéng fēn kāi le.",
+    "en": "After union, they can't be separated.",
+    "hanzi_source": "合并"
+  },
+  {
+    "id": "sent_1350",
+    "zh": "用A减去B得到孔。",
+    "pinyin": "Yòng A jiǎnqù B dédào kǒng.",
+    "en": "Subtract B from A to get a hole.",
+    "hanzi_source": "减去"
+  },
+  {
+    "id": "sent_1351",
+    "zh": "减去多余的部分。",
+    "pinyin": "Jiǎnqù duōyú de bùfen.",
+    "en": "Subtract the extra parts.",
+    "hanzi_source": "减去"
+  },
+  {
+    "id": "sent_1352",
+    "zh": "相交运算只保留重叠部分。",
+    "pinyin": "Xiāngjiāo yùnsuàn zhǐ bǎoliú chóngdié bùfen.",
+    "en": "Intersect keeps only the overlapping part.",
+    "hanzi_source": "相交"
+  },
+  {
+    "id": "sent_1353",
+    "zh": "两条线相交于一点。",
+    "pinyin": "Liǎng tiáo xiàn xiāngjiāo yú yī diǎn.",
+    "en": "Two lines intersect at one point.",
+    "hanzi_source": "相交"
+  },
+  {
+    "id": "sent_1354",
+    "zh": "修改参数模型会自动更新。",
+    "pinyin": "Xiūgǎi cānshù móxíng huì zìdòng gēngxīn.",
+    "en": "Change a parameter and the model updates automatically.",
+    "hanzi_source": "参数"
+  },
+  {
+    "id": "sent_1355",
+    "zh": "参数化设计很方便。",
+    "pinyin": "Cānshù huà shèjì hěn fāngbiàn.",
+    "en": "Parametric design is very convenient.",
+    "hanzi_source": "参数"
+  },
+  {
+    "id": "sent_1356",
+    "zh": "拉伸是一个特征。",
+    "pinyin": "Lāshēn shì yí ge tèzhēng.",
+    "en": "Extrude is a feature.",
+    "hanzi_source": "特征"
+  },
+  {
+    "id": "sent_1357",
+    "zh": "每个特征在时间轴上都可以编辑。",
+    "pinyin": "Měi ge tèzhēng zài shíjiān zhóu shàng dōu kěyǐ biānjí.",
+    "en": "Every feature can be edited in the timeline.",
+    "hanzi_source": "特征"
+  },
+  {
+    "id": "sent_1358",
+    "zh": "在时间轴上删除一个特征。",
+    "pinyin": "Zài shíjiān zhóu shàng shānchú yí ge tèzhēng.",
+    "en": "Delete a feature in the timeline.",
+    "hanzi_source": "时间轴"
+  },
+  {
+    "id": "sent_1359",
+    "zh": "时间轴记录了建模步骤。",
+    "pinyin": "Shíjiān zhóu jìlù le jiànmó bùzhòu.",
+    "en": "The timeline records the modeling steps.",
+    "hanzi_source": "时间轴"
+  },
+  {
+    "id": "sent_1360",
+    "zh": "加材质然后渲染。",
+    "pinyin": "Jiā cáizhì ránhòu xuànrǎn.",
+    "en": "Add materials then render.",
+    "hanzi_source": "渲染"
+  },
+  {
+    "id": "sent_1361",
+    "zh": "渲染图看起来像照片。",
+    "pinyin": "Xuànrǎn tú kàn qǐlai xiàng zhàopiàn.",
+    "en": "The rendered image looks like a photo.",
+    "hanzi_source": "渲染"
+  },
+  {
+    "id": "sent_1362",
+    "zh": "把模型导出为STL文件。",
+    "pinyin": "Bǎ móxíng dǎochū wéi STL wénjiàn.",
+    "en": "Export the model as an STL file.",
+    "hanzi_source": "导出"
+  },
+  {
+    "id": "sent_1363",
+    "zh": "导出前检查一下单位。",
+    "pinyin": "Dǎochū qián jiǎnchá yīxià dānwèi.",
+    "en": "Check the units before exporting.",
+    "hanzi_source": "导出"
+  },
+  {
+    "id": "sent_1364",
+    "zh": "他在学设计。",
+    "pinyin": "Tā zài xué shèjì.",
+    "en": "He is studying design.",
+    "hanzi_source": "设计"
+  },
+  {
+    "id": "sent_1365",
+    "zh": "这个设计很漂亮。",
+    "pinyin": "Zhège shèjì hěn piàoliang.",
+    "en": "This design is very beautiful.",
+    "hanzi_source": "设计"
+  },
+  {
+    "id": "sent_1366",
+    "zh": "现代技术发展很快。",
+    "pinyin": "Xiàndài jìshù fāzhǎn hěn kuài.",
+    "en": "Modern technology develops very fast.",
+    "hanzi_source": "技术"
+  },
+  {
+    "id": "sent_1367",
+    "zh": "学习技术很重要。",
+    "pinyin": "Xuéxí jìshù hěn zhòngyào.",
+    "en": "Learning technology is very important.",
+    "hanzi_source": "技术"
+  },
+  {
+    "id": "sent_1368",
+    "zh": "他的教学方法很好。",
+    "pinyin": "Tā de jiàoxué fāngfǎ hěn hǎo.",
+    "en": "His teaching method is very good.",
+    "hanzi_source": "教学"
+  },
+  {
+    "id": "sent_1369",
+    "zh": "在线教学越来越流行。",
+    "pinyin": "Zàixiàn jiàoxué yuè lái yuè liúxíng.",
+    "en": "Online teaching is becoming more popular.",
+    "hanzi_source": "教学"
+  },
+  {
+    "id": "sent_1370",
+    "zh": "这个学生很努力。",
+    "pinyin": "Zhège xuésheng hěn nǔlì.",
+    "en": "This student is very hardworking.",
+    "hanzi_source": "学生"
+  },
+  {
+    "id": "sent_1371",
+    "zh": "学生们都在考试。",
+    "pinyin": "Xuéshengmen dōu zài kǎoshì.",
+    "en": "The students are all taking an exam.",
+    "hanzi_source": "学生"
+  },
+  {
+    "id": "sent_1372",
+    "zh": "我们正在做一个项目。",
+    "pinyin": "Wǒmen zhèngzài zuò yí ge xiàngmù.",
+    "en": "We are working on a project.",
+    "hanzi_source": "项目"
+  },
+  {
+    "id": "sent_1373",
+    "zh": "这个项目需要两周完成。",
+    "pinyin": "Zhège xiàngmù xūyào liǎng zhōu wánchéng.",
+    "en": "This project needs two weeks to complete.",
+    "hanzi_source": "项目"
+  },
+  {
+    "id": "sent_1374",
+    "zh": "工程师每天都要解决问题。",
+    "pinyin": "Gōngchéngshī měitiān dōu yào jiějué wèntí.",
+    "en": "Engineers solve problems every day.",
+    "hanzi_source": "解决问题"
+  },
+  {
+    "id": "sent_1375",
+    "zh": "我们一起解决这个问题。",
+    "pinyin": "Wǒmen yīqǐ jiějué zhège wèntí.",
+    "en": "Let's solve this problem together.",
+    "hanzi_source": "解决问题"
+  },
+  {
+    "id": "sent_1376",
+    "zh": "批判性思维很重要。",
+    "pinyin": "Pīpànxìng sīwéi hěn zhòngyào.",
+    "en": "Critical thinking is very important.",
+    "hanzi_source": "批判性思维"
+  },
+  {
+    "id": "sent_1377",
+    "zh": "老师教我们批判性思维。",
+    "pinyin": "Lǎoshī jiāo wǒmen pīpànxìng sīwéi.",
+    "en": "The teacher teaches us critical thinking.",
+    "hanzi_source": "批判性思维"
+  },
+  {
+    "id": "sent_1378",
+    "zh": "孩子很有创造力。",
+    "pinyin": "Háizi hěn yǒu chuàngzàolì.",
+    "en": "Children have a lot of creativity.",
+    "hanzi_source": "创造力"
+  },
+  {
+    "id": "sent_1379",
+    "zh": "设计需要创造力。",
+    "pinyin": "Shèjì xūyào chuàngzàolì.",
+    "en": "Design needs creativity.",
+    "hanzi_source": "创造力"
+  },
+  {
+    "id": "sent_1380",
+    "zh": "我们先做一个原型。",
+    "pinyin": "Wǒmen xiān zuò yí ge yuánxíng.",
+    "en": "Let's make a prototype first.",
+    "hanzi_source": "原型"
+  },
+  {
+    "id": "sent_1381",
+    "zh": "原型测试很重要。",
+    "pinyin": "Yuánxíng cèshì hěn zhòngyào.",
+    "en": "Prototype testing is very important.",
+    "hanzi_source": "原型"
+  },
+  {
+    "id": "sent_1382",
+    "zh": "设计需要多次迭代。",
+    "pinyin": "Shèjì xūyào duō cì diédài.",
+    "en": "Design needs many iterations.",
+    "hanzi_source": "迭代"
+  },
+  {
+    "id": "sent_1383",
+    "zh": "第二次迭代改进了很多。",
+    "pinyin": "Dì-èr cì diédài gǎijìn le hěn duō.",
+    "en": "The second iteration improved a lot.",
+    "hanzi_source": "迭代"
+  },
+  {
+    "id": "sent_1384",
+    "zh": "谢谢你的反馈。",
+    "pinyin": "Xièxie nǐ de fǎnkuì.",
+    "en": "Thank you for your feedback.",
+    "hanzi_source": "反馈"
+  },
+  {
+    "id": "sent_1385",
+    "zh": "老师给了很多反馈。",
+    "pinyin": "Lǎoshī gěi le hěn duō fǎnkuì.",
+    "en": "The teacher gave a lot of feedback.",
+    "hanzi_source": "反馈"
+  },
+  {
+    "id": "sent_1386",
+    "zh": "团队合作很重要。",
+    "pinyin": "Tuánduì hézuò hěn zhòngyào.",
+    "en": "Team collaboration is very important.",
+    "hanzi_source": "合作"
+  },
+  {
+    "id": "sent_1387",
+    "zh": "我们一起合作完成项目。",
+    "pinyin": "Wǒmen yīqǐ hézuò wánchéng xiàngmù.",
+    "en": "We collaborate together to complete the project.",
+    "hanzi_source": "合作"
+  },
+  {
+    "id": "sent_1388",
+    "zh": "先画一个草图。",
+    "pinyin": "Xiān huà yí ge cǎotú.",
+    "en": "First draw a rough sketch.",
+    "hanzi_source": "草图"
+  },
+  {
+    "id": "sent_1389",
+    "zh": "草图不用太精细。",
+    "pinyin": "Cǎotú bú yòng tài jīngxì.",
+    "en": "Rough sketches don't need to be too detailed.",
+    "hanzi_source": "草图"
+  },
+  {
+    "id": "sent_1390",
+    "zh": "先测量长度。",
+    "pinyin": "Xiān cèliáng chángdù.",
+    "en": "First measure the length.",
+    "hanzi_source": "测量"
+  },
+  {
+    "id": "sent_1391",
+    "zh": "测量要准确。",
+    "pinyin": "Cèliáng yào zhǔnquè.",
+    "en": "Measurements need to be accurate.",
+    "hanzi_source": "测量"
+  },
+  {
+    "id": "sent_1392",
+    "zh": "这些工具很有用。",
+    "pinyin": "Zhèxiē gōngjù hěn yǒuyòng.",
+    "en": "These tools are very useful.",
+    "hanzi_source": "工具"
+  },
+  {
+    "id": "sent_1393",
+    "zh": "锤子是个基本工具。",
+    "pinyin": "Chuízi shì ge jīběn gōngjù.",
+    "en": "A hammer is a basic tool.",
+    "hanzi_source": "工具"
+  },
+  {
+    "id": "sent_1394",
+    "zh": "我们需要买材料。",
+    "pinyin": "Wǒmen xūyào mǎi cáiliào.",
+    "en": "We need to buy materials.",
+    "hanzi_source": "材料"
+  },
+  {
+    "id": "sent_1395",
+    "zh": "这个材料很轻。",
+    "pinyin": "Zhège cáiliào hěn qīng.",
+    "en": "This material is very light.",
+    "hanzi_source": "材料"
+  },
+  {
+    "id": "sent_1396",
+    "zh": "安全第一。",
+    "pinyin": "Ānquán dì-yī.",
+    "en": "Safety first.",
+    "hanzi_source": "安全"
+  },
+  {
+    "id": "sent_1397",
+    "zh": "戴好安全装备。",
+    "pinyin": "Dài hǎo ānquán zhuāngbèi.",
+    "en": "Put on your safety equipment properly.",
+    "hanzi_source": "安全"
+  },
+  {
+    "id": "sent_1398",
+    "zh": "请戴上护目镜。",
+    "pinyin": "Qǐng dài shàng hùmùjìng.",
+    "en": "Please put on safety goggles.",
+    "hanzi_source": "护目镜"
+  },
+  {
+    "id": "sent_1399",
+    "zh": "护目镜保护眼睛。",
+    "pinyin": "Hùmùjìng bǎohù yǎnjing.",
+    "en": "Goggles protect your eyes.",
+    "hanzi_source": "护目镜"
+  },
+  {
+    "id": "sent_1400",
+    "zh": "我们在工作坊做手工。",
+    "pinyin": "Wǒmen zài gōngzuòfāng zuò shǒugōng.",
+    "en": "We do hands-on work in the workshop.",
+    "hanzi_source": "工作坊"
+  },
+  {
+    "id": "sent_1401",
+    "zh": "这个工作坊很大。",
+    "pinyin": "Zhège gōngzuòfāng hěn dà.",
+    "en": "This workshop is very large.",
+    "hanzi_source": "工作坊"
+  },
+  {
+    "id": "sent_1402",
+    "zh": "学生要准备作品集。",
+    "pinyin": "Xuésheng yào zhǔnbèi zuòpǐnjí.",
+    "en": "Students need to prepare a portfolio.",
+    "hanzi_source": "作品集"
+  },
+  {
+    "id": "sent_1403",
+    "zh": "作品集展示了你的能力。",
+    "pinyin": "Zuòpǐnjí zhǎnshì le nǐ de nénglì.",
+    "en": "The portfolio shows your abilities.",
+    "hanzi_source": "作品集"
+  },
+  {
+    "id": "sent_1404",
+    "zh": "微控制器很小但功能强大。",
+    "pinyin": "Wēi kòngzhìqì hěn xiǎo dàn gōngnéng qiángdà.",
+    "en": "Microcontrollers are small but powerful.",
+    "hanzi_source": "微控制器"
+  },
+  {
+    "id": "sent_1405",
+    "zh": "Arduino是一个常用的微控制器。",
+    "pinyin": "Arduino shì yí ge chángyòng de wēi kòngzhìqì.",
+    "en": "Arduino is a commonly used microcontroller.",
+    "hanzi_source": "微控制器"
+  },
+  {
+    "id": "sent_1406",
+    "zh": "我喜欢学电子。",
+    "pinyin": "Wǒ xǐhuan xué diànzǐ.",
+    "en": "I like learning electronics.",
+    "hanzi_source": "电子"
+  },
+  {
+    "id": "sent_1407",
+    "zh": "电子元件很便宜。",
+    "pinyin": "Diànzǐ yuánjiàn hěn piányi.",
+    "en": "Electronic components are cheap.",
+    "hanzi_source": "电子"
+  },
+  {
+    "id": "sent_1408",
+    "zh": "这个电路很简单。",
+    "pinyin": "Zhège diànlù hěn jiǎndān.",
+    "en": "This circuit is very simple.",
+    "hanzi_source": "电路"
+  },
+  {
+    "id": "sent_1409",
+    "zh": "不要短路电路。",
+    "pinyin": "Bú yào duǎnlù diànlù.",
+    "en": "Don't short-circuit the circuit.",
+    "hanzi_source": "电路"
+  },
+  {
+    "id": "sent_1410",
+    "zh": "传感器可以检测温度。",
+    "pinyin": "Chuángǎnqì kěyǐ jiǎncè wēndù.",
+    "en": "Sensors can detect temperature.",
+    "hanzi_source": "传感器"
+  },
+  {
+    "id": "sent_1411",
+    "zh": "超声波传感器测量距离。",
+    "pinyin": "Chāoshēngbō chuángǎnqì cèliáng jùlí.",
+    "en": "Ultrasonic sensors measure distance.",
+    "hanzi_source": "传感器"
+  },
+  {
+    "id": "sent_1412",
+    "zh": "执行器让机器动起来。",
+    "pinyin": "Zhíxíngqì ràng jīqì dòng qǐlai.",
+    "en": "Actuators make machines move.",
+    "hanzi_source": "执行器"
+  },
+  {
+    "id": "sent_1413",
+    "zh": "电机是一种执行器。",
+    "pinyin": "Diànjī shì yī zhǒng zhíxíngqì.",
+    "en": "Motors are a type of actuator.",
+    "hanzi_source": "执行器"
+  },
+  {
+    "id": "sent_1414",
+    "zh": "电压不能太高。",
+    "pinyin": "Diànyā bùnéng tài gāo.",
+    "en": "Voltage can't be too high.",
+    "hanzi_source": "电压"
+  },
+  {
+    "id": "sent_1415",
+    "zh": "这个电池的电压是1.5伏。",
+    "pinyin": "Zhège diànchí de diànyā shì 1.5 fú.",
+    "en": "This battery's voltage is 1.5 volts.",
+    "hanzi_source": "电压"
+  },
+  {
+    "id": "sent_1416",
+    "zh": "电流太大可能会烧坏元件。",
+    "pinyin": "Diànliú tài dà kěnéng huì shāohuài yuánjiàn.",
+    "en": "If the current is too high, it might burn components.",
+    "hanzi_source": "电流"
+  },
+  {
+    "id": "sent_1417",
+    "zh": "万用表可以测量电流。",
+    "pinyin": "Wànyòngbiǎo kěyǐ cèliáng diànliú.",
+    "en": "A multimeter can measure current.",
+    "hanzi_source": "电流"
+  },
+  {
+    "id": "sent_1418",
+    "zh": "电阻限制电流。",
+    "pinyin": "Diànzǔ xiànzhì diànliú.",
+    "en": "Resistors limit current.",
+    "hanzi_source": "电阻"
+  },
+  {
+    "id": "sent_1419",
+    "zh": "这个电阻的阻值是100欧姆。",
+    "pinyin": "Zhège diànzǔ de zǔzhí shì yībǎi ōumǔ.",
+    "en": "This resistor's value is 100 ohms.",
+    "hanzi_source": "电阻"
+  },
+  {
+    "id": "sent_1420",
+    "zh": "电容可以储存电能。",
+    "pinyin": "Diànróng kěyǐ chǔcún diànnéng.",
+    "en": "Capacitors can store electrical energy.",
+    "hanzi_source": "电容"
+  },
+  {
+    "id": "sent_1421",
+    "zh": "这个电容坏了。",
+    "pinyin": "Zhège diànróng huài le.",
+    "en": "This capacitor is broken.",
+    "hanzi_source": "电容"
+  },
+  {
+    "id": "sent_1422",
+    "zh": "发光二极管很省电。",
+    "pinyin": "Fāguāng èrjíguǎn hěn shěng diàn.",
+    "en": "LEDs are very energy-efficient.",
+    "hanzi_source": "发光二极管"
+  },
+  {
+    "id": "sent_1423",
+    "zh": "按下开关，发光二极管亮了。",
+    "pinyin": "Àn xià kāiguān, fāguāng èrjíguǎn liàng le.",
+    "en": "Press the switch, the LED lights up.",
+    "hanzi_source": "发光二极管"
+  },
+  {
+    "id": "sent_1424",
+    "zh": "先在面包板上测试电路。",
+    "pinyin": "Xiān zài miànbāobǎn shàng cèshì diànlù.",
+    "en": "First test the circuit on the breadboard.",
+    "hanzi_source": "面包板"
+  },
+  {
+    "id": "sent_1425",
+    "zh": "面包板不需要焊接。",
+    "pinyin": "Miànbāobǎn bù xūyào hànjiē.",
+    "en": "Breadboards don't require soldering.",
+    "hanzi_source": "面包板"
+  },
+  {
+    "id": "sent_1426",
+    "zh": "用跳线连接面包板上的元件。",
+    "pinyin": "Yòng tiàoxiàn liánjiē miànbāobǎn shàng de yuánjiàn.",
+    "en": "Use jumper wires to connect components on the breadboard.",
+    "hanzi_source": "跳线"
+  },
+  {
+    "id": "sent_1427",
+    "zh": "跳线有很多颜色。",
+    "pinyin": "Tiàoxiàn yǒu hěn duō yánsè.",
+    "en": "Jumper wires come in many colors.",
+    "hanzi_source": "跳线"
+  },
+  {
+    "id": "sent_1428",
+    "zh": "焊接需要练习。",
+    "pinyin": "Hànjiē xūyào liànxí.",
+    "en": "Soldering takes practice.",
+    "hanzi_source": "焊接"
+  },
+  {
+    "id": "sent_1429",
+    "zh": "小心不要把板子焊坏了。",
+    "pinyin": "Xiǎoxīn bú yào bǎ bǎnzi hàn huài le.",
+    "en": "Be careful not to damage the board while soldering.",
+    "hanzi_source": "焊接"
+  },
+  {
+    "id": "sent_1430",
+    "zh": "烙铁温度很高。",
+    "pinyin": "Làotiě wēndù hěn gāo.",
+    "en": "The soldering iron is very hot.",
+    "hanzi_source": "烙铁"
+  },
+  {
+    "id": "sent_1431",
+    "zh": "用完烙铁要关掉电源。",
+    "pinyin": "Yòng wán làotiě yào guān diào diànyuán.",
+    "en": "Turn off the soldering iron after use.",
+    "hanzi_source": "烙铁"
+  },
+  {
+    "id": "sent_1432",
+    "zh": "我写了一段代码控制LED灯。",
+    "pinyin": "Wǒ xiě le yī duàn dàimǎ kòngzhì LED dēng.",
+    "en": "I wrote some code to control an LED.",
+    "hanzi_source": "代码"
+  },
+  {
+    "id": "sent_1433",
+    "zh": "上传代码到微控制器。",
+    "pinyin": "Shàngchuán dàimǎ dào wēi kòngzhìqì.",
+    "en": "Upload code to the microcontroller.",
+    "hanzi_source": "代码"
+  },
+  {
+    "id": "sent_1434",
+    "zh": "把代码上传到开发板。",
+    "pinyin": "Bǎ dàimǎ shàngchuán dào kāifā bǎn.",
+    "en": "Upload the code to the development board.",
+    "hanzi_source": "上传"
+  },
+  {
+    "id": "sent_1435",
+    "zh": "上传成功了。",
+    "pinyin": "Shàngchuán chénggōng le.",
+    "en": "Upload successful.",
+    "hanzi_source": "上传"
+  },
+  {
+    "id": "sent_1436",
+    "zh": "这个引脚是正极。",
+    "pinyin": "Zhège yǐnjiǎo shì zhèngjí.",
+    "en": "This pin is positive.",
+    "hanzi_source": "引脚"
+  },
+  {
+    "id": "sent_1437",
+    "zh": "不要接错引脚。",
+    "pinyin": "Bú yào jiē cuò yǐnjiǎo.",
+    "en": "Don't connect the wrong pins.",
+    "hanzi_source": "引脚"
+  },
+  {
+    "id": "sent_1438",
+    "zh": "黑线一般接地。",
+    "pinyin": "Hēi xiàn yībān jiēdì.",
+    "en": "The black wire is usually ground.",
+    "hanzi_source": "接地"
+  },
+  {
+    "id": "sent_1439",
+    "zh": "别忘了接地线。",
+    "pinyin": "Bié wàng le jiē dìxiàn.",
+    "en": "Don't forget to connect ground.",
+    "hanzi_source": "接地"
+  },
+  {
+    "id": "sent_1440",
+    "zh": "数字信号只有0和1。",
+    "pinyin": "Shùzì xìnhào zhǐ yǒu 0 hé 1.",
+    "en": "Digital signals are only 0 and 1.",
+    "hanzi_source": "数字"
+  },
+  {
+    "id": "sent_1441",
+    "zh": "这个引脚是数字引脚。",
+    "pinyin": "Zhège yǐnjiǎo shì shùzì yǐnjiǎo.",
+    "en": "This pin is a digital pin.",
+    "hanzi_source": "数字"
+  },
+  {
+    "id": "sent_1442",
+    "zh": "模拟信号可以是任何值。",
+    "pinyin": "Mónǐ xìnhào kěyǐ shì rènhé zhí.",
+    "en": "Analog signals can be any value.",
+    "hanzi_source": "模拟"
+  },
+  {
+    "id": "sent_1443",
+    "zh": "用模拟引脚读取传感器的值。",
+    "pinyin": "Yòng mónǐ yǐnjiǎo dúqǔ chuángǎnqì de zhí.",
+    "en": "Use an analog pin to read sensor values.",
+    "hanzi_source": "模拟"
+  },
+  {
+    "id": "sent_1444",
+    "zh": "脉冲宽度调制可以控制电机速度。",
+    "pinyin": "Màichōng kuāndù tiáozhì kěyǐ kòngzhì diànjī sùdù.",
+    "en": "PWM can control motor speed.",
+    "hanzi_source": "脉冲宽度调制"
+  },
+  {
+    "id": "sent_1445",
+    "zh": "这个引脚支持脉冲宽度调制。",
+    "pinyin": "Zhège yǐnjiǎo zhīchí màichōng kuāndù tiáozhì.",
+    "en": "This pin supports PWM.",
+    "hanzi_source": "脉冲宽度调制"
+  },
+  {
+    "id": "sent_1446",
+    "zh": "我在学习编程。",
+    "pinyin": "Wǒ zài xuéxí biānchéng.",
+    "en": "I am learning programming.",
+    "hanzi_source": "编程"
+  },
+  {
+    "id": "sent_1447",
+    "zh": "编程很有趣。",
+    "pinyin": "Biānchéng hěn yǒuqù.",
+    "en": "Programming is very interesting.",
+    "hanzi_source": "编程"
+  },
+  {
+    "id": "sent_1448",
+    "zh": "这个网站很有用。",
+    "pinyin": "Zhège wǎngzhàn hěn yǒuyòng.",
+    "en": "This website is very useful.",
+    "hanzi_source": "网站"
+  },
+  {
+    "id": "sent_1449",
+    "zh": "我想建一个自己的网站。",
+    "pinyin": "Wǒ xiǎng jiàn yí ge zìjǐ de wǎngzhàn.",
+    "en": "I want to build my own website.",
+    "hanzi_source": "网站"
+  },
+  {
+    "id": "sent_1450",
+    "zh": "前端开发负责用户界面。",
+    "pinyin": "Qiánduān kāifā fùzé yònghù jièmiàn.",
+    "en": "Front-end development is responsible for the user interface.",
+    "hanzi_source": "前端"
+  },
+  {
+    "id": "sent_1451",
+    "zh": "我想学前端。",
+    "pinyin": "Wǒ xiǎng xué qiánduān.",
+    "en": "I want to learn front-end.",
+    "hanzi_source": "前端"
+  },
+  {
+    "id": "sent_1452",
+    "zh": "后端处理服务器和数据库。",
+    "pinyin": "Hòuduān chǔlǐ fúwùqì hé shùjùkù.",
+    "en": "Back-end handles servers and databases.",
+    "hanzi_source": "后端"
+  },
+  {
+    "id": "sent_1453",
+    "zh": "前端和后端要配合工作。",
+    "pinyin": "Qiánduān hé hòuduān yào pèihé gōngzuò.",
+    "en": "Front-end and back-end need to work together.",
+    "hanzi_source": "后端"
+  },
+  {
+    "id": "sent_1454",
+    "zh": "超文本标记语言是网页的基础。",
+    "pinyin": "Chāowénběn biāojì yǔyán shì wǎngyè de jīchǔ.",
+    "en": "HTML is the foundation of web pages.",
+    "hanzi_source": "超文本标记语言"
+  },
+  {
+    "id": "sent_1455",
+    "zh": "学习编程要先学超文本标记语言。",
+    "pinyin": "Xuéxí biānchéng yào xiān xué chāowénběn biāojì yǔyán.",
+    "en": "When learning programming, learn HTML first.",
+    "hanzi_source": "超文本标记语言"
+  },
+  {
+    "id": "sent_1456",
+    "zh": "层叠样式表控制网页的样式。",
+    "pinyin": "Céngdié yàngshì biǎo kòngzhì wǎngyè de yàngshì.",
+    "en": "CSS controls the style of web pages.",
+    "hanzi_source": "层叠样式表"
+  },
+  {
+    "id": "sent_1457",
+    "zh": "用层叠样式表可以改变颜色和字体。",
+    "pinyin": "Yòng céngdié yàngshì biǎo kěyǐ gǎibiàn yánsè hé zìtǐ.",
+    "en": "You can change colors and fonts with CSS.",
+    "hanzi_source": "层叠样式表"
+  },
+  {
+    "id": "sent_1458",
+    "zh": "脚本语言让网页动起来。",
+    "pinyin": "Jiǎoběn yǔyán ràng wǎngyè dòng qǐlai.",
+    "en": "JavaScript makes web pages interactive.",
+    "hanzi_source": "脚本语言"
+  },
+  {
+    "id": "sent_1459",
+    "zh": "脚本语言很难学。",
+    "pinyin": "Jiǎoběn yǔyán hěn nán xué.",
+    "en": "JavaScript is hard to learn.",
+    "hanzi_source": "脚本语言"
+  },
+  {
+    "id": "sent_1460",
+    "zh": "使用框架可以加快开发速度。",
+    "pinyin": "Shǐyòng kuàngjià kěyǐ jiākuài kāifā sùdù.",
+    "en": "Using a framework speeds up development.",
+    "hanzi_source": "框架"
+  },
+  {
+    "id": "sent_1461",
+    "zh": "React是一个流行的前端框架。",
+    "pinyin": "React shì yí ge liúxíng de qiánduān kuàngjià.",
+    "en": "React is a popular front-end framework.",
+    "hanzi_source": "框架"
+  },
+  {
+    "id": "sent_1462",
+    "zh": "响应式设计适配手机和电脑。",
+    "pinyin": "Xiǎngyìng shì shèjì shìpèi shǒujī hé diànnǎo.",
+    "en": "Responsive design adapts to phones and computers.",
+    "hanzi_source": "响应式"
+  },
+  {
+    "id": "sent_1463",
+    "zh": "这个网站是响应式的。",
+    "pinyin": "Zhège wǎngzhàn shì xiǎngyìng shì de.",
+    "en": "This website is responsive.",
+    "hanzi_source": "响应式"
+  },
+  {
+    "id": "sent_1464",
+    "zh": "服务器不能停机。",
+    "pinyin": "Fúwùqì bùnéng tíngjī.",
+    "en": "The server cannot go down.",
+    "hanzi_source": "服务器"
+  },
+  {
+    "id": "sent_1465",
+    "zh": "网站托管在服务器上。",
+    "pinyin": "Wǎngzhàn tuōguǎn zài fúwùqì shàng.",
+    "en": "The website is hosted on a server.",
+    "hanzi_source": "服务器"
+  },
+  {
+    "id": "sent_1466",
+    "zh": "数据库里存储了用户信息。",
+    "pinyin": "Shùjùkù lǐ cúnchǔ le yònghù xìnxī.",
+    "en": "User information is stored in the database.",
+    "hanzi_source": "数据库"
+  },
+  {
+    "id": "sent_1467",
+    "zh": "学习数据库很有用。",
+    "pinyin": "Xuéxí shùjùkù hěn yǒuyòng.",
+    "en": "Learning databases is very useful.",
+    "hanzi_source": "数据库"
+  },
+  {
+    "id": "sent_1468",
+    "zh": "我买了一个新域名。",
+    "pinyin": "Wǒ mǎi le yí ge xīn yùmíng.",
+    "en": "I bought a new domain name.",
+    "hanzi_source": "域名"
+  },
+  {
+    "id": "sent_1469",
+    "zh": "域名要每年续费。",
+    "pinyin": "Yùmíng yào měi nián xùfèi.",
+    "en": "Domain names need to be renewed every year.",
+    "hanzi_source": "域名"
+  },
+  {
+    "id": "sent_1470",
+    "zh": "网站需要托管。",
+    "pinyin": "Wǎngzhàn xūyào tuōguǎn.",
+    "en": "Websites need hosting.",
+    "hanzi_source": "托管"
+  },
+  {
+    "id": "sent_1471",
+    "zh": "这个托管服务很便宜。",
+    "pinyin": "Zhège tuōguǎn fúwù hěn piányi.",
+    "en": "This hosting service is very cheap.",
+    "hanzi_source": "托管"
+  },
+  {
+    "id": "sent_1472",
+    "zh": "版本控制帮助团队合作。",
+    "pinyin": "Bǎnběn kòngzhì bāngzhù tuánduì hézuò.",
+    "en": "Version control helps teams collaborate.",
+    "hanzi_source": "版本控制"
+  },
+  {
+    "id": "sent_1473",
+    "zh": "Git是一个版本控制系统。",
+    "pinyin": "Git shì yí ge bǎnběn kòngzhì xìtǒng.",
+    "en": "Git is a version control system.",
+    "hanzi_source": "版本控制"
+  },
+  {
+    "id": "sent_1474",
+    "zh": "把代码推送到远程仓库。",
+    "pinyin": "Bǎ dàimǎ tuīsòng dào yuǎnchéng cāngkù.",
+    "en": "Push the code to the remote repository.",
+    "hanzi_source": "仓库"
+  },
+  {
+    "id": "sent_1475",
+    "zh": "创建一个新仓库。",
+    "pinyin": "Chuàngjiàn yí ge xīn cāngkù.",
+    "en": "Create a new repository.",
+    "hanzi_source": "仓库"
+  },
+  {
+    "id": "sent_1476",
+    "zh": "代码写好后要部署到服务器。",
+    "pinyin": "Dàimǎ xiě hǎo hòu yào bùshǔ dào fúwùqì.",
+    "en": "After writing the code, deploy it to the server.",
+    "hanzi_source": "部署"
+  },
+  {
+    "id": "sent_1477",
+    "zh": "部署前先测试一下。",
+    "pinyin": "Bùshǔ qián xiān cèshì yīxià.",
+    "en": "Test before deploying.",
+    "hanzi_source": "部署"
+  },
+  {
+    "id": "sent_1478",
+    "zh": "这个bug很难调试。",
+    "pinyin": "Zhège bug hěn nán tiáoshì.",
+    "en": "This bug is very hard to debug.",
+    "hanzi_source": "调试"
+  },
+  {
+    "id": "sent_1479",
+    "zh": "用控制台调试代码。",
+    "pinyin": "Yòng kòngzhìtái tiáoshì dàimǎ.",
+    "en": "Use the console to debug code.",
+    "hanzi_source": "调试"
+  },
+  {
+    "id": "sent_1480",
+    "zh": "变量可以存储数据。",
+    "pinyin": "Biànliàng kěyǐ cúnchǔ shùjù.",
+    "en": "Variables can store data.",
+    "hanzi_source": "变量"
+  },
+  {
+    "id": "sent_1481",
+    "zh": "给变量起个好名字。",
+    "pinyin": "Gěi biànliàng qǐ ge hǎo míngzi.",
+    "en": "Give the variable a good name.",
+    "hanzi_source": "变量"
+  },
+  {
+    "id": "sent_1482",
+    "zh": "把重复的代码写成函数。",
+    "pinyin": "Bǎ chóngfù de dàimǎ xiě chéng hánshù.",
+    "en": "Write repeated code as a function.",
+    "hanzi_source": "函数"
+  },
+  {
+    "id": "sent_1483",
+    "zh": "调用这个函数会返回结果。",
+    "pinyin": "Diàoyòng zhège hánshù huì fǎnhuí jiéguǒ.",
+    "en": "Calling this function will return a result.",
+    "hanzi_source": "函数"
+  },
+  {
+    "id": "sent_1484",
+    "zh": "循环可以重复执行代码。",
+    "pinyin": "Xúnhuán kěyǐ chóngfù zhíxíng dàimǎ.",
+    "en": "Loops can execute code repeatedly.",
+    "hanzi_source": "循环"
+  },
+  {
+    "id": "sent_1485",
+    "zh": "小心无限循环。",
+    "pinyin": "Xiǎoxīn wúxiàn xúnhuán.",
+    "en": "Beware of infinite loops.",
+    "hanzi_source": "循环"
+  },
+  {
+    "id": "sent_1486",
+    "zh": "数组可以存储多个值。",
+    "pinyin": "Shùzǔ kěyǐ cúnchǔ duō ge zhí.",
+    "en": "An array can store multiple values.",
+    "hanzi_source": "数组"
+  },
+  {
+    "id": "sent_1487",
+    "zh": "访问数组的第一个元素。",
+    "pinyin": "Fǎngwèn shùzǔ de dì-yī ge yuánsù.",
+    "en": "Access the first element of the array.",
+    "hanzi_source": "数组"
+  },
+  {
+    "id": "sent_1488",
     "zh": "我喜欢玩电脑游戏。",
     "pinyin": "Wǒ xǐhuan wán diànnǎo yóuxì.",
     "en": "I like playing computer games.",
     "hanzi_source": "游戏"
   },
   {
-    "id": "sent_0709",
+    "id": "sent_1489",
     "zh": "这个游戏很好玩。",
     "pinyin": "Zhège yóuxì hěn hǎowán.",
     "en": "This game is very fun.",
     "hanzi_source": "游戏"
   },
   {
-    "id": "sent_0710",
+    "id": "sent_1490",
     "zh": "他是一个资深玩家。",
     "pinyin": "Tā shì yí ge zīshēn wánjiā.",
     "en": "He is an experienced gamer.",
     "hanzi_source": "玩家"
   },
   {
-    "id": "sent_0711",
+    "id": "sent_1491",
     "zh": "很多玩家喜欢这个游戏。",
     "pinyin": "Hěn duō wánjiā xǐhuan zhège yóuxì.",
     "en": "Many players like this game.",
     "hanzi_source": "玩家"
   },
   {
-    "id": "sent_0712",
+    "id": "sent_1492",
     "zh": "帧率太低会卡顿。",
     "pinyin": "Zhēnlǜ tài dī huì kǎdùn.",
     "en": "If the frame rate is too low, it will stutter.",
     "hanzi_source": "帧率"
   },
   {
-    "id": "sent_0713",
+    "id": "sent_1493",
     "zh": "高帧率让游戏更流畅。",
     "pinyin": "Gāo zhēnlǜ ràng yóuxì gèng liúchàng.",
     "en": "High frame rate makes games smoother.",
     "hanzi_source": "帧率"
   },
   {
-    "id": "sent_0714",
+    "id": "sent_1494",
     "zh": "4K分辨率很清晰。",
     "pinyin": "4K fēnbiànlǜ hěn qīngxī.",
     "en": "4K resolution is very clear.",
     "hanzi_source": "分辨率"
   },
   {
-    "id": "sent_0715",
+    "id": "sent_1495",
     "zh": "降低分辨率可以提高帧率。",
     "pinyin": "Jiàngdī fēnbiànlǜ kěyǐ tígāo zhēnlǜ.",
     "en": "Lowering resolution can increase frame rate.",
     "hanzi_source": "分辨率"
   },
   {
-    "id": "sent_0716",
+    "id": "sent_1496",
     "zh": "网络延迟很高。",
     "pinyin": "Wǎngluò yánchí hěn gāo.",
     "en": "The network latency is very high.",
     "hanzi_source": "延迟"
   },
   {
-    "id": "sent_0717",
+    "id": "sent_1497",
     "zh": "延迟高的时候游戏没法玩。",
     "pinyin": "Yánchí gāo de shíhou yóuxì méi fǎ wán.",
     "en": "When lag is high, the game is unplayable.",
     "hanzi_source": "延迟"
   },
   {
-    "id": "sent_0718",
+    "id": "sent_1498",
     "zh": "我的键盘坏了。",
     "pinyin": "Wǒ de jiànpán huài le.",
     "en": "My keyboard is broken.",
     "hanzi_source": "键盘"
   },
   {
-    "id": "sent_0719",
+    "id": "sent_1499",
     "zh": "用键盘打字很快。",
     "pinyin": "Yòng jiànpán dǎzì hěn kuài.",
     "en": "Typing with a keyboard is very fast.",
     "hanzi_source": "键盘"
   },
   {
-    "id": "sent_0720",
+    "id": "sent_1500",
     "zh": "无线鼠标很方便。",
     "pinyin": "Wúxiàn shǔbiāo hěn fāngbiàn.",
     "en": "A wireless mouse is very convenient.",
     "hanzi_source": "鼠标"
   },
   {
-    "id": "sent_0721",
+    "id": "sent_1501",
     "zh": "鼠标指针不动了。",
     "pinyin": "Shǔbiāo zhǐzhēn bú dòng le.",
     "en": "The mouse cursor stopped moving.",
     "hanzi_source": "鼠标"
   },
   {
-    "id": "sent_0722",
+    "id": "sent_1502",
     "zh": "这个显示器色彩很好。",
     "pinyin": "Zhège xiǎnshìqì sècǎi hěn hǎo.",
     "en": "This monitor has good colors.",
     "hanzi_source": "显示器"
   },
   {
-    "id": "sent_0723",
+    "id": "sent_1503",
     "zh": "我有一个27寸的显示器。",
     "pinyin": "Wǒ yǒu yí ge èrshíqī cùn de xiǎnshìqì.",
     "en": "I have a 27-inch monitor.",
     "hanzi_source": "显示器"
   },
   {
-    "id": "sent_0724",
+    "id": "sent_1504",
     "zh": "144Hz刷新率玩游戏很爽。",
     "pinyin": "Yībǎi sìshísì Hz shuāxīnlǜ wán yóuxì hěn shuǎng.",
     "en": "144Hz refresh rate is great for gaming.",
     "hanzi_source": "刷新率"
   },
   {
-    "id": "sent_0725",
+    "id": "sent_1505",
     "zh": "刷新率越高画面越流畅。",
     "pinyin": "Shuāxīnlǜ yuè gāo huàmiàn yuè liúchàng.",
     "en": "The higher the refresh rate, the smoother the picture.",
     "hanzi_source": "刷新率"
   },
   {
-    "id": "sent_0726",
+    "id": "sent_1506",
     "zh": "机械键盘手感很好。",
     "pinyin": "Jīxiè jiànpán shǒugǎn hěn hǎo.",
     "en": "Mechanical keyboards feel very good.",
     "hanzi_source": "机械键盘"
   },
   {
-    "id": "sent_0727",
+    "id": "sent_1507",
     "zh": "青轴机械键盘声音很大。",
     "pinyin": "Qīng zhóu jīxiè jiànpán shēngyīn hěn dà.",
     "en": "Blue-switch mechanical keyboards are very loud.",
     "hanzi_source": "机械键盘"
   },
   {
-    "id": "sent_0728",
+    "id": "sent_1508",
     "zh": "用游戏手柄玩赛车游戏更好。",
     "pinyin": "Yòng yóuxì shǒubǐng wán sàichē yóuxì gèng hǎo.",
     "en": "Using a game controller is better for racing games.",
     "hanzi_source": "游戏手柄"
   },
   {
-    "id": "sent_0729",
+    "id": "sent_1509",
     "zh": "这个游戏手柄支持无线连接。",
     "pinyin": "Zhège yóuxì shǒubǐng zhīchí wúxiàn liánjiē.",
     "en": "This game controller supports wireless connection.",
     "hanzi_source": "游戏手柄"
   },
   {
-    "id": "sent_0730",
+    "id": "sent_1510",
     "zh": "玩游戏需要好的耳机。",
     "pinyin": "Wán yóuxì xūyào hǎo de ěrjī.",
     "en": "Playing games requires good headphones.",
     "hanzi_source": "耳机"
   },
   {
-    "id": "sent_0731",
+    "id": "sent_1511",
     "zh": "耳机可以听到脚步声。",
     "pinyin": "Ěrjī kěyǐ tīng dào jiǎobù shēng.",
     "en": "Headphones let you hear footsteps.",
     "hanzi_source": "耳机"
   },
   {
-    "id": "sent_0732",
+    "id": "sent_1512",
     "zh": "麦克风坏了，听不见我说话。",
     "pinyin": "Màikèfēng huài le, tīng bú jiàn wǒ shuōhuà.",
     "en": "The microphone is broken, you can't hear me.",
     "hanzi_source": "麦克风"
   },
   {
-    "id": "sent_0733",
+    "id": "sent_1513",
     "zh": "用麦克风和队友沟通。",
     "pinyin": "Yòng màikèfēng hé duìyǒu gōutōng.",
     "en": "Use the microphone to communicate with teammates.",
     "hanzi_source": "麦克风"
   },
   {
-    "id": "sent_0734",
+    "id": "sent_1514",
     "zh": "他在做游戏流媒体直播。",
     "pinyin": "Tā zài zuò yóuxì liú méitǐ zhíbō.",
     "en": "He is doing game streaming.",
     "hanzi_source": "流媒体"
   },
   {
-    "id": "sent_0735",
+    "id": "sent_1515",
     "zh": "流媒体平台很受欢迎。",
     "pinyin": "Liú méitǐ píngtái hěn shòu huānyíng.",
     "en": "Streaming platforms are very popular.",
     "hanzi_source": "流媒体"
   },
   {
-    "id": "sent_0736",
+    "id": "sent_1516",
     "zh": "我晚上八点开直播。",
-    "pinyin": "Wǒ wǎnshàng bā diǎn kāi zhíbō.",
+    "pinyin": "Wǒ wǎnshang bā diǎn kāi zhíbō.",
     "en": "I start my live stream at 8 PM.",
     "hanzi_source": "直播"
   },
   {
-    "id": "sent_0737",
+    "id": "sent_1517",
     "zh": "直播的时候可以和观众聊天。",
     "pinyin": "Zhíbō de shíhou kěyǐ hé guānzhòng liáotiān.",
     "en": "During a live stream, you can chat with viewers.",
     "hanzi_source": "直播"
   },
   {
-    "id": "sent_0738",
+    "id": "sent_1518",
     "zh": "我在下载一个新游戏。",
     "pinyin": "Wǒ zài xiàzài yí ge xīn yóuxì.",
     "en": "I am downloading a new game.",
     "hanzi_source": "下载"
   },
   {
-    "id": "sent_0739",
+    "id": "sent_1519",
     "zh": "下载速度很慢。",
     "pinyin": "Xiàzài sùdù hěn màn.",
     "en": "The download speed is very slow.",
     "hanzi_source": "下载"
   },
   {
-    "id": "sent_0740",
+    "id": "sent_1520",
     "zh": "游戏需要更新。",
     "pinyin": "Yóuxì xūyào gēngxīn.",
     "en": "The game needs to update.",
     "hanzi_source": "更新"
   },
   {
-    "id": "sent_0741",
+    "id": "sent_1521",
     "zh": "更新后添加了新功能。",
     "pinyin": "Gēngxīn hòu tiānjiā le xīn gōngnéng.",
     "en": "After the update, new features were added.",
     "hanzi_source": "更新"
   },
   {
-    "id": "sent_0742",
+    "id": "sent_1522",
     "zh": "新补丁修复了很多bug。",
     "pinyin": "Xīn bǔdīng xiūfù le hěn duō bug.",
     "en": "The new patch fixed many bugs.",
     "hanzi_source": "补丁"
   },
   {
-    "id": "sent_0743",
+    "id": "sent_1523",
     "zh": "安装补丁后重启游戏。",
     "pinyin": "Ānzhuāng bǔdīng hòu chóngqǐ yóuxì.",
     "en": "Restart the game after installing the patch.",
     "hanzi_source": "补丁"
   },
   {
-    "id": "sent_0744",
+    "id": "sent_1524",
     "zh": "我解锁了一个新成就。",
     "pinyin": "Wǒ jiěsuǒ le yí ge xīn chéngjiù.",
     "en": "I unlocked a new achievement.",
     "hanzi_source": "成就"
   },
   {
-    "id": "sent_0745",
+    "id": "sent_1525",
     "zh": "这个成就很难拿到。",
     "pinyin": "Zhège chéngjiù hěn nán ná dào.",
     "en": "This achievement is very hard to get.",
     "hanzi_source": "成就"
   },
   {
-    "id": "sent_0746",
+    "id": "sent_1526",
     "zh": "这个游戏支持多人模式。",
     "pinyin": "Zhège yóuxì zhīchí duōrén móshì.",
     "en": "This game supports multiplayer mode.",
     "hanzi_source": "多人"
   },
   {
-    "id": "sent_0747",
+    "id": "sent_1527",
     "zh": "我喜欢和朋友一起玩多人游戏。",
     "pinyin": "Wǒ xǐhuan hé péngyou yīqǐ wán duōrén yóuxì.",
     "en": "I like playing multiplayer games with friends.",
     "hanzi_source": "多人"
   },
   {
-    "id": "sent_0748",
+    "id": "sent_1528",
     "zh": "单人游戏可以慢慢玩。",
     "pinyin": "Dānrén yóuxì kěyǐ mànmàn wán.",
     "en": "Single-player games can be played slowly.",
     "hanzi_source": "单人"
   },
   {
-    "id": "sent_0749",
+    "id": "sent_1529",
     "zh": "我喜欢剧情好的单人游戏。",
     "pinyin": "Wǒ xǐhuan jùqíng hǎo de dānrén yóuxì.",
     "en": "I like single-player games with good stories.",
     "hanzi_source": "单人"
   },
   {
-    "id": "sent_0750",
+    "id": "sent_1530",
     "zh": "我喜欢涂装微缩模型。",
     "pinyin": "Wǒ xǐhuan túzhuāng wēisuō móxíng.",
     "en": "I like painting miniatures.",
     "hanzi_source": "微缩模型"
   },
   {
-    "id": "sent_0751",
+    "id": "sent_1531",
     "zh": "这个微缩模型很小，细节很丰富。",
     "pinyin": "Zhège wēisuō móxíng hěn xiǎo, xìjié hěn fēngfù.",
     "en": "This miniature is very small with rich details.",
     "hanzi_source": "微缩模型"
   },
   {
-    "id": "sent_0752",
+    "id": "sent_1532",
     "zh": "微缩模型涂装需要耐心。",
     "pinyin": "Wēisuō móxíng túzhuāng xūyào nàixīn.",
     "en": "Painting miniatures requires patience.",
     "hanzi_source": "涂装"
   },
   {
-    "id": "sent_0753",
+    "id": "sent_1533",
     "zh": "他的涂装技术很棒。",
     "pinyin": "Tā de túzhuāng jìshù hěn bàng.",
     "en": "His painting skills are great.",
     "hanzi_source": "涂装"
   },
   {
-    "id": "sent_0754",
+    "id": "sent_1534",
     "zh": "涂装前先喷底漆。",
     "pinyin": "Túzhuāng qián xiān pēn dǐqī.",
     "en": "Spray primer before painting.",
     "hanzi_source": "底漆"
   },
   {
-    "id": "sent_0755",
+    "id": "sent_1535",
     "zh": "黑色底漆适合暗色调。",
     "pinyin": "Hēisè dǐqī shìhé ànsè diào.",
     "en": "Black primer is good for dark color schemes.",
     "hanzi_source": "底漆"
   },
   {
-    "id": "sent_0756",
+    "id": "sent_1536",
     "zh": "微缩模型常用丙烯酸颜料。",
     "pinyin": "Wēisuō móxíng cháng yòng bǐngxīsuān yánliào.",
     "en": "Acrylic paint is commonly used for miniatures.",
     "hanzi_source": "丙烯酸颜料"
   },
   {
-    "id": "sent_0757",
+    "id": "sent_1537",
     "zh": "丙烯酸颜料干得很快。",
     "pinyin": "Bǐngxīsuān yánliào gàn de hěn kuài.",
     "en": "Acrylic paint dries very quickly.",
     "hanzi_source": "丙烯酸颜料"
   },
   {
-    "id": "sent_0758",
+    "id": "sent_1538",
     "zh": "用小号画笔涂细节。",
     "pinyin": "Yòng xiǎo hào huàbǐ tú xìjié.",
     "en": "Use a small brush for details.",
     "hanzi_source": "画笔"
   },
   {
-    "id": "sent_0759",
+    "id": "sent_1539",
     "zh": "画笔用完后要清洗干净。",
     "pinyin": "Huàbǐ yòng wán hòu yào qīngxǐ gānjìng.",
     "en": "Clean the brushes thoroughly after use.",
     "hanzi_source": "画笔"
   },
   {
-    "id": "sent_0760",
+    "id": "sent_1540",
     "zh": "干扫可以让边缘更突出。",
     "pinyin": "Gānsǎo kěyǐ ràng biānyuán gèng tūchū.",
     "en": "Dry brushing makes edges stand out more.",
     "hanzi_source": "干扫"
   },
   {
-    "id": "sent_0761",
+    "id": "sent_1541",
     "zh": "干扫前要把画笔上的颜料擦干。",
     "pinyin": "Gānsǎo qián yào bǎ huàbǐ shàng de yánliào cā gān.",
     "en": "Dry the paint off the brush before dry brushing.",
     "hanzi_source": "干扫"
   },
   {
-    "id": "sent_0762",
+    "id": "sent_1542",
     "zh": "渍洗可以加深阴影。",
     "pinyin": "Zìxǐ kěyǐ jiāshēn yīnyǐng.",
     "en": "Wash can deepen shadows.",
     "hanzi_source": "渍洗"
   },
   {
-    "id": "sent_0763",
+    "id": "sent_1543",
     "zh": "棕色渍洗适合做旧效果。",
     "pinyin": "Zōngsè zìxǐ shìhé zuò jiù xiàoguǒ.",
     "en": "Brown wash is good for a weathered effect.",
     "hanzi_source": "渍洗"
   },
   {
-    "id": "sent_0764",
+    "id": "sent_1544",
     "zh": "给边缘加上高光。",
     "pinyin": "Gěi biānyuán jiā shàng gāoguāng.",
     "en": "Add highlights to the edges.",
     "hanzi_source": "高光"
   },
   {
-    "id": "sent_0765",
+    "id": "sent_1545",
     "zh": "高光让模型更有立体感。",
     "pinyin": "Gāoguāng ràng móxíng gèng yǒu lìtǐ gǎn.",
     "en": "Highlights make the model more three-dimensional.",
     "hanzi_source": "高光"
   },
   {
-    "id": "sent_0766",
+    "id": "sent_1546",
     "zh": "阴影让颜色更有层次。",
     "pinyin": "Yīnyǐng ràng yánsè gèng yǒu céngcì.",
     "en": "Shadows give colors more depth.",
     "hanzi_source": "阴影"
   },
   {
-    "id": "sent_0767",
+    "id": "sent_1547",
     "zh": "在凹陷处加深阴影。",
     "pinyin": "Zài āoxiàn chù jiāshēn yīnyǐng.",
     "en": "Darken the shadows in recessed areas.",
     "hanzi_source": "阴影"
   },
   {
-    "id": "sent_0768",
+    "id": "sent_1548",
     "zh": "把颜料挤在调色板上。",
     "pinyin": "Bǎ yánliào jǐ zài tiáosèbǎn shàng.",
     "en": "Squeeze the paint onto the palette.",
     "hanzi_source": "调色板"
   },
   {
-    "id": "sent_0769",
+    "id": "sent_1549",
     "zh": "湿调色板可以保持颜料湿润。",
     "pinyin": "Shī tiáosèbǎn kěyǐ bǎochí yánliào shīrùn.",
     "en": "A wet palette keeps the paint moist.",
     "hanzi_source": "调色板"
   },
   {
-    "id": "sent_0770",
+    "id": "sent_1550",
     "zh": "湿盘很适合长时间涂装。",
     "pinyin": "Shīpán hěn shìhé cháng shíjiān túzhuāng.",
     "en": "A wet palette is great for long painting sessions.",
     "hanzi_source": "湿盘"
   },
   {
-    "id": "sent_0771",
+    "id": "sent_1551",
     "zh": "自己做湿盘很简单。",
     "pinyin": "Zìjǐ zuò shīpán hěn jiǎndān.",
     "en": "Making your own wet palette is very simple.",
     "hanzi_source": "湿盘"
   },
   {
-    "id": "sent_0772",
+    "id": "sent_1552",
     "zh": "用喷笔可以快速上底漆。",
     "pinyin": "Yòng pēnbǐ kěyǐ kuàisù shàng dǐqī.",
     "en": "Using an airbrush can apply primer quickly.",
     "hanzi_source": "喷笔"
   },
   {
-    "id": "sent_0773",
+    "id": "sent_1553",
     "zh": "喷笔需要定期清洗。",
     "pinyin": "Pēnbǐ xūyào dìngqī qīngxǐ.",
     "en": "The airbrush needs regular cleaning.",
     "hanzi_source": "喷笔"
   },
   {
-    "id": "sent_0774",
+    "id": "sent_1554",
     "zh": "用遮盖带保护不想涂的区域。",
     "pinyin": "Yòng zhēgài dài bǎohù bù xiǎng tú de qūyù.",
     "en": "Use masking tape to protect areas you don't want to paint.",
     "hanzi_source": "遮盖"
   },
   {
-    "id": "sent_0775",
+    "id": "sent_1555",
     "zh": "遮盖液干了以后可以撕掉。",
     "pinyin": "Zhēgài yè gān le yǐhòu kěyǐ sī diào.",
     "en": "Masking fluid can be peeled off after it dries.",
     "hanzi_source": "遮盖"
   },
   {
-    "id": "sent_0776",
+    "id": "sent_1556",
     "zh": "最后喷一层清漆保护模型。",
     "pinyin": "Zuìhòu pēn yī céng qīngqī bǎohù móxíng.",
     "en": "Finally spray a layer of varnish to protect the model.",
     "hanzi_source": "清漆"
   },
   {
-    "id": "sent_0777",
+    "id": "sent_1557",
     "zh": "亮光清漆让模型反光。",
     "pinyin": "Liàngguāng qīngqī ràng móxíng fǎnguāng.",
     "en": "Gloss varnish makes the model shiny.",
     "hanzi_source": "清漆"
   },
   {
-    "id": "sent_0778",
+    "id": "sent_1558",
     "zh": "血碗是一款桌上游戏。",
     "pinyin": "Xuè Wǎn shì yī kuǎn zhuōshàng yóuxì.",
     "en": "Blood Bowl is a board game.",
     "hanzi_source": "血碗"
   },
   {
-    "id": "sent_0779",
+    "id": "sent_1559",
     "zh": "血碗结合了美式橄榄球和奇幻。",
     "pinyin": "Xuè Wǎn jiéhé le Měishì gǎnlǎnqiú hé qíhuàn.",
     "en": "Blood Bowl combines American football and fantasy.",
     "hanzi_source": "血碗"
   },
   {
-    "id": "sent_0780",
+    "id": "sent_1560",
     "zh": "周末和朋友一起玩桌上游戏。",
     "pinyin": "Zhōumò hé péngyou yīqǐ wán zhuōshàng yóuxì.",
     "en": "Play board games with friends on the weekend.",
     "hanzi_source": "桌上游戏"
   },
   {
-    "id": "sent_0781",
+    "id": "sent_1561",
     "zh": "桌上游戏很有趣。",
     "pinyin": "Zhuōshàng yóuxì hěn yǒuqù.",
     "en": "Board games are very fun.",
     "hanzi_source": "桌上游戏"
   },
   {
-    "id": "sent_0782",
+    "id": "sent_1562",
     "zh": "血碗需要使用很多骰子。",
     "pinyin": "Xuè Wǎn xūyào shǐyòng hěn duō tóuzi.",
     "en": "Blood Bowl requires using many dice.",
     "hanzi_source": "骰子"
   },
   {
-    "id": "sent_0783",
+    "id": "sent_1563",
     "zh": "掷骰子决定结果。",
     "pinyin": "Zhì tóuzi juédìng jiéguǒ.",
     "en": "Roll the dice to determine the outcome.",
     "hanzi_source": "骰子"
   },
   {
-    "id": "sent_0784",
+    "id": "sent_1564",
     "zh": "每个球员都有不同的技能。",
     "pinyin": "Měi ge qiúyuán dōu yǒu bùtóng de jìnéng.",
     "en": "Each player has different skills.",
     "hanzi_source": "球员"
   },
   {
-    "id": "sent_0785",
+    "id": "sent_1565",
     "zh": "我的球员受伤了。",
     "pinyin": "Wǒ de qiúyuán shòushāng le.",
     "en": "My player got injured.",
     "hanzi_source": "球员"
   },
   {
-    "id": "sent_0786",
+    "id": "sent_1566",
     "zh": "你选哪个队伍？",
     "pinyin": "Nǐ xuǎn nǎ ge duìwǔ?",
     "en": "Which team do you choose?",
     "hanzi_source": "队伍"
   },
   {
-    "id": "sent_0787",
+    "id": "sent_1567",
     "zh": "我的队伍赢了比赛。",
     "pinyin": "Wǒ de duìwǔ yíng le bǐsài.",
     "en": "My team won the match.",
     "hanzi_source": "队伍"
   },
   {
-    "id": "sent_0788",
+    "id": "sent_1568",
     "zh": "教练负责制定战术。",
     "pinyin": "Jiàoliàn fùzé zhìdìng zhànshù.",
     "en": "The coach is responsible for making tactics.",
     "hanzi_source": "教练"
   },
   {
-    "id": "sent_0789",
+    "id": "sent_1569",
     "zh": "血碗里每个队伍都有教练。",
     "pinyin": "Xuè Wǎn lǐ měi ge duìwǔ dōu yǒu jiàoliàn.",
     "en": "In Blood Bowl, every team has a coach.",
     "hanzi_source": "教练"
   },
   {
-    "id": "sent_0790",
+    "id": "sent_1570",
     "zh": "我在参加一个血碗联赛。",
     "pinyin": "Wǒ zài cānjiā yí ge Xuè Wǎn liánsài.",
     "en": "I am participating in a Blood Bowl league.",
     "hanzi_source": "联赛"
   },
   {
-    "id": "sent_0791",
+    "id": "sent_1571",
     "zh": "联赛每周都有比赛。",
     "pinyin": "Liánsài měi zhōu dōu yǒu bǐsài.",
     "en": "The league has matches every week.",
     "hanzi_source": "联赛"
   },
   {
-    "id": "sent_0792",
+    "id": "sent_1572",
     "zh": "他跑进对方禁区触底得分。",
     "pinyin": "Tā pǎo jìn duìfāng jìnqū chùdǐ défēn.",
     "en": "He ran into the opponent's end zone for a touchdown.",
     "hanzi_source": "触底得分"
   },
   {
-    "id": "sent_0793",
+    "id": "sent_1573",
     "zh": "触底得分获得六分。",
     "pinyin": "Chùdǐ défēn huòdé liù fēn.",
     "en": "A touchdown gives you six points.",
     "hanzi_source": "触底得分"
   },
   {
-    "id": "sent_0794",
+    "id": "sent_1574",
     "zh": "用球员阻挡对方的进攻。",
     "pinyin": "Yòng qiúyuán zǔdǎng duìfāng de jìngōng.",
     "en": "Use players to block the opponent's attack.",
     "hanzi_source": "阻挡"
   },
   {
-    "id": "sent_0795",
+    "id": "sent_1575",
     "zh": "阻挡失败会很危险。",
     "pinyin": "Zǔdǎng shībài huì hěn wēixiǎn.",
     "en": "A failed block can be very dangerous.",
     "hanzi_source": "阻挡"
   },
   {
-    "id": "sent_0796",
+    "id": "sent_1576",
     "zh": "把球传给队友。",
     "pinyin": "Bǎ qiú chuán gěi duìyǒu.",
     "en": "Pass the ball to a teammate.",
     "hanzi_source": "传球"
   },
   {
-    "id": "sent_0797",
+    "id": "sent_1577",
     "zh": "传球前看看有没有人防守。",
     "pinyin": "Chuánqiú qián kànkan yǒu méiyǒu rén fángshǒu.",
     "en": "Before passing, check if anyone is defending.",
     "hanzi_source": "传球"
   },
   {
-    "id": "sent_0798",
+    "id": "sent_1578",
     "zh": "球员可以冲刺突破防线。",
     "pinyin": "Qiúyuán kěyǐ chōngcì tūpò fángxiàn.",
     "en": "Players can rush to break through the defense.",
     "hanzi_source": "冲刺"
   },
   {
-    "id": "sent_0799",
+    "id": "sent_1579",
     "zh": "冲刺时可能会摔倒。",
     "pinyin": "Chōngcì shí kěnéng huì shuāidǎo.",
     "en": "You might fall down when rushing.",
