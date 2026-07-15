@@ -9,8 +9,8 @@
     },
     {
       "name": "chinese-vocab",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/Chinese"],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese"],
       "port": 7788
     }
   ]

@@ -33,10 +33,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return Math.max(1, m ? m.length : 1);
   }
 
+  // Punctuation to strip before tokenizing — includes CJK punctuation, ASCII
+  // punctuation, and dash variants (em/en dash) used for dialogue like
+  // "你有什么爱好？——我的爱好是……".
+  const PUNCT_RE = /[。？！，、；：""''「」（）【】.,!?;:'"()—–…]/g;
+
   // Split a sentence into word-level tokens, each with {zh, pinyin}
   function tokenizeSentence(zh, pinyin) {
-    const cleanZh = zh.replace(/[。？！，、；：""''「」（）【】.,!?;:'"()]/g, '');
-    const cleanPy = pinyin.replace(/[。？！，、；：""''「」（）【】.,!?;:'"()]/g, '').trim();
+    // Bail out entirely on sentences containing embedded Latin-letter terms
+    // (CPU, DDR5, USB, Arduino, T恤衫, vitamin "C", etc. — a handful of the
+    // bonus tech-vocab sentences). A stray letter throws off the character
+    // count for every token AFTER it too, silently mispairing unrelated
+    // hanzi with the wrong pinyin — and since those tokens are still pure
+    // CJK, they'd otherwise slip into the shared distractor pool and pollute
+    // puzzles for *other* (including real textbook) sentences. Safer to
+    // just not offer these sentences for hanzi tokenization at all; they
+    // still work fine in English-arrange mode and Tone Trainer.
+    if (/[A-Za-z]/.test(zh)) return [];
+
+    const cleanZh = zh.replace(PUNCT_RE, '');
+    const cleanPy = pinyin.replace(PUNCT_RE, '').trim();
     const pyWords = cleanPy.split(/\s+/).filter(Boolean);
 
     const tokens = [];
@@ -51,7 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (charPos < cleanZh.length && tokens.length) {
       tokens[tokens.length - 1].zh += cleanZh.slice(charPos);
     }
-    return tokens;
+    // Merge consecutive all-digit tokens into one number token, e.g. a
+    // spelled-out year like "2026" (Chinese: èr líng èr liù, one syllable
+    // per digit) would otherwise become four separate single-digit chips.
+    const merged = [];
+    for (const t of tokens) {
+      const prev = merged[merged.length - 1];
+      if (/^[0-9]+$/.test(t.zh) && prev && /^[0-9]+$/.test(prev.zh)) {
+        prev.zh += t.zh;
+        prev.pinyin += ' ' + t.pinyin;
+      } else {
+        merged.push({ ...t });
+      }
+    }
+    return merged;
   }
 
   // ── Distractor pool (lazy, built once) ────────────────────────────────────
@@ -61,12 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
       _pool = { zh: [], en: [] };
       sentences.forEach(s => {
         tokenizeSentence(s.zh, s.pinyin).forEach(t => _pool.zh.push(t));
-        s.en.replace(/[.,!?;:'"()]/g, '').split(/\s+/).filter(Boolean)
+        s.en.replace(/[.,!?;:'"()—–]/g, '').split(/\s+/).filter(Boolean)
             .forEach(w => _pool.en.push(w.toLowerCase()));
       });
-      // Deduplicate + keep only pure-Chinese tokens (no Latin/digit contamination)
+      // Deduplicate + keep only pure-Chinese (or spelled-out number) tokens —
+      // no stray Latin-letter contamination.
       const zhSeen = new Set();
-      const pureZh = /^[一-鿿㐀-䶿]+$/; // CJK only
+      const pureZh = /^[一-鿿㐀-䶿0-9]+$/;
       _pool.zh = _pool.zh.filter(t => {
         if (!pureZh.test(t.zh)) return false;  // skip if any non-CJK char
         if (zhSeen.has(t.zh)) return false;
@@ -121,13 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const s = sentences[idx];
     if (mode === 'zh') {
       tokens = tokenizeSentence(s.zh, s.pinyin)
-        .filter(t => /^[一-鿿㐀-䶿]+$/.test(t.zh)); // skip any Latin-contaminated tokens
+        .filter(t => /^[一-鿿㐀-䶿0-9]+$/.test(t.zh)); // skip any Latin-contaminated tokens
       if (!tokens.length) { loadSentence(pickRandom()); return; } // skip bad sentence
       if (promptLabel) promptLabel.textContent = 'Arrange the Chinese words to match this English:';
       if (promptText)  promptText.textContent  = s.en;
       if (promptPinyin) promptPinyin.textContent = '';
     } else {
-      tokens = s.en.replace(/[.,!?;:'"()]/g, '').split(/\s+/).filter(Boolean).map(w => w.toLowerCase());
+      tokens = s.en.replace(/[.,!?;:'"()—–]/g, '').split(/\s+/).filter(Boolean).map(w => w.toLowerCase());
       if (promptLabel)  promptLabel.textContent  = 'Arrange the English words to match this Chinese:';
       if (promptText)   promptText.textContent   = s.zh;
       if (promptPinyin) promptPinyin.textContent = s.pinyin;
