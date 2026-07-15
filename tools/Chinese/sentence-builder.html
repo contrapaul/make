@@ -46,37 +46,45 @@
   <div class="builder-page">
     <div class="builder-header">
       <h2 class="section-title">Sentence Builder</h2>
-      <p class="section-subtitle">
-        Drag words into place (or tap to insert). Words are checked as you place them:
-        <span class="legend-chip legend-green">green</span> = right spot,
-        <span class="legend-chip legend-yellow">yellow</span> = belongs, wrong spot,
-        <span class="legend-chip legend-red">red</span> = not in this sentence (bounces back).
-        Drag placed words between slots to rearrange.
-      </p>
     </div>
 
-    <!-- Toolbar: mode toggles + controls on one row -->
-    <div class="builder-toolbar">
-      <div class="mode-tabs">
-        <button class="mode-tab active" id="tabZh" data-mode="zh">
-          <span class="mode-tab-word">中文 <span class="mode-tab-py">Zhōngwén</span></span>
-          <span class="mode-tab-act">Arrange Chinese</span>
-        </button>
-        <button class="mode-tab" id="tabEn" data-mode="en">
-          <span class="mode-tab-word">英文 <span class="mode-tab-py">Yīngwén</span></span>
-          <span class="mode-tab-act">Arrange English</span>
-        </button>
+    <!-- Mode toggle + instructions, tucked away so they don't push the
+         sentence/slots/bank apart. Collapsed by default. -->
+    <div class="accordion" id="optionsAccordion">
+      <button class="accordion-trigger" id="optionsToggle">
+        <span><span class="glyph" style="width:22px;height:22px;font-size:0.8rem;vertical-align:-5px;margin-right:6px">设</span>Mode &amp; instructions</span>
+        <span class="accordion-chevron">▼</span>
+      </button>
+      <div class="accordion-body" id="optionsBody">
+        <div class="mode-tabs" style="margin-bottom:16px">
+          <button class="mode-tab active" id="tabZh" data-mode="zh">
+            <span class="mode-tab-word">中文 <span class="mode-tab-py">Zhōngwén</span></span>
+            <span class="mode-tab-act">Arrange Chinese</span>
+          </button>
+          <button class="mode-tab" id="tabEn" data-mode="en">
+            <span class="mode-tab-word">英文 <span class="mode-tab-py">Yīngwén</span></span>
+            <span class="mode-tab-act">Arrange English</span>
+          </button>
+        </div>
+        <p class="section-subtitle" style="margin-bottom:0">
+          Drag words into place (or tap to insert). Words are checked as you place them:
+          <span class="legend-chip legend-green">green</span> = right spot,
+          <span class="legend-chip legend-yellow">yellow</span> = belongs, wrong spot,
+          <span class="legend-chip legend-red">red</span> = not in this sentence (bounces back).
+          Drag placed words between slots to rearrange.
+        </p>
       </div>
-      <div class="builder-controls">
-        <button class="btn btn-primary" id="hintBtn">提示 · Hint</button>
-        <button class="btn btn-secondary" id="clearBtn">清空 · Clear all</button>
-        <button class="btn btn-secondary" id="nextBtn">下一句 · Next</button>
-      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="builder-controls">
+      <button class="btn btn-primary" id="hintBtn">提示 · Hint</button>
+      <button class="btn btn-secondary" id="clearBtn">清空 · Clear all</button>
+      <button class="btn btn-secondary" id="nextBtn">下一句 · Next</button>
     </div>
 
     <!-- Sentence prompt + session accuracy -->
     <div class="sentence-display">
-      <span class="sentence-prompt-label" id="promptLabel">Arrange the Chinese words to match:</span>
       <div class="sentence-prompt-text" id="promptText">载入中…</div>
       <div class="sentence-prompt-pinyin" id="promptPinyin"></div>
       <div class="progress-row">
@@ -89,19 +97,13 @@
     </div>
 
     <!-- Answer slots -->
-    <div>
-      <span class="word-bank-label">Your answer — drag words here:</span>
-      <div class="slots-area" id="slotsArea"></div>
-    </div>
+    <div class="slots-area" id="slotsArea"></div>
 
     <!-- Feedback -->
     <div class="feedback-bar" id="feedbackBar"></div>
 
     <!-- Word bank -->
-    <div>
-      <span class="word-bank-label">Word bank — drag from here:</span>
-      <div class="word-bank" id="wordBank"></div>
-    </div>
+    <div class="word-bank" id="wordBank"></div>
   </div>
 </div>
 
@@ -127,6 +129,14 @@
     themeBtn?.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
     toggle?.addEventListener('click',()=>{ sidebar?.classList.add('open'); overlay?.classList.add('open'); });
     overlay?.addEventListener('click',()=>{ sidebar?.classList.remove('open'); overlay?.classList.remove('open'); });
+
+    const optionsToggle = document.getElementById('optionsToggle');
+    const optionsBody = document.getElementById('optionsBody');
+    optionsToggle?.addEventListener('click', () => {
+      const open = !optionsToggle.classList.contains('open');
+      optionsToggle.classList.toggle('open', open);
+      optionsBody.classList.toggle('open', open);
+    });
   });
 </script>
 </body>
