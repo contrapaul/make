@@ -55,17 +55,37 @@
       </p>
     </div>
 
-    <!-- Mode tabs -->
-    <div class="mode-tabs">
-      <button class="mode-tab active" id="tabZh" data-mode="zh">中 → arrange Chinese</button>
-      <button class="mode-tab" id="tabEn" data-mode="en">EN → arrange English</button>
+    <!-- Toolbar: mode toggles + controls on one row -->
+    <div class="builder-toolbar">
+      <div class="mode-tabs">
+        <button class="mode-tab active" id="tabZh" data-mode="zh">
+          <span class="mode-tab-word">中文 <span class="mode-tab-py">Zhōngwén</span></span>
+          <span class="mode-tab-act">Arrange Chinese</span>
+        </button>
+        <button class="mode-tab" id="tabEn" data-mode="en">
+          <span class="mode-tab-word">英文 <span class="mode-tab-py">Yīngwén</span></span>
+          <span class="mode-tab-act">Arrange English</span>
+        </button>
+      </div>
+      <div class="builder-controls">
+        <button class="btn btn-primary" id="hintBtn">提示 · Hint</button>
+        <button class="btn btn-secondary" id="clearBtn">清空 · Clear all</button>
+        <button class="btn btn-secondary" id="nextBtn">下一句 · Next</button>
+      </div>
     </div>
 
-    <!-- Sentence prompt -->
+    <!-- Sentence prompt + session accuracy -->
     <div class="sentence-display">
       <span class="sentence-prompt-label" id="promptLabel">Arrange the Chinese words to match:</span>
       <div class="sentence-prompt-text" id="promptText">载入中…</div>
       <div class="sentence-prompt-pinyin" id="promptPinyin"></div>
+      <div class="progress-row">
+        <span id="progressText">Session accuracy: —</span>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="resetProgress">Reset</button>
+      </div>
     </div>
 
     <!-- Answer slots -->
@@ -81,22 +101,6 @@
     <div>
       <span class="word-bank-label">Word bank — drag from here:</span>
       <div class="word-bank" id="wordBank"></div>
-    </div>
-
-    <!-- Controls -->
-    <div class="builder-controls">
-      <button class="btn btn-primary" id="hintBtn">提示 · Hint</button>
-      <button class="btn btn-secondary" id="clearBtn">清空 · Clear all</button>
-      <button class="btn btn-secondary" id="nextBtn">下一句 · Next</button>
-    </div>
-
-    <!-- Progress -->
-    <div class="progress-row">
-      <span id="progressText">Accuracy: —</span>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
-      </div>
-      <button class="btn btn-ghost btn-sm" id="resetProgress">Reset</button>
     </div>
   </div>
 </div>

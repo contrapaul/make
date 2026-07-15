@@ -800,6 +800,18 @@ th.sorted .sort-indicator { color: var(--seal); }
 /* ── Sentence Builder ────────────────────────────────────────────── */
 .builder-page { padding: 32px 28px 80px; max-width: 940px; }
 
+/* Toolbar row: mode toggles (left) + controls (right) */
+.builder-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.builder-toolbar .mode-tabs { margin-bottom: 0; }
+.builder-toolbar .builder-controls { margin-bottom: 0; }
+
 .mode-tabs {
   display: inline-flex;
   border: 1px solid var(--hair);
@@ -809,19 +821,48 @@ th.sorted .sort-indicator { color: var(--seal); }
 }
 
 .mode-tab {
-  padding: 10px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 18px;
   border: 0;
   background: var(--surface);
   color: var(--soft);
   font-family: var(--ui);
-  font-size: 0.78rem;
-  font-weight: 600;
   cursor: pointer;
+  line-height: 1.2;
   transition: background var(--transition), color var(--transition);
 }
 .mode-tab + .mode-tab { border-left: 1px solid var(--hair); }
 .mode-tab.active { background: var(--ink); color: var(--ground); }
 .mode-tab:hover:not(.active) { color: var(--ink); }
+
+/* hanzi + pinyin over the English action, mirroring the vocab-chip stack */
+.mode-tab-word {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--cjk);
+  font-size: 1rem;
+  font-weight: 500;
+}
+.mode-tab-py {
+  font-family: var(--latin);
+  font-style: italic;
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--seal);
+}
+.mode-tab.active .mode-tab-py { color: var(--ground); opacity: 0.72; }
+.mode-tab-act {
+  font-family: var(--ui);
+  font-size: 0.64rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
 
 .sentence-display {
   background: var(--surface);
@@ -846,6 +887,13 @@ th.sorted .sort-indicator { color: var(--seal); }
   color: var(--soft);
   font-size: 0.95rem;
   margin-top: 4px;
+}
+
+/* Session accuracy sits inside the sentence card, under the prompt */
+.sentence-display .progress-row {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
 }
 
 .word-bank-label { display: block; margin-bottom: 10px; }
@@ -1192,6 +1240,13 @@ th.sorted .sort-indicator { color: var(--seal); }
   .sentence-widget, .tool-index { margin-left: 16px; margin-right: 16px; }
   .vocab-card-grid { grid-template-columns: 1fr; }
   .trainer-options { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  /* Toolbar groups each take a full row and stretch to fill */
+  .builder-toolbar .mode-tabs,
+  .builder-toolbar .builder-controls { width: 100%; }
+  .builder-toolbar .mode-tab { flex: 1; }
 }
 
 @media (max-width: 480px) {

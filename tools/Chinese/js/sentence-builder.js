@@ -550,8 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct = stats.attempts ? Math.round(stats.correct / stats.attempts * 100) : 0;
     const pt = $('progressText'); const pf = $('progressFill');
     if (pt) pt.textContent = stats.attempts
-      ? `Accuracy: ${pct}% (${stats.correct}/${stats.attempts} placements) · ${stats.solved} solved`
-      : `Accuracy: — · ${stats.solved} solved`;
+      ? `Session accuracy: ${pct}% (${stats.correct}/${stats.attempts} placements) · ${stats.solved} solved`
+      : `Session accuracy: — · ${stats.solved} solved`;
     if (pf) pf.style.width = pct + '%';
   }
 
