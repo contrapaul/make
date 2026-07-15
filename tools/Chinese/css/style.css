@@ -800,18 +800,6 @@ th.sorted .sort-indicator { color: var(--seal); }
 /* ── Sentence Builder ────────────────────────────────────────────── */
 .builder-page { padding: 32px 28px 80px; max-width: 940px; }
 
-/* Toolbar row: mode toggles (left) + controls (right) */
-.builder-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 22px;
-}
-.builder-toolbar .mode-tabs { margin-bottom: 0; }
-.builder-toolbar .builder-controls { margin-bottom: 0; }
-
 .mode-tabs {
   display: inline-flex;
   border: 1px solid var(--hair);
@@ -1110,9 +1098,11 @@ th.sorted .sort-indicator { color: var(--seal); }
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  align-items: center;
+  align-items: stretch; /* equal height even when one button's label wraps
+                            to two lines and another doesn't (mobile) */
   margin-bottom: 20px;
 }
+.builder-controls .btn { text-align: center; }
 
 .feedback-bar {
   display: none;
@@ -1243,10 +1233,8 @@ th.sorted .sort-indicator { color: var(--seal); }
 }
 
 @media (max-width: 560px) {
-  /* Toolbar groups each take a full row and stretch to fill */
-  .builder-toolbar .mode-tabs,
-  .builder-toolbar .builder-controls { width: 100%; }
-  .builder-toolbar .mode-tab { flex: 1; }
+  .mode-tabs { width: 100%; }
+  .mode-tab { flex: 1; }
 }
 
 @media (max-width: 480px) {
