@@ -183,7 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Bank ───────────────────────────────────────────────────────────────────
   function buildBank() {
-    const distractors = pickDistractors(20);
+    // Total word choices ≈ twice the sentence length, capped at 12 so long
+    // sentences don't flood the bank with distractors.
+    const targetTotal = Math.min(tokens.length * 2, 12);
+    const distractorCount = Math.max(0, targetTotal - tokens.length);
+    const distractors = pickDistractors(distractorCount);
     let raw;
     if (mode === 'zh') {
       raw = shuffle([...tokens, ...distractors])
