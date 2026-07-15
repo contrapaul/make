@@ -1,4 +1,4 @@
-import { Card, Effect } from '../types/cards';
+import { Card, Effect } from '../../types/cards';
 import { RawRow } from './csvParser';
 function generateId(): string {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
