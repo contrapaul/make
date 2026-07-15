@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Glossary — Chinese Vocab Review</title>
+  <title>Glossary · 汉语词汇</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,28 +15,31 @@
 
 <nav class="sidebar" id="sidebar" aria-label="Site navigation">
   <div class="sidebar-header">
-    <div class="sidebar-title">汉语词汇</div>
-    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+    <div class="seal-mark" aria-hidden="true"><span>汉</span><span>语</span><span>词</span><span>汇</span></div>
+    <div>
+      <div class="sidebar-title">汉语词汇</div>
+      <div class="sidebar-subtitle">Vocabulary Review</div>
+    </div>
   </div>
   <div class="sidebar-nav">
     <div class="sidebar-section-label">Tools</div>
-    <a href="index.html" class="sidebar-link"><span class="icon">🏠</span> Home</a>
-    <a href="lessons.html" class="sidebar-link tool-link"><span class="icon">📚</span> Lessons</a>
-    <a href="glossary.html" class="sidebar-link tool-link active"><span class="icon">📖</span> Glossary</a>
-    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="icon">🧩</span> Sentence Builder</a>
-    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="icon">🎯</span> Tone Trainer</a>
-    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="icon">⬇️</span> Download Anki Deck</a>
+    <a href="index.html" class="sidebar-link"><span class="glyph">首</span> Home</a>
+    <a href="lessons.html" class="sidebar-link tool-link"><span class="glyph">课</span> Lessons</a>
+    <a href="glossary.html" class="sidebar-link tool-link active"><span class="glyph">词</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="glyph">句</span> Sentence Builder</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="glyph">声</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="glyph">卡</span> Anki Deck</a>
   </div>
 </nav>
 
 <div class="main">
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
-      <span class="topbar-title">📖 Glossary</span>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">≡</button>
+      <span class="topbar-title">词 · Glossary</span>
     </div>
     <div class="topbar-controls">
-      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">暗</button>
     </div>
   </header>
 
@@ -48,7 +54,7 @@
       <select class="filter-select" id="filterTopic"><option value="">All topics</option></select>
       <select class="filter-select" id="filterHsk"><option value="">All HSK</option></select>
       <span class="results-count" id="resultsCount"></span>
-      <button class="btn btn-ghost btn-sm" id="clearFilters">✕ Clear</button>
+      <button class="btn btn-ghost btn-sm" id="clearFilters">Clear</button>
     </div>
 
     <div style="overflow-x:auto">
@@ -68,7 +74,16 @@
   </div>
 </div>
 
+<nav class="tabbar" aria-label="Primary">
+  <a href="index.html"><span class="glyph">首</span>Home</a>
+  <a href="lessons.html"><span class="glyph">课</span>Lessons</a>
+  <a href="glossary.html" class="active"><span class="glyph">词</span>Glossary</a>
+  <a href="sentence-builder.html"><span class="glyph">句</span>Builder</a>
+  <a href="tone-trainer.html"><span class="glyph">声</span>Tones</a>
+</nav>
+
 <script src="js/data.js"></script>
+<script src="js/format.js"></script>
 <script src="js/glossary.js"></script>
 <script>
   // Shared theme + sidebar logic
@@ -84,7 +99,7 @@
     function applyTheme(t){
       document.documentElement.setAttribute('data-theme',t);
       localStorage.setItem('cv-theme',t);
-      if(themeBtn) themeBtn.textContent = t==='dark'?'☀️':'🌙';
+      if(themeBtn) themeBtn.textContent = t==='dark'?'亮':'暗';
     }
     applyTheme(localStorage.getItem('cv-theme')||'light');
     themeBtn?.addEventListener('click',()=>{

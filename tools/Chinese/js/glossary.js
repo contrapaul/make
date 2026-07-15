@@ -127,13 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tbody.innerHTML = '';
     filtered.forEach(entry => {
       const ex = entry.sentences?.[0];
-      const tagHtml = entry.tags.map(t => {
-        let cls = '';
-        if (t.startsWith('type:')) cls = 'type';
-        else if (t.startsWith('hsk:')) cls = 'hsk';
-        else if (t.startsWith('topic:')) cls = 'topic';
-        return `<span class="tag-chip ${cls}">${escHtml(t)}</span>`;
-      }).join('');
+      const tagHtml = window.VocabMeta ? VocabMeta.metaHtml(entry.tags) : '';
 
       const tr = document.createElement('tr');
       tr.innerHTML = `

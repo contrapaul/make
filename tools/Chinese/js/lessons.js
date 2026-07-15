@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('cv-theme', t);
-    if (themeBtn) themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+    if (themeBtn) themeBtn.textContent = t === 'dark' ? '亮' : '暗';
   }
   applyTheme(localStorage.getItem('cv-theme') || 'light');
   themeBtn?.addEventListener('click', () =>
@@ -89,8 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
       container.appendChild(buildLessonBlock(lesson, entries));
     });
   }
-  addGroup('📘 Textbook — Speak Chinese Together 1 (Lessons 1–24)', core);
-  addGroup('🛠️ Bonus — Personal Interests (Not from the Textbook)', bonus);
+  addGroup('Textbook — Speak Chinese Together 1 (Lessons 1–24)', core);
+  addGroup('Bonus — Personal Interests (Not from the Textbook)', bonus);
 
   function buildLessonBlock(lesson, entries) {
     const wrap = document.createElement('div');
@@ -128,12 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const card = document.createElement('div');
     card.className = 'vocab-card';
     const ex = entry.sentences?.[0];
-    const tags = (entry.tags || [])
-      .filter(t => /^(type:|hsk:|topic:)/.test(t))
-      .map(t => {
-        const cls = t.startsWith('type:') ? 'type' : t.startsWith('hsk:') ? 'hsk' : 'topic';
-        return `<span class="tag-chip ${cls}">${t}</span>`;
-      }).join('');
+    // Lesson is implied by the accordion header, so omit it here → type · HSK.
+    const tags = window.VocabMeta ? VocabMeta.metaHtml(entry.tags, { lesson: false }) : '';
 
     card.innerHTML = `
       <div class="vc-top">

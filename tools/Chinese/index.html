@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chinese Vocab Review</title>
+  <title>汉语词汇 · Chinese Vocab Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,28 +17,30 @@
 <!-- Sidebar -->
 <nav class="sidebar" id="sidebar" aria-label="Site navigation">
   <div class="sidebar-header">
-    <div class="sidebar-title">汉语词汇</div>
-    <div class="sidebar-subtitle">Chinese Vocabulary Review</div>
+    <div class="seal-mark" aria-hidden="true"><span>汉</span><span>语</span><span>词</span><span>汇</span></div>
+    <div>
+      <div class="sidebar-title">汉语词汇</div>
+      <div class="sidebar-subtitle">Vocabulary Review</div>
+    </div>
   </div>
   <div class="sidebar-nav">
     <div class="sidebar-section-label">Tools</div>
     <a href="lessons.html" class="sidebar-link tool-link">
-      <span class="icon">📚</span> Lessons
+      <span class="glyph">课</span> Lessons
     </a>
     <a href="glossary.html" class="sidebar-link tool-link">
-      <span class="icon">📖</span> Glossary
+      <span class="glyph">词</span> Glossary
     </a>
     <a href="sentence-builder.html" class="sidebar-link tool-link">
-      <span class="icon">🧩</span> Sentence Builder
+      <span class="glyph">句</span> Sentence Builder
     </a>
     <a href="tone-trainer.html" class="sidebar-link tool-link">
-      <span class="icon">🎯</span> Tone Trainer
+      <span class="glyph">声</span> Tone Trainer
     </a>
     <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download>
-      <span class="icon">⬇️</span> Download Anki Deck
+      <span class="glyph">卡</span> Anki Deck
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:8px">Lessons</div>
     <!-- Lesson links injected by main.js -->
     <div id="sidebarLessons"></div>
   </div>
@@ -47,58 +52,82 @@
   <!-- Top bar -->
   <header class="topbar">
     <div style="display:flex;align-items:center;gap:12px">
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">☰</button>
-      <span class="topbar-title">Chinese Vocabulary Review</span>
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">≡</button>
+      <span class="topbar-title">汉语词汇 · Vocabulary Review</span>
     </div>
     <div class="topbar-controls">
-      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">暗</button>
     </div>
   </header>
 
-  <!-- Tool cards -->
-  <div class="tool-cards">
-    <a href="lessons.html" class="tool-card">
-      <div class="tool-card-icon">📚</div>
-      <div class="tool-card-title">Lessons</div>
-      <div class="tool-card-desc">All 24 textbook lessons & 8 bonus sets as collapsible cards, with a jump-to menu.</div>
-    </a>
-    <a href="glossary.html" class="tool-card">
-      <div class="tool-card-icon">📖</div>
-      <div class="tool-card-title">Glossary</div>
-      <div class="tool-card-desc">Search & filter all <span id="countVocab">…</span> vocab entries by lesson, type, topic, or HSK level.</div>
-    </a>
-    <a href="sentence-builder.html" class="tool-card">
-      <div class="tool-card-icon">🧩</div>
-      <div class="tool-card-title">Sentence Builder</div>
-      <div class="tool-card-desc">Drag-and-drop <span id="countSentences">…</span> example sentences in Chinese or English mode.</div>
-    </a>
-    <a href="tone-trainer.html" class="tool-card">
-      <div class="tool-card-icon">🎯</div>
-      <div class="tool-card-title">Tone Trainer</div>
-      <div class="tool-card-desc">Fill-in-the-blank with tone marks — target the most common learner weakness.</div>
-    </a>
-    <a href="chinese_vocab_anki.apkg" class="tool-card" download>
-      <div class="tool-card-icon">⬇️</div>
-      <div class="tool-card-title">Anki Deck</div>
-      <div class="tool-card-desc">Download the pre-built Anki deck for all <span id="countVocab2">…</span> vocabulary entries.</div>
-    </a>
+  <!-- Home hero -->
+  <div class="home-hero">
+    <div class="seal-mark" aria-hidden="true"><span>汉</span><span>语</span><span>词</span><span>汇</span></div>
+    <div>
+      <h1>汉语词汇</h1>
+      <p class="home-sub">Speak Chinese Together 1 · Lessons 1–24</p>
+    </div>
   </div>
 
   <!-- Random sentence widget -->
   <div class="sentence-widget">
-    <div class="sentence-widget-label">✨ Random sentence</div>
-    <div class="sentence-zh" id="randomZh">Loading…</div>
+    <span class="sentence-widget-label">随机例句 · Random sentence</span>
+    <div class="sentence-zh" id="randomZh">载入中…</div>
     <div class="sentence-pinyin" id="randomPinyin"></div>
     <div class="sentence-en" id="randomEn"></div>
     <div class="sentence-widget-actions">
-      <button class="btn btn-ghost btn-sm" id="refreshSentence" title="New sentence">🔀 New</button>
+      <button class="btn btn-secondary btn-sm" id="refreshSentence" title="New sentence">换一句 · New</button>
     </div>
   </div>
 
+  <!-- Tool index -->
+  <div class="tool-index">
+    <a href="lessons.html" class="tool-row">
+      <span class="glyph">课</span>
+      <span>
+        <span class="tool-row-name">Lessons</span>
+        <span class="tool-row-desc">All 24 textbook lessons &amp; 8 bonus sets, grouped, with a jump-to menu.</span>
+      </span>
+      <span class="tool-row-arrow">→</span>
+    </a>
+    <a href="glossary.html" class="tool-row">
+      <span class="glyph">词</span>
+      <span>
+        <span class="tool-row-name">Glossary</span>
+        <span class="tool-row-desc">Search &amp; filter all <span id="countVocab">…</span> vocab entries by lesson, type, topic, or HSK.</span>
+      </span>
+      <span class="tool-row-arrow">→</span>
+    </a>
+    <a href="sentence-builder.html" class="tool-row">
+      <span class="glyph">句</span>
+      <span>
+        <span class="tool-row-name">Sentence Builder</span>
+        <span class="tool-row-desc">Arrange <span id="countSentences">…</span> example sentences in Chinese or English mode.</span>
+      </span>
+      <span class="tool-row-arrow">→</span>
+    </a>
+    <a href="tone-trainer.html" class="tool-row">
+      <span class="glyph">声</span>
+      <span>
+        <span class="tool-row-name">Tone Trainer</span>
+        <span class="tool-row-desc">Fill in the blank with the correct tone-marked pinyin.</span>
+      </span>
+      <span class="tool-row-arrow">→</span>
+    </a>
+    <a href="chinese_vocab_anki.apkg" class="tool-row" download>
+      <span class="glyph">卡</span>
+      <span>
+        <span class="tool-row-name">Anki Deck</span>
+        <span class="tool-row-desc">Download the pre-built deck for all <span id="countVocab2">…</span> entries — hanzi + pinyin on the front.</span>
+      </span>
+      <span class="tool-row-arrow">↓</span>
+    </a>
+  </div>
+
   <!-- Lesson accordions -->
-  <div class="page-section" style="margin-top:28px">
-    <h2 class="section-title">Lessons</h2>
-    <p class="section-subtitle">All vocabulary grouped by lesson. Click a header to expand. Click any column to sort.</p>
+  <div class="page-section" style="margin-top:12px">
+    <h2 class="section-title">Contents</h2>
+    <p class="section-subtitle">Every lesson's vocabulary. Tap a header to expand; tap any column to sort.</p>
   </div>
   <div class="accordion-group" id="accordionGroup">
     <!-- Accordions injected by main.js -->
@@ -106,7 +135,17 @@
 
 </div><!-- /.main -->
 
+<!-- Mobile bottom tab bar -->
+<nav class="tabbar" aria-label="Primary">
+  <a href="index.html" class="active"><span class="glyph">首</span>Home</a>
+  <a href="lessons.html"><span class="glyph">课</span>Lessons</a>
+  <a href="glossary.html"><span class="glyph">词</span>Glossary</a>
+  <a href="sentence-builder.html"><span class="glyph">句</span>Builder</a>
+  <a href="tone-trainer.html"><span class="glyph">声</span>Tones</a>
+</nav>
+
 <script src="js/data.js"></script>
+<script src="js/format.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
