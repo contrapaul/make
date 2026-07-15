@@ -40,7 +40,13 @@
   <div class="builder-page">
     <div class="builder-header">
       <h2 class="section-title">Sentence Builder</h2>
-      <p class="section-subtitle">Drag words into the correct order. Tap to insert on mobile.</p>
+      <p class="section-subtitle">
+        Drag words into place (or tap to insert). Words are checked as you place them:
+        <span class="legend-chip legend-green">green</span> = right spot,
+        <span class="legend-chip legend-yellow">yellow</span> = belongs, wrong spot,
+        <span class="legend-chip legend-red">red</span> = not in this sentence (bounces back).
+        Drag placed words between slots to rearrange.
+      </p>
     </div>
 
     <!-- Mode tabs -->
@@ -73,15 +79,14 @@
 
     <!-- Controls -->
     <div class="builder-controls">
-      <button class="btn btn-primary" id="checkBtn">✔ Check</button>
+      <button class="btn btn-primary" id="hintBtn">💡 Hint</button>
       <button class="btn btn-secondary" id="clearBtn">✕ Clear all</button>
       <button class="btn btn-secondary" id="nextBtn">→ Next sentence</button>
-      <button class="btn btn-ghost" id="revealBtn">👁 Reveal answer</button>
     </div>
 
     <!-- Progress -->
     <div class="progress-row">
-      <span id="progressText">0 / 0 correct</span>
+      <span id="progressText">Accuracy: —</span>
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
       </div>
