@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('cv-theme', t);
-    if (themeBtn) themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+    if (themeBtn) themeBtn.textContent = t === 'dark' ? '亮' : '暗';
   }
   applyTheme(localStorage.getItem('cv-theme') || 'light');
   if (themeBtn) themeBtn.addEventListener('click', () => {
@@ -63,9 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addLessonLink(lesson) {
       const a = document.createElement('button');
-      a.className = 'sidebar-link';
+      a.className = 'sidebar-link is-lesson';
       a.dataset.lesson = lesson.id;
-      a.innerHTML = `<span class="icon">📝</span> ${lesson.name}`;
+      a.textContent = lesson.name;
       a.addEventListener('click', () => {
         closeSidebar();
         const el = document.getElementById('lesson-' + lesson.id);
@@ -111,14 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (core.length) {
       const h = document.createElement('h3');
       h.className = 'lesson-group-heading';
-      h.textContent = '📘 Textbook — Speak Chinese Together 1 (Lessons 1–24)';
+      h.textContent = 'Textbook — Speak Chinese Together 1 (Lessons 1–24)';
       group.appendChild(h);
       addAccordions(core);
     }
     if (bonus.length) {
       const h = document.createElement('h3');
       h.className = 'lesson-group-heading';
-      h.textContent = '🛠️ Bonus — Personal Interests (Not from the Textbook)';
+      h.textContent = 'Bonus — Personal Interests (Not from the Textbook)';
       group.appendChild(h);
       addAccordions(bonus);
     }
@@ -177,14 +177,7 @@ function buildVocabTable(entries) {
       const tr = document.createElement('tr');
       const ex = entry.sentences?.[0];
       const tags = entry.tags || [];
-
-      const tagHtml = tags.map(t => {
-        let cls = '';
-        if (t.startsWith('type:')) cls = 'type';
-        else if (t.startsWith('hsk:')) cls = 'hsk';
-        else if (t.startsWith('topic:')) cls = 'topic';
-        return `<span class="tag-chip ${cls}">${t}</span>`;
-      }).join('');
+      const tagHtml = window.VocabMeta ? VocabMeta.metaHtml(tags) : '';
 
       tr.innerHTML = `
         <td class="cell-hanzi">${entry.hanzi}</td>

@@ -257,6 +257,17 @@ button { font-family: var(--ui); }
 /* legacy emoji icon span (if any remain) */
 .sidebar-link .icon { width: 1.2em; text-align: center; }
 
+/* lesson jump-links: quieter, indented sub-list under the group labels */
+.sidebar-link.is-lesson {
+  padding: 5px 8px 5px 14px;
+  font-size: 0.78rem;
+  color: var(--faint);
+  border-left: 1px solid var(--hair);
+  border-radius: 0;
+  margin-left: 6px;
+}
+.sidebar-link.is-lesson:hover { color: var(--ink); background: transparent; border-left-color: var(--seal); }
+
 .sidebar-overlay {
   display: none;
   position: fixed;
