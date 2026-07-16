@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dynamic Archery Challenge</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --ui-bg: rgba(30, 30, 30, 0.85);
+            --accent: #ffcc00;
+            --text-color: #ffffff;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            overflow: hidden;
+            font-family: var(--font-main);
+            color: var(--text-color);
+        }
+
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* UI Overlay */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        /* HUD */
+        .hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .hud-panel {
+            background: var(--ui-bg);
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 120px;
+        }
+
+        .hud-label {
+            font-size: 0.8rem;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hud-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        #wind-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #wind-arrow {
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform-origin: center;
+            transition: transform 0.5s ease;
+        }
+
+        /* Screens (Start / Game Over) */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ddd;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+        }
+
+        .btn:hover {
+            transform: typo;
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .controls-hint {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+            display: flex;
+            gap: 20px;
+        }
+
+        .key {
+            border: 1px solid #666;
+            padding: 5px 10px;
+            border-radius: 4px;
+            background: #222;
+        }
+
+        /* Floating Text Animation */
+        .floating-text {
+            position: absolute;
+            font-weight: bold;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="ui-layer">
+        <div class="hud">
+            <div class="hud-panel">
+                <span class="hud-label">Score</span>
+                <span id="score-display" class="hud-value">0</span>
+            </div>
+            
+            <div class="hud-panel" id="wind-indicator">
+                <span class="hud-label">Wind</span>
+                <div id="wind-arrow"></div>
+                <span id="wind-speed" class="hud-value">0</span>
+            </div>
+
+            <div class="hud-panel">
+                <span class="hud-label">Arrows</span>
+                <span id="arrows-display" class="hud-value">5</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen">
+        <h1>Dynamic Archery</h1>
+        <p class="subtitle">Drag back to aim, release to shoot.<br>Watch out for the <strong>moving target</strong> and <strong>changing wind</strong>!</p>
+        <button class="btn" id="start-btn">Play Game</button>
+        <div class="controls-hint">
+            <span><span class="key">Mouse</span> or <span class="key">Touch</span> to Aim</span>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen hidden">
+        <h1>Game Over</h1>
+        <p class="subtitle">Final Score: <span id="final-score" style="color:var(--accent); font-weight:bold;">0</span></p>
+        <p class="subtitle">High Score: <span id="high-score" style="color:#fff;">0</span></p>
+        <button class="btn" id="restart-btn">Play Again</button>
+    </div>
+</div>
+
+<script>
+/**
+ * AUDIO SYSTEM (Web Audio API)
+ * Synthesizes sounds without external assets.
+ */
+const AudioSys = {
+    ctx: null,
+    init() {
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.ctx = new AudioContext();
+    },
+    playTone(freq, type, duration, vol = 0.1) {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+    },
+    playShoot() {
+        // Noise burst for bow twang
+        if (!this.ctx) return;
+        const bufferSize = this.ctx.sampleRate * 0.1;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
+        noise.connect(gain);
+        gain.connect(this.ctx.destination);
+        noise.start();
+    },
+    playHit() {
+        // High pitch ping for target
+        this.playTone(800, 'sine', 0.1, 0.2);
+        setTimeout(() => this.playTone(1200, 'triangle', 0.2, 0.1), 50);
+    },
+    playMiss() {
+        // Low thud
+        this.playTone(150, 'sawtooth', 0.2, 0.2);
+    }
+};
+
+/**
+ * GAME ENGINE
+ */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Game State
+const STATE = {
+    MENU: 0,
+    PLAYING: 1,
+    GAMEOVER: 2
+};
+
+let currentState = STATE.MENU;
+let score = 0;
+let arrowsLeft = 5;
+let highScore = localStorage.getItem('archeryHighScore') || 0;
+let lastTime = 0;
+
+// Physics Constants
+const GRAVITY = 0.4;
+const GROUND_Y_OFFSET = 50;
+
+// Entities
+let arrow = null;
+let target = null;
+let particles = [];
+let floatingTexts = [];
+
+// Input State
+const input = {
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    currX: 0,
+    currY: 0
+};
+
+// Wind
+let wind = { x: 0, y: 0 };
+
+/**
+ * CLASSES
+ */
+
+class Vector {
+    constructor(x, y) { this.x = x; this.y = y; }
+    add(v) { return new Vector(this.x + v.x, this.y + v.y); }
+    sub(v) { return new Vector(this.x - v.x, this.y - v.y); }
+    mult(n) { return new Vector(this.x * n, this.y * n); }
+    mag() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    normalize() {
+        const m = this.mag();
+        return m === 0 ? new Vector(0,0) : new Vector(this.x/m, this.y/m);
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 5;
+        this.vy = (Math.random() - 0.5) * 5;
+        this.life = 1.0;
+        this.color = color;
+        this.size = Math.random() * 3 + 2;
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1; // gravity
+        this.life -= 0.02;
+    }
+    draw(ctx) {
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+    }
+}
+
+class FloatingText {
+    constructor(x, y, text, color) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+        this.color = color;
+        this.life = 1.0;
+        this.vy = -1;
+    }
+    update() {
+        this.y += this.vy;
+        this.life -= 0.015;
+    }
+    draw(ctx) {
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.fillStyle = this.color;
+        ctx.font = "bold 24px Arial";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.strokeText(this.text, this.x, this.y);
+        ctx.fillText(this.text, this.x, this.y);
+        ctx.globalAlpha = 1.0;
+    }
+}
+
+class Target {
+    constructor() {
+        this.reset();
+        this.width = 60;
+        this.height = 200; // Total height
+        this.rings = [
+            { r: 10, color: '#FFD700', score: 10 }, // Gold
+            { r: 20, color: '#FF0000', score: 8 },  // Red
+            { r: 30, color: '#0000FF', score: 6 },  // Blue
+            { r: 40, color: '#000000', score: 4 },  // Black
+            { r: 50, color: '#FFFFFF', score: 2 }   // White
+        ];
+    }
+
+    reset() {
+        this.x = canvas.width * 0.8;
+        this.y = canvas.height / 2;
+        this.driftOffset = 0;
+        this.driftSpeed = 0.02;
+        this.driftRange = 50;
+    }
+
+    update() {
+        // Drift motion
+        this.driftOffset = Math.sin(Date.now() * this.driftSpeed) * this.driftRange;
+    }
+
+    draw(ctx) {
+        const drawY = this.y + this.driftOffset;
+        const centerX = this.x;
+        const centerY = drawY;
+
+        // Draw backboard
+        ctx.fillStyle = '#333';
+        ctx.fillRect(centerX - 5, centerY - this.height/2 - 10, 10, this.height + 20);
+
+        // Draw Rings
+        for (let i = this.rings.length - 1; i >= 0; i--) {
+            const ring = this.rings[i];
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, ring.r, 0, Math.PI * 2);
+            ctx.fillStyle = ring.color;
+            ctx.fill();
+            ctx.strokeStyle = '#222';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+    }
+
+    getHitScore(x, y) {
+        const drawY = this.y + this.driftOffset;
+        const centerX = this.x;
+        const centerY = drawY;
+        const dx = x - centerX;
+        const dy = y - centerY;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        for (let ring of this.rings) {
+            if (dist <= ring.r) return ring.score;
+        }
+        return 0;
+    }
+}
+
+class Arrow {
+    constructor() {
+        this.reset();
+        this.width = 4;
+        this.length = 40;
+        this.stuck = false;
+    }
+
+    reset() {
+        this.pos = new Vector(100, canvas.height - 150);
+        this.vel = new Vector(0, 0);
+        this.angle = -Math.PI / 2; // Pointing up
+        this.stuck = false;
+        this.inAir = false;
+    }
+
+    shoot(power, angle) {
+        this.vel = new Vector(Math.cos(angle) * power, Math.sin(angle) * power);
+        this.inAir = true;
+        this.stuck = false;
+        AudioSys.playShoot();
+    }
+
+    update() {
+        if (!this.inAir || this.stuck) return;
+
+        // Apply forces
+        this.vel.x += wind.x * 0.01; // Wind effect
+        this.vel.y += GRAVITY;
+        
+        this.pos = this.pos.add(this.vel);
+
+        // Rotation based on velocity
+        this.angle = Math.atan2(this.vel.y, this.vel.x);
+
+        // Ground collision
+        const groundY = canvas.height - GROUND_Y_OFFSET;
+        if (this.pos.y > groundY) {
+            this.pos.y = groundY;
+            this.stuck = true;
+            this.inAir = false;
+            this.vel = new Vector(0,0);
+            this.angle = Math.PI / 2; // Point down
+            handleMiss();
+        }
+
+        // Out of bounds (left/right)
+        if (this.pos.x > canvas.width || this.pos.x < 0) {
+            this.stuck = true;
+            this.inAir = false;
+            handleMiss();
+        }
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.translate(this.pos.x, this.pos.y);
+        ctx.rotate(this.angle);
+
+        // Shaft
+        ctx.fillStyle = '#ddd';
+        ctx.fillRect(-this.length/2, -this.width/2, this.length, this.width);
+
+        // Tip
+        ctx.fillStyle = '#ccc';
+        ctx.beginPath();
+        ctx.moveTo(this.length/2, 0);
+        ctx.lineTo(this.length/2 + 5, -3);
+        ctx.lineTo(this.length/2 + 5, 3);
+        ctx.fill();
+
+        // Fletching (Feathers)
+        ctx.fillStyle = '#d32f2f';
+        ctx.beginPath();
+        ctx.moveTo(-this.length/2, 0);
+        ctx.lineTo(-this.length/2 - 8, -5);
+        ctx.lineTo(-this.length/2 - 8, 5);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}
+
+/**
+ * GAME LOGIC
+ */
+
+function init() {
+    resize();
+    window.addEventListener('resize', resize);
+    
+    // Input Listeners
+    canvas.addEventListener('mousedown', onPointerDown);
+    canvas.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+    
+    canvas.addEventListener('touchstart', (e) => onPointerDown(e.touches[0]));
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); onPointerMove(e.touches[0]); });
+    window.addEventListener('touchend', onPointerUp);
+
+    // UI Buttons
+    document.getElementById('start-btn').addEventListener('click', startGame);
+    document.getElementById('restart-btn').addEventListener('click', startGame);
+
+    // Initial Draw
+    target = new Target();
+    arrow = new Arrow();
+    loop();
+}
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if(target) target.reset();
+    if(arrow) arrow.reset();
+}
+
+function startGame() {
+    AudioSys.init();
+    score = 0;
+    arrowsLeft = 5;
+    updateUI();
+    
+    currentState = STATE.PLAYING;
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('game-over-screen').classList.add('hidden');
+    
+    target.reset();
+    arrow.reset();
+    randomizeWind();
+}
+
+function randomizeWind() {
+    // Random wind between -2 and 2
+    wind.x = (Math.random() * 4) - 2;
+    wind.y = (Math.random() * 2) - 1; // Slight vertical wind
+    
+    // Update UI
+    const windArrow = document.getElementById('wind-arrow');
+    const windSpeed = document.getElementById('wind-speed');
+    const deg = Math.atan2(wind.y, wind.x) * (180 / Math.PI);
+    windArrow.style.transform = `rotate(${deg}deg)`;
+    windSpeed.innerText = Math.abs(wind.x).toFixed(1);
+}
+
+function handleMiss() {
+    AudioSys.playMiss();
+    arrowsLeft--;
+    updateUI();
+    
+    if (arrowsLeft <= 0) {
+        setTimeout(endGame, 1000);
+    } else {
+        arrow.reset();
+    }
+}
+
+function handleHit(scoreVal) {
+    AudioSys.playHit();
+    score += scoreVal;
+    updateUI();
+    
+    // Create particles
+    const color = scoreVal === 10 ? '#FFD700' : '#fff';
+    for(let i=0; i<20; i++) {
+        particles.push(new Particle(arrow.pos.x, arrow.pos.y, color));
+    }
+    
+    // Floating text
+    const text = scoreVal === 10 ? "BULLSEYE! +10" : `+${scoreVal}`;
+    const colorText = scoreVal === 10 ? "#FFD700" : "#fff";
+    floatingTexts.push(new FloatingText(arrow.pos.x, arrow.pos.y, text, colorText));
+
+    // Stick arrow
+    arrow.stuck = true;
+    arrow.inAir = false;
+
+    // Reset for next shot after delay
+    setTimeout(() => {
+        arrowsLeft--;
+        updateUI();
+        if (arrowsLeft > 0) {
+            arrow.reset();
+            randomizeWind();
+        } else {
+            endGame();
+        }
+    }, 1500);
+}
+
+function endGame() {
+    currentState = STATE.GAMEOVER;
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('archeryHighScore', highScore);
+    }
+    document.getElementById('final-score').innerText = score;
+    document.getElementById('high-score').innerText = highScore;
+    document.getElementById('game-over-screen').classList.remove('hidden');
+}
+
+function updateUI() {
+    document.getElementById('score-display').innerText = score;
+    document.getElementById('arrows-display').innerText = arrowsLeft;
+}
+
+/**
+ * INPUT HANDLING
+ */
+function onPointerDown(e) {
+    if (currentState !== STATE.PLAYING || arrow.inAir) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    input.startX = e.clientX - rect.left;
+    input.startY = e.clientY - rect.top;
+    input.currX = input.startX;
+    input.currY = input.startY;
+    input.isDragging = true;
+}
+
+function onPointerMove(e) {
+    if (!input.isDragging) return;
+    const rect = canvas.getBoundingClientRect();
+    input.currX = e.clientX - rect.left;
+    input.currY = e.clientY - rect.top;
+}
+
+function onPointerUp() {
+    if (!input.isDragging) return;
+    input.isDragging = false;
+
+    // Calculate vector
+    const dx = input.startX - input.currX;
+    const dy = input.startY - input.currY;
+    
+    // Power calculation (max power 25)
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const maxPull = 200;
+    let power = Math.min(dist, maxPull) / maxPull * 25;
+    
+    // Angle calculation
+    let angle = Math.atan2(dy, dx);
+    
+    // Only shoot if pulled back enough
+    if (dist > 20 && power > 2) {
+        arrow.shoot(power, angle);
+    } else {
+        arrow.reset(); // Cancel shot
+    }
+}
+
+/**
+ * RENDER LOOP
+ */
+function drawBackground() {
+    // Sky
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#1a1a2e');
+    grad.addColorStop(1, '#16213e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Ground
+    ctx.fillStyle = '#0f3460';
+    ctx.fillRect(0, canvas.height - GROUND_Y_OFFSET, canvas.width, GROUND_Y_OFFSET);
+    
+    // Ground Line
+    ctx.strokeStyle = '#e94560';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height - GROUND_Y_OFFSET);
+    ctx.lineTo(canvas.width, canvas.height - GROUND_Y_OFFSET);
+    ctx.stroke();
+}
+
+function drawTrajectory() {
+    if (!input.isDragging) return;
+
+    const dx = input.startX - input.currX;
+    const dy = input.startY - input.currY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const maxPull = 200;
+    let power = Math.min(dist, maxPull) / maxPull * 25;
+    let angle = Math.atan2(dy, dx);
+
+    // Simulate path
+    let simX = arrow.pos.x;
+    let simY = arrow.pos.y;
+    let simVx = Math.cos(angle) * power;
+    let simVy = Math.sin(angle) * power;
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+
+    for (let i = 0; i < 30; i++) {
+        simX += simVx;
+        simY += simVy;
+        simVy += GRAVITY;
+        simVx += wind.x * 0.01;
+        
+        if (i === 0) ctx.moveTo(simX, simY);
+        else ctx.lineTo(simX, simY);
+
+        if (simY > canvas.height - GROUND_Y_OFFSET) break;
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    drawBackground();
+
+    if (currentState === STATE.PLAYING) {
+        target.update();
+        target.draw(ctx);
+        
+        arrow.update();
+        arrow.draw(ctx);
+
+        drawTrajectory();
+
+        // Collision Detection
+        if (arrow.inAir && !arrow.stuck) {
+            // Check target collision
+            // Simple box/circle check approximation
+            const tX = target.x;
+            const tY = target.y + target.driftOffset;
+            const tW = target.width;
+            const tH = target.height;
+            
+            // Check if arrow tip is within target vertical bounds
+            if (arrow.pos.x > tX - tW/2 && arrow.pos.x < tX + tW/2) {
+                if (arrow.pos.y > tY - tH/2 && arrow.pos.y < tY + tH/2) {
+                    const score = target.getHitScore(arrow.pos.x, arrow.pos.y);
+                    if (score > 0) {
+                        handleHit(score);
+                    }
+                }
+            }
+        }
+    }
+
+    // Particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw(ctx);
+        if (particles[i].life <= 0) particles.splice(i, 1);
+    }
+
+    // Floating Text
+    for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        floatingTexts[i].update();
+        floatingTexts[i].draw(ctx);
+        if (floatingTexts[i].life <= 0) floatingTexts.splice(i, 1);
+    }
+
+    requestAnimationFrame(loop);
+}
+
+// Start
+init();
+
+</script>
+</body>
+</html>
