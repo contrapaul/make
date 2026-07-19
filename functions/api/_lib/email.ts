@@ -2,7 +2,7 @@
 // RESEND_API_KEY is a Pages secret; RESEND_FROM optionally overrides the
 // sender (must be on a domain verified in Resend).
 
-const DEFAULT_FROM = 'Blood Bowl Companion <bloodbowl@contrapaul.com>';
+const DEFAULT_FROM = 'Blood Bowl Companion <bloodbowl@send.contrapaul.com>';
 
 async function sendEmail(env: any, to: string, subject: string, html: string): Promise<void> {
   const res = await fetch('https://api.resend.com/emails', {

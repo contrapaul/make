@@ -184,6 +184,18 @@
       }
     });
 
+    $('btn-resend-verify').addEventListener('click', async () => {
+      const btn = $('btn-resend-verify');
+      btn.disabled = true;
+      try {
+        await BBApi.resendVerify();
+        banner('✓ Verification email sent — check your inbox.');
+      } catch (e) {
+        banner(e.message, true);
+        btn.disabled = false;
+      }
+    });
+
     $('btn-logout').addEventListener('click', async () => {
       await BBApi.logout();
       render(null);

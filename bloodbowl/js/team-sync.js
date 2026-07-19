@@ -44,11 +44,18 @@
     if (changed) _setLocal(_getLocal().map((t) => (t.id === team.id ? team : t)));
   }
 
+  /* A team may only be pushed by the account it was last synced under.
+     Unsynced local teams (no _syncOwner) are adopted by whoever signs in. */
+  function _pushableBy(team, userId) {
+    return !team._syncOwner || team._syncOwner === userId;
+  }
+
   function _applyServerTeam(team) {
     const merged = team.data;
     merged.id = team.id;
     merged.updatedAt = team.updatedAt;
     merged.isPublic = team.isPublic;
+    merged._syncOwner = BBApi.user?.id;
     const all = _getLocal();
     const idx = all.findIndex((t) => t.id === team.id);
     if (idx >= 0) all[idx] = merged; else all.push(merged);
@@ -57,6 +64,7 @@
 
   async function _pushTeam(team) {
     await _migratePhotos(team);
+    team._syncOwner = BBApi.user?.id;
     const body = {
       name: team.name || 'Unnamed Team',
       baseTeamId: team.baseTeamId || 'custom',
@@ -68,8 +76,12 @@
     try {
       await BBApi.putTeam(team.id, body);
       _serverMeta?.set(team.id, { updatedAt: body.updatedAt });
+      _setLocal(_getLocal().map((t) => (t.id === team.id ? team : t)));
     } catch (e) {
-      if (e.status === 409) {
+      if (e.status === 403) {
+        // Owned by a different account (shared device) — leave it alone.
+        console.warn('[team-sync] skipping team not owned by this account:', team.name);
+      } else if (e.status === 409) {
         // Server copy is newer (edited on another device) — it wins.
         const { team: server } = await BBApi.getTeam(team.id);
         _applyServerTeam(server);
@@ -111,6 +123,7 @@
       }
       // Push: local teams that are newer than (or missing from) the server.
       for (const l of _getLocal()) {
+        if (!_pushableBy(l, BBApi.user.id)) continue;
         const s = _serverMeta.get(l.id);
         if (!s || (l.updatedAt || 0) > s.updatedAt) await _pushTeam(l);
       }
@@ -131,6 +144,7 @@
     try {
       await _deletePending();
       for (const l of _getLocal()) {
+        if (!_pushableBy(l, BBApi.user.id)) continue;
         const s = _serverMeta.get(l.id);
         if (!s || (l.updatedAt || 0) > s.updatedAt) await _pushTeam(l);
       }

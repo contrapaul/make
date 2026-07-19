@@ -63,6 +63,7 @@
       _setUser(null);
     },
     verifyEmail(token)              { return req('POST', '/api/auth/verify-email', { token }); },
+    resendVerify()                  { return req('POST', '/api/auth/resend-verify', {}); },
     requestReset(email)             { return req('POST', '/api/auth/request-reset', { email }); },
     resetPassword(token, newPassword) { return req('POST', '/api/auth/reset-password', { token, newPassword }); },
 
