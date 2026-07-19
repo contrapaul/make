@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tournaments | Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../css/account.css?v=1">
+  <link rel="stylesheet" href="../css/tournaments.css?v=1">
+  <script src="../js/title-quips.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
+        <span class="bb-home-btn-dice">J</span>
+        <span class="bb-home-btn-label">Return to Main Menu</span>
+      </a>
+      <nav class="nav bb-nav" id="bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/rules/">Rules</a>
+        <a href="https://make.contrapaul.com/bloodbowl/browse/">Browse</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tournaments/">Tournaments</a>
+        <a href="https://make.contrapaul.com/bloodbowl/account/">Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-app">
+
+    <div class="bb-page-title" aria-label="Tournaments">
+      <span class="bb-title-sub">placeholder top</span>
+      <span class="bb-title-main">TOURNAMENTS</span>
+      <span class="bb-title-sub">placeholder bottom</span>
+    </div>
+
+    <div class="bb-page-content acct-page tv-page">
+
+      <div class="acct-banner" id="tv-banner" hidden></div>
+
+      <!-- ═══ LIST VIEW ═══ -->
+      <section id="tv-list" hidden>
+        <div class="acct-card">
+          <h2 class="acct-h2">Run a Tournament</h2>
+          <p class="acct-hint" id="tv-create-hint"></p>
+          <form class="acct-form" id="tv-create-form">
+            <label>Name <input type="text" id="tv-new-name" required minlength="3" maxlength="60" placeholder="e.g. Backyard Bowl III"></label>
+            <label>Description <textarea id="tv-new-desc" maxlength="500" rows="3" placeholder="When, where, house rules…"></textarea></label>
+            <button class="acct-btn" type="submit">Create Tournament</button>
+          </form>
+        </div>
+        <div class="acct-card">
+          <h2 class="acct-h2">All Tournaments</h2>
+          <div class="tv-rows" id="tv-rows"></div>
+        </div>
+      </section>
+
+      <!-- ═══ DETAIL VIEW ═══ -->
+      <section id="tv-detail" hidden>
+        <div class="acct-card">
+          <div class="tv-head">
+            <div>
+              <h2 class="acct-h2" id="tv-name"></h2>
+              <p class="acct-meta"><span class="tv-status" id="tv-status"></span> · run by <span id="tv-owner"></span></p>
+            </div>
+            <a class="acct-link" href="./">← All tournaments</a>
+          </div>
+          <p class="acct-meta" id="tv-desc"></p>
+          <div class="tv-org-controls" id="tv-org-controls" hidden>
+            <button class="acct-btn" id="tv-status-btn" type="button"></button>
+            <button class="acct-btn acct-btn-ghost" id="tv-delete-btn" type="button">Delete Tournament</button>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <h2 class="acct-h2">Coaches <span class="tv-count" id="tv-coach-count"></span></h2>
+          <div class="acct-teams" id="tv-entries"></div>
+          <div id="tv-join-box" hidden>
+            <p class="acct-meta">Enter with one of your cloud teams:</p>
+            <div class="tv-join-row">
+              <select id="tv-join-team"></select>
+              <button class="acct-btn" id="tv-join-btn" type="button">Join</button>
+            </div>
+          </div>
+          <button class="acct-btn acct-btn-ghost" id="tv-leave-btn" type="button" hidden>Withdraw</button>
+          <p class="acct-hint" id="tv-join-hint" hidden></p>
+        </div>
+
+        <div class="acct-card">
+          <h2 class="acct-h2">Rounds &amp; Results</h2>
+          <div id="tv-rounds"></div>
+          <div class="tv-pairing" id="tv-pairing" hidden>
+            <h3 class="tv-h3">Add pairing</h3>
+            <div class="tv-pairing-row">
+              <label>Round <input type="number" id="tv-pair-round" min="1" max="99" value="1"></label>
+              <select id="tv-pair-home"></select>
+              <span class="tv-vs">vs</span>
+              <select id="tv-pair-away"></select>
+              <button class="acct-btn" id="tv-pair-add" type="button">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <h2 class="acct-h2">Standings</h2>
+          <div class="tv-table-wrap">
+            <table class="tv-table" id="tv-standings">
+              <thead><tr><th>#</th><th>Coach</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>TD±</th><th>Pts</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="acct-card">
+          <h2 class="acct-h2">Photo Wall</h2>
+          <div class="tv-composer" id="tv-composer" hidden>
+            <input type="file" id="tv-photo-file" accept="image/*" hidden>
+            <div class="tv-composer-row">
+              <button class="acct-btn acct-btn-ghost" id="tv-photo-pick" type="button">📷 Choose Photo</button>
+              <img class="tv-composer-thumb" id="tv-photo-thumb" alt="" hidden>
+            </div>
+            <input type="text" id="tv-photo-caption" maxlength="280" placeholder="Say something about it…">
+            <button class="acct-btn" id="tv-photo-share" type="button" disabled>Share to Wall</button>
+          </div>
+          <p class="acct-hint" id="tv-wall-hint" hidden>Coaches in this tournament can share photos here.</p>
+          <div class="tv-wall" id="tv-wall"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const toggle = document.getElementById('bb-nav-toggle');
+      const nav    = document.getElementById('bb-nav');
+      if (!toggle || !nav) return;
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = nav.classList.toggle('bb-nav-open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+      document.addEventListener('click', e => {
+        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+          nav.classList.remove('bb-nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
+  <script src="../js/api.js?v=3"></script>
+  <script src="../js/tournaments-page.js?v=1"></script>
+</body>
+</html>
