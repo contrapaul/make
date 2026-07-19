@@ -8,6 +8,12 @@
       "port": 5500
     },
     {
+      "name": "site-with-api",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "pages", "dev", ".", "--port", "8788"],
+      "port": 8788
+    },
+    {
       "name": "chinese-vocab",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese"],

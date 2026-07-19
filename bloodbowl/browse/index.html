@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Teams | Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../css/account.css?v=1">
+  <script src="../js/title-quips.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
+        <span class="bb-home-btn-dice">J</span>
+        <span class="bb-home-btn-label">Return to Main Menu</span>
+      </a>
+      <nav class="nav bb-nav" id="bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/browse/">Browse</a>
+        <a href="https://make.contrapaul.com/bloodbowl/account/">Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-app">
+
+    <div class="bb-page-title" aria-label="Browse Teams">
+      <span class="bb-title-sub">placeholder top</span>
+      <span class="bb-title-main">BROWSE TEAMS</span>
+      <span class="bb-title-sub">placeholder bottom</span>
+    </div>
+
+    <div class="bb-page-content br-page">
+
+      <div class="br-filters">
+        <select id="br-race"><option value="">All races</option></select>
+        <input type="search" id="br-search" placeholder="Search team names…">
+      </div>
+
+      <div class="br-grid" id="br-grid"></div>
+      <p class="acct-hint" id="br-empty" hidden>No public teams match. Coaches make teams public from their Account page.</p>
+      <div class="br-pager">
+        <button class="acct-btn acct-btn-ghost" id="br-prev" type="button" hidden>← Previous</button>
+        <button class="acct-btn acct-btn-ghost" id="br-next" type="button" hidden>Next →</button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Read-only team detail overlay -->
+  <div class="br-overlay" id="br-detail" hidden role="dialog" aria-modal="true" aria-label="Team detail">
+    <div class="br-detail-window">
+      <div class="br-detail-head">
+        <div>
+          <h2 class="br-detail-title" id="br-detail-title">Team</h2>
+          <p class="br-detail-sub" id="br-detail-sub"></p>
+        </div>
+        <button class="br-close" id="br-detail-close" type="button" aria-label="Close">&times;</button>
+      </div>
+      <div class="br-roster" id="br-roster"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+    </div>
+  </footer>
+
+  <script src="../js/api.js?v=1"></script>
+  <script src="../js/browse-page.js?v=1"></script>
+</body>
+</html>

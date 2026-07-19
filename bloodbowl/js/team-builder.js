@@ -46,9 +46,11 @@ const TeamBuilder = (() => {
   function saveTeam(team) {
     const all = getTeams();
     const idx = all.findIndex(t => t.id === team.id);
+    team.updatedAt = Date.now();   /* drives cloud sync (last-write-wins) */
     if (idx >= 0) all[idx] = team; else all.push(team);
     try {
       setTeams(all);
+      document.dispatchEvent(new CustomEvent('bb:teams-changed'));
       return true;
     } catch (e) {
       return false;
@@ -57,6 +59,13 @@ const TeamBuilder = (() => {
 
   function deleteTeam(id) {
     setTeams(getTeams().filter(t => t.id !== id));
+    /* Tombstone so team-sync can delete the cloud copy (even after reload). */
+    try {
+      const tombs = JSON.parse(localStorage.getItem('bb_deleted_teams') ?? '[]');
+      if (!tombs.includes(id)) tombs.push(id);
+      localStorage.setItem('bb_deleted_teams', JSON.stringify(tombs));
+    } catch {}
+    document.dispatchEvent(new CustomEvent('bb:teams-changed'));
   }
 
   /* ─── Helpers ─────────────────────────────────────── */
@@ -609,13 +618,26 @@ const TeamBuilder = (() => {
     };
 
     pick.addEventListener('click', () => input.click());
-    remove.addEventListener('click', () => { p.photo = undefined; sync(); });
+    remove.addEventListener('click', () => { p.photo = undefined; p.photoId = undefined; sync(); });
     input.addEventListener('change', async () => {
       const file = input.files?.[0];
       input.value = '';
       if (!file) return;
       try {
-        p.photo = await _downscalePhoto(file);
+        const dataUrl = await _downscalePhoto(file);
+        /* Signed in: upload to the cloud and store a URL (keeps localStorage
+           small). Signed out or upload fails: keep the dataURL as before. */
+        let stored = dataUrl;
+        if (window.BBTeamSync?.canUpload()) {
+          try {
+            const up = await BBTeamSync.uploadPhotoFromDataUrl(dataUrl);
+            p.photoId = up.id;
+            stored = up.url;
+          } catch (e) {
+            p.photoId = undefined;
+          }
+        }
+        p.photo = stored;
         sync();
       } catch (e) {
         _showToast('✗ Could not read that image', true);

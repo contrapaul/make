@@ -1,0 +1,12 @@
+name = "make"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bloodbowl-db"
+database_id = "541a4d6c-a488-432c-97c1-3786f995b4cf"
+
+[[r2_buckets]]
+binding = "PHOTOS"
+bucket_name = "bloodbowl-photos"

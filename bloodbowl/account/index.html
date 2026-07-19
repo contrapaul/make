@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account | Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
+  <link rel="stylesheet" href="../style.css?v=2">
+  <link rel="stylesheet" href="../css/account.css?v=1">
+  <script src="../js/title-quips.js" defer></script>
+</head>
+<body>
+
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
+        <span class="bb-home-btn-dice">J</span>
+        <span class="bb-home-btn-label">Return to Main Menu</span>
+      </a>
+      <nav class="nav bb-nav" id="bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/browse/">Browse</a>
+        <a href="https://make.contrapaul.com/bloodbowl/account/">Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-app">
+
+    <div class="bb-page-title" aria-label="Account">
+      <span class="bb-title-sub">placeholder top</span>
+      <span class="bb-title-main">ACCOUNT</span>
+      <span class="bb-title-sub">placeholder bottom</span>
+    </div>
+
+    <div class="bb-page-content acct-page">
+
+      <!-- Message banner (verify/reset results, errors) -->
+      <div class="acct-banner" id="acct-banner" hidden></div>
+
+      <!-- Signed out: login / signup / forgot password -->
+      <section class="acct-card" id="acct-signed-out" hidden>
+        <div class="acct-tabs" role="tablist">
+          <button class="acct-tab is-active" id="tab-login" type="button">Sign In</button>
+          <button class="acct-tab" id="tab-signup" type="button">Create Account</button>
+        </div>
+
+        <form class="acct-form" id="form-login">
+          <label>Email <input type="email" id="login-email" required autocomplete="email"></label>
+          <label>Password <input type="password" id="login-password" required autocomplete="current-password"></label>
+          <p class="acct-error" id="login-error" hidden></p>
+          <button class="acct-btn" type="submit">Sign In</button>
+          <button class="acct-link" id="forgot-link" type="button">Forgot password?</button>
+        </form>
+
+        <form class="acct-form" id="form-signup" hidden>
+          <label>Email <input type="email" id="signup-email" required autocomplete="email"></label>
+          <label>Coach name <input type="text" id="signup-username" required minlength="3" maxlength="24"
+                 pattern="[A-Za-z0-9_\-]+" title="3-24 characters: letters, numbers, - or _"
+                 autocomplete="username"></label>
+          <label>Password <input type="password" id="signup-password" required minlength="8" autocomplete="new-password"></label>
+          <p class="acct-hint">Your coach name is shown publicly on teams you share.</p>
+          <p class="acct-error" id="signup-error" hidden></p>
+          <button class="acct-btn" type="submit">Create Account</button>
+        </form>
+
+        <form class="acct-form" id="form-forgot" hidden>
+          <label>Email <input type="email" id="forgot-email" required autocomplete="email"></label>
+          <p class="acct-error" id="forgot-error" hidden></p>
+          <button class="acct-btn" type="submit">Send Reset Link</button>
+        </form>
+      </section>
+
+      <!-- Reset-password form (arrived via emailed ?reset= link) -->
+      <section class="acct-card" id="acct-reset" hidden>
+        <h2 class="acct-h2">Choose a new password</h2>
+        <form class="acct-form" id="form-reset">
+          <label>New password <input type="password" id="reset-password" required minlength="8" autocomplete="new-password"></label>
+          <p class="acct-error" id="reset-error" hidden></p>
+          <button class="acct-btn" type="submit">Set Password</button>
+        </form>
+      </section>
+
+      <!-- Signed in: profile + cloud teams -->
+      <section id="acct-signed-in" hidden>
+        <div class="acct-card">
+          <h2 class="acct-h2">Coach <span id="acct-username"></span></h2>
+          <p class="acct-meta"><span id="acct-email"></span> · <span id="acct-verified"></span></p>
+          <p class="acct-hint" id="acct-verify-hint" hidden>
+            Check your inbox for a verification link — you need it before teams can be made public.
+          </p>
+          <button class="acct-btn acct-btn-ghost" id="btn-logout" type="button">Sign Out</button>
+        </div>
+
+        <div class="acct-card">
+          <h2 class="acct-h2">My Cloud Teams</h2>
+          <p class="acct-meta" id="sync-status">☁ …</p>
+          <div class="acct-teams" id="acct-teams"></div>
+          <p class="acct-hint">Public teams appear in <a href="../browse/">Browse</a> under your coach name.
+             Teams sync automatically whenever you edit them in the team builder.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+    </div>
+  </footer>
+
+  <script src="../js/api.js?v=1"></script>
+  <script src="../js/team-sync.js?v=1"></script>
+  <script src="../js/account-page.js?v=1"></script>
+</body>
+</html>
