@@ -728,10 +728,13 @@ function persistGameState() {
         sig:      { left: _rosterSig('left'), right: _rosterSig('right') },
       };
       localStorage.setItem(_matchKey(), JSON.stringify(payload));
+      /* Live two-device games mirror every persisted snapshot to the opponent. */
+      document.dispatchEvent(new CustomEvent('bb:statePersisted', { detail: payload }));
     } catch (_) { /* storage full / private mode — skip */ }
   }, 250);
 }
 window.persistGameState = persistGameState;
+window.bbMatchKey = _matchKey;
 
 /* Apply saved state for one side if its roster signature still matches. */
 function rehydrateSide(side) {

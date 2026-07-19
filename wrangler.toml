@@ -10,3 +10,8 @@ database_id = "541a4d6c-a488-432c-97c1-3786f995b4cf"
 [[r2_buckets]]
 binding = "PHOTOS"
 bucket_name = "bloodbowl-photos"
+
+[[durable_objects.bindings]]
+name = "LIVE_GAME"
+class_name = "LiveGame"
+script_name = "bb-live"

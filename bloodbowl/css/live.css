@@ -1,0 +1,104 @@
+/* Live two-device games — banner, passive lock, new-game device step, join page. */
+
+/* ── Floating live banner (game page) ── */
+#bb-live-banner {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bb-bar-bg);
+  backdrop-filter: var(--bb-bar-blur);
+  border: 1px solid var(--bb-hairline);
+  border-radius: 999px;
+  padding: 8px 16px;
+  color: var(--bb-text);
+  font-family: var(--bb-font-head);
+  font-size: var(--bb-font-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: auto;
+  max-width: 92vw;
+  white-space: nowrap;
+}
+#bb-live-banner.is-passive { border-color: rgba(240, 190, 80, 0.55); }
+.bb-live-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #46d46a;
+  box-shadow: 0 0 8px #46d46a;
+  animation: bb-live-pulse 2s infinite;
+}
+@keyframes bb-live-pulse { 50% { opacity: 0.4; } }
+#bb-live-note { color: var(--bb-text-faint); text-transform: none; }
+#bb-live-pass {
+  background: var(--bb-gold-grad);
+  border: none;
+  border-radius: 999px;
+  color: #23180a;
+  font-family: var(--bb-font-head);
+  font-size: var(--bb-font-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+/* ── Passive lock: watching, not touching ── */
+body.bb-live-locked .bb-app,
+body.bb-live-locked .panels-zone,
+body.bb-live-locked .bb-panel,
+body.bb-live-locked .modal-overlay,
+body.bb-live-locked .game-bar {
+  pointer-events: none;
+}
+body.bb-live-locked .bb-app { opacity: 0.92; }
+
+/* ── New Game panel: device step + waiting room ── */
+.sg-device, .sg-live-wait { margin-top: var(--bb-space-5); }
+.sg-device-btns { display: flex; gap: var(--bb-space-3); flex-wrap: wrap; }
+.sg-device-btns .roll-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 220px;
+}
+.sg-device-sub {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-font-sm);
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.75;
+}
+.sg-device-note { color: var(--bb-text-muted); font-family: var(--bb-font-body); font-size: var(--bb-font-sm); min-height: 1.2em; }
+.sg-live-code {
+  font-family: var(--bb-font-num);
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: 0.35em;
+  color: var(--bb-text);
+  text-align: center;
+  padding: var(--bb-space-3);
+  border: 1px dashed var(--bb-hairline);
+  border-radius: var(--bb-radius);
+  margin: var(--bb-space-3) 0;
+}
+.sg-live-linkrow { display: flex; gap: var(--bb-space-2); margin-bottom: var(--bb-space-3); }
+.sg-live-linkrow input {
+  flex: 1;
+  background: rgba(5, 10, 26, 0.6);
+  border: 1px solid var(--bb-hairline);
+  border-radius: var(--bb-radius);
+  color: var(--bb-text-muted);
+  font-family: var(--bb-font-num);
+  font-size: var(--bb-font-sm);
+  padding: var(--bb-space-2) var(--bb-space-3);
+}
+
+/* ── Join page team picker ── */
+.jn-team-row { cursor: pointer; background: none; width: 100%; text-align: left; }
+.jn-team-row.is-picked { border-color: var(--team-accent, var(--tc-primary, #3b6fe0)); background: rgba(59, 111, 224, 0.12); }

@@ -46,8 +46,12 @@
     if (match.gameMode) window.BBSettings?.setGameMode?.(match.gameMode);
 
     try {
-      await window.reconstructSide?.('left',  match.home);
-      await window.reconstructSide?.('right', match.away);
+      if (window.BBLive?.isActive()) {
+        await window.BBLive.reconstructSides();
+      } else {
+        await window.reconstructSide?.('left',  match.home);
+        await window.reconstructSide?.('right', match.away);
+      }
     } catch (err) {
       console.error('[BB] Failed to reconstruct match:', err);
     }
@@ -265,6 +269,7 @@
 
   /* Show the fielding wizard, then hand off to the drive (kickoff) wizard. */
   function startDrive(flow) {
+    if (window.BBLive?.isPassive()) return;   // opponent's device runs the wizards
     const overlay = document.getElementById('bb-intro-overlay');
     if (!overlay || !window.PlayerCard) { window.DriveWizard?.open?.(flow); return; }
 
@@ -375,6 +380,15 @@
   function esc(s) {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
+
+  /* Re-derive scoreboard/turn-button/timeline after a remote snapshot lands
+     (live two-device games — called by live-client.js). */
+  window.BBGameRefresh = function () {
+    syncScoreboard();
+    deriveMode();
+    renderTurnButton();
+    window.BBGameTimeline?.render?.();
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

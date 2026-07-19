@@ -37,6 +37,7 @@
 
   const BBApi = {
     user: undefined,
+    request: req,
 
     async me() {
       try {

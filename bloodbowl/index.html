@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/drive-wizard.css?v=4">
   <link rel="stylesheet" href="css/team-builder.css?v=2">
   <link rel="stylesheet" href="css/spp.css">
+  <link rel="stylesheet" href="css/live.css?v=1">
 </head>
 <body class="app-loading">
 
@@ -145,6 +146,28 @@
             </article>
 
           </div>
+
+          <!-- Device choice (shown after picking a mode) -->
+          <div class="sg-device" id="sg-device" hidden>
+            <h3 class="gs-section-title">Where are you playing?</h3>
+            <div class="sg-device-btns">
+              <button class="roll-btn" id="sg-one-device" type="button">📱 This Device<span class="sg-device-sub">pass-and-play, both teams here</span></button>
+              <button class="roll-btn" id="sg-two-devices" type="button">📡 Two Devices<span class="sg-device-sub">invite another coach — they bring their own team</span></button>
+            </div>
+            <p class="sg-device-note" id="sg-device-note"></p>
+          </div>
+
+          <!-- Waiting room for two-device games -->
+          <div class="sg-live-wait" id="sg-live-wait" hidden>
+            <h3 class="gs-section-title">Waiting for your opponent…</h3>
+            <div class="sg-live-code" id="sg-live-code">······</div>
+            <p class="sg-device-note">Send them this link — they sign in, pick their team, and the game starts automatically.</p>
+            <div class="sg-live-linkrow">
+              <input type="text" id="sg-live-link" readonly>
+              <button class="roll-btn" id="sg-live-copy" type="button">Copy</button>
+            </div>
+            <button class="gb-start-sub-btn" id="sg-live-cancel" type="button">Cancel game</button>
+          </div>
         </div>
       </div>
 
@@ -263,7 +286,7 @@
 
   <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
   <script src="js/dice.js"></script>
-  <script src="js/state.js?v=13"></script>
+  <script src="js/state.js?v=14"></script>
   <script src="js/settings.js?v=2"></script>
   <script src="js/tutorial.js"></script>
   <script src="js/physical-dice.js?v=2"></script>
@@ -271,8 +294,9 @@
   <script src="js/player-card.js?v=2"></script>
   <script src="js/pitch.js"></script>
   <script src="js/drive-wizard.js?v=4"></script>
-  <script src="js/api.js?v=2"></script>
+  <script src="js/api.js?v=3"></script>
   <script src="js/team-sync.js?v=2"></script>
+  <script src="js/live-client.js?v=1"></script>
   <script src="js/team-builder.js?v=6"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js?v=3"></script>
@@ -314,31 +338,75 @@
           c.classList.toggle('mode-card--selected', c.dataset.mode === m));
       };
       markModeCards();
+      let chosenMode = null;
+      const deviceNote = (msg) => { const n = document.getElementById('sg-device-note'); if (n) n.textContent = msg || ''; };
       document.querySelectorAll('#panel-startgame .mode-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', () => {
-          /* New Game flow: require both teams, record the matchup, then hand
-             off to the dedicated game page. */
-          if (!(window.state?.left?.team && window.state?.right?.team)) {
-            alert('Pick a Home and an Away team first.');
-            return;
-          }
-          const mode = card.dataset.mode || 'seasoned';
-          window.BBSettings?.setGameMode?.(mode);
+          /* New Game flow: pick a mode, then choose 1-device or 2-device play. */
+          chosenMode = card.dataset.mode || 'seasoned';
+          window.BBSettings?.setGameMode?.(chosenMode);
           markModeCards();
-          const sel = window.getSelectedSides?.() || {};
-          try {
-            localStorage.setItem('bb:activeMatch', JSON.stringify({
-              v: 1,
-              home: sel.left ?? null,
-              away: sel.right ?? null,
-              gameMode: mode,
-              createdAt: Date.now(),
-            }));
-          } catch (_) {}
-          window.Panels?.closePanel?.('startgame');
-          location.href = './game/';
+          document.getElementById('sg-device').hidden = false;
+          deviceNote('');
+          document.getElementById('sg-device').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
+      });
+
+      /* One device: classic pass-and-play — both teams on this device. */
+      document.getElementById('sg-one-device')?.addEventListener('click', () => {
+        if (!(window.state?.left?.team && window.state?.right?.team)) {
+          deviceNote('Pick a Home and an Away team first.');
+          return;
+        }
+        window.BBLive?.clear?.();
+        const sel = window.getSelectedSides?.() || {};
+        try {
+          localStorage.setItem('bb:activeMatch', JSON.stringify({
+            v: 1,
+            home: sel.left ?? null,
+            away: sel.right ?? null,
+            gameMode: chosenMode,
+            createdAt: Date.now(),
+          }));
+        } catch (_) {}
+        window.Panels?.closePanel?.('startgame');
+        location.href = './game/';
+      });
+
+      /* Two devices: create a live game, show the invite, wait for the guest
+         (live-client.js navigates to /game when they join). */
+      document.getElementById('sg-two-devices')?.addEventListener('click', async () => {
+        if (!window.BBApi?.user) {
+          deviceNote('Two-device play needs an account — sign in via the Account page first.');
+          return;
+        }
+        if (!window.state?.left?.team) {
+          deviceNote('Pick your team (Home side) first — your opponent brings theirs.');
+          return;
+        }
+        try {
+          const code = await window.BBLive.createGame(chosenMode);
+          document.getElementById('sg-device').hidden = true;
+          document.getElementById('sg-live-wait').hidden = false;
+          document.getElementById('sg-live-code').textContent = code;
+          const link = `${location.origin}/bloodbowl/join/?code=${code}`;
+          document.getElementById('sg-live-link').value = link;
+        } catch (e) {
+          deviceNote(e.message || 'Could not create the game.');
+        }
+      });
+      document.getElementById('sg-live-copy')?.addEventListener('click', () => {
+        const input = document.getElementById('sg-live-link');
+        input.select();
+        navigator.clipboard?.writeText(input.value);
+        const b = document.getElementById('sg-live-copy');
+        const t = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => { b.textContent = t; }, 1200);
+      });
+      document.getElementById('sg-live-cancel')?.addEventListener('click', () => {
+        window.BBLive?.clear?.();
+        document.getElementById('sg-live-wait').hidden = true;
+        document.getElementById('sg-device').hidden = false;
       });
 
       /* Professional mode: optional per-turn action tracking */

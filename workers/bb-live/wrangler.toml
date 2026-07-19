@@ -1,0 +1,12 @@
+name = "bb-live"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["LiveGame"]
+
+[durable_objects]
+bindings = [
+  { name = "LIVE_GAME", class_name = "LiveGame" }
+]
