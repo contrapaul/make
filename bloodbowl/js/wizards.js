@@ -2965,13 +2965,62 @@ function initSpecialWizard() {
     });
   }
 
-  function buildTargetList() {
+  /* Both cards glow once actor and target are locked in (as Block does). */
+  function updateGlows() {
+    const a = document.querySelector('#spec-actor-card-wrap .bwiz-embedded-card');
+    const t = document.querySelector('#spec-target-card-wrap .bwiz-embedded-card');
+    const both = !!(a && t);
+    a?.classList.toggle('bwiz-card-glow-att', both);
+    t?.classList.toggle('bwiz-card-glow-def', both);
+  }
+
+  /* ── Target: picker in the card wrap → embedded trading card on pick ── */
+  function showTargetPicker() {
+    target = null;
+    const wrap   = document.getElementById('spec-target-card-wrap');
+    const picker = document.getElementById('spec-target-picker');
+    wrap?.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+    if (picker) picker.hidden = false;
+    updateGlows();
     const PS = window.PlayerStatus;
     buildWizardPlayerList('spec-target-list', targetSide,
       p => p.status === PS?.AVAILABLE && window.isPlayerAvailable?.(p),
-      (p) => { target = p; readyToResolve(); },
+      (p) => {
+        target = p;
+        if (picker) picker.hidden = true;
+        buildEmbeddedCardShared(wrap, p, targetSide);
+        updateGlows();
+        readyToResolve();
+      },
       /* Being attacked is not an action — acted players are legal targets. */
       { allowActed: true });
+  }
+
+  /* ── Actor: roster tabs in the card wrap → embedded trading card ── */
+  function showActorPicker() {
+    actor = null; chosenSkill = null;
+    const wrap   = document.getElementById('spec-actor-card-wrap');
+    const picker = document.getElementById('spec-actor-picker');
+    wrap?.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+    if (picker) picker.hidden = false;
+    document.getElementById('spec-action-chips').innerHTML = '';
+    updateGlows();
+    const tabsWrap = document.getElementById('spec-actor-wrap');
+    if (!tabsWrap) return;
+    tabsWrap.innerHTML = '';
+    buildRosterTabs(tabsWrap, {
+      tabsId: 'spec-actor',
+      initialSide: actorSide,
+      filterFn: p => specialSkillsOf(p).length > 0 && window.isPlayerAvailable?.(p),
+      onSelect: (p, _stats, side) => {
+        actor = p; actorSide = side; targetSide = opposite(side);
+        if (picker) picker.hidden = true;
+        buildEmbeddedCardShared(wrap, p, side);
+        buildActionChips();
+        showTargetPicker();
+        readyToResolve();
+      },
+    });
   }
 
   function refresh() {
@@ -2981,27 +3030,33 @@ function initSpecialWizard() {
     rollBtn.onclick = resolve;
     rollBtn.disabled = true;
     lockPanels();
-    document.getElementById('spec-action-chips').innerHTML = '';
     const n = document.getElementById('spec-action-name');
     if (n) n.textContent = 'Select an acting player and a target.';
+    showActorPicker();
+    /* Target waits for an actor (its side depends on the actor's team). */
+    const tPicker = document.getElementById('spec-target-picker');
+    if (tPicker) tPicker.hidden = false;
+    document.getElementById('spec-target-card-wrap')
+      ?.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
     document.getElementById('spec-target-list').innerHTML = '<p class="wps-empty">Choose an acting player</p>';
-
-    const wrap = document.getElementById('spec-actor-wrap');
-    if (wrap) {
-      wrap.innerHTML = '';
-      buildRosterTabs(wrap, {
-        tabsId: 'spec-actor',
-        initialSide: 'left',
-        filterFn: p => specialSkillsOf(p).length > 0 && window.isPlayerAvailable?.(p),
-        onSelect: (p, _stats, side) => {
-          actor = p; actorSide = side; targetSide = opposite(side);
-          buildActionChips();
-          buildTargetList();
-          readyToResolve();
-        },
-      });
-    }
   }
+
+  /* ── Change buttons (mirror Block's) ── */
+  document.getElementById('spec-change-actor')?.addEventListener('click', () => {
+    showActorPicker();
+    const tPicker = document.getElementById('spec-target-picker');
+    if (tPicker) tPicker.hidden = false;
+    document.getElementById('spec-target-card-wrap')
+      ?.querySelectorAll('.bwiz-embedded-card').forEach(c => c.remove());
+    document.getElementById('spec-target-list').innerHTML = '<p class="wps-empty">Choose an acting player</p>';
+    target = null;
+    readyToResolve();
+  });
+  document.getElementById('spec-change-target')?.addEventListener('click', () => {
+    if (!actor) return;
+    showTargetPicker();
+    readyToResolve();
+  });
 
   rollBtn.onclick = resolve;
 

@@ -452,26 +452,39 @@
         <div class="panel-body bwiz-panel-body" id="panel-special-body">
           <div class="bwiz-scale-root bwiz-scale-root--special">
           <p class="panel-intro">Resolve attacks made <em>instead of a Block</em> — Stab, Chainsaw, Breathe Fire, Projectile Vomit, Chomp. Pick the acting player, the action, and a standing target.</p>
-          <div class="spec-outer">
+          <div class="bwiz-outer spec-outer">
 
-            <div class="spec-col">
-              <div class="spec-col-label">Acting Player</div>
-              <div class="spec-actor-wrap" id="spec-actor-wrap"></div>
-              <div class="spec-action-chips" id="spec-action-chips"></div>
+            <!-- Acting player card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="spec-change-actor">Change Attacker</button>
+              <div class="bwiz-card-wrap" id="spec-actor-card-wrap">
+                <div class="bwiz-picker" id="spec-actor-picker">
+                  <div class="bwiz-picker-label">Select Acting Player</div>
+                  <div class="spec-actor-wrap" id="spec-actor-wrap"></div>
+                </div>
+              </div>
             </div>
 
+            <!-- Center: action chips, description, dice, resolve -->
             <div class="bwiz-center spec-center">
+              <div class="spec-action-chips" id="spec-action-chips"></div>
               <div class="spec-action-name" id="spec-action-name">Select an acting player and a target.</div>
               <div class="block-dice-tray bwiz-dice-tray" id="spec-dice-tray" aria-live="polite"></div>
               <button class="roll-btn" id="spec-roll-btn" disabled>Resolve</button>
             </div>
 
-            <div class="spec-col">
-              <div class="spec-col-label">Target</div>
-              <div class="wps-list" id="spec-target-list"><p class="wps-empty">Load a roster first</p></div>
+            <!-- Target card column -->
+            <div class="bwiz-card-col">
+              <button class="bwiz-change-btn" id="spec-change-target">Change Target</button>
+              <div class="bwiz-card-wrap" id="spec-target-card-wrap">
+                <div class="bwiz-picker" id="spec-target-picker">
+                  <div class="bwiz-picker-label">Select Target</div>
+                  <div class="wps-list" id="spec-target-list"><p class="wps-empty">Load a roster first</p></div>
+                </div>
+              </div>
             </div>
 
-          </div><!-- /.spec-outer -->
+          </div><!-- /.bwiz-outer -->
 
           <div class="bwiz-results-strip">
             <div class="bwiz-result-panel locked" id="spec-hit-panel">
@@ -780,7 +793,7 @@
   <script src="js/team-builder.js?v=6"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js?v=3"></script>
-  <script src="js/wizards.js?v=35"></script>
+  <script src="js/wizards.js?v=36"></script>
   <script src="js/pass-wizard.js?v=15"></script>
   <script src="script.js?v=9"></script>
   <script src="js/game-timeline.js?v=2"></script>
