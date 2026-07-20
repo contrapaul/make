@@ -2,7 +2,8 @@
    PASS WIZARD v3 — trading-card players, single roll button
    ════════════════════════════════════════════════════════ */
 /* Panel hosts the scaled stage; FitScale (JS) scales .pwiz3 to fit both axes */
-#panel-pass .panel-body {
+#panel-pass .panel-body,
+#panel-throw .panel-body {
   display:               grid !important;
   grid-template-columns: minmax(0, 1fr);
   justify-items:         center;
@@ -295,3 +296,24 @@
 /* No viewport breakpoints: FitScale (JS) scales the whole fixed-design stage to
    fit any window — phone, iPad, or desktop — so the horizontal layout is
    preserved and scales uniformly, matching the Block and Foul wizards. */
+
+/* ── Throw Team-Mate: options column replaces the pitch ── */
+.twiz3-mid {
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding-top: 0.4rem;
+  min-height: 0;
+}
+.twiz3-mid .av-picker { display: flex; gap: 0.4rem; }
+.twiz3-tz-row { align-items: center; gap: 0.6rem; }
+.twiz3-chips { flex-wrap: wrap; justify-content: center; }
+.twiz3-note {
+  font-size: 0.68rem;
+  color: rgba(255, 200, 80, 0.75);
+  text-align: center;
+  margin: 0.4rem 0 0;
+  max-width: 320px;
+}
