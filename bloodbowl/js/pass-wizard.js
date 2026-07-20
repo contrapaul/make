@@ -261,13 +261,16 @@ function initPassWizard() {
     const fMath = el('div', 'pwiz3-math'); fMath.id = 'pwiz3-math';
     frame.appendChild(fMath);
 
-    /* Right: dice (left of button) + big Roll, with confirm/reroll + skill slot */
+    /* Die: standalone slot to the LEFT of the button frame (block-wizard size) */
+    const dice = el('div', 'pwiz3-dice-slot'); dice.id = 'pwiz3-dice';
+    frame.appendChild(dice);
+
+    /* Right: big Roll, with confirm/reroll + skill slot */
     const fRoll = el('div', 'pwiz3-frame-roll');
     const diceRow = el('div', 'pwiz3-dice-row');
-    const dice = el('div', 'pwiz3-dice-slot'); dice.id = 'pwiz3-dice';
     const rollBtn = el('button', 'roll-btn pwiz3-roll-btn'); rollBtn.id = 'pwiz3-roll';
     rollBtn.type = 'button'; rollBtn.textContent = 'Roll'; rollBtn.disabled = true;
-    diceRow.appendChild(dice); diceRow.appendChild(rollBtn);
+    diceRow.appendChild(rollBtn);
     fRoll.appendChild(diceRow);
 
     const actRow = el('div', 'pwiz3-act-row');

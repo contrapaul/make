@@ -121,9 +121,10 @@ function initThrowTeammateWizard() {
     const fLeft = el('div', 'pwiz3-frame-left'); fLeft.id = 'twiz3-frame-left';
     frame.appendChild(fLeft);
     frame.appendChild(el('div', 'pwiz3-math')).id = 'twiz3-math';
+    /* Die: standalone slot to the LEFT of the button frame (block-wizard size) */
+    frame.appendChild(el('div', 'pwiz3-dice-slot')).id = 'twiz3-dice';
     const fRoll = el('div', 'pwiz3-frame-roll');
     const diceRow = el('div', 'pwiz3-dice-row');
-    diceRow.appendChild(el('div', 'pwiz3-dice-slot')).id = 'twiz3-dice';
     const rollBtn = el('button', 'roll-btn pwiz3-roll-btn'); rollBtn.id = 'twiz3-roll';
     rollBtn.type = 'button'; rollBtn.textContent = 'Roll'; rollBtn.disabled = true;
     diceRow.appendChild(rollBtn);

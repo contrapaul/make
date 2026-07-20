@@ -246,9 +246,15 @@
   min-width: 17rem;
 }
 .pwiz3-dice-row { display: flex; align-items: center; gap: 0.6rem; }
+/* Standalone die slot left of the button frame — block-wizard die size.
+   min-width (not width) so 2D6 rolls (throw armour/injury) fit side by side. */
 .pwiz3-dice-slot {
-  width: 4rem; height: 4rem; flex-shrink: 0;
+  min-width: var(--block-die-size, 72px);
+  height: var(--block-die-size, 72px);
+  flex-shrink: 0;
+  align-self: center;
   display: flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
 }
 .pwiz3-roll-btn {
   flex: 1 1 0;
