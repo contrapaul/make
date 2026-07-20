@@ -143,6 +143,7 @@
   }
 
   /* Driver streams every persisted snapshot. */
+  let _finished = false;
   document.addEventListener('bb:statePersisted', (e) => {
     if (!IS_GAME_PAGE || !isActive() || isPassive()) return;
     if (!_ws || _ws.readyState !== WebSocket.OPEN) return;
@@ -150,6 +151,13 @@
     const state = e.detail;
     _sendTimer = setTimeout(() => {
       try { _ws.send(JSON.stringify({ type: 'snapshot', state })); } catch {}
+      /* Full time: record the result for the games feed (idempotent). */
+      if (state.phase === 'game_over' && !_finished) {
+        _finished = true;
+        setTimeout(() => {
+          BBApi.request('POST', `/api/live/${session()?.code}/finish`, {}).catch(() => { _finished = false; });
+        }, 500);
+      }
     }, 200);
   });
 

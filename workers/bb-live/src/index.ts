@@ -88,6 +88,18 @@ export class LiveGame {
       return json({ meta: this.publicMeta(meta), seq: snap?.seq ?? 0 });
     }
 
+    if (path.endsWith('/result') && request.method === 'GET') {
+      const snap: any = await this.state.storage.get('snap');
+      const s = snap?.state || {};
+      return json({
+        status: meta.status,
+        phase: s.phase ?? null,
+        scores: s.scores ?? { home: 0, away: 0 },
+        hostTeamName: meta.hostTeam?.draft?.name || meta.hostTeam?.id || 'Home',
+        guestTeamName: meta.guestTeam?.draft?.name || 'Away',
+      });
+    }
+
     return json({ error: 'Not found.' }, 404);
   }
 
