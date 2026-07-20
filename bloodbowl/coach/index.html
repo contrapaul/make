@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Join Game | Blood Bowl Companion | contrapaul/make</title>
+  <title>Coach | Blood Bowl Companion | contrapaul/make</title>
   <link rel="stylesheet" href="../css/tokens.css">
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css?v=2">
   <link rel="stylesheet" href="../css/account.css?v=2">
-  <link rel="stylesheet" href="../css/live.css?v=1">
   <script src="../js/title-quips.js" defer></script>
 </head>
 <body>
@@ -39,41 +38,31 @@
 
   <main class="bb-app">
 
-    <div class="bb-page-title" aria-label="Join Game">
+    <div class="bb-page-title" aria-label="Coach">
       <span class="bb-title-sub">placeholder top</span>
-      <span class="bb-title-main">JOIN GAME</span>
+      <span class="bb-title-main" id="ch-title">COACH</span>
       <span class="bb-title-sub">placeholder bottom</span>
     </div>
 
     <div class="bb-page-content acct-page">
 
-      <div class="acct-banner" id="jn-banner" hidden></div>
+      <div class="acct-card">
+        <h2 class="acct-h2" id="ch-name">Loading…</h2>
+        <p class="acct-meta" id="ch-meta"></p>
+        <p class="acct-meta ch-record" id="ch-record"></p>
+      </div>
 
-      <section class="acct-card" id="jn-info">
-        <h2 class="acct-h2" id="jn-title">Looking up game…</h2>
-        <p class="acct-meta" id="jn-sub"></p>
-      </section>
+      <div class="acct-card">
+        <h2 class="acct-h2">Public Teams</h2>
+        <div class="br-grid" id="ch-teams"></div>
+        <p class="acct-hint" id="ch-teams-empty" hidden>No public teams yet.</p>
+      </div>
 
-      <!-- Join as the opposing coach -->
-      <section class="acct-card" id="jn-join" hidden>
-        <h2 class="acct-h2">Join as opponent</h2>
-        <p class="acct-hint" id="jn-signin-hint" hidden>
-          You need an account (and a cloud team) to play.
-          <a id="jn-signin-link" href="../account/">Sign in or create one</a>, then come back to this link.
-        </p>
-        <div id="jn-team-pick" hidden>
-          <p class="acct-meta">Choose your team:</p>
-          <div class="acct-teams" id="jn-teams"></div>
-          <button class="acct-btn" id="jn-join-btn" type="button" disabled>Join Game</button>
-        </div>
-      </section>
-
-      <!-- Spectate -->
-      <section class="acct-card" id="jn-watch" hidden>
-        <h2 class="acct-h2">Just watching?</h2>
-        <p class="acct-hint">Follow the match live — score, turns, and the play-by-play log. No account needed.</p>
-        <button class="acct-btn acct-btn-ghost" id="jn-watch-btn" type="button">Watch Live</button>
-      </section>
+      <div class="acct-card">
+        <h2 class="acct-h2">Recent Games</h2>
+        <div class="gm-rows" id="ch-games"></div>
+        <p class="acct-hint" id="ch-games-empty" hidden>No recorded games yet — finished two-device games land here automatically.</p>
+      </div>
 
     </div>
   </main>
@@ -103,6 +92,6 @@
     })();
   </script>
   <script src="../js/api.js?v=3"></script>
-  <script src="../js/join-page.js?v=1"></script>
+  <script src="../js/coach-page.js?v=1"></script>
 </body>
 </html>

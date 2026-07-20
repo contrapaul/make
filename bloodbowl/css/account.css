@@ -220,3 +220,32 @@
 .br-player-pos { color: var(--bb-text-muted); font-family: var(--bb-font-head); text-transform: uppercase; font-size: var(--bb-font-sm); letter-spacing: 0.05em; }
 .br-player-stats { color: var(--bb-text-muted); font-family: var(--bb-font-num); font-size: var(--bb-font-sm); }
 .br-player-skills { color: var(--bb-text-faint); font-family: var(--bb-font-body); font-size: var(--bb-font-sm); }
+
+/* ── Games feed rows (browse + coach pages) ── */
+
+.gm-heading {
+  font-family: var(--bb-font-head);
+  font-size: var(--bb-font-lg);
+  color: var(--bb-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: var(--bb-space-5) 0 var(--bb-space-3);
+}
+.gm-rows { display: flex; flex-direction: column; gap: var(--bb-space-2); }
+.gm-row {
+  display: flex;
+  align-items: center;
+  gap: var(--bb-space-3);
+  flex-wrap: wrap;
+  border: 1px solid var(--bb-hairline);
+  border-radius: var(--bb-radius);
+  padding: var(--bb-space-2) var(--bb-space-3);
+  font-family: var(--bb-font-body);
+}
+.gm-teams { color: var(--bb-text); flex: 1; min-width: 200px; }
+.gm-score { font-family: var(--bb-font-num); color: #f4d977; white-space: nowrap; }
+.gm-meta { color: var(--bb-text-faint); font-size: var(--bb-font-sm); }
+.gm-meta a { color: var(--bb-text-muted); }
+
+/* ── Coach profile ── */
+.ch-record { font-family: var(--bb-font-num); color: var(--bb-text); }

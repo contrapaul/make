@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../../style.css">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css?v=2">
-  <link rel="stylesheet" href="../css/account.css?v=1">
+  <link rel="stylesheet" href="../css/account.css?v=2">
   <script src="../js/title-quips.js" defer></script>
 </head>
 <body>
@@ -58,6 +58,10 @@
         <button class="acct-btn acct-btn-ghost" id="br-next" type="button" hidden>Next →</button>
       </div>
 
+      <h2 class="gm-heading">Recent Games</h2>
+      <div class="gm-rows" id="br-games"></div>
+      <p class="acct-hint" id="br-games-empty" hidden>No games recorded yet — finished two-device games show up here.</p>
+
     </div>
   </main>
 
@@ -101,6 +105,6 @@
     })();
   </script>
   <script src="../js/api.js?v=3"></script>
-  <script src="../js/browse-page.js?v=1"></script>
+  <script src="../js/browse-page.js?v=2"></script>
 </body>
 </html>

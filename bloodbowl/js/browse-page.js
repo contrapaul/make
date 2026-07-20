@@ -27,6 +27,32 @@
     return new Date(ms).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
+  const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  async function loadGames() {
+    const box = $('br-games');
+    if (!box) return;
+    try {
+      const { games } = await BBApi.request('GET', '/api/games');
+      $('br-games-empty').hidden = games.length > 0;
+      box.innerHTML = '';
+      for (const g of games) {
+        const row = document.createElement('div');
+        row.className = 'gm-row';
+        row.innerHTML = `
+          <span class="gm-teams">${esc(g.homeTeam || 'Home')} <span class="gm-score">${g.homeScore} – ${g.awayScore}</span> ${esc(g.awayTeam || 'Away')}</span>
+          <span class="gm-meta">
+            <a href="../coach/?u=${encodeURIComponent(g.host)}">${esc(g.host)}</a> vs
+            <a href="../coach/?u=${encodeURIComponent(g.guest || '')}">${esc(g.guest || '?')}</a>
+            · ${fmtDate(g.finishedAt)}</span>`;
+        box.appendChild(row);
+      }
+    } catch (e) {
+      $('br-games-empty').hidden = false;
+      $('br-games-empty').textContent = 'Could not load games: ' + e.message;
+    }
+  }
+
   async function loadPage() {
     const grid = $('br-grid');
     grid.innerHTML = '<p class="acct-hint">Loading…</p>';
@@ -65,8 +91,8 @@
     try {
       const { team } = await BBApi.publicTeam(id);
       $('br-detail-title').textContent = team.name;
-      $('br-detail-sub').textContent =
-        `${_raceNames[team.baseTeamId] || team.baseTeamId} · Coach ${team.owner} · updated ${fmtDate(team.updatedAt)}`;
+      $('br-detail-sub').innerHTML =
+        `${esc(_raceNames[team.baseTeamId] || team.baseTeamId)} · <a href="../coach/?u=${encodeURIComponent(team.owner)}">Coach ${esc(team.owner)}</a> · updated ${fmtDate(team.updatedAt)}`;
 
       const roster = $('br-roster');
       roster.innerHTML = '';
@@ -123,5 +149,9 @@
 
     await loadRaces();
     loadPage();
+    loadGames();
+    /* Deep link from coach pages: /browse/?team=<id> opens the roster. */
+    const teamParam = new URLSearchParams(location.search).get('team');
+    if (teamParam) openDetail(teamParam);
   });
 })();
