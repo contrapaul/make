@@ -576,6 +576,14 @@
   transform: translateY(-50%);
 }
 
+/* Start Game panel: wider than the default .bb-panel cap so the game-type
+   cards (and team-pick steps) have room to actually use their own max-width
+   instead of being squeezed into the 660px default. */
+#panel-startgame {
+  max-width: 1400px;
+  width:     calc(100vw - 3rem);
+}
+
 /* Start Game mode cards grid */
 .sg-modes {
   display:               grid;
@@ -583,6 +591,7 @@
   gap:                   1.5rem;
   align-items:           start;
   justify-items:         center;
+  width:                 100%;
   max-width:             1320px;
   margin:                0 auto;
 }
