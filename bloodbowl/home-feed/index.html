@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Bowl Companion | contrapaul/make</title>
+  <link rel="stylesheet" href="../css/tokens.css?v=2">
+  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
+  <link rel="stylesheet" href="../style.css?v=9">
+  <link rel="stylesheet" href="../css/account.css?v=2">
+  <link rel="stylesheet" href="../css/home-feed.css?v=1">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PROPOSED ALTERNATIVE HOME PAGE (not linked from the site nav yet)
+       Copied from bloodbowl/index.html with the game-bar, Start Game /
+       My Teams / Choose Team panels, and roster accordions removed —
+       none of that game-launching machinery applies here. In its place:
+       a news/update card and a chronological activity feed (new public
+       teams, tournaments, finished games, tournament photos). The real
+       game launcher still lives at bloodbowl/index.html; "Play Now"
+       below links there. Only js/api.js is kept from the old script
+       list (for a future sign-in-aware greeting) plus a new
+       js/home-feed.js for the feed itself — every game-engine script
+       (dice/state/wizards/team-builder/live-client/etc.) is dropped
+       since none of it is used without the roster/game UI.
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <header class="site-header bb-site-header">
+    <div class="header-inner bb-header-inner">
+      <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
+        <span class="bb-home-btn-dice">J</span>
+        <span class="bb-home-btn-label">Play a Game</span>
+      </a>
+      <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav bb-nav" id="bb-nav">
+        <a href="https://make.contrapaul.com/bloodbowl/skills/">Skills</a>
+        <a href="https://make.contrapaul.com/bloodbowl/teams/">Teams</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tables/">Tables</a>
+        <a href="https://make.contrapaul.com/bloodbowl/starplayers/">Star Players</a>
+        <a href="https://make.contrapaul.com/bloodbowl/rules/">Rules</a>
+        <a href="https://make.contrapaul.com/bloodbowl/browse/">Browse</a>
+        <a href="https://make.contrapaul.com/bloodbowl/tournaments/">Tournaments</a>
+        <a href="https://make.contrapaul.com/bloodbowl/account/">Account</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="bb-app">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PAGE TITLE — unchanged from index.html; only the game-bar and
+         roster sections below it were removed.
+         ═══════════════════════════════════════════════════════════ -->
+    <div class="bb-page-title" aria-label="Yeah so it's kind of like Fantasy Football Chess">
+      <span class="bb-title-sub">YEAH SO IT'S KIND OF LIKE</span>
+      <span class="bb-title-main">FANTASY FOOTBALL CHESS</span>
+      <span class="bb-title-sub">BUT NOT LIKE "FANTASY FOOTBALL", THERE'S ORCS AND STUFF</span>
+    </div>
+
+    <div class="hf-cta-row">
+      <a class="acct-btn" href="../">▶ Play a Game</a>
+    </div>
+
+    <div class="hf-layout">
+
+      <!-- News / update — hand-edit this card for each new post. -->
+      <section class="acct-card">
+        <h2 class="acct-h2">News &amp; Updates</h2>
+        <div class="hf-news-date">Jul 21, 2026</div>
+        <div class="hf-news-body">
+          <p><strong>Cloud games are here.</strong> Invite another coach to play from their own device — pick your team, share a code, and watch their roster pop in the moment they join. Same-device Local Games are still one tap away too.</p>
+          <p>Tournaments now have a photo wall — share a shot of your painted minis or a table setup and it'll show up for everyone registered.</p>
+        </div>
+      </section>
+
+      <!-- Chronological activity feed -->
+      <section class="acct-card">
+        <h2 class="acct-h2">Activity</h2>
+        <p class="acct-hint">New public teams, tournaments, finished games, and photos — newest first.</p>
+        <div class="hf-feed-list" id="hf-feed-list">
+          <p class="acct-hint">Loading…</p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer bb-site-footer">
+    <div class="footer-inner bb-footer-inner">
+      <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
+      <a href="https://make.contrapaul.com/bloodbowl/about/" class="bb-footer-about">About this Site</a>
+    </div>
+    <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play — especially for new players. It is not designed or intended for any commercial purpose.</p>
+  </footer>
+
+  <script>
+    (function () {
+      const toggle = document.getElementById('bb-nav-toggle');
+      const nav    = document.getElementById('bb-nav');
+      if (!toggle || !nav) return;
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = nav.classList.toggle('bb-nav-open');
+        toggle.setAttribute('aria-expanded', open);
+      });
+      document.addEventListener('click', e => {
+        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
+          nav.classList.remove('bb-nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    })();
+  </script>
+  <script src="../js/api.js?v=3"></script>
+  <script src="../js/home-feed.js?v=1"></script>
+</body>
+</html>
