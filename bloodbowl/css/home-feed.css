@@ -1,12 +1,104 @@
 /* Alternative home page — news + chronological activity feed.
    Builds on account.css (.acct-card, .acct-h2, .acct-btn, .gm-*). */
 
-.hf-cta-row {
+/* ── Play row: My Teams | New Game | Join Game ──
+   Same text treatment as the live index.html's New Game button
+   (.gb-center .gb-start-btn) copied by value rather than relying on
+   that selector's .gb-center scoping, which this stripped-down page
+   doesn't have. My Teams / Join Game share that treatment but with a
+   secondary (blue glass, not gold) color/glow. */
+.hf-play-row {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
   margin: 0 0 var(--bb-space-2, 1rem);
 }
-.hf-cta-row .acct-btn { font-size: 1rem; padding: 0.7rem 1.6rem; }
+.hf-play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nuffle Italic', serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border-radius: 6px;
+  padding: 0.35em 1.4em;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.12s, border-color 0.15s;
+}
+.hf-play-btn:hover { transform: translateY(-1px); text-decoration: none; }
+
+.hf-play-btn--main {
+  background: rgba(212, 175, 55, 0.88);
+  border-color: rgba(212, 175, 55, 0.95);
+  color: #fff;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.7), 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+.hf-play-btn--main:hover {
+  background: rgba(212, 175, 55, 1);
+  border-color: rgba(212, 175, 55, 1);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.hf-play-btn--secondary {
+  background: rgba(20, 34, 74, 0.55);
+  border-color: rgba(100, 140, 220, 0.4);
+  color: rgba(210, 225, 255, 0.92);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.hf-play-btn--secondary:hover {
+  background: rgba(30, 50, 100, 0.7);
+  border-color: rgba(120, 170, 255, 0.75);
+  box-shadow: 0 0 18px rgba(80, 130, 255, 0.35), 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 520px) {
+  .hf-play-row { flex-direction: column; align-items: stretch; }
+}
+
+/* ── Join Game dialog (self-contained; no team-builder.css dependency) ── */
+.hf-dialog-back {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-toast, 900);
+  background: rgba(3, 6, 16, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.hf-dialog {
+  background: linear-gradient(180deg, rgba(13, 24, 56, 0.97), rgba(8, 15, 38, 0.97));
+  border: 1px solid rgba(120, 160, 255, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 1.2rem 1.4rem;
+  width: min(420px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.hf-dialog-field {
+  width: 100%;
+  background: rgba(4, 10, 28, 0.72);
+  border: 1px solid rgba(80, 130, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(200, 220, 255, 0.9);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.42rem 0.6rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.12s;
+}
+.hf-dialog-field:focus { border-color: rgba(80, 130, 255, 0.5); }
+.hf-dialog-field::placeholder { color: rgba(140, 170, 220, 0.3); }
+.hf-dialog-field--bad { border-color: rgba(240, 100, 100, 0.7); }
+.hf-dialog-actions { display: flex; justify-content: flex-end; gap: 0.6rem; }
 
 .hf-layout {
   display: grid;
@@ -83,3 +175,5 @@
   text-transform: uppercase;
   margin-top: 2px;
 }
+
+#hf-load-more { display: block; margin: 1rem auto 0; }

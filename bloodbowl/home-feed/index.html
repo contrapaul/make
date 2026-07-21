@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="../style.css?v=9">
   <link rel="stylesheet" href="../css/account.css?v=2">
-  <link rel="stylesheet" href="../css/home-feed.css?v=1">
+  <link rel="stylesheet" href="../css/home-feed.css?v=2">
 </head>
 <body>
 
@@ -18,21 +18,23 @@
        Copied from bloodbowl/index.html with the game-bar, Start Game /
        My Teams / Choose Team panels, and roster accordions removed —
        none of that game-launching machinery applies here. In its place:
-       a news/update card and a chronological activity feed (new public
-       teams, tournaments, finished games, tournament photos). The real
-       game launcher still lives at bloodbowl/index.html; "Play Now"
-       below links there. Only js/api.js is kept from the old script
-       list (for a future sign-in-aware greeting) plus a new
-       js/home-feed.js for the feed itself — every game-engine script
-       (dice/state/wizards/team-builder/live-client/etc.) is dropped
-       since none of it is used without the roster/game UI.
+       a My Teams / New Game / Join Game row (New Game + My Teams link
+       to the real launcher at bloodbowl/index.html; Join Game's code
+       dialog is self-contained, see home-feed.js), a news/update card,
+       and a chronological activity feed (new public teams, tournaments,
+       finished games, tournament photos) with "Load more" pagination
+       and a short sessionStorage cache. Only js/api.js is kept from the
+       old script list (for a future sign-in-aware greeting) plus the
+       new js/home-feed.js — every game-engine script (dice/state/
+       wizards/team-builder/live-client/etc.) is dropped since none of
+       it is used without the roster/game UI.
        ═══════════════════════════════════════════════════════════════ -->
 
   <header class="site-header bb-site-header">
     <div class="header-inner bb-header-inner">
       <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
         <span class="bb-home-btn-dice">J</span>
-        <span class="bb-home-btn-label">Play a Game</span>
+        <span class="bb-home-btn-label">Return to Main Menu</span>
       </a>
       <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -62,8 +64,15 @@
       <span class="bb-title-sub">BUT NOT LIKE "FANTASY FOOTBALL", THERE'S ORCS AND STUFF</span>
     </div>
 
-    <div class="hf-cta-row">
-      <a class="acct-btn" href="../">▶ Play a Game</a>
+    <!-- My Teams / New Game / Join Game — same text treatment as the live
+         New Game button, My Teams + Join Game in a secondary color/glow.
+         New Game and My Teams link to the real game launcher (this page
+         has no game engine loaded to run them in-page); Join Game's
+         code-entry dialog is fully self-contained (see home-feed.js). -->
+    <div class="hf-play-row">
+      <a class="hf-play-btn hf-play-btn--secondary" href="../teams/">My Teams</a>
+      <a class="hf-play-btn hf-play-btn--main" href="../">New Game</a>
+      <button class="hf-play-btn hf-play-btn--secondary" id="hf-join-game-btn" type="button">Join Game</button>
     </div>
 
     <div class="hf-layout">
@@ -85,6 +94,7 @@
         <div class="hf-feed-list" id="hf-feed-list">
           <p class="acct-hint">Loading…</p>
         </div>
+        <button class="acct-btn acct-btn-ghost" id="hf-load-more" type="button" hidden>Load more</button>
       </section>
 
     </div>
@@ -118,6 +128,6 @@
     })();
   </script>
   <script src="../js/api.js?v=3"></script>
-  <script src="../js/home-feed.js?v=1"></script>
+  <script src="../js/home-feed.js?v=2"></script>
 </body>
 </html>
