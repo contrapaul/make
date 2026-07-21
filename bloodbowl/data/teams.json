@@ -29,7 +29,7 @@
   {
     "id": "black-orc",
     "name": "Black Orc",
-    "description": "Placeholder",
+    "description": "Orcs so strong they can't actually have more than 6 on a team. Capable of ruining opposing player's days with grab and frequent 2 and 3 block dice rolls. The high cost of Orcs and skill heavy but stat light Goblins leads to a team that may start strong but can struggle with only a few players sent off the pitch. Tier 2",
     "file": "data/teams/black-orc.json",
     "imageDir": "images/black-orc/",
     "reroll": 60000,
@@ -56,7 +56,7 @@
   {
     "id": "bretonnian",
     "name": "Bretonnian",
-    "description": "Placeholder",
+    "description": "With squires who love to wrestle and knights itching to take on the biggest guys around, Bretonnian's are a distinct flavor of human team that lives up to their questing reputation. Tier 2",
     "file": "data/teams/bretonnian.json",
     "imageDir": "images/bretonnian/",
     "reroll": 60000,
@@ -83,7 +83,7 @@
   {
     "id": "chaos-chosen",
     "name": "Chaos Chosen",
-    "description": "Placeholder",
+    "description": "A sturdy team that dish out a lot of pain, but lacks mobility and ball handling skills. Very fun as a beginner though! Tier 3",
     "file": "data/teams/chaos-chosen.json",
     "imageDir": "images/chaos-chosen/",
     "reroll": 50000,
@@ -110,7 +110,7 @@
   {
     "id": "chaos-dwarf",
     "name": "Chaos Dwarf",
-    "description": "Placeholder",
+    "description": "A blend basic but cheap hobgoblins and hard to break dwarfs. Centaurs who happen to get ahold of the ball can single-handedly change the game. Tier 1",
     "file": "data/teams/chaos-dwarf.json",
     "imageDir": "images/chaos-dwarf/",
     "reroll": 70000,
@@ -137,7 +137,7 @@
   {
     "id": "chaos-renegades",
     "name": "Chaos Renegades",
-    "description": "Placeholder",
+    "description": "A collection of players potentially fallen to chaos, or just committed to chaotic games. Teams can include humans, skaven, goblins, dark elves, and orcs, but the result is a motley group that wins less than most donor teams. Tier 3",
     "file": "data/teams/chaos-renegades.json",
     "imageDir": "images/chaos-renegades/",
     "reroll": 70000,
@@ -164,7 +164,7 @@
   {
     "id": "dark-elf",
     "name": "Dark Elf",
-    "description": "Placeholder",
+    "description": "High elves, but with a few nasty tricks. Agile, strong, and with an extremely high rate of pass completion. Very few drawbacks. Tier 1",
     "file": "data/teams/dark-elf.json",
     "imageDir": "images/dark-elf/",
     "reroll": 50000,
@@ -245,7 +245,7 @@
   {
     "id": "gnome",
     "name": "Gnome",
-    "description": "Placeholder",
+    "description": "Tricky to play, but undeniably cool to look at. Who else gets a badger or a goose on their team? Tier 4",
     "file": "data/teams/gnome.json",
     "imageDir": "images/gnome/",
     "reroll": 50000,
@@ -272,7 +272,7 @@
   {
     "id": "goblin",
     "name": "Goblin",
-    "description": "Placeholder",
+    "description": "Perfect for players more content with mayhem than winning. Goblins are weak, but slippery. Loonies, bommas, and fanatics have immense potential for disruption, but results aren't guaranteed. Tier 4",
     "file": "data/teams/goblin.json",
     "imageDir": "images/goblin/",
     "reroll": 60000,
@@ -299,7 +299,7 @@
   {
     "id": "halfling",
     "name": "Halfling",
-    "description": "Placeholder",
+    "description": "A team of charming, food obsessed underdogs effectively requiring star players to stand a chance. Very slippery, but not very fast. Tier 4",
     "file": "data/teams/halfling.json",
     "imageDir": "images/halfling/",
     "reroll": 60000,
@@ -326,7 +326,7 @@
   {
     "id": "high-elf",
     "name": "High Elf",
-    "description": "Placeholder",
+    "description": "Dark elves, but without the nasty tricks. Strong, ageile, and with an extremely high rate of pass completion. Very few drawbacks. Tier 1",
     "file": "data/teams/high-elf.json",
     "imageDir": "images/high-elf/",
     "reroll": 50000,
@@ -353,7 +353,7 @@
   {
     "id": "human",
     "name": "Human",
-    "description": "Placeholder",
+    "description": "With a name like 'Human' you know they're an OG team. While the lineman have no special skills, they do have a bit more armor than most other equivelant human players. Catchers have 8 movement, catch AND dodge, and when paired with a thrower they can go a long way toward making up for how 'basic' the line players are. Tier 2",
     "file": "data/teams/human.json",
     "imageDir": "images/human/",
     "reroll": 50000,
@@ -380,7 +380,7 @@
   {
     "id": "imperial-nobility",
     "name": "Imperial Nobility",
-    "description": "The snootier, private equity version of the human team. Fend helps linemen prevent opposing teams breaking through. Bodyguards can punch above their (sometimes considerable) weight with the brawl ability. Tier 2",
+    "description": "The snootier, private equity version of the human team. Fend helps linemen prevent opposing teams breaking through. Bodyguards can punch above their (sometimes considerable) weight with the wrestle ability. Tier 2",
     "file": "data/teams/imperial-nobility.json",
     "imageDir": "images/imperial-nobility/",
     "reroll": 60000,
@@ -596,7 +596,7 @@
   {
     "id": "orc",
     "name": "Orc",
-    "description": "Placeholder",
+    "description": "The 'plain' Orc team features a sturdy line without a much flair, slippery goblins and blitzers to move the ball, and a thrower capable of actually getting them the ball. More versatile than their beefier cousins, but not especially great. Tier 2",
     "file": "data/teams/orc.json",
     "imageDir": "images/orc/",
     "reroll": 60000,
@@ -704,7 +704,7 @@
   {
     "id": "tomb-kings",
     "name": "Tomb Kings",
-    "description": "Placeholder",
+    "description": "Strong and annoyingly resilient, but unlikely to catch many passes or move very fast. A great choice for coaches who'd rather the whole team march into the endzone. Tier 2",
     "file": "data/teams/tomb-kings.json",
     "imageDir": "images/tomb-kings/",
     "reroll": 60000,
@@ -731,7 +731,7 @@
   {
     "id": "underworld-denizens",
     "name": "Underworld Denizens",
-    "description": "Placeholder",
+    "description": "What if chaos renegades could include snotlings but no orcs or humans? Somehow the result is a stronger team, full of players likely to get steamrolled. Tier 1",
     "file": "data/teams/underworld-denizens.json",
     "imageDir": "images/underworld-denizens/",
     "reroll": 70000,
@@ -785,7 +785,7 @@
   {
     "id": "wood-elf",
     "name": "Wood Elf",
-    "description": "Placeholder",
+    "description": "Less armor than their dark and high cousins, but more movement. Absolutely perfect for coaches who want to want to score and win above all else. Tier 1",
     "file": "data/teams/wood-elf.json",
     "imageDir": "images/wood-elf/",
     "reroll": 50000,
