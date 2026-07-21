@@ -2,6 +2,7 @@
   {
     "id": "amazon",
     "name": "Amazon",
+    "description": "An agile team where all players are equipped with dodge. While they have less armor than most humans their toolkit is built around mobility, slipping in and out of tackle zones, and harrying opposing throwers and catchers. Tier 1",
     "file": "data/teams/amazon.json",
     "imageDir": "images/amazon/",
     "reroll": 60000,
@@ -28,6 +29,7 @@
   {
     "id": "black-orc",
     "name": "Black Orc",
+    "description": "Placeholder",
     "file": "data/teams/black-orc.json",
     "imageDir": "images/black-orc/",
     "reroll": 60000,
@@ -54,6 +56,7 @@
   {
     "id": "bretonnian",
     "name": "Bretonnian",
+    "description": "Placeholder",
     "file": "data/teams/bretonnian.json",
     "imageDir": "images/bretonnian/",
     "reroll": 60000,
@@ -80,6 +83,7 @@
   {
     "id": "chaos-chosen",
     "name": "Chaos Chosen",
+    "description": "Placeholder",
     "file": "data/teams/chaos-chosen.json",
     "imageDir": "images/chaos-chosen/",
     "reroll": 50000,
@@ -106,6 +110,7 @@
   {
     "id": "chaos-dwarf",
     "name": "Chaos Dwarf",
+    "description": "Placeholder",
     "file": "data/teams/chaos-dwarf.json",
     "imageDir": "images/chaos-dwarf/",
     "reroll": 70000,
@@ -132,6 +137,7 @@
   {
     "id": "chaos-renegades",
     "name": "Chaos Renegades",
+    "description": "Placeholder",
     "file": "data/teams/chaos-renegades.json",
     "imageDir": "images/chaos-renegades/",
     "reroll": 70000,
@@ -158,6 +164,7 @@
   {
     "id": "dark-elf",
     "name": "Dark Elf",
+    "description": "Placeholder",
     "file": "data/teams/dark-elf.json",
     "imageDir": "images/dark-elf/",
     "reroll": 50000,
@@ -184,6 +191,7 @@
   {
     "id": "dwarf",
     "name": "Dwarf",
+    "description": "Placeholder",
     "file": "data/teams/dwarf.json",
     "imageDir": "images/dwarf/",
     "reroll": 60000,
@@ -210,6 +218,7 @@
   {
     "id": "elven-union",
     "name": "Elven Union",
+    "description": "Placeholder",
     "file": "data/teams/elven-union.json",
     "imageDir": "images/elven-union/",
     "reroll": 50000,
@@ -236,6 +245,7 @@
   {
     "id": "gnome",
     "name": "Gnome",
+    "description": "Placeholder",
     "file": "data/teams/gnome.json",
     "imageDir": "images/gnome/",
     "reroll": 50000,
@@ -262,6 +272,7 @@
   {
     "id": "goblin",
     "name": "Goblin",
+    "description": "Placeholder",
     "file": "data/teams/goblin.json",
     "imageDir": "images/goblin/",
     "reroll": 60000,
@@ -288,6 +299,7 @@
   {
     "id": "halfling",
     "name": "Halfling",
+    "description": "Placeholder",
     "file": "data/teams/halfling.json",
     "imageDir": "images/halfling/",
     "reroll": 60000,
@@ -314,6 +326,7 @@
   {
     "id": "high-elf",
     "name": "High Elf",
+    "description": "Placeholder",
     "file": "data/teams/high-elf.json",
     "imageDir": "images/high-elf/",
     "reroll": 50000,
@@ -340,6 +353,7 @@
   {
     "id": "human",
     "name": "Human",
+    "description": "Placeholder",
     "file": "data/teams/human.json",
     "imageDir": "images/human/",
     "reroll": 50000,
@@ -366,6 +380,7 @@
   {
     "id": "imperial-nobility",
     "name": "Imperial Nobility",
+    "description": "Placeholder",
     "file": "data/teams/imperial-nobility.json",
     "imageDir": "images/imperial-nobility/",
     "reroll": 60000,
@@ -392,6 +407,7 @@
   {
     "id": "khorne",
     "name": "Khorne",
+    "description": "Placeholder",
     "file": "data/teams/khorne.json",
     "imageDir": "images/khorne/",
     "reroll": 60000,
@@ -418,6 +434,7 @@
   {
     "id": "lizardmen",
     "name": "Lizardmen",
+    "description": "Placeholder",
     "file": "data/teams/lizardmen.json",
     "imageDir": "images/lizardmen/",
     "reroll": 70000,
@@ -444,6 +461,7 @@
   {
     "id": "necromantic-horror",
     "name": "Necromantic Horror",
+    "description": "Placeholder",
     "file": "data/teams/necromantic-horror.json",
     "imageDir": "images/necromantic-horror/",
     "reroll": 70000,
@@ -470,6 +488,7 @@
   {
     "id": "norse",
     "name": "Norse",
+    "description": "Placeholder",
     "file": "data/teams/norse.json",
     "imageDir": "images/norse/",
     "reroll": 60000,
@@ -496,6 +515,7 @@
   {
     "id": "nurgle",
     "name": "Nurgle",
+    "description": "Placeholder",
     "file": "data/teams/nurgle.json",
     "imageDir": "images/nurgle/",
     "reroll": 60000,
@@ -522,6 +542,7 @@
   {
     "id": "ogre",
     "name": "Ogre",
+    "description": "Placeholder",
     "file": "data/teams/ogre.json",
     "imageDir": "images/ogre/",
     "reroll": 70000,
@@ -548,6 +569,7 @@
   {
     "id": "old-world-alliance",
     "name": "Old World Alliance",
+    "description": "Placeholder",
     "file": "data/teams/old-world-alliance.json",
     "imageDir": "images/old-world-alliance/",
     "reroll": 70000,
@@ -574,6 +596,7 @@
   {
     "id": "orc",
     "name": "Orc",
+    "description": "Placeholder",
     "file": "data/teams/orc.json",
     "imageDir": "images/orc/",
     "reroll": 60000,
@@ -600,6 +623,7 @@
   {
     "id": "shambling-undead",
     "name": "Shambling Undead",
+    "description": "Placeholder",
     "file": "data/teams/shambling-undead.json",
     "imageDir": "images/shambling-undead/",
     "reroll": 70000,
@@ -626,6 +650,7 @@
   {
     "id": "skaven",
     "name": "Skaven",
+    "description": "Placeholder",
     "file": "data/teams/skaven.json",
     "imageDir": "images/skaven/",
     "reroll": 50000,
@@ -652,6 +677,7 @@
   {
     "id": "snotling",
     "name": "Snotling",
+    "description": "Placeholder",
     "file": "data/teams/snotling.json",
     "imageDir": "images/snotling/",
     "reroll": 70000,
@@ -678,6 +704,7 @@
   {
     "id": "tomb-kings",
     "name": "Tomb Kings",
+    "description": "Placeholder",
     "file": "data/teams/tomb-kings.json",
     "imageDir": "images/tomb-kings/",
     "reroll": 60000,
@@ -704,6 +731,7 @@
   {
     "id": "underworld-denizens",
     "name": "Underworld Denizens",
+    "description": "Placeholder",
     "file": "data/teams/underworld-denizens.json",
     "imageDir": "images/underworld-denizens/",
     "reroll": 70000,
@@ -730,6 +758,7 @@
   {
     "id": "vampire",
     "name": "Vampire",
+    "description": "Placeholder",
     "file": "data/teams/vampire.json",
     "imageDir": "images/vampire/",
     "reroll": 60000,
@@ -756,6 +785,7 @@
   {
     "id": "wood-elf",
     "name": "Wood Elf",
+    "description": "Placeholder",
     "file": "data/teams/wood-elf.json",
     "imageDir": "images/wood-elf/",
     "reroll": 50000,
