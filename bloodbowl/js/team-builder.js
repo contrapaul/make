@@ -529,9 +529,12 @@ const TeamBuilder = (() => {
     const saveBtn = document.createElement('button');
     saveBtn.type = 'button'; saveBtn.className = 'roll-btn tb-save-btn';
     saveBtn.innerHTML = '<span class="roll-btn-icon">💾</span> Save Team';
-    saveBtn.addEventListener('click', () => {
+    const attemptSave = () => {
       if (!_draft.name.trim()) {
-        _showToast('✗ Please give your team a name', true); return;
+        /* No name yet — ask right here instead of sending them scrolling
+           back to the Team Name field at the top. */
+        _promptTeamName(attemptSave);
+        return;
       }
       if (!_draft.baseTeamId) {
         _showToast('✗ Please select a base race', true); return;
@@ -550,7 +553,8 @@ const TeamBuilder = (() => {
       }
       _showToast(`✓ Saved: ${_draft.name}`);
       _finishBuilder();
-    });
+    };
+    saveBtn.addEventListener('click', attemptSave);
 
     const cancelBtn = document.createElement('button');
     cancelBtn.type = 'button'; cancelBtn.className = 'tb-cancel-btn';
@@ -1102,6 +1106,58 @@ const TeamBuilder = (() => {
     bd.addEventListener('click', () => { bd.remove(); modal.remove(); });
     document.body.appendChild(bd);
     document.body.appendChild(modal);
+  }
+
+  /* ─── Name dialog (shown by Save Team when the draft is unnamed) ─── */
+
+  function _promptTeamName(onNamed) {
+    const back = document.createElement('div');
+    back.className = 'tb-name-dialog-back';
+
+    const box = document.createElement('div');
+    box.className = 'tb-name-dialog';
+    box.innerHTML = '<div class="tb-section-title">Name Your Team</div>';
+
+    const inp = document.createElement('input');
+    inp.type = 'text'; inp.className = 'tb-name-field';
+    inp.maxLength = 40;
+    inp.placeholder = 'e.g. Gouged Eye Reserves';
+    inp.value = _draft?.name ?? '';
+    box.appendChild(inp);
+
+    const row = document.createElement('div');
+    row.className = 'tb-name-dialog-actions';
+    const cancel = document.createElement('button');
+    cancel.type = 'button'; cancel.className = 'tb-cancel-btn'; cancel.textContent = 'Cancel';
+    const ok = document.createElement('button');
+    ok.type = 'button'; ok.className = 'roll-btn tb-save-btn';
+    ok.innerHTML = '<span class="roll-btn-icon">💾</span> Save Team';
+    row.appendChild(cancel); row.appendChild(ok);
+    box.appendChild(row);
+
+    const close = () => back.remove();
+    const confirm = () => {
+      const name = inp.value.trim();
+      if (!name) { inp.classList.add('tb-name-field--bad'); inp.focus(); return; }
+      if (_draft) _draft.name = name;
+      /* Keep the Team Name field at the top of the builder in step. */
+      const topInp = _builderContainer?.querySelector('.tb-name-field');
+      if (topInp) topInp.value = name;
+      close();
+      onNamed?.();
+    };
+
+    cancel.addEventListener('click', close);
+    ok.addEventListener('click', confirm);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') confirm();
+      if (e.key === 'Escape') close();
+    });
+    back.addEventListener('click', e => { if (e.target === back) close(); });
+
+    back.appendChild(box);
+    document.body.appendChild(back);
+    inp.focus();
   }
 
   /* ─── Toast ─── */

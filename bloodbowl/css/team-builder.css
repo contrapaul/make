@@ -669,3 +669,33 @@
   cursor:     pointer;
 }
 .tb-photo-remove[hidden] { display: none; }
+
+/* ── Save-time name dialog ── */
+.tb-name-dialog-back {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-toast, 900);
+  background: rgba(3, 6, 16, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.tb-name-dialog {
+  background: linear-gradient(180deg, rgba(13, 24, 56, 0.97), rgba(8, 15, 38, 0.97));
+  border: 1px solid rgba(120, 160, 255, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  padding: 1.2rem 1.4rem;
+  width: min(420px, 92vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.tb-name-dialog .tb-name-field { width: 100%; }
+.tb-name-dialog .tb-name-field--bad { border-color: rgba(240, 100, 100, 0.7); }
+.tb-name-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
