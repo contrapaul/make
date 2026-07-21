@@ -191,7 +191,7 @@
   {
     "id": "dwarf",
     "name": "Dwarf",
-    "description": "Placeholder",
+    "description": "Short kings with thick armor. While they can't run very fast they can and will win brawls. Sturdy lads who get it done. Tier 1",
     "file": "data/teams/dwarf.json",
     "imageDir": "images/dwarf/",
     "reroll": 60000,
@@ -218,7 +218,7 @@
   {
     "id": "elven-union",
     "name": "Elven Union",
-    "description": "Placeholder",
+    "description": "A blend of elven strengths that makes them more well-rounded than high elves, dark elves, and wood elves, but not as specialized. Tier 2",
     "file": "data/teams/elven-union.json",
     "imageDir": "images/elven-union/",
     "reroll": 50000,
@@ -380,7 +380,7 @@
   {
     "id": "imperial-nobility",
     "name": "Imperial Nobility",
-    "description": "Placeholder",
+    "description": "The snootier, private equity version of the human team. Fend helps linemen prevent opposing teams breaking through. Bodyguards can punch above their (sometimes considerable) weight with the brawl ability. Tier 2",
     "file": "data/teams/imperial-nobility.json",
     "imageDir": "images/imperial-nobility/",
     "reroll": 60000,
@@ -488,7 +488,7 @@
   {
     "id": "norse",
     "name": "Norse",
-    "description": "Placeholder",
+    "description": "Perhaps the most 'brawly' of all human teams, though not particulary good at passing the ball. Raiders, the linemen of the team, have a bit of a drinking problem. Tier 1",
     "file": "data/teams/norse.json",
     "imageDir": "images/norse/",
     "reroll": 60000,
