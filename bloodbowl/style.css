@@ -1300,11 +1300,8 @@
   justify-content: space-between;
 }
 
-/* ── Return to Main Menu button ── */
+/* ── Return to Main Menu button (left slot of the header) ── */
 .bb-home-btn {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 0.45em;
@@ -1321,7 +1318,7 @@
   pointer-events: auto;
 }
 .bb-home-btn:hover {
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateY(-2px);
   box-shadow: 0 6px 24px rgba(0,0,0,0.45),
               0 0 0 1px rgba(100,160,255,0.25);
   color: #fff;
@@ -1340,16 +1337,6 @@
   -webkit-text-stroke: 0.5px #000;
   paint-order: stroke fill;
 }
-
-.bb-wordmark {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
-  color: rgba(180, 210, 255, 0.7);
-  letter-spacing: 0.04em;
-  text-decoration: none;
-}
-.bb-wordmark .wordmark-slash { color: var(--bb-gold, #D4AF37); }
-.bb-wordmark:hover { color: #fff; text-decoration: none; }
 
 /* Nav sits on the right; flex-end pushes it there */
 .bb-nav {
@@ -1434,6 +1421,9 @@
 }
 
 .bb-site-footer {
+  /* Parent .site-footer is a flex ROW, which put the disclaimer beside the
+     brand/about pair and crushed them together — stack vertically instead. */
+  display: block;
   background: rgba(4, 10, 28, 0.97);
   border-top: 1px solid rgba(70, 110, 220, 0.3);
   padding: 1rem 1.5rem 0.75rem;

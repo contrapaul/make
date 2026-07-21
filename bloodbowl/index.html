@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/tokens.css?v=2">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="../WEB/css/jetbrains-mono.css">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
   <link rel="stylesheet" href="css/game-bar.css">
   <link rel="stylesheet" href="css/panels.css?v=4">
   <link rel="stylesheet" href="css/dice.css?v=3">
@@ -23,7 +23,10 @@
 
   <header class="site-header bb-site-header">
     <div class="header-inner bb-header-inner">
-      <a href="https://make.contrapaul.com" class="wordmark bb-wordmark">contrapaul<span class="wordmark-slash">/</span>make</a>
+      <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
+        <span class="bb-home-btn-dice">J</span>
+        <span class="bb-home-btn-label">Main Menu</span>
+      </a>
       <button class="bb-nav-toggle" id="bb-nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -65,7 +68,7 @@
         <div class="gb-start-sub">
           <button class="gb-start-sub-btn" id="gb-game-settings-btn" type="button">Game Settings</button>
           <button class="gb-start-sub-btn" id="gb-my-teams-btn" type="button">My Teams</button>
-          <button class="gb-start-sub-btn" id="gb-end-turn-btn" type="button" title="Clear all 'acted this turn' flags">End Turn</button>
+          <button class="gb-start-sub-btn" id="gb-join-game-btn" type="button" title="Join a friend's live game by code">Join Game</button>
         </div>
       </div>
 
@@ -317,10 +320,44 @@
       document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
       document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
       document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.openChooseTeam?.('left'));
-      document.getElementById('gb-end-turn-btn')?.addEventListener('click', () => {
-        window.endTurn?.();
-        const b = document.getElementById('gb-end-turn-btn');
-        if (b) { const t = b.textContent; b.textContent = '✓ New Turn'; setTimeout(() => { b.textContent = t; }, 1200); }
+      /* Join a live game by code — small dialog, then hand off to /join. */
+      document.getElementById('gb-join-game-btn')?.addEventListener('click', () => {
+        const back = document.createElement('div');
+        back.className = 'tb-name-dialog-back';
+        const box = document.createElement('div');
+        box.className = 'tb-name-dialog';
+        box.innerHTML = '<div class="tb-section-title">Join a Game</div>' +
+          '<p class="panel-intro" style="margin:0;">Enter the 6-character code from your opponent\'s invite.</p>';
+        const inp = document.createElement('input');
+        inp.type = 'text'; inp.className = 'tb-name-field';
+        inp.maxLength = 6; inp.placeholder = 'GAME CODE';
+        inp.style.textTransform = 'uppercase';
+        inp.autocapitalize = 'characters'; inp.spellcheck = false;
+        box.appendChild(inp);
+        const row = document.createElement('div');
+        row.className = 'tb-name-dialog-actions';
+        const cancel = document.createElement('button');
+        cancel.type = 'button'; cancel.className = 'tb-cancel-btn'; cancel.textContent = 'Cancel';
+        const ok = document.createElement('button');
+        ok.type = 'button'; ok.className = 'roll-btn tb-save-btn'; ok.textContent = 'Join Game';
+        row.appendChild(cancel); row.appendChild(ok);
+        box.appendChild(row);
+        const close = () => back.remove();
+        const join = () => {
+          const code = inp.value.trim().toUpperCase();
+          if (!/^[A-Z0-9]{6}$/.test(code)) { inp.classList.add('tb-name-field--bad'); inp.focus(); return; }
+          location.href = 'join/?code=' + code;
+        };
+        cancel.addEventListener('click', close);
+        ok.addEventListener('click', join);
+        inp.addEventListener('keydown', e => {
+          if (e.key === 'Enter') join();
+          if (e.key === 'Escape') close();
+        });
+        back.addEventListener('click', e => { if (e.target === back) close(); });
+        back.appendChild(box);
+        document.body.appendChild(back);
+        inp.focus();
       });
 
       /* Clear all player conditions (statuses + buffs) for this matchup. */
