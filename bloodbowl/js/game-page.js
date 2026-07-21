@@ -7,9 +7,11 @@
    (localStorage 'bb:activeMatch'), restores any in-progress
    state, plays the TEAM-vs-TEAM intro, and boots play.
 
-   NOTE: page uses <base href="../">, so anchor hrefs resolve
-   from the bloodbowl root, but the location API does NOT —
-   use page-relative '../' to return to the lobby.
+   NOTE: page uses <base href="../">, which anchor hrefs AND the
+   location API both resolve against (verified empirically — an
+   earlier version of this comment claimed location.* ignored the
+   base; it doesn't). Write lobby-bound targets as if this page were
+   already at the bloodbowl root, e.g. 'play/' not '../play/'.
    ═══════════════════════════════════════════════════════ */
 
 (function () {
@@ -38,7 +40,7 @@
   async function boot() {
     const match = readMatch();
     if (!match || !match.home || !match.away) {
-      location.replace('../');   // no active match → back to lobby
+      location.replace('play/');   // no active match → back to the game launcher
       return;
     }
 
@@ -236,7 +238,7 @@
         </div>
         <div class="bb-summary-winner">${esc(winner)}</div>
         <div class="bb-summary-actions">
-          <a class="roll-btn bb-intro-start show" href="./" role="button">Back to Menu</a>
+          <a class="roll-btn bb-intro-start show" href="play/" role="button">Back to Menu</a>
         </div>
       </div>`;
     overlay.hidden = false;

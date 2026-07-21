@@ -1,6 +1,8 @@
-/* Alternative home page: chronological activity feed merging public teams,
+/* Home page: chronological activity feed merging public teams,
    tournaments, finished games, and tournament photo posts. Read-only,
    no sign-in required — this page has no game-engine scripts loaded.
+   Only ever loaded from bloodbowl/index.html (the site root), so every
+   link built here is root-relative (coach/, browse/, tournaments/, join/).
 
    Loads 15 items at a time via "Load more"; each of the four sources is
    fetched page-by-page (?page=) and merged+re-sorted so "Load more" stays
@@ -49,16 +51,16 @@
     if (srcHasMore.teams)       jobs.push(safeFetch(`/api/public/teams?page=${srcPage.teams}`).then((r) => {
       (r?.teams ?? []).forEach((t) => pool.push({
         timestamp: t.updatedAt, icon: '🛡️',
-        html: `<a href="../coach/?u=${encodeURIComponent(t.owner)}">${esc(t.owner)}</a> shared <b>${esc(t.name)}</b> (${esc(t.baseTeamId)})`,
-        href: `../browse/?team=${t.id}`,
+        html: `<a href="coach/?u=${encodeURIComponent(t.owner)}">${esc(t.owner)}</a> shared <b>${esc(t.name)}</b> (${esc(t.baseTeamId)})`,
+        href: `browse/?team=${t.id}`,
       }));
       srcHasMore.teams = !!r?.hasMore; srcPage.teams++;
     }));
     if (srcHasMore.tournaments) jobs.push(safeFetch(`/api/tournaments?page=${srcPage.tournaments}`).then((r) => {
       (r?.tournaments ?? []).forEach((t) => pool.push({
         timestamp: t.createdAt, icon: '🏆',
-        html: `<a href="../coach/?u=${encodeURIComponent(t.owner)}">${esc(t.owner)}</a> started a tournament: <b>${esc(t.name)}</b>`,
-        href: `../tournaments/?t=${t.id}`,
+        html: `<a href="coach/?u=${encodeURIComponent(t.owner)}">${esc(t.owner)}</a> started a tournament: <b>${esc(t.name)}</b>`,
+        href: `tournaments/?t=${t.id}`,
       }));
       srcHasMore.tournaments = !!r?.hasMore; srcPage.tournaments++;
     }));
@@ -66,15 +68,15 @@
       (r?.games ?? []).forEach((g) => pool.push({
         timestamp: g.finishedAt, icon: '🎲',
         html: `<b>${esc(g.homeTeam || 'Home')}</b> ${g.homeScore}–${g.awayScore} <b>${esc(g.awayTeam || 'Away')}</b> — ${esc(g.host)} vs ${esc(g.guest || '?')}`,
-        href: `../coach/?u=${encodeURIComponent(g.host)}`,
+        href: `coach/?u=${encodeURIComponent(g.host)}`,
       }));
       srcHasMore.games = !!r?.hasMore; srcPage.games++;
     }));
     if (srcHasMore.photos)      jobs.push(safeFetch(`/api/feed/photos?page=${srcPage.photos}`).then((r) => {
       (r?.posts ?? []).forEach((p) => pool.push({
         timestamp: p.createdAt, thumb: p.photoUrl,
-        html: `<a href="../coach/?u=${encodeURIComponent(p.coach)}">${esc(p.coach)}</a> posted a photo${p.tournamentName ? ` to <b>${esc(p.tournamentName)}</b>` : ''}${p.caption ? ` — “${esc(p.caption)}”` : ''}`,
-        href: `../tournaments/?t=${p.tournamentId}`,
+        html: `<a href="coach/?u=${encodeURIComponent(p.coach)}">${esc(p.coach)}</a> posted a photo${p.tournamentName ? ` to <b>${esc(p.tournamentName)}</b>` : ''}${p.caption ? ` — “${esc(p.caption)}”` : ''}`,
+        href: `tournaments/?t=${p.tournamentId}`,
       }));
       srcHasMore.photos = !!r?.hasMore; srcPage.photos++;
     }));
@@ -186,7 +188,7 @@
     const join = () => {
       const code = inp.value.trim().toUpperCase();
       if (!/^[A-Z0-9]{6}$/.test(code)) { inp.classList.add('hf-dialog-field--bad'); inp.focus(); return; }
-      location.href = '../join/?code=' + code;
+      location.href = 'join/?code=' + code;
     };
     cancel.addEventListener('click', close);
     ok.addEventListener('click', join);
