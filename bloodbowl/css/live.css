@@ -59,22 +59,9 @@ body.bb-live-locked .game-bar {
 }
 body.bb-live-locked .bb-app { opacity: 0.92; }
 
-/* ── New Game panel: device step + waiting room ── */
-.sg-device, .sg-live-wait { margin-top: var(--bb-space-5); }
-.sg-device-btns { display: flex; gap: var(--bb-space-3); flex-wrap: wrap; }
-.sg-device-btns .roll-btn {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 220px;
-}
-.sg-device-sub {
-  font-family: var(--bb-font-body);
-  font-size: var(--bb-font-sm);
-  text-transform: none;
-  letter-spacing: 0;
-  opacity: 0.75;
-}
+/* ── New Game panel: game-type step, team-pick steps, waiting room ── */
+.sg-step { display: flex; flex-direction: column; align-items: center; gap: var(--bb-space-5); }
+
 .sg-device-note { color: var(--bb-text-muted); font-family: var(--bb-font-body); font-size: var(--bb-font-sm); min-height: 1.2em; }
 .sg-live-code {
   font-family: var(--bb-font-num);
@@ -97,6 +84,99 @@ body.bb-live-locked .bb-app { opacity: 0.92; }
   font-family: var(--bb-font-num);
   font-size: var(--bb-font-sm);
   padding: var(--bb-space-2) var(--bb-space-3);
+}
+
+/* Utility column — replaces the 3rd mode-card slot in the game-type step.
+   Matches the trading-card's own footprint (aspect-ratio 5/7, max 420px)
+   so the two half-height buttons sit level with the two cards beside them. */
+.sg-util-col {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 5 / 7;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.sg-util-btn {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  cursor: pointer;
+  color: rgba(220, 230, 255, 0.85);
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.sg-util-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+.sg-util-icon { font-size: 2rem; line-height: 1; }
+.sg-util-label {
+  font-family: 'Nuffle Italic', serif;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  text-align: center;
+  padding: 0 0.5rem;
+}
+@media (max-width: 860px) {
+  .sg-util-col { aspect-ratio: auto; flex-direction: row; }
+  .sg-util-btn { flex-direction: row; min-height: 64px; }
+}
+
+/* ── Team-pick steps (Local / Cloud) ── */
+.sg-back-btn {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(180, 210, 255, 0.6);
+  padding: 0.3rem 0.5rem;
+}
+.sg-back-btn:hover { color: #fff; }
+
+.sg-team-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--bb-space-5);
+  width: 100%;
+  max-width: 900px;
+}
+@media (max-width: 720px) {
+  .sg-team-cols { grid-template-columns: 1fr; }
+}
+.sg-team-col { display: flex; flex-direction: column; gap: 0.6rem; min-width: 0; }
+.sg-team-list { max-height: 360px; overflow-y: auto; padding-right: 0.3rem; }
+
+.sg-team-row--selected {
+  border-color: var(--card-color, rgba(120, 200, 255, 0.8)) !important;
+  box-shadow: 0 0 0 2px var(--card-color, rgba(120, 200, 255, 0.8)), 0 6px 20px rgba(0, 0, 0, 0.35);
+  background: rgba(120, 200, 255, 0.08);
+}
+.sg-team-list--locked .sg-team-row { opacity: 0.55; pointer-events: none; }
+
+.sg-start-btn { min-width: 220px; margin-top: 0.5rem; }
+.sg-start-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.sg-cloud-code { display: flex; flex-direction: column; align-items: center; }
+.sg-cloud-away-team {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #81c784;
+  text-align: center;
+  padding: 0.6rem;
+  border: 1px solid rgba(110, 220, 140, 0.35);
+  border-radius: 8px;
+  background: rgba(110, 220, 140, 0.08);
 }
 
 /* ── Join page team picker ── */

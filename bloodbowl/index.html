@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="css/drive-wizard.css?v=4">
   <link rel="stylesheet" href="css/team-builder.css?v=3">
   <link rel="stylesheet" href="css/spp.css">
-  <link rel="stylesheet" href="css/live.css?v=1">
+  <link rel="stylesheet" href="css/live.css?v=2">
 </head>
 <body class="app-loading">
 
@@ -99,79 +99,99 @@
           <button class="panel-close" aria-label="Close">&#215;</button>
         </div>
         <div class="panel-body wiz-body">
-          <div class="sg-modes">
 
-            <article class="trading-card mode-card" data-mode="first" style="--tc-primary:#1A5A2A;--tc-accent:#1A5A2A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
-              <div class="modal-image-area" style="background:#1A5A2A;">
-                <span class="img-placeholder-num" aria-hidden="true">1</span>
-                <div class="modal-card-overlay">
-                  <div class="modal-jersey-circle">1</div>
-                  <div class="modal-overlay-info">
-                    <h2 class="modal-name">First Match</h2>
-                    <p class="modal-position">Game Mode</p>
+          <!-- STEP 1: game type -->
+          <div class="sg-step" id="sg-step-type">
+            <div class="sg-modes">
+
+              <article class="trading-card mode-card" data-gametype="local" style="--tc-primary:#1A3A7A;--tc-accent:#1A3A7A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
+                <div class="modal-image-area" style="background:#1A3A7A;">
+                  <span class="img-placeholder-num" aria-hidden="true">📱</span>
+                  <div class="modal-card-overlay">
+                    <div class="modal-jersey-circle">1</div>
+                    <div class="modal-overlay-info">
+                      <h2 class="modal-name">Local Game</h2>
+                      <p class="modal-position">Pass &amp; Play</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="mode-card-body">
-                <p class="mode-card-flavor">Like it says on the tin, this mode is designed for your first time playing "Football Chess" with the companion app. (Or just first time ever!)</p>
-              </div>
-            </article>
+                <div class="mode-card-body">
+                  <p class="mode-card-flavor">Choose teams from your account and play the full game sharing this device.</p>
+                </div>
+              </article>
 
-            <article class="trading-card mode-card" data-mode="seasoned" style="--tc-primary:#1A3A7A;--tc-accent:#1A3A7A;--tc-gold:#D4AF37;--tc-gold-dark:#8B6914;">
-              <div class="modal-image-area" style="background:#1A3A7A;">
-                <span class="img-placeholder-num" aria-hidden="true">2</span>
-                <div class="modal-card-overlay">
-                  <div class="modal-jersey-circle">2</div>
-                  <div class="modal-overlay-info">
-                    <h2 class="modal-name">Seasoned Coach</h2>
-                    <p class="modal-position">Game Mode</p>
+              <article class="trading-card mode-card" data-gametype="cloud" style="--tc-primary:#8B6914;--tc-accent:#8B6914;--tc-gold:#D4AF37;--tc-gold-dark:#5A4410;">
+                <div class="modal-image-area" style="background:#8B6914;">
+                  <span class="img-placeholder-num" aria-hidden="true">📡</span>
+                  <div class="modal-card-overlay">
+                    <div class="modal-jersey-circle">2</div>
+                    <div class="modal-overlay-info">
+                      <h2 class="modal-name">Cloud Game</h2>
+                      <p class="modal-position">Two Devices</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="mode-card-body">
-                <p class="mode-card-flavor">This is the mode intended for most players. Lots of quality of life improvements without a lot of hand-holding.</p>
-              </div>
-            </article>
-
-            <article class="trading-card mode-card" data-mode="pro" style="--tc-primary:#8B6914;--tc-accent:#8B6914;--tc-gold:#D4AF37;--tc-gold-dark:#5A4410;">
-              <div class="modal-image-area" style="background:#8B6914;">
-                <span class="img-placeholder-num" aria-hidden="true">3</span>
-                <div class="modal-card-overlay">
-                  <div class="modal-jersey-circle">3</div>
-                  <div class="modal-overlay-info">
-                    <h2 class="modal-name">Consummate Professional</h2>
-                    <p class="modal-position">Game Mode</p>
-                  </div>
+                <div class="mode-card-body">
+                  <p class="mode-card-flavor">Invite a player to join on their device with their own team. Results tracked for both teams.</p>
                 </div>
-              </div>
-              <div class="mode-card-body">
-                <p class="mode-card-flavor">For players who will mostly play without the app, but who still can't remember prayers to Nuffle.</p>
-              </div>
-            </article>
+              </article>
 
-          </div>
+              <div class="sg-util-col">
+                <button class="sg-util-btn" id="sg-game-settings-btn" type="button">
+                  <span class="sg-util-icon" aria-hidden="true">⚙</span>
+                  <span class="sg-util-label">Game Settings</span>
+                </button>
+                <button class="sg-util-btn" id="sg-learn-btn" type="button">
+                  <span class="sg-util-icon" aria-hidden="true">📖</span>
+                  <span class="sg-util-label">Learn how to Play</span>
+                </button>
+              </div>
 
-          <!-- Device choice (shown after picking a mode) -->
-          <div class="sg-device" id="sg-device" hidden>
-            <h3 class="gs-section-title">Where are you playing?</h3>
-            <div class="sg-device-btns">
-              <button class="roll-btn" id="sg-one-device" type="button">📱 This Device<span class="sg-device-sub">pass-and-play, both teams here</span></button>
-              <button class="roll-btn" id="sg-two-devices" type="button">📡 Two Devices<span class="sg-device-sub">invite another coach — they bring their own team</span></button>
             </div>
-            <p class="sg-device-note" id="sg-device-note"></p>
           </div>
 
-          <!-- Waiting room for two-device games -->
-          <div class="sg-live-wait" id="sg-live-wait" hidden>
-            <h3 class="gs-section-title">Waiting for your opponent…</h3>
-            <div class="sg-live-code" id="sg-live-code">······</div>
-            <p class="sg-device-note">Send them this link — they sign in, pick their team, and the game starts automatically.</p>
-            <div class="sg-live-linkrow">
-              <input type="text" id="sg-live-link" readonly>
-              <button class="roll-btn" id="sg-live-copy" type="button">Copy</button>
+          <!-- STEP 2a: Local Game — pick both sides on this device -->
+          <div class="sg-step" id="sg-step-local" hidden>
+            <button class="sg-back-btn" id="sg-local-back" type="button">← Back</button>
+            <div class="sg-team-cols">
+              <div class="sg-team-col">
+                <h3 class="gs-section-title">Home Team</h3>
+                <div class="ct-myteams-grid sg-team-list" id="sg-local-home-list"></div>
+              </div>
+              <div class="sg-team-col">
+                <h3 class="gs-section-title">Away Team</h3>
+                <div class="ct-myteams-grid sg-team-list" id="sg-local-away-list"></div>
+              </div>
             </div>
-            <button class="gb-start-sub-btn" id="sg-live-cancel" type="button">Cancel game</button>
+            <button class="roll-btn sg-start-btn" id="sg-local-start" type="button" disabled>Start Game</button>
           </div>
+
+          <!-- STEP 2b: Cloud Game — host picks a team, waits for the guest -->
+          <div class="sg-step" id="sg-step-cloud" hidden>
+            <button class="sg-back-btn" id="sg-cloud-back" type="button">← Back</button>
+            <div class="sg-team-cols">
+              <div class="sg-team-col">
+                <h3 class="gs-section-title">Your Team (Home)</h3>
+                <div class="ct-myteams-grid sg-team-list" id="sg-cloud-home-list"></div>
+                <p class="sg-device-note" id="sg-cloud-error"></p>
+              </div>
+              <div class="sg-team-col">
+                <h3 class="gs-section-title">Opponent (Away)</h3>
+                <div class="sg-cloud-code" id="sg-cloud-code" hidden>
+                  <div class="sg-live-code" id="sg-cloud-code-val">······</div>
+                  <div class="sg-live-linkrow">
+                    <input type="text" id="sg-cloud-link" readonly>
+                    <button class="roll-btn" id="sg-cloud-copy" type="button">Copy</button>
+                  </div>
+                </div>
+                <p class="sg-device-note" id="sg-cloud-away-status">Pick your team to generate an invite code.</p>
+                <div class="sg-cloud-away-team" id="sg-cloud-away-team" hidden></div>
+              </div>
+            </div>
+            <button class="roll-btn sg-start-btn" id="sg-cloud-start" type="button" disabled>Start Game</button>
+            <button class="gb-start-sub-btn" id="sg-cloud-cancel" type="button" hidden>Cancel game</button>
+          </div>
+
         </div>
       </div>
 
@@ -300,7 +320,7 @@
   <script src="js/drive-wizard.js?v=4"></script>
   <script src="js/api.js?v=3"></script>
   <script src="js/team-sync.js?v=2"></script>
-  <script src="js/live-client.js?v=2"></script>
+  <script src="js/live-client.js?v=3"></script>
   <script src="js/team-builder.js?v=7"></script>
   <script src="js/spp-tracker.js"></script>
   <script src="js/panels.js?v=3"></script>
@@ -317,7 +337,6 @@
         btn.addEventListener('click', () => window.Panels?.togglePanel?.(btn.dataset.panel));
       });
 
-      document.getElementById('gb-start-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('startgame'));
       document.getElementById('gb-game-settings-btn')?.addEventListener('click', () => window.Panels?.togglePanel?.('gamesettings'));
       document.getElementById('gb-my-teams-btn')?.addEventListener('click', () => window.openChooseTeam?.('left'));
       /* Join a live game by code — small dialog, then hand off to /join. */
@@ -369,83 +388,236 @@
         }
       });
 
-      /* Starting a new game (picking a mode) sets the game mode and
-         resets in-progress conditions. */
-      const markModeCards = () => {
-        const m = window.BBSettings?.getSettings().gameMode;
-        document.querySelectorAll('#panel-startgame .mode-card').forEach(c =>
-          c.classList.toggle('mode-card--selected', c.dataset.mode === m));
-      };
-      markModeCards();
-      let chosenMode = null;
-      const deviceNote = (msg) => { const n = document.getElementById('sg-device-note'); if (n) n.textContent = msg || ''; };
-      document.querySelectorAll('#panel-startgame .mode-card').forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => {
-          /* New Game flow: pick a mode, then choose 1-device or 2-device play. */
-          chosenMode = card.dataset.mode || 'seasoned';
-          window.BBSettings?.setGameMode?.(chosenMode);
-          markModeCards();
-          document.getElementById('sg-device').hidden = false;
-          deviceNote('');
-          document.getElementById('sg-device').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-      });
+      /* ════════════════════════════════════════════════════════
+         NEW GAME FLOW
+         Step 1: Local or Cloud. Step 2: pick teams — team choice now
+         happens AFTER the game type, not as a precondition for it.
+         ════════════════════════════════════════════════════════ */
+      function sgShowStep(step) {
+        document.getElementById('sg-step-type').hidden  = step !== 'type';
+        document.getElementById('sg-step-local').hidden = step !== 'local';
+        document.getElementById('sg-step-cloud').hidden = step !== 'cloud';
+      }
 
-      /* One device: classic pass-and-play — both teams on this device. */
-      document.getElementById('sg-one-device')?.addEventListener('click', () => {
-        if (!(window.state?.left?.team && window.state?.right?.team)) {
-          deviceNote('Pick a Home and an Away team first.');
-          return;
-        }
+      function sgMarkSelected(container, row) {
+        container.querySelectorAll('.sg-team-row--selected').forEach(r => r.classList.remove('sg-team-row--selected'));
+        row.classList.add('sg-team-row--selected');
+      }
+
+      /* One combined, click-to-lock team list: custom (cloud-synced) teams
+         first, then the standard rosters — click a row to load it into the
+         given side (reuses the same loaders the top game-bar buttons use,
+         so roster accordions / choose-team buttons stay in sync). */
+      function sgBuildTeamList(container, side, onPicked) {
+        container.innerHTML = '';
+        const sel = window.getSelectedSides?.()?.[side];
+        const custom = window.TeamBuilder?.getTeams?.() ?? [];
+        custom.forEach(team => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'ct-card ct-card--myteam sg-team-row';
+          if (sel?.kind === 'custom' && sel.id === team.id) row.classList.add('sg-team-row--selected');
+          row.style.setProperty('--card-color', team.colors?.accent || 'rgba(150,180,255,0.6)');
+          row.innerHTML = `<span class="ct-card-name">${esc(team.name)}</span><span class="ct-card-meta">${team.players.length}pl · Custom</span>`;
+          row.addEventListener('click', async () => {
+            await window.TeamBuilder?.loadIntoGame(team.id, side);
+            sgMarkSelected(container, row);
+            onPicked?.();
+          });
+          container.appendChild(row);
+        });
+        [...(window.state?.teams ?? [])].sort((a, b) => a.name.localeCompare(b.name)).forEach(team => {
+          const row = document.createElement('button');
+          row.type = 'button';
+          row.className = 'ct-card sg-team-row';
+          if (sel?.kind === 'default' && sel.id === team.id) row.classList.add('sg-team-row--selected');
+          row.style.setProperty('--card-color', team.colors?.accent || team.colors?.gold || 'rgba(255,255,255,0.3)');
+          row.innerHTML = `<span class="ct-card-name">${esc(team.name)}</span>`;
+          row.addEventListener('click', async () => {
+            await window.loadTeam?.(side, team.id);
+            sgMarkSelected(container, row);
+            onPicked?.();
+          });
+          container.appendChild(row);
+        });
+      }
+
+      /* ── Local Game: pick both sides, then Start Game ── */
+      function sgUpdateLocalStart() {
+        const btn = document.getElementById('sg-local-start');
+        const ready = !!(window.state?.left?.team && window.state?.right?.team);
+        btn.disabled = !ready;
+        btn.classList.toggle('glow-gold', ready);
+      }
+      function sgRenderLocal() {
+        sgBuildTeamList(document.getElementById('sg-local-home-list'), 'left',  sgUpdateLocalStart);
+        sgBuildTeamList(document.getElementById('sg-local-away-list'), 'right', sgUpdateLocalStart);
+        sgUpdateLocalStart();
+      }
+      document.getElementById('sg-local-start')?.addEventListener('click', () => {
+        if (document.getElementById('sg-local-start').disabled) return;
         window.BBLive?.clear?.();
         const sel = window.getSelectedSides?.() || {};
+        const gameMode = window.BBSettings?.getSettings().gameMode || 'seasoned';
         try {
           localStorage.setItem('bb:activeMatch', JSON.stringify({
-            v: 1,
-            home: sel.left ?? null,
-            away: sel.right ?? null,
-            gameMode: chosenMode,
-            createdAt: Date.now(),
+            v: 1, home: sel.left ?? null, away: sel.right ?? null, gameMode, createdAt: Date.now(),
           }));
         } catch (_) {}
         window.Panels?.closePanel?.('startgame');
         location.href = './game/';
       });
 
-      /* Two devices: create a live game, show the invite, wait for the guest
-         (live-client.js navigates to /game when they join). */
-      document.getElementById('sg-two-devices')?.addEventListener('click', async () => {
-        if (!window.BBApi?.user) {
-          deviceNote('Two-device play needs an account — sign in via the Account page first.');
+      /* ── Cloud Game: host picks a team (this creates the game + code),
+         waits for the opponent, then confirms Start Game once they've
+         joined — the away side populates live as soon as they pick. ── */
+      function sgRenderCloud() {
+        const sess      = window.BBLive?.session?.();
+        const codeBox   = document.getElementById('sg-cloud-code');
+        const codeVal   = document.getElementById('sg-cloud-code-val');
+        const link      = document.getElementById('sg-cloud-link');
+        const statusEl  = document.getElementById('sg-cloud-away-status');
+        const awayTeam  = document.getElementById('sg-cloud-away-team');
+        const startBtn  = document.getElementById('sg-cloud-start');
+        const cancelBtn = document.getElementById('sg-cloud-cancel');
+        const homeList  = document.getElementById('sg-cloud-home-list');
+
+        if (!homeList._sgBuilt) {
+          sgBuildTeamList(homeList, 'left', sgPickCloudHomeTeam);
+          homeList._sgBuilt = true;
+        }
+        homeList.classList.toggle('sg-team-list--locked', !!sess);
+
+        if (!sess) {
+          codeBox.hidden = true;
+          statusEl.hidden = false;
+          statusEl.textContent = 'Pick your team to generate an invite code.';
+          awayTeam.hidden = true;
+          startBtn.disabled = true;
+          startBtn.classList.remove('glow-gold');
+          cancelBtn.hidden = true;
           return;
         }
-        if (!window.state?.left?.team) {
-          deviceNote('Pick your team (Home side) first — your opponent brings theirs.');
+
+        codeBox.hidden = false;
+        codeVal.textContent = sess.code;
+        link.value = `${location.origin}/bloodbowl/join/?code=${sess.code}`;
+        cancelBtn.hidden = false;
+
+        if (sess.meta?.guestName) {
+          statusEl.hidden = true;
+          awayTeam.hidden = false;
+          awayTeam.textContent = `${sess.meta.guestName} — ${sess.meta.guestTeam?.draft?.name || 'Team selected'}`;
+          startBtn.disabled = false;
+          startBtn.classList.add('glow-gold');
+        } else {
+          statusEl.hidden = false;
+          statusEl.textContent = 'Waiting for your opponent to join and pick a team…';
+          awayTeam.hidden = true;
+          startBtn.disabled = true;
+          startBtn.classList.remove('glow-gold');
+        }
+      }
+
+      async function sgPickCloudHomeTeam() {
+        const errEl = document.getElementById('sg-cloud-error');
+        if (errEl) errEl.textContent = '';
+        if (window.BBLive?.session?.()) return; /* already locked in */
+        if (!window.BBApi?.user) {
+          if (errEl) errEl.textContent = 'Cloud games need an account — sign in via the Account page first.';
           return;
         }
         try {
-          const code = await window.BBLive.createGame(chosenMode);
-          document.getElementById('sg-device').hidden = true;
-          document.getElementById('sg-live-wait').hidden = false;
-          document.getElementById('sg-live-code').textContent = code;
-          const link = `${location.origin}/bloodbowl/join/?code=${code}`;
-          document.getElementById('sg-live-link').value = link;
+          const gameMode = window.BBSettings?.getSettings().gameMode || 'seasoned';
+          await window.BBLive.createGame(gameMode);
+          sgRenderCloud();
         } catch (e) {
-          deviceNote(e.message || 'Could not create the game.');
+          if (errEl) errEl.textContent = e.message || 'Could not create the game.';
         }
-      });
-      document.getElementById('sg-live-copy')?.addEventListener('click', () => {
-        const input = document.getElementById('sg-live-link');
+      }
+
+      document.getElementById('sg-cloud-copy')?.addEventListener('click', () => {
+        const input = document.getElementById('sg-cloud-link');
         input.select();
         navigator.clipboard?.writeText(input.value);
-        const b = document.getElementById('sg-live-copy');
+        const b = document.getElementById('sg-cloud-copy');
         const t = b.textContent; b.textContent = '✓ Copied'; setTimeout(() => { b.textContent = t; }, 1200);
       });
-      document.getElementById('sg-live-cancel')?.addEventListener('click', () => {
+      document.getElementById('sg-cloud-cancel')?.addEventListener('click', () => {
         window.BBLive?.clear?.();
-        document.getElementById('sg-live-wait').hidden = true;
-        document.getElementById('sg-device').hidden = false;
+        const homeList = document.getElementById('sg-cloud-home-list');
+        if (homeList) homeList._sgBuilt = false;
+        sgRenderCloud();
+      });
+      document.getElementById('sg-cloud-start')?.addEventListener('click', () => {
+        const sess = window.BBLive?.session?.();
+        if (!sess || !sess.meta?.guestName) return;
+        const sel = window.getSelectedSides?.() || {};
+        try {
+          localStorage.setItem('bb:activeMatch', JSON.stringify({
+            v: 1,
+            home: sel.left ?? { kind: 'live', id: 'live' },
+            away: { kind: 'live', id: 'live' },
+            gameMode: sess.meta.gameMode,
+            createdAt: Date.now(),
+          }));
+        } catch (_) {}
+        window.Panels?.closePanel?.('startgame');
+        location.href = './game/';
+      });
+      /* Live-updates the cloud step whenever the opponent joins, even if
+         the New Game panel isn't currently the thing on screen. */
+      document.addEventListener('bb:liveEvent', (e) => {
+        if (e.detail?.type === 'guestJoined') sgRenderCloud();
+      });
+
+      /* ── Game type cards ── */
+      document.querySelectorAll('#panel-startgame .mode-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          const type = card.dataset.gametype;
+          if (type === 'local') { sgShowStep('local'); sgRenderLocal(); }
+          else if (type === 'cloud') { sgShowStep('cloud'); sgRenderCloud(); }
+        });
+      });
+      document.getElementById('sg-local-back')?.addEventListener('click', () => sgShowStep('type'));
+      document.getElementById('sg-cloud-back')?.addEventListener('click', () => sgShowStep('type'));
+
+      /* ── Placeholder pop-ups (Game Settings / Learn how to Play) ── */
+      function sgPlaceholderDialog(title, message) {
+        const back = document.createElement('div');
+        back.className = 'tb-name-dialog-back';
+        const box = document.createElement('div');
+        box.className = 'tb-name-dialog';
+        box.innerHTML = `<div class="tb-section-title">${esc(title)}</div><p class="panel-intro" style="margin:0;">${esc(message)}</p>`;
+        const row = document.createElement('div');
+        row.className = 'tb-name-dialog-actions';
+        const close = document.createElement('button');
+        close.type = 'button'; close.className = 'roll-btn tb-save-btn'; close.textContent = 'Got it';
+        row.appendChild(close);
+        box.appendChild(row);
+        back.appendChild(box);
+        document.body.appendChild(back);
+        const dismiss = () => back.remove();
+        close.addEventListener('click', dismiss);
+        back.addEventListener('click', e => { if (e.target === back) dismiss(); });
+      }
+      document.getElementById('sg-game-settings-btn')?.addEventListener('click', () => {
+        sgPlaceholderDialog('Game Settings', 'Match options for the game you’re about to start — dice mode, turn tracking, house rules — will live here soon.');
+      });
+      document.getElementById('sg-learn-btn')?.addEventListener('click', () => {
+        sgPlaceholderDialog('Learn how to Play', 'A guided walkthrough of the companion app is coming soon. In the meantime, check the Rules and Skills pages.');
+      });
+
+      /* Opening New Game resumes an in-progress cloud game you're hosting;
+         otherwise it starts fresh at the game-type step. */
+      document.getElementById('gb-start-btn')?.addEventListener('click', () => {
+        const wasHidden = document.getElementById('panel-startgame').hasAttribute('hidden');
+        window.Panels?.togglePanel?.('startgame');
+        if (!wasHidden) return; /* this click just closed an already-open panel */
+        const sess = window.BBLive?.session?.();
+        if (sess && sess.role === 'host') { sgShowStep('cloud'); sgRenderCloud(); }
+        else { sgShowStep('type'); }
       });
 
       /* Professional mode: optional per-turn action tracking */

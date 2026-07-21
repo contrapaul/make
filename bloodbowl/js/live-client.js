@@ -234,7 +234,9 @@
     return code;
   }
 
-  /* Host lobby: when the guest arrives, record the match and enter the game. */
+  /* Host lobby: when the guest arrives, sync their team into the session
+     so the New Game screen can show it — the host confirms Start Game
+     themselves (see index.html) rather than auto-entering the match. */
   document.addEventListener('bb:liveEvent', (e) => {
     if (IS_GAME_PAGE) return;
     const msg = e.detail;
@@ -243,17 +245,6 @@
     if (!s || s.role !== 'host') return;
     s.meta = msg.meta;
     saveSession(s);
-    const sel = window.getSelectedSides?.() || {};
-    try {
-      localStorage.setItem('bb:activeMatch', JSON.stringify({
-        v: 1,
-        home: sel.left ?? { kind: 'live', id: 'live' },
-        away: { kind: 'live', id: 'live' },
-        gameMode: msg.meta.gameMode,
-        createdAt: Date.now(),
-      }));
-    } catch {}
-    location.href = './game/';
   });
 
   /* ── Boot on the game page ── */
