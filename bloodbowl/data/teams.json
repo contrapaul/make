@@ -1,21 +1,5 @@
 [
   {
-    "id": "imperial-v1",
-    "name": "Imperial Nobility — Custom",
-    "file": "data/Imperialv1.json",
-    "imageDir": "data/images/imperial-v1/",
-    "reroll": 60000,
-    "colors": {
-      "bg": "#8C8C8C",
-      "primary": "#73030D",
-      "primaryDark": "#450008",
-      "accent": "#732F3B",
-      "gold": "#D4AF37",
-      "goldDark": "#9A7D0A",
-      "headerBg": "#1a0005"
-    }
-  },
-  {
     "id": "amazon",
     "name": "Amazon",
     "file": "data/teams/amazon.json",
