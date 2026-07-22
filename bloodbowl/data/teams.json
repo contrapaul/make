@@ -407,7 +407,7 @@
   {
     "id": "khorne",
     "name": "Khorne",
-    "description": "Placeholder",
+    "description": "Basically Chaos Chosen but with fewer beastmen. Lots of frenzy, lots of seeing red, and potentially a bloodspawn. Tier 3",
     "file": "data/teams/khorne.json",
     "imageDir": "images/khorne/",
     "reroll": 60000,
@@ -434,7 +434,7 @@
   {
     "id": "lizardmen",
     "name": "Lizardmen",
-    "description": "Placeholder",
+    "description": "Skinks have only 2 strength, but otherwise this team is an absolute powerhouse. They've got speed, strength, and massive jaws. Tier 1",
     "file": "data/teams/lizardmen.json",
     "imageDir": "images/lizardmen/",
     "reroll": 70000,
@@ -461,7 +461,7 @@
   {
     "id": "necromantic-horror",
     "name": "Necromantic Horror",
-    "description": "Placeholder",
+    "description": "If 'shambling' isn't your kind of adjective, but you still want an undead team, necromantic horror is for you! Faster, slighly less punchy, more evil? Tier 2",
     "file": "data/teams/necromantic-horror.json",
     "imageDir": "images/necromantic-horror/",
     "reroll": 70000,
@@ -515,7 +515,7 @@
   {
     "id": "nurgle",
     "name": "Nurgle",
-    "description": "Placeholder",
+    "description": "Consistently voted 'least hygenic'. A team that's hard to take down, and messes things up by just being around. Not highly mobile. Tier 3",
     "file": "data/teams/nurgle.json",
     "imageDir": "images/nurgle/",
     "reroll": 60000,
@@ -542,7 +542,7 @@
   {
     "id": "ogre",
     "name": "Ogre",
-    "description": "Placeholder",
+    "description": "If teams were required to go with the name of the most common player this would be the Gnoblar team. A great choice for coaches who are more interested in clobbering the opposing team than winning the game. Winning by knocking out most of the team is an option... Tier 4",
     "file": "data/teams/ogre.json",
     "imageDir": "images/ogre/",
     "reroll": 70000,
