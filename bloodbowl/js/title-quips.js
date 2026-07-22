@@ -130,11 +130,44 @@ const TITLE_QUIPS = {
 
 };
 
+/* Candidate app names for the homepage hero — each with its own top/bottom
+   flavor text, in the same [top, bottom] shape as TITLE_QUIPS. The title
+   itself is picked at random right alongside them, unlike every other page
+   where the title is fixed and only the subs rotate. */
+const APP_NAME_QUIPS = [
+  { title: 'THE NUFFLE PROTOCOL',
+    quip: ['A TITLE LIKE',
+           'WOULD BE GREAT FOR GRIFF OBERWALD\'S TELL-ALL AUTOBIOGRAPHY'] },
+  { title: 'TURNOVER ON TURN ONE',
+    quip: ['NOTHING LIKE A',
+           'TO PREPARE YOU FOR A DISAPPOINTING GAME'] },
+  { title: 'BRIBE THE REF',
+    quip: ['YOU CAN ALWAYS TRY TO',
+           'BUT A TEAM OF SNOTLINGS IS A TEAM OF SNOTLINGS'] },
+  { title: 'FUMBLEROOSKI',
+    quip: ['IT WOULD MAKE A LOT MORE SENSE IF',
+           'WAS A SKILL FOR KISLEVITE PLAYERS'] },
+  { title: 'SPORTHAMMER 40,000',
+    quip: ['IN THE GRIM DARKNESS OF THE FAR FUTURE',
+           'THERE IS ONLY BLOOD BOWL'] },
+];
+
 /* ── Auto-run on DOMContentLoaded ── */
 document.addEventListener('DOMContentLoaded', () => {
   const mainEl = document.querySelector('.bb-title-main');
   const subs   = document.querySelectorAll('.bb-title-sub');
   if (!mainEl || subs.length < 2) return;
+
+  /* Homepage hero: title text itself rotates too (see APP_NAME_QUIPS). */
+  if (mainEl.hasAttribute('data-random-title')) {
+    const pick = APP_NAME_QUIPS[Math.floor(Math.random() * APP_NAME_QUIPS.length)];
+    const [top, bottom] = pick.quip;
+    mainEl.textContent = pick.title;
+    subs[0].textContent = top;
+    subs[1].textContent = bottom;
+    mainEl.closest('.bb-page-title')?.setAttribute('aria-label', `${top} ${pick.title} ${bottom}`);
+    return;
+  }
 
   const key   = mainEl.textContent.trim().toUpperCase();
   const bank  = TITLE_QUIPS[key];
