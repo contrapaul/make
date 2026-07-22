@@ -105,32 +105,6 @@
   },
   {
     "id": 9,
-    "name": "Snotling Lineman 9",
-    "position": "Snotling Lineman",
-    "ma": 5,
-    "st": 1,
-    "ag": "3+",
-    "pa": "4+",
-    "av": "6+",
-    "skills": "Dodge, Insignificant, Right Stuff, Sidestep, Stunty, Titchy",
-    "value": 15000,
-    "fact": "Placeholder text."
-  },
-  {
-    "id": 10,
-    "name": "Snotling Lineman 10",
-    "position": "Snotling Lineman",
-    "ma": 5,
-    "st": 1,
-    "ag": "3+",
-    "pa": "4+",
-    "av": "6+",
-    "skills": "Dodge, Insignificant, Right Stuff, Sidestep, Stunty, Titchy",
-    "value": 15000,
-    "fact": "Placeholder text."
-  },
-  {
-    "id": 11,
     "name": "Fun-hoppa 1",
     "position": "Fun-hoppa",
     "ma": 6,
@@ -143,7 +117,20 @@
     "fact": "Placeholder text."
   },
   {
-    "id": 12,
+    "id": 10,
+    "name": "Fun-hoppa 2",
+    "position": "Fun-hoppa",
+    "ma": 6,
+    "st": 1,
+    "ag": "3+",
+    "pa": "4+",
+    "av": "6+",
+    "skills": "Dodge, Pogo, Right Stuff, Sidestep, Stunty",
+    "value": 20000,
+    "fact": "Placeholder text."
+  },
+  {
+    "id": 11,
     "name": "Stilty Runna 1",
     "position": "Stilty Runna",
     "ma": 6,
@@ -156,20 +143,46 @@
     "fact": "Placeholder text."
   },
   {
+    "id": 12,
+    "name": "Stilty Runna 2",
+    "position": "Stilty Runna",
+    "ma": 6,
+    "st": 1,
+    "ag": "3+",
+    "pa": "4+",
+    "av": "6+",
+    "skills": "Dodge, Right Stuff, Sidestep, Sprint, Stunty",
+    "value": 20000,
+    "fact": "Placeholder text."
+  },
+  {
     "id": 13,
-    "name": "Pump Wagon 1",
-    "position": "Pump Wagon",
+    "name": "Fungus Flinga 1",
+    "position": "Fungus Flinga",
     "ma": 5,
-    "st": 5,
-    "ag": "5+",
-    "pa": "6+",
-    "av": "9+",
-    "skills": "Dirty Player, Juggernaut, Mighty Blow, Really Stupid, Stand Firm",
-    "value": 100000,
+    "st": 1,
+    "ag": "3+",
+    "pa": "4+",
+    "av": "6+",
+    "skills": "Bombardier, Dodge, Right Stuff, Secret Weapon, Sidestep, Stunty, Titchy",
+    "value": 30000,
     "fact": "Placeholder text."
   },
   {
     "id": 14,
+    "name": "Fungus Flinga 2",
+    "position": "Fungus Flinga",
+    "ma": 5,
+    "st": 1,
+    "ag": "3+",
+    "pa": "4+",
+    "av": "6+",
+    "skills": "Bombardier, Dodge, Right Stuff, Secret Weapon, Sidestep, Stunty, Titchy",
+    "value": 30000,
+    "fact": "Placeholder text."
+  },
+  {
+    "id": 15,
     "name": "Trained Troll 1",
     "position": "Trained Troll",
     "ma": 4,
@@ -179,6 +192,19 @@
     "av": "10+",
     "skills": "Always Hungry, Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate",
     "value": 115000,
+    "fact": "Placeholder text."
+  },
+  {
+    "id": 16,
+    "name": "Pump Wagon 1",
+    "position": "Pump Wagon",
+    "ma": 5,
+    "st": 5,
+    "ag": "5+",
+    "pa": "6+",
+    "av": "9+",
+    "skills": "Dirty Player, Juggernaut, Mighty Blow, Really Stupid, Stand Firm",
+    "value": 100000,
     "fact": "Placeholder text."
   }
 ]

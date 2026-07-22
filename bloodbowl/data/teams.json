@@ -569,7 +569,7 @@
   {
     "id": "old-world-alliance",
     "name": "Old World Alliance",
-    "description": "Placeholder",
+    "description": "Excellent for coaches plagued by indecision, specifically the inability to decide between vanilla humans, dwarfs, and halflings. Potentially extremely cheesy, due to the ability of coaches to build a team of all-stars. Tier 1 ",
     "file": "data/teams/old-world-alliance.json",
     "imageDir": "images/old-world-alliance/",
     "reroll": 70000,
@@ -623,7 +623,7 @@
   {
     "id": "shambling-undead",
     "name": "Shambling Undead",
-    "description": "Placeholder",
+    "description": "A very strong counter for teams who win brawls. Few things are as demoralizing as your opponent's players refusing to stay down. A mix of undead, each with their own special annoying abilities. Tier 2",
     "file": "data/teams/shambling-undead.json",
     "imageDir": "images/shambling-undead/",
     "reroll": 70000,
@@ -650,7 +650,7 @@
   {
     "id": "skaven",
     "name": "Skaven",
-    "description": "Placeholder",
+    "description": "A very fast team with more punching strength than you'd think. Runners are SO fast that 2 turn touchdowns are not only possible, but a serious threat to opponents. Tier 2",
     "file": "data/teams/skaven.json",
     "imageDir": "images/skaven/",
     "reroll": 50000,
@@ -677,7 +677,7 @@
   {
     "id": "snotling",
     "name": "Snotling",
-    "description": "Placeholder",
+    "description": "A team that's perfect for anyone who likes losing and enjoys having their players beaten to a pulp. Many, many, many players who are difficult to pin down. Can be thrown by trolls, both to score and as a living cannonball. Tier 4",
     "file": "data/teams/snotling.json",
     "imageDir": "images/snotling/",
     "reroll": 70000,
@@ -758,7 +758,7 @@
   {
     "id": "vampire",
     "name": "Vampire",
-    "description": "Placeholder",
+    "description": "A team composed of bog standard humans and powerful vampires who see the humans less as teammates and more as fast food. Generally quite strong, but can be derailed quickly if they prove too hungry. Tier 2",
     "file": "data/teams/vampire.json",
     "imageDir": "images/vampire/",
     "reroll": 60000,
