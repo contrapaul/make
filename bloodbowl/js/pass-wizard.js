@@ -701,7 +701,7 @@ function initPassWizard() {
     seqResult('throw', roll, isAccurate ? 'Accurate' : 'Inaccurate', isAccurate ? 'ok' : 'warn', explain);
 
     if (isAccurate) {
-      afterRoll({ onConfirm: afterThrowAccurate, rerollFn: doThrow });
+      afterThrowAccurate();
     } else {
       const skills = (hasSk(ws.thrower, 'Pass') && !ws.passSkillUsed) ? [passSkillButton()] : [];
       afterRoll({

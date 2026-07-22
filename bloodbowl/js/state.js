@@ -139,10 +139,14 @@ window.GameState = GameState;
    ──────────────────────────────────────────────────────── */
 
 function setPhase(phase) {
+  const changed = phase !== GameState.phase;
   GameState.phase = phase;
   updateTimeline();
   updateModuleAvailability();
-  document.dispatchEvent(new CustomEvent('bb:phase', { detail: { phase } }));
+  /* Only fire on an actual phase change — beginTurn() re-enters DRIVE for every
+     turn within the same drive, and listeners (e.g. KO recovery) key off the
+     transition INTO a phase, not every turn inside it. */
+  if (changed) document.dispatchEvent(new CustomEvent('bb:phase', { detail: { phase } }));
 }
 
 function advancePhase() {
