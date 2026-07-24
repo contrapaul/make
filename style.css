@@ -416,7 +416,6 @@ body.page-fun { background: var(--ink); color: var(--paper); }
   grid-template-columns: 1fr 110px 1fr;
   min-height: 340px;              /* slightly taller than one card */
 }
-.tl-month.tl-empty { background: var(--paper-2); }
 
 /* The vertical spine with the month label riding on it */
 .tl-spine {
@@ -437,7 +436,6 @@ body.page-fun { background: var(--ink); color: var(--paper); }
   margin-top: 1.5rem;
   white-space: nowrap;
 }
-.tl-empty .tl-mlabel { background: var(--paper); color: var(--muted-2); border: 1px solid var(--line-soft); }
 
 /* Card zones — up to two cards share a row on desktop */
 .tl-zone {
@@ -476,6 +474,13 @@ body.page-fun { background: var(--ink); color: var(--paper); }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Life-event marker — inverted card for milestones/talks, not a project.
+   No cover slot, so it reads as a compact flag rather than a photo card. */
+.pcard-event { background: var(--ink); border-top: 4px solid var(--orange); }
+.pcard-event:hover, .pcard-event:focus-visible { background: var(--ink-soft); }
+.pcard-event .pcard-body h3 { color: var(--paper); }
+.pcard-event .pcard-body p { color: var(--dark-muted); }
 
 /* Expanded card modal */
 .pmodal[hidden] { display: none; }

@@ -10,6 +10,14 @@
      images:      array of extra image paths (optional — delete freely)
      description: string (required)
      links:       array of { label, url } (optional — delete freely)
+
+   Life events (milestones, talks, etc.) — same timeline, styled as
+   a dark marker card instead of a project card:
+     type:  "event"  (switches on the alternate styling)
+     tag:   string (optional — short label like "TALK" or
+            "MILESTONE"; defaults to "MILESTONE")
+     cover / images: optional, same as above — omit both for a
+            plain text marker with no photo
    ============================================================ */
 
 const PROJECTS = [
@@ -381,7 +389,7 @@ const PROJECTS = [
     title: "Poplar Headboard with Integrated Lighting",
     date: "2016-09",
     cover: "../images/projects/headboard1.jpg",
-    images: ["../images/projects/bed1.jpg"],["../images/projects/bed2.jpg"],
+    images: ["../images/projects/bed1.jpg", "../images/projects/bed2.jpg"],
     description: "This headboard with integrated illuminated shelves was a lengthy but very satisfying project. I ripped down 3/4 inch poplar planks to produce the slats, and routed a channel in the shelves to house IKEA lights. The shelves required a lot of additional work to hide seams, but the results looked great.",
   },
   {
@@ -407,7 +415,7 @@ const PROJECTS = [
     title: "Pollock-Inspired Paintings",
     date: "2015-07",
     cover: "../images/projects/apartment.jpg",
-    images: ["../images/projects/pollock1.jpg"],["../images/projects/pollock2.jpg"],["../images/projects/pollock3.jpg"],
+    images: ["../images/projects/pollock1.jpg", "../images/projects/pollock2.jpg", "../images/projects/pollock3.jpg"],
     description: "After moving to Winston-Salem I found a great loft apartment and set out to create furniture and artwork for my new place. I produced 4 paintings directly inspired by the works of Jackson Pollock- including the same canvas (hardboard) and similar paints. I created similar works in 2021, and set up a summer camp workshop for students to produce their own in 2022. One painting was given to a friend, and 3 are now permanently displayed at my parents' house.",
   },
   {
@@ -475,6 +483,13 @@ const PROJECTS = [
     title: "Backpack #1",
     date: "2013-03",
     cover: "../images/projects/jacketmar2013.jpg",
-    description: "My first sewing machine project. Fleece knit material and a broadcloth liner- not a great combo, but featured an assymetrical zip and a novel 'X' pattern integrating pockets." 
+    description: "My first sewing machine project. Fleece knit material and a broadcloth liner- not a great combo, but featured an assymetrical zip and a novel 'X' pattern integrating pockets."
     },
+  {
+    type: "event",
+    tag: "Talk",
+    title: "Example Life Event",
+    date: "2026-08",
+    description: "Placeholder milestone card — swap in a real talk, launch, or life event. Renders as a dark marker instead of a project card; delete the cover/images lines entirely for a plain text-only version.",
+  },
 ];

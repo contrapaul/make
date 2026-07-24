@@ -42,16 +42,19 @@
   /* Default sides: every other project alternates */
   sorted.forEach((p, i) => { p._side = i % 2 === 0 ? "left" : "right"; });
 
-  /* Walk month by month from newest to oldest */
-  let [y, m] = sorted[0].date.split("-").map(Number);
-  const [oldY, oldM] = sorted[sorted.length - 1].date.split("-").map(Number);
-
-  while (y > oldY || (y === oldY && m >= oldM)) {
-    const key = y + "-" + String(m).padStart(2, "0");
-    const inMonth = sorted.filter((p) => p.date === key);
+  /* One row per month that actually has projects, newest first —
+     months with nothing in them are skipped rather than rendered empty. */
+  let i = 0;
+  while (i < sorted.length) {
+    const key = sorted[i].date;
+    const inMonth = [];
+    while (i < sorted.length && sorted[i].date === key) {
+      inMonth.push(sorted[i]);
+      i += 1;
+    }
 
     const row = document.createElement("div");
-    row.className = "tl-month" + (inMonth.length ? "" : " tl-empty");
+    row.className = "tl-month";
 
     const left = document.createElement("div");
     left.className = "tl-zone tl-left";
@@ -65,14 +68,20 @@
     right.className = "tl-zone tl-right";
 
     inMonth.forEach((p) => {
-      (p._side === "left" ? left : right).appendChild(buildCard(p));
+      const card = p.type === "event" ? buildEventCard(p) : buildCard(p);
+      (p._side === "left" ? left : right).appendChild(card);
     });
 
     row.append(left, spine, right);
     timeline.appendChild(row);
+  }
 
-    m -= 1;
-    if (m === 0) { m = 12; y -= 1; }
+  function wireOpen(card, p) {
+    const open = () => openModal(p);
+    card.addEventListener("click", open);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
+    });
   }
 
   function buildCard(p) {
@@ -96,11 +105,33 @@
     body.append(label, h3, teaser);
     card.appendChild(body);
 
-    const open = () => openModal(p);
-    card.addEventListener("click", open);
-    card.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
-    });
+    wireOpen(card, p);
+    return card;
+  }
+
+  /* Life-event marker — milestones, talks, etc. Same click-to-expand
+     behavior as a project card, but no cover slot: just a tag, title,
+     and description on a dark card. */
+  function buildEventCard(p) {
+    const card = document.createElement("article");
+    card.className = "pcard pcard-event";
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-haspopup", "dialog");
+
+    const body = document.createElement("div");
+    body.className = "pcard-body";
+    const label = document.createElement("span");
+    label.className = "label";
+    label.textContent = (p.tag || "Milestone").toUpperCase();
+    const h3 = document.createElement("h3");
+    h3.textContent = p.title;
+    const teaser = document.createElement("p");
+    teaser.textContent = p.description;
+    body.append(label, h3, teaser);
+    card.appendChild(body);
+
+    wireOpen(card, p);
     return card;
   }
 
@@ -177,7 +208,10 @@
     modalContent.replaceChildren();
     lightbox.hidden = true;
 
-    modalContent.appendChild(buildMediaRow(p));
+    const hasMedia = p.cover || (p.images && p.images.length);
+    if (p.type !== "event" || hasMedia) {
+      modalContent.appendChild(buildMediaRow(p));
+    }
 
     const body = document.createElement("div");
     body.className = "pmodal-body";
