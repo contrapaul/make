@@ -381,8 +381,7 @@ const PROJECTS = [
     title: "Poplar Headboard with Integrated Lighting",
     date: "2016-09",
     cover: "../images/projects/headboard1.jpg",
-    images: ["../images/projects/bed1.jpg"],
-    images: ["../images/projects/bed2.jpg"],
+    images: ["../images/projects/bed1.jpg"],["../images/projects/bed2.jpg"],
     description: "This headboard with integrated illuminated shelves was a lengthy but very satisfying project. I ripped down 3/4 inch poplar planks to produce the slats, and routed a channel in the shelves to house IKEA lights. The shelves required a lot of additional work to hide seams, but the results looked great.",
   },
   {
@@ -391,7 +390,6 @@ const PROJECTS = [
     cover: "../images/projects/coffeetablecover.jpg",
     images: ["../images/projects/coffeetable.jpg"],
     description: "After moving in with my future wife, I endeavored to create several pieces of furniture for our larger place. This live-edge ambrosia maple coffee table is deceptively simple, but has been sanded and polished to a brilliant lustre. In my opinion. I used toothpicks to fill worm holes (The source of the striations) and installed powdercoated steel hairpin legs.",
-    links: [{ label: "Write-up", url: "#" }],
   },
   {
     title: "Waxed Canvas Market Bag",
@@ -404,17 +402,13 @@ const PROJECTS = [
     date: "2016-04",
     cover: "../images/projects/burgatorium.jpg",
     description: "One of the first major set projects I assisted in creating. I produced spray paint burger stencils to decorate the walls, designed the Burgatorium logo and menu, and assembled the set.",
-    links: [{ label: "Write-up", url: "#" }],
   },
    {
     title: "Pollock-Inspired Paintings",
     date: "2015-07",
     cover: "../images/projects/apartment.jpg",
-    images: ["../images/projects/pollock1.jpg"],
-    images: ["../images/projects/pollock2.jpg"],
-    images: ["../images/projects/pollock3.jpg"],
+    images: ["../images/projects/pollock1.jpg"],["../images/projects/pollock2.jpg"],["../images/projects/pollock3.jpg"],
     description: "After moving to Winston-Salem I found a great loft apartment and set out to create furniture and artwork for my new place. I produced 4 paintings directly inspired by the works of Jackson Pollock- including the same canvas (hardboard) and similar paints. I created similar works in 2021, and set up a summer camp workshop for students to produce their own in 2022. One painting was given to a friend, and 3 are now permanently displayed at my parents' house.",
-    links: [{ label: "Write-up", url: "#" }],
   },
   {
     title: "Assorted Furniture",
