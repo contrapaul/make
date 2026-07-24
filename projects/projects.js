@@ -438,7 +438,7 @@ const PROJECTS = [
     description: "My first 'capsule collection', consisting of backpacks, keychains, dopp kits, and tote bags. Also the last 'collection' under the 'contrapaul' name, as I'd rebrand in September 2014.",
   },
     {
-    title: "Project Title Six",
+    title: "Two-tone Backpack",
     date: "2014-06",
     cover: "../images/projects/jan20142.jpg",
     images: ["../images/projects/jan2014.jpg"],
