@@ -401,7 +401,7 @@ const PROJECTS = [
   {
     title: "Project Title Seven",
     date: "2016-07",
-    cover: "../images/projects/project-seven.jpg",
+    cover: "../images/projects/shopbag.jpg",
     description: "Fourth of four projects in one month — the desktop cap. Anything past this stacks below.",
   },
   {

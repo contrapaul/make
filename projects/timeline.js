@@ -104,28 +104,80 @@
     return card;
   }
 
+  /* ---------- modal media row + lightbox ---------- */
+  function buildMediaTile(src, alt) {
+    const tile = document.createElement(src ? "button" : "div");
+    tile.className = "ph pmodal-media-item" + (src ? "" : " pmodal-media-item--empty");
+
+    if (!src) {
+      const label = document.createElement("span");
+      label.className = "ph-label";
+      label.textContent = "[ photo ]";
+      tile.appendChild(label);
+      return tile;
+    }
+
+    tile.type = "button";
+    tile.setAttribute("aria-label", "Expand photo — " + alt);
+    const img = phImage(src, alt);
+    img.onerror = () => {
+      tile.classList.add("pmodal-media-item--empty");
+      tile.disabled = true;
+      img.remove();
+      const label = document.createElement("span");
+      label.className = "ph-label";
+      label.textContent = "[ photo ]";
+      tile.appendChild(label);
+    };
+    tile.appendChild(img);
+    tile.addEventListener("click", () => openLightbox(src, alt));
+    return tile;
+  }
+
+  function buildMediaRow(p) {
+    const media = [p.cover, ...(p.images || [])];
+    const row = document.createElement("div");
+    row.className = "pmodal-media" + (media.length === 2 ? " pmodal-media--pair" : "");
+    media.forEach((src, i) => {
+      const alt = i === 0 ? p.title : p.title + " " + (i + 1);
+      row.appendChild(buildMediaTile(src, alt));
+    });
+    return row;
+  }
+
   /* ---------- modal ---------- */
   const modal = document.getElementById("pmodal");
   const modalContent = modal.querySelector(".pmodal-content");
   const closeBtn = modal.querySelector(".pmodal-close");
+  const lightbox = document.getElementById("pmodal-lightbox");
+  const lightboxImg = lightbox.querySelector(".pmodal-lightbox-img");
+  const lightboxClose = lightbox.querySelector(".pmodal-lightbox-close");
   let lastFocus = null;
+  let lastMediaFocus = null;
+
+  function openLightbox(src, alt) {
+    lastMediaFocus = document.activeElement;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    lightbox.hidden = false;
+    lightboxClose.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    lightboxImg.src = "";
+    if (lastMediaFocus) lastMediaFocus.focus();
+  }
+
+  lightboxClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", closeLightbox);
 
   function openModal(p) {
     lastFocus = document.activeElement;
     modalContent.replaceChildren();
+    lightbox.hidden = true;
 
-    modalContent.appendChild(
-      phSlot("pmodal-cover", p.cover, p.title, "[ cover · photo ]"));
-
-    if (p.images && p.images.length) {
-      const strip = document.createElement("div");
-      strip.className = "pmodal-images";
-      p.images.forEach((src, i) => {
-        strip.appendChild(phSlot("pmodal-thumb", src, p.title + " " + (i + 2),
-                                 "[ photo ]"));
-      });
-      modalContent.appendChild(strip);
-    }
+    modalContent.appendChild(buildMediaRow(p));
 
     const body = document.createElement("div");
     body.className = "pmodal-body";
@@ -159,6 +211,7 @@
 
   function closeModal() {
     modal.hidden = true;
+    lightbox.hidden = true;
     document.body.style.overflow = "";
     if (lastFocus) lastFocus.focus();
   }
@@ -168,6 +221,8 @@
     if (e.target === modal) closeModal();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.hidden) closeModal();
+    if (e.key !== "Escape") return;
+    if (!lightbox.hidden) closeLightbox();
+    else if (!modal.hidden) closeModal();
   });
 })();

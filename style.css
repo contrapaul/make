@@ -503,14 +503,65 @@ body.page-fun { background: var(--ink); color: var(--paper); }
   width: 44px; height: 44px;
 }
 .pmodal-close:hover { color: var(--orange); }
-.pmodal-cover { height: clamp(220px, 40vh, 380px); border-bottom: 2px solid var(--line); }
-.pmodal-images {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+/* Cover + extra images share one row, scaled (never cropped) to a shared height */
+.pmodal-media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px;
+  background: var(--line);
   border-bottom: 2px solid var(--line);
 }
-.pmodal-thumb { height: 130px; border-right: 2px solid var(--line); }
-.pmodal-thumb:last-child { border-right: none; }
+.pmodal-media-item {
+  position: relative;
+  flex: 0 0 auto;
+  height: clamp(220px, 40vh, 380px);
+  min-width: 140px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  overflow: visible;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.pmodal-media-item--empty { flex: 1 1 auto; cursor: default; }
+.pmodal-media .pmodal-media-item > img {
+  position: static;
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.pmodal-media-item:not(.pmodal-media-item--empty):hover,
+.pmodal-media-item:not(.pmodal-media-item--empty):focus-visible {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(22, 20, 15, .25);
+  z-index: 2;
+}
+/* Exactly two images: even side-by-side split instead of hugging each image's width */
+.pmodal-media--pair .pmodal-media-item { flex: 1 1 0; }
+.pmodal-media--pair .pmodal-media-item > img { width: 100%; }
+
+/* Full-image lightbox — opens over the project window, closes back to the gallery */
+.pmodal-lightbox[hidden] { display: none; }
+.pmodal-lightbox {
+  position: absolute; inset: 0;
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  padding: 3.5rem var(--pad) 2rem;
+  z-index: 3;
+}
+.pmodal-lightbox-img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.pmodal-lightbox-close {
+  position: absolute; top: 0; right: 0;
+  font-family: var(--font-mono); font-size: 1rem;
+  background: var(--ink); color: var(--paper);
+  border: none; cursor: pointer;
+  width: 44px; height: 44px;
+}
+.pmodal-lightbox-close:hover { color: var(--orange); }
 .pmodal-body { padding: 2rem var(--pad) 2.5rem; }
 .pmodal-body .label { display: block; margin-bottom: .75rem; }
 .pmodal-body h2 {
@@ -533,6 +584,8 @@ body.page-fun { background: var(--ink); color: var(--paper); }
   .tl-mlabel { writing-mode: vertical-rl; padding: .55rem .3rem; margin-top: 1rem; }
   .pmodal { padding: 1rem; }
   .pmodal-body { padding: 1.5rem 1.25rem 2rem; }
+  .pmodal-media-item { height: clamp(180px, 32vh, 300px); min-width: 110px; }
+  .pmodal-lightbox { padding: 3rem .75rem 1.5rem; }
 }
 
 /* ============================================================
