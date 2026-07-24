@@ -444,14 +444,14 @@ const PROJECTS = [
     title: "Spring Collection: 2014",
     date: "2014-04",
     cover: "../images/projects/spring2014.png",
-    images: ["../images/projects/doppkits.jpg"]
+    images: ["../images/projects/doppkits.jpg"],
     description: "My first 'capsule collection', consisting of backpacks, keychains, dopp kits, and tote bags. Also the last 'collection' under the 'contrapaul' name, as I'd rebrand in September 2014.",
   },
     {
     title: "Festival Packs Collaboration",
     date: "2014-02",
     cover: "../images/projects/billionaires.jpg",
-    images: ["../images/projects/billion2.jpg"]
+    images: ["../images/projects/billion2.jpg"],
     description: "A friend of mine operated Billionaires Apparel, an 'underground' clothing brand and commissioned 9 backpacks after I produced a sample as a gift. 3 were black/purple, 3 black/neon blue, and 3 black/lime green.",
   },
    {
