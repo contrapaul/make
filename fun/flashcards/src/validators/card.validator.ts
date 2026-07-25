@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const EffectSchema = z.object({
   trigger: z.enum(['Battlecry', 'Deathrattle', 'StartOfTurn', 'EndOfTurn', 'OnAttack', 'Passive']),
-  action: z.enum(['DealDamage', 'DrawCard', 'BuffAttack', 'BuffHealth', 'Heal', 'SummonToken', 'Destroy', 'GainKeyword']),
+  action: z.enum(['DealDamage', 'DrawCard', 'BuffAttack', 'BuffHealth', 'Heal', 'SummonToken', 'Destroy', 'GainKeyword', 'GainMana']),
   target: z.enum(['Self', 'EnemyMinion', 'FriendlyMinion', 'Hero', 'RandomEnemy', 'AllEnemies']).optional(),
   value: z.number().int().min(0).max(99).optional(),
   condition: z.string().nullable().optional()

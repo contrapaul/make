@@ -1,4 +1,4 @@
-import { Card, Rarity } from '../types/cards';
+import type { Card, Rarity } from '../types/cards';
 
 const RARITY_WEIGHTS: Record<Rarity, number> = {
   Common: 50, Uncommon: 30, Rare: 15, Epic: 4, Legendary: 1

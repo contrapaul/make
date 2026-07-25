@@ -14,7 +14,7 @@
     {#if card.art.type === 'image'}
       <div class="art-image" style="background-image: url({card.art.value})"></div>
     {:else}
-      <div class="art-css" class:{card.art.value}></div>
+      <div class="art-css {card.art.value}"></div>
     {/if}
   {:else}
     <div class="art-placeholder">?</div>

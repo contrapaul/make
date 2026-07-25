@@ -1,4 +1,4 @@
-import { RawRow } from './csvParser';
+import type { RawRow } from './csvParser';
 
 export function parseMD(text: string): RawRow[] {
   const rows: RawRow[] = [];

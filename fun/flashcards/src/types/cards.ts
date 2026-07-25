@@ -20,8 +20,9 @@ export type Action =
   | 'BuffHealth' 
   | 'Heal' 
   | 'SummonToken' 
-  | 'Destroy' 
-  | 'GainKeyword';
+  | 'Destroy'
+  | 'GainKeyword'
+  | 'GainMana';
 export type Target = 
   | 'Self' 
   | 'EnemyMinion' 
