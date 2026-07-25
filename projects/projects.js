@@ -480,7 +480,7 @@ const PROJECTS = [
     description: "After a couple projects I was ready to try making a backpack, and this is the result. All things considered it turned out pretty great." 
     },
       {
-    title: "Backpack #1",
+    title: "Jacket",
     date: "2013-03",
     cover: "../images/projects/jacketmar2013.jpg",
     description: "My first sewing machine project. Fleece knit material and a broadcloth liner- not a great combo, but featured an assymetrical zip and a novel 'X' pattern integrating pockets."
