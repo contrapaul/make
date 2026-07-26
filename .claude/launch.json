@@ -14,11 +14,11 @@
       "port": 8788
     },
     {
-      "name": "study-strike",
+      "name": "flashstone",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
         "--prefix",
-        "fun/flashcards",
+        "/Users/paul/Documents/GitHub/flashstone",
         "run",
         "dev",
         "--",
