@@ -17,29 +17,37 @@
 /* Ensure [hidden] always wins over any display override in author CSS */
 [hidden] { display: none !important; }
 
+/* The parent site's ../style.css sets body's font-family to Space Grotesk
+   (a font this project never loads, so it silently fell through to
+   Helvetica/Arial) — override with this project's own body type role. */
+body { font-family: var(--bb-font-body); }
+
 /* ─────────────────────────────────────────────
    0. CUSTOM FONTS
    ───────────────────────────────────────────── */
+/* font-display: block (not swap) — these are small display faces used for
+   the big page-title headline; a brief invisible period is preferable to a
+   5.5rem fallback-font headline reflowing into Nuffle after it loads. */
 @font-face {
   font-family: 'Nuffle';
   src: url('Nuffle.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 @font-face {
   font-family: 'Nuffle Italic';
   src: url('Nuffle Italic.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 @font-face {
   font-family: 'Nuffle Dice';
   src: url('Nuffle Dice.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 /* ── UI Refinement type system — self-hosted (NO Google Fonts; they break in
@@ -84,7 +92,12 @@
    Glass-blue game UI aesthetic.
    ───────────────────────────────────────────── */
 .bb-app {
-  min-height: calc(100vh - 52px - 60px);
+  /* No min-height here: the parent stylesheet already makes body a
+     min-height:100vh flex column with `main { flex: 1 0 auto }`, so this
+     <main> fills the remaining space and the footer sits at the bottom
+     without hardcoding header/footer pixel heights (which drifted from
+     their real, variable rendered heights and caused visible page-height
+     jumps between navigations). */
   background:
     radial-gradient(ellipse at 30% 0%,   rgba(20, 50, 140, 0.35) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 90%,  rgba(10, 30, 100, 0.3)  0%, transparent 55%),
@@ -1277,9 +1290,13 @@
 }
 
 /* ─────────────────────────────────────────────
-   BB HEADER / FOOTER OVERRIDES
+   BB HEADER / FOOTER
    ───────────────────────────────────────────── */
 .bb-site-header {
+  display: flex;
+  align-items: center;
+  height: 58px;
+  padding: 0 2.25rem;
   background: rgba(4, 10, 28, 0.97);
   border-bottom: 1px solid rgba(70, 110, 220, 0.3);
   position: relative;
@@ -1287,10 +1304,10 @@
      covered; below panels (400) and modals. */
   z-index: 250;
 }
+@media (max-width: 760px) {
+  .bb-site-header { height: auto; padding: 0.85rem 1.5rem; }
+}
 
-/* The parent site styles .site-header as the flex row and has no
-   .header-inner — these pages wrap the wordmark/toggle/nav in one, so it
-   must become the flex row itself or everything stacks in a block. */
 .bb-header-inner {
   max-width: none;
   padding: 0 1.5rem;
@@ -1421,8 +1438,6 @@
 }
 
 .bb-site-footer {
-  /* Parent .site-footer is a flex ROW, which put the disclaimer beside the
-     brand/about pair and crushed them together — stack vertically instead. */
   display: block;
   background: rgba(4, 10, 28, 0.97);
   border-top: 1px solid rgba(70, 110, 220, 0.3);
@@ -1442,6 +1457,7 @@
   font-size: 0.78rem;
   color: rgba(150, 185, 255, 0.5);
   letter-spacing: 0.04em;
+  text-transform: uppercase;
   text-decoration: none;
 }
 .bb-footer-brand:hover { color: rgba(150, 185, 255, 0.9); }

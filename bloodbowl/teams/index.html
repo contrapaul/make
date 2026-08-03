@@ -3,17 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- BB:PRELOAD -->
+  <link rel="preload" href="../Nuffle.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../Nuffle Italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/Barlow-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/BarlowCondensed-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../../WEB/Jetbrains/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- /BB:PRELOAD -->
   <title>Teams | Blood Bowl Companion | contrapaul/make</title>
-  <link rel="stylesheet" href="../css/tokens.css">
-  <link rel="stylesheet" href="../../style.css">
+  <link rel="stylesheet" href="../css/tokens.css?v=70b95e6e">
+  <link rel="stylesheet" href="../css/shell.css?v=8e5af389">
   <link rel="stylesheet" href="../../WEB/css/jetbrains-mono.css">
-  <link rel="stylesheet" href="../style.css?v=3">
-  <link rel="stylesheet" href="../css/team-builder.css?v=3">
-  <link rel="stylesheet" href="../css/teams-page.css">
-  <script src="../js/title-quips.js" defer></script>
+  <link rel="stylesheet" href="../style.css?v=10a04621">
+  <link rel="stylesheet" href="../css/team-builder.css?v=c60dcfa0">
+  <link rel="stylesheet" href="../css/teams-page.css?v=ea372ac7">
+  <script src="../js/title-quips.js?v=be792e2b" defer></script>
+  <script src="../js/shell.js?v=a29b8485" defer></script>
 </head>
 <body>
 
+  <!-- BB:HEADER -->
   <header class="site-header bb-site-header">
     <div class="header-inner bb-header-inner">
       <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
@@ -35,13 +45,14 @@
       </nav>
     </div>
   </header>
+  <!-- /BB:HEADER -->
 
   <main class="bb-app">
 
     <div class="bb-page-title" aria-label="Teams">
-      <span class="bb-title-sub">placeholder top</span>
+      <span class="bb-title-sub">NUFFLE BLESSES ALL</span>
       <span class="bb-title-main">TEAMS</span>
-      <span class="bb-title-sub">placeholder bottom</span>
+      <span class="bb-title-sub">EQUALLY, WHICH IS TO SAY, BARELY</span>
     </div>
 
     <div class="bb-page-content tp-page">
@@ -77,6 +88,7 @@
     <div class="trading-card" id="tp-player-card"></div>
   </div>
 
+  <!-- BB:FOOTER -->
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
@@ -84,34 +96,17 @@
     </div>
     <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play, especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
+  <!-- /BB:FOOTER -->
 
-  <script>
-    (function () {
-      const toggle = document.getElementById('bb-nav-toggle');
-      const nav    = document.getElementById('bb-nav');
-      if (!toggle || !nav) return;
-      toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const open = nav.classList.toggle('bb-nav-open');
-        toggle.setAttribute('aria-expanded', open);
-      });
-      document.addEventListener('click', e => {
-        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
-          nav.classList.remove('bb-nav-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-    })();
-  </script>
 
   <!-- Teams page: data + builder. BB_DATA_PREFIX lets the shared builder fetch
        from the parent /bloodbowl/ directory while running on this subpage. -->
   <script>window.BB_DATA_PREFIX = '../';</script>
-  <script src="../js/player-card.js"></script>
-  <script src="../js/api.js?v=3"></script>
-  <script src="../js/team-sync.js?v=2"></script>
-  <script src="../js/team-builder.js?v=7"></script>
-  <script src="../js/teams-page.js?v=3"></script>
+  <script src="../js/player-card.js?v=b8cbfeae"></script>
+  <script src="../js/api.js?v=b1d5e1e3"></script>
+  <script src="../js/team-sync.js?v=658f099c"></script>
+  <script src="../js/team-builder.js?v=0d40613f"></script>
+  <script src="../js/teams-page.js?v=ea6af0e1"></script>
 
 </body>
 </html>

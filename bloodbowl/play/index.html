@@ -3,28 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- BB:PRELOAD -->
+  <link rel="preload" href="Nuffle.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="Nuffle Italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Barlow-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/BarlowCondensed-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../WEB/Jetbrains/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin>
+  <!-- /BB:PRELOAD -->
   <!-- Page lives one level deep (bloodbowl/play/); resolve every relative
        asset/data/image path from the bloodbowl/ root, same trick game/
        already uses, so nothing below needs its paths touched. -->
   <base href="../">
   <title>Play | Blood Bowl Companion | contrapaul/make</title>
-  <link rel="stylesheet" href="css/tokens.css?v=2">
-  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="css/tokens.css?v=70b95e6e">
+  <link rel="stylesheet" href="css/shell.css?v=8e5af389">
   <link rel="stylesheet" href="../WEB/css/jetbrains-mono.css">
-  <link rel="stylesheet" href="style.css?v=9">
-  <link rel="stylesheet" href="css/game-bar.css">
-  <link rel="stylesheet" href="css/panels.css?v=5">
-  <link rel="stylesheet" href="css/dice.css?v=3">
-  <link rel="stylesheet" href="css/wizards.css?v=23">
-  <link rel="stylesheet" href="css/pass-v3.css?v=15">
-  <link rel="stylesheet" href="css/pitch.css">
-  <link rel="stylesheet" href="css/drive-wizard.css?v=4">
-  <link rel="stylesheet" href="css/team-builder.css?v=3">
-  <link rel="stylesheet" href="css/spp.css">
-  <link rel="stylesheet" href="css/live.css?v=2">
+  <link rel="stylesheet" href="style.css?v=10a04621">
+  <link rel="stylesheet" href="css/game-bar.css?v=6af3d3f6">
+  <link rel="stylesheet" href="css/panels.css?v=05e90c2c">
+  <link rel="stylesheet" href="css/dice.css?v=085c9862">
+  <link rel="stylesheet" href="css/wizards.css?v=1f2e17a6">
+  <link rel="stylesheet" href="css/pass-v3.css?v=129ef7f7">
+  <link rel="stylesheet" href="css/pitch.css?v=536ca043">
+  <link rel="stylesheet" href="css/drive-wizard.css?v=01c9e73f">
+  <link rel="stylesheet" href="css/team-builder.css?v=c60dcfa0">
+  <link rel="stylesheet" href="css/spp.css?v=ff71a2d8">
+  <link rel="stylesheet" href="css/live.css?v=eddc6183">
+  <script src="js/title-quips.js?v=be792e2b" defer></script>
 </head>
 <body class="app-loading">
 
+  <!-- BB:HEADER -->
   <header class="site-header bb-site-header">
     <div class="header-inner bb-header-inner">
       <a href="https://make.contrapaul.com/bloodbowl/" class="bb-home-btn">
@@ -46,6 +56,7 @@
       </nav>
     </div>
   </header>
+  <!-- /BB:HEADER -->
 
   <main class="bb-app">
 
@@ -304,6 +315,7 @@
   <!-- Team Builder now renders inside the Choose Team window's right pane (#ct-right-body). -->
 
 
+  <!-- BB:FOOTER -->
   <footer class="site-footer bb-site-footer">
     <div class="footer-inner bb-footer-inner">
       <a href="https://make.contrapaul.com" class="footer-brand bb-footer-brand">contrapaul / make</a>
@@ -311,32 +323,31 @@
     </div>
     <p class="bb-footer-disclaimer">This is an unofficial fan project. It is not affiliated with, endorsed by, or connected to Games Workshop in any way. Blood Bowl is a trademark of Games Workshop Ltd. This tool was made for personal use to make the game easier and faster to play, especially for new players. It is not designed or intended for any commercial purpose.</p>
   </footer>
+  <!-- /BB:FOOTER -->
 
   <!-- JS — load order: dice → state → settings → physical-dice → panels → wizards → app -->
-  <script src="js/dice.js"></script>
-  <script src="js/state.js?v=14"></script>
-  <script src="js/settings.js?v=2"></script>
-  <script src="js/tutorial.js"></script>
-  <script src="js/physical-dice.js?v=2"></script>
-  <script src="js/dice-slot.js"></script>
-  <script src="js/player-card.js?v=2"></script>
-  <script src="js/pitch.js"></script>
-  <script src="js/drive-wizard.js?v=4"></script>
-  <script src="js/api.js?v=3"></script>
-  <script src="js/team-sync.js?v=2"></script>
-  <script src="js/live-client.js?v=3"></script>
-  <script src="js/team-builder.js?v=7"></script>
-  <script src="js/spp-tracker.js"></script>
-  <script src="js/panels.js?v=3"></script>
-  <script src="js/wizards.js?v=37"></script>
-  <script src="js/pass-wizard.js?v=16"></script>
-  <script src="js/throw-wizard.js?v=2"></script>
-  <script src="script.js?v=9"></script>
+  <script src="js/dice.js?v=ddc267d8"></script>
+  <script src="js/state.js?v=5b07e475"></script>
+  <script src="js/settings.js?v=c412afb1"></script>
+  <script src="js/tutorial.js?v=4dd5069b"></script>
+  <script src="js/physical-dice.js?v=d26f2768"></script>
+  <script src="js/dice-slot.js?v=87300247"></script>
+  <script src="js/player-card.js?v=b8cbfeae"></script>
+  <script src="js/pitch.js?v=af80681d"></script>
+  <script src="js/drive-wizard.js?v=6a562987"></script>
+  <script src="js/api.js?v=b1d5e1e3"></script>
+  <script src="js/team-sync.js?v=658f099c"></script>
+  <script src="js/live-client.js?v=3494d18a"></script>
+  <script src="js/team-builder.js?v=0d40613f"></script>
+  <script src="js/spp-tracker.js?v=55a6d3f4"></script>
+  <script src="js/panels.js?v=e5eeb34c"></script>
+  <script src="js/wizards.js?v=b71d85c7"></script>
+  <script src="js/pass-wizard.js?v=95652518"></script>
+  <script src="js/throw-wizard.js?v=ba64c867"></script>
+  <script src="script.js?v=b9be64c7"></script>
+  <script src="js/shell.js?v=a29b8485"></script>
   <script>
     (function () {
-      const toggle = document.getElementById('bb-nav-toggle');
-      const nav    = document.getElementById('bb-nav');
-      if (!toggle || !nav) return;
       document.querySelectorAll('.bb-action-card[data-panel]').forEach(btn => {
         btn.addEventListener('click', () => window.Panels?.togglePanel?.(btn.dataset.panel));
       });
@@ -652,18 +663,6 @@
           moreCard.classList.remove('bb-action-card--active');
         });
       }
-
-      toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const open = nav.classList.toggle('bb-nav-open');
-        toggle.setAttribute('aria-expanded', open);
-      });
-      document.addEventListener('click', e => {
-        if (!toggle.contains(e.target) && !nav.contains(e.target)) {
-          nav.classList.remove('bb-nav-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
     })();
   </script>
 
