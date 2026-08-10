@@ -206,7 +206,7 @@ body.page-fun { background: var(--ink); color: var(--paper); }
    ============================================================ */
 .hero-landing {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 460px;
   border-bottom: 2px solid var(--line);
 }
 .hero-landing .hero-text { padding: 3.5rem var(--pad); min-width: 0; }
