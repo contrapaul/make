@@ -227,7 +227,7 @@ body.page-fun { background: var(--ink); color: var(--paper); }
 .hero-portrait > img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
-  object-fit: contain; object-position: bottom center;
+  object-fit: cover; object-position: bottom center;
 }
 .hero-portrait .slot-tag {
   position: absolute; top: 1.1rem; left: 1.1rem;
