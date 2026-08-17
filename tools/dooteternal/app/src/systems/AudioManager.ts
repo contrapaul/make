@@ -16,6 +16,8 @@ export interface AudioSink {
 }
 
 export const SOUNDTRACK_FILE = 'audio/soundtrack/music_hell_loop.ogg';
+export const BREATH_LOOP_ID = 'breath_recharge';
+export const BREATH_LOOP_FILE = 'audio/sfx/breath_recharge.ogg';
 
 /**
  * Web Audio playback for the files listed in app/assets/audio/MANIFEST.md.

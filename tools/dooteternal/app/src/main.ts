@@ -9,7 +9,7 @@ import { buildLevel, type LevelData } from './core/LevelLoader';
 import { keyColor } from './core/PlaceholderAssets';
 import { PlayerController } from './core/PlayerController';
 import { BREATH, PLAYER } from './data/constants';
-import { AudioManager } from './systems/AudioManager';
+import { AudioManager, BREATH_LOOP_FILE, BREATH_LOOP_ID } from './systems/AudioManager';
 import { BlastSystem } from './systems/BlastSystem';
 import { BreathSystem } from './systems/BreathSystem';
 import { DecalSystem } from './systems/DecalSystem';
@@ -90,6 +90,8 @@ interface World {
   blasts: BlastSystem;
   doorKeys: DoorKeySystem;
   update(dt: number): void;
+  /** Stops held-fire and breathing loops — pausing, leaving, dying. */
+  silence(): void;
   render(): void;
   snapshot(): LevelState;
   dispose(): void;
@@ -183,6 +185,16 @@ function createWorld(level: LevelData, restored: LevelState | null, selectedWeap
   );
 
   const aim = new THREE.Vector3();
+  let breathLoopPlaying = false;
+
+  /** The breathing loop from §5: audible only while breath is refilling. */
+  function updateBreathAudio(): void {
+    if (breath.recharging === breathLoopPlaying) return;
+
+    breathLoopPlaying = breath.recharging;
+    if (breathLoopPlaying) audio.startLoop(BREATH_LOOP_ID, BREATH_LOOP_FILE);
+    else audio.stopLoop(BREATH_LOOP_ID, 0.1);
+  }
 
   return {
     level,
@@ -210,6 +222,7 @@ function createWorld(level: LevelData, restored: LevelState | null, selectedWeap
       rig.camera.getWorldDirection(aim);
       const fired = weapon.update(dt, firePressed, fireHeld, player.position, aim);
       breath.update(dt, fireHeld);
+      updateBreathAudio();
 
       if (fired) viewModel.recoil();
       viewModel.setWeapon(weapon.current.id);
@@ -253,7 +266,17 @@ function createWorld(level: LevelData, restored: LevelState | null, selectedWeap
       };
     },
 
+    silence(): void {
+      weapon.holster();
+      if (breathLoopPlaying) {
+        audio.stopLoop(BREATH_LOOP_ID, 0.1);
+        breathLoopPlaying = false;
+      }
+    },
+
     dispose(): void {
+      this.silence();
+
       // The camera and its view model outlive the level, so lift them out first.
       scene.remove(rig.camera);
 
@@ -326,6 +349,7 @@ function pause(): void {
 
   setMode('paused');
   pauseMenu.show();
+  world?.silence();
   if (document.pointerLockElement === canvas) document.exitPointerLock();
   if (world) saveLevelState();
 }

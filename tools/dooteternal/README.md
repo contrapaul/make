@@ -3,7 +3,23 @@
 Browser Doom/Boltgun-style FPS set in music hell. Full spec in [plans.md](plans.md);
 build order and phase gates were agreed on top of it.
 
-Play (once built): <https://make.contrapaul.com/tools/dooteternal/>
+Play: <https://make.contrapaul.com/tools/dooteternal/>
+
+## Status
+
+The tech demo is complete against the definition of done in plans.md §26, with
+one exception: **no audio files exist yet**. Every sound is wired to the paths in
+[app/assets/audio/MANIFEST.md](app/assets/audio/MANIFEST.md); a missing file is
+reported once and treated as silence, so the game plays normally and silently.
+Drop the files in at those paths and they start working with no code change.
+
+That leaves three §24 items unverifiable until then: that the trumpet and tuba
+pick randomly per shot, that the saxophone's loop restarts cleanly on each burst,
+and that the guitar's three files play in order. All three are asserted at the
+call level in `npm run checks` — what nobody has done is *hear* them.
+
+Controls: WASD move, mouse look, click fire, 1–4 or mouse wheel to switch,
+R to catch your breath, ESC to pause.
 
 ## Commands
 
@@ -36,8 +52,13 @@ npm run checks
 asserted in Node, one section per phase, exiting non-zero on any failure. It
 exists because the things most likely to be wrong here are numbers — breath
 timing, damage falloff, spread growth — and neither the typechecker nor a
-screenshot can see those. It has already caught a stalled breath refill and an
-unreachable weak point.
+screenshot can see those.
+
+It has caught, among others: a breath refill that stalled just above empty, a
+weak point no shot could reach, melee enemies that stopped a hair outside their
+own reach, and settings changes that silently went to a detached object. It also
+walks each level the way a player must, so a level whose exit can't be reached
+fails as a check rather than as a bug report.
 
 Modules that build canvas textures on construction (`EnemySystem`,
 `PlaceholderAssets`) can't be loaded outside a browser, so anything depending on

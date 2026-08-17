@@ -139,6 +139,14 @@ export class WeaponSystem {
     return Math.min(def.spreadBaseRadians + growth * this.burstSeconds, max);
   }
 
+  /**
+   * Silences held-fire audio. Pausing or leaving a level mid-burst would
+   * otherwise leave the saxophone loop playing over the menu.
+   */
+  holster(): void {
+    this.stopBurstAudio();
+  }
+
   select(id: string): void {
     if (!WEAPONS[id] || id === this.currentId) return;
 
