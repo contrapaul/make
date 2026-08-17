@@ -6,8 +6,8 @@
     "shotsPerClick": 1,
     "fireDelaySeconds": 0.3,
     "continuousFire": false,
-    "spreadBaseRadians": 0.02,
     "projectileType": "trumpet_note",
+    "spreadBaseRadians": 0.02,
     "projectileSpeedMetersPerSecond": 28,
     "damage": 9,
     "rangeMeters": 35,
@@ -16,6 +16,81 @@
       "audio/sfx/trumpet_fire_01.wav",
       "audio/sfx/trumpet_fire_02.wav",
       "audio/sfx/trumpet_fire_03.wav"
+    ]
+  },
+
+  "tuba": {
+    "id": "tuba",
+    "name": "Tuba",
+    "breathCostPerShot": 10,
+    "shotsPerClick": 1,
+    "fireDelaySeconds": 0.8,
+    "continuousFire": false,
+    "projectileType": "tuba_wave",
+    "waveStartRadiusMeters": 0.2,
+    "waveMaxRadiusMeters": 8.0,
+    "waveExpansionTimeSeconds": 0.9,
+    "maxEffectiveRangeMeters": 8.0,
+    "baseDamageClose": 35,
+    "audioMode": "random",
+    "audioFiles": ["audio/sfx/tuba_blast_01.wav", "audio/sfx/tuba_blast_02.wav"]
+  },
+
+  "saxophone": {
+    "id": "saxophone",
+    "name": "Saxophone",
+    "breathCostPerShot": 0.5,
+    "shotsPerClick": 1,
+    "fireDelaySeconds": 0.0625,
+    "continuousFire": true,
+    "projectileType": "sax_note",
+    "spreadBaseRadians": 0.03,
+    "spreadGrowthPerSecond": 0.25,
+    "spreadMaxRadians": 0.4,
+    "spreadResetSeconds": 0.5,
+    "projectileSpeedMetersPerSecond": 22,
+    "damage": 2,
+    "rangeMeters": 20,
+    "audioMode": "loop_restart_on_new_burst",
+    "audioFiles": ["audio/sfx/saxophone_fire_loop.ogg"]
+  },
+
+  "electric_guitar": {
+    "id": "electric_guitar",
+    "name": "Electric Guitar",
+    "breathCostPerShot": 13.33,
+    "shotsPerClick": 1,
+    "fireDelaySeconds": 0.7,
+    "continuousFire": false,
+    "projectileType": "guitar_wave_sequence",
+    "audioMode": "sequence",
+    "audioFiles": [
+      "audio/sfx/guitar_blast_01.wav",
+      "audio/sfx/guitar_blast_02.wav",
+      "audio/sfx/guitar_blast_03.wav"
+    ],
+    "blasts": [
+      {
+        "delaySeconds": 0.0,
+        "targetDistanceMeters": 4.0,
+        "explosionRadiusMeters": 4.0,
+        "damage": 22,
+        "audioIndex": 0
+      },
+      {
+        "delaySeconds": 0.15,
+        "targetDistanceMeters": 8.0,
+        "explosionRadiusMeters": 3.0,
+        "damage": 18,
+        "audioIndex": 1
+      },
+      {
+        "delaySeconds": 0.3,
+        "targetDistanceMeters": 14.0,
+        "explosionRadiusMeters": 1.5,
+        "damage": 14,
+        "audioIndex": 2
+      }
     ]
   }
 }

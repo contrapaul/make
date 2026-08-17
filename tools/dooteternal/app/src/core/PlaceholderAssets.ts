@@ -216,6 +216,118 @@ export function splatTexture(): THREE.CanvasTexture {
   });
 }
 
+/**
+ * First-person weapon shapes, plans.md §21: simple instruments angled in from
+ * the lower right, muzzle pointing toward the centre of the screen.
+ */
+export function viewModelTexture(weaponId: string): THREE.CanvasTexture {
+  return canvasTexture(256, (ctx) => {
+    ctx.clearRect(0, 0, 256, 256);
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = '#3a2408';
+
+    switch (weaponId) {
+      case 'tuba': {
+        // Big brass loop with a wide upward bell.
+        ctx.strokeStyle = '#c8901c';
+        ctx.lineWidth = 22;
+        ctx.beginPath();
+        ctx.arc(150, 150, 66, Math.PI * 0.15, Math.PI * 1.75);
+        ctx.stroke();
+
+        ctx.fillStyle = '#e8b53c';
+        ctx.beginPath();
+        ctx.ellipse(96, 74, 52, 30, -0.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = '#6b4a0c';
+        ctx.stroke();
+        break;
+      }
+
+      case 'saxophone': {
+        // Curved tube hooking up to a flared bell.
+        ctx.strokeStyle = '#dca92c';
+        ctx.lineWidth = 20;
+        ctx.beginPath();
+        ctx.moveTo(214, 236);
+        ctx.quadraticCurveTo(150, 190, 148, 120);
+        ctx.quadraticCurveTo(146, 62, 96, 60);
+        ctx.stroke();
+
+        ctx.fillStyle = '#f0c451';
+        ctx.beginPath();
+        ctx.ellipse(78, 56, 34, 22, -0.35, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#7a5410';
+        for (let key = 0; key < 5; key += 1) {
+          ctx.beginPath();
+          ctx.arc(168 - key * 6, 190 - key * 26, 6, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+      }
+
+      case 'electric_guitar': {
+        // Angular body, neck toward the centre, strings along it.
+        ctx.fillStyle = '#7a3ad6';
+        ctx.beginPath();
+        ctx.moveTo(232, 250);
+        ctx.lineTo(140, 214);
+        ctx.lineTo(158, 150);
+        ctx.lineTo(250, 186);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = '#2a1150';
+        ctx.stroke();
+
+        ctx.fillStyle = '#c9a24a';
+        ctx.save();
+        ctx.translate(158, 150);
+        ctx.rotate(-0.38);
+        ctx.fillRect(-14, -108, 28, 116);
+        ctx.restore();
+
+        ctx.strokeStyle = 'rgba(255, 240, 190, 0.9)';
+        ctx.lineWidth = 1.5;
+        for (let string = 0; string < 4; string += 1) {
+          ctx.beginPath();
+          ctx.moveTo(146 + string * 6, 152);
+          ctx.lineTo(104 + string * 6, 56);
+          ctx.stroke();
+        }
+        break;
+      }
+
+      default: {
+        // Trumpet: straight gold tube with a bell and three valves.
+        ctx.fillStyle = '#d9a52a';
+        ctx.save();
+        ctx.translate(190, 200);
+        ctx.rotate(-0.62);
+        ctx.fillRect(-18, -132, 36, 140);
+        ctx.restore();
+
+        ctx.fillStyle = '#f2c451';
+        ctx.beginPath();
+        ctx.ellipse(104, 74, 46, 34, -0.62, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#6b4a0c';
+        ctx.stroke();
+
+        ctx.fillStyle = '#8a5f10';
+        for (let valve = 0; valve < 3; valve += 1) {
+          ctx.beginPath();
+          ctx.arc(186 - valve * 22, 178 - valve * 12, 9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        break;
+      }
+    }
+  });
+}
+
 function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): void {
   ctx.beginPath();
   ctx.moveTo(x + r, y);

@@ -24,6 +24,7 @@ interface Projectile {
   damage: number;
   lifetimeSeconds: number;
   ageSeconds: number;
+  weaponId: string;
   sprite: THREE.Sprite;
 }
 
@@ -33,6 +34,8 @@ export interface ProjectileSpawn {
   speedMetersPerSecond: number;
   damage: number;
   rangeMeters: number;
+  /** Which weapon fired it, so a kill can pick the right death preset. */
+  weaponId: string;
   radiusMeters?: number;
 }
 
@@ -62,6 +65,7 @@ export class ProjectileSystem {
     projectile.damage = spawn.damage;
     projectile.lifetimeSeconds = spawn.rangeMeters / spawn.speedMetersPerSecond;
     projectile.ageSeconds = 0;
+    projectile.weaponId = spawn.weaponId;
 
     projectile.sprite.position.copy(spawn.origin);
     projectile.sprite.visible = true;
@@ -94,7 +98,14 @@ export class ProjectileSystem {
       projectile.position.addScaledVector(projectile.velocity, stepDt);
 
       if (this.hitsGeometry(projectile.position)) return true;
-      if (this.enemies.tryHit(projectile.position, heading, projectile.radiusMeters, projectile.damage)) return true;
+      const hit = this.enemies.tryHit(
+        projectile.position,
+        heading,
+        projectile.radiusMeters,
+        projectile.damage,
+        projectile.weaponId,
+      );
+      if (hit) return true;
     }
 
     return false;
@@ -128,6 +139,7 @@ export class ProjectileSystem {
       damage: 0,
       lifetimeSeconds: 0,
       ageSeconds: 0,
+      weaponId: '',
       sprite,
     };
   }

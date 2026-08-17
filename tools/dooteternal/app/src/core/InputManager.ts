@@ -21,6 +21,7 @@ export class InputManager {
   private pendingPitch = 0;
   private fireHeld = false;
   private firePressedEdge = false;
+  private wheelSteps = 0;
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     window.addEventListener('keydown', (event) => this.pressed.add(event.code));
@@ -44,6 +45,10 @@ export class InputManager {
     window.addEventListener('mouseup', (event) => {
       if (event.button === 0) this.fireHeld = false;
     });
+
+    canvas.addEventListener('wheel', (event) => {
+      this.wheelSteps += Math.sign(event.deltaY);
+    }, { passive: true });
 
     document.addEventListener('pointerlockchange', () => {
       this.pendingYaw = 0;
@@ -73,6 +78,13 @@ export class InputManager {
     const pressed = this.firePressedEdge;
     this.firePressedEdge = false;
     return pressed;
+  }
+
+  /** Net mouse-wheel steps since the last call, for cycling weapons. */
+  consumeWeaponCycle(): number {
+    const steps = this.wheelSteps;
+    this.wheelSteps = 0;
+    return steps;
   }
 
   /** Returns the look movement since the last call and resets the accumulator. */

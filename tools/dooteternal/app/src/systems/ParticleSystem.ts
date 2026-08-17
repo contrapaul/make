@@ -59,9 +59,12 @@ export class ParticleSystem {
 
   /**
    * Erupts particles from an impact point, biased along `outward` — the surface
-   * normal of the thing that was hit.
+   * normal of the thing that was hit. A zero `outward` spits omnidirectionally.
+   *
+   * `spread` is how much random direction is mixed in: low values make a tight
+   * jet (vertical shards, horizontal shredding), high values a loose puff.
    */
-  burst(origin: THREE.Vector3, outward: THREE.Vector3, count: number): void {
+  burst(origin: THREE.Vector3, outward: THREE.Vector3, count: number, spread = 0.65): void {
     for (let i = 0; i < count; i += 1) {
       if (this.active >= PARTICLES.maxActive) return;
 
@@ -74,7 +77,7 @@ export class ParticleSystem {
       this.velocity[index]!
         .set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5)
         .normalize()
-        .multiplyScalar(0.65)
+        .multiplyScalar(spread)
         .add(outward)
         .normalize()
         .multiplyScalar(speed);

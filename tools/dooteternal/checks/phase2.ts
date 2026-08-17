@@ -14,7 +14,7 @@ import enemiesJson from '../app/src/data/enemies.json';
 import type { LevelData } from '../app/src/core/LevelLoader';
 import type { EnemyType } from '../app/src/systems/EnemySystem';
 import { BreathSystem } from '../app/src/systems/BreathSystem';
-import { withSpread, type WeaponDef } from '../app/src/systems/WeaponSystem';
+import { withSpread, type ProjectileWeapon, type WeaponDef } from '../app/src/systems/WeaponSystem';
 import { BREATH, PLAYER } from '../app/src/data/constants';
 import { check, section } from './harness';
 
@@ -22,7 +22,7 @@ const level = levelJson as LevelData;
 const weapons = weaponsJson as unknown as Record<string, WeaponDef>;
 const enemies = enemiesJson as unknown as Record<string, EnemyType>;
 
-const trumpet = weapons.trumpet!;
+const trumpet = weapons.trumpet as ProjectileWeapon;
 const tambourine = enemies.hell_tambourine!;
 
 /** Advances the breath system at 60 fps for a span of simulated seconds. */

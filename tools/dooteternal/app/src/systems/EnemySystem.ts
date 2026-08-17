@@ -5,6 +5,9 @@ import { cellCentre, type LevelData } from '../core/LevelLoader';
 import type { DecalSystem } from './DecalSystem';
 import type { ParticleSystem } from './ParticleSystem';
 import { PARTICLES } from '../data/constants';
+import { getOverkillTier } from './Overkill';
+import { deathPreset, type BurstPattern, type DeathEffectSink, type DeathPreset } from './DeathEffects';
+import type { DamageAtDistance } from './BlastSystem';
 
 /** Enemy stats, plans.md §7.1. */
 export interface WeakPoint {
@@ -70,6 +73,7 @@ export class EnemySystem {
     level: LevelData,
     private readonly particles: ParticleSystem,
     private readonly decals: DecalSystem,
+    private readonly effects: DeathEffectSink,
   ) {
     level.enemies.forEach((spawn, index) => {
       const type = ENEMY_TYPES[spawn.type];
@@ -98,6 +102,7 @@ export class EnemySystem {
     direction: THREE.Vector3,
     projectileRadius: number,
     damage: number,
+    weaponId: string,
   ): HitResult | null {
     for (let i = 0; i < this.enemies.length; i += 1) {
       const enemy = this.enemies[i]!;
@@ -107,17 +112,18 @@ export class EnemySystem {
 
       const weak = enemy.type.weakPoint;
       const damageDealt = weakPointHit ? damage * weak.damageMultiplier : damage;
-      enemy.hp -= damageDealt;
 
       const outward = position.clone().sub(this.centre(enemy));
       if (outward.lengthSq() < 1e-6) outward.set(0, 1, 0);
       outward.normalize();
 
-      const killed = enemy.hp <= 0;
-      if (killed) {
-        this.kill(i, position, outward);
-      } else {
-        this.particles.burst(position, outward, randomCount(weakPointHit ? PARTICLES.weakPointHitCount : PARTICLES.normalHitCount));
+      const killed = this.applyDamage(i, damageDealt, position, outward, weaponId);
+      if (!killed) {
+        this.particles.burst(
+          position,
+          outward,
+          randomCount(weakPointHit ? PARTICLES.weakPointHitCount : PARTICLES.normalHitCount),
+        );
         // Body hits spit less, so they only sometimes reach a surface.
         if (weakPointHit || Math.random() < 0.4) this.decals.splatter(position, 1);
       }
@@ -126,6 +132,60 @@ export class EnemySystem {
     }
 
     return null;
+  }
+
+  /**
+   * Area damage from an expanding blast — the tuba's wave and the guitar's
+   * sequenced bursts. `alreadyHit` is the blast's own record, so a wave front
+   * that keeps growing can't hit the same enemy twice.
+   */
+  damageSphere(
+    centre: THREE.Vector3,
+    radiusMeters: number,
+    damageAt: DamageAtDistance,
+    alreadyHit: Set<string>,
+    weaponId: string,
+  ): void {
+    for (let i = this.enemies.length - 1; i >= 0; i -= 1) {
+      const enemy = this.enemies[i]!;
+      if (alreadyHit.has(enemy.id)) continue;
+
+      const enemyCentre = this.centre(enemy);
+      const distance = enemyCentre.distanceTo(centre) - enemy.type.radiusMeters;
+      if (distance > radiusMeters) continue;
+
+      alreadyHit.add(enemy.id);
+
+      const damage = damageAt(Math.max(0, distance));
+      if (damage <= 0) continue;
+
+      const outward = enemyCentre.clone().sub(centre);
+      if (outward.lengthSq() < 1e-6) outward.set(0, 1, 0);
+      outward.normalize();
+
+      const killed = this.applyDamage(i, damage, enemyCentre, outward, weaponId);
+      if (!killed) {
+        this.particles.burst(enemyCentre, outward, randomCount(PARTICLES.normalHitCount));
+        this.decals.splatter(enemyCentre, 1);
+      }
+    }
+  }
+
+  /** Returns true when the hit was fatal. */
+  private applyDamage(
+    index: number,
+    damage: number,
+    impact: THREE.Vector3,
+    outward: THREE.Vector3,
+    weaponId: string,
+  ): boolean {
+    const enemy = this.enemies[index]!;
+    enemy.hp -= damage;
+
+    if (enemy.hp > 0) return false;
+
+    this.kill(index, damage, impact, outward, weaponId);
+    return true;
   }
 
   private add(id: string, type: EnemyType, cellX: number, cellY: number): void {
@@ -148,30 +208,71 @@ export class EnemySystem {
     this.enemies.push({ id, type, position, hp: type.hp, sprite });
   }
 
-  private kill(index: number, impact: THREE.Vector3, outward: THREE.Vector3): void {
+  /** Death, dressed by the killing weapon and the overkill tier (plans.md §10). */
+  private kill(
+    index: number,
+    killingBlowDamage: number,
+    impact: THREE.Vector3,
+    outward: THREE.Vector3,
+    weaponId: string,
+  ): void {
     const enemy = this.enemies[index]!;
     this.enemies.splice(index, 1);
 
     this.group.remove(enemy.sprite);
     enemy.sprite.material.dispose();
 
-    // Generic death for now: weapon-specific presets and overkill tiers are Phase 3.
-    this.particles.burst(this.centre(enemy), outward, randomCount(PARTICLES.weakPointHitCount));
-    this.particles.burst(this.centre(enemy), new THREE.Vector3(0, 1, 0), 24);
-    this.decals.splatter(impact, 3);
+    const tier = getOverkillTier(killingBlowDamage, enemy.type.hp);
+    const preset = deathPreset(weaponId, tier);
+    const centre = this.centre(enemy);
 
-    this.addCorpse(enemy);
+    const count = Math.round(randomCount(PARTICLES.weakPointHitCount) * preset.burstScale);
+    this.burstFor(preset.pattern, centre, outward, count);
+
+    if (preset.emberCount > 0) {
+      // Embers drift rather than spray: straight up, tightly grouped.
+      this.particles.burst(centre, new THREE.Vector3(0, 1, 0), preset.emberCount, 0.25);
+    }
+
+    for (let ring = 0; ring < preset.ringCount; ring += 1) {
+      // Staggered sizes stand in for the guitar's three timed bursts.
+      const scale = 1 + ring * 0.45;
+      this.effects.ring(centre, preset.ringRadiusMeters * scale, preset.ringColor, 0.22 + ring * 0.12);
+    }
+
+    if (preset.shake > 0) this.effects.shake(preset.shake);
+
+    this.decals.splatter(impact, 3 + preset.extraDecals);
+    this.addCorpse(enemy, preset);
   }
 
-  private addCorpse(enemy: Enemy): void {
+  private burstFor(pattern: BurstPattern, centre: THREE.Vector3, outward: THREE.Vector3, count: number): void {
+    if (pattern === 'up') {
+      this.particles.burst(centre, new THREE.Vector3(0, 1, 0), count, 0.3);
+      return;
+    }
+
+    if (pattern === 'horizontal') {
+      const flat = new THREE.Vector3(outward.x, 0, outward.z);
+      if (flat.lengthSq() < 1e-6) flat.set(1, 0, 0);
+      this.particles.burst(centre, flat.normalize(), count, 0.35);
+      return;
+    }
+
+    // Radial: no bias at all, so directions come out evenly spread.
+    this.particles.burst(centre, new THREE.Vector3(), count, 1);
+  }
+
+  private addCorpse(enemy: Enemy, preset: DeathPreset): void {
     let texture = this.corpseTextures.get(enemy.type.label);
     if (!texture) {
       texture = corpseTexture(enemy.type.bodyColor);
       this.corpseTextures.set(enemy.type.label, texture);
     }
 
-    const height = enemy.type.heightMeters * 0.35;
+    const height = enemy.type.heightMeters * 0.35 * preset.corpseFlatten;
     const corpse = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
+    corpse.material.color.setHex(preset.corpseTint);
     corpse.scale.set(enemy.type.radiusMeters * 2.2, height, 1);
     corpse.position.set(enemy.position.x, height / 2, enemy.position.z);
 

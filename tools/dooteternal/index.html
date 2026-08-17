@@ -20,8 +20,38 @@
     bottom: 12px;
     margin: 0;
     white-space: pre;
-    text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+    color: #7d6a3a;
     pointer-events: none;
+  }
+  #status {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    pointer-events: none;
+  }
+  #breath-track {
+    width: 260px;
+    height: 15px;
+    border: 1px solid #6d5a24;
+    background: rgba(20, 12, 4, 0.65);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+  }
+  #breath-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #b8791a, #ffd700);
+    transition: width 60ms linear;
+  }
+  #status.recharging #breath-fill { background: linear-gradient(90deg, #ffd700, #fff4c0); }
+  #status.starved #breath-fill { background: linear-gradient(90deg, #7a2a2a, #c4442c); }
+  #weapon-name {
+    min-width: 130px;
+    letter-spacing: 0.14em;
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
   }
   #lock-hint {
     position: fixed;
@@ -50,15 +80,19 @@
     pointer-events: none;
   }
 </style>
-  <script type="module" crossorigin src="/tools/dooteternal/build/index-DzYk4jTC.js"></script>
+  <script type="module" crossorigin src="/tools/dooteternal/build/index-DuuZgBkZ.js"></script>
 </head>
 <body>
 <canvas id="view"></canvas>
 <div id="crosshair"></div>
+<div id="status">
+  <div id="breath-track"><div id="breath-fill"></div></div>
+  <div id="weapon-name">TRUMPET</div>
+</div>
 <pre id="hud"></pre>
 <div id="lock-hint">
   <strong>CLICK TO PLAY</strong>
-  <span>WASD move &middot; mouse look &middot; click fire &middot; R breath &middot; ESC release</span>
+  <span>WASD move &middot; mouse look &middot; click fire &middot; 1-4 / wheel weapon &middot; R breath &middot; ESC release</span>
 </div>
 </body>
 </html>
