@@ -29,7 +29,11 @@
   ],
   "doors": [],
   "keys": [],
-  "enemies": [],
+  "enemies": [
+    { "type": "hell_tambourine", "x": 5, "y": 2 },
+    { "type": "hell_tambourine", "x": 10, "y": 5 },
+    { "type": "hell_tambourine", "x": 4, "y": 9 }
+  ],
   "exit": {
     "x": 13,
     "y": 10

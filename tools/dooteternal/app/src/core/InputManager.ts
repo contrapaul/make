@@ -19,21 +19,38 @@ export class InputManager {
   private readonly pressed = new Set<string>();
   private pendingYaw = 0;
   private pendingPitch = 0;
+  private fireHeld = false;
+  private firePressedEdge = false;
 
   constructor(private readonly canvas: HTMLCanvasElement) {
     window.addEventListener('keydown', (event) => this.pressed.add(event.code));
     window.addEventListener('keyup', (event) => this.pressed.delete(event.code));
 
     // Losing focus mid-stride would otherwise leave the key stuck down.
-    window.addEventListener('blur', () => this.pressed.clear());
+    window.addEventListener('blur', () => {
+      this.pressed.clear();
+      this.fireHeld = false;
+    });
 
     canvas.addEventListener('click', () => this.requestLock());
     canvas.addEventListener('mousemove', (event) => this.accumulateLook(event));
+
+    canvas.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return;
+      this.fireHeld = true;
+      this.firePressedEdge = true;
+    });
+
+    window.addEventListener('mouseup', (event) => {
+      if (event.button === 0) this.fireHeld = false;
+    });
 
     document.addEventListener('pointerlockchange', () => {
       this.pendingYaw = 0;
       this.pendingPitch = 0;
       this.pressed.clear();
+      this.fireHeld = false;
+      this.firePressedEdge = false;
       this.onLockChange?.(this.locked);
     });
   }
@@ -44,6 +61,18 @@ export class InputManager {
 
   isDown(code: string): boolean {
     return this.pressed.has(code);
+  }
+
+  /** Fire button held — what the breath system means by "firing". */
+  get firing(): boolean {
+    return this.fireHeld;
+  }
+
+  /** True once per click, so a non-continuous weapon fires one shot per press. */
+  consumeFirePressed(): boolean {
+    const pressed = this.firePressedEdge;
+    this.firePressedEdge = false;
+    return pressed;
   }
 
   /** Returns the look movement since the last call and resets the accumulator. */

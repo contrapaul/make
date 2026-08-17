@@ -37,15 +37,28 @@
   #lock-hint[hidden] { display: none; }
   #lock-hint strong { font-size: 18px; letter-spacing: 0.16em; }
   #lock-hint span { color: #b89a4e; }
+  #crosshair {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 3px;
+    height: 3px;
+    margin: -1.5px 0 0 -1.5px;
+    border-radius: 50%;
+    background: #ffd700;
+    box-shadow: 0 0 6px rgba(255, 190, 40, 0.9);
+    pointer-events: none;
+  }
 </style>
-  <script type="module" crossorigin src="/tools/dooteternal/build/index-Ds-ac0OT.js"></script>
+  <script type="module" crossorigin src="/tools/dooteternal/build/index-DzYk4jTC.js"></script>
 </head>
 <body>
 <canvas id="view"></canvas>
+<div id="crosshair"></div>
 <pre id="hud"></pre>
 <div id="lock-hint">
   <strong>CLICK TO PLAY</strong>
-  <span>WASD to move &middot; mouse to look &middot; ESC to release</span>
+  <span>WASD move &middot; mouse look &middot; click fire &middot; R breath &middot; ESC release</span>
 </div>
 </body>
 </html>

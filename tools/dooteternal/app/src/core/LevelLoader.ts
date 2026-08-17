@@ -34,7 +34,7 @@ export function buildLevel(level: LevelData): THREE.Group {
   group.name = level.id;
 
   const { width, height } = level;
-  const wallHeight = WORLD.wallHeightMetres;
+  const wallHeight = WORLD.wallHeightMeters;
 
   group.add(buildFloor(level, width, height));
   group.add(buildCeiling(level, width, height, wallHeight));

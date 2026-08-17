@@ -105,6 +105,128 @@ function ceilingTexture(): THREE.CanvasTexture {
 }
 
 /**
+ * Enemy stand-in (plans.md §21): labelled body with the weak point drawn where
+ * the data says it is. weakPointFromTop is the weak point's height expressed as
+ * a fraction down the sprite, so art and hitbox cannot drift apart.
+ */
+export function enemyTexture(label: string, bodyColor: string, weakPointFromTop: number): THREE.CanvasTexture {
+  return canvasTexture(128, (ctx) => {
+    ctx.clearRect(0, 0, 128, 128);
+
+    ctx.fillStyle = bodyColor;
+    ctx.strokeStyle = '#2a0d16';
+    ctx.lineWidth = 3;
+    roundedRect(ctx, 24, 10, 80, 108, 16);
+    ctx.fill();
+    ctx.stroke();
+
+    // Radius stays small enough that a weak point near the top still fits.
+    const weakY = 128 * weakPointFromTop;
+    const weakRadius = 14;
+    const glow = ctx.createRadialGradient(64, weakY, 0, 64, weakY, weakRadius);
+    glow.addColorStop(0, 'rgba(255, 244, 190, 1)');
+    glow.addColorStop(0.45, 'rgba(255, 205, 60, 0.95)');
+    glow.addColorStop(1, 'rgba(255, 160, 20, 0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(64, weakY, weakRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#ffe9a8';
+    ctx.font = 'bold 11px ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, 64, 112);
+  });
+}
+
+/** Corpse stand-in: the body darkened, weak point spent, no label. */
+export function corpseTexture(bodyColor: string): THREE.CanvasTexture {
+  return canvasTexture(128, (ctx) => {
+    ctx.clearRect(0, 0, 128, 128);
+
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = bodyColor;
+    ctx.strokeStyle = '#1b0810';
+    ctx.lineWidth = 3;
+    roundedRect(ctx, 10, 62, 108, 54, 18);
+    ctx.fill();
+    ctx.stroke();
+
+    // Gold residue pooling where it fell.
+    ctx.globalAlpha = 0.55;
+    ctx.fillStyle = '#c08a20';
+    for (let i = 0; i < 6; i += 1) {
+      const x = 24 + Math.random() * 80;
+      const y = 96 + Math.random() * 18;
+      ctx.beginPath();
+      ctx.ellipse(x, y, 4 + Math.random() * 9, 2 + Math.random() * 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+/** Trumpet projectile: a gold music note (plans.md §11.3). */
+export function noteTexture(): THREE.CanvasTexture {
+  return canvasTexture(64, (ctx) => {
+    ctx.clearRect(0, 0, 64, 64);
+
+    const glow = ctx.createRadialGradient(32, 32, 0, 32, 32, 30);
+    glow.addColorStop(0, 'rgba(255, 240, 170, 0.85)');
+    glow.addColorStop(1, 'rgba(255, 170, 30, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, 64, 64);
+
+    ctx.fillStyle = '#fffbe6';
+    ctx.beginPath();
+    ctx.ellipse(26, 42, 13, 10, -0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillRect(36, 14, 5, 30);
+    ctx.beginPath();
+    ctx.moveTo(41, 14);
+    ctx.quadraticCurveTo(54, 18, 50, 30);
+    ctx.quadraticCurveTo(50, 21, 41, 22);
+    ctx.fill();
+  });
+}
+
+/** One of several gold splats, per plans.md §9 — overlapping blobs. */
+export function splatTexture(): THREE.CanvasTexture {
+  return canvasTexture(256, (ctx) => {
+    ctx.clearRect(0, 0, 256, 256);
+
+    const blobs = 8 + Math.floor(Math.random() * 13);
+    for (let i = 0; i < blobs; i += 1) {
+      const angle = Math.random() * Math.PI * 2;
+      const spread = Math.random() ** 0.7 * 78;
+      const x = 128 + Math.cos(angle) * spread;
+      const y = 128 + Math.sin(angle) * spread;
+      const radius = 14 + Math.random() * 44;
+
+      const blob = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      blob.addColorStop(0, 'rgba(255, 214, 90, 0.95)');
+      blob.addColorStop(0.6, 'rgba(226, 164, 24, 0.7)');
+      blob.addColorStop(1, 'rgba(168, 108, 0, 0)');
+
+      ctx.fillStyle = blob;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): void {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/**
  * Texture IDs levels refer to, standing in for the textures.json map in
  * plans.md §13. Levels name an ID, never a path, so swapping in real files later
  * is a change here and nowhere else.

@@ -1,0 +1,21 @@
+{
+  "trumpet": {
+    "id": "trumpet",
+    "name": "Trumpet",
+    "breathCostPerShot": 4,
+    "shotsPerClick": 1,
+    "fireDelaySeconds": 0.3,
+    "continuousFire": false,
+    "spreadBaseRadians": 0.02,
+    "projectileType": "trumpet_note",
+    "projectileSpeedMetersPerSecond": 28,
+    "damage": 9,
+    "rangeMeters": 35,
+    "audioMode": "random",
+    "audioFiles": [
+      "audio/sfx/trumpet_fire_01.wav",
+      "audio/sfx/trumpet_fire_02.wav",
+      "audio/sfx/trumpet_fire_03.wav"
+    ]
+  }
+}
