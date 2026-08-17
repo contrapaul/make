@@ -28,6 +28,21 @@ npm run build
 npm run check
 ```
 
+```bash
+npm run checks
+```
+
+`check` is types, `checks` is behaviour: the gameplay modules are bundled and
+asserted in Node, one section per phase, exiting non-zero on any failure. It
+exists because the things most likely to be wrong here are numbers — breath
+timing, damage falloff, spread growth — and neither the typechecker nor a
+screenshot can see those. It has already caught a stalled breath refill and an
+unreachable weak point.
+
+Modules that build canvas textures on construction (`EnemySystem`,
+`PlaceholderAssets`) can't be loaded outside a browser, so anything depending on
+them is verified in the browser instead, via the dev-only `window.doot` handle.
+
 ## Layout
 
 ```text
@@ -39,6 +54,7 @@ tools/dooteternal/
     src/              main.ts, core/, systems/, data/
     levels/           level_01.json, level_02.json
     assets/audio/     hand-supplied audio — see assets/audio/MANIFEST.md
+  checks/             npm run checks — one file per phase
   vite.config.ts
 ```
 
