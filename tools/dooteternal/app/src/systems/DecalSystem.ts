@@ -15,7 +15,7 @@ export class DecalSystem {
   readonly group = new THREE.Group();
 
   private readonly pool: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshBasicMaterial>[] = [];
-  private readonly textures: THREE.CanvasTexture[] = [];
+  private readonly textures: THREE.Texture[] = [];
   private readonly raycaster = new THREE.Raycaster();
   private nextSlot = 0;
   private used = 0;
@@ -24,7 +24,7 @@ export class DecalSystem {
     this.raycaster.far = DECALS.maxDistanceMeters;
 
     for (let i = 0; i < DECALS.textureCount; i += 1) {
-      this.textures.push(splatTexture());
+      this.textures.push(splatTexture(i));
     }
   }
 

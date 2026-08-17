@@ -96,4 +96,10 @@ the single place that resolves them. Level and enemy/weapon JSON is imported as
 ES modules instead, so the bundler handles it and no path logic is involved.
 
 Textures, sprites, particles and decals are generated procedurally at boot
-(plans.md §21) — there are no image files to manage.
+(plans.md §21), so the game is complete with no image files at all. Supplying one
+is opt-in per asset: drop a PNG at its path in
+[app/assets/IMAGES.md](app/assets/IMAGES.md) and it takes over on the next
+reload, while everything you haven't drawn keeps its stand-in.
+
+`npm run checks` holds that checklist against the code, so a mistyped path fails
+a check instead of looking like art you simply haven't made yet.

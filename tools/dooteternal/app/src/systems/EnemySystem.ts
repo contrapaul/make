@@ -64,6 +64,8 @@ const ENEMY_TYPES = enemyTypesJson as unknown as Record<string, EnemyType>;
 
 interface Enemy {
   id: string;
+  /** Data-file key, which is also the sprite sheet's filename. */
+  typeId: string;
   type: EnemyType;
   /** Floor position; the sprite is centred at heightMeters / 2 above it. */
   position: THREE.Vector3;
@@ -86,8 +88,8 @@ export class EnemySystem {
   readonly group = new THREE.Group();
 
   private readonly enemies: Enemy[] = [];
-  private readonly aliveTextures = new Map<string, THREE.CanvasTexture>();
-  private readonly corpseTextures = new Map<string, THREE.CanvasTexture>();
+  private readonly aliveTextures = new Map<string, THREE.Texture>();
+  private readonly corpseTextures = new Map<string, THREE.Texture>();
   private readonly killed: string[] = [];
   private corpses = 0;
 
@@ -119,7 +121,7 @@ export class EnemySystem {
         return;
       }
 
-      this.add(id, type, spawn.x, spawn.y);
+      this.add(id, spawn.type, type, spawn.x, spawn.y);
     });
   }
 
@@ -393,16 +395,16 @@ export class EnemySystem {
     enemy.sprite.material.color.setHex(0xffffff);
   }
 
-  private add(id: string, type: EnemyType, cellX: number, cellY: number): void {
+  private add(id: string, typeId: string, type: EnemyType, cellX: number, cellY: number): void {
     const centre = cellCentre(cellX, cellY);
     const position = new THREE.Vector3(centre.x, 0, centre.z);
 
-    let texture = this.aliveTextures.get(type.label);
+    let texture = this.aliveTextures.get(typeId);
     if (!texture) {
       // Draw the weak point where the data says it is, measured down from the top.
       const fromTop = 1 - (type.heightMeters / 2 + type.weakPoint.offset[1]) / type.heightMeters;
-      texture = enemyTexture(type.label, type.bodyColor, fromTop);
-      this.aliveTextures.set(type.label, texture);
+      texture = enemyTexture(typeId, type.label, type.bodyColor, fromTop);
+      this.aliveTextures.set(typeId, texture);
     }
 
     const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true }));
@@ -412,6 +414,7 @@ export class EnemySystem {
     this.group.add(sprite);
     this.enemies.push({
       id,
+      typeId,
       type,
       position,
       hp: type.hp,
@@ -481,10 +484,10 @@ export class EnemySystem {
   }
 
   private addCorpse(enemy: Enemy, preset: DeathPreset): void {
-    let texture = this.corpseTextures.get(enemy.type.label);
+    let texture = this.corpseTextures.get(enemy.typeId);
     if (!texture) {
-      texture = corpseTexture(enemy.type.bodyColor);
-      this.corpseTextures.set(enemy.type.label, texture);
+      texture = corpseTexture(enemy.typeId, enemy.type.bodyColor);
+      this.corpseTextures.set(enemy.typeId, texture);
     }
 
     const height = enemy.type.heightMeters * 0.35 * preset.corpseFlatten;

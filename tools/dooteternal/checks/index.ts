@@ -8,6 +8,7 @@ import './phase3';
 import './phase4';
 import './phase5';
 import './phase6';
+import './images';
 import { report } from './harness';
 
 report();

@@ -13,7 +13,7 @@ const RECOIL_SECONDS = 0.16;
 export class ViewModel {
   readonly sprite: THREE.Sprite;
 
-  private readonly textures = new Map<string, THREE.CanvasTexture>();
+  private readonly textures = new Map<string, THREE.Texture>();
   /** Far enough into the corner to keep the crosshair area clear (§11.2). */
   private readonly restPosition = new THREE.Vector3(0.54, -0.52, -1);
   private elapsed = 0;

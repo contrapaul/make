@@ -1,12 +1,15 @@
 import * as THREE from 'three';
+import { image, sheetFrame } from './ImageAssets';
+import { enemySheetPath, enemySheetRow } from './ImageManifest';
 
 /**
- * Procedurally generated stand-in art, per plans.md §21. The tech demo ships no
- * image files: every texture here is drawn to a canvas at boot. Real PNGs can
- * replace these one at a time without touching call sites.
+ * Art for everything on screen. Each function returns a real image when one has
+ * been supplied at the matching path in IMAGES.md, and otherwise draws a
+ * procedural stand-in per plans.md §21 — so the game looks complete with no
+ * image files at all, and improves one file at a time as art arrives.
  *
- * Patterns are drawn to tile seamlessly — edge lines are drawn on one side only,
- * since the neighbouring copy supplies the other.
+ * Drawn patterns tile seamlessly: edge lines go on one side only, since the
+ * neighbouring copy supplies the other.
  */
 
 const TILE_SIZE = 256;
@@ -24,7 +27,11 @@ export function canvasTexture(size: number, draw: (ctx: CanvasRenderingContext2D
 }
 
 /** Radial gold particle — the hit/blood particle from plans.md §9. */
-export function goldParticleTexture(): THREE.CanvasTexture {
+export function goldParticleTexture(): THREE.Texture {
+  return image('textures/particles/particle_gold.png') ?? drawGoldParticle();
+}
+
+function drawGoldParticle(): THREE.CanvasTexture {
   return canvasTexture(64, (ctx) => {
     const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     gradient.addColorStop(0, 'rgba(255, 230, 120, 1)');
@@ -109,7 +116,24 @@ function ceilingTexture(): THREE.CanvasTexture {
  * the data says it is. weakPointFromTop is the weak point's height expressed as
  * a fraction down the sprite, so art and hitbox cannot drift apart.
  */
-export function enemyTexture(label: string, bodyColor: string, weakPointFromTop: number): THREE.CanvasTexture {
+export function enemyTexture(
+  typeId: string,
+  label: string,
+  bodyColor: string,
+  weakPointFromTop: number,
+): THREE.Texture {
+  // A supplied sheet contributes its idle frame; animation is a separate job.
+  const sheet = sheetFrame(enemySheetPath(typeId), enemySheetRow('idle'));
+  return sheet ?? drawEnemy(label, bodyColor, weakPointFromTop);
+}
+
+/** Corpses come from the sheet's own corpse row when a sheet is supplied. */
+export function corpseTexture(typeId: string, bodyColor: string): THREE.Texture {
+  const sheet = sheetFrame(enemySheetPath(typeId), enemySheetRow('corpse'));
+  return sheet ?? drawCorpse(bodyColor);
+}
+
+function drawEnemy(label: string, bodyColor: string, weakPointFromTop: number): THREE.CanvasTexture {
   return canvasTexture(128, (ctx) => {
     ctx.clearRect(0, 0, 128, 128);
 
@@ -140,7 +164,7 @@ export function enemyTexture(label: string, bodyColor: string, weakPointFromTop:
 }
 
 /** Corpse stand-in: the body darkened, weak point spent, no label. */
-export function corpseTexture(bodyColor: string): THREE.CanvasTexture {
+function drawCorpse(bodyColor: string): THREE.CanvasTexture {
   return canvasTexture(128, (ctx) => {
     ctx.clearRect(0, 0, 128, 128);
 
@@ -166,7 +190,11 @@ export function corpseTexture(bodyColor: string): THREE.CanvasTexture {
 }
 
 /** Trumpet projectile: a gold music note (plans.md §11.3). */
-export function noteTexture(): THREE.CanvasTexture {
+export function noteTexture(): THREE.Texture {
+  return image('sprites/projectiles/proj_note.png') ?? drawNote();
+}
+
+function drawNote(): THREE.CanvasTexture {
   return canvasTexture(64, (ctx) => {
     ctx.clearRect(0, 0, 64, 64);
 
@@ -190,8 +218,16 @@ export function noteTexture(): THREE.CanvasTexture {
   });
 }
 
-/** One of several gold splats, per plans.md §9 — overlapping blobs. */
-export function splatTexture(): THREE.CanvasTexture {
+/**
+ * One of the gold splats, per plans.md §9. `variant` picks which supplied file to
+ * use; drawn splats are random each time, so variety comes free either way.
+ */
+export function splatTexture(variant: number): THREE.Texture {
+  const supplied = image(`textures/decals/gold_splat_0${(variant % 4) + 1}.png`);
+  return supplied ?? drawSplat();
+}
+
+function drawSplat(): THREE.CanvasTexture {
   return canvasTexture(256, (ctx) => {
     ctx.clearRect(0, 0, 256, 256);
 
@@ -228,7 +264,11 @@ export function keyColor(color: string): string {
 }
 
 /** Music-note key, drawn in its own colour with a glow behind it. */
-export function keyTexture(color: string): THREE.CanvasTexture {
+export function keyTexture(color: string): THREE.Texture {
+  return image(`sprites/keys/key_${color}_note.png`) ?? drawKey(color);
+}
+
+function drawKey(color: string): THREE.CanvasTexture {
   const hex = keyColor(color);
 
   return canvasTexture(128, (ctx) => {
@@ -255,7 +295,11 @@ export function keyTexture(color: string): THREE.CanvasTexture {
 }
 
 /** Locked door panel: dark metal with a note-shaped lock in the key's colour. */
-export function doorTexture(color: string): THREE.CanvasTexture {
+export function doorTexture(color: string): THREE.Texture {
+  return image(`textures/doors/door_${color}_front.png`) ?? drawDoor(color);
+}
+
+function drawDoor(color: string): THREE.CanvasTexture {
   const hex = keyColor(color);
 
   return canvasTexture(256, (ctx) => {
@@ -285,7 +329,11 @@ export function doorTexture(color: string): THREE.CanvasTexture {
 }
 
 /** Exit portal: a bright churn of gold that reads as a way out. */
-export function portalTexture(): THREE.CanvasTexture {
+export function portalTexture(): THREE.Texture {
+  return image('sprites/exit_portal.png') ?? drawPortal();
+}
+
+function drawPortal(): THREE.CanvasTexture {
   return canvasTexture(256, (ctx) => {
     ctx.clearRect(0, 0, 256, 256);
 
@@ -311,7 +359,11 @@ export function portalTexture(): THREE.CanvasTexture {
  * First-person weapon shapes, plans.md §21: simple instruments angled in from
  * the lower right, muzzle pointing toward the centre of the screen.
  */
-export function viewModelTexture(weaponId: string): THREE.CanvasTexture {
+export function viewModelTexture(weaponId: string): THREE.Texture {
+  return image(`sprites/weapons/${weaponId}_viewmodel.png`) ?? drawViewModel(weaponId);
+}
+
+function drawViewModel(weaponId: string): THREE.CanvasTexture {
   return canvasTexture(256, (ctx) => {
     ctx.clearRect(0, 0, 256, 256);
     ctx.lineWidth = 5;
@@ -434,17 +486,20 @@ function roundedRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: num
  * plans.md §13. Levels name an ID, never a path, so swapping in real files later
  * is a change here and nowhere else.
  */
-const TEXTURE_FACTORIES: Record<string, () => THREE.CanvasTexture> = {
-  wall_hell: wallTexture,
-  floor_music: floorTexture,
-  ceil_void: ceilingTexture,
+const TEXTURE_FACTORIES: Record<string, { file: string; draw: () => THREE.CanvasTexture }> = {
+  wall_hell: { file: 'textures/walls/hell_wall_01.png', draw: wallTexture },
+  floor_music: { file: 'textures/floors/music_floor_01.png', draw: floorTexture },
+  ceil_void: { file: 'textures/ceilings/void_ceiling_01.png', draw: ceilingTexture },
 };
 
-export function placeholderTexture(id: string): THREE.CanvasTexture {
-  const factory = TEXTURE_FACTORIES[id];
-  if (!factory) {
+export function placeholderTexture(id: string): THREE.Texture {
+  const entry = TEXTURE_FACTORIES[id];
+  if (!entry) {
     throw new Error(`Unknown texture id "${id}". Known ids: ${Object.keys(TEXTURE_FACTORIES).join(', ')}`);
   }
 
-  return factory();
+  // A supplied file is cached and shared, so hand back a clone: callers set
+  // their own repeat for the surface they are covering.
+  const supplied = image(entry.file);
+  return supplied ? supplied.clone() : entry.draw();
 }

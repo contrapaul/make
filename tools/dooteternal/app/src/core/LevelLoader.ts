@@ -103,7 +103,7 @@ function buildWalls(level: LevelData, wallHeight: number): THREE.InstancedMesh {
   return walls;
 }
 
-function tiled(texture: THREE.CanvasTexture, repeatX: number, repeatY: number): THREE.CanvasTexture {
+function tiled(texture: THREE.Texture, repeatX: number, repeatY: number): THREE.Texture {
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set(repeatX, repeatY);

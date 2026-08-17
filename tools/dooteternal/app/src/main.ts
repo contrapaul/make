@@ -5,6 +5,7 @@ import { CameraRig } from './core/CameraRig';
 import { CollisionSystem } from './core/CollisionSystem';
 import { GameLoop } from './core/GameLoop';
 import { InputManager } from './core/InputManager';
+import { preloadImages } from './core/ImageAssets';
 import { buildLevel, type LevelData } from './core/LevelLoader';
 import { keyColor } from './core/PlaceholderAssets';
 import { PlayerController } from './core/PlayerController';
@@ -404,6 +405,11 @@ const forced = { fire: false };
 resize();
 window.addEventListener('resize', resize);
 
+// Any supplied art is probed before the first level builds, so textures are
+// picked up on the first frame rather than popping in afterwards. Missing files
+// are the normal case and leave the procedural stand-ins in place.
+const art = await preloadImages();
+
 // A save mid-level resumes there; otherwise start on the map.
 if (save.data.levelState && LEVELS[save.data.levelState.levelId]) {
   enterLevel(save.data.levelState.levelId);
@@ -527,6 +533,7 @@ if (import.meta.env.DEV) {
       resume,
       save,
       audio,
+      art,
       get mode() {
         return mode;
       },
