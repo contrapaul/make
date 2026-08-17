@@ -33,19 +33,21 @@
     gap: 14px;
     pointer-events: none;
   }
-  #breath-track {
-    width: 260px;
+  .track {
+    width: 200px;
     height: 15px;
     border: 1px solid #6d5a24;
     background: rgba(20, 12, 4, 0.65);
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   }
-  #breath-fill {
+  #hp-track { width: 150px; border-color: #7a3030; }
+  #breath-fill, #hp-fill {
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, #b8791a, #ffd700);
     transition: width 60ms linear;
   }
+  #breath-fill { background: linear-gradient(90deg, #b8791a, #ffd700); }
+  #hp-fill { background: linear-gradient(90deg, #7a1f1f, #e04a3a); }
   #status.recharging #breath-fill { background: linear-gradient(90deg, #ffd700, #fff4c0); }
   #status.starved #breath-fill { background: linear-gradient(90deg, #7a2a2a, #c4442c); }
   #weapon-name {
@@ -53,6 +55,34 @@
     letter-spacing: 0.14em;
     text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
   }
+  #keys { display: flex; gap: 6px; }
+  #keys .key {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+    background: currentColor;
+  }
+  #damage-flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 55%, rgba(180, 20, 20, 0) 35%, rgba(190, 20, 20, 0.75) 100%);
+    opacity: 0;
+    transition: opacity 260ms ease-out;
+    pointer-events: none;
+  }
+  #banner {
+    position: fixed;
+    left: 50%;
+    top: 42%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    letter-spacing: 0.18em;
+    font-size: 20px;
+    text-shadow: 0 0 14px rgba(255, 170, 0, 0.6);
+    pointer-events: none;
+  }
+  #banner[hidden] { display: none; }
   #lock-hint {
     position: fixed;
     inset: 0;
@@ -84,9 +114,13 @@
 <body>
 <canvas id="view"></canvas>
 <div id="crosshair"></div>
+<div id="damage-flash"></div>
+<div id="banner" hidden></div>
 <div id="status">
-  <div id="breath-track"><div id="breath-fill"></div></div>
+  <div class="track" id="hp-track"><div id="hp-fill"></div></div>
+  <div class="track" id="breath-track"><div id="breath-fill"></div></div>
   <div id="weapon-name">TRUMPET</div>
+  <div id="keys"></div>
 </div>
 <pre id="hud"></pre>
 <div id="lock-hint">

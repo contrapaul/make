@@ -216,6 +216,97 @@ export function splatTexture(): THREE.CanvasTexture {
   });
 }
 
+/** Key colours, shared by keys and the doors they open (plans.md §11.5). */
+export const KEY_COLORS: Record<string, string> = {
+  red: '#ff4a4a',
+  blue: '#4aa8ff',
+  green: '#4aff7a',
+};
+
+export function keyColor(color: string): string {
+  return KEY_COLORS[color] ?? '#ffffff';
+}
+
+/** Music-note key, drawn in its own colour with a glow behind it. */
+export function keyTexture(color: string): THREE.CanvasTexture {
+  const hex = keyColor(color);
+
+  return canvasTexture(128, (ctx) => {
+    ctx.clearRect(0, 0, 128, 128);
+
+    const glow = ctx.createRadialGradient(64, 64, 0, 64, 64, 62);
+    glow.addColorStop(0, `${hex}cc`);
+    glow.addColorStop(1, `${hex}00`);
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, 128, 128);
+
+    ctx.fillStyle = hex;
+    ctx.beginPath();
+    ctx.ellipse(48, 88, 22, 17, -0.35, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillRect(65, 26, 8, 62);
+    ctx.beginPath();
+    ctx.moveTo(73, 26);
+    ctx.quadraticCurveTo(100, 33, 92, 56);
+    ctx.quadraticCurveTo(92, 39, 73, 41);
+    ctx.fill();
+  });
+}
+
+/** Locked door panel: dark metal with a note-shaped lock in the key's colour. */
+export function doorTexture(color: string): THREE.CanvasTexture {
+  const hex = keyColor(color);
+
+  return canvasTexture(256, (ctx) => {
+    ctx.fillStyle = '#241820';
+    ctx.fillRect(0, 0, 256, 256);
+
+    ctx.strokeStyle = '#4a3040';
+    ctx.lineWidth = 6;
+    for (let band = 1; band < 4; band += 1) {
+      ctx.beginPath();
+      ctx.moveTo(0, band * 64);
+      ctx.lineTo(256, band * 64);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = hex;
+    ctx.lineWidth = 8;
+    ctx.strokeRect(28, 28, 200, 200);
+
+    // Note-shaped lock, so colour is not the only cue.
+    ctx.fillStyle = hex;
+    ctx.beginPath();
+    ctx.ellipse(104, 168, 30, 23, -0.35, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(128, 78, 11, 90);
+  });
+}
+
+/** Exit portal: a bright churn of gold that reads as a way out. */
+export function portalTexture(): THREE.CanvasTexture {
+  return canvasTexture(256, (ctx) => {
+    ctx.clearRect(0, 0, 256, 256);
+
+    const glow = ctx.createRadialGradient(128, 128, 10, 128, 128, 126);
+    glow.addColorStop(0, 'rgba(255, 255, 235, 0.95)');
+    glow.addColorStop(0.45, 'rgba(255, 206, 90, 0.7)');
+    glow.addColorStop(1, 'rgba(255, 150, 20, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, 256, 256);
+
+    ctx.strokeStyle = 'rgba(255, 244, 200, 0.8)';
+    ctx.lineWidth = 5;
+    for (let arm = 0; arm < 5; arm += 1) {
+      const angle = (arm / 5) * Math.PI * 2;
+      ctx.beginPath();
+      ctx.arc(128, 128, 52 + arm * 8, angle, angle + Math.PI * 0.7);
+      ctx.stroke();
+    }
+  });
+}
+
 /**
  * First-person weapon shapes, plans.md §21: simple instruments angled in from
  * the lower right, muzzle pointing toward the centre of the screen.

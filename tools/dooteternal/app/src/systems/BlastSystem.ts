@@ -22,9 +22,14 @@ export interface BlastSpec {
   orientation?: 'horizontal' | 'billboard';
   /** Which weapon owns the blast, so kills can pick the right death preset. */
   weaponId?: string;
+  /** Who the blast hurts. Enemy attacks aim the same machinery at the player. */
+  target?: BlastTarget;
 }
 
+export type BlastTarget = 'enemies' | 'player';
+
 export type SphereDamage = (
+  target: BlastTarget,
   centre: THREE.Vector3,
   radiusMeters: number,
   damageAt: DamageAtDistance,
@@ -42,6 +47,7 @@ interface Blast {
   orientation: 'horizontal' | 'billboard';
   alreadyHit: Set<string>;
   weaponId: string;
+  target: BlastTarget;
   mesh: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
 }
 
@@ -68,6 +74,7 @@ export class BlastSystem {
     blast.damageAt = spec.damageAt ?? null;
     blast.orientation = spec.orientation ?? 'billboard';
     blast.weaponId = spec.weaponId ?? '';
+    blast.target = spec.target ?? 'enemies';
     blast.alreadyHit.clear();
 
     blast.mesh.material.color.setHex(spec.color);
@@ -88,7 +95,7 @@ export class BlastSystem {
       const radius = blast.startRadius + (blast.maxRadius - blast.startRadius) * progress;
 
       if (blast.damageAt) {
-        this.damageSphere(blast.centre, radius, blast.damageAt, blast.alreadyHit, blast.weaponId);
+        this.damageSphere(blast.target, blast.centre, radius, blast.damageAt, blast.alreadyHit, blast.weaponId);
       }
 
       blast.mesh.scale.setScalar(radius);
@@ -130,6 +137,7 @@ export class BlastSystem {
       orientation: 'billboard',
       alreadyHit: new Set<string>(),
       weaponId: '',
+      target: 'enemies',
       mesh,
     };
   }

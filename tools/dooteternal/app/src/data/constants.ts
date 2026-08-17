@@ -5,6 +5,31 @@ export const PLAYER = {
   moveSpeed: 4.0, // meters/second
   radius: 0.35, // collision circle
   eyeHeight: 1.6,
+  /**
+   * Not in plans.md, which gives the player no health at all despite enemies
+   * dealing 3–25 damage. 100 with a restart on death, no pickups or regen.
+   */
+  maxHp: 100,
+  /** Grace period after a hit, so a swarm can't chain-stun you to death. */
+  damageImmunitySeconds: 0.4,
+};
+
+/** Enemy behaviour, plans.md §20. The spec gives no ranges for these. */
+export const ENEMY_AI = {
+  /** How far an enemy notices the player, given line of sight. */
+  detectionRangeMeters: 18,
+  /** Ranged types hold roughly this fraction of their range as spacing. */
+  preferredRangeFraction: 0.65,
+  /** Brief flinch on being hit, per the HIT_STUN state in §20. */
+  hitStunSeconds: 0.08,
+  /** Enemies stop this far short of the player rather than standing inside them. */
+  personalSpaceMeters: 0.15,
+  /**
+   * Dead band around the preferred range, so enemies don't jitter in place.
+   * It has to stay well inside a melee type's reach: if an enemy stops moving
+   * further out than it can swing, it stalls forever without ever attacking.
+   */
+  approachToleranceMeters: 0.15,
 };
 
 export const BREATH = {
@@ -43,6 +68,14 @@ export const PARTICLES = {
   speedMeters: [1.5, 5.5],
   dragPerSecond: 2.4,
   gravityMeters: 4.0,
+};
+
+/** Keys, doors and the exit portal, plans.md §14. */
+export const LEVEL_FLOW = {
+  keyPickupRangeMeters: 1.0,
+  /** How close you must be for a matching key to swing a door open. */
+  doorOpenRangeMeters: 1.6,
+  exitRangeMeters: 1.0,
 };
 
 /** Gold "blood" decals, plans.md §9. */

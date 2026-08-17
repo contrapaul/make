@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import { WORLD } from '../data/constants';
+import { PLAYER, WORLD } from '../data/constants';
 import { noteTexture } from '../core/PlaceholderAssets';
 import type { CollisionSystem } from '../core/CollisionSystem';
 import type { EnemySystem } from './EnemySystem';
 
 /**
  * Pooled projectiles (plans.md §19). Every weapon is projectile-based, so this
- * is the only path from a trigger pull to damage — nothing is hitscan.
+ * is the only path from a trigger pull to damage — nothing is hitscan. Enemy
+ * shots travel the same way, just aimed the other direction.
  *
  * Movement is substepped: a 28 m/s note covers 0.45 m per frame at 60 fps and
  * 2.8 m on a clamped 100 ms frame, either of which could step clean over a
@@ -17,6 +18,19 @@ const MAX_SUBSTEP_METERS = 0.2;
 /** Not specified in plans.md; sized to the note sprite so hits look fair. */
 const DEFAULT_RADIUS_METERS = 0.12;
 
+const PLAYER_SHOT_COLOR = 0xffffff;
+const ENEMY_SHOT_COLOR = 0xff5a4a;
+
+export type ProjectileOwner = 'player' | 'enemy';
+
+/** What an enemy shot needs to know about its target. */
+export interface PlayerTarget {
+  /** Eye position; the body is taken to run from the floor to just above it. */
+  position: THREE.Vector3;
+  radiusMeters: number;
+  damage(amount: number): boolean;
+}
+
 interface Projectile {
   position: THREE.Vector3;
   velocity: THREE.Vector3;
@@ -25,6 +39,7 @@ interface Projectile {
   lifetimeSeconds: number;
   ageSeconds: number;
   weaponId: string;
+  owner: ProjectileOwner;
   sprite: THREE.Sprite;
 }
 
@@ -37,6 +52,7 @@ export interface ProjectileSpawn {
   /** Which weapon fired it, so a kill can pick the right death preset. */
   weaponId: string;
   radiusMeters?: number;
+  owner?: ProjectileOwner;
 }
 
 export class ProjectileSystem {
@@ -50,6 +66,7 @@ export class ProjectileSystem {
   constructor(
     private readonly collision: CollisionSystem,
     private readonly enemies: EnemySystem,
+    private readonly player: PlayerTarget,
   ) {}
 
   get activeCount(): number {
@@ -66,7 +83,11 @@ export class ProjectileSystem {
     projectile.lifetimeSeconds = spawn.rangeMeters / spawn.speedMetersPerSecond;
     projectile.ageSeconds = 0;
     projectile.weaponId = spawn.weaponId;
+    projectile.owner = spawn.owner ?? 'player';
 
+    projectile.sprite.material.color.setHex(
+      projectile.owner === 'enemy' ? ENEMY_SHOT_COLOR : PLAYER_SHOT_COLOR,
+    );
     projectile.sprite.position.copy(spawn.origin);
     projectile.sprite.visible = true;
 
@@ -98,6 +119,12 @@ export class ProjectileSystem {
       projectile.position.addScaledVector(projectile.velocity, stepDt);
 
       if (this.hitsGeometry(projectile.position)) return true;
+
+      if (projectile.owner === 'enemy') {
+        if (this.hitsPlayer(projectile)) return true;
+        continue;
+      }
+
       const hit = this.enemies.tryHit(
         projectile.position,
         heading,
@@ -109,6 +136,19 @@ export class ProjectileSystem {
     }
 
     return false;
+  }
+
+  private hitsPlayer(projectile: Projectile): boolean {
+    const reach = this.player.radiusMeters + projectile.radiusMeters;
+    const dx = projectile.position.x - this.player.position.x;
+    const dz = projectile.position.z - this.player.position.z;
+
+    if (dx * dx + dz * dz > reach * reach) return false;
+    if (projectile.position.y < 0 || projectile.position.y > PLAYER.eyeHeight + 0.2) return false;
+
+    // Retire the shot either way: it struck the player, immune or not.
+    this.player.damage(projectile.damage);
+    return true;
   }
 
   private hitsGeometry(position: THREE.Vector3): boolean {
@@ -140,6 +180,7 @@ export class ProjectileSystem {
       lifetimeSeconds: 0,
       ageSeconds: 0,
       weaponId: '',
+      owner: 'player',
       sprite,
     };
   }

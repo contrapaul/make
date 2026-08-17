@@ -4,10 +4,25 @@ import { corpseTexture, enemyTexture } from '../core/PlaceholderAssets';
 import { cellCentre, type LevelData } from '../core/LevelLoader';
 import type { DecalSystem } from './DecalSystem';
 import type { ParticleSystem } from './ParticleSystem';
-import { PARTICLES } from '../data/constants';
+import { ENEMY_AI, PARTICLES } from '../data/constants';
 import { getOverkillTier } from './Overkill';
 import { deathPreset, type BurstPattern, type DeathEffectSink, type DeathPreset } from './DeathEffects';
 import type { DamageAtDistance } from './BlastSystem';
+import type { BlastSink, ProjectileSink } from './WeaponSystem';
+import type { CollisionSystem } from '../core/CollisionSystem';
+import type { PlayerTarget } from './ProjectileSystem';
+import { preferredRange } from './EnemyTactics';
+
+/**
+ * Enemy states, plans.md §20. SPAWNING is unused (enemies start placed), and
+ * DYING/CORPSE collapse into a single frame: death swaps the sprite for a corpse
+ * immediately, since there are no death animation frames to play through yet.
+ */
+export type EnemyState = 'IDLE' | 'CHASE' | 'CHARGING' | 'ATTACK_WINDUP' | 'ATTACK_RECOVER' | 'HIT_STUN';
+
+/** Telegraph for AoE attacks, so a shockwave can be walked out of (§20). */
+const AOE_TELEGRAPH_SECONDS = 0.6;
+const ENEMY_SHOT_COLOR = 0xff7a5a;
 
 /** Enemy stats, plans.md §7.1. */
 export interface WeakPoint {
@@ -54,12 +69,18 @@ interface Enemy {
   position: THREE.Vector3;
   hp: number;
   sprite: THREE.Sprite;
+  state: EnemyState;
+  /** Counts down the current state, where the state is timed. */
+  stateSeconds: number;
+  attackCooldown: number;
+  /** Where an AoE was aimed when its telegraph started. */
+  aoeTarget: THREE.Vector3 | null;
 }
 
 /**
- * Enemies as camera-facing billboards with a body hitbox and a weak point
- * sphere (plans.md §7–§8). Movement and attacks arrive in Phase 4; for now they
- * stand where the level put them and can be shot to pieces.
+ * Enemies as camera-facing billboards with a body hitbox, a weak point sphere
+ * (plans.md §7–§8) and the state machine from §20: notice the player, close to
+ * their preferred range, then attack on a cooldown.
  */
 export class EnemySystem {
   readonly group = new THREE.Group();
@@ -74,6 +95,10 @@ export class EnemySystem {
     private readonly particles: ParticleSystem,
     private readonly decals: DecalSystem,
     private readonly effects: DeathEffectSink,
+    private readonly collision: CollisionSystem,
+    private readonly player: PlayerTarget,
+    private readonly projectiles: ProjectileSink,
+    private readonly blasts: BlastSink,
   ) {
     level.enemies.forEach((spawn, index) => {
       const type = ENEMY_TYPES[spawn.type];
@@ -91,6 +116,45 @@ export class EnemySystem {
 
   get corpseCount(): number {
     return this.corpses;
+  }
+
+  /** Drives every living enemy's state machine (plans.md §20). */
+  update(dt: number): void {
+    for (const enemy of this.enemies) {
+      enemy.attackCooldown = Math.max(0, enemy.attackCooldown - dt);
+      enemy.stateSeconds = Math.max(0, enemy.stateSeconds - dt);
+
+      const centre = this.centre(enemy);
+      const distance = Math.hypot(this.player.position.x - enemy.position.x, this.player.position.z - enemy.position.z);
+      const canSee = this.collision.hasLineOfSight(centre, this.player.position);
+
+      switch (enemy.state) {
+        case 'IDLE':
+          if (canSee && distance <= ENEMY_AI.detectionRangeMeters) enemy.state = 'CHASE';
+          break;
+
+        case 'HIT_STUN':
+        case 'ATTACK_RECOVER':
+          if (enemy.stateSeconds === 0) enemy.state = 'CHASE';
+          break;
+
+        case 'CHASE':
+          this.move(enemy, dt, distance);
+          this.considerAttack(enemy, distance, canSee);
+          break;
+
+        case 'CHARGING':
+          // Held in place while the wind-up plays, then released.
+          if (enemy.stateSeconds === 0) this.releaseRangedAttack(enemy);
+          break;
+
+        case 'ATTACK_WINDUP':
+          if (enemy.stateSeconds === 0) this.landMeleeAttack(enemy, distance);
+          break;
+      }
+
+      this.updateSprite(enemy);
+    }
   }
 
   /**
@@ -182,10 +246,133 @@ export class EnemySystem {
     const enemy = this.enemies[index]!;
     enemy.hp -= damage;
 
-    if (enemy.hp > 0) return false;
+    if (enemy.hp > 0) {
+      // Flinch, but never interrupt an attack that has already been committed.
+      if (enemy.state === 'CHASE' || enemy.state === 'IDLE') {
+        enemy.state = 'HIT_STUN';
+        enemy.stateSeconds = ENEMY_AI.hitStunSeconds;
+      }
+      return false;
+    }
 
     this.kill(index, damage, impact, outward, weaponId);
     return true;
+  }
+
+  /** Closes to the range this type prefers, and backs off if crowded. */
+  private move(enemy: Enemy, dt: number, distance: number): void {
+    const desired = preferredRange(enemy.type);
+    const tolerance = ENEMY_AI.approachToleranceMeters;
+
+    let towards = 0;
+    if (distance > desired + tolerance) towards = 1;
+    else if (distance < desired - tolerance) towards = -1;
+    if (towards === 0) return;
+
+    const dx = this.player.position.x - enemy.position.x;
+    const dz = this.player.position.z - enemy.position.z;
+    const length = Math.hypot(dx, dz);
+    if (length < 1e-4) return;
+
+    const step = enemy.type.speedMetersPerSecond * dt * towards;
+    const resolved = this.collision.resolve(
+      enemy.position.x + (dx / length) * step,
+      enemy.position.z + (dz / length) * step,
+      enemy.type.radiusMeters,
+    );
+
+    enemy.position.x = resolved.x;
+    enemy.position.z = resolved.z;
+  }
+
+  /** Starts a melee wind-up or a ranged shot if one is off cooldown. */
+  private considerAttack(enemy: Enemy, distance: number, canSee: boolean): void {
+    if (enemy.attackCooldown > 0) return;
+
+    const { melee, ranged } = enemy.type;
+
+    if (melee.enabled && distance <= melee.rangeMeters) {
+      enemy.state = 'ATTACK_WINDUP';
+      enemy.stateSeconds = melee.windupSeconds;
+      return;
+    }
+
+    if (!ranged.enabled || !canSee || distance > ranged.rangeMeters) return;
+
+    // Charged and AoE attacks telegraph first so they can be reacted to.
+    const telegraph = ranged.chargeTelegraphSeconds ?? (ranged.aoeRadiusMeters ? AOE_TELEGRAPH_SECONDS : 0);
+
+    if (ranged.aoeRadiusMeters) {
+      // Lock the target where the player stood when the wind-up began.
+      enemy.aoeTarget = new THREE.Vector3(this.player.position.x, 0.9, this.player.position.z);
+    }
+
+    if (telegraph > 0) {
+      enemy.state = 'CHARGING';
+      enemy.stateSeconds = telegraph;
+      return;
+    }
+
+    this.releaseRangedAttack(enemy);
+  }
+
+  private releaseRangedAttack(enemy: Enemy): void {
+    const { ranged } = enemy.type;
+    const centre = this.centre(enemy);
+
+    if (ranged.aoeRadiusMeters) {
+      const target = enemy.aoeTarget ?? new THREE.Vector3(this.player.position.x, 0.9, this.player.position.z);
+      this.blasts.spawn({
+        centre: target,
+        maxRadiusMeters: ranged.aoeRadiusMeters,
+        expansionSeconds: 0.45,
+        color: ENEMY_SHOT_COLOR,
+        orientation: 'horizontal',
+        target: 'player',
+        damageAt: () => ranged.damage,
+      });
+      enemy.aoeTarget = null;
+    } else {
+      this.projectiles.spawn({
+        origin: centre,
+        direction: this.player.position.clone().sub(centre).normalize(),
+        speedMetersPerSecond: ranged.projectileSpeedMetersPerSecond,
+        damage: ranged.damage,
+        rangeMeters: ranged.rangeMeters,
+        weaponId: `enemy_${enemy.type.label.toLowerCase()}`,
+        owner: 'enemy',
+      });
+    }
+
+    enemy.attackCooldown = ranged.cooldownSeconds;
+    enemy.state = 'ATTACK_RECOVER';
+    enemy.stateSeconds = 0.25;
+  }
+
+  /** Melee only connects if the player is still inside reach when it lands. */
+  private landMeleeAttack(enemy: Enemy, distance: number): void {
+    const { melee } = enemy.type;
+    if (distance <= melee.rangeMeters + 0.2) this.player.damage(melee.damage);
+
+    enemy.attackCooldown = melee.cooldownSeconds;
+    enemy.state = 'ATTACK_RECOVER';
+    enemy.stateSeconds = 0.25;
+  }
+
+  /** Keeps the billboard on its feet, and shows a charge as a swelling glow. */
+  private updateSprite(enemy: Enemy): void {
+    const height = enemy.type.heightMeters;
+    enemy.sprite.position.set(enemy.position.x, height / 2, enemy.position.z);
+
+    if (enemy.state === 'CHARGING') {
+      const pulse = 1 + Math.sin(performance.now() * 0.02) * 0.08;
+      enemy.sprite.scale.set(enemy.type.radiusMeters * 2 * pulse, height * pulse, 1);
+      enemy.sprite.material.color.setHex(0xffdf9a);
+      return;
+    }
+
+    enemy.sprite.scale.set(enemy.type.radiusMeters * 2, height, 1);
+    enemy.sprite.material.color.setHex(0xffffff);
   }
 
   private add(id: string, type: EnemyType, cellX: number, cellY: number): void {
@@ -205,7 +392,17 @@ export class EnemySystem {
     sprite.position.set(position.x, type.heightMeters / 2, position.z);
 
     this.group.add(sprite);
-    this.enemies.push({ id, type, position, hp: type.hp, sprite });
+    this.enemies.push({
+      id,
+      type,
+      position,
+      hp: type.hp,
+      sprite,
+      state: 'IDLE',
+      stateSeconds: 0,
+      attackCooldown: 0,
+      aoeTarget: null,
+    });
   }
 
   /** Death, dressed by the killing weapon and the overkill tier (plans.md §10). */
