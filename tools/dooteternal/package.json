@@ -1,0 +1,21 @@
+{
+  "name": "dooteternal",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "@types/three": "0.185.4",
+    "typescript": "7.0.2",
+    "vite": "8.2.1"
+  }
+}
