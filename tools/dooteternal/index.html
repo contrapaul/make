@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doot Eternal</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #05040a;
+    color: #ffd700;
+    font: 12px/1.5 ui-monospace, "JetBrains Mono", monospace;
+  }
+  #view { display: block; width: 100%; height: 100%; }
+  #hud {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    margin: 0;
+    white-space: pre;
+    text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+    pointer-events: none;
+  }
+  #lock-hint {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 6px;
+    text-align: center;
+    background: rgba(5, 4, 10, 0.72);
+    letter-spacing: 0.08em;
+    pointer-events: none;
+  }
+  #lock-hint[hidden] { display: none; }
+  #lock-hint strong { font-size: 18px; letter-spacing: 0.16em; }
+  #lock-hint span { color: #b89a4e; }
+</style>
+  <script type="module" crossorigin src="/tools/dooteternal/build/index-Ds-ac0OT.js"></script>
+</head>
+<body>
+<canvas id="view"></canvas>
+<pre id="hud"></pre>
+<div id="lock-hint">
+  <strong>CLICK TO PLAY</strong>
+  <span>WASD to move &middot; mouse to look &middot; ESC to release</span>
+</div>
+</body>
+</html>
