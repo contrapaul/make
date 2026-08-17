@@ -88,7 +88,11 @@ export class EnemySystem {
   private readonly enemies: Enemy[] = [];
   private readonly aliveTextures = new Map<string, THREE.CanvasTexture>();
   private readonly corpseTextures = new Map<string, THREE.CanvasTexture>();
+  private readonly killed: string[] = [];
   private corpses = 0;
+
+  /** Fired on every death, so progress can be saved when it happens (§16). */
+  onKill?: () => void;
 
   constructor(
     level: LevelData,
@@ -99,6 +103,8 @@ export class EnemySystem {
     private readonly player: PlayerTarget,
     private readonly projectiles: ProjectileSink,
     private readonly blasts: BlastSink,
+    /** Ids from a save: these enemies stay dead (plans.md §16). */
+    alreadyKilled: string[] = [],
   ) {
     level.enemies.forEach((spawn, index) => {
       const type = ENEMY_TYPES[spawn.type];
@@ -106,7 +112,14 @@ export class EnemySystem {
         throw new Error(`Unknown enemy type "${spawn.type}". Known: ${Object.keys(ENEMY_TYPES).join(', ')}`);
       }
 
-      this.add(`enemy_${spawn.type}_${index}`, type, spawn.x, spawn.y);
+      // Ids are derived from the level data, so they survive a reload.
+      const id = `enemy_${spawn.type}_${index}`;
+      if (alreadyKilled.includes(id)) {
+        this.killed.push(id);
+        return;
+      }
+
+      this.add(id, type, spawn.x, spawn.y);
     });
   }
 
@@ -116,6 +129,11 @@ export class EnemySystem {
 
   get corpseCount(): number {
     return this.corpses;
+  }
+
+  /** Ids of everything killed here, for the save file. */
+  get killedIds(): string[] {
+    return [...this.killed];
   }
 
   /** Drives every living enemy's state machine (plans.md §20). */
@@ -415,6 +433,7 @@ export class EnemySystem {
   ): void {
     const enemy = this.enemies[index]!;
     this.enemies.splice(index, 1);
+    this.killed.push(enemy.id);
 
     this.group.remove(enemy.sprite);
     enemy.sprite.material.dispose();
@@ -441,6 +460,7 @@ export class EnemySystem {
 
     this.decals.splatter(impact, 3 + preset.extraDecals);
     this.addCorpse(enemy, preset);
+    this.onKill?.();
   }
 
   private burstFor(pattern: BurstPattern, centre: THREE.Vector3, outward: THREE.Vector3, count: number): void {

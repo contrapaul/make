@@ -1,4 +1,5 @@
 import { INPUT } from '../data/constants';
+import type { Settings } from '../systems/SaveSystem';
 
 export interface LookDelta {
   /** Radians to add to yaw. Positive turns right. */
@@ -23,7 +24,11 @@ export class InputManager {
   private firePressedEdge = false;
   private wheelSteps = 0;
 
-  constructor(private readonly canvas: HTMLCanvasElement) {
+  constructor(
+    private readonly canvas: HTMLCanvasElement,
+    /** Read live, so the sensitivity slider takes effect as it moves (§17). */
+    private readonly settings: Settings,
+  ) {
     window.addEventListener('keydown', (event) => this.pressed.add(event.code));
     window.addEventListener('keyup', (event) => this.pressed.delete(event.code));
 
@@ -103,7 +108,7 @@ export class InputManager {
   private accumulateLook(event: MouseEvent): void {
     if (!this.locked) return;
 
-    const scale = INPUT.lookScaleRadiansPerPixel * INPUT.mouseSensitivity;
+    const scale = INPUT.lookScaleRadiansPerPixel * this.settings.mouseSensitivity;
     // Mouse right turns right, mouse up looks up (plans.md §18, with the yaw
     // sign matching the level format's clockwise-from-north convention).
     this.pendingYaw += event.movementX * scale;

@@ -39,12 +39,17 @@ export class DoorKeySystem {
   private readonly exit: { position: THREE.Vector3; sprite: THREE.Sprite };
   private exitReached = false;
 
+  /** Fired when a key or door changes hands, so §16 can save on the event. */
+  onProgress?: () => void;
+
   constructor(
     level: LevelData,
     private readonly collision: CollisionSystem,
     private readonly audio: AudioSink,
     /** Called once, when the player steps into the portal. */
     private readonly onExit: () => void,
+    /** Restored from a save: keys already taken and doors already open (§16). */
+    restored: { keysCollected?: string[]; doorsOpened?: string[] } = {},
   ) {
     for (const spec of level.keys) {
       const centre = cellCentre(spec.x, spec.y);
@@ -54,8 +59,14 @@ export class DoorKeySystem {
       sprite.scale.setScalar(0.55);
       sprite.position.set(centre.x, 0.85, centre.z);
 
+      const taken = restored.keysCollected?.includes(spec.color) ?? false;
+      if (taken) {
+        sprite.visible = false;
+        this.held.add(spec.color);
+      }
+
       this.group.add(sprite);
-      this.keys.push({ color: spec.color, position: sprite.position.clone(), sprite, taken: false });
+      this.keys.push({ color: spec.color, position: sprite.position.clone(), sprite, taken });
     }
 
     for (const spec of level.doors) {
@@ -66,6 +77,13 @@ export class DoorKeySystem {
       );
       mesh.position.set(centre.x, WORLD.wallHeightMeters / 2, centre.z);
 
+      const opened = restored.doorsOpened?.includes(spec.id) ?? false;
+      if (opened) {
+        // Already open in the save: leave the cell clear and the slab hidden.
+        collision.openDoor(spec.x, spec.y);
+        mesh.visible = false;
+      }
+
       this.group.add(mesh);
       this.doors.push({
         id: spec.id,
@@ -73,8 +91,8 @@ export class DoorKeySystem {
         cellY: spec.y,
         keyColor: spec.keyColor,
         mesh,
-        openProgress: 0,
-        opened: false,
+        openProgress: opened ? 1 : 0,
+        opened,
       });
     }
 
@@ -130,6 +148,7 @@ export class DoorKeySystem {
       key.sprite.visible = false;
       this.held.add(key.color);
       this.audio.playOne(`audio/sfx/key_pickup_${key.color}.ogg`);
+      this.onProgress?.();
     }
   }
 
@@ -146,6 +165,7 @@ export class DoorKeySystem {
         door.opened = true;
         this.collision.openDoor(door.cellX, door.cellY);
         this.audio.playOne('audio/sfx/door_open.ogg');
+        this.onProgress?.();
       }
 
       door.openProgress = Math.min(1, door.openProgress + dt / DOOR_SLIDE_SECONDS);

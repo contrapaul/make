@@ -50,8 +50,6 @@ export const WORLD = {
 export const INPUT = {
   /** Radians per pixel of mouse movement at sensitivity 1.0 (plans.md §18). */
   lookScaleRadiansPerPixel: 0.002,
-  /** Phase 5 replaces this with the saved setting (0.25x–3.0x). */
-  mouseSensitivity: 1.0,
   pitchLimitRadians: (85 * Math.PI) / 180,
 };
 

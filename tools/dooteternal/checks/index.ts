@@ -6,6 +6,7 @@ import './phase1';
 import './phase2';
 import './phase3';
 import './phase4';
+import './phase5';
 import { report } from './harness';
 
 report();

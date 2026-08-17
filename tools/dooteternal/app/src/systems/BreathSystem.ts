@@ -20,6 +20,11 @@ export class BreathSystem {
    */
   private latched = false;
 
+  /** Restores a saved value (plans.md §16). */
+  set(value: number): void {
+    this.breath = Math.min(BREATH.max, Math.max(0, value));
+  }
+
   canSpend(cost: number): boolean {
     return this.breath >= cost;
   }

@@ -41,11 +41,7 @@
     box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
   }
   #hp-track { width: 150px; border-color: #7a3030; }
-  #breath-fill, #hp-fill {
-    height: 100%;
-    width: 100%;
-    transition: width 60ms linear;
-  }
+  #breath-fill, #hp-fill { height: 100%; width: 100%; transition: width 60ms linear; }
   #breath-fill { background: linear-gradient(90deg, #b8791a, #ffd700); }
   #hp-fill { background: linear-gradient(90deg, #7a1f1f, #e04a3a); }
   #status.recharging #breath-fill { background: linear-gradient(90deg, #ffd700, #fff4c0); }
@@ -55,6 +51,8 @@
     letter-spacing: 0.14em;
     text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
   }
+  /* An explicit display beats the [hidden] attribute, so restate it. */
+  #status[hidden], #keys[hidden] { display: none; }
   #keys { display: flex; gap: 6px; }
   #keys .key {
     width: 12px;
@@ -83,20 +81,6 @@
     pointer-events: none;
   }
   #banner[hidden] { display: none; }
-  #lock-hint {
-    position: fixed;
-    inset: 0;
-    display: grid;
-    place-content: center;
-    gap: 6px;
-    text-align: center;
-    background: rgba(5, 4, 10, 0.72);
-    letter-spacing: 0.08em;
-    pointer-events: none;
-  }
-  #lock-hint[hidden] { display: none; }
-  #lock-hint strong { font-size: 18px; letter-spacing: 0.16em; }
-  #lock-hint span { color: #b89a4e; }
   #crosshair {
     position: fixed;
     left: 50%;
@@ -109,8 +93,57 @@
     box-shadow: 0 0 6px rgba(255, 190, 40, 0.9);
     pointer-events: none;
   }
+
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 18px;
+    text-align: center;
+    background: rgba(5, 4, 10, 0.86);
+    letter-spacing: 0.08em;
+  }
+  .screen[hidden] { display: none; }
+  .screen h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: 0.3em;
+    font-weight: 400;
+  }
+  .screen .hint { color: #8a7434; font-size: 11px; }
+  .screen button {
+    font: inherit;
+    letter-spacing: 0.14em;
+    color: #ffd700;
+    background: rgba(40, 24, 8, 0.7);
+    border: 1px solid #6d5a24;
+    padding: 9px 16px;
+    cursor: pointer;
+  }
+  .screen button:hover:not(:disabled) { background: rgba(90, 56, 12, 0.85); }
+  .screen button:disabled { color: #5b5240; border-color: #3a3428; cursor: default; }
+
+  #settings {
+    display: grid;
+    grid-template-columns: auto 160px 52px;
+    align-items: center;
+    gap: 10px 14px;
+    text-align: left;
+    color: #c9a94e;
+  }
+  #settings input[type="range"] { width: 100%; accent-color: #d9a52a; }
+  #settings input[type="checkbox"] { accent-color: #d9a52a; }
+  #settings .value { color: #8a7434; }
+  #pause-buttons { display: flex; gap: 10px; }
+
+  #overworld-nodes { display: grid; gap: 10px; min-width: 340px; }
+  #overworld-nodes .node { display: flex; justify-content: space-between; gap: 24px; }
+  #overworld-nodes .node.cleared { color: #9a8548; }
+  #overworld-nodes .node-state { font-size: 10px; opacity: 0.75; }
 </style>
-  <script type="module" crossorigin src="/tools/dooteternal/build/index-BcNBA9GW.js"></script>
+  <script type="module" crossorigin src="/tools/dooteternal/build/index-BL-xy7fZ.js"></script>
 </head>
 <body>
 <canvas id="view"></canvas>
@@ -124,9 +157,35 @@
   <div id="keys"></div>
 </div>
 <pre id="hud"></pre>
-<div id="lock-hint">
-  <strong>CLICK TO PLAY</strong>
-  <span>WASD move &middot; mouse look &middot; click fire &middot; 1-4 / wheel weapon &middot; R breath &middot; ESC release</span>
+
+<div class="screen" id="overworld" hidden>
+  <h1>DESCENT</h1>
+  <div class="hint">music hell, one floor at a time</div>
+  <div id="overworld-nodes"></div>
 </div>
+
+<div class="screen" id="pause" hidden>
+  <h1>PAUSED</h1>
+  <div id="settings">
+    <label for="set-soundtrack">Soundtrack</label>
+    <input type="checkbox" id="set-soundtrack" checked>
+    <span class="value"></span>
+
+    <label for="set-sfx">SFX volume</label>
+    <input type="range" id="set-sfx" min="0" max="100" step="1" value="80">
+    <span class="value" id="set-sfx-value">80%</span>
+
+    <label for="set-sensitivity">Mouse sensitivity</label>
+    <input type="range" id="set-sensitivity" min="0.25" max="3" step="0.05" value="1">
+    <span class="value" id="set-sensitivity-value">1.00x</span>
+  </div>
+  <div id="pause-buttons">
+    <button id="pause-resume">RESUME</button>
+    <button id="pause-restart">RESTART LEVEL</button>
+    <button id="pause-map">DESCENT MAP</button>
+  </div>
+  <div class="hint">WASD move &middot; mouse look &middot; click fire &middot; 1-4 / wheel weapon &middot; R breath &middot; ESC pause</div>
+</div>
+
 </body>
 </html>
