@@ -1,13 +1,11 @@
 import * as THREE from 'three';
-import level01 from '../levels/level_01.json';
-import level02 from '../levels/level_02.json';
 import { CameraRig } from './core/CameraRig';
 import { CollisionSystem } from './core/CollisionSystem';
 import { GameLoop } from './core/GameLoop';
 import { InputManager } from './core/InputManager';
 import { preloadImages } from './core/ImageAssets';
 import { buildLevel, type LevelData } from './core/LevelLoader';
-import { keyColor } from './core/PlaceholderAssets';
+import { keyColor } from './data/keys';
 import { PlayerController } from './core/PlayerController';
 import { BREATH, PLAYER } from './data/constants';
 import { AudioManager, BREATH_LOOP_FILE, BREATH_LOOP_ID } from './systems/AudioManager';
@@ -37,10 +35,16 @@ const damageFlash = document.querySelector<HTMLDivElement>('#damage-flash')!;
 const banner = document.querySelector<HTMLDivElement>('#banner')!;
 const crosshair = document.querySelector<HTMLDivElement>('#crosshair')!;
 
-const LEVELS: Record<string, LevelData> = {
-  level_01: level01 as LevelData,
-  level_02: level02 as LevelData,
-};
+/**
+ * Every map in app/levels/, keyed by its own `id`. Dropping a new .json in there
+ * is enough for the game to know about it — add a matching node to
+ * data/overworld.json and it appears on the descent map. See MAPS.md.
+ */
+const LEVELS: Record<string, LevelData> = Object.fromEntries(
+  Object.values(
+    import.meta.glob('../levels/*.json', { eager: true, import: 'default' }) as Record<string, LevelData>,
+  ).map((level) => [level.id, level]),
+);
 
 /** How often mid-level state is written while playing (plans.md §16). */
 const AUTOSAVE_SECONDS = 5;
@@ -324,6 +328,13 @@ function enterLevel(levelId: string, options: { fresh?: boolean } = {}): void {
   overworldMap.hide();
   setMode('playing');
   resize();
+
+  // Entering from a click on the map is a user gesture, so the pointer can be
+  // captured immediately. A restart after death already holds it. If the browser
+  // refuses, clicking the view still locks.
+  if (document.pointerLockElement !== canvas) {
+    void Promise.resolve(canvas.requestPointerLock()).catch(() => {});
+  }
 }
 
 function showOverworld(): void {
@@ -351,7 +362,6 @@ function pause(): void {
   setMode('paused');
   pauseMenu.show();
   world?.silence();
-  if (document.pointerLockElement === canvas) document.exitPointerLock();
   if (world) saveLevelState();
 }
 
@@ -363,6 +373,11 @@ function setMode(next: Mode): void {
   statusBar.hidden = !playing;
   hud.hidden = !playing;
   if (!playing) damageFlash.style.opacity = '0';
+
+  // The pointer belongs to the game only while it is being played. Releasing it
+  // here covers every way out — pausing, dying, finishing a level, walking back
+  // to the map — so no menu can appear with the mouse still captured.
+  if (!playing && document.pointerLockElement === canvas) document.exitPointerLock();
 }
 
 // Losing pointer lock mid-game is a pause (plans.md §17).

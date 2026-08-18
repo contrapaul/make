@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "tsc --noEmit",
-    "checks": "rolldown checks/index.ts -o node_modules/.checks.mjs --format esm --platform node --logLevel silent && node node_modules/.checks.mjs"
+    "checks": "rolldown checks/index.ts -o node_modules/.checks.mjs --format esm --platform node --logLevel silent && node node_modules/.checks.mjs",
+    "map": "node scripts/map-to-level.mjs"
   },
   "dependencies": {
     "three": "0.185.1"

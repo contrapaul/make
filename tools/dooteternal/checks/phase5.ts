@@ -6,9 +6,6 @@
  * themselves are DOM and are verified in play.
  */
 import assert from 'node:assert/strict';
-import level01 from '../app/levels/level_01.json';
-import level02 from '../app/levels/level_02.json';
-import type { LevelData } from '../app/src/core/LevelLoader';
 import {
   clampSettings,
   defaultSave,
@@ -30,7 +27,7 @@ import {
 } from '../app/src/systems/Progress';
 import { check, section } from './harness';
 
-const levels: LevelData[] = [level01 as LevelData, level02 as LevelData];
+import { LEVELS as levels } from './levels';
 
 function sampleLevelState(levelId = 'level_01'): LevelState {
   return {
@@ -205,18 +202,6 @@ check('a storage that refuses writes does not take the game down', () => {
 
 section('phase 5 — descent map (plans.md §15)');
 
-check('the map has a node per level and edges between them', () => {
-  assert.equal(OVERWORLD.nodes.length, levels.length);
-
-  const nodeIds = OVERWORLD.nodes.map((node) => node.id);
-  assert.deepEqual(nodeIds, levels.map((level) => level.id));
-
-  for (const [from, to] of OVERWORLD.edges) {
-    assert.ok(nodeIds.includes(from), `edge from unknown node ${from}`);
-    assert.ok(nodeIds.includes(to), `edge to unknown node ${to}`);
-  }
-});
-
 check('node names match the levels they load', () => {
   for (const node of OVERWORLD.nodes) {
     const level = levels.find((entry) => entry.id === node.id)!;
@@ -253,10 +238,16 @@ check('replaying a cleared level does not duplicate it', () => {
 });
 
 check('finishing the last level leaves the player standing on it', () => {
-  const end = completeLevel(completeLevel(initialProgress(), 'level_01'), 'level_02');
-  assert.equal(nextLevelId('level_02'), null);
-  assert.equal(end.currentLevelId, 'level_02');
-  assert.deepEqual(end.completedLevels, ['level_01', 'level_02']);
+  // Derived from the map rather than hardcoded, so adding a level doesn't break
+  // this — the last node is simply the one nothing leads out of.
+  const last = OVERWORLD.nodes.find((node) => nextLevelId(node.id) === null)!;
+  assert.ok(last, 'the descent has no end');
+
+  let progress = initialProgress();
+  for (const node of OVERWORLD.nodes) progress = completeLevel(progress, node.id);
+
+  assert.equal(progress.currentLevelId, last.id);
+  assert.equal(progress.completedLevels.length, OVERWORLD.nodes.length);
 });
 
 check('completeLevel does not mutate the progress it is given', () => {

@@ -64,6 +64,13 @@ Modules that build canvas textures on construction (`EnemySystem`,
 `PlaceholderAssets`) can't be loaded outside a browser, so anything depending on
 them is verified in the browser instead, via the dev-only `window.doot` handle.
 
+## Making maps
+
+A level is one JSON file in `app/levels/` and the game picks it up automatically.
+Draw it as text and run `npm run map`, or edit the JSON directly — see
+[MAPS.md](MAPS.md). `npm run checks` validates every map, including whether its
+exit can actually be reached.
+
 ## Layout
 
 ```text
@@ -73,9 +80,11 @@ tools/dooteternal/
   app/                source (Vite root)
     index.html
     src/              main.ts, core/, systems/, data/
-    levels/           level_01.json, level_02.json
+    levels/           one .json per map, discovered by glob
     assets/audio/     hand-supplied audio — see assets/audio/MANIFEST.md
-  checks/             npm run checks — one file per phase
+  checks/             npm run checks — one file per phase, plus levels/images
+  maps/               .map sources for npm run map
+  scripts/            map-to-level.mjs
   vite.config.ts
 ```
 

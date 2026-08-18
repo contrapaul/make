@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { image, sheetFrame } from './ImageAssets';
 import { enemySheetPath, enemySheetRow } from './ImageManifest';
+import { keyColor } from '../data/keys';
 
 /**
  * Art for everything on screen. Each function returns a real image when one has
@@ -250,17 +251,6 @@ function drawSplat(): THREE.CanvasTexture {
       ctx.fill();
     }
   });
-}
-
-/** Key colours, shared by keys and the doors they open (plans.md §11.5). */
-export const KEY_COLORS: Record<string, string> = {
-  red: '#ff4a4a',
-  blue: '#4aa8ff',
-  green: '#4aff7a',
-};
-
-export function keyColor(color: string): string {
-  return KEY_COLORS[color] ?? '#ffffff';
 }
 
 /** Music-note key, drawn in its own colour with a glow behind it. */

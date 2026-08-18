@@ -1,7 +1,22 @@
 {
   "nodes": [
-    { "id": "level_01", "name": "Tuning Room", "x": 0, "y": 0 },
-    { "id": "level_02", "name": "Brass Catacombs", "x": 0, "y": -1 }
+    {
+      "id": "level_01",
+      "name": "Tuning Room",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "level_02",
+      "name": "Brass Catacombs",
+      "x": 0,
+      "y": -1
+    }
   ],
-  "edges": [["level_01", "level_02"]]
+  "edges": [
+    [
+      "level_01",
+      "level_02"
+    ]
+  ]
 }

@@ -8,11 +8,8 @@
  */
 import assert from 'node:assert/strict';
 import { Vector3 } from 'three';
-import level01 from '../app/levels/level_01.json';
-import level02 from '../app/levels/level_02.json';
 import enemiesJson from '../app/src/data/enemies.json';
 import { CollisionSystem } from '../app/src/core/CollisionSystem';
-import type { LevelData } from '../app/src/core/LevelLoader';
 import type { EnemyType } from '../app/src/systems/EnemySystem';
 import { preferredRange } from '../app/src/systems/EnemyTactics';
 import { PlayerHealth } from '../app/src/systems/PlayerHealth';
@@ -20,7 +17,7 @@ import { ENEMY_AI, PLAYER } from '../app/src/data/constants';
 import { check, section } from './harness';
 
 const enemies = enemiesJson as unknown as Record<string, EnemyType>;
-const levels: LevelData[] = [level01 as LevelData, level02 as LevelData];
+import { LEVELS as levels } from './levels';
 
 /** The archetype table from plans.md §7.2, transcribed to assert against. */
 const SPEC_STATS: Record<string, { hp: number; speed: number; melee: number; ranged: number }> = {
@@ -198,130 +195,3 @@ check('a closed door blocks sight until it opens', () => {
   collision.openDoor(door.x, door.y);
   assert.equal(collision.hasLineOfSight(before, beyond), true);
 });
-
-section('phase 4 — level layout and progression (plans.md §14)');
-
-for (const level of levels) {
-  check(`${level.id}: grid matches its declared size`, () => {
-    assert.equal(level.walls.length, level.height, 'row count');
-    for (const [index, row] of level.walls.entries()) {
-      assert.equal(row.length, level.width, `row ${index} width`);
-    }
-  });
-
-  check(`${level.id}: start, exit, keys, doors and enemies all stand on floor`, () => {
-    const open = (x: number, y: number) => level.walls[y]?.[x] === 0;
-
-    assert.ok(open(level.start.x, level.start.y), 'start is inside a wall');
-    assert.ok(open(level.exit.x, level.exit.y), 'exit is inside a wall');
-
-    for (const key of level.keys) assert.ok(open(key.x, key.y), `${key.color} key is inside a wall`);
-    for (const door of level.doors) assert.ok(open(door.x, door.y), `${door.id} overlaps a static wall`);
-    for (const spawn of level.enemies) {
-      assert.ok(open(spawn.x, spawn.y), `${spawn.type} at ${spawn.x},${spawn.y} is inside a wall`);
-      assert.ok(enemies[spawn.type], `unknown enemy type ${spawn.type}`);
-    }
-  });
-
-  check(`${level.id}: every door has a key and every key a door`, () => {
-    const keyColors = new Set(level.keys.map((key) => key.color));
-    const doorColors = new Set(level.doors.map((door) => door.keyColor));
-
-    for (const color of doorColors) assert.ok(keyColors.has(color), `no ${color} key for a ${color} door`);
-    for (const color of keyColors) assert.ok(doorColors.has(color), `${color} key opens nothing`);
-    assert.equal(new Set(level.doors.map((door) => door.id)).size, level.doors.length, 'duplicate door ids');
-  });
-
-  check(`${level.id}: the exit can actually be reached, keys first`, () => {
-    const { region, collected, openedDoors } = walkthrough(level);
-
-    for (const key of level.keys) {
-      assert.ok(collected.has(key.color), `${key.color} key is unreachable`);
-    }
-    for (const door of level.doors) {
-      assert.ok(openedDoors.has(cellKey(door.x, door.y)), `${door.id} can never be opened`);
-    }
-    assert.ok(region.has(cellKey(level.exit.x, level.exit.y)), 'exit is sealed off');
-  });
-
-  check(`${level.id}: no enemy is stranded outside the reachable map`, () => {
-    const { region } = walkthrough(level);
-    for (const spawn of level.enemies) {
-      assert.ok(region.has(cellKey(spawn.x, spawn.y)), `${spawn.type} at ${spawn.x},${spawn.y} is walled off`);
-    }
-  });
-}
-
-check('the descent has two levels in order', () => {
-  assert.deepEqual(levels.map((level) => level.id), ['level_01', 'level_02']);
-  assert.equal(levels[1]!.enemies.length, 8, 'the second level should field the whole bestiary');
-  assert.equal(new Set(levels[1]!.enemies.map((spawn) => spawn.type)).size, 8);
-});
-
-function cellKey(x: number, y: number): string {
-  return `${x},${y}`;
-}
-
-/**
- * Plays the level the way a player must: explore, pick up whatever keys are
- * reachable, open the doors those keys unlock, explore again. Returns what can
- * be reached once no further progress is possible — so a level that can't be
- * finished shows up as an unreachable exit rather than as a bug report later.
- */
-function walkthrough(level: LevelData): {
-  region: Set<string>;
-  collected: Set<string>;
-  openedDoors: Set<string>;
-} {
-  const doorCells = new Map(level.doors.map((door) => [cellKey(door.x, door.y), door] as const));
-  const openedDoors = new Set<string>();
-  const collected = new Set<string>();
-  let region = flood(level, doorCells, openedDoors);
-
-  for (;;) {
-    let progressed = false;
-
-    for (const key of level.keys) {
-      if (region.has(cellKey(key.x, key.y)) && !collected.has(key.color)) {
-        collected.add(key.color);
-        progressed = true;
-      }
-    }
-
-    for (const [cell, door] of doorCells) {
-      if (openedDoors.has(cell) || !collected.has(door.keyColor)) continue;
-      // A door opens when the player can stand next to it.
-      const adjacent = [
-        cellKey(door.x + 1, door.y),
-        cellKey(door.x - 1, door.y),
-        cellKey(door.x, door.y + 1),
-        cellKey(door.x, door.y - 1),
-      ];
-      if (!adjacent.some((neighbour) => region.has(neighbour))) continue;
-
-      openedDoors.add(cell);
-      progressed = true;
-    }
-
-    if (!progressed) return { region, collected, openedDoors };
-    region = flood(level, doorCells, openedDoors);
-  }
-}
-
-function flood(level: LevelData, doorCells: Map<string, unknown>, openedDoors: Set<string>): Set<string> {
-  const seen = new Set<string>();
-  const queue = [{ x: level.start.x, y: level.start.y }];
-
-  while (queue.length > 0) {
-    const { x, y } = queue.pop()!;
-    const cell = cellKey(x, y);
-    if (seen.has(cell)) continue;
-    if (level.walls[y]?.[x] !== 0) continue;
-    if (doorCells.has(cell) && !openedDoors.has(cell)) continue;
-
-    seen.add(cell);
-    queue.push({ x: x + 1, y }, { x: x - 1, y }, { x, y: y + 1 }, { x, y: y - 1 });
-  }
-
-  return seen;
-}
