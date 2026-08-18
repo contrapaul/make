@@ -21,6 +21,17 @@ Must tile seamlessly — they repeat once per metre.
 - [ ] `textures/floors/music_floor_01.png` — 512x512, tileable. Cracked marble with gold veins, dark stage wood, obsidian tiles.
 - [ ] `textures/ceilings/void_ceiling_01.png` — 512x512, tileable. Void with faint notes, inverted organ pipes, hellfire.
 
+## Sky
+
+- [ ] `textures/sky/hell_sky.png` — 1024x1024. Mapped to the inside of a dome
+  150 m across, so **the top of the image is straight up and the middle row is the
+  horizon**. Put the burning band just above centre: anything below the middle
+  sits behind the walls and is never seen. Keep features small and wide — the
+  dome magnifies everything, so a blob here becomes a blob hanging over the level.
+
+Levels are open to this sky by default. A level that wants a roof instead sets
+`"sky": false` and uses its `textures.ceiling` id.
+
 ## Effects (§11.4)
 
 - [ ] `textures/particles/particle_gold.png` — 64x64. Radial gold, bright centre to transparent edge. Drawn additively, so black is invisible and bright is hot.

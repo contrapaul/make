@@ -89,7 +89,68 @@ function floorTexture(): THREE.CanvasTexture {
   });
 }
 
-/** Void ceiling: near-black with scattered glowing notes. */
+/**
+ * Hell sky: a burning orange horizon banding up into near-black, with embers
+ * drifting through it. Mapped to the inside of a dome, so the top of the canvas
+ * is the zenith and the middle is the horizon the walls stand against.
+ */
+export function skyTexture(): THREE.Texture {
+  return image('textures/sky/hell_sky.png') ?? drawSky();
+}
+
+function drawSky(): THREE.CanvasTexture {
+  const size = 1024;
+
+  return canvasTexture(size, (ctx) => {
+    // Canvas rows map bottom-up onto the dome: row 0 is the zenith, the middle
+    // is the horizon. The burning band therefore sits just ABOVE centre, or the
+    // walls hide it entirely.
+    const sky = ctx.createLinearGradient(0, 0, 0, size);
+    sky.addColorStop(0, '#3a0a07'); // straight up: the darkest it gets, still red
+    sky.addColorStop(0.22, '#6d1508');
+    sky.addColorStop(0.36, '#a82a0b');
+    sky.addColorStop(0.45, '#e85c14');
+    sky.addColorStop(0.487, '#ff9c33'); // the burning horizon
+    sky.addColorStop(0.53, '#ff7418');
+    sky.addColorStop(0.6, '#8a2708');
+    sky.addColorStop(1, '#120302'); // below the horizon, behind the floor
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, size, size);
+
+    // Torn cloud banding. Kept thin and wide: a 150 m dome magnifies everything,
+    // and anything chunky here reads as a blob hanging over the level.
+    for (let band = 0; band < 90; band += 1) {
+      const y = Math.random() ** 1.4 * size * 0.47;
+      ctx.fillStyle = `rgba(12, 2, 2, ${0.10 + Math.random() * 0.2})`;
+      ctx.beginPath();
+      ctx.ellipse(Math.random() * size, y, 30 + Math.random() * 90, 1.5 + Math.random() * 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // A brighter smoulder just above the horizon line.
+    for (let glow = 0; glow < 40; glow += 1) {
+      const y = size * (0.44 + Math.random() * 0.05);
+      ctx.fillStyle = `rgba(255, 170, 60, ${0.06 + Math.random() * 0.12})`;
+      ctx.beginPath();
+      ctx.ellipse(Math.random() * size, y, 40 + Math.random() * 120, 2 + Math.random() * 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Embers: small and numerous, thickening toward the horizon.
+    for (let ember = 0; ember < 900; ember += 1) {
+      const depth = Math.random() ** 0.5;
+      const y = depth * size * 0.47;
+      const radius = 0.5 + Math.random() * 1.2;
+
+      ctx.fillStyle = `rgba(255, ${180 + Math.floor(Math.random() * 60)}, 110, ${0.25 + depth * 0.45})`;
+      ctx.beginPath();
+      ctx.arc(Math.random() * size, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+/** Void ceiling: near-black with scattered glowing notes. Only used indoors. */
 function ceilingTexture(): THREE.CanvasTexture {
   return canvasTexture(TILE_SIZE, (ctx) => {
     ctx.fillStyle = '#08060d';

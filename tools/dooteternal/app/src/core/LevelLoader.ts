@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { WORLD } from '../data/constants';
-import { placeholderTexture } from './PlaceholderAssets';
+import { placeholderTexture, skyTexture } from './PlaceholderAssets';
 
 /**
  * Level format from plans.md §14. Grid cells are 1 m; map y becomes world z, so
@@ -17,11 +17,20 @@ export interface LevelData {
   textures: { wall: string; floor: string; ceiling: string };
   /** Row-major; 0 is open floor, non-zero is a solid wall. */
   walls: number[][];
+  /**
+   * Open to the burning sky (the default) or roofed over with the ceiling
+   * texture. Walls are the same height either way, so an open level shows sky
+   * above them without ever revealing what is beyond.
+   */
+  sky?: boolean;
   doors: { id: string; x: number; y: number; keyColor: string }[];
   keys: { color: string; x: number; y: number }[];
   enemies: { type: string; x: number; y: number }[];
   exit: { x: number; y: number };
 }
+
+/** Comfortably inside the camera's 200 m far plane. */
+const SKY_RADIUS_METERS = 150;
 
 /** World-space centre of a map cell. */
 export function cellCentre(cellX: number, cellY: number): { x: number; z: number } {
@@ -37,7 +46,7 @@ export function buildLevel(level: LevelData): THREE.Group {
   const wallHeight = WORLD.wallHeightMeters;
 
   group.add(buildFloor(level, width, height));
-  group.add(buildCeiling(level, width, height, wallHeight));
+  group.add(level.sky === false ? buildCeiling(level, width, height, wallHeight) : buildSky(width, height));
   group.add(buildWalls(level, wallHeight));
 
   // Flat-ish lighting: enough directional bias to read corners, bright ambient
@@ -73,6 +82,22 @@ function buildCeiling(level: LevelData, width: number, height: number, wallHeigh
   ceiling.rotation.x = Math.PI / 2;
   ceiling.position.set(width / 2, wallHeight, height / 2);
   return ceiling;
+}
+
+/**
+ * Dome of sky, seen from the inside. Its radius sits well inside the camera's
+ * far plane, and it is unlit — a sky lights the world rather than being lit by it.
+ */
+function buildSky(width: number, height: number): THREE.Mesh {
+  const sky = new THREE.Mesh(
+    new THREE.SphereGeometry(SKY_RADIUS_METERS, 40, 24),
+    new THREE.MeshBasicMaterial({ map: skyTexture(), side: THREE.BackSide, depthWrite: false }),
+  );
+
+  // Centred on the level so the horizon sits evenly around the player.
+  sky.position.set(width / 2, 0, height / 2);
+  sky.renderOrder = -1;
+  return sky;
 }
 
 /** One instanced box per solid cell — a single draw call for the whole level. */

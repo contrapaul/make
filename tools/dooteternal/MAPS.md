@@ -59,6 +59,18 @@ walls in the grid — they occupy an open cell and block it until opened.
 Cell `(x, y)` becomes world position `(x + 0.5, y + 0.5)`: x runs east, y runs
 south, and one cell is one metre.
 
+### Sky or ceiling
+
+Levels are open to the burning sky by default. For an enclosed level, add:
+
+```json
+"sky": false
+```
+
+and the `textures.ceiling` id is used as a roof at wall height instead. Walls are
+3 m either way, and you can never see over a wall of equal height, so an open
+level shows sky above the walls without revealing the layout beyond them.
+
 ## What the checks enforce
 
 Run `npm run checks` after any change. Every map in `app/levels/` is held to:

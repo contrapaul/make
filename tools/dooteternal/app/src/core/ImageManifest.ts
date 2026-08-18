@@ -46,6 +46,10 @@ export const IMAGE_ASSETS: readonly ImageAsset[] = [
   { path: 'textures/floors/music_floor_01.png', replaces: 'floor_music', size: '512x512', tiling: true },
   { path: 'textures/ceilings/void_ceiling_01.png', replaces: 'ceil_void', size: '512x512', tiling: true },
 
+  // The dome overhead. Equirect-style: the top of the image is straight up, the
+  // middle is the horizon.
+  { path: 'textures/sky/hell_sky.png', replaces: 'hell sky dome', size: '1024x1024' },
+
   // Effects (plans.md §11.4).
   { path: 'textures/particles/particle_gold.png', replaces: 'gold hit particle', size: '64x64' },
   ...[1, 2, 3, 4].map((n) => ({
