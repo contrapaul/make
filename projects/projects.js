@@ -198,11 +198,11 @@ const PROJECTS = [
     description: "A scratch-built prop using MDF, wood, and a few other bits, created for my costume at DragonCon 2017.",
   },
   {
-    title: "Project Title Six",
-    date: "2019-02",
+    title: "Set Design for Seussical",
+    date: "2018-10",
     cover: "../images/projects/project-six.webp",
     images: ["../images/projects/project-six-2.webp"],
-    description: "Third of four projects in one month, with one extra image and one link.",
+    description: "A whimsical build for a primary school production of Seussical.",
     links: [{ label: "Write-up", url: "#" }],
   },
   {
