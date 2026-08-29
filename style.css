@@ -288,8 +288,6 @@ body.page-fun { background: var(--ink); color: var(--paper); }
 .builds {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  max-width: 900px;
-  margin: 0 auto;
 }
 .build {
   border-right: 2px solid var(--line);
@@ -297,8 +295,8 @@ body.page-fun { background: var(--ink); color: var(--paper); }
 }
 .build:last-child { border-right: none; }
 .build:hover { background: var(--paper-2); }
-.build .ph { height: 140px; border-bottom: 2px solid var(--line); }
-.build-body { padding: 1.1rem 1.35rem; }
+.build .ph { height: 190px; border-bottom: 2px solid var(--line); }
+.build-body { padding: 1.6rem 1.75rem; }
 .build-body .label { display: block; margin-bottom: .5rem; }
 .build-body h3 {
   font-family: var(--font-display); font-weight: 700;
