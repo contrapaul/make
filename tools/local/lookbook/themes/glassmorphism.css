@@ -1,140 +1,155 @@
 /* ==========================================================================
-   Theme: Glassmorphism
-   Frosted-glass panels over a colorful gradient background,
-   soft shadows, translucent layers.
-   Structural changes: large 20px border-radius on cards and buttons,
-   backdrop-filter blur on all panels (cards, blockquote, form inputs),
-   hero h1 has text-shadow for depth, card hover lifts 8px with
-   deeper shadow, blockquote gets rounded right corners.
+   Theme: Glassmorphism (Frosted Glass)
+   Semi-transparent layers over colorful gradient backgrounds.
+   Structural changes: backdrop-filter blur on cards and nav, layered
+   depth via overlapping semi-transparent panels, soft box-shadows on
+   everything, floating card layout with staggered Z-index, hero h1 has
+   text-shadow for slight glow, buttons are frosted glass themselves,
+   form inputs get a subtle gradient border. Very airy, very modern.
    ========================================================================== */
 
 body.theme-glassmorphism {
-  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-  --text: #ffffff;
-  --muted: rgba(255,255,255,0.7);
-  --glass-bg: rgba(255,255,255,0.12);
-  --glass-border: rgba(255,255,255,0.2);
-  --accent: #f093fb;
-  --btn-primary-bg: rgba(255,255,255,0.25);
+  --bg: #e8f0fe;
+  --text: #2a3462;
+  --muted: #5b7190;
+  --border: rgba(255,255,255,0.3);
+  --accent: #6366f1;
+  --card-bg: rgba(255,255,255,0.85);
+  --btn-primary-bg: rgba(99,102,241,0.7);
   --btn-primary-text: #ffffff;
-  --input-bg: rgba(255,255,255,0.1);
-  --selector-bg: rgba(255,255,255,0.08);
+  --input-bg: rgba(255,255,255,0.9);
+  --selector-bg: rgba(255,255,255,0.9);
 }
 
 body.theme-glassmorphism {
-  background: var(--bg-gradient);
+  background-color: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  /* Gradient gradient background */
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, #6366f1 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, #ec4899 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 70%, #2dd4bf 0%, transparent 50%);
 }
 
-/* Hero — depth shadow */
+/* Hero — centered, frosted */
+body.theme-glassmorphism .hero {
+  text-align: center;
+  padding-block: var(--spacing-3xl);
+}
 body.theme-glassmorphism .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2.5rem, 7vw, 4rem);
   line-height: 1.1;
-  color: var(--text);
-  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
-  font-weight: 700;
+  letter-spacing: -0.04em;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 body.theme-glassmorphism .hero p {
   color: var(--muted);
+  max-width: 60ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
 }
 
-/* Nav — subtle underline */
+/* Nav — frosted glass bar */
+body.theme-glassmorphism .demo-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  padding-block: var(--spacing-md);
+}
 body.theme-glassmorphism .demo-nav a {
   color: var(--text);
-  font-weight: 500;
-  padding-block: var(--spacing-sm);
-  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  text-decoration: none;
 }
-body.theme-glassmorphism .demo-nav a:hover { border-bottom-color: var(--accent); }
 
-/* Cards — frosted glass, large radius, deep hover lift */
+/* Cards — frosted glass with blur */
 body.theme-glassmorphism .card-grid {
   gap: var(--spacing-xl);
 }
 body.theme-glassmorphism .card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  padding-block: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1), 
+              0 4px 6px rgba(0,0,0,0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 body.theme-glassmorphism .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), 
+              0 8px 24px rgba(99,102,241,0.2);
 }
-body.theme-glassmorphism .card-image { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
-body.theme-glassmorphism .card-title { color: var(--text); font-weight: 600; margin-bottom: var(--spacing-sm); }
-body.theme-glassmorphism .card-body p { color: var(--muted); }
 
-/* Buttons — frosted glass, large radius */
-body.theme-glassmorphism .btn-primary {
+/* Card images — gradient fills */
+body.theme-glassmorphism .card-image {
+  background: linear-gradient(135deg, #6366f1 20%, transparent 60%);
+  border-radius: 8px;
+}
+
+body.theme.glassmorphism .card-title { color: var(--accent); font-weight: 700; margin-bottom: var(--spacing-sm); }
+body.theme.glassmorphism .card-body p { color: var(--muted); }
+
+/* Buttons — frosted glass */
+@keyframes glass-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(99,102,241,0.3); }
+  50% { box-shadow: 0 6px 30px rgba(99,102,241,0.5), 
+              0 0 40px rgba(188,72,153,0.2); }
+}
+
+body.theme.glassmorphism .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
+  border: none;
+  animation: glass-pulse 4s ease-in-out infinite;
 }
-body.theme-glassmorphism .btn-secondary {
+body.theme.glassmorphism .btn-secondary {
   background: transparent;
   color: var(--text);
-  border: 1px solid var(--glass-border);
-  border-radius: 16px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
 }
-body.theme-glassmorphism .btn-ghost {
-  background: transparent;
-  color: var(--muted);
+body.theme.glassmorphism .btn-ghost {
+  background: rgba(255,255,255,0.6);
+  color: var(--text);
   border: none;
 }
 
 /* Form — frosted inputs */
-body.theme-glassmorphism .demo-form input,
-body.theme-glassmorphism .demo-form textarea {
+body.theme.glassmorphism .demo-form input,
+body.theme.glassmorphism .demo-form textarea {
   background: var(--input-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 16px;
-}
-body.theme-glassmorphism .demo-form input:focus,
-body.theme-glassmorphism .demo-form textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 16px rgba(240,147,251,0.3);
-}
-
-/* Blockquote — frosted glass with rounded right corners */
-body.theme-glassmorphism .callout {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  border-left: 3px solid var(--accent);
-  color: var(--text);
-  font-style: italic;
-  border-radius: 0 16px 16px 0;
-}
-body.theme-glassmorphism .callout cite { color: var(--muted); }
-
-/* Footer */
-body.theme-glassmorphism footer p { color: var(--muted); }
-
-/* Style Selector — frosted glass bar */
-body.theme-glassmorphism .style-selector {
-  background: var(--selector-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-body.theme-glassmorphism .style-selector button {
-  background: transparent;
+  border: 1px solid var(--border);
   color: var(--text);
   border-radius: 8px;
 }
-body.theme-glassmorphism .style-selector button:hover { background: rgba(255,255,255,0.1); }
-body.theme-glassmorphism .style-selector button.active {
-  background: var(--btn-primary-bg);
-  color: #ffffff;
+body.theme.glassmorphism .demo-form input:focus,
+body.theme.glassmorphism .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(99,102,241,0.3), 
+              0 0 30px rgba(188,72,153,0.15);
+}
+
+/* Blockquote — frosted glass panel */
+body.theme.glassmorphism .callout {
+  background: var(--card-bg);
+  border-left: 4px solid var(--accent);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1), 
+              0 4px 8px rgba(99,102,241,0.2);
+}
+
+/* Footer — frosted */
+body.theme.glassmorphism footer {
+  background: var(--card-bg);
+  border-top: 1px solid var(--border);
+}
+
+/* Style Selector — frosted top bar */
+body.theme.glassmorphism .style-selector {
+  background: var(--selector-bg);
 }

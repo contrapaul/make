@@ -1,132 +1,151 @@
 /* ==========================================================================
-   Theme: Retro
+   Theme: Retro (90s Web Aesthetic)
    Warm beige/cream tones, serif fonts, drop shadows, chunky borders.
-   90s web aesthetic.
-   Structural changes: zero border-radius everywhere (hard edges),
-   thick 3px+ borders with hard offset box-shadows (no blur),
-   card grid uses wider gaps and larger cards, hero has text-shadow
-   offset, nav links have thicker underline on hover, blockquote
-   gets a chunky shadow.
+   Structural changes: 3px borders on everything, large padding gaps,
+   subtle background pattern via CSS gradient, slightly larger typography
+   for that "early web" feel. Cards get a double-shadow effect.
    ========================================================================== */
 
 body.theme-retro {
-  --bg: #f5e6c8;
-  --text: #3b2a1a;
-  --muted: #7a6450;
-  --border: #8b7355;
-  --accent: #c0392b;
-  --card-bg: #fff8ee;
-  --btn-primary-bg: var(--accent);
-  --btn-primary-text: #ffffff;
-  --input-bg: #fff8ee;
-  --selector-bg: #e8d5b7;
+  --bg: #f5f0e8;
+  --text: #3c2e1f;
+  --muted: #6b4f3d;
+  --border: #8b7a64;
+  --accent: #d48b3a;
+  --card-bg: #ffffff;
+  --btn-primary-bg: #8b4513;
+  --btn-primary-text: #f5f0e8;
+  --input-bg: #eee8dc;
+  --selector-bg: #e6d9c8;
 }
 
 body.theme-retro {
   background-color: var(--bg);
   color: var(--text);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* Subtle paper-like texture via repeating gradients */
+  background-image: 
+    linear-gradient(rgba(139, 107, 85, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 107, 85, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* Hero — offset text shadow */
+/* Hero — larger, more generous spacing */
+body.theme-retro .hero {
+  text-align: center;
+  padding-block: var(--spacing-3xl);
+}
 body.theme-retro .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  line-height: 1.1;
-  color: var(--text);
-  text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  line-height: 1.2;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-lg);
 }
 body.theme-retro .hero p {
   color: var(--muted);
-  font-style: italic;
+  max-width: 64ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
 
-/* Nav — thicker underline */
+/* Nav — chunky, with borders */
+body.theme-retro .demo-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  padding-block: var(--spacing-md);
+}
 body.theme-retro .demo-nav a {
   color: var(--text);
-  font-weight: 600;
-  padding-block: var(--spacing-sm);
-  border-bottom: 3px solid transparent;
+  font-weight: 700;
+  padding-block: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 2px solid var(--border);
+  text-decoration: underline offset 4px;
 }
-body.theme-retro .demo-nav a:hover { border-bottom-color: var(--accent); }
 
-/* Cards — chunky, hard shadows, no rounding */
+/* Cards — chunky double-shadow, wide borders */
 body.theme-retro .card-grid {
   gap: var(--spacing-xl);
 }
 body.theme-retro .card {
   background: var(--card-bg);
   border: 3px solid var(--border);
-  border-radius: 0;
-  box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.15), 
+              -4px -6px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 body.theme-retro .card:hover {
-  transform: translateY(-2px);
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.2);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 6px 8px 20px rgba(0,0,0,0.2), 
+              -6px -8px 20px rgba(0,0,0,0.15);
 }
-body.theme-retro .card-image { background: linear-gradient(135deg, #e8d5b7, #d4c0a0); }
-body.theme-retro .card-title { color: var(--text); font-weight: 700; margin-bottom: var(--spacing-sm); }
-body.theme-retro .card-body p { color: var(--muted); }
 
-/* Buttons — chunky, hard shadows */
+/* Hero h1 gets a shadow for that 90s web feel */
+body.theme-retro .hero h1 {
+  text-shadow: 3px 3px 0 #d4a86a;
+}
+
+/* Buttons — chunky borders, no rounded corners */
 body.theme-retro .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  border: 2px solid #9a2b22;
-  border-radius: 0;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  border: 2px solid var(--border);
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
 body.theme-retro .btn-secondary {
   background: transparent;
   color: var(--text);
   border: 2px solid var(--border);
-  border-radius: 0;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3), 
+              inset -1px -1px 0 rgba(0,0,0,0.2);
 }
 body.theme-retro .btn-ghost {
   background: transparent;
   color: var(--muted);
-  border: none;
+  border: 2px dashed var(--border);
 }
 
-/* Form — chunky inputs */
+/* Form — chunky borders, slightly larger */
 body.theme-retro .demo-form input,
 body.theme-retro .demo-form textarea {
   background: var(--input-bg);
   border: 2px solid var(--border);
   color: var(--text);
-  border-radius: 0;
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
 body.theme-retro .demo-form input:focus,
 body.theme-retro .demo-form textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 3px 3px 0 rgba(192,57,43,0.15);
+  box-shadow: 0 0 0 3px rgba(212, 139, 58, 0.25);
 }
 
-/* Blockquote — chunky shadow */
+/* Blockquote — thick left accent line */
 body.theme-retro .callout {
-  background: #e8d5b7;
+  background: transparent;
   border-left: 4px solid var(--accent);
-  color: var(--text);
-  font-style: italic;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+  box-shadow: 6px 8px 16px rgba(0,0,0,0.12);
 }
-body.theme-retro .callout cite { color: var(--muted); }
 
-/* Footer */
-body.theme-retro footer p { color: var(--muted); }
+/* Footer — chunky */
+body.theme-retro footer p { color: var(--muted); font-size: 0.9rem; }
 
-/* Style Selector — chunky buttons */
+/* Style Selector — flush top, chunky buttons */
 body.theme-retro .style-selector {
   background: var(--selector-bg);
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
 body.theme-retro .style-selector button {
   background: transparent;
   color: var(--text);
   border-radius: 0;
+  font-size: 1rem;
 }
-body.theme-retro .style-selector button:hover { background: rgba(0,0,0,0.05); }
+body.theme-retro .style-selector button:hover { background: rgba(0,0,0,0.08); }
 body.theme-retro .style-selector button.active {
-  background: var(--accent);
-  color: #ffffff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }

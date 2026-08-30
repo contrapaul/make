@@ -1,24 +1,22 @@
 /* ==========================================================================
-   Theme: Brutalist
-   Raw, unpolished look: monospace text, harsh black borders,
-   no rounded corners, high-contrast colors.
-   Structural changes: uppercase ALL text (h1, nav, card titles,
-   blockquote), extreme line-height on hero h1 (0.9 for tight stacking),
-   6px+ thick borders everywhere, card grid uses wider gaps and
-   larger min-width cards, buttons are pure black with no padding
-   reduction, form inputs get 4px borders.
+   Theme: Brutalist (Raw, Unpolished)
+   Monospace text, harsh black borders, no rounded corners, high contrast.
+   Structural changes: 3px solid black borders everywhere, visible grid lines
+   in background, aggressive letter-spacing, card images displayed as raw
+   rectangles, hero is left-aligned with offset layout, navigation uses
+   thin rules instead of links. Very sharp, very direct.
    ========================================================================== */
 
 body.theme-brutalist {
   --bg: #ffffff;
-  --text: #000000;
+  --text: #111111;
   --muted: #444444;
   --border: #000000;
-  --accent: #ff3300;
+  --accent: #f04747;
   --card-bg: #ffffff;
-  --btn-primary-bg: #000000;
+  --btn-primary-bg: #111111;
   --btn-primary-text: #ffffff;
-  --input-bg: #ffffff;
+  --input-bg: #f9f9f9;
   --selector-bg: #f0f0f0;
 }
 
@@ -26,111 +24,151 @@ body.theme-brutalist {
   background-color: var(--bg);
   color: var(--text);
   font-family: 'Courier New', Courier, monospace;
+  /* Visible grid overlay for that raw, constructed feel */
+  background-image: 
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-/* Hero — tight line-height, uppercase */
+/* Hero — left-aligned, aggressive */
+body.theme-brutalist .hero {
+  text-align: left;
+  padding-inline: var(--spacing-xl);
+  max-width: 700px;
+}
 body.theme-brutalist .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  line-height: 0.9;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 900;
   color: var(--text);
-  letter-spacing: -0.05em;
-  font-weight: 700;
-  text-transform: uppercase;
 }
 body.theme-brutalist .hero p {
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  max-width: 56ch;
+  margin-inline: auto;
+  margin-block-start: var(--spacing-md);
+  font-size: 0.95rem;
 }
 
-/* Nav — thick underline, uppercase */
+/* Navigation — thin rules instead of links */
+body.theme-brutalist .demo-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  padding-block: var(--spacing-md);
+}
 body.theme-brutalist .demo-nav a {
   color: var(--text);
   font-weight: 700;
-  padding-block: var(--spacing-sm);
-  border-bottom: 4px solid transparent;
-  text-transform: uppercase;
+  text-decoration: none;
+  position: relative;
 }
-body.theme-brutalist .demo-nav a:hover { border-bottom-color: var(--accent); }
+body.theme-brutalist .demo-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--border);
+}
 
-/* Cards — thick borders, uppercase titles */
+/* Cards — harsh black borders, no rounding */
 body.theme-brutalist .card-grid {
-  gap: var(--spacing-xl);
+  gap: var(--spacing-lg);
 }
 body.theme-brutalist .card {
   background: var(--card-bg);
-  border: 4px solid var(--border);
-  border-radius: 0;
+  border: 3px solid var(--border);
+  padding-block: var(--spacing-md) var(--spacing-xl);
+  box-shadow: none;
 }
-body.theme-brutalist .card:hover { transform: translateY(-2px); }
-body.theme-brutalist .card-image { background: #e0e0e0; border-bottom: 4px solid var(--border); }
-body.theme-brutalist .card-title {
-  color: var(--text);
-  font-weight: 700;
-  margin-bottom: var(--spacing-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+body.theme-brutalist .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
-body.theme-brutalist .card-body p { color: var(--muted); }
 
-/* Buttons — pure black, no rounding */
+/* Card images — raw rectangles */
+body.theme-brutalist .card-image {
+  background-color: var(--border);
+  aspect-ratio: 4 / 3;
+}
+body.theme-brutalist .card-title {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: var(--spacing-sm);
+}
+body.theme-brutalist .card-body p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* Buttons — no rounded corners, flat */
 body.theme-brutalist .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
   border: none;
-  border-radius: 0;
+  padding-block: var(--spacing-sm) var(--spacing-lg);
 }
 body.theme-brutalist .btn-secondary {
   background: transparent;
   color: var(--text);
-  border: 4px solid var(--border);
-  border-radius: 0;
+  border: 3px solid var(--border);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.8), 
+              inset -1px -1px 0 rgba(0,0,0,0.4);
 }
 body.theme-brutalist .btn-ghost {
   background: transparent;
   color: var(--muted);
-  border: none;
+  border: 3px dashed var(--border);
 }
 
-/* Form — thick borders */
+/* Form — chunky inputs */
 body.theme-brutalist .demo-form input,
 body.theme-brutalist .demo-form textarea {
   background: var(--input-bg);
-  border: 4px solid var(--border);
+  border: 3px solid var(--border);
   color: var(--text);
-  border-radius: 0;
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
 body.theme-brutalist .demo-form input:focus,
 body.theme-brutalist .demo-form textarea:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(240,71,71,0.3);
 }
 
-/* Blockquote — uppercase, thick left border */
+/* Blockquote — thick left accent */
 body.theme-brutalist .callout {
-  background: #f0f0f0;
-  border-left: 6px solid var(--border);
-  color: var(--text);
-  font-style: normal;
-  text-transform: uppercase;
+  border-left: 4px solid var(--border);
+  padding-inline-start: var(--spacing-lg);
+  position: relative;
 }
-body.theme-brutalist .callout cite { color: var(--muted); }
+body.theme-brutalist .callout cite { 
+  color: var(--muted);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+}
 
-/* Footer */
+/* Footer — minimal */
 body.theme-brutalist footer p { color: var(--muted); }
 
-/* Style Selector — thick bottom border */
+/* Style Selector — flush top, stark */
 body.theme-brutalist .style-selector {
   background: var(--selector-bg);
-  border-bottom: 4px solid var(--border);
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
 body.theme-brutalist .style-selector button {
   background: transparent;
   color: var(--text);
   border-radius: 0;
+  font-size: 1rem;
 }
-body.theme-brutalist .style-selector button:hover { background: rgba(0,0,0,0.1); }
+body.theme-brutalist .style-selector button:hover { background: rgba(0,0,0,0.05); }
 body.theme-brutalist .style-selector button.active {
-  background: var(--border);
-  color: #ffffff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }

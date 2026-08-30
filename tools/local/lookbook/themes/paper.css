@@ -1,140 +1,155 @@
 /* ==========================================================================
-   Theme: Paper
-   Off-white textured background, handwritten-style fonts,
-   ink-like strokes, subtle paper grain overlay.
-   Structural changes: rotated elements (hero h1 -1deg, card titles
-   -0.5deg, buttons -1deg), dashed borders on nav links and secondary
-   button, fixed-position SVG noise overlay for paper grain texture,
-   card hover adds a slight rotation (0.5deg) in addition to lift.
+   Theme: Paper (Handwritten & Ink)
+   Off-white textured background, handwritten-style fonts for accents, ink-like
+   stroke borders. Structural changes: cards have a subtle skew/rotation to look
+   like they're resting on paper, decorative lines instead of borders, block quotes
+   use a "handwritten" style font with indented quotation mark, hero h1 has an
+   slight italic slant for that pencil-drawn feel, navigation uses underlined
+   text with ink-style dashes. Very organic, very tactile.
    ========================================================================== */
 
 body.theme-paper {
-  --bg: #f7f3eb;
-  --text: #2c2416;
-  --muted: #6b5e4a;
-  --border: #d4c8b0;
-  --accent: #8b4513;
-  --card-bg: #fdf9f0;
-  --btn-primary-bg: var(--accent);
-  --btn-primary-text: #ffffff;
-  --input-bg: #fdf9f0;
-  --selector-bg: #ece6d8;
+  --bg: #fdf6ec;
+  --text: #2d3748;
+  --muted: #718096;
+  --border: #b79500;
+  --accent: #5c4033;
+  --card-bg: rgba(253,246,236, 0.95);
+  --btn-primary-bg: #8B4513;
+  --btn-primary-text: #f5deb3;
+  --input-bg: #fff9e7;
+  --selector-bg: #f5e6d8;
 }
 
 body.theme-paper {
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* Paper grain effect via subtle noise pattern */
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
 }
 
-/* Paper grain overlay */
-body.theme-paper::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
+/* Hero — italic slant for handwritten feel */
+body.theme-paper .hero {
+  text-align: center;
+  padding-block: var(--spacing-2xl);
 }
-
-/* Hero — slight rotation */
-body.theme-paper .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+body.theme.paper .hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4rem);
   line-height: 1.1;
-  color: var(--text);
-  transform: rotate(-1deg);
-  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  transform: skewX(-2deg);
 }
-body.theme-paper .hero p {
+body.theme.paper .hero p {
   color: var(--muted);
-  font-style: italic;
+  max-width: 64ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
 }
 
-/* Nav — dashed underline */
-body.theme-paper .demo-nav a {
-  color: var(--text);
-  font-weight: 600;
-  padding-block: var(--spacing-sm);
-  border-bottom: 2px dashed transparent;
-}
-body.theme-paper .demo-nav a:hover { border-bottom-color: var(--accent); }
-
-/* Cards — slight rotation on hover */
-body.theme-paper .card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  box-shadow: 2px 3px 6px rgba(0,0,0,0.08);
-}
-body.theme-paper .card:hover { transform: translateY(-2px) rotate(0.5deg); }
-body.theme-paper .card-image { background: linear-gradient(135deg, #e8dcc4, #d4c8b0); border-radius: 4px 4px 0 0; }
-body.theme-paper .card-title {
+/* Navigation — underlined with ink dashes */
+body.theme.paper .demo-nav a {
   color: var(--text);
   font-weight: 700;
-  margin-bottom: var(--spacing-sm);
-  transform: rotate(-0.5deg);
+  text-decoration: none;
+  position: relative;
 }
-body.theme-paper .card-body p { color: var(--muted); }
+body.theme.paper .demo-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent);
+}
 
-/* Buttons — rotated, dashed secondary */
-body.theme-paper .btn-primary {
+/* Cards — slightly skewed for that "on paper" effect */
+body.theme.paper .card-grid {
+  gap: var(--spacing-lg);
+}
+body.theme.paper .card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding-block: var(--spacing-md) var(--spacing-xl);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.08);
+  transform: rotate(-0.5deg);
+  transition: transform 0.3s ease;
+}
+body.theme.paper .card:hover {
+  transform: translateY(-4px) rotate(-0.8deg);
+}
+
+/* Card images — ink wash effect */
+body.theme.paper .card-image {
+  background: linear-gradient(to right, rgba(179,69,19,0.3), transparent 70%);
+}
+body.theme.paper .card-title { color: var(--accent); font-weight: 800; margin-bottom: var(--spacing-sm); }
+body.theme.paper .card-body p { color: var(--muted); }
+
+/* Buttons — ink wash effect */
+body.theme.paper .btn-primary {
   background: var(--btn-primary-bg);
   color: var(--btn-primary-text);
-  border: none;
-  border-radius: 4px;
-  transform: rotate(-1deg);
+  border: 2px solid var(--border);
 }
-body.theme-paper .btn-secondary {
+body.theme.paper .btn-secondary {
   background: transparent;
   color: var(--text);
-  border: 2px dashed var(--border);
-  border-radius: 4px;
-}
-body.theme-paper .btn-ghost {
-  background: transparent;
-  color: var(--muted);
-  border: none;
+  border: 2px dashed var(--accent);
 }
 
-/* Form — rounded inputs */
-body.theme-paper .demo-form input,
-body.theme-paper .demo-form textarea {
+/* Form - slightly larger for that handwritten feel */
+body.theme.paper .demo-form input,
+body.theme.paper .demo-form textarea {
   background: var(--input-bg);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   color: var(--text);
-  border-radius: 4px;
+  padding-block: var(--spacing-sm) var(--spacing-md);
 }
-body.theme-paper .demo-form input:focus,
-body.theme-paper .demo-form textarea:focus {
+body.theme.paper .demo-form input:focus,
+body.theme.paper .demo-form textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(139,69,19,0.12);
+  box-shadow: 0 0 0 2px rgba(179,69,19,0.3);
 }
 
-/* Blockquote — rotated */
-body.theme-paper .callout {
-  background: #ece6d8;
-  border-left: 4px solid var(--accent);
-  color: var(--text);
-  font-style: italic;
-  transform: rotate(-0.5deg);
+/* Blockquote - indented with quotation mark */
+body.theme.paper .callout {
+  position: relative;
+  margin-block-start: var(--spacing-lg);
 }
-body.theme-paper .callout cite { color: var(--muted); }
+body.theme.paper .callout::before {
+  content: '"';
+  font-size: 2rem;
+  color: var(--accent);
+  position: absolute;
+  left: var(--spacing-md);
+  top: -0.25em;
+  line-height: 1;
+}
+body.theme.paper .callout p {
+  margin-inline-start: calc(var(--spacing-lg) + 1rem);
+}
 
 /* Footer */
-body.theme-paper footer p { color: var(--muted); }
+body.theme.paper footer p { color: var(--muted); }
 
-/* Style Selector — paper feel */
-body.theme-paper .style-selector {
+/* Style Selector - flush top, paper colored */
+body.theme.paper .style-selector {
   background: var(--selector-bg);
 }
-body.theme-paper .style-selector button {
+body.theme.paper .style-selector button {
   background: transparent;
   color: var(--text);
-  border-radius: 4px;
+  border-radius: 0;
+  font-size: 1rem;
 }
-body.theme-paper .style-selector button:hover { background: rgba(0,0,0,0.05); }
-body.theme-paper .style-selector button.active {
-  background: var(--accent);
-  color: #ffffff;
+body.theme.paper .style-selector button:hover { background: rgba(0,0,0,0.05); }
+body.theme.paper .style-selector button.active {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
