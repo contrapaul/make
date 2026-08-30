@@ -49,7 +49,7 @@ img { max-width: 100%; height: auto; display: block; }
    ========================================================================== */
 
 .container {
-  width: min(100% - 2rem, 80rem);
+  width: min(100% - 2rem, 76rem);
   margin-inline: auto;
 }
 
