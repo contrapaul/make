@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Theme: Glassmorphism
+   Frosted-glass panels over a colorful gradient background,
+   soft shadows, translucent layers.
+   Structural changes: large 20px border-radius on cards and buttons,
+   backdrop-filter blur on all panels (cards, blockquote, form inputs),
+   hero h1 has text-shadow for depth, card hover lifts 8px with
+   deeper shadow, blockquote gets rounded right corners.
+   ========================================================================== */
+
+body.theme-glassmorphism {
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.7);
+  --glass-bg: rgba(255,255,255,0.12);
+  --glass-border: rgba(255,255,255,0.2);
+  --accent: #f093fb;
+  --btn-primary-bg: rgba(255,255,255,0.25);
+  --btn-primary-text: #ffffff;
+  --input-bg: rgba(255,255,255,0.1);
+  --selector-bg: rgba(255,255,255,0.08);
+}
+
+body.theme-glassmorphism {
+  background: var(--bg-gradient);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+/* Hero — depth shadow */
+body.theme-glassmorphism .hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.1;
+  color: var(--text);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  font-weight: 700;
+}
+body.theme-glassmorphism .hero p {
+  color: var(--muted);
+}
+
+/* Nav — subtle underline */
+body.theme-glassmorphism .demo-nav a {
+  color: var(--text);
+  font-weight: 500;
+  padding-block: var(--spacing-sm);
+  border-bottom: 2px solid transparent;
+}
+body.theme-glassmorphism .demo-nav a:hover { border-bottom-color: var(--accent); }
+
+/* Cards — frosted glass, large radius, deep hover lift */
+body.theme-glassmorphism .card-grid {
+  gap: var(--spacing-xl);
+}
+body.theme-glassmorphism .card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+body.theme-glassmorphism .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+}
+body.theme-glassmorphism .card-image { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)); }
+body.theme-glassmorphism .card-title { color: var(--text); font-weight: 600; margin-bottom: var(--spacing-sm); }
+body.theme-glassmorphism .card-body p { color: var(--muted); }
+
+/* Buttons — frosted glass, large radius */
+body.theme-glassmorphism .btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+}
+body.theme-glassmorphism .btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+body.theme-glassmorphism .btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+}
+
+/* Form — frosted inputs */
+body.theme-glassmorphism .demo-form input,
+body.theme-glassmorphism .demo-form textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+}
+body.theme-glassmorphism .demo-form input:focus,
+body.theme-glassmorphism .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 16px rgba(240,147,251,0.3);
+}
+
+/* Blockquote — frosted glass with rounded right corners */
+body.theme-glassmorphism .callout {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  font-style: italic;
+  border-radius: 0 16px 16px 0;
+}
+body.theme-glassmorphism .callout cite { color: var(--muted); }
+
+/* Footer */
+body.theme-glassmorphism footer p { color: var(--muted); }
+
+/* Style Selector — frosted glass bar */
+body.theme-glassmorphism .style-selector {
+  background: var(--selector-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+body.theme-glassmorphism .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 8px;
+}
+body.theme-glassmorphism .style-selector button:hover { background: rgba(255,255,255,0.1); }
+body.theme-glassmorphism .style-selector button.active {
+  background: var(--btn-primary-bg);
+  color: #ffffff;
+}

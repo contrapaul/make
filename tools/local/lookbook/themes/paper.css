@@ -1,0 +1,140 @@
+/* ==========================================================================
+   Theme: Paper
+   Off-white textured background, handwritten-style fonts,
+   ink-like strokes, subtle paper grain overlay.
+   Structural changes: rotated elements (hero h1 -1deg, card titles
+   -0.5deg, buttons -1deg), dashed borders on nav links and secondary
+   button, fixed-position SVG noise overlay for paper grain texture,
+   card hover adds a slight rotation (0.5deg) in addition to lift.
+   ========================================================================== */
+
+body.theme-paper {
+  --bg: #f7f3eb;
+  --text: #2c2416;
+  --muted: #6b5e4a;
+  --border: #d4c8b0;
+  --accent: #8b4513;
+  --card-bg: #fdf9f0;
+  --btn-primary-bg: var(--accent);
+  --btn-primary-text: #ffffff;
+  --input-bg: #fdf9f0;
+  --selector-bg: #ece6d8;
+}
+
+body.theme-paper {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+}
+
+/* Paper grain overlay */
+body.theme-paper::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Hero — slight rotation */
+body.theme-paper .hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.1;
+  color: var(--text);
+  transform: rotate(-1deg);
+  font-weight: 700;
+}
+body.theme-paper .hero p {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Nav — dashed underline */
+body.theme-paper .demo-nav a {
+  color: var(--text);
+  font-weight: 600;
+  padding-block: var(--spacing-sm);
+  border-bottom: 2px dashed transparent;
+}
+body.theme-paper .demo-nav a:hover { border-bottom-color: var(--accent); }
+
+/* Cards — slight rotation on hover */
+body.theme-paper .card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 2px 3px 6px rgba(0,0,0,0.08);
+}
+body.theme-paper .card:hover { transform: translateY(-2px) rotate(0.5deg); }
+body.theme-paper .card-image { background: linear-gradient(135deg, #e8dcc4, #d4c8b0); border-radius: 4px 4px 0 0; }
+body.theme-paper .card-title {
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+  transform: rotate(-0.5deg);
+}
+body.theme-paper .card-body p { color: var(--muted); }
+
+/* Buttons — rotated, dashed secondary */
+body.theme-paper .btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  border-radius: 4px;
+  transform: rotate(-1deg);
+}
+body.theme-paper .btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px dashed var(--border);
+  border-radius: 4px;
+}
+body.theme-paper .btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+}
+
+/* Form — rounded inputs */
+body.theme-paper .demo-form input,
+body.theme-paper .demo-form textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+}
+body.theme-paper .demo-form input:focus,
+body.theme-paper .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(139,69,19,0.12);
+}
+
+/* Blockquote — rotated */
+body.theme-paper .callout {
+  background: #ece6d8;
+  border-left: 4px solid var(--accent);
+  color: var(--text);
+  font-style: italic;
+  transform: rotate(-0.5deg);
+}
+body.theme-paper .callout cite { color: var(--muted); }
+
+/* Footer */
+body.theme-paper footer p { color: var(--muted); }
+
+/* Style Selector — paper feel */
+body.theme-paper .style-selector {
+  background: var(--selector-bg);
+}
+body.theme-paper .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 4px;
+}
+body.theme-paper .style-selector button:hover { background: rgba(0,0,0,0.05); }
+body.theme-paper .style-selector button.active {
+  background: var(--accent);
+  color: #ffffff;
+}

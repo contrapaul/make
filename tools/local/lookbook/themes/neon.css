@@ -1,0 +1,158 @@
+/* ==========================================================================
+   Theme: Neon
+   Dark background with glowing neon accents (cyan, magenta, lime),
+   bold gradients, and animated hover effects.
+   Structural changes: staggered card grid (offset rows via nth-child),
+   animated border glow on cards, hero h1 has text-shadow glow,
+   buttons have pulsing box-shadow animation, form inputs get
+   neon focus ring with glow.
+   ========================================================================== */
+
+body.theme-neon {
+  --bg: #0a0a12;
+  --text: #e0e0ff;
+  --muted: #8888aa;
+  --border: #2a2a3a;
+  --accent-cyan: #00f5d4;
+  --accent-magenta: #f15bb5;
+  --accent-lime: #72ef2c;
+  --card-bg: rgba(20, 20, 36, 0.8);
+  --input-bg: rgba(30, 30, 50, 0.9);
+  --selector-bg: rgba(20, 20, 36, 0.9);
+}
+
+body.theme-neon {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Hero — centered with glow */
+body.theme-neon .hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  line-height: 1.1;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 20px rgba(0,245,212,0.5), 0 0 60px rgba(0,245,212,0.2);
+  font-weight: 800;
+}
+body.theme-neon .hero p {
+  color: var(--muted);
+  text-shadow: 0 0 10px rgba(241,91,181,0.3);
+}
+
+/* Nav — glowing links */
+body.theme-neon .demo-nav a {
+  color: var(--accent-magenta);
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(241,91,181,0.4);
+}
+body.theme-neon .demo-nav a:hover {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 12px rgba(0,245,212,0.6);
+}
+
+/* Cards — staggered grid with animated border glow */
+body.theme-neon .card-grid {
+  gap: var(--spacing-xl);
+}
+body.theme-neon .card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,245,212,0.08);
+  position: relative;
+}
+body.theme-neon .card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
+body.theme-neon .card:hover::before { opacity: 1; }
+body.theme-neon .card:hover {
+  box-shadow: 0 0 30px rgba(0,245,212,0.2), 0 0 60px rgba(241,91,181,0.1);
+}
+body.theme-neon .card-image {
+  background: linear-gradient(135deg, #0a0a12, #1a1a3a);
+  border-bottom: 1px solid var(--border);
+}
+body.theme-neon .card-title { color: var(--accent-cyan); font-weight: 700; margin-bottom: var(--spacing-sm); }
+body.theme-neon .card-body p { color: var(--muted); }
+
+/* Staggered rows — offset every other card */
+body.theme-neon .card-grid > :nth-child(odd) {
+  transform: translateX(var(--spacing-lg));
+}
+body.theme-neon .card-grid > :nth-child(even) {
+  transform: translateX(calc(-1 * var(--spacing-lg)));
+}
+
+/* Buttons — pulsing glow animation */
+@keyframes neon-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(0,245,212,0.4); }
+  50% { box-shadow: 0 0 30px rgba(0,245,212,0.7), 0 0 60px rgba(0,245,212,0.2); }
+}
+body.theme-neon .btn-primary {
+  background: var(--accent-cyan);
+  color: #0a0a12;
+  border: none;
+  animation: neon-pulse 3s ease-in-out infinite;
+}
+body.theme-neon .btn-secondary {
+  background: transparent;
+  color: var(--accent-magenta);
+  border: 1px solid var(--accent-magenta);
+  box-shadow: 0 0 8px rgba(241,91,181,0.2);
+}
+body.theme-neon .btn-ghost {
+  background: transparent;
+  color: var(--accent-lime);
+  border: none;
+}
+
+/* Form — neon focus ring */
+body.theme-neon .demo-form input,
+body.theme-neon .demo-form textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+}
+body.theme-neon .demo-form input:focus,
+body.theme-neon .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0,245,212,0.3), 0 0 24px rgba(0,245,212,0.1);
+}
+
+/* Blockquote — magenta glow */
+body.theme-neon .callout {
+  background: rgba(20, 20, 36, 0.6);
+  border-left: 3px solid var(--accent-magenta);
+  color: var(--text);
+  font-style: italic;
+  box-shadow: 0 0 16px rgba(241,91,181,0.15);
+}
+body.theme-neon .callout cite { color: var(--muted); }
+
+/* Footer */
+body.theme-neon footer p { color: var(--muted); }
+
+/* Style Selector — dark glass */
+body.theme-neon .style-selector {
+  background: var(--selector-bg);
+}
+body.theme-neon .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 6px;
+}
+body.theme-neon .style-selector button:hover { background: rgba(0,245,212,0.1); }
+body.theme-neon .style-selector button.active {
+  background: var(--accent-cyan);
+  color: #0a0a12;
+}
