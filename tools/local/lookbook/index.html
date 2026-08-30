@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Lookbook Learn by Seeing</title>
+    <title>CSS Lookbook - Learn by Seeing</title>
     <link rel="stylesheet" href="lookbook.css">
     <link id="theme-sheet" rel="stylesheet" href="themes/minimal.css">
 </head>
@@ -40,32 +40,28 @@
         <p>HTML (HyperText Markup Language) gives your page structure. It doesn't make things look nice that's CSS's job. Think of HTML as the skeleton and CSS as the skin, clothes, and makeup.</p>
 
         <div class="card-grid">
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="headings">
                 <div class="card-body">
                     <h3 class="card-title">Headings</h3>
-                    <p><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> define heading levels. Use them to create a clear hierarchy one <code>&lt;h1&gt;</code> per page, then nest down from there.</p>
+                    <p><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code> define heading levels. Use them to create a clear hierarchy — one <code>&lt;h1&gt;</code> per page, then nest down from there.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="paragraphs">
                 <div class="card-body">
                     <h3 class="card-title">Paragraphs &amp; Text</h3>
-                    <p><code>&lt;p&gt;</code> wraps blocks of text. For emphasis use <code>&lt;strong&gt;</code> (bold) and <code>&lt;em&gt;</code> (italic). Avoid <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> they carry no meaning.</p>
+                    <p><code>&lt;p&gt;</code> wraps blocks of text. For emphasis use <code>&lt;strong&gt;</code> (bold) and <code>&lt;em&gt;</code> (italic). Avoid <code>&lt;b&gt;</code> and <code>&lt;i&gt;</code> — they carry no meaning.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="links">
                 <div class="card-body">
                     <h3 class="card-title">Links</h3>
-                    <p><code>&lt;a href="..."&gt;</code> creates a hyperlink. Always give it descriptive text "click here" tells the reader nothing.</p>
+                    <p><code>&lt;a href="..."&gt;</code> creates a hyperlink. Always give it descriptive text — "click here" tells the reader nothing.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="lists">
                 <div class="card-body">
                     <h3 class="card-title">Lists</h3>
                     <p><code>&lt;ul&gt;</code> for unordered (bulleted) lists, <code>&lt;ol&gt;</code> for ordered (numbered). Each item goes in an <code>&lt;li&gt;</code>.</p>
@@ -80,32 +76,28 @@
         <p>CSS (Cascading Style Sheets) tells the browser how to paint your HTML. A rule has a <strong>selector</strong> and a <strong>declaration block</strong>:</p>
 
         <div class="card-grid">
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="selectors">
                 <div class="card-body">
                     <h3 class="card-title">Selectors</h3>
                     <p>Target elements by tag (<code>p</code>), class (<code>.intro</code>), or id (<code>#header</code>). Classes are reusable; ids should be unique on a page.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="properties">
                 <div class="card-body">
                     <h3 class="card-title">Properties &amp; Values</h3>
                     <p>Inside the braces you write declarations: <code>color: blue;</code>, <code>font-size: 16px;</code>. Each ends with a semicolon.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="units">
                 <div class="card-body">
                     <h3 class="card-title">Units</h3>
                     <p><code>px</code> is fixed. <code>rem</code> scales with the root font size (great for accessibility). <code>%</code> is relative to the parent element.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="box-model">
                 <div class="card-body">
                     <h3 class="card-title">The Box Model</h3>
                     <p>Every element is a box: content → padding → border → margin. Understanding this is the single most important thing in CSS.</p>
@@ -120,24 +112,21 @@
         <p>CSS layout tools let you arrange elements on the page. Here are the three most important ones:</p>
 
         <div class="card-grid">
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="flexbox">
                 <div class="card-body">
                     <h3 class="card-title">Flexbox</h3>
                     <p>One-dimensional layout. Great for nav bars, button rows, and centering things. Set <code>display: flex;</code> on the parent.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="grid">
                 <div class="card-body">
                     <h3 class="card-title">Grid</h3>
                     <p>Two-dimensional layout. Define rows and columns with <code>grid-template-columns</code>. Perfect for card grids like this one.</p>
                 </div>
             </article>
 
-            <article class="card">
-                <div class="card-image"></div>
+            <article class="card" data-card="responsive">
                 <div class="card-body">
                     <h3 class="card-title">Responsive Design</h3>
                     <p>Use media queries (<code>@media (max-width: 640px)</code>) to change styles at different screen sizes. Your page should work on phones and desktops.</p>
@@ -149,7 +138,7 @@
     <!-- Section: Components -->
     <section id="components" class="demo-section">
         <h2>Components</h2>
-        <p>A component is a reusable piece of UI a button, card, or form field. CSS lets you style them however you want.</p>
+        <p>A component is a reusable piece of UI — a button, card, or form field. CSS lets you style them however you want.</p>
 
         <!-- Buttons -->
         <div class="button-row">
@@ -176,7 +165,7 @@
     <!-- Blockquote -->
     <section class="demo-section">
         <blockquote class="callout">
-            "HTML is the structure. CSS is the presentation. JavaScript is the behavior. Learn them in that order each one builds on the last."
+            "HTML is the structure. CSS is the presentation. JavaScript is the behavior. Learn them in that order — each one builds on the last."
             <cite>- A common piece of advice for beginners</cite>
         </blockquote>
     </section>
@@ -187,5 +176,19 @@
     </footer>
 
     <script src="switcher.js"></script>
+
+    <!-- Modal Overlay -->
+    <div id="modal-backdrop" class="modal-backdrop">
+        <!-- Modal Content Box -->
+        <div id="modal-content" class="modal-content">
+            <!-- Modal Close Button -->
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <!-- Modal Header -->
+            <h2 id="modal-title" class="modal-title"></h2>
+            <!-- Modal Body Placeholder (populated by JS) -->
+            <div id="modal-body" class="modal-body">Loading content...</div>
+        </div>
+    </div>
+
 </body>
 </html>
