@@ -1,0 +1,309 @@
+# v100 — Blueprint: "How Local AI Works" Interactive Page
+
+Status: **Blueprint** (ready to build) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
+Last updated: 2026-09-01
+
+---
+
+## 1. Product Definition
+
+A static, multi-tab interactive site for **high school students and educators** (English first; Chinese toggle deferred). It demonstrates how local AI models run, makes hardware a first-class factor in performance, simulates inference with representative real numbers, and compares local setups against ChatGPT (GPT-5 family), DeepSeek V4, and Claude Opus 5 — including cost at Shenzhen electricity rates.
+
+**Success criteria:**
+1. A student can toggle hardware + model + quantization, run a simulation, and *explain* why the speed changed.
+2. Numbers pass muster with seasoned local-AI enthusiasts (labeled assumptions, footnoted sources).
+3. Every tab is visually rewarding; exploration of all 4 tabs is encouraged and celebrated.
+4. Hosts as plain static files on the owner's website — no build step, no external media assets.
+
+**Out of scope:** mobile layout polish (touch-friendly controls only), Chinese UI, fine-tuning *simulation* (covered in comparison narrative only), custom hardware entry.
+
+---
+
+## 2. Architecture & File Layout
+
+```
+v100/
+├── index.html              # App shell: tab nav, theme toggle, footer placeholder
+├── css/
+│   ├── tokens.css          # Design tokens + light/dark themes (CSS custom properties)
+│   ├── base.css            # Reset, typography, glass components, controls
+│   └── tabs.css            # Per-tab layout & motion classes
+├── js/
+│   ├── data/
+│   │   ├── hardware.js     # All-in-ones, GPUs, RAM tiers, CPUs (verified specs + sources)
+│   │   ├── models.js       # Slider stops w/ anchor-model architecture metadata
+│   │   ├── quantization.js # Levels, bytes/param, student explainers
+│   │   ├── cloud.js        # GPT-5 family / DeepSeek V4 / Claude Opus 5 (specs, pricing, "as of" dates)
+│   │   └── rates.js        # Shenzhen electricity rate + USD conversion
+│   ├── engine/
+│   │   ├── perf.js         # Decode/prefill/KV-cache/fits-check formulas (§5)
+│   │   └── cost.js         # Power, kWh, RMB/USD per M tokens
+│   ├── state/store.js      # Shared reactive store (config → derived metrics), localStorage persistence
+│   ├── motion/scroll.js    # Reversible scroll-reveal engine (§8)
+│   ├── tabs/
+│   │   ├── home.js         # Tab 1
+│   │   ├── pipeline.js     # Tab 2
+│   │   ├── lab.js          # Tab 3 (centerpiece)
+│   │   └── compare.js      # Tab 4
+│   └── app.js              # Bootstrap, tab router, theme switcher, exploration tracker
+├── plans.md · outline.md · blueprint.md
+```
+
+- **No framework, no build step.** Vanilla ES modules; one optional charting library (Chart.js) if hand-rolled SVG proves clumsy — decision at Phase 3.
+- All visuals: CSS gradients/SVG/canvas only. Zero image/video/font-file dependencies (system font stack).
+
+---
+
+## 3. Data Layer (verified anchors + research TODOs)
+
+### 3.1 Hardware presets
+
+**All-in-one:**
+
+| Platform | Memory | Bandwidth | Compute notes | Load power |
+|---|---|---|---|---|
+| MacBook Air M5 | 16 GB unified | **153 GB/s** [S1] | M5, 10-core CPU + 8/10-core GPU | ~30 W (assumption) |
+| MacBook Pro M4 Pro | 48 GB unified | **273 GB/s** [S2] | M4 Pro, 14-core CPU + 20-core GPU | ~90 W (assumption range 65–120) |
+| DGX Spark | 128 GB LPDDR5x unified | **273 GB/s** [S3] | GB10 Grace Blackwell, up to 1 PFLOP FP4 sparse; 20-core Arm | GB10 TDP 140 W / PSU 240 W [S3] |
+
+**GPUs (1×/2×/4×):**
+
+| GPU | VRAM | Bandwidth | Prefill compute | TDP |
+|---|---|---|---|---|
+| V100 PCIe | 16 GB | HBM2 **900 GB/s** ✅ (R1) | FP32 15.7 / Tensor 125 TFLOPS [user-provided] | 250 W; PCIe Gen3 x16 ≈ 32 GB/s link [user-provided] |
+| RTX 3060 | 12 GB GDDR6 | 360 GB/s | FP32 12.7 TFLOPS | 170 W |
+| RTX 3090 | 24 GB GDDR6X | 936 GB/s | FP32 35.6 TFLOPS | 350 W |
+| RX 9070 XT | 16 GB GDDR6 | **644.6 GB/s** [S4] | RDNA4, boost 2970 MHz — **FP32 48.7 TFLOPS** ✅ (R2) | **304 W** [S5] |
+| RTX 5070 Ti | 16 GB GDDR7 | 896 GB/s | Blackwell — **FP32 43.9 TFLOPS** ✅ (R2) | 300 W |
+| RTX 5090 | 32 GB GDDR7 | 1792 GB/s | Blackwell — **FP32 104.8 TFLOPS** ✅ (R2) | 575 W |
+| RTX 6000 Ada | 48 GB GDDR6 ECC | 960 GB/s | Ada — **FP32 91.1 TFLOPS** ✅ (R2) | 300 W |
+
+**System RAM (dual-channel bandwidth):** DDR4-3200 ≈ **51.2 GB/s**; DDR5-6000 ≈ **96 GB/s**. Capacities: both at 16/32/48/64/128 GB; DDR5 additionally 192/256 GB.
+
+**CPU (selectable — offload realism):** Ryzen 5 3600 · Ryzen 9 5800X3D · i5-13600K · i9-13900KF *(user-approved)* + included adds (user-approved): **Ryzen 7 7800X3D** and **Threadripper 7960X (DDR5, 12-ch ≈ 400 GB/s)** as a workstation tier. CPU compute matters for prefill on CPU-only/offload paths; RAM bandwidth is the decode bottleneck.
+
+### 3.2 Model slider (approved list)
+**4B · 8B · 12B · 14B · 16B · 27B · 32B · 70B · 80B · 405B** — each stop anchored to a real model for architecture metadata (layers, KV heads, head dim):
+
+| Stop | Anchor (metadata source) |
+|---|---|
+| 4B | Qwen3-4B — 36 layers, GQA 8 KV heads, head dim 128 ✅ (R4) [M1] |
+| 8B | Llama 3.1 8B — 32 layers, GQA 8 KV heads, head dim 128 |
+| 12B | Gemma 3 12B — 48 layers, GQA 8 KV heads, head dim **256** ✅ (R4) [M2] |
+| 14B | Qwen3-14B (selected) — 40 layers, GQA 8 KV heads, head dim 128 ✅ (R4) [M3] |
+| 16B | Interpolated (no major anchor) — labeled "representative" |
+| 27B | Gemma 3 27B v3 — 62 layers, GQA **16** KV heads, head dim 128 ✅ (R4) [M4] |
+| 32B | Qwen3-32B (selected) — 64 layers, GQA 8 KV heads, head dim 128 ✅ (R4) [M6] |
+| 70B | Llama 3.3 70B — 80 layers, GQA 8 KV heads, head dim 128 |
+| 80B | Interpolated between 70B/405B anchors — labeled "representative" |
+| 405B | Llama 3.1 405B — 126 layers, GQA 8 KV heads, head dim 128 |
+
+### 3.3 Quantization levels (each with a student explainer)
+
+| Level | Bytes/param | Explainer angle |
+|---|---|---|
+| FP16/BF16 | 2.0 | "Full precision — the model as trained; biggest and slowest" |
+| INT8/AWQ | ~1.05 | "Halved size, near-identical answers for most tasks" |
+| Q6_K (GGUF) | ~0.75 | "Small quality dip on hard reasoning" |
+| Q5_K_M | ~0.63 | "The balance pick" |
+| Q4_K_M | ~0.55 | "Community default — fits more, slightly dumber" |
+
+Explainers must cover: what precision means → bytes/param → size vs speed vs quality trade-off → why quantization makes small models viable on big hardware and vice versa.
+
+### 3.4 Cloud baselines (research + cite; fallback = nearest published equivalent with footnote)
+
+| System | Known now | Status (P1) |
+|---|---|---|
+| ChatGPT / GPT-5 family ("ChatGPT 5+") | GPT-5 exists on Artificial Analysis [S6] | ✅ closed — current top = **GPT-5.6 Sol**: $5/$30 list (promo $4/$20 through Nov 21, 2026), ~1.05M ctx, 82.8 t/s max-effort; ChatGPT Plus $20/mo — see `js/data/cloud.js` [C1][C3][C7] |
+| DeepSeek V4 | Released ~Apr 2026; **1M context**; "rivaling top closed models" [S7]; community: practical coding sweet spot 150–250k ctx [S8] | ✅ closed — **V4 Pro** peak $1.32/$3.96 (off-peak half), 54.1 t/s, TTFT 1.65 s; V4 Flash value tier — see `js/data/cloud.js` [C5][C6] |
+| Claude Opus 5 | Released **Jul 24 2026**; **$5/M input, $25/M output** [S9]; context window reported 1M — ✅ confirmed in P1 (see Status) | ✅ closed — 1M ctx default (all providers), Fast mode $10/$50, ~53 t/s, II 63 #1/187 + agentic-coding results — see `js/data/cloud.js` [C2][C4] |
+
+### 3.5 Cost constants
+- **Shenzhen electricity:** residential tier-1 ≈ **0.66 RMB/kWh** [S10]; industrial 35 kV+ = **0.61 RMB/kWh** (Jul 2026, NDRC via CEIC) [S11]. Model default: **0.65 RMB/kWh** (labeled midpoint), displayed in RMB + USD at **≈6.72 CNY/USD** — verified Aug 31, 2026 across Wise/Xe/Bloomberg/Yahoo; supersedes the earlier ~7.2 assumption. See `js/data/rates.js`.
+- Local cost model: hardware price (one-time, amortized over a chosen horizon — default 3 yr) + electricity only *(per user)*.
+
+### 3.6 Sources
+- [S1] Apple MacBook Air tech specs (M5, 153 GB/s): https://www.apple.com/macbook-air/specs/
+- [S2] M4 Pro memory bandwidth 273 GB/s — confirmed (R3, see `hardware.js` [H2])
+- [S3] NVIDIA DGX Spark: https://www.nvidia.com/en-us/products/workstations/dgx-spark
+- [S4] TechPowerUp RX 9070 XT (644.6 GB/s): https://www.techpowerup.com/gpu-specs/radeon-rx-9070-xt.c4229
+- [S5] Corsair RX 9070/XT power guide (304 W TDP)
+- [S6] Artificial Analysis GPT-5 benchmarks: https://artificialanalysis.ai
+- [S7] DeepSeek V4 preview news: https://api-docs.deepseek.com/news/news260424/
+- [S8] r/LocalLLaMA on V4 1M context practicality (context only, not a citation)
+- [S9] Anthropic Claude Opus 5 announcement: https://www.anthropic.com/news/claude-opus-5
+- [S10] Shenzhen residential rate ≈0.6629 RMB/kWh tier-1: https://www.eyeshenzhen.com (verify current schedule at build)
+- [S11] CEIC/NDRC Shenzhen industrial 35 kV+ = 0.610 RMB/kWh Jul 2026
+
+---
+
+## 4. State Model & App Shell
+
+**Shared reactive store** (`state/store.js`): single source of truth; every tab subscribes.
+
+```
+config: { platform | gpu:{type,count} | ram:{tier,capacity} | cpu, modelStop, quant,
+          contextWindow, promptSplit, concurrency }
+derived (recomputed on any change): fitsState, decodeTps, ttftMs, kvCacheGB,
+          maxModelFits, watts, costPerMOutRMB/USD, prefillTflopsEff
+ui: { activeTab, theme, visitedTabs[], simRunning, simProgress }
+```
+
+- Persist `config` + `visitedTabs` to `localStorage`; restore on load.
+- Tab router: hash-based (`#/lab`) so tabs are linkable/bookmarkable without leaving the page.
+- **Exploration tracker:** per-tab "new" dots until first visit; Home shows a progress ring (n/4); all-4 → one-time celebration state (CSS sparkle burst, no assets) + persistent "Explorer" badge in nav.
+
+---
+
+## 5. Performance Engine Spec (`engine/perf.js`)
+
+All formulas documented on-page as an expandable "How we estimate this" panel with assumptions labeled.
+
+**Memory accounting**
+- `weightsGB = params × bytesPerParam(quant)` (table §3.3)
+- `kvCacheGB = 2 × layers × kvHeads × headDim × ctxTokens × dtypeBytes / 1e9` (dtype follows quant; FP16 KV default, note Q8_0 option later)
+- Usable memory: discrete GPU → VRAM per card; Apple/DGX unified pool minus ~⅓ OS carve-out *(labeled assumption)*.
+
+**Fits check (drives everything)**
+1. `weights + kv ≤ VRAM` → **GPU-resident** (fast path).
+2. Else split layers across GPU/CPU at the boundary → **offload mode**; if `weights + kv > VRAM + RAM` → **doesn't fit** state (UI explains what to change: smaller model / lower quant / shorter context).
+
+**Decode speed (bandwidth-bound)**
+- Per-layer serial model: `t_token = Σ_layers (layerBytes / BW_of_resident_device)`; `tps = 1/t_token × η`
+- `η_decode ≈ 0.65–0.80` real-world efficiency *(calibrate against §5.4 anchors)*
+- Multi-GPU scaling factors on bandwidth: 2× → **1.75**, 4× → **3.2** (NVLink/PCIe overhead; labeled assumption)
+- CPU-resident layers use RAM tier bandwidth (51.2 / 96 GB/s); this is why offload visibly punishes speed — the teaching moment.
+
+**Prefill / TTFT (compute-bound)**
+- `ttft_s = promptTokens × 2 × params / (η_prefill × TFLOPS_eff) + 0.1s overhead`
+- `TFLOPS_eff = Σ_gpu TFLOPS × η_prefill`, `η_prefill ≈ 0.5–0.7`; CPU path uses CPU FLOPs *(per-CPU values at build)*
+
+**Power & cost (`engine/cost.js`)**
+- `watts_load = Σ GPU_TDP×0.9 + systemBase(platform)` (systemBase: Macs ~30–60 W, PC rigs ~80–120 W — assumptions)
+- `kWh_per_M_out = watts × (1e6 / tps) / 3.6e6` → `costRMB = kWh × 0.65`; show RMB + USD
+- Amortized hardware: `price / (3×365×24h)` blended into $/M for the comparison tab *(hardware prices researched at build, cited)*
+
+**Sanity anchors (Phase 2 acceptance — engine output must land in these ranges):**
+| Setup | Model | Expected decode |
+|---|---|---|
+| RTX 3090 ×1 | 8B Q4_K_M (~4.5 GB) | **140–200 tok/s** |
+| M4 Pro 48GB | 8B Q4_K_M | **40–60 tok/s** |
+| M4 Pro 48GB | 70B Q4_K_M (~40 GB) | **5–9 tok/s** |
+| MacBook Air M5 16GB | 4B Q4_K_M (~2.6 GB) | **25–45 tok/s** |
+| RTX 3060 ×1 (offload, DDR4-3200) | 70B Q4_K_M | **< 3 tok/s** (teaches offload pain) |
+
+If an anchor misses its range by >25%, adjust `η` constants — never the formula shape.
+
+---
+
+## 6. Tab Specifications
+
+### Tab 1 — Home / Intro
+- **Layout:** full-viewport hero ("AI, running on *your* hardware") → scroll story in 4–5 beats: what a model is (weights = billions of numbers) → why it needs memory & bandwidth → the local vs cloud fork → "explore" CTA grid linking tabs.
+- **Motion:** Pi.dev-style beat-by-beat reveals (§8); hero has an ambient CSS gradient-mesh + floating glass panels; token-glyph stream animation (pure CSS/SVG).
+- **Components:** exploration progress ring, tab cards with "new" dots, theme toggle in nav.
+- **Acceptance:** a first-time visitor reaches Tab 3 within ~60 s of scrolling; all beats reverse cleanly on scroll-up.
+
+### Tab 2 — How It Works (pipeline)
+- **Layout:** horizontal pipeline diagram (5 stages), each stage an expandable glass card:
+  1. **Tokenization** — live example: type a sentence → watch it split into token chips with IDs.
+  2. **Model load** — weights "pouring" from disk into the memory bar of *the current config*; shows GB used vs available.
+  3. **Prefill vs decode** — two-speed animation: prompt processed in one fast pass (compute-bound), then tokens drip out one-by-one at the estimated tok/s (bandwidth-bound). This contrast is the core lesson.
+  4. **KV cache growth** — a bar that fills as context grows; live GB readout from §5 formulas for current model/context.
+  5. **Sampling** — temperature/top-p sliders with a "next-token probability" bar chart that visibly reshapes (hand-rolled SVG).
+- **Binding:** all numbers reflect the shared store's current config; changing hardware in Tab 3 changes this tab live.
+- **Acceptance:** each stage shows at least one real number from the engine; tokenization demo works with arbitrary input.
+
+### Tab 3 — Hardware Lab (centerpiece)
+- **Layout (desktop ≥1280px):** left rail = controls; center = simulation canvas; right rail = printouts.
+- **Left rail (controls, top→bottom):**
+  - Platform group: All-in-one (Air M5 / MBP M4 Pro / DGX Spark) *or* GPU rig (GPU picker × count 1/2/4 + RAM tier/capacity + CPU picker).
+  - Model slider (§3.2 stops, with anchor-model name shown per stop).
+  - Quantization segmented control + inline explainer card for the selected level.
+  - Toggles: context window (8K/32K/128K), prompt-vs-generation split (short/long/balanced presets), concurrency (1 / 4 / 16 requests).
+- **Center (simulation):** "Run Inference" button → animated pass: load bar → prefill flash → token stream at estimated rate across a canvas/SVG "conveyor"; live tokens/sec gauge; progress to N-token target. Concurrency >1 shows queueing and throughput vs per-request speed divergence *(teaching moment)*.
+- **Right rail (printouts, always visible):** max model size that fits · time-to-first-token · power draw (W) · memory fill bar (VRAM/RAM split) · $/M output tokens (RMB+USD). Values animate on change; "doesn't fit" state shows a friendly diagnosis + suggested fixes.
+- **Acceptance:** every control changes ≥1 printout within 100 ms; simulation speed matches engine ±5%; offload scenario visibly slows the stream and explains why in one sentence of UI copy.
+
+### Tab 4 — Local vs Cloud
+- **Layout:** top = animated "race" (same 256-token generation task: local config vs GPT-5 family vs DeepSeek V4 vs Claude Opus 5, progress bars racing at their respective tok/s with latency offsets); below = full comparison table; bottom = cost panel.
+- **Table dimensions:** speed & TTFT · cost per M tokens (local amortized+electricity vs API pricing) · subscription alternative ($20/mo ChatGPT Plus equivalent — verify current plan names/pricing at build) · privacy/on-device data · offline capability · quality benchmarks (cite [S6][S9]) · context window (DeepSeek V4 1M [S7] vs local KV-cache-limited reality) · **agentic coding** (narrative + cited results) · **trainability/customization** — the local advantage: fine-tune/LoRA on your data, no API dependency; cloud = none.
+- **Cost panel:** interactive "your usage" estimator (messages/day × tokens/message) → monthly RMB for local vs each cloud tier at Shenzhen rates [S10][S11].
+- **Acceptance:** race finishes in ≤20 s real time (time-compressed, labeled); every authoritative number has a footnote; cost panel computes correctly against §5.
+
+---
+
+## 7. Design System (`css/tokens.css`)
+
+**Glassmorphism recipe (not cookie-cutter):**
+- Background: layered CSS radial-gradient mesh (3–4 soft color blobs, slow drift animation ≤60 s loop) — different hue sets per theme.
+- Panels: `background: rgba(255,255,255,.07)` (dark) / `rgba(255,255,255,.55)` (light); `backdrop-filter: blur(18px) saturate(140%)`; 1px border `rgba(255,255,255,.14)`; radius 16–20 px; layered soft shadows. Cap simultaneous blurred layers ≤ ~8 for performance on mid-range GPUs.
+- Accent: single electric accent (indigo→cyan gradient) for interactive states + data highlights; semantic green/amber/red for fits/warn/fail.
+
+**Tokens:** spacing scale 4/8/12/16/24/32/48; type scale 13/15/17/20/24/32/48 (system stack: SF Pro / Segoe UI / Noto Sans CJK fallback); motion durations 150/250/400/600 ms; easing `cubic-bezier(.22,1,.36,1)` for reveals, `ease-in-out` for toggles.
+
+**Themes:** light + dark via `[data-theme]` on `<html>`; default = `prefers-color-scheme`; manual toggle persisted. All colors tokenized — no hardcodes in tab CSS.
+
+---
+
+## 8. Motion & Scroll Choreography (`motion/scroll.js`)
+
+- **Reversible reveals:** IntersectionObserver with `rootMargin: -10% 0px`; elements enter from below → add `.in-view` (translateY(24–48px)→0, opacity 0→1, stagger via `--i × 60 ms`); leaving upward past threshold → class removed (clean reverse on scroll-up). No library.
+- **Micro-interactions:** control changes pulse the affected printout; tab switches crossfade + slight parallax of background mesh; "Run Inference" button has a charging→running state machine.
+- `prefers-reduced-motion`: reveals become instant opacity-only; ambient drift disabled. (Courtesy, not required.)
+
+---
+
+## 9. Touch & Input Considerations (desktop-first)
+
+- All hit targets ≥ 40×40 px; sliders draggable by touch; no hover-only information (tooltips get tap/focus fallbacks).
+- Keyboard: tab order logical per rail; all controls focusable with visible focus rings.
+- No accessibility program beyond the above *(per user)*, but semantic HTML + labels kept clean for future i18n.
+
+---
+
+## 10. Research Checklist (Phase 1 deliverables)
+
+| # | Task | Source target | Status (P1) |
+|---|---|---|---|
+| R1 | V100 PCIe HBM2 bandwidth confirm (900 GB/s?) + TDP | NVIDIA datasheet | ✅ 900 GB/s HBM2 + 250 W confirmed (`hardware.js` [H4]) |
+| R2 | RX 9070 XT / RTX 5070 Ti / 5090 / RTX 6000 Ada TFLOPS for prefill model | TechPowerUp / vendor | ✅ FP32 dense: **48.7 / 43.9 / 104.8 / 91.1** (RX 9070 XT corrected 2026-09-01 — see log below) |
+| R3 | M4 Pro bandwidth confirm (273 GB/s) + Mac load-power estimates | Apple specs, reviews | ✅ 273 GB/s confirmed [H2][H3] · ⚠️ Mac load power = labeled assumption (Air ~30 W; MBP ~90 W midpoint of 65–120) |
+| R4 | Anchor-model configs (layers/KV heads/head dim) for §3.2 stops | HF config.json per anchor | ✅ all anchors verified (`models.js` [M1]–[M6]; Gemma 3 uses explicit `head_dim`) |
+| R5 | GPT-5 family: current top model, tok/s, $/M in/out, context, subscription plan names/pricing | OpenAI + artificialanalysis.ai [S6] | ✅ **GPT-5.6 Sol**: list $5/$30 (promo $4/$20 through Nov 21, 2026), ~1.05M ctx, 82.8 t/s max-effort; ChatGPT Plus $20/mo (`cloud.js`) |
+| R6 | DeepSeek V4 pricing + speed claims | api-docs.deepseek.com [S7] | ✅ **V4 Pro** peak $1.32/$3.96 (off-peak half), 54.1 t/s, TTFT 1.65 s; V4 Flash value tier (`cloud.js`) |
+| R7 | Claude Opus 5 context window confirm (1M?) + benchmark/agentic-coding results | anthropic.com [S9] | ✅ 1M ctx default on all providers, $5/$25 (Fast mode $10/$50), ~53 t/s, II 63 #1/187 (`cloud.js`) |
+| R8 | Shenzhen residential TOU schedule current values; USD/CNY rate | CEG/NDRC, PBOC [S10][S11] | ✅ tier-1 ≈0.66 + industrial 0.610 both current → default **0.65** (labeled midpoint) · ⚠️ FX now **6.72** CNY/USD (Wise, Aug 31 2026) — supersedes §3.5's ~7.2 |
+| R9 | Hardware street prices (RMB) for amortization: each GPU, Macs, DGX Spark, RAM kits | JD/Taobao listings or vendor pages | ⚠️ **estimates** (`priceBasis:'estimate'`, [H6][H7]) — UI must footnote; **owner to confirm at sign-off** |
+| R10 | CPU FLOPs + memory channels for the 4 approved CPUs (+2 proposed) | AMD/Intel ARK | ⚠️ `prefillTflopsEff` = community-behavior estimates, labeled per row (`hardware.js`) — calibrate in P2 |
+
+**Verification log (2026-09-01):** full re-check of all five data files against primary sources. **One real error found and fixed:** RX 9070 XT `tflopsFp32Dense` in `hardware.js` corrected **132.7 → 48.7 TFLOPS** (earlier derivation "54 CUs × 512 ALU" was wrong; actual is 64 CUs / 4096 shaders, boost 2970 MHz — AMD official + TechPowerUp both ≈48.7); `tdpW` also updated 300 → **304 W** [H8][H9]. Everything else confirmed as written: V100 bandwidth/TDP (R1), M5/M4 Pro/DGX Spark bandwidths (R3), all anchor configs incl. Gemma 3's explicit `head_dim` (R4), cloud pricing/speeds/contexts (R5–R7), Shenzhen rates + FX (R8).
+
+---
+
+## 11. Build Order & Milestones
+
+| Phase | Deliverable | Acceptance gate |
+|---|---|---|
+| **P1 Research** | `js/data/*` complete with sources + "as of" dates; R1–R10 closed or footnoted as estimates | Data review sign-off (owner) |
+| **P2 Engine** | `perf.js`, `cost.js`, store | All §5 sanity anchors within range; unit checks for fits/offload/KV math |
+| **P3 Design system** | tokens/base CSS, theme switcher, glass components, scroll engine | Light/dark both correct on all components; reveals reversible |
+| **P4 Home tab** | Tab 1 complete | §6 acceptance; exploration tracker works across tabs |
+| **P5 Pipeline tab** | Tab 2 complete | Live-bound to store; tokenization demo functional |
+| **P6 Hardware Lab** | Tab 3 complete (largest) | §6 acceptance incl. concurrency + offload teaching moment |
+| **P7 Compare tab** | Tab 4 complete | Race ≤20 s; footnotes on all authoritative numbers; cost math verified |
+| **P8 Polish & QA** | Motion pass, edge cases (doesn't-fit, 4×GPU+405B), performance on mid-range GPU, final walkthrough with owner | Owner sign-off; ship as static files |
+
+Suggested order note: P3→P6 before P5/P7 if the Lab is the priority demo surface.
+
+---
+
+## 12. Risks & Mitigations
+
+| Risk | Mitigation |
+|---|---|
+| Numbers feel "off" to enthusiasts | §5 calibration anchors; assumptions labeled on-page; footnotes [S*]; "representative estimate" disclaimer in engine panel |
+| Cloud pricing/specs change before launch | All cloud data centralized in `cloud.js` with as-of dates → single-file update |
+| `backdrop-filter` jank on mid-range hardware | Blur-layer cap (§7); test on RTX 3060-class machine during P8 |
+| Scope creep (more tabs/features) | Strict tab boundaries; new ideas go to a `backlog.md`, not the build |
+| Multi-GPU efficiency assumptions wrong | Factors isolated in one constant table (`hardware.js`) for easy recalibration |
