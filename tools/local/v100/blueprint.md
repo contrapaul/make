@@ -1,7 +1,7 @@
 # v100 — Blueprint: "How Local AI Works" Interactive Page
 
-Status: **Blueprint** (ready to build) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
-Last updated: 2026-09-01
+Status: **Blueprint** (ready to build; Phase 1 data complete, awaiting owner sign-off — see [HANDOFF.md](HANDOFF.md)) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
+Last updated: 2026-09-02
 
 ---
 
