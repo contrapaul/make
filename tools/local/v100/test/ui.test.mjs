@@ -1,17 +1,24 @@
 /* ============================================================
-   v100 — Phase 3 UI logic tests (plain Node ESM, no framework)
+   v100 — Phase 4 UI logic tests (plain Node ESM, no framework)
    ------------------------------------------------------------
    Runs the browser modules against minimal DOM stubs:
      - js/theme.js        theme resolution precedence + toggle/persist
      - js/motion/scroll.js stagger index, IO wiring, reversibility,
                           pulse micro-interaction, slider fill binding
+     - js/app.js          hash router + exploration tracker (P4)
+     - js/tabs/home.js    hero CTA → story scroll (P4)
    Run: node test/ui.test.mjs
    ============================================================ */
 
 import { strict as assert } from 'node:assert';
 import { STORAGE_KEY, resolveInitialTheme, initTheme } from '../js/theme.js';
 import { revealStaggerIndex, initReveals, pulse, bindRangeFill } from '../js/motion/scroll.js';
-import { tabFromHash, initRouter } from '../js/app.js';
+import {
+  tabFromHash, initRouter,
+  TAB_TO_STORE, trackerView, unseenRouterTabs, initTracker, CELEBRATED_KEY,
+} from '../js/app.js';
+import { initHome } from '../js/tabs/home.js';
+import { createStore } from '../js/state/store.js';
 
 let passed = 0;
 const ok = (name) => { passed += 1; console.log(`  ✓ ${name}`); };
@@ -253,5 +260,144 @@ function makeClassEl(dataset = {}) {
   ok('initRouter is a no-op when there are no .tab-panel elements (harness keeps #light/#dark)');
 }
 
+/* ---------------- js/app.js — exploration tracker (P4, §4) -------- */
+console.log('app.js — tracker');
+
+{ // TAB_TO_STORE bridges the two id systems ('how' in URLs ↔ 'pipeline' in store)
+  assert.deepEqual(TAB_TO_STORE, { home: 'home', how: 'pipeline', lab: 'lab', compare: 'compare' });
+  ok('TAB_TO_STORE maps router ids to store ids (how → pipeline)');
+}
+
+{ // trackerView — pure derivation from a visited set; foreign ids ignored
+  assert.deepEqual(trackerView([]), { count: 0, total: 4, allVisited: false });
+  assert.deepEqual(trackerView(['home', 'pipeline']), { count: 2, total: 4, allVisited: false });
+  assert.equal(trackerView(['home', 'pipeline', 'lab', 'compare']).allVisited, true);
+  assert.equal(trackerView(['bogus-tab']).count, 0); // foreign ids never count
+  ok('trackerView derives n/4 + allVisited; ignores unknown ids');
+}
+
+{ // unseenRouterTabs — "new" dots per ROUTER tab id
+  assert.deepEqual(unseenRouterTabs([]), ['home', 'how', 'lab', 'compare']);
+  assert.deepEqual(unseenRouterTabs(['pipeline']), ['home', 'lab', 'compare']); // how visited → no dot
+  ok('unseenRouterTabs reports which tabs still show a "new" dot');
+}
+
+function tEl(extra = {}) {
+  const classes = new Set();
+  return Object.assign({
+    dataset: {},
+    attrs: {},
+    textContent: '',
+    offsetWidth: 10,
+    style: { vars: {}, setProperty(k, v) { this.vars[k] = String(v); } },
+    classList: {
+      add(c) { classes.add(c); }, remove(c) { classes.delete(c); }, contains: (c) => classes.has(c),
+      toggle(c, force) {
+        if (force === undefined) { if (classes.has(c)) classes.delete(c); else classes.add(c); }
+        else if (force) classes.add(c); else classes.delete(c);
+      },
+    },
+    setAttribute(k, v) { this.attrs[k] = v; },
+    getAttribute(k) { return this.attrs[k] ?? null; },
+  }, extra);
+}
+
+function makeTrackerDoc() {
+  const navDot = {}; const cardDot = {};
+  const containers = [];
+  for (const t of ['home', 'how', 'lab', 'compare']) {
+    navDot[t] = tEl();
+    containers.push(tEl({ dataset: { tabLink: t }, querySelector: (s) => (s === '.dot-new' ? navDot[t] : null) }));
+  }
+  for (const t of ['how', 'lab', 'compare']) { // Home's explore-grid cards
+    cardDot[t] = tEl();
+    containers.push(tEl({ dataset: { trackTab: t }, querySelector: (s) => (s === '.dot-new' ? cardDot[t] : null) }));
+  }
+  const ringLabel = tEl();
+  const ring = tEl({ querySelector: (s) => (s === '.ring-label' ? ringLabel : null) });
+  const badge = tEl();
+  const celebrate = tEl();
+  return {
+    navDot, cardDot, ring, ringLabel, badge, celebrate,
+    querySelectorAll: () => containers,
+    getElementById: (id) => ({ 'explore-ring': ring, 'explorer-badge': badge, 'explorer-celebrate': celebrate }[id] ?? null),
+  };
+}
+
+{
+  const storage = makeStorage();
+  const st = createStore({ storage }); // real P2 store contract, injected storage
+  const doc = makeTrackerDoc();
+  const tr = initTracker({ doc, storage, store: st });
+
+  // fresh state: every dot visible (nav + cards), ring 0/4, badge hidden, no burst
+  for (const t of ['home', 'how', 'lab', 'compare']) assert.ok(!doc.navDot[t].classList.contains('is-hidden'), `nav dot ${t} visible`);
+  for (const t of ['how', 'lab', 'compare']) assert.ok(!doc.cardDot[t].classList.contains('is-hidden'), `card dot ${t} visible`);
+  assert.equal(doc.ring.style.vars['--progress'], '0');
+  assert.equal(doc.ringLabel.textContent, '0/4');
+  assert.ok(doc.badge.classList.contains('is-hidden'));
+  ok('fresh visitor: all dots visible, ring 0/4, badge hidden, no celebration');
+
+  tr.markVisited('how'); // router id → store 'pipeline'
+  assert.ok(doc.navDot.how.classList.contains('is-hidden') && doc.cardDot.how.classList.contains('is-hidden'));
+  for (const t of ['home', 'lab', 'compare']) assert.ok(!doc.navDot[t].classList.contains('is-hidden'), `${t} still dotted`);
+  assert.equal(doc.ring.style.vars['--progress'], '0.25');
+  assert.equal(doc.ringLabel.textContent, '1/4');
+  ok('visiting How It Works hides its dots and moves the ring to 1/4');
+
+  tr.markVisited('lab');
+  tr.markVisited('compare');
+  assert.equal(doc.ringLabel.textContent, '3/4');
+  assert.ok(doc.badge.classList.contains('is-hidden'));
+  assert.ok(!doc.celebrate.classList.contains('is-once'), 'no burst before all-4');
+  ok('3/4: badge still hidden and celebration has not fired');
+
+  tr.markVisited('home'); // the fourth tab → all visited
+  assert.ok(!doc.badge.classList.contains('is-hidden'), 'badge shown at 4/4');
+  assert.equal(doc.ring.style.vars['--progress'], '1');
+  assert.equal(doc.ringLabel.textContent, '4/4');
+  assert.ok(doc.celebrate.classList.contains('is-once'), 'spark burst fired once');
+  assert.equal(storage.getItem(CELEBRATED_KEY), '1', 'one-time flag persisted');
+  ok('all-4: badge shown, ring full, celebration fires and its flag persists');
+
+  const persisted = JSON.parse(storage.getItem('v100.state.v1'));
+  // Store appends in visit order — compare as a set, not an ordered array.
+  assert.deepEqual([...persisted.visitedTabs].sort(), ['compare', 'home', 'lab', 'pipeline']);
+  ok('visited tabs persist through the P2 store (cross-session state)');
+}
+
+{
+  // A fresh instance (new page load) with the same storage must NOT re-fire.
+  const storage = makeStorage();
+  const st1 = createStore({ storage });
+  initTracker({ doc: makeTrackerDoc(), storage, store: st1 });
+  for (const id of ['home', 'pipeline', 'lab', 'compare']) st1.setActiveTab(id);
+  assert.equal(storage.getItem(CELEBRATED_KEY), '1');
+
+  const st2 = createStore({ storage }); // restores all-4 visited state from persistence
+  const doc2 = makeTrackerDoc();
+  initTracker({ doc: doc2, storage, store: st2 });
+  assert.ok(!doc2.celebrate.classList.contains('is-once'), 'no re-fire on load');
+  assert.ok(!doc2.badge.classList.contains('is-hidden'), 'badge still shown from persisted state');
+
+  st2.setActiveTab('lab'); // repeated update after the fact → still no burst
+  assert.ok(!doc2.celebrate.classList.contains('is-once'));
+  ok('celebration is one-time: fresh instance + later updates never re-fire it');
+}
+
+/* ---------------- js/tabs/home.js — hero CTA (P4) -------------- */
+console.log('tabs/home.js');
+
+{
+  const target = { calls: [], scrollIntoView(o) { this.calls.push(o); } };
+  const btn = { listeners: {}, addEventListener(ev, fn) { this.listeners[ev] = fn; } };
+  const doc = { getElementById: (id) => (id === 'story' ? target : id === 'start-exploring' ? btn : null) };
+  initHome({ doc });
+  btn.listeners.click();
+  assert.equal(target.calls.length, 1);
+  assert.equal(target.calls[0].behavior, 'smooth'); // no matchMedia in Node → not reduced
+  ok('hero CTA smooth-scrolls to the story (block: start)');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (P3 UI logic).`);
+console.log(`ALL PASS — ${passed} checks green (P4 UI logic).`);

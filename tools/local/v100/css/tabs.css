@@ -1,0 +1,199 @@
+/* ============================================================
+   v100 — Per-tab layout & motion (blueprint §2 file layout)
+   ------------------------------------------------------------
+   P4 scope: Tab 1 — Home / Intro, per blueprint §6.
+   All colors via tokens (§7); no hardcoded theme values here.
+   Agent-decided details are labeled as such in comments.
+   ============================================================ */
+
+/* ---------- Hero (full viewport, §6 Tab 1) ------------------- */
+.home-hero {
+  position: relative;
+  overflow: hidden; /* clip the floating panels at the edges */
+  min-height: calc(100vh - 56px);  /* nav = sp-2 ×2 + 40 px toggle */
+  min-height: calc(100svh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  padding: var(--sp-7) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  text-align: center;
+}
+
+.hero-inner .eyebrow {
+  margin: 0;
+  font-size: var(--fs-1);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.hero-inner h1 {
+  margin: 0;
+  font-size: var(--fs-7);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  margin: 0;
+  max-width: 58ch;
+  font-size: var(--fs-3);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.hero-cta { display: flex; gap: var(--sp-3); flex-wrap: wrap; justify-content: center; }
+
+/* Floating glass panels — decorative only (aria-hidden in markup).
+   Agent-decided: animate the individual `translate` property so it can't
+   clash with any transform on the element; hidden below 900 px. */
+.hero-float {
+  position: absolute;
+  z-index: 0;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-1);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.hero-float b { color: var(--text-primary); font-weight: 700; }
+
+.hero-float--a { top: 16%; left: 7%;  animation: float-a 9s  var(--ease-toggle) infinite alternate; }
+.hero-float--b { top: 24%; right: 6%; animation: float-b 11s var(--ease-toggle) infinite alternate; }
+.hero-float--c { bottom: 18%; left: 13%; animation: float-c 13s var(--ease-toggle) infinite alternate; }
+
+@keyframes float-a { from { translate: 0 0; } to { translate: 0 -20px; } }
+@keyframes float-b { from { translate: 0 0; } to { translate: 0 16px; } }
+@keyframes float-c { from { translate: 0 0; } to { translate: 0 -14px; } }
+
+@media (max-width: 900px) { .hero-float { display: none; } }
+
+/* Token-glyph stream — pure CSS loop (§6). Agent-decided: two identical
+   halves so a −50 % translate is seamless; edge fade via mask. */
+.token-stream {
+  position: absolute;
+  left: 0; right: 0; bottom: var(--sp-5);
+  z-index: 1;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.token-track { display: flex; width: max-content; animation: token-drift 36s linear infinite; }
+
+.token-half { display: inline-flex; gap: var(--sp-2); padding-right: var(--sp-2); }
+
+@keyframes token-drift { to { transform: translateX(-50%); } }
+
+.glyph {
+  font-family: var(--font-mono);
+  font-size: var(--fs-1);
+  line-height: 1;
+  padding: 6px 12px;
+  border-radius: var(--radius-chip);
+  background: var(--chip-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+}
+
+.glyph--accent {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  color: var(--on-accent);
+}
+
+/* ---------- Scroll story (§6 Tab 1: beats) -------------------- */
+.home-story {
+  max-width: 920px;
+  margin-inline: auto;
+  padding: var(--sp-7) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-7);
+}
+
+.beat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--sp-6);
+  align-items: center;
+}
+
+@media (max-width: 820px) { .beat { grid-template-columns: 1fr; } }
+
+.beat-copy h3 { margin: 0 0 var(--sp-3); font-size: var(--fs-5); line-height: 1.2; }
+.beat-copy p { margin: 0; line-height: 1.65; color: var(--text-secondary); }
+.beat-copy b { color: var(--text-primary); }
+
+.beat-visual h4 { margin: 0 0 var(--sp-3); font-size: var(--fs-2); color: var(--text-faint); font-weight: 600; }
+
+/* Beat 1 — a corner of the weight table (decorative, aria-hidden) */
+.weights-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: var(--sp-3); }
+
+.w-cell {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1;
+  padding: 7px 2px;
+  text-align: center;
+  border-radius: 6px;
+  background: var(--chip-bg);
+  color: var(--text-faint);
+}
+
+.w-cell--hot { background: var(--accent-gradient); color: var(--on-accent); font-weight: 700; }
+
+.beat-caption { margin: 0 !important; font-size: var(--fs-1) !important; color: var(--text-faint) !important; }
+
+/* Beat 2 — bandwidth comparison bars (numbers from blueprint §3.1) */
+.bw { display: flex; flex-direction: column; gap: var(--sp-4); margin-bottom: var(--sp-3); }
+
+.bw-row { display: grid; grid-template-columns: 150px minmax(0, 1fr) 84px; align-items: center; gap: var(--sp-3); }
+@media (max-width: 560px) { .bw-row { grid-template-columns: 110px minmax(0, 1fr) 72px; } }
+
+.bw-label { font-size: var(--fs-1); color: var(--text-secondary); }
+
+.bw-bar { height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; }
+.bw-bar i { display: block; height: 100%; width: var(--w, 10%); border-radius: inherit; background: var(--accent-gradient); }
+
+.bw-val { font-size: var(--fs-2); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Beat 3 — the local/cloud fork */
+.fork-grid { display: grid; gap: var(--sp-4); }
+
+.fork-card h4 { margin: 0 0 var(--sp-2); font-size: var(--fs-3); color: var(--text-primary); }
+.fork-card ul { margin: 0; padding-left: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-1, 6px); }
+.fork-card li { font-size: var(--fs-2); color: var(--text-secondary); line-height: 1.5; }
+
+/* ---------- Explore grid (ring + tab cards, §4 tracker) ------- */
+.home-explore { max-width: 920px; margin-inline: auto; padding: 0 var(--sp-5) var(--sp-7); }
+
+.explore-head { display: flex; align-items: center; gap: var(--sp-5); margin-bottom: var(--sp-5); }
+@media (max-width: 640px) { .explore-head { flex-direction: column; align-items: flex-start; } }
+
+.explore-head h3 { margin: 0 0 var(--sp-1, 6px); font-size: var(--fs-5); }
+.explore-head p { margin: 0; color: var(--text-secondary); max-width: 48ch; line-height: 1.6; }
+
+.tab-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-4); }
+@media (max-width: 820px) { .tab-card-grid { grid-template-columns: 1fr; } }
+
+/* Tab cards are links — keep the card look, drop link affordances */
+.tab-card { position: relative; display: block; text-decoration: none; color: inherit; transition: transform var(--dur-micro) var(--ease-toggle), box-shadow var(--dur-micro) var(--ease-toggle); }
+.tab-card:hover { transform: translateY(-3px); }
+
+/* ---------- Reduced motion (§8 courtesy) ---------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .token-track,
+  .hero-float--a, .hero-float--b, .hero-float--c { animation: none !important; }
+}

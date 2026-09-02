@@ -1,6 +1,6 @@
 # v100 — Blueprint: "How Local AI Works" Interactive Page
 
-Status: **Building** — P1 signed off by owner 2026-09-02 (incl. R9 prices, now owner-provided Taobao listings); **P2 engine complete + signed off 2026-09-02** (all §5.4 anchors pass; `test/engine.test.mjs` 62/62 green; owner confirmed all prices correct — incl. unchanged RTX 3060 ¥2,000 / MBP M4 Pro ¥18,000 — and approved the KV-inclusive decode semantics); **P3 design system SIGNED OFF by owner 2026-09-02** (harness light+dark clean on all components, reveals reversible; "links don't work" verified as expected at P3 — router proven by tests; `test/ui.test.mjs` 21/21 green) · **P4 Home tab: in progress** · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
+Status: **Building** — P1 signed off by owner 2026-09-02 (incl. R9 prices, now owner-provided Taobao listings); **P2 engine complete + signed off 2026-09-02** (all §5.4 anchors pass; `test/engine.test.mjs` 62/62 green; owner confirmed all prices correct — incl. unchanged RTX 3060 ¥2,000 / MBP M4 Pro ¥18,000 — and approved the KV-inclusive decode semantics); **P3 design system SIGNED OFF by owner 2026-09-02** (harness light+dark clean on all components, reveals reversible; "links don't work" verified as expected at P3 — router proven by tests; `test/ui.test.mjs` 21/21 green) · **P4 Home tab SIGNED OFF by owner 2026-09-02** ("looking ridiculously good"; hero + story beats + explore grid; exploration tracker across tabs; `test/ui.test.mjs` 31/31 green) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
 Last updated: 2026-09-02
 
 ---
@@ -299,6 +299,12 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 
 **Verification log (P3 sign-off, 2026-09-02):** owner reviewed the acceptance harness (`dev/design-system.html`) in light + dark: "Looks fantastic" — all components pass muster; scroll reveals reversible. **P3 gate: signed off.** (Owner initially reviewed `index.html`, which correctly shows only placeholder panels at P3 — the sign-off page is the harness.) Proceeding to Phase 4 — Home tab.
 
+**Verification log (P4, 2026-09-02):** Home tab built per §6 Tab 1 + §4 — hero (eyebrow/H1/sub/CTA pair incl. "Skip to the Lab" ghost link), 3 story beats ("A model is billions of numbers", Qwen3-4B ≈ 4.2×10⁹ · "Speed is set by memory bandwidth", RTX 3090 936 GB/s vs DDR5-6000 96 GB/s per §3.1 · "The fork: local or cloud?" at ¥0.65/kWh), explore grid (progress ring + 3 tab cards with unvisited dots). Exploration tracker in `js/app.js`: `TAB_TO_STORE` mapping (`how`↔`pipeline`), nav dots + card dots, ring n/4 with aria-label, Explorer badge, one-time spark burst gated on separate localStorage key `v100-celebrated`. New files: `css/tabs.css` (hero layout, floating glass panels, pure-CSS token stream, reduced-motion block), `js/tabs/home.js` (CTA smooth-scroll). **Tests:** `test/ui.test.mjs` **31/31 green** (+10 tracker/home checks); `test/engine.test.mjs` 62/62; all JS pass `node --check`.
+
+**Verification log (P4 sign-off, 2026-09-02):** owner reviewed the Home tab in light + dark in the app browser: "this site is looking ridiculously good." **P4 gate: signed off.** The seven agent-decided P4 items (TAB_TO_STORE mapping, celebration key, button CTA, token stream, float panels, beat copy, deep-link counts as visit) are approved with the phase.
+
+**Verification log (owner-reported JSON error — closed, 2026-09-02):** owner supplied the exact message: **"Unterminated string in JSON at position 347 (line 1 column 348)"**, seen **in harness stream/output** (not on any v100 page; no file reference). Consistent with the session-10 audit — v100 has no code path that throws an uncaught JSON error (`js/state/store.js` is the only runtime JSON user, both parse and stringify wrapped in try/catch with a green test covering the corrupt-state fallback; zero `fetch()` calls; no `.json` assets). **Closed as external to v100 — no action needed.**
+
 ---
 
 ## 11. Build Order & Milestones
@@ -308,7 +314,7 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 | **P1 Research** | `js/data/*` complete with sources + "as of" dates; R1–R10 closed or footnoted as estimates | Data review sign-off (owner) |
 | **P2 Engine** | `perf.js`, `cost.js`, store ✅ 2026-09-02 | All §5 sanity anchors within range; unit checks for fits/offload/KV math — **met** (`test/engine.test.mjs` 62/62) |
 | **P3 Design system** | tokens/base CSS ✅ · theme switcher ✅ · glass components ✅ · scroll engine ✅ (built 2026-09-02) | Light/dark both correct on all components; reveals reversible — **SIGNED OFF by owner 2026-09-02** (harness light+dark clean, reveals reversible; "links don't work" verified as expected at P3 — router proven by tests) (`test/ui.test.mjs` 21/21 green) |
-| **P4 Home tab** | Tab 1 complete | §6 acceptance; exploration tracker works across tabs |
+| **P4 Home tab** | hero + CTA ✅ · story beats ✅ · explore grid ✅ · exploration tracker ✅ (built 2026-09-02) | §6 acceptance; exploration tracker works across tabs — **SIGNED OFF by owner 2026-09-02** ("looking ridiculously good"; light+dark reviewed in app browser) (`test/ui.test.mjs` 31/31 green · `test/engine.test.mjs` 62/62) |
 | **P5 Pipeline tab** | Tab 2 complete | Live-bound to store; tokenization demo functional |
 | **P6 Hardware Lab** | Tab 3 complete (largest) | §6 acceptance incl. concurrency + offload teaching moment |
 | **P7 Compare tab** | Tab 4 complete | Race ≤20 s; footnotes on all authoritative numbers; cost math verified |

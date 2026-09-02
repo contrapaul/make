@@ -1,98 +1,103 @@
-# v100 Handoff — Phase 3 (Design System), Session 9
+# v100 Handoff — Phase 4 (Home tab), Session 10
 
-**Date:** 2026-09-02 · **Status: P3 BUILT + VERIFIED; owner confirmed light/dark swap clean; "links don't work" INVESTIGATED AND VERIFIED AS EXPECTED AT P3.** `test/ui.test.mjs` now **21/21 green** (incl. 5 new router tests proving tab-link navigation works); `test/engine.test.mjs` 62/62 re-confirmed this session; all JS pass `node --check`; token audit clean. Remaining P3 gate: owner's full visual sign-off of light+dark on **all components** + reveal reversibility → then P4 (or P6 if the Lab is prioritized).
+**Date:** 2026-09-02 · **Status: P4 SIGNED OFF by owner ("this site is looking ridiculously good"); JSON error CLOSED as external (exact message captured — harness stream/output, not v100).** `test/ui.test.mjs` **31/31 green** · `test/engine.test.mjs` **62/62 green** (both re-verified on disk in session 11); `blueprint.md` flipped + verification log appended; ready for P5 or P6 per owner priority.
 
-Project lives at `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step; full spec in [blueprint.md](blueprint.md), owner Q&A context in [plans.md](plans.md). This file supersedes the session-7 handoff and completes session 8's in-flight steps.
+Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. This file supersedes the session-9 handoff and completes its P4 kickoff + build.
 
 ---
 
-## Where things stand
+## The task right now (owner's latest instructions)
 
-- **Phase 1 (Research & Data): complete + signed off** by owner 2026-09-02; prices = owner-provided Taobao listings [H7].
-- **Phase 2 (Engine): COMPLETE + SIGNED OFF.** `perf.js`/`cost.js`/`store.js`, calibrated, `test/engine.test.mjs` 62/62 green.
-- **Phase 3 (Design system): BUILT + VERIFIED — owner confirmed light/dark swap clean; full visual sign-off still pending.** Owner's "none of the links work" report was investigated and **verified as the correct P3 result** (see below). Logic proven by tests: `test/ui.test.mjs` 21/21 green.
+1. Owner signed off P3: *"Looks fantastic! We can proceed to phase 4."* → **DONE this session — Phase 4 Home tab built** per blueprint §6 Tab 1 + §4 exploration tracker.
+2. *"Update handoff.md and note the JSON error. We will move to a new session."* → This document is that update, with the JSON-error investigation findings below.
+3. Owner signed off P4 (session 11): "this site is looking ridiculously good" — and supplied the exact JSON error message (harness stream/output) → **DONE — blueprint flipped, verification log appended, JSON error closed as external.**
 
-## The owner's "links don't work" question — VERIFIED AS EXPECTED AT P3 ✅
+## ✅ The JSON error (owner-reported) — CLOSED 2026-09-02
 
-Owner (after confirming light/dark swap cleanly): *"I can't test more than the appearance at present — none of the links work."* Verified correct, for **two distinct reasons**:
+**RESOLVED:** owner supplied the exact message — **"Unterminated string in JSON at position 347 (line 1 column 348)"** — and confirmed it appeared **in harness stream/output, not on any v100 page**, with no file reference. That matches the audit below: there is no code path in v100 that throws a JSON error. **Closed as external to v100; owner said "no worries."**
 
-1. **`dev/design-system.html` (the acceptance harness) has NO tab navigation by design** — it's a single scrolling component showcase; its only link is the brand mark (`href="#/home"`), which does nothing meaningful there. Confirmed by grep: zero `.tab-panel` / `[data-tab-link]` elements on that page. "Links don't work" here = correct.
-2. **`index.html` (app shell) DOES have a working router** — clicking a tab link changes the hash → `hashchange` → `router.show(tab)` → toggles `.is-active` on exactly one panel + its nav link. It works, but every panel is an intentional placeholder ("Phase N lands here") that P4–P7 fill in, so navigation *looks* inert because there's no destination content yet — also correct at P3.
+Session-10 audit (kept for the record):
 
-**Proof (not just assertion):**
-- 5 new router tests added to `test/ui.test.mjs` and **run green this session → 21/21 total**: `tabFromHash` parses `#/<tab>` and rejects theme hashes (`#dark`) + unknowns; default panel active on load; `show(tab)` activates exactly one panel + its link (the tab-link click path); no stacking across switches; safe no-op when a page has no `.tab-panel`s (so the harness keeps `#light/#dark` without the router clobbering the URL).
-- Live check: served via HTTP and opened `index.html#/lab` in the app browser — deep-link loads with the Lab placeholder active, exercising the same `initRouter → show()` path a click uses.
-- Corroboration: the theme toggle (wired by `initTheme()` inside the same `initApp()` bootstrap that runs `initRouter`) works end-to-end per owner's own confirmation → the JS bootstrap ran in-browser.
+- **The v100 codebase cannot produce an uncaught JSON error.** Verified by full-project search + reading every JSON touchpoint:
+  - `js/state/store.js` is the ONLY runtime JSON user. `loadPersisted()` wraps `JSON.parse` in try/catch → corrupt state falls back to defaults (a green test proves exactly this path); `persist()` wraps `JSON.stringify` in try/catch. Neither can throw.
+  - Zero `fetch()` calls anywhere; no `.json` assets are loaded by the site; `package.json` is valid JSON and browsers ignore it anyway.
+- Both suites were re-run green at session start (21/21 + 62/62) **before** any P4 code was written, so the error predates this build and isn't caused by it.
+- **Conclusion: the error almost certainly came from OUTSIDE the v100 site** — most likely the Bionic/LM Studio app UI itself (attachment/session payload), a browser extension, or another tab.
 
-## What was done this session (session 9 — continuation of session 8)
+**Status: closed — no further action.** If it recurs, note where it appears (app UI vs browser console); per the audit above there is no code path in v100 that throws a JSON error.
 
-1. **Ran the interrupted test suite** — `node test/ui.test.mjs` → **21/21 green** (the router block added at the end of session 8 now passes); re-ran `test/engine.test.mjs` → **62/62 green**.
-2. **Live-verified in the app browser** — static server on :8077 still up; opened `index.html#/lab` (deep-link proves hash routing on load) for owner inspection; grep-confirmed the harness has no tabs by design and `index.html` has exactly 4 tab links + 4 placeholder panels.
-3. **Doc sync (completed what session 8 left in flight)** — `blueprint.md`: status line, §11 P3 row, and a new verification-log entry ("P3 owner check-in") recording the light/dark confirmation + the two-part "links" verdict with test proof; this `HANDOFF.md` rewritten to current state (session 8's rewrite never reached disk — verified via change history before overwriting).
+## What was built this session (P4 — Home tab)
 
-## What session 8 did (carried forward, all now complete)
-
-1. Read all P3 files + blueprint/plans; re-ran both suites green; `node --check` clean on all JS.
-2. **Token audit:** every `var(--x)` in CSS + HTML resolves to a defined token; no hardcoded theme colors in base.css beyond structural white/black. Clean.
-3. Served via `python3 -m http.server 8077`; opened for owner: `dev/design-system.html#light`, `#dark`, and `index.html`. All assets HTTP 200 (server still running as of this session's check).
-4. Updated `blueprint.md` (status line, §11 P3 row, verification-log entry); attempted HANDOFF rewrite — **did not land on disk** (this file was still the session-7 version; now fixed).
-5. Added the router test block to `test/ui.test.mjs` (+5 checks) — **now run and green this session**.
-
-## What sessions 6–7 did (the P3 build + verification) — reference
-
-| File | Status |
+| File | Change |
 |---|---|
-| `css/tokens.css` ✅ | Full token set: spacing/type/durations/ease, glass recipe (§7 exact values), accent indigo→cyan per theme, semantic ok/warn/fail, mesh blob colors. Light = `:root` default; dark under `[data-theme="dark"]`; **no-JS fallback** duplicates dark tokens in `@media (prefers-color-scheme: dark) :root:not([data-theme])` with KEEP-IN-SYNC comment. |
-| `css/base.css` ✅ (~790 lines) | Reset, typography, `.mesh` ambient bg, glass panels/cards, nav shell + tab links + new-dots + Explorer badge + theme toggle, buttons + Run state machine (`data-run-state`, CSS-only label swap), radio segmented control, range slider w/ `--val` fill, switch, cards, progress ring, token chips, memory bar states, printout rows + pulse, conic gauge (label OUTSIDE masked ring), comparison table, estimates panel, footnotes, CSS-only celebration sparks, tab-panel crossfade, scroll-reveal base state **gated on `html.js`**, utilities, full `prefers-reduced-motion` block. |
-| `js/theme.js` ✅ | `resolveInitialTheme({stored, system, hash})` pure fn; precedence **hash > stored > system**; `initTheme()` wires `[data-theme-toggle]`, persists to `localStorage("v100-theme")`. No DOM at import → Node-testable. |
-| `js/motion/scroll.js` ✅ | `initReveals()`: IO `rootMargin: '-10% 0px'`, reversible `.in-view`, `--i` = ordinal among data-reveal siblings in same parent; DI-friendly. Plus §8 micro-interactions: `pulse(el)`, `bindRangeFill(input)`. |
-| `js/app.js` ✅ (minimal P3 bootstrap) | theme + reveals + hash router (`#/home · #/how · #/lab · #/compare`, bookmarkable via replaceState; **safe no-op when no `.tab-panel`s**). **P4 will add** exploration tracker, celebration wiring. Auto-bootstraps only in browser contexts. |
-| `index.html` ✅ | App shell: pre-paint theme snippet (mirrors `resolveInitialTheme` — keep-in-sync comments), nav with 4 tab links + badge slot + toggle, 4 placeholder `.tab-panel`s ("Phase N lands here"), footer placeholder. |
-| `dev/design-system.html` ✅ | **P3 acceptance harness** (not part of shipped site): every component in one page; tall scroll zone to prove reveal reversibility. **No tabs by design.** |
+| `css/tabs.css` **NEW** (~200 lines) | Per-tab layout/motion per blueprint §2: full-viewport hero, floating glass panels (`translate`-property animation, hidden <900 px), pure-CSS token-glyph stream (two identical halves → seamless −50 % translate; `mask-image` edge fade), 3-beat story grid, bandwidth bars, local/cloud fork cards, explore grid + tab-card link styling. All colors via tokens; own reduced-motion block. |
+| `js/tabs/home.js` **NEW** | Hero "Start exploring" CTA → smooth-scroll to `#story` (reduced-motion → instant). DI-friendly for Node tests. |
+| `js/app.js` | **+ exploration tracker (blueprint §4)**: `TAB_TO_STORE` mapping (`how`↔`pipeline`), pure `trackerView()`/`unseenRouterTabs()`, `initTracker({doc, storage, store})` rendering nav dots + Home tab-card dots + progress ring (`--progress`, label n/4, aria-label) + Explorer badge; one-time celebration (`.is-once` restart pattern from the P3 harness) gated on localStorage flag **`v100-celebrated`** (agent-decided: separate key — signed-off P2 persisted shape untouched). `initRouter` now also returns `initial` (additive); `initApp` marks the load-time tab visited + wires hashchange → `markVisited`. |
+| `index.html` | Home placeholder **replaced**: hero (eyebrow/H1/sub/CTA pair incl. "Skip to the Lab" ghost link) + 3 story beats (weights table · bandwidth bars 936 vs 96 GB/s · local/cloud fork at ¥0.65/kWh) + explore grid (ring `#explore-ring` + 3 tab cards with dots). Celebrate spans added next to `#explorer-badge`. `tabs.css` linked after base.css. |
+| `test/ui.test.mjs` | **+10 checks → 31/31 green**: mapping, pure view fns (incl. foreign-id rejection), fresh-visitor render state, dot hiding + ring 1/4 on visit, no burst before 4/4, all-4 → badge+burst+flag, persistence round-trip through the real P2 store (`createStore({storage})`), one-time celebration across fresh instances (no re-fire on load or later updates), hero CTA scroll. |
+
+**Test results this session:** `node test/ui.test.mjs` → **31/31 green** · `node test/engine.test.mjs` → **62/62 green** · `node --check` clean on new JS · all assets HTTP 200 on :8077.
+
+## Design decisions — agent-decided this session (labeled in code, NOT yet owner-approved)
+
+1. `TAB_TO_STORE = {home:'home', how:'pipeline', lab:'lab', compare:'compare'}` in app.js — URLs keep `#/how`; never compare raw ids across the two systems.
+2. One-time celebration flag = separate localStorage key **`v100-celebrated`** owned by the tracker (P2 store shape is signed off; don't touch it).
+3. "Start exploring" CTA = `<button>` + JS smooth-scroll to `#story` (NOT a hash link) so router URLs stay clean.
+4. Token stream: pure-CSS keyframe loop, duplicated track for seamless −50 % translate, edge fade via `mask-image`; disabled under `prefers-reduced-motion`.
+5. Floating hero panels: decorative glass cards, `aria-hidden`, animate the individual `translate` property (avoids transform clashes), hidden below ~900 px.
+6. Beat copy as shipped: "A model is billions of numbers" (Qwen3-4B ≈ 4.2×10⁹) · "Speed is set by memory bandwidth" (RTX 3090 936 GB/s vs DDR5-6000 96 GB/s, blueprint §3.1) · "The fork: local or cloud?" (Shenzhen ¥0.65/kWh default vs $/M tokens).
+7. A deep-link load counts as a visit (`initApp` marks `router.initial`) — so first-time visitors land at ring 1/4 with Home's dot already cleared; the other three tabs show dots in nav AND on the explore cards.
+
+## Owner review checklist — COMPLETED 2026-09-02 ("this site is looking ridiculously good")
+
+Light: `http://localhost:8077/index.html` · Dark: `http://localhost:8077/index.html#dark`
+
+- **§6 acceptance:** first-time visitor reaches Tab 3 within ~60 s of scrolling (hero → 3 beats → explore grid; "Start exploring" smooth-scrolls); all beats reverse cleanly on scroll-up.
+- **Tracker across tabs (§11 P4 gate):** dots visible on unvisited tabs (nav + cards) → visit How It Works / Lab / Compare and return to Home: dot clears, ring climbs 2/4→3/4→4/4; at 4/4 the Explorer badge appears in nav with a one-time spark burst. Reload → badge persists, **no** re-burst.
+- Hero: floating panels + token stream (both decorative); light+dark contrast on glass chips/bars/cards.
+- "Skip to the Lab" ghost link routes to `#/lab` and marks it visited.
 
 ## Immediate next steps (in order)
 
-1. **Owner closes the P3 visual gate — on `dev/design-system.html`, NOT `index.html`.** (2026-09-02 confusion: owner reviewed `index.html` and saw only placeholder panels + footer note — that IS the correct shell state; the component showcase for sign-off is the harness page.) Harness light/dark are open in the app browser. Owner verifies there: light + dark both correct on all components (type/spacing, buttons+run states, segmented/slider/switch, cards+dots, ring/gauge/membar/printouts, table, estimates panel, footnotes); scroll down/up reverses reveals cleanly (Groups A/B/C zone at the bottom). If they flag anything, fix it (likely candidates from session 6: contrast of segmented selected state in light theme, gauge caption at `top:128px`, nav wrapping on narrow widths — desktop-first so low priority).
-2. **On sign-off:** flip blueprint.md status line + §11 P3 row to "signed off" and append a one-line verification-log entry recording the owner's confirmation (date + any tweaks made); update this handoff's status line.
-3. **Proceed to Phase 4 — Home tab** per blueprint §11, or **P6 Hardware Lab first** if the owner prioritizes the centerpiece (§11 suggested order: P3→P6 before P5/P7; owner's call).
+1. ~~Owner reviews per checklist~~ — **DONE 2026-09-02:** "this site is looking ridiculously good."
+2. ~~On sign-off: flip `blueprint.md` + verification log + this handoff~~ — **DONE in session 11** (status line, §11 P4 row → SIGNED OFF, three new verification-log entries incl. JSON-error closure; writes verified by reading back).
+3. **Owner picks P5 (Pipeline tab) or P6 (Hardware Lab)** — §11 suggests P3→P6 before P5/P7 if the Lab is the demo centerpiece; owner's call. Then build per blueprint §6 Tab 2 / Tab 3 (tracker already in place from P4).
 
-## Key decisions (agent-decided this phase, all labeled in code)
-
-- **Theme precedence:** explicit hash (`#light`/`#dark`) > `localStorage("v100-theme")` > `prefers-color-scheme`. Pure system default is NOT persisted (keeps following the OS until the user toggles); any explicit choice persists. Rationale: testability + §7 "default = prefers-color-scheme; manual toggle persisted".
-- **Stagger convention:** `--i` = index among `data-reveal` siblings within the same parent — zero extra markup, predictable. CSS applies `transition-delay: calc(var(--i) * 60ms)` per §8.
-- **No-JS safety:** hidden reveal base state only under `html.js [data-reveal]`; no-JS visitors see all content without motion.
-- **`scroll.js` owns §8 micro-interactions** (pulse, slider fill) — matches blueprint file layout; avoided creating a new `ui.js` module not in the spec.
-- **`app.js` created as minimal bootstrap in P3** (router + theme + reveals); exploration tracker/celebration = P4 scope.
-- **Router is a safe no-op when there are no `.tab-panel`s** — so the dev harness can use `#light/#dark` without the router clobbering the URL. Directly relevant to the owner's "links" question (now regression-tested).
-- **Gauge label placed OUTSIDE the masked ring** (`.gauge-wrap`) so the radial mask doesn't hide it.
-
-## Observations / gotchas for the next session
-
-- **No headless browser on this machine** — visual verification goes through `open_url_in_app_browser` + a running static server; ES modules fail over `file://`, so always serve via HTTP (server was still up on :8077 as of this session).
-- Write access to the project folder is read-only by default in new sessions — re-request if edits are needed.
-- Pre-paint theme snippets in `index.html` AND `dev/design-system.html` duplicate `resolveInitialTheme()` — keep all three (both HTML + `js/theme.js`) in sync; KEEP-IN-SYNC comments mark them.
-- Dark tokens duplicated for the no-JS media-query fallback in `tokens.css` — keep both blocks in sync when tuning colors.
-- The static server is a background process; if gone, restart from the project dir before opening pages.
-- **Handoff discipline:** session 8's HANDOFF rewrite never reached disk (context ran out mid-step) — always verify doc writes landed (`read` back or check change history) before declaring done.
-- Scratchpad progress note: `/home/paul/.lmstudio/scratchpads/wi/progress.md`.
-
-## Files & reference map (current state)
-
-| File | Status / significance |
-|---|---|
-| `js/data/*` (hardware, models, quantization, cloud, rates) | ✅ P1 signed off; prices = owner Taobao listings [H7] |
-| `js/engine/perf.js`, `cost.js`, `js/state/store.js` | ✅ P2 signed off; 62/62 green (re-verified this session) |
-| `css/tokens.css`, `css/base.css` | ✅ built + token-audit clean — owner confirmed light/dark swap clean; full visual sign-off pending |
-| `js/theme.js`, `js/motion/scroll.js`, `js/app.js` | ✅ built; app.js = P3 bootstrap (router lives here) |
-| `index.html` | ✅ shell, 4 placeholder `.tab-panel`s + working router (P4–P7 fill panels) |
-| `dev/design-system.html` | ✅ P3 acceptance harness — **no tabs by design** (relevant to owner's "links" question) |
-| `test/engine.test.mjs` | ✅ 62/62 green (`node test/engine.test.mjs`) |
-| `test/ui.test.mjs` | ✅ **21/21 green** incl. 5 router tests (`node test/ui.test.mjs`) — run this session |
-| `blueprint.md` | synced through P3 owner check-in (status line, §11 row, verification log) — flip to "signed off" once owner confirms full visual gate |
-| `HANDOFF.md` | this file — current as of session 9 |
-
-## Constraints & process rules (carried from owner)
+## User preferences & constraints (all owner-approved)
 
 - NEVER change formula shape — calibrate constants only (§5.4 rule).
 - Audience: high school students + educators; **English only**; must pass muster with seasoned local-AI enthusiasts (labeled assumptions, footnoted sources); desktop-first; glassmorphism light+dark; zero image/video/font-file assets; plain static hosting; Shenzhen 0.65 RMB/kWh default @ FX 6.72; local cost = hardware + electricity ONLY; no custom hardware entry; semantic HTML only.
-- **Context limits have killed sessions before** → persist work to disk early/often, checkpoint after each milestone, keep this handoff current (resume protocol: read it first, verify against `ls` + run both test suites, continue at "Immediate next steps").
+- Persist work to disk early/often (context limits have killed sessions before); keep this handoff current and **verify writes landed**.
+
+## Key decisions — MINE vs OWNER-APPROVED
+
+**Owner-approved:** all constraints above; P1 prices (Taobao listings [H7]); P2 KV-inclusive decode semantics + η=0.85; theme default = `prefers-color-scheme` with manual toggle persisted (§7); **P3 visual sign-off 2026-09-02 ("Looks fantastic")**; "links don't work" accepted as expected at P3 after test proof; proceed to Phase 4.
+
+**Agent-decided (labeled in code):** theme precedence hash > stored > system (pure-system not persisted); `--i` stagger = ordinal among data-reveal siblings; no-JS reveal gating under `html.js`; scroll.js owns §8 micro-interactions; app.js minimal bootstrap; router safe no-op without `.tab-panel`s; gauge label outside masked ring. **P4 (session 10) — SIGNED OFF by owner 2026-09-02 with the phase:** the seven decisions listed above — mapping, celebration key, button-CTA, token stream, float panels, beat copy, deep-link counts as visit.
+
+## Observations / gotchas
+
+- **No headless browser on this box** — visual checks via `open_url_in_app_browser` + static server; ES modules fail over `file://`, always serve HTTP.
+- Write access to the project folder is read-only by default in new sessions — re-request if edits are needed (granted again this session).
+- Pre-paint theme snippets duplicate `resolveInitialTheme()` in both HTML files + `js/theme.js` — KEEP-IN-SYNC comments mark them; keep all three in sync.
+- Dark tokens duplicated for no-JS fallback in `tokens.css` — keep both blocks in sync.
+- **Store says `'pipeline'`, router/hash says `'how'`** — always go through `TAB_TO_STORE`; never compare raw ids across the two.
+- Button class is `.btn--primary` (BEM double-dash), not `.btn-primary`.
+- Static server on :8077 may be dead in a new session — restart from project dir before opening pages (`python3 -m http.server 8077 --bind 127.0.0.1`). It was alive this session (all assets 200).
+- Store appends `visitedTabs` **in visit order** (not TAB_IDS order) — compare as a set in tests.
+- Scratchpad progress note: `/home/paul/.lmstudio/scratchpads/wi/progress.md` (stale from session 9; flip to "P4 built, awaiting sign-off" if accessible).
+
+## Important files & reference map
+
+| File | Status / significance |
+|---|---|
+| `js/data/*`, `js/engine/perf.js`, `cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green. Store = tracker's state source (`setActiveTab`, `subscribe`, `ui.visitedTabs`) — **do not modify** (signed off) |
+| `css/tokens.css`, `css/base.css` | ✅ P3 signed off — all component primitives live here |
+| `js/theme.js`, `js/motion/scroll.js` | ✅ built, unchanged this session |
+| `js/app.js` | ✅ router + **P4 tracker** (this session); bootstrap wires theme/reveals/router/tracker/home |
+| `index.html` | shell; **Home panel now real content**; nav dots/badge/celebrate slots wired |
+| `css/tabs.css`, `js/tabs/home.js` | ✅ NEW this session — P4 deliverables per blueprint §3 layout |
+| `dev/design-system.html` | P3 acceptance harness (signed off); ring/celebrate markup reference |
+| `test/ui.test.mjs` | **31/31 green** incl. tracker block + home CTA |
+| `blueprint.md` | ✅ flipped session 11: P4 SIGNED OFF + §11 row met + verification log (incl. JSON-error closure) |
+| `HANDOFF.md` (on disk) | ✅ this document — updated session 11: P4 signed off, JSON error closed |

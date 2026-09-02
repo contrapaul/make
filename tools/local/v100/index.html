@@ -27,6 +27,7 @@
 
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/tabs.css">
 </head>
 <body>
 
@@ -55,8 +56,19 @@
       <a class="tab-link" data-tab-link="compare" href="#/compare">Local vs Cloud<span class="dot-new is-hidden"></span></a>
     </nav>
 
-    <!-- Exploration badge: P4 shows it once all four tabs are visited -->
+    <!-- Exploration badge + one-time spark burst (blueprint §4; tracker in js/app.js) -->
     <span class="badge-explorer is-hidden" id="explorer-badge" title="You explored all four tabs">★ Explorer</span>
+    <div class="celebrate" id="explorer-celebrate" aria-hidden="true">
+      <span style="--i:0; --dx:80px;  --dy:-10px; --c:var(--accent-2)"></span>
+      <span style="--i:1; --dx:54px;  --dy:27px;  --c:var(--accent-1)"></span>
+      <span style="--i:2; --dx:57px;  --dy:70px;  --c:var(--ok)"></span>
+      <span style="--i:3; --dx:15px;  --dy:63px;  --c:var(--accent-2)"></span>
+      <span style="--i:4; --dx:-19px; --dy:-83px; --c:var(--warn)"></span>
+      <span style="--i:5; --dx:-38px; --dy:-47px; --c:var(--accent-1)"></span>\n      <span style="--i:6; --dx:-81px; --dy:-39px; --c:var(--accent-2)"></span>
+      <span style="--i:7; --dx:-62px; --dy:0px;   --c:var(--ok)"></span>
+      <span style="--i:8; --dx:-76px; --dy:37px;  --c:var(--accent-1)"></span>
+      <span style="--i:9; --dx:-37px; --dy:45px;  --c:var(--warn)"></span>
+    </div>
 
     <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch color theme" aria-pressed="false">
       <!-- sun: shown in dark mode (switches to light) -->
@@ -72,14 +84,148 @@
   </header>
 
   <main id="app">
-    <!-- Tab panels: P4–P7 fill these in. Placeholders keep the shell testable now. -->
+    <!-- Tab panels: P5–P7 fill the rest; Home ships in P4. -->
     <section class="tab-panel is-active" data-tab="home" aria-label="Home">
-      <div class="shell-pad stack">
-        <div class="card" data-reveal>
-          <h2>Phase 4 lands here</h2>
-          <p>The intro story — what a model is, why it needs memory and bandwidth, the local-vs-cloud fork — plus the exploration progress ring and tab cards ship in Phase 4 (blueprint §6 Tab 1).</p>
+
+      <!-- ============ Hero (blueprint §6 Tab 1) ============ -->
+      <div class="home-hero">
+        <!-- Decorative floating glass panels — hidden below 900 px -->
+        <span class="hero-float hero-float--a panel" aria-hidden="true"><b>4.2 × 10⁹</b> weights · Qwen3-4B</span>
+        <span class="hero-float hero-float--b panel" aria-hidden="true">936 GB/s · RTX 3090</span>
+        <span class="hero-float hero-float--c panel" aria-hidden="true"><b>¥0.65 / kWh</b> · Shenzhen</span>
+
+        <div class="hero-inner">
+          <p class="eyebrow" data-reveal>An interactive guide for students &amp; educators</p>
+          <h1 data-reveal>AI, running on <em class="accent-text">your</em> hardware.</h1>
+          <p class="hero-sub" data-reveal>What a model actually is, why memory bandwidth sets its speed, and what inference really costs — with real numbers you can poke at in the Hardware Lab.</p>
+          <div class="hero-cta" data-reveal>
+            <button class="btn btn--primary" id="start-exploring" type="button">Start exploring</button>
+            <a class="btn btn--ghost" href="#/lab">Skip to the Lab</a>
+          </div>
+        </div>
+
+        <!-- Token-glyph stream (pure CSS loop, §6) — two identical halves for a seamless −50 % translate -->
+        <div class="token-stream" aria-hidden="true">
+          <div class="token-track">
+            <span class="token-half">
+              <span class="glyph">“The”</span><span class="glyph">model</span><span class="glyph">“is”</span>
+              <span class="glyph glyph--accent">4.2×10⁹ numbers</span><span class="glyph">·</span>
+              <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
+              <span class="glyph">memory</span><span class="glyph">at</span>
+              <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
+              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">—</span>
+              <span class="glyph">your</span><span class="glyph">hardware</span>
+            </span>
+            <span class="token-half">
+              <span class="glyph">“The”</span><span class="glyph">model</span><span class="glyph">“is”</span>
+              <span class="glyph glyph--accent">4.2×10⁹ numbers</span><span class="glyph">·</span>
+              <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
+              <span class="glyph">memory</span><span class="glyph">at</span>
+              <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
+              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">—</span>
+              <span class="glyph">your</span><span class="glyph">hardware</span>
+            </span>
+          </div>
         </div>
       </div>
+
+      <!-- ============ Scroll story: 3 beats (§6 Tab 1) ============ -->
+      <div class="home-story" id="story">
+
+        <section class="beat" data-reveal>
+          <div class="beat-copy">
+            <h3>A “model” is billions of numbers</h3>
+            <p>An AI model isn’t magic — it’s a giant table of weights, one number per learned connection. Qwen3-4B carries about <b>4.2 billion</b> of them. Every answer you get is those numbers doing arithmetic on your input.</p>
+          </div>
+          <div class="card beat-visual" aria-hidden="true">
+            <h4>A corner of the weight table</h4>
+            <div class="weights-grid">
+              <span class="w-cell">0.0231</span><span class="w-cell">−1.408</span><span class="w-cell w-cell--hot">0.5772</span>
+              <span class="w-cell">0.9126</span><span class="w-cell">−0.3341</span><span class="w-cell">0.0817</span>
+              <span class="w-cell">−2.115</span><span class="w-cell w-cell--hot">1.0093</span><span class="w-cell">0.4468</span>
+              <span class="w-cell">−0.7205</span><span class="w-cell">0.1583</span><span class="w-cell w-cell--hot">−0.9644</span>
+            </div>
+            <p class="beat-caption">Qwen3-4B · 36 layers, GQA 8 KV heads — values illustrative (blueprint §3.2 [M1]).</p>
+          </div>
+        </section>
+
+        <section class="beat" data-reveal>
+          <div class="card beat-visual">
+            <h4>Who’s the bottleneck?</h4>
+            <div class="bw">
+              <div class="bw-row"><span class="bw-label">RTX 3090 · GDDR6X</span><span class="bw-bar"><i style="--w:100%"></i></span><b class="bw-val">936 GB/s</b></div>
+              <div class="bw-row"><span class="bw-label">DDR5-6000 RAM</span><span class="bw-bar"><i style="--w:10.3%"></i></span><b class="bw-val">96 GB/s</b></div>
+            </div>
+            <p class="beat-caption">Memory bandwidth (blueprint §3.1) — the decode bottleneck.</p>
+          </div>
+          <div class="beat-copy">
+            <h3>Speed is set by memory bandwidth</h3>
+            <p>To write a single token, the model re-reads most of its weights from memory. That’s why a GPU with <b>936 GB/s</b> streams tokens roughly ten times faster than DDR5 RAM at <b>96 GB/s</b> — and why offloading layers to CPU RAM feels painfully slow.</p>
+          </div>
+        </section>
+
+        <section class="beat" data-reveal>
+          <div class="beat-copy">
+            <h3>The fork: local or cloud?</h3>
+            <p>You can run these models on hardware you own — in Shenzhen that’s about <b>¥0.65 per kWh</b> of electricity, and your data never leaves the room. Or call a cloud API priced per million tokens. Both are legitimate; the right answer depends on your model, your usage, and what privacy means to you.</p>
+          </div>
+          <div class="fork-grid">
+            <div class="card fork-card">
+              <h4>Local</h4>
+              <ul>
+                <li>Runs on your machine — no per-token billing</li>
+                <li>Cost = electricity (~¥0.65/kWh) + hardware you already own</li>
+                <li>Works offline; data stays with you</li>
+              </ul>
+            </div>
+            <div class="card fork-card">
+              <h4>Cloud</h4>
+              <ul>
+                <li>Priced per million tokens (GPT-5, DeepSeek V4, Claude Opus 5)</li>
+                <li>No hardware to buy or maintain</li>
+                <li>Always the newest models — but your prompts leave the building</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ============ Explore grid (ring + tab cards, §4 tracker) ============ -->
+      <section class="home-explore" id="explore">
+        <div class="explore-head" data-reveal>
+          <div class="ring" id="explore-ring" role="img" aria-label="Exploration progress: 0 of 4 tabs">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <circle class="ring-track" cx="24" cy="24" r="20" pathLength="100"/>
+              <circle class="ring-fill" cx="24" cy="24" r="20" pathLength="100"/>
+            </svg>
+            <span class="ring-label">0/4</span>
+          </div>
+          <div>
+            <h3>Your exploration so far</h3>
+            <p>Visit all four tabs to earn the Explorer badge. The dots mark what you haven’t seen yet.</p>
+          </div>
+        </div>
+
+        <div class="tab-card-grid">
+          <a class="card tab-card" href="#/how" data-track-tab="how">
+            <span class="dot-new is-hidden"></span>
+            <h3>How It Works</h3>
+            <p>The five-stage pipeline — tokenization to sampling — bound live to your config.</p>
+          </a>
+          <a class="card tab-card" href="#/lab" data-track-tab="lab">
+            <span class="dot-new is-hidden"></span>
+            <h3>Hardware Lab</h3>
+            <p>Pick hardware, model and precision — then run inference and watch the numbers move.</p>
+          </a>
+          <a class="card tab-card" href="#/compare" data-track-tab="compare">
+            <span class="dot-new is-hidden"></span>
+            <h3>Local vs Cloud</h3>
+            <p>The race, the full comparison table, and what it all costs at Shenzhen rates.</p>
+          </a>
+        </div>
+      </section>
+
     </section>
 
     <section class="tab-panel" data-tab="how" aria-label="How It Works">
