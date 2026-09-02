@@ -11,6 +11,7 @@
 import { strict as assert } from 'node:assert';
 import { STORAGE_KEY, resolveInitialTheme, initTheme } from '../js/theme.js';
 import { revealStaggerIndex, initReveals, pulse, bindRangeFill } from '../js/motion/scroll.js';
+import { tabFromHash, initRouter } from '../js/app.js';
 
 let passed = 0;
 const ok = (name) => { passed += 1; console.log(`  ✓ ${name}`); };
@@ -191,6 +192,65 @@ function makeEl(extra = {}) {
   input.dispatch('input');
   assert.equal(input.style.vars['--val'], '25.00%');
   ok('--val updates on the input event');
+}
+
+/* ---------------- js/app.js — hash router (tab links) ---------------- */
+console.log('app.js — router');
+
+function makeClassEl(dataset = {}) {
+  const classes = new Set();
+  return {
+    dataset,
+    classList: {
+      add(c) { classes.add(c); },
+      remove(c) { classes.delete(c); },
+      contains(c) { return classes.has(c); },
+      toggle(c, force) {
+        if (force === undefined) { if (classes.has(c)) classes.delete(c); else classes.add(c); }
+        else if (force) classes.add(c); else classes.delete(c);
+      },
+    },
+  };
+}
+
+{ // tabFromHash — maps #/<tab> to a known tab; rejects theme hashes + unknowns
+  assert.equal(tabFromHash('#/home'), 'home');
+  assert.equal(tabFromHash('#/lab'), 'lab');
+  assert.equal(tabFromHash(''), null);
+  assert.equal(tabFromHash('#dark'), null);   // #light/#dark are theme overrides, not tabs
+  assert.equal(tabFromHash('#/nope'), null);
+  ok('tabFromHash parses #/<tab> and rejects non-tab hashes (e.g. #dark)');
+}
+
+{ // initRouter — default panel active on load; show() switches exactly one panel + its link
+  const tabs = ['home', 'how', 'lab', 'compare'];
+  const panels = Object.fromEntries(tabs.map((t) => [t, makeClassEl({ tab: t })]));
+  const links = Object.fromEntries(tabs.map((t) => [t, makeClassEl({ tabLink: t })]));
+  const doc = { querySelectorAll: (sel) => sel === '.tab-panel' ? tabs.map((t) => panels[t]) : sel === '[data-tab-link]' ? tabs.map((t) => links[t]) : [] };
+
+  const router = initRouter({ doc, hash: '' }); // no hash → defaults to home
+  assert.ok(panels.home.classList.contains('is-active'));
+  assert.ok(!panels.how.classList.contains('is-active'));
+  ok('initRouter shows the default (home) panel on load');
+
+  router.show('lab'); // what a "Hardware Lab" link click does via hashchange
+  assert.ok(panels.lab.classList.contains('is-active'));
+  assert.ok(!panels.home.classList.contains('is-active'));
+  assert.ok(links.lab.classList.contains('is-active'));
+  assert.ok(!links.home.classList.contains('is-active'));
+  ok('show(tab) activates exactly one panel + its nav link (tab-link click path)');
+
+  router.show('compare');
+  const active = tabs.filter((t) => panels[t].classList.contains('is-active'));
+  assert.deepEqual(active, ['compare']);
+  ok('switching again leaves exactly one panel active (no stacking)');
+}
+
+{ // non-app page: no .tab-panel → router is a safe no-op (design-system harness keeps #light/#dark)
+  const doc = { querySelectorAll: () => [] };
+  const r = initRouter({ doc, hash: '#dark' });
+  assert.equal(typeof r.show, 'function');
+  ok('initRouter is a no-op when there are no .tab-panel elements (harness keeps #light/#dark)');
 }
 
 console.log(`\n============================================================`);
