@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>v100 · Design System — Phase 3 acceptance</title>
+
+  <!-- Same pre-paint theme snippet as index.html (keep in sync with js/theme.js) -->
+  <script>
+    document.documentElement.classList.add('js');
+    (function () {
+      try {
+        var h = location.hash.replace('#', '').toLowerCase();
+        if (h !== 'light' && h !== 'dark') {
+          var s = localStorage.getItem('v100-theme');
+          if (s !== 'light' && s !== 'dark') {
+            s = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          h = s;
+        }
+        document.documentElement.setAttribute('data-theme', h);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/base.css">
+</head>
+<body>
+
+  <div class="mesh" aria-hidden="true">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+    <span class="blob blob-c"></span>
+    <span class="blob blob-d"></span>
+  </div>
+
+  <header class="nav">
+    <a class="brand" href="#/home">
+      <span class="mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2 4.5 13.5H11L9.5 22 19 9.5h-6.5L13 2Z" fill="currentColor"/></svg>
+      </span>
+      v100 · Design System
+    </a>
+
+    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch color theme" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <div class="shell-pad stack" style="--gap: var(--sp-5)">
+
+      <!-- ============ Intro ============ -->
+      <section data-reveal>
+        <h1 style="font-size: var(--fs-6)">Phase 3 acceptance harness</h1>
+        <p style="color: var(--text-secondary); max-width: 70ch">
+          Every shared component from blueprint §7–§9, in one place. Toggle the theme (top right) and check both
+          light and dark; scroll down and back up — every reveal must reverse cleanly (§8).
+          Tip: append <span class="formula">#light</span> or <span class="formula">#dark</span> to the URL to force a theme.
+        </p>
+      </section>
+
+      <!-- ============ Type & spacing scale ============ -->
+      <section class="card" data-reveal>
+        <h3>Type scale — 13 / 15 / 17 / 20 / 24 / 32 / 48</h3>
+        <div class="stack" style="--gap: var(--sp-2)">
+          <p style="font-size: var(--fs-1); color: var(--text-secondary)">13 px — captions, footnotes, dense tables</p>
+          <p style="font-size: var(--fs-2)">15 px — body text (base)</p>
+          <p style="font-size: var(--fs-3)">17 px — lead paragraphs</p>
+          <p style="font-size: var(--fs-4)">20 px — card titles</p>
+          <p style="font-size: var(--fs-5)">24 px — section headings</p>
+          <p style="font-size: var(--fs-6)">32 px — page headings</p>
+          <p class="accent-text" style="font-size: var(--fs-7); font-weight: 700">48 px — hero, accent gradient text</p>
+        </div>
+      </section>
+
+      <section class="card" data-reveal>
+        <h3>Spacing scale — 4 / 8 / 12 / 16 / 24 / 32 / 48</h3>
+        <div style="display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap">
+          <span title="4 px" style="width: var(--sp-1); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="8 px" style="width: var(--sp-2); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="12 px" style="width: var(--sp-3); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="16 px" style="width: var(--sp-4); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="24 px" style="width: var(--sp-5); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="32 px" style="width: var(--sp-6); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+          <span title="48 px" style="width: var(--sp-7); height: 14px; border-radius: 3px; background: var(--accent-gradient)"></span>
+        </div>
+      </section>
+
+      <!-- ============ Buttons + run state machine ============ -->
+      <section class="card" data-reveal>
+        <h3>Buttons</h3>
+        <p style="margin-bottom: var(--sp-4); color: var(--text-secondary)">Primary (accent gradient) · ghost · disabled. The Run button below cycles its §8 state machine: idle → charging → running.</p>
+        <div style="display: flex; gap: var(--sp-3); flex-wrap: wrap; align-items: center">
+          <button class="btn btn--primary" type="button">Primary action</button>
+          <button class="btn btn--ghost" type="button">Ghost button</button>
+          <button class="btn btn--ghost" type="button" disabled>Disabled</button>
+        </div>
+        <div style="margin-top: var(--sp-4); display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap">
+          <button class="btn btn--primary run-btn" id="run-demo" type="button" data-run-state="idle">
+            <span class="run-indicator" aria-hidden="true"></span>
+            <span class="label label-idle">Run Inference</span>
+            <span class="label label-charging">Charging…</span>
+            <span class="label label-running">Running — 145.3 tok/s</span>
+          </button>
+          <span style="color: var(--text-faint); font-size: var(--fs-1)">state cycles automatically every 1.6 s</span>
+        </div>
+      </section>
+
+      <!-- ============ Controls ============ -->
+      <section class="card" data-reveal>
+        <h3>Controls — segmented · slider · switch</h3>
+        <p style="margin-bottom: var(--sp-4); color: var(--text-secondary)">Radio-based segments (keyboard + screen-reader safe), range with accent fill, and a 40 px-target switch.</p>
+
+        <div class="segmented" role="group" aria-label="Quantization level">
+          <label><input type="radio" name="ds-quant" value="fp16"><span class="seg-opt">FP16</span></label>
+          <label><input type="radio" name="ds-quant" value="int8"><span class="seg-opt">INT8</span></label>
+          <label><input type="radio" name="ds-quant" value="q6k"><span class="seg-opt">Q6_K</span></label>
+          <label><input type="radio" name="ds-quant" value="q5km"><span class="seg-opt">Q5_K_M</span></label>
+          <label><input type="radio" name="ds-quant" value="q4km" checked><span class="seg-opt">Q4_K_M</span></label>
+        </div>
+
+        <div style="margin-top: var(--sp-5)">
+          <label for="ds-model" style="display: block; margin-bottom: 2px; color: var(--text-secondary); font-size: var(--fs-1)">Model size (slider stops, §3.2)</label>
+          <input class="slider" id="ds-model" type="range" min="0" max="9" step="1" value="7">
+          <div class="slider-stops"><span>4B</span><span>8B</span><span>16B</span><span>27B</span><span>32B</span><span>70B</span><span>80B</span><span>405B</span></div>
+        </div>
+
+        <div style="margin-top: var(--sp-5)">
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="track"><span class="knob"></span></span>
+            <span>Show estimation assumptions on-page</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ============ Cards, dots, badge ============ -->
+      <section data-reveal style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-4)">
+        <article class="card">
+          <span class="dot-new" aria-hidden="true"></span>
+          <h3>Tab card — new</h3>
+          <p>Hardware Lab · the centerpiece simulation with live printouts.</p>
+        </article>
+        <article class="card">
+          <h3>Tab card — seen</h3>
+          <p>How It Works · the five-stage pipeline bound to your config.</p>
+        </article>
+        <div style="display: flex; align-items: center; gap: var(--sp-4)">
+          <span class="badge-explorer">★ Explorer</span>
+          <span style="color: var(--text-faint); font-size: var(--fs-1)">shown after all 4 tabs visited (P4)</span>
+        </div>
+      </section>
+
+      <!-- ============ Data displays ============ -->
+      <section class="card" data-reveal>
+        <h3>Data displays — ring · gauge · memory bar · printouts</h3>
+        <div style="display: flex; gap: var(--sp-6); align-items: center; flex-wrap: wrap">
+
+          <div>
+            <div class="ring" style="--progress: 0.75" role="img" aria-label="Exploration progress: 3 of 4 tabs">
+              <svg viewBox="0 0 48 48" aria-hidden="true">
+                <circle class="ring-track" cx="24" cy="24" r="20" pathLength="100"/>
+                <circle class="ring-fill" cx="24" cy="24" r="20" pathLength="100"/>
+              </svg>
+              <span class="ring-label">3/4</span>
+            </div>
+            <p style="font-size: var(--fs-1); color: var(--text-faint); margin-top: 6px; text-align: center">progress ring</p>
+          </div>
+
+          <div class="gauge-wrap">
+            <div class="gauge" style="--val: 0.63"></div>
+            <span class="gauge-label"><strong>12.6</strong><small>t/s</small></span>
+            <p style="position: absolute; top: 128px; left: 50%; transform: translateX(-50%); font-size: var(--fs-1); color: var(--text-faint); white-space: nowrap">gauge (conic)</p>
+          </div>
+
+          <div class="stack" style="--gap: var(--sp-3); flex: 1; min-width: 260px">
+            <div>
+              <div class="membar" data-state="ok"><span class="seg seg-gpu" style="--w: 62%"></span><span class="seg seg-cpu" style="--w: 18%"></span></div>
+              <p style="font-size: var(--fs-1); color: var(--text-faint)">ok — GPU 62% · CPU offload 18%</p>
+            </div>
+            <div>
+              <div class="membar" data-state="warn"><span class="seg seg-gpu" style="--w: 90%"></span><span class="seg seg-cpu" style="--w: 6%"></span></div>
+              <p style="font-size: var(--fs-1); color: var(--text-faint)">warn — near the memory limit</p>
+            </div>
+            <div>
+              <div class="membar" data-state="fail"><span class="seg seg-gpu" style="--w: 100%"></span><span class="seg seg-cpu" style="--w: 40%"></span></div>
+              <p style="font-size: var(--fs-1); color: var(--text-faint)">fail — doesn't fit (diagnosis + fixes in P6)</p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="stack" style="--gap: var(--sp-3); margin-top: var(--sp-5)">
+          <div class="printouts">
+            <div class="printout" id="po-tps"><span class="k">Decode speed</span><span class="v">145.3 tok/s</span></div>
+            <div class="printout"><span class="k">Time to first token</span><span class="v">0.42 s</span></div>
+            <div class="printout"><span class="k">Power draw</span><span class="v">395 W</span></div>
+            <div class="printout"><span class="k">Cost / M output tokens</span><span class="v">¥0.18 · $0.027</span></div>
+          </div>
+          <button class="btn btn--ghost" id="pulse-demo" type="button">Pulse the first printout (§8 micro-interaction)</button>
+        </div>
+
+        <div style="margin-top: var(--sp-5); display: flex; gap: var(--sp-2); flex-wrap: wrap; align-items: center">
+          <span class="chip">local<span class="id">#9054</span></span>
+          <span class="chip">AI<span class="id">#318</span></span>
+          <span class="chip">running<span class="id">#2763</span></span>
+          <span style="color: var(--text-faint); font-size: var(--fs-1)">token chips (Tab 2 demo)</span>
+        </div>
+      </section>
+
+      <!-- ============ Table ============ -->
+      <section class="card" data-reveal>
+        <h3>Comparison table</h3>
+        <table class="data">
+          <thead>
+            <tr><th>Setup</th><th class="num">Decode tok/s</th><th class="num">$ / M out tokens</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>RTX 3090 ×1 · 8B Q4_K_M (anchor A1)</td><td class="num">145.3</td><td class="num">¥0.18 · $0.027</td></tr>
+            <tr><td>M4 Pro 48 GB · 70B Q4_K_M (anchor A3)</td><td class="num">5.63</td><td class="num">—</td></tr>
+            <tr><td>GPT-5.6 Sol API<sup class="fn"><a href="#ds-fn-c1">[C1]</a></sup></td><td class="num">82.8</td><td class="num">$30 in / $… out</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============ Estimates panel + footnotes ============ -->
+      <section class="card" data-reveal>
+        <h3>"How we estimate this" + footnotes</h3>
+        <details class="estimates">
+          <summary><span class="twist" aria-hidden="true"></span>How we estimate this</summary>
+          <div class="body">
+            <p>Decode is bandwidth-bound: every token streams the model's weights (plus each layer's KV-cache read) through memory.
+               <span class="formula">t_token = Σ_layers (layerBytes / BW_of_layer) ÷ η_decode</span></p>
+            <ul>
+              <li><strong>η_decode = 0.85</strong> — one global constant calibrated against five real-world anchors in Phase 2.</li>
+              <li>KV-cache reads are included in <em>layerBytes</em> at the current context length (owner-approved, P2 sign-off).</li>
+              <li>Labeled assumption: multi-GPU bandwidth factors for 1× / 2× / 4× → 1 / 1.75 / 3.2.</li>
+            </ul>
+          </div>
+        </details>
+
+        <p style="margin-top: var(--sp-4)">
+          The M4 Pro's unified memory runs at 273 GB/s<sup class="fn"><a href="#ds-fn-s2">[S2]</a></sup>, while the RX 9070 XT hits 644.6 GB/s<sup class="fn"><a href="#ds-fn-s4">[S4]</a></sup> — that gap is why offload hurts.
+        </p>
+        <ol class="fn-list">
+          <li id="ds-fn-s2">Apple MacBook Pro (M4 Pro) tech specs — memory bandwidth 273 GB/s.</li>
+          <li id="ds-fn-s4">TechPowerUp GPU database — Radeon RX 9070 XT, 644.6 GB/s GDDR6.</li>
+          <li id="ds-fn-c1">Artificial Analysis — GPT-5 family benchmarks (as of Aug 2026).</li>
+        </ol>
+      </section>
+
+      <!-- ============ Celebration ============ -->
+      <section class="card" data-reveal style="text-align: center">
+        <h3>Celebration — all four tabs explored</h3>
+        <p style="color: var(--text-secondary); margin-bottom: var(--sp-4)">Pure-CSS spark burst (no assets), one-time state, reduced-motion fallback renders a static scatter.</p>
+        <div style="position: relative; display: inline-block">
+          <button class="btn btn--primary" id="spark-btn" type="button">Fire the sparks</button>
+          <div class="celebrate" id="celebrate" aria-hidden="true">
+            <span style="--i:0; --dx:80px;  --dy:-10px; --c:var(--accent-2)"></span>
+            <span style="--i:1; --dx:54px;  --dy:27px;  --c:var(--accent-1)"></span>
+            <span style="--i:2; --dx:57px;  --dy:70px;  --c:var(--ok)"></span>
+            <span style="--i:3; --dx:15px;  --dy:63px;  --c:var(--accent-2)"></span>
+            <span style="--i:4; --dx:-19px; --dy:-83px; --c:var(--warn)"></span>
+            <span style="--i:5; --dx:-38px; --dy:-47px; --c:var(--accent-1)"></span>
+            <span style="--i:6; --dx:-81px; --dy:-39px; --c:var(--accent-2)"></span>
+            <span style="--i:7; --dx:-62px; --dy:0px;   --c:var(--ok)"></span>
+            <span style="--i:8; --dx:-76px; --dy:37px;  --c:var(--accent-1)"></span>
+            <span style="--i:9; --dx:-37px; --dy:45px;  --c:var(--warn)"></span>
+            <span style="--i:10;--dx:-20px; --dy:86px;  --c:var(--accent-2)"></span>
+            <span style="--i:11;--dx:14px;  --dy:62px;  --c:var(--accent-1)"></span>
+            <span style="--i:12;--dx:40px;  --dy:78px;  --c:var(--ok)"></span>
+            <span style="--i:13;--dx:66px;  --dy:40px;  --c:var(--accent-2)"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ Reversible reveals — scroll test zone ============ -->
+      <section class="card" data-reveal style="text-align: center">
+        <h3>Reversible reveals — scroll test</h3>
+        <p style="color: var(--text-secondary)">Scroll down through the groups below, then back up. Each group staggers in (60 ms per element) and must reverse cleanly when it leaves the viewport band (§8).</p>
+      </section>
+
+      <div class="stack" style="--gap: var(--sp-4); min-height: 120vh">
+        <div data-reveal><div class="card"><h3>Group A — element 1</h3><p>Weights are billions of numbers. Loading them is a memory event, not a compute one.</p></div></div>
+        <div data-reveal><div class="card"><h3>Group A — element 2 (staggered)</h3><p>Bandwidth decides how fast those numbers can be read back out.</p></div></div>
+        <div data-reveal><div class="card"><h3>Group A — element 3 (staggered)</h3><p>That is the whole decode story: bytes ÷ bandwidth = tokens per second.</p></div></div>
+      </div>
+
+      <div style="height: 40vh" aria-hidden="true"></div>
+
+      <div class="stack" style="--gap: var(--sp-4)">
+        <div data-reveal><div class="card"><h3>Group B — element 1</h3><p>Prefill is the opposite regime: compute-bound, one fast pass over the prompt.</p></div></div>
+        <div data-reveal><div class="card"><h3>Group B — element 2 (staggered)</h3><p>Then decode drips out token by token at the bandwidth-limited rate.</p></div></div>
+      </div>
+
+      <div style="height: 40vh" aria-hidden="true"></div>
+
+      <div class="stack" style="--gap: var(--sp-4)">
+        <div data-reveal><div class="card"><h3>Group C — element 1</h3><p>The KV cache grows with context — that's real GB, read from the §5 formulas.</p></div></div>
+        <div data-reveal><div class="card"><h3>Group C — element 2 (staggered)</h3><p>Concurrency multiplies KV traffic: per-request speed drops, total throughput climbs sub-linearly.</p></div></div>
+        <div data-reveal><div class="card"><h3>Group C — element 3 (staggered)</h3><p>Offload is the teaching moment: CPU layers run at RAM bandwidth, and you feel it.</p></div></div>
+      </div>
+
+      <section class="card" data-reveal style="text-align: center">
+        <h3>End of scroll test</h3>
+        <p style="color: var(--text-secondary)">Scroll back up — everything should reverse. If it does, the §8 gate is met.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="shell-pad foot-inner">
+      <p>v100 · Phase 3 design-system harness — not part of the shipped site (dev/ folder).</p>
+    </div>
+  </footer>
+
+  <!-- app.js first: theme + reveals + slider fills. Then demo wiring. -->
+  <script type="module" src="../js/app.js"></script>
+  <script type="module">
+    import { pulse } from '../js/motion/scroll.js';
+
+    // Run-button state machine demo: idle → charging → running, cycling.
+    const run = document.getElementById('run-demo');
+    if (run) {
+      const states = ['idle', 'charging', 'running'];
+      let i = 0;
+      setInterval(() => { i = (i + 1) % states.length; run.dataset.runState = states[i]; }, 1600);
+    }
+
+    // §8 micro-interaction: pulse a printout on change.
+    document.getElementById('pulse-demo')?.addEventListener('click', () => {
+      pulse(document.getElementById('po-tps'));
+    });
+
+    // One-time celebration burst (re-triggerable here for review).
+    const cel = document.getElementById('celebrate');
+    document.getElementById('spark-btn')?.addEventListener('click', () => {
+      if (!cel) return;
+      cel.classList.remove('is-once');
+      void cel.offsetWidth; // restart the animation
+      cel.classList.add('is-once');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>v100 — How Local AI Works</title>
+  <meta name="description" content="An interactive guide to how local AI models run: hardware, memory bandwidth, and the real cost of inference.">
+
+  <!-- Pre-paint theme + JS flag (runs before first paint; no FOUC).
+       ⚠ KEEP IN SYNC with resolveInitialTheme() in js/theme.js -->
+  <script>
+    document.documentElement.classList.add('js');
+    (function () {
+      try {
+        var h = location.hash.replace('#', '').toLowerCase();
+        if (h !== 'light' && h !== 'dark') {
+          var s = localStorage.getItem('v100-theme');
+          if (s !== 'light' && s !== 'dark') {
+            s = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          h = s;
+        }
+        document.documentElement.setAttribute('data-theme', h);
+      } catch (e) { /* CSS defaults to light */ }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+  <!-- Ambient gradient mesh (§7): 4 soft blobs, ≤60 s drift loops -->
+  <div class="mesh" aria-hidden="true">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+    <span class="blob blob-c"></span>
+    <span class="blob blob-d"></span>
+  </div>
+
+  <header class="nav">
+    <a class="brand" href="#/home">
+      <span class="mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2 4.5 13.5H11L9.5 22 19 9.5h-6.5L13 2Z" fill="currentColor"/>
+        </svg>
+      </span>
+      v100 · How Local AI Works
+    </a>
+
+    <nav class="tabs" aria-label="Site tabs">
+      <a class="tab-link" data-tab-link="home" href="#/home">Home<span class="dot-new is-hidden"></span></a>
+      <a class="tab-link" data-tab-link="how" href="#/how">How It Works<span class="dot-new is-hidden"></span></a>
+      <a class="tab-link" data-tab-link="lab" href="#/lab">Hardware Lab<span class="dot-new is-hidden"></span></a>
+      <a class="tab-link" data-tab-link="compare" href="#/compare">Local vs Cloud<span class="dot-new is-hidden"></span></a>
+    </nav>
+
+    <!-- Exploration badge: P4 shows it once all four tabs are visited -->
+    <span class="badge-explorer is-hidden" id="explorer-badge" title="You explored all four tabs">★ Explorer</span>
+
+    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch color theme" aria-pressed="false">
+      <!-- sun: shown in dark mode (switches to light) -->
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+      </svg>
+      <!-- moon: shown in light mode (switches to dark) -->
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+      </svg>
+    </button>
+  </header>
+
+  <main id="app">
+    <!-- Tab panels: P4–P7 fill these in. Placeholders keep the shell testable now. -->
+    <section class="tab-panel is-active" data-tab="home" aria-label="Home">
+      <div class="shell-pad stack">
+        <div class="card" data-reveal>
+          <h2>Phase 4 lands here</h2>
+          <p>The intro story — what a model is, why it needs memory and bandwidth, the local-vs-cloud fork — plus the exploration progress ring and tab cards ship in Phase 4 (blueprint §6 Tab 1).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" data-tab="how" aria-label="How It Works">
+      <div class="shell-pad stack">
+        <div class="card" data-reveal>
+          <h2>Phase 5 lands here</h2>
+          <p>The five-stage pipeline — tokenization, model load, prefill vs decode, KV-cache growth, sampling — bound live to the shared store (blueprint §6 Tab 2).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" data-tab="lab" aria-label="Hardware Lab">
+      <div class="shell-pad stack">
+        <div class="card" data-reveal>
+          <h2>Phase 6 lands here</h2>
+          <p>The centerpiece: hardware/model/quantization controls, the Run Inference simulation, and live printouts (blueprint §6 Tab 3).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="tab-panel" data-tab="compare" aria-label="Local vs Cloud">
+      <div class="shell-pad stack">
+        <div class="card" data-reveal>
+          <h2>Phase 7 lands here</h2>
+          <p>The local-vs-cloud race, full comparison table, and the Shenzhen cost panel (blueprint §6 Tab 4).</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="shell-pad foot-inner">
+      <p>v100 · a static interactive guide — no build step, no external assets.</p>
+      <p>Footer content to be added by the owner (blueprint §2).</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

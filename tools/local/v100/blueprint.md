@@ -1,6 +1,6 @@
 # v100 — Blueprint: "How Local AI Works" Interactive Page
 
-Status: **Blueprint** (ready to build; Phase 1 data complete, awaiting owner sign-off — see [HANDOFF.md](HANDOFF.md)) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
+Status: **Building** — P1 signed off by owner 2026-09-02 (incl. R9 prices, now owner-provided Taobao listings); **P2 engine complete + signed off 2026-09-02** (all §5.4 anchors pass; `test/engine.test.mjs` 62/62 green; owner confirmed all prices correct — incl. unchanged RTX 3060 ¥2,000 / MBP M4 Pro ¥18,000 — and approved the KV-inclusive decode semantics); **P3 design system built 2026-09-02 — pending owner visual sign-off** (`test/ui.test.mjs` 16/16 green; tokens/base CSS, theme switcher, glass components, scroll engine complete) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
 Last updated: 2026-09-02
 
 ---
@@ -46,6 +46,9 @@ v100/
 │   │   ├── lab.js          # Tab 3 (centerpiece)
 │   │   └── compare.js      # Tab 4
 │   └── app.js              # Bootstrap, tab router, theme switcher, exploration tracker
+├── package.json            # {"type":"module"} — enables Node-based engine tests; browsers ignore it (zero hosting impact)
+├── test/
+│   └── engine.test.mjs     # P2 acceptance suite: §5.4 anchors + unit checks (`node test/engine.test.mjs`)
 ├── plans.md · outline.md · blueprint.md
 ```
 
@@ -162,7 +165,7 @@ All formulas documented on-page as an expandable "How we estimate this" panel wi
 **Memory accounting**
 - `weightsGB = params × bytesPerParam(quant)` (table §3.3)
 - `kvCacheGB = 2 × layers × kvHeads × headDim × ctxTokens × dtypeBytes / 1e9` (dtype follows quant; FP16 KV default, note Q8_0 option later)
-- Usable memory: discrete GPU → VRAM per card; Apple/DGX unified pool minus ~⅓ OS carve-out *(labeled assumption)*.
+- Usable memory: discrete GPU → VRAM per card; Apple/DGX unified pool minus **⅛** OS carve-out (P2-calibrated from the initial ~⅓ guess — macOS in practice lets one inference workload use most of the unified pool; labeled assumption, `ENGINE_CONSTANTS.unifiedMemoryOsCarveout`).
 
 **Fits check (drives everything)**
 1. `weights + kv ≤ VRAM` → **GPU-resident** (fast path).
@@ -170,13 +173,16 @@ All formulas documented on-page as an expandable "How we estimate this" panel wi
 
 **Decode speed (bandwidth-bound)**
 - Per-layer serial model: `t_token = Σ_layers (layerBytes / BW_of_resident_device)`; `tps = 1/t_token × η`
-- `η_decode ≈ 0.65–0.80` real-world efficiency *(calibrate against §5.4 anchors)*
+- **`layerBytes` includes the layer's weight bytes *plus* its KV-cache read at the current context length** — attention must stream each request's full K/V history for every new token, and that is bandwidth-bound traffic. P2 calibration note: with weights-only bytes no constant set can satisfy anchors 3+4 simultaneously; counting KV reads lets one global η pass all five (same formula shape as above).
+- Concurrency B *(labeled assumption)*: weights are read once per step (shared across the batch), but each request's KV history is re-read every token → `t_step = [Σ_gpu w_l/BW_g + B·Σ_all kv_l/BW_of_layer] / η`; total throughput = B × per-request (sub-linear when KV dominates); fits check uses KV ×B.
+- `η_decode` **calibrated in P2 to 0.85** (initial guess was 0.65–0.80; higher because KV traffic is now explicit instead of hidden inside η) — one global constant passes all five §5.4 anchors (`ENGINE_CONSTANTS.etaDecode`).
 - Multi-GPU scaling factors on bandwidth: 2× → **1.75**, 4× → **3.2** (NVLink/PCIe overhead; labeled assumption)
 - CPU-resident layers use RAM tier bandwidth (51.2 / 96 GB/s); this is why offload visibly punishes speed — the teaching moment.
 
 **Prefill / TTFT (compute-bound)**
 - `ttft_s = promptTokens × 2 × params / (η_prefill × TFLOPS_eff) + 0.1s overhead`
-- `TFLOPS_eff = Σ_gpu TFLOPS × η_prefill`, `η_prefill ≈ 0.5–0.7`; CPU path uses CPU FLOPs *(per-CPU values at build)*
+- `TFLOPS_eff = Σ_gpu TFLOPS × η_prefill`, `η_prefill` **set to 0.6** (midpoint of the initial guess 0.5–0.7; sanity-checked vs community prompt-eval rates — no hard anchor); CPU path uses per-CPU `prefillTflopsEff` directly (already efficiency-adjusted, `hardware.js`)
+- All-in-one prefill compute = **labeled estimates** in `ENGINE_CONSTANTS.unifiedPrefillTflopsEstimate` (Air M5 12 · M4 Pro 24 · DGX Spark 120 TFLOPS-equivalent) — Apple/GB10 don't publish comparable dense figures
 
 **Power & cost (`engine/cost.js`)**
 - `watts_load = Σ GPU_TDP×0.9 + systemBase(platform)` (systemBase: Macs ~30–60 W, PC rigs ~80–120 W — assumptions)
@@ -191,6 +197,8 @@ All formulas documented on-page as an expandable "How we estimate this" panel wi
 | M4 Pro 48GB | 70B Q4_K_M (~40 GB) | **5–9 tok/s** |
 | MacBook Air M5 16GB | 4B Q4_K_M (~2.6 GB) | **25–45 tok/s** |
 | RTX 3060 ×1 (offload, DDR4-3200) | 70B Q4_K_M | **< 3 tok/s** (teaches offload pain) |
+
+**P2 result (2026-09-02, `test/engine.test.mjs`):** A1 → **145.3** · A2 → **42.4** · A3 → **5.63** · A4 → **38.2** · A5 → **1.40 t/s** — all in range with one global η_decode = 0.85; 62/62 checks green.
 
 If an anchor misses its range by >25%, adjust `η` constants — never the formula shape.
 
@@ -274,10 +282,18 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 | R6 | DeepSeek V4 pricing + speed claims | api-docs.deepseek.com [S7] | ✅ **V4 Pro** peak $1.32/$3.96 (off-peak half), 54.1 t/s, TTFT 1.65 s; V4 Flash value tier (`cloud.js`) |
 | R7 | Claude Opus 5 context window confirm (1M?) + benchmark/agentic-coding results | anthropic.com [S9] | ✅ 1M ctx default on all providers, $5/$25 (Fast mode $10/$50), ~53 t/s, II 63 #1/187 (`cloud.js`) |
 | R8 | Shenzhen residential TOU schedule current values; USD/CNY rate | CEG/NDRC, PBOC [S10][S11] | ✅ tier-1 ≈0.66 + industrial 0.610 both current → default **0.65** (labeled midpoint) · ⚠️ FX now **6.72** CNY/USD (Wise, Aug 31 2026) — supersedes §3.5's ~7.2 |
-| R9 | Hardware street prices (RMB) for amortization: each GPU, Macs, DGX Spark, RAM kits | JD/Taobao listings or vendor pages | ⚠️ **estimates** (`priceBasis:'estimate'`, [H6][H7]) — UI must footnote; **owner to confirm at sign-off** |
-| R10 | CPU FLOPs + memory channels for the 4 approved CPUs (+2 proposed) | AMD/Intel ARK | ⚠️ `prefillTflopsEff` = community-behavior estimates, labeled per row (`hardware.js`) — calibrate in P2 |
+| R9 | Hardware street prices (RMB) for amortization: each GPU, Macs, DGX Spark, RAM kits | JD/Taobao listings or vendor pages | ✅ **Owner-provided current Taobao listings, 2026-09-02** — all `priceRMB` values in `hardware.js`, now `priceBasis:'taobao-listing'` [H7]; UI footnotes them as a date-stamped listing snapshot (not live prices) |
+| R10 | CPU FLOPs + memory channels for the 4 approved CPUs (+2 proposed) | AMD/Intel ARK | ⚠️ `prefillTflopsEff` = community-behavior estimates, labeled per row (`hardware.js`) — kept as labeled estimates in P2 (no §5.4 anchor constrains the CPU prefill path; sanity-checked vs community prompt-eval rates) |
 
 **Verification log (2026-09-01):** full re-check of all five data files against primary sources. **One real error found and fixed:** RX 9070 XT `tflopsFp32Dense` in `hardware.js` corrected **132.7 → 48.7 TFLOPS** (earlier derivation "54 CUs × 512 ALU" was wrong; actual is 64 CUs / 4096 shaders, boost 2970 MHz — AMD official + TechPowerUp both ≈48.7); `tdpW` also updated 300 → **304 W** [H8][H9]. Everything else confirmed as written: V100 bandwidth/TDP (R1), M5/M4 Pro/DGX Spark bandwidths (R3), all anchor configs incl. Gemma 3's explicit `head_dim` (R4), cloud pricing/speeds/contexts (R5–R7), Shenzhen rates + FX (R8).
+
+**Verification log (2026-09-02):** owner updated R9 street prices to current Taobao listings and signed off P1. New `priceRMB` values in `hardware.js`: V100 ¥1,000 · RTX 3060 ¥2,000 · RTX 3090 ¥8,000 · RX 9070 XT ¥5,400 · RTX 5070 Ti ¥8,000 · RTX 5090 ¥29,000 · RTX 6000 Ada ¥78,400 · MacBook Air M5 ¥8,500 · MBP M4 Pro ¥18,000 · DGX Spark ¥38,900. All `priceBasis` flipped `'estimate' → 'taobao-listing'`; [H7] relabeled as owner-provided listing snapshot (2026-09-02). No other data values changed.
+
+**Verification log (P2, 2026-09-02):** engine acceptance run. `test/engine.test.mjs` (plain Node ESM, no framework) — **62/62 checks green**. All five §5.4 anchors in range with a single global η_decode = 0.85: A1 RTX 3090+8B → 145.3 t/s [140–200] · A2 M4 Pro+8B → 42.4 [40–60] · A3 M4 Pro+70B → 5.63 [5–9], fits on the unified pool (carve-out calibrated to ⅛) · A4 Air M5+4B → 38.2 [25–45] · A5 RTX 3060 offload+70B → 1.40 [<3], layer split 23 GPU / 57 CPU. Decode `layerBytes` now includes each layer's KV-cache read (same formula shape; see §5 note). Tests also caught and fixed one store bug: a rejected `setConfig` no longer mutates state before validation throws.
+
+**Verification log (P2 sign-off, 2026-09-02):** owner closed both open flags — confirmed all prices correct (incl. unchanged RTX 3060 ¥2,000 and MBP M4 Pro ¥18,000) and approved the KV-inclusive `layerBytes` decode semantics as documented in §5. **P2 gate: signed off.**
+
+**Verification log (P3, 2026-09-02):** design system built — `css/tokens.css` (§7 exact glass recipe + per-theme accent/semantic/mesh tokens; light default, dark under `[data-theme="dark"]`, no-JS `prefers-color-scheme` fallback), `css/base.css` (reset, ambient mesh, glass panels/nav/buttons/run-state machine, radio segmented control, slider fill, switch, cards+dots+badge, progress ring, chips, memory-bar states, printout pulse, conic gauge, comparison table, estimates panel, footnotes, CSS-only celebration, reversible scroll reveals gated on `html.js`, full reduced-motion block), `js/theme.js` (hash > stored > system precedence; pure-system default not persisted), `js/motion/scroll.js` (IO rootMargin `-10% 0px`, reversible `.in-view`, `--i` stagger, pulse + slider-fill helpers), `js/app.js` (P3 bootstrap: theme + reveals + hash router). **Tests:** `test/ui.test.mjs` 16/16 green; all JS pass `node --check`. **Token audit:** every `var()` resolves to a defined token; no hardcoded theme colors in component CSS. **Pending:** owner visual sign-off of light+dark on all components + reveal reversibility (the §11 P3 gate) — opened in-app browser for review.
 
 ---
 
@@ -286,8 +302,8 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 | Phase | Deliverable | Acceptance gate |
 |---|---|---|
 | **P1 Research** | `js/data/*` complete with sources + "as of" dates; R1–R10 closed or footnoted as estimates | Data review sign-off (owner) |
-| **P2 Engine** | `perf.js`, `cost.js`, store | All §5 sanity anchors within range; unit checks for fits/offload/KV math |
-| **P3 Design system** | tokens/base CSS, theme switcher, glass components, scroll engine | Light/dark both correct on all components; reveals reversible |
+| **P2 Engine** | `perf.js`, `cost.js`, store ✅ 2026-09-02 | All §5 sanity anchors within range; unit checks for fits/offload/KV math — **met** (`test/engine.test.mjs` 62/62) |
+| **P3 Design system** | tokens/base CSS ✅ · theme switcher ✅ · glass components ✅ · scroll engine ✅ (built 2026-09-02) | Light/dark both correct on all components; reveals reversible — **built, pending owner visual sign-off** (`test/ui.test.mjs` 16/16 green) |
 | **P4 Home tab** | Tab 1 complete | §6 acceptance; exploration tracker works across tabs |
 | **P5 Pipeline tab** | Tab 2 complete | Live-bound to store; tokenization demo functional |
 | **P6 Hardware Lab** | Tab 3 complete (largest) | §6 acceptance incl. concurrency + offload teaching moment |
