@@ -1,6 +1,6 @@
 # v100 — Blueprint: "How Local AI Works" Interactive Page
 
-Status: **Building** — P1 signed off by owner 2026-09-02 (incl. R9 prices, now owner-provided Taobao listings); **P2 engine complete + signed off 2026-09-02** (all §5.4 anchors pass; `test/engine.test.mjs` 62/62 green; owner confirmed all prices correct — incl. unchanged RTX 3060 ¥2,000 / MBP M4 Pro ¥18,000 — and approved the KV-inclusive decode semantics); **P3 design system built 2026-09-02 — owner confirmed light/dark swap clean (2026-09-02); "links don't work" verified as expected at P3** (`test/ui.test.mjs` 21/21 green incl. router tests; tokens/base CSS, theme switcher, glass components, scroll engine complete; full visual sign-off of all components still pending) · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
+Status: **Building** — P1 signed off by owner 2026-09-02 (incl. R9 prices, now owner-provided Taobao listings); **P2 engine complete + signed off 2026-09-02** (all §5.4 anchors pass; `test/engine.test.mjs` 62/62 green; owner confirmed all prices correct — incl. unchanged RTX 3060 ¥2,000 / MBP M4 Pro ¥18,000 — and approved the KV-inclusive decode semantics); **P3 design system SIGNED OFF by owner 2026-09-02** (harness light+dark clean on all components, reveals reversible; "links don't work" verified as expected at P3 — router proven by tests; `test/ui.test.mjs` 21/21 green) · **P4 Home tab: in progress** · Supersedes [outline.md](outline.md) · Context in [plans.md](plans.md)
 Last updated: 2026-09-02
 
 ---
@@ -297,6 +297,8 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 
 **Verification log (P3 owner check-in, 2026-09-02):** owner confirmed the light/dark theme swap works cleanly. Owner then reported "none of the links work" — investigated and **verified as expected at P3**, two distinct reasons: (1) `dev/design-system.html` is a single-page component showcase with **no tab navigation by design** (its only link is the brand mark); (2) `index.html`'s hash router works — clicking a tab changes the hash → `hashchange` → `router.show(tab)` toggles `.is-active` on exactly one panel + its nav link — but all four panels are intentional "Phase N lands here" placeholders until P4–P7, so navigation looks inert. **Proof:** 5 new router tests added to `test/ui.test.mjs` (`tabFromHash` parsing incl. rejecting theme hashes like `#dark`; default panel on load; `show()` activates exactly one panel + link; no stacking across switches; safe no-op when a page has no `.tab-panel`s so the harness keeps `#light/#dark`) → suite now **21/21 green**; live deep-link check of `index.html#/lab` in the app browser shows the Lab placeholder active. The theme toggle — wired by the same bootstrap that runs the router — working end-to-end corroborates the JS path.
 
+**Verification log (P3 sign-off, 2026-09-02):** owner reviewed the acceptance harness (`dev/design-system.html`) in light + dark: "Looks fantastic" — all components pass muster; scroll reveals reversible. **P3 gate: signed off.** (Owner initially reviewed `index.html`, which correctly shows only placeholder panels at P3 — the sign-off page is the harness.) Proceeding to Phase 4 — Home tab.
+
 ---
 
 ## 11. Build Order & Milestones
@@ -305,7 +307,7 @@ If an anchor misses its range by >25%, adjust `η` constants — never the formu
 |---|---|---|
 | **P1 Research** | `js/data/*` complete with sources + "as of" dates; R1–R10 closed or footnoted as estimates | Data review sign-off (owner) |
 | **P2 Engine** | `perf.js`, `cost.js`, store ✅ 2026-09-02 | All §5 sanity anchors within range; unit checks for fits/offload/KV math — **met** (`test/engine.test.mjs` 62/62) |
-| **P3 Design system** | tokens/base CSS ✅ · theme switcher ✅ · glass components ✅ · scroll engine ✅ (built 2026-09-02) | Light/dark both correct on all components; reveals reversible — owner confirmed light/dark swap clean 2026-09-02; "links don't work" verified as expected at P3 (router proven by tests); **full visual sign-off still pending** (`test/ui.test.mjs` 21/21 green) |
+| **P3 Design system** | tokens/base CSS ✅ · theme switcher ✅ · glass components ✅ · scroll engine ✅ (built 2026-09-02) | Light/dark both correct on all components; reveals reversible — **SIGNED OFF by owner 2026-09-02** (harness light+dark clean, reveals reversible; "links don't work" verified as expected at P3 — router proven by tests) (`test/ui.test.mjs` 21/21 green) |
 | **P4 Home tab** | Tab 1 complete | §6 acceptance; exploration tracker works across tabs |
 | **P5 Pipeline tab** | Tab 2 complete | Live-bound to store; tokenization demo functional |
 | **P6 Hardware Lab** | Tab 3 complete (largest) | §6 acceptance incl. concurrency + offload teaching moment |
