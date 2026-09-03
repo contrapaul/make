@@ -417,7 +417,7 @@ function makeRadio(value, label = null) {
   return el;
 }
 
-function makeClassEl(extra = {}) {
+function makeLabClassEl(extra = {}) {
   const classes = new Set();
   return Object.assign({
     classList: {
@@ -440,11 +440,11 @@ function makeLabDoc() {
   group('lab-gpu', ['v100-pcie-16g', 'rtx-3060-12g', 'rtx-3090-24g', 'rx-9070xt-16g', 'rtx-5070ti-16g', 'rtx-5090-32g', 'rtx-6000-ada-48g']);
   group('lab-gpucount', ['1', '2', '4']);
   group('lab-ramtier', ['ddr4-3200', 'ddr5-6000']);
-  // 192/256 GB chips are DDR5-only (labels carry data-tier-only, as in index.html)
-  const capLabels = {
-    '192': makeClassEl({ dataset: { tierOnly: 'ddr5-6000' } }),
-    '256': makeClassEl({ dataset: { tierOnly: 'ddr5-6000' } }),
-  };
+  // Every capacity chip sits in a <label> (index.html); 192/256 GB are DDR5-only
+  const capLabels = {};
+  for (const v of ['16', '32', '48', '64', '128']) capLabels[v] = makeLabClassEl();
+  capLabels['192'] = makeLabClassEl({ dataset: { tierOnly: 'ddr5-6000' } });
+  capLabels['256'] = makeLabClassEl({ dataset: { tierOnly: 'ddr5-6000' } });
   group('lab-capacity', ['16', '32', '48', '64', '128', '192', '256'], capLabels);
   group('lab-cpu', ['ryzen5-3600', 'ryzen9-5800x3d', 'i5-13600k', 'i9-13900kf', 'ryzen7-7800x3d', 'threadripper-7960x']);
   group('lab-quant', ['fp16', 'int8-awq', 'q6_k', 'q5_k_m', 'q4_k_m']);
@@ -461,8 +461,8 @@ function makeLabDoc() {
   };
 
   const byId = {
-    'lab-aio-group': makeClassEl(),
-    'lab-rig-group': makeClassEl(),
+    'lab-aio-group': makeLabClassEl(),
+    'lab-rig-group': makeLabClassEl(),
     'lab-model': modelInput,
     'lab-model-anchor': { textContent: '' },
   };
