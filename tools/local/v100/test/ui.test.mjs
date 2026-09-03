@@ -20,8 +20,11 @@ import {
 import { initHome } from '../js/tabs/home.js';
 import {
   clampCapacity, modeSwitchPartial, tierSwitchPartial, anchorNote, initLab,
+  membarView, fitChipText, quantExplainer, fmtTps, fmtMs, fmtWatts, fmtCost,
+  renderPrintouts, memoryCaption,
 } from '../js/tabs/lab.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
+import { evaluate } from '../js/engine/perf.js';
 
 let passed = 0;
 const ok = (name) => { passed += 1; console.log(`  ✓ ${name}`); };
@@ -460,16 +463,59 @@ function makeLabDoc() {
     dispatchEvent(evt) { for (const fn of this.listeners[evt.type] ?? []) fn(evt); return true; },
   };
 
+  // M2 printouts rail stubs (pulse() needs classList + offsetWidth + addEventListener)
+  const makePrintout = () => {
+    const classes = new Set();
+    const v = { textContent: '—' };
+    return {
+      v,
+      querySelector: (sel) => (sel === '.v' ? v : null),
+      classList: {
+        add(c) { classes.add(c); }, remove(c) { classes.delete(c); }, contains: (c) => classes.has(c),
+        toggle(c, force) { if (force === undefined) { if (classes.has(c)) classes.delete(c); else classes.add(c); } else if (force) classes.add(c); else classes.delete(c); },
+      },
+      offsetWidth: 10,
+      listeners: {},
+      addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    };
+  };
+  const makeSeg = () => {
+    const vars = {};
+    return { style: { vars, setProperty(k, v) { vars[k] = v; } } };
+  };
+  const segGpu = makeSeg(); // persistent instances — querySelector must return the same object
+  const segCpu = makeSeg();
+  const membarEl = {
+    attrs: {},
+    setAttribute(k, v) { this.attrs[k] = v; },
+    getAttribute(k) { return this.attrs[k] ?? null; },
+    querySelector: (sel) => (sel === '.seg-gpu' ? segGpu : sel === '.seg-cpu' ? segCpu : null),
+  };
+  const nofitList = {
+    children: [],
+    appendChild(c) { this.children.push(c); },
+    removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+  };
+
   const byId = {
     'lab-aio-group': makeLabClassEl(),
     'lab-rig-group': makeLabClassEl(),
     'lab-model': modelInput,
     'lab-model-anchor': { textContent: '' },
+    'po-tps': makePrintout(), 'po-ttft': makePrintout(), 'po-power': makePrintout(),
+    'po-cost': makePrintout(), 'po-maxfit': makePrintout(),
+    'lab-membar': membarEl,
+    'lab-mem-caption': { textContent: '' },
+    'lab-fit-state': { textContent: '', attrs: {}, setAttribute(k, v) { this.attrs[k] = v; } },
+    'lab-nofit': makeLabClassEl(),
+    'lab-nofit-list': nofitList,
+    'lab-quant-explain': { innerHTML: '' },
   };
 
   return {
-    groups, modelInput,
+    groups, modelInput, membarEl, nofitList,
     getElementById: (id) => byId[id] ?? null,
+    createElement: (tag) => ({ tag, textContent: '' }),
     querySelectorAll: (sel) => {
       const m = /^input\[name="(.+)"\]$/.exec(sel);
       return m && groups[m[1]] ? groups[m[1]] : [];
@@ -619,5 +665,101 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
   ok('initial paint restores a persisted all-in-one config');
 }
 
+{ // M2 formatting helpers
+  assert.equal(fmtTps(145.3), '145.3 tok/s');
+  assert.equal(fmtTps(null), '—');
+  assert.equal(fmtMs(850), '850 ms');
+  assert.equal(fmtMs(1650), '1.65 s');
+  assert.equal(fmtWatts(415), '415 W');
+  assert.equal(fmtCost(0.18, 0.027), '¥0.180 · $0.027');
+  ok('M2 formatters: tok/s · ms/s · watts · ¥/$ (3dp under 1)');
+}
+
+{ // M2 membarView — gpu / offload / noFit states, self-consistent with the engine
+  const perfGpu = evaluate(DEFAULT_CONFIG); // RTX 3090 + 8B Q4 → GPU-resident
+  assert.equal(perfGpu.fitsState, 'gpu');
+  let v = membarView(perfGpu);
+  assert.ok(v.gpuPct > 0 && v.cpuPct === 0, 'all bytes on the VRAM side');
+  assert.equal(v.state, 'ok', '8B in a 24 GB card is far from full');
+
+  const offCfg = { ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 };
+  const perfOff = evaluate(offCfg); // §5.4 anchor A5 shape → offload
+  assert.equal(perfOff.fitsState, 'offload');
+  v = membarView(perfOff);
+  const perLayer = (perfOff.weightsGB + perfOff.kvCacheGB) / perfOff.totalLayers;
+  assert.ok(Math.abs(v.gpuPct - Math.min(1, (perfOff.layersOnGpu * perLayer) / perfOff.gpuUsableGB)) < 1e-9);
+  assert.ok(Math.abs(v.cpuPct - Math.min(1, (perfOff.layersOnCpu * perLayer) / perfOff.ramUsableGB)) < 1e-9);
+  assert.equal(v.state, v.gpuPct >= 0.9 || v.cpuPct >= 0.9 ? 'warn' : 'ok', 'state follows the ≥90 % rule');
+
+  const noCfg = { mode: 'allInOne', platformId: 'mba-m5', modelStopIndex: 9, quantId: 'q4_k_m', contextWindow: 8192 };
+  const perfNo = evaluate(noCfg); // 405B Q4 on a 16 GB Air → noFit
+  assert.equal(perfNo.fitsState, 'noFit');
+  v = membarView(perfNo);
+  assert.equal(v.state, 'fail');
+  assert.equal(v.gpuPct, 1, 'demand clamps the bar to full');
+  ok('membarView: gpu/offload/noFit splits + ok/warn/fail states match the engine model');
+}
+
+{ // M2 renderPrintouts — default config renders exact engine values
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  const perf = evaluate(DEFAULT_CONFIG);
+  assert.equal(doc.getElementById('po-tps').v.textContent, fmtTps(perf.decodeTpsPerRequest));
+  assert.equal(doc.getElementById('po-ttft').v.textContent, fmtMs(perf.ttftMs));
+  assert.equal(doc.getElementById('po-power').v.textContent, '415 W'); // 350×0.9 + 100 system base
+  assert.match(doc.getElementById('po-cost').v.textContent, /^¥[\d.]+ · \$[\d.]+$/);
+  assert.equal(doc.getElementById('po-maxfit').v.textContent, '80B'); // 70B/80B fit in 24+64 GB at Q4/8K
+
+  const v = membarView(perf);
+  assert.ok(doc.membarEl.querySelector('.seg-gpu').style.vars['--w'].endsWith('%'));
+  assert.equal(doc.membarEl.getAttribute('data-state'), 'ok');
+  assert.match(doc.getElementById('lab-mem-caption').textContent, /weights \+ .*KV of 24 GB VRAM/);
+
+  const chip = doc.getElementById('lab-fit-state');
+  assert.equal(chip.textContent, 'GPU-resident — fast path');
+  assert.equal(chip.attrs['data-fit'], 'gpu');
+  assert.ok(doc.getElementById('lab-nofit').classList.contains('is-hidden'), 'diagnosis hidden when it fits');
+
+  const ex = doc.getElementById('lab-quant-explain').innerHTML;
+  assert.match(ex, /Q4_K_M \(GGUF\) — Fits more, slightly dumber/);
+  assert.match(ex, /K-quant blocks/); // whatItIs from the signed-off data layer
+  ok('M2 printouts: exact engine values · membar + caption · fit chip · quant explainer');
+}
+
+{ // M2 doesn't-fit — diagnosis card with the engine's suggestions
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  st.setConfig({ mode: 'allInOne', platformId: 'mba-m5' }); // seed AIO (M1 logic)
+  st.setConfig({ modelStopIndex: 9 });                        // 405B Q4 → noFit on the Air
+  const perf = evaluate(st.getState().config);
+  assert.equal(perf.fitsState, 'noFit');
+
+  assert.ok(!doc.getElementById('lab-nofit').classList.contains('is-hidden'), 'diagnosis visible');
+  assert.equal(doc.nofitList.children.length, perf.noFitSuggestions.length);
+  assert.equal(doc.nofitList.children[0].textContent, perf.noFitSuggestions[0]);
+
+  assert.equal(doc.getElementById('po-tps').v.textContent, '—', 'speed unavailable when it doesn’t fit');
+  assert.equal(doc.membarEl.getAttribute('data-state'), 'fail');
+  const chip = doc.getElementById('lab-fit-state');
+  assert.equal(chip.attrs['data-fit'], 'noFit');
+  ok('M2 noFit: suggestions rendered from the engine, speed rows read “—”, bar in fail state');
+}
+
+{ // M2 §8 pulse — changed printouts pulse; unchanged ones don’t; first paint never pulses
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st }); // initial paint (firstSync → no pulses)
+  assert.ok(!doc.getElementById('po-tps').classList.contains('is-pulsing'), 'no pulse on first paint');
+
+  st.setConfig({ modelStopIndex: 2 }); // 8B → 12B: tps/TTFT/cost move, maxfit stays 80B, watts unchanged
+  assert.ok(doc.getElementById('po-tps').classList.contains('is-pulsing'), 'changed row pulses');
+  assert.ok(!doc.getElementById('po-power').classList.contains('is-pulsing'), 'unchanged row does not pulse');
+  ok('M2 pulse-on-change: §8 micro-interaction fires only for rows whose value moved');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1 Lab controls).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1+M2 Lab).`);
