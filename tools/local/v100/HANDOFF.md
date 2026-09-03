@@ -1,6 +1,6 @@
-# v100 Handoff — Phase 6 (Hardware Lab), M1 of 4
+# v100 Handoff — Phase 6 (Hardware Lab), M3 of 4
 
-**Date:** 2026-09-03 · **Status: P4 SIGNED OFF by owner ("this site is looking ridiculously good"); JSON error CLOSED as external.** Owner picked **P6 (Hardware Lab)** over P5. **P6 M1+M2 COMPLETE**: Lab shell + control rail bound two-way to the signed-off store; printouts rail live-bound to the engine (speed/TTFT/power/¥$ per M, memory bar w/ VRAM-RAM split + ok/warn/fail, fit chip, doesn't-fit diagnosis, quant explainers, §8 pulse-on-change); `test/ui.test.mjs` **45/45 green** · `test/engine.test.mjs` **62/62 green**; committed. Next: **M3 Run Inference simulation**, then M4 concurrency/offload teaching moments.
+**Date:** 2026-09-03 · **Status: P4 SIGNED OFF by owner ("this site is looking ridiculously good"); JSON error CLOSED as external.** Owner picked **P6 (Hardware Lab)** over P5. **P6 M1+M2+M3 COMPLETE**: control rail two-way bound to the store; printouts live-bound to the engine; Run Inference simulation (load → prefill → decode at the engine's exact rate, gauge + 256-token progress, labeled time-compression ≤8 s budget, reduced-motion instant path); `test/ui.test.mjs` **52/52 green** · `test/engine.test.mjs` **62/62 green**; committed. Next: **M4 concurrency/offload teaching moments + final verification.**
 
 Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. This file supersedes the session-9 handoff and completes its P4 kickoff + build.
 
@@ -14,10 +14,12 @@ Owner: *"Proceed with P6."* (after reviewing state; P4 was the last signed-off p
 |---|---|---|
 | **M1** | Lab shell (3-rail layout) + control rail bound two-way to the store: platform mode/AIO/GPU×count/RAM tier+capacity/CPU, model slider w/ anchor readout, quant segmented (+explainer slot), context/prompt-split/concurrency toggles | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 40/40 (was 31) · engine 62/62 · committed |
 | **M2** | Printouts rail: decode speed, TTFT, power, ¥/$ per M tokens, memory-fill bar w/ VRAM/RAM split + ok/warn/fail states, fit-state chip, doesn't-fit diagnosis (suggestions from engine), pulse-on-change (§8), quant explainer card content | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 45/45 · engine 62/62 · committed |
-| **M3** | Run Inference simulation: idle→charging→running state machine on `.run-btn`, load bar → prefill beat → token conveyor at the engine's rate (displayed tok/s = engine value, ±5% acceptance by construction), gauge + 256-token progress, labeled time-compression for slow configs, reduced-motion path | ⏳ |
-| **M4** | Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×B queueing) + offload teaching moment (visible slowdown + one-sentence why), then full verification: both suites, `node --check`, live light+dark review, blueprint §11 P6 row flipped + verification log | ⏳ |
+| **M3** | Run Inference simulation: idle→charging→running state machine on `.run-btn`, load bar → prefill beat → token conveyor at the engine's rate (displayed tok/s = engine value, ±5% acceptance by construction), gauge + 256-token progress, labeled time-compression for slow configs, reduced-motion path | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 52/52 · engine 62/62 · committed |
+| **M4** | Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×B queueing) + offload teaching moment (visible slowdown + one-sentence why), then full verification: both suites, `node --check`, live light+dark review, blueprint §11 P6 row flipped + verification log | ⏳ NEXT |
 
 **M2 agent-decided (labeled in code):** warn threshold = any pool ≥90 % full · noFit bar reads full + fail border with demand caption · first paint sets printout values without pulsing (§8 pulses only on actual changes) · explainer card rendered via escaped innerHTML from the signed-off `quantization.js` data (no user input → safe).
+
+**M3 agent-decided (labeled in code):** real-time budget 8 s — slower configs compress ×N and say so on screen (blueprint Tab 4 "time-compressed, labeled" precedent) · load phase = illustrative weightsGB/20 clamped [0.5, 2] s (choreography, not physics) · prefill is a fixed 0.8 s virtual beat; true TTFT lives in the printouts · gauge full at ≥200 tok/s (label carries exact value) · click mid-run = restart · any store change mid-run cancels the run · reduced motion → instant final state, no loop.
 
 **Agent-decided so far in P6 (labeled in code):** first AIO switch seeds `platformId` with the first AIO (`mba-m5`) since DEFAULT_CONFIG has none · RAM tier switch clamps a stranded capacity to nearest offered value (192→128 on DDR4) and hides tier-exclusive chips · slider fill refresh via guarded `input` dispatch (no event loops; P3's `bindRangeFill` listener does the work).
 
@@ -72,8 +74,9 @@ Light: `http://localhost:8077/index.html` · Dark: `http://localhost:8077/index.
 2. ~~On sign-off: flip `blueprint.md` + verification log + this handoff~~ — **DONE in session 11** (status line, §11 P4 row → SIGNED OFF, three new verification-log entries incl. JSON-error closure; writes verified by reading back).
 3. ~~Owner picks P5 or P6~~ — **DONE 2026-09-03: owner picked P6.**
 4. ~~**Build P6 M2 (printouts rail)**~~ — **DONE 2026-09-03.**
-5. **Build P6 M3 (Run Inference simulation)** per the table above → then M4.
-6. After P6 sign-off: P5 Pipeline tab, P7 Compare tab, P8 polish (blueprint §11).
+5. ~~**Build P6 M3 (Run Inference simulation)**~~ — **DONE 2026-09-03.**
+6. **Build P6 M4 (concurrency + offload teaching moments) + final verification** per the table above.
+7. After P6 sign-off: P5 Pipeline tab, P7 Compare tab, P8 polish (blueprint §11).
 
 ## User preferences & constraints (all owner-approved)
 

@@ -31,12 +31,18 @@
      #lab-membar (.seg-gpu / .seg-cpu children) · #lab-mem-caption
      #lab-fit-state (chip, data-fit attr) · #lab-nofit · #lab-nofit-list
      #lab-quant-explain (innerHTML — own static data only)
+
+   M3 (Run Inference simulation):
+     #lab-run (data-run-state) · #lab-sim-stage · #lab-sim-loadbar (.seg)
+     #lab-conveyor (chips appended as tokens emit) · #lab-gauge (--val) · #lab-tps-value
+     #lab-progress-bar (.seg) · #lab-progress-label · #lab-run-meta
    ============================================================ */
 
 import { ALL_IN_ONES, RAM_TIERS } from '../data/hardware.js';
 import { MODEL_STOPS } from '../data/models.js';
 import { QUANT_LEVELS } from '../data/quantization.js';
 import { pulse } from '../motion/scroll.js';
+import { GENERATION_TARGET_TOKENS } from '../engine/perf.js';
 
 const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
 
@@ -247,11 +253,190 @@ export function memoryCaption(perf, config) {
   return `${w} GB weights + ${kv} GB KV of ${perf.gpuUsableGB.toFixed(0)} GB VRAM`;
 }
 
+/* ---------------- M3 · Run Inference simulation --------------
+   Virtual timeline (sim seconds): load → prefill beat → decode at the
+   engine's per-request rate. Real time = virtual ÷ speedup, where speedup
+   keeps any run within SIM_REAL_BUDGET_S and is LABELED on screen when >1
+   (blueprint Tab 4 precedent: "time-compressed, labeled"). The displayed
+   tok/s is always the engine's exact value → §6 acceptance (±5 %) holds by
+   construction. Reduced motion (§8): instant completion, no animation.
+   ------------------------------------------------------------ */
+
+/** Agent-decided: a full run takes at most ~8 s real time; slower configs are compressed ×N and labeled. */
+export const SIM_REAL_BUDGET_S = 8;
+const PREFILL_BEAT_S = 0.8; // virtual-time beat for the prefill flash (true TTFT is shown numerically in printouts)
+
+/** Pure: simulation plan from a perf result. null → can't run (doesn't fit). */
+export function simPlan(perf, targetTokens = GENERATION_TARGET_TOKENS) {
+  if (!perf || perf.decodeTpsPerRequest == null || !(perf.decodeTpsPerRequest > 0)) return null;
+  const tps = perf.decodeTpsPerRequest;
+  // Illustrative load time ∝ weights size at a nominal ~20 GB/s (labeled assumption — choreography, not physics).
+  const loadS = Math.min(2, Math.max(0.5, perf.weightsGB / 20));
+  const decodeS = targetTokens / tps; // true virtual seconds at the engine rate
+  const totalVirtualS = loadS + PREFILL_BEAT_S + decodeS;
+  const speedup = Math.max(1, totalVirtualS / SIM_REAL_BUDGET_S);
+  return {
+    targetTokens,
+    tps,
+    promptTokens: perf.promptTokens ?? 0,
+    loadS,
+    prefillBeatS: PREFILL_BEAT_S,
+    decodeS,
+    totalVirtualS,
+    speedup,
+    realDurationS: totalVirtualS / speedup,
+  };
+}
+
+/** Pure: per-request tokens emitted by virtual time t (0 before decode starts, clamped at target).
+ *  Relative epsilon keeps the exact end-time boundary from flooring to target−1 in float math. */
+export function tokensAt(plan, tVirtual) {
+  const t = Math.max(0, tVirtual - plan.loadS - plan.prefillBeatS);
+  const raw = t * plan.tps;
+  return Math.min(plan.targetTokens, Math.floor(raw + 1e-9 * (raw + 1)));
+}
+
+/** Pure: phase at virtual time t — loading → prefill → decoding → done. */
+export function simPhase(plan, tVirtual) {
+  if (tVirtual < plan.loadS) return 'loading';
+  if (tVirtual < plan.loadS + plan.prefillBeatS) return 'prefill';
+  if (tokensAt(plan, tVirtual) >= plan.targetTokens) return 'done';
+  return 'decoding';
+}
+
+/** Pure: gauge fill 0..1 — full at ≥200 tok/s; the label carries the exact value. */
+export function gaugeFill(tps) {
+  if (!tps || !(tps > 0)) return 0;
+  return Math.min(1, tps / Math.max(200, tps));
+}
+
+/** Pure: stage line for a phase (rendered into #lab-sim-stage). */
+export function stageText(phase, plan) {
+  if (phase === 'loading') return 'Loading weights into memory…';
+  if (phase === 'prefill') return `Prefill — one fast pass over the ${plan.promptTokens.toLocaleString()}-token prompt…`;
+  if (phase === 'decoding') return `Decoding — tokens out at ${fmtTps(plan.tps)} per request`;
+  return 'Done';
+}
+
+const defaultRaf = () => (typeof requestAnimationFrame === 'function' ? requestAnimationFrame : null);
+const defaultNow = () => (typeof performance !== 'undefined' && typeof performance.now === 'function'
+  ? () => performance.now()
+  : Date.now);
+
+/** Wire the Run Inference simulation. DI-friendly: {doc, store, raf, now, reduced}. */
+export function initSim({ doc = defaultDoc(), store, raf = defaultRaf(), now = defaultNow(), reduced } = {}) {
+  if (!doc || !store) return { start() {}, cancel() {}, isRunning: () => false };
+
+  const byId = (id) => doc.getElementById?.(id) ?? null;
+  const runBtn = byId('lab-run');
+  const stageEl = byId('lab-sim-stage');
+  const loadbarSeg = (() => { const b = byId('lab-sim-loadbar'); return b && typeof b.querySelector === 'function' ? b.querySelector('.seg') : null; })();
+  const conveyor = byId('lab-conveyor');
+  const gauge = byId('lab-gauge');
+  const tpsValue = byId('lab-tps-value');
+  const progressSeg = (() => { const b = byId('lab-progress-bar'); return b && typeof b.querySelector === 'function' ? b.querySelector('.seg') : null; })();
+  const progressLabel = byId('lab-progress-label');
+  const metaEl = byId('lab-run-meta');
+
+  // §8 courtesy: reduced motion → instant completion, no animation loop.
+  const isReduced = reduced ?? (typeof matchMedia !== 'undefined' && typeof matchMedia === 'function'
+    ? matchMedia('(prefers-reduced-motion: reduce)').matches
+    : false);
+
+  let rafId = null;
+  let running = false;
+  let chipsRendered = 0;
+
+  function setRunState(s) { if (runBtn && runBtn.setAttribute) runBtn.setAttribute('data-run-state', s); }
+  function setW(el, frac) {
+    if (el && el.style && el.style.setProperty) el.style.setProperty('--w', `${Math.max(0, Math.min(100, frac * 100)).toFixed(1)}%`);
+  }
+
+  function clearConveyor() {
+    chipsRendered = 0;
+    if (conveyor && typeof conveyor.appendChild === 'function') {
+      while (conveyor.children && conveyor.children.length > 0) conveyor.removeChild(conveyor.children[0]);
+    }
+  }
+
+  /** Append per-request token chips up to n (bounded at the target — M4 reports totals separately). */
+  function renderChips(n) {
+    if (!conveyor || typeof doc.createElement !== 'function') return;
+    while (chipsRendered < n) {
+      const chip = doc.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = `#${chipsRendered + 1}`;
+      conveyor.appendChild(chip);
+      chipsRendered += 1;
+    }
+  }
+
+  function paintFrame(plan, tVirtual) {
+    const phase = simPhase(plan, tVirtual);
+    setW(loadbarSeg, Math.min(1, tVirtual / plan.loadS));
+    if (stageEl) stageEl.textContent = stageText(phase, plan);
+    renderChips(tokensAt(plan, tVirtual));
+    if (gauge && gauge.style && gauge.style.setProperty) gauge.style.setProperty('--val', String(gaugeFill(plan.tps)));
+    if (tpsValue) tpsValue.textContent = `${Math.round(plan.tps * 10) / 10}`;
+    const n = tokensAt(plan, tVirtual);
+    setW(progressSeg, plan.targetTokens > 0 ? n / plan.targetTokens : 0);
+    if (progressLabel) progressLabel.textContent = `${n} / ${plan.targetTokens} tokens`;
+  }
+
+  function finish(plan) {
+    paintFrame(plan, plan.totalVirtualS); // land on the exact final state
+    running = false;
+    setRunState('idle');
+    const compressed = plan.speedup > 1 ? ` · ×${plan.speedup.toFixed(1)} time-compressed` : '';
+    if (metaEl) metaEl.textContent =
+      `Done — ${plan.targetTokens} tokens in ${plan.realDurationS.toFixed(1)} s real time${compressed}. The gauge shows the engine's estimated rate for this config.`;
+  }
+
+  function start() {
+    const perf = store.getState()?.derived?.perf ?? null;
+    const plan = simPlan(perf);
+    if (!plan) {
+      setRunState('idle');
+      if (stageEl) stageEl.textContent = "Can't run — the model doesn't fit this hardware. See the diagnosis on the right.";
+      return false;
+    }
+    cancel(); // click mid-run = restart with the current config
+    clearConveyor();
+    running = true;
+
+    if (isReduced || !raf) { finish(plan); return true; } // §8 reduced motion → instant result
+
+    const t0 = now();
+    function frame() {
+      if (!running) return;
+      const tVirtual = ((now() - t0) / 1000) * plan.speedup;
+      const clamped = Math.min(tVirtual, plan.totalVirtualS);
+      // Button state machine (§8): charging through load+prefill, running while decoding.
+      setRunState(simPhase(plan, clamped) === 'decoding' ? 'running' : 'charging');
+      paintFrame(plan, clamped);
+      if (tVirtual >= plan.totalVirtualS) { finish(plan); return; }
+      rafId = raf(frame);
+    }
+    rafId = raf(frame);
+    return true;
+  }
+
+  function cancel() {
+    running = false;
+    if (rafId != null && typeof cancelAnimationFrame === 'function') cancelAnimationFrame(rafId);
+    rafId = null;
+    setRunState('idle');
+  }
+
+  return { start, cancel, isRunning: () => running };
+}
+
 /* ---------------- control binding ---------------------------- */
 
-/** Wire the Lab control rail. DI-friendly: {doc, store}. Returns handles. */
-export function initLab({ doc = defaultDoc(), store } = {}) {
-  if (!doc || !store) return { syncControls() {}, unsubscribe() {} };
+/** Wire the whole Lab tab (controls + printouts + simulation).
+ *  DI-friendly: {doc, store, sim} — `sim` is forwarded to initSim ({raf, now, reduced}). */
+export function initLab({ doc = defaultDoc(), store, sim: simOpts = {} } = {}) {
+  if (!doc || !store) return { syncControls() {}, unsubscribe() {}, sim: { start() {}, cancel() {}, isRunning: () => false } };
 
   const byId = (id) => doc.getElementById?.(id) ?? null;
   const radios = (name) => Array.from(doc.querySelectorAll(`input[name="${name}"]`) ?? []);
@@ -358,9 +543,18 @@ export function initLab({ doc = defaultDoc(), store } = {}) {
     });
   }
 
+  /* M3: Run Inference simulation — click starts; any config change mid-run
+     cancels it (the numbers changed under it; agent-decided). */
+  const sim = initSim({ doc, store, ...simOpts });
+  const runBtn = byId('lab-run');
+  if (runBtn) runBtn.addEventListener('click', () => { sim.start(); });
+
   // Store → controls on every change (including changes made elsewhere, e.g. P7).
-  const unsubscribe = store.subscribe(syncControls);
+  const unsubscribe = store.subscribe((state) => {
+    if (sim.isRunning()) sim.cancel();
+    syncControls(state);
+  });
   syncControls(store.getState()); // initial paint (covers persisted config)
 
-  return { syncControls, unsubscribe };
+  return { syncControls, unsubscribe, sim };
 }

@@ -22,6 +22,7 @@ import {
   clampCapacity, modeSwitchPartial, tierSwitchPartial, anchorNote, initLab,
   membarView, fitChipText, quantExplainer, fmtTps, fmtMs, fmtWatts, fmtCost,
   renderPrintouts, memoryCaption,
+  simPlan, tokensAt, simPhase, gaugeFill, stageText, SIM_REAL_BUDGET_S, initSim,
 } from '../js/tabs/lab.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
 import { evaluate } from '../js/engine/perf.js';
@@ -491,11 +492,25 @@ function makeLabDoc() {
     getAttribute(k) { return this.attrs[k] ?? null; },
     querySelector: (sel) => (sel === '.seg-gpu' ? segGpu : sel === '.seg-cpu' ? segCpu : null),
   };
-  const nofitList = {
+  const makeList = () => ({
     children: [],
     appendChild(c) { this.children.push(c); },
     removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+  });
+  const nofitList = makeList();
+
+  // M3 simulation stubs (persistent seg instances, as in the real DOM)
+  const runBtnStub = {
+    attrs: {},
+    setAttribute(k, v) { this.attrs[k] = v; },
+    getAttribute(k) { return this.attrs[k] ?? null; },
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
   };
+  const loadbarSegStub = makeSeg();
+  const progressSegStub = makeSeg();
+  const conveyorStub = makeList();
+  const gaugeStub = makeSeg(); // --val lives in style.vars, like the real .gauge
 
   const byId = {
     'lab-aio-group': makeLabClassEl(),
@@ -510,10 +525,21 @@ function makeLabDoc() {
     'lab-nofit': makeLabClassEl(),
     'lab-nofit-list': nofitList,
     'lab-quant-explain': { innerHTML: '' },
+    // M3
+    'lab-run': runBtnStub,
+    'lab-sim-stage': { textContent: '' },
+    'lab-sim-loadbar': { querySelector: (sel) => (sel === '.seg' ? loadbarSegStub : null) },
+    'lab-conveyor': conveyorStub,
+    'lab-gauge': gaugeStub,
+    'lab-tps-value': { textContent: '' },
+    'lab-progress-bar': { querySelector: (sel) => (sel === '.seg' ? progressSegStub : null) },
+    'lab-progress-label': { textContent: '' },
+    'lab-run-meta': { textContent: '' },
   };
 
   return {
     groups, modelInput, membarEl, nofitList,
+    runBtnStub, conveyorStub, gaugeStub, loadbarSegStub, progressSegStub,
     getElementById: (id) => byId[id] ?? null,
     createElement: (tag) => ({ tag, textContent: '' }),
     querySelectorAll: (sel) => {
@@ -761,5 +787,129 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
   ok('M2 pulse-on-change: §8 micro-interaction fires only for rows whose value moved');
 }
 
+{ // M3 simPlan — fast configs run real-time; slow ones compress within budget
+  const perfFast = evaluate(DEFAULT_CONFIG);
+  let p = simPlan(perfFast);
+  assert.equal(p.speedup, 1, 'fast config needs no compression');
+  assert.ok(Math.abs(p.realDurationS - (p.loadS + p.prefillBeatS + p.decodeS)) < 1e-9);
+
+  const perfSlow = evaluate({ ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 });
+  assert.ok(perfSlow.decodeTpsPerRequest < 5, 'offload pain (anchor A5 shape)');
+  p = simPlan(perfSlow);
+  assert.ok(p.speedup > 1, 'slow config is time-compressed');
+  assert.ok(p.realDurationS <= SIM_REAL_BUDGET_S + 1e-9, 'real duration stays within budget');
+
+  const perfNo = evaluate({ ...DEFAULT_CONFIG, mode: 'allInOne', platformId: 'mba-m5', modelStopIndex: 9 });
+  assert.equal(simPlan(perfNo), null, "can't plan a run that doesn't fit");
+  ok('M3 simPlan: real-time when fast · labeled compression within budget · null on noFit');
+}
+
+{ // M3 timeline math — tokensAt / simPhase / gauge scale
+  const perf = evaluate(DEFAULT_CONFIG);
+  const p = simPlan(perf);
+  assert.equal(tokensAt(p, 0), 0);
+  assert.equal(tokensAt(p, p.loadS + p.prefillBeatS - 0.01), 0, 'nothing before decode starts');
+  const mid = p.loadS + p.prefillBeatS + (p.decodeS / 2);
+  assert.ok(Math.abs(tokensAt(p, mid) - Math.floor((p.decodeS / 2) * p.tps)) <= 1);
+  assert.equal(tokensAt(p, p.totalVirtualS), p.targetTokens, 'clamped at target');
+
+  assert.equal(simPhase(p, 0.1), 'loading');
+  assert.equal(simPhase(p, p.loadS + 0.4), 'prefill');
+  assert.equal(simPhase(p, p.loadS + p.prefillBeatS + 0.05), 'decoding');
+  assert.equal(simPhase(p, p.totalVirtualS), 'done');
+
+  assert.ok(Math.abs(gaugeFill(145) - 145 / 200) < 1e-9);
+  assert.equal(gaugeFill(500), 1, 'full at ≥200 tok/s; label carries the exact value');
+  ok('M3 timeline: tokensAt + phase transitions + gauge scale');
+}
+
+function makeClock() {
+  let t = 0; // ms
+  let pending = null;
+  return {
+    now: () => t,
+    raf: (cb) => { pending = cb; return 1; },
+    step: (ms) => { t += ms; if (pending) { const cb = pending; pending = null; cb(); } },
+    isPending: () => pending !== null,
+  };
+}
+
+{ // M3 full run — fake clock drives load → prefill → decode to completion
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  const clock = makeClock();
+  const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
+
+  assert.equal(sim.start(), true);
+  clock.step(100); // still inside the load phase (loadS ≥ 0.5 s)
+  assert.match(doc.getElementById('lab-sim-stage').textContent, /Loading weights/);
+  assert.equal(doc.runBtnStub.getAttribute('data-run-state'), 'charging', 'button in charging state during load');
+
+  while (clock.isPending() && clock.now() < 20000) clock.step(100); // drive to completion
+  assert.ok(!clock.isPending(), 'animation loop stopped at the end');
+  assert.equal(doc.getElementById('lab-progress-label').textContent, '256 / 256 tokens');
+  assert.equal(doc.conveyorStub.children.length, 256, 'one chip per token of the target task');
+  assert.equal(doc.runBtnStub.getAttribute('data-run-state'), 'idle', 'button back to idle after finish');
+
+  const engineTps = evaluate(DEFAULT_CONFIG).decodeTpsPerRequest;
+  const shown = parseFloat(doc.getElementById('lab-tps-value').textContent);
+  assert.ok(Math.abs(shown - engineTps) / engineTps < 0.05, '§6 acceptance: displayed rate within ±5 % of the engine');
+
+  assert.match(doc.getElementById('lab-run-meta').textContent, /Done — 256 tokens/);
+  ok('M3 run: phases in order · 256 chips · gauge + progress land exactly on the engine values');
+}
+
+{ // M3 slow config — compression label appears in the finish line
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  st.setConfig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 }); // offload, ~1.4 t/s
+  const clock = makeClock();
+  const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
+  assert.equal(sim.start(), true);
+  while (clock.isPending() && clock.now() < 60000) clock.step(250);
+  assert.match(doc.getElementById('lab-run-meta').textContent, /time-compressed/);
+  ok('M3 slow run: ×N compression labeled on screen');
+}
+
+{ // M3 noFit — start is refused with a pointer to the diagnosis
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  st.setConfig({ mode: 'allInOne', platformId: 'mba-m5' });
+  st.setConfig({ modelStopIndex: 9 }); // 405B on the Air → noFit
+  const clock = makeClock();
+  const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
+  assert.equal(sim.start(), false);
+  assert.match(doc.getElementById('lab-sim-stage').textContent, /doesn't fit/);
+  assert.equal(doc.conveyorStub.children.length, 0);
+  ok("M3 noFit: run refused with a pointer to the diagnosis");
+}
+
+{ // M3 reduced motion (§8) — instant completion, final state rendered, no loop
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  const sim = initSim({ doc, store: st, raf: () => { throw new Error('must not animate'); }, now: () => 0, reduced: true });
+  assert.equal(sim.start(), true);
+  assert.equal(doc.getElementById('lab-progress-label').textContent, '256 / 256 tokens');
+  assert.equal(doc.conveyorStub.children.length, 256);
+  assert.match(doc.getElementById('lab-run-meta').textContent, /Done/);
+  ok('M3 reduced motion: no animation loop, instant final state');
+}
+
+{ // M3 wiring — click starts the run; a config change mid-run cancels it
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  const clock = makeClock();
+  const lab = initLab({ doc, store: st, sim: { raf: clock.raf, now: clock.now } });
+
+  doc.runBtnStub.listeners.click[0](); // click “Run Inference”
+  assert.ok(lab.sim.isRunning(), 'run in flight after the click');
+  clock.step(100);
+
+  st.setConfig({ gpuCount: 2 }); // config change mid-run → cancel (agent-decided)
+  assert.equal(lab.sim.isRunning(), false, 'mid-run config change cancels the run');
+  assert.equal(doc.runBtnStub.getAttribute('data-run-state'), 'idle');
+  ok('M3 wiring: click starts · store change mid-run cancels cleanly');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1+M2 Lab).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M3 Lab).`);
