@@ -18,7 +18,10 @@ import {
   TAB_TO_STORE, trackerView, unseenRouterTabs, initTracker, CELEBRATED_KEY,
 } from '../js/app.js';
 import { initHome } from '../js/tabs/home.js';
-import { createStore } from '../js/state/store.js';
+import {
+  clampCapacity, modeSwitchPartial, tierSwitchPartial, anchorNote, initLab,
+} from '../js/tabs/lab.js';
+import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
 
 let passed = 0;
 const ok = (name) => { passed += 1; console.log(`  ✓ ${name}`); };
@@ -399,5 +402,222 @@ console.log('tabs/home.js');
   ok('hero CTA smooth-scrolls to the story (block: start)');
 }
 
+/* ---------------- js/tabs/lab.js — P6 M1 controls ------------- */
+console.log('tabs/lab.js — P6 M1');
+
+function makeRadio(value, label = null) {
+  const el = {
+    value: String(value),
+    checked: false,
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatch(ev) { for (const fn of this.listeners[ev] ?? []) fn({}); },
+  };
+  if (label) el.parentElement = label;
+  return el;
+}
+
+function makeClassEl(extra = {}) {
+  const classes = new Set();
+  return Object.assign({
+    classList: {
+      add(c) { classes.add(c); }, remove(c) { classes.delete(c); }, contains: (c) => classes.has(c),
+      toggle(c, force) {
+        if (force === undefined) { if (classes.has(c)) classes.delete(c); else classes.add(c); }
+        else if (force) classes.add(c); else classes.delete(c);
+      },
+    },
+  }, extra);
+}
+
+function makeLabDoc() {
+  const groups = {};
+  const group = (name, values, labels = {}) => {
+    groups[name] = values.map((v) => makeRadio(v, labels[v] ?? null));
+  };
+  group('lab-mode', ['allInOne', 'rig']);
+  group('lab-platform', ['mba-m5', 'mbp-m4pro-48', 'dgx-spark']);
+  group('lab-gpu', ['v100-pcie-16g', 'rtx-3060-12g', 'rtx-3090-24g', 'rx-9070xt-16g', 'rtx-5070ti-16g', 'rtx-5090-32g', 'rtx-6000-ada-48g']);
+  group('lab-gpucount', ['1', '2', '4']);
+  group('lab-ramtier', ['ddr4-3200', 'ddr5-6000']);
+  // 192/256 GB chips are DDR5-only (labels carry data-tier-only, as in index.html)
+  const capLabels = {
+    '192': makeClassEl({ dataset: { tierOnly: 'ddr5-6000' } }),
+    '256': makeClassEl({ dataset: { tierOnly: 'ddr5-6000' } }),
+  };
+  group('lab-capacity', ['16', '32', '48', '64', '128', '192', '256'], capLabels);
+  group('lab-cpu', ['ryzen5-3600', 'ryzen9-5800x3d', 'i5-13600k', 'i9-13900kf', 'ryzen7-7800x3d', 'threadripper-7960x']);
+  group('lab-quant', ['fp16', 'int8-awq', 'q6_k', 'q5_k_m', 'q4_k_m']);
+  group('lab-ctx', ['8192', '32768', '131072']);
+  group('lab-split', ['short', 'balanced', 'long']);
+  group('lab-conc', ['1', '4', '16']);
+
+  const modelInput = {
+    min: '0', max: '9', step: '1', value: '1',
+    style: { vars: {}, setProperty(k, v) { this.vars[k] = v; } },
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatchEvent(evt) { for (const fn of this.listeners[evt.type] ?? []) fn(evt); return true; },
+  };
+
+  const byId = {
+    'lab-aio-group': makeClassEl(),
+    'lab-rig-group': makeClassEl(),
+    'lab-model': modelInput,
+    'lab-model-anchor': { textContent: '' },
+  };
+
+  return {
+    groups, modelInput,
+    getElementById: (id) => byId[id] ?? null,
+    querySelectorAll: (sel) => {
+      const m = /^input\[name="(.+)"\]$/.exec(sel);
+      return m && groups[m[1]] ? groups[m[1]] : [];
+    },
+  };
+}
+
+const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value ?? null;
+
+{ // pure helpers — capacity clamping across RAM tiers (§3.1)
+  assert.equal(clampCapacity('ddr4-3200', 192), 128);   // DDR4 tops out at 128 GB
+  assert.equal(clampCapacity('ddr5-6000', 192), 192);   // DDR5 offers it
+  assert.equal(clampCapacity('ddr5-6000', 100), 128);   // nearest offered value
+  ok('clampCapacity: DDR4 caps at 128 GB, DDR5 keeps 192/256, nearest-value rounding');
+}
+
+{ // pure helpers — mode + tier switch partials (store-safe)
+  assert.deepEqual(modeSwitchPartial({ platformId: 'mba-m5' }, 'allInOne'), { mode: 'allInOne' });
+  const seeded = modeSwitchPartial(DEFAULT_CONFIG, 'allInOne'); // DEFAULT_CONFIG has no platformId
+  assert.equal(seeded.mode, 'allInOne');
+  assert.equal(seeded.platformId, 'mba-m5', 'first AIO seeds a missing platformId');
+  assert.deepEqual(tierSwitchPartial({ ramCapacityGB: 192 }, 'ddr4-3200'), { ramTierId: 'ddr4-3200', ramCapacityGB: 128 });
+  ok('mode/tier switch partials are store-safe (seeded platformId, clamped capacity)');
+}
+
+{ // pure helper — anchor readout labels representative stops (§3.2)
+  assert.match(anchorNote(1), /Llama 3\.1 8B/);
+  assert.match(anchorNote(4), /representative/i); // 16B stop is interpolated
+  ok('anchorNote names the anchor model and flags representative stops');
+}
+
+{ // initial paint reflects DEFAULT_CONFIG (rig mode)
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+  assert.ok(!doc.getElementById('lab-rig-group').classList.contains('is-hidden'), 'rig group visible');
+  assert.ok(doc.getElementById('lab-aio-group').classList.contains('is-hidden'), 'AIO group hidden in rig mode');
+  assert.equal(checkedOf(doc, 'lab-gpu'), 'rtx-3090-24g');
+  assert.equal(checkedOf(doc, 'lab-capacity'), '64');
+  assert.equal(doc.modelInput.value, '1');
+  assert.match(doc.getElementById('lab-model-anchor').textContent, /Llama 3\.1 8B/);
+  ok('initial paint: controls reflect the store config (rig · RTX 3090 · 64 GB · 8B)');
+}
+
+{ // control → store: every rail writes a validated partial
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  const fire = (name, value) => { const r = doc.groups[name].find((x) => x.value === value); r.checked = true; r.dispatch('change'); };
+
+  fire('lab-gpu', 'rtx-5090-32g');
+  assert.equal(st.getState().config.gpuId, 'rtx-5090-32g');
+  assert.ok(typeof st.getState().derived.perf.decodeTpsPerRequest === 'number', 'derived recomputed');
+
+  fire('lab-gpucount', '4');
+  assert.equal(st.getState().config.gpuCount, 4);
+
+  fire('lab-cpu', 'i9-13900kf');
+  assert.equal(st.getState().config.cpuId, 'i9-13900kf');
+
+  doc.modelInput.value = '7';
+  doc.modelInput.dispatchEvent({ type: 'input' });
+  assert.equal(st.getState().config.modelStopIndex, 7);
+  assert.match(doc.getElementById('lab-model-anchor').textContent, /Llama 3\.3 70B/);
+
+  fire('lab-quant', 'q5_k_m');
+  assert.equal(st.getState().config.quantId, 'q5_k_m');
+
+  fire('lab-ctx', '131072');
+  assert.equal(st.getState().config.contextWindow, 131072);
+  fire('lab-split', 'long');
+  assert.equal(st.getState().config.promptSplit, 'long');
+  fire('lab-conc', '16');
+  assert.equal(st.getState().config.concurrency, 16);
+
+  ok('control → store: GPU/count/CPU/model/quant/ctx/split/concurrency all land in the config');
+}
+
+{ // RAM tier switch clamps a stranded capacity + hides DDR5-only chips
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  const fire = (name, value) => { const r = doc.groups[name].find((x) => x.value === value); r.checked = true; r.dispatch('change'); };
+  fire('lab-capacity', '192'); // DDR5-only capacity, valid now
+  assert.equal(st.getState().config.ramCapacityGB, 192);
+
+  fire('lab-ramtier', 'ddr4-3200');
+  const c = st.getState().config;
+  assert.equal(c.ramTierId, 'ddr4-3200');
+  assert.equal(c.ramCapacityGB, 128, '192 GB clamped to DDR4 max');
+
+  const cap192 = doc.groups['lab-capacity'].find((x) => x.value === '192').parentElement;
+  const cap64 = doc.groups['lab-capacity'].find((x) => x.value === '64').parentElement;
+  assert.ok(cap192.classList.contains('is-hidden'), '192 GB chip hidden on DDR4');
+  assert.ok(!cap64.classList.contains('is-hidden'), '64 GB chip still offered');
+  ok('tier switch: stranded capacity clamped, tier-exclusive chips hidden');
+}
+
+{ // mode switch seeds a valid platformId and flips the sub-groups
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  const fire = (name, value) => { const r = doc.groups[name].find((x) => x.value === value); r.checked = true; r.dispatch('change'); };
+  fire('lab-mode', 'allInOne');
+  let c = st.getState().config;
+  assert.equal(c.mode, 'allInOne');
+  assert.equal(c.platformId, 'mba-m5', 'missing platformId seeded with first AIO');
+  assert.ok(!doc.getElementById('lab-aio-group').classList.contains('is-hidden'), 'AIO group visible');
+  assert.ok(doc.getElementById('lab-rig-group').classList.contains('is-hidden'), 'rig group hidden');
+
+  fire('lab-platform', 'dgx-spark');
+  assert.equal(st.getState().config.platformId, 'dgx-spark');
+
+  fire('lab-mode', 'rig'); // back to rig — previous rig config intact
+  c = st.getState().config;
+  assert.equal(c.mode, 'rig');
+  assert.ok(!doc.getElementById('lab-rig-group').classList.contains('is-hidden'), 'rig group visible again');
+  ok('mode switch: platformId seeded on first AIO use, sub-groups flip both ways');
+}
+
+{ // store → controls sync (external change) without re-triggering handlers
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  let handlerFiredDuringSync = false;
+  for (const r of doc.groups['lab-gpu']) {
+    r.addEventListener('change', () => { handlerFiredDuringSync = true; });
+  }
+  st.setConfig({ gpuCount: 2, modelStopIndex: 3 }); // external change → sync path
+  assert.equal(checkedOf(doc, 'lab-gpucount'), '2');
+  assert.equal(doc.modelInput.value, '3');
+  assert.match(doc.getElementById('lab-model-anchor').textContent, /Qwen3-14B/);
+  assert.equal(handlerFiredDuringSync, false, 'sync never re-fires control handlers (no loop)');
+  ok('store → controls: external changes sync the rail without event loops');
+}
+
+{ // initial paint covers a persisted AIO config (fresh page load)
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null, initialConfig: { mode: 'allInOne', platformId: 'dgx-spark' } });
+  initLab({ doc, store: st });
+  assert.equal(checkedOf(doc, 'lab-mode'), 'allInOne');
+  assert.equal(checkedOf(doc, 'lab-platform'), 'dgx-spark');
+  ok('initial paint restores a persisted all-in-one config');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (P4 UI logic).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1 Lab controls).`);

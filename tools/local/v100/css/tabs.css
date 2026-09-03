@@ -197,3 +197,130 @@
   .token-track,
   .hero-float--a, .hero-float--b, .hero-float--c { animation: none !important; }
 }
+
+/* ============================================================
+   Tab 3 · Hardware Lab — layout & motion (blueprint §6 Tab 3)
+   ------------------------------------------------------------
+   Three rails at ≥1280 px: controls | simulation | printouts.
+   Component primitives (.segmented, .slider, .membar, .gauge,
+   .run-btn, .estimates) come from base.css (P3, signed off);
+   this section only lays them out. All colors via tokens (§7).
+   ============================================================ */
+
+.lab-wrap { display: flex; flex-direction: column; gap: var(--sp-4); }
+.lab-head h2 { margin: 0 0 var(--sp-1); font-size: var(--fs-6); }
+.lab-head p { margin: 0; color: var(--text-secondary); max-width: 78ch; line-height: 1.6; }
+
+.lab-grid {
+  display: grid;
+  gap: var(--sp-4);
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 980px) {
+  .lab-grid { grid-template-columns: minmax(270px, 330px) minmax(0, 1fr); }
+}
+@media (min-width: 1280px) {
+  .lab-grid { grid-template-columns: minmax(270px, 330px) minmax(0, 1fr) minmax(270px, 330px); }
+}
+
+/* ---------- Left rail · controls ---------------------------- */
+.lab-controls { display: flex; flex-direction: column; gap: var(--sp-4); padding: var(--sp-4); }
+.ctl-group h4 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-1);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.ctl-sub { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2); padding-left: var(--sp-3); border-left: 1px solid var(--glass-border); }
+.ctl-sub h5 {
+  margin: 0;
+  font-size: var(--fs-1);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.ctl-note { margin: var(--sp-1) 0 0; font-size: var(--fs-1); color: var(--text-secondary); line-height: 1.5; }
+.ctl-sublabel { margin: var(--sp-3) 0 var(--sp-1); font-size: var(--fs-2); color: var(--text-secondary); }
+
+/* Mode-dependent sub-groups (lab.js toggles .is-hidden) */
+.lab-controls .is-hidden, .nofit.is-hidden { display: none; }
+
+/* Quantization explainer card inside the controls rail */
+.ctl-explain {
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-1);
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+.ctl-explain h5 { margin: 0 0 var(--sp-2); font-size: var(--fs-2); color: var(--text-primary); }
+.ctl-explain p { margin: 0 0 var(--sp-2); }
+.ctl-explain p:last-child { margin-bottom: 0; }
+
+/* ---------- Center · simulation ----------------------------- */
+.lab-sim { display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-4); min-height: 420px; }
+.sim-top { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); flex-wrap: wrap; }
+.sim-stage { margin: 0; font-size: var(--fs-2); color: var(--text-secondary); min-height: 1.5em; }
+
+/* Token conveyor: chips appear as tokens are emitted (P6 M3) */
+.sim-conveyor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 96px;
+  padding: var(--sp-2);
+  border-radius: var(--radius-control);
+  background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+  border: 1px dashed var(--glass-border);
+}
+.sim-conveyor .chip {
+  animation: chip-in var(--dur-base) var(--ease-reveal);
+}
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Gauge + progress side by side */
+.sim-readout { display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
+.sim-progress { flex: 1 1 200px; min-width: 180px; display: flex; flex-direction: column; gap: var(--sp-1); }
+.sim-meta { margin: 0; font-size: var(--fs-1); color: var(--text-faint); }
+
+/* ---------- Right rail · printouts -------------------------- */
+.lab-printouts { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); }
+.lab-printouts h4 {
+  margin: 0 0 var(--sp-1);
+  font-size: var(--fs-1);
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.memblock { display: flex; flex-direction: column; gap: var(--sp-1); padding-block: var(--sp-2); border-bottom: 1px solid var(--glass-border); }
+
+/* Fit-state chip (GPU-resident / offload / CPU-only / doesn’t fit) */
+.fit-chip {
+  margin: var(--sp-2) 0 0;
+  padding: 6px 12px;
+  border-radius: var(--radius-chip);
+  font-size: var(--fs-1);
+  font-weight: 600;
+  text-align: center;
+  background: color-mix(in srgb, var(--accent-solid) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-solid) 35%, transparent);
+}
+.fit-chip[data-fit="offload"] { background: color-mix(in srgb, var(--warn) 14%, transparent); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.fit-chip[data-fit="cpuOnly"], .fit-chip[data-fit="noFit"] {
+  background: color-mix(in srgb, var(--fail) 12%, transparent);
+  border-color: color-mix(in srgb, var(--fail) 45%, transparent);
+}
+
+/* Doesn’t-fit diagnosis card */
+.nofit { padding: var(--sp-3); border-radius: var(--radius-control); background: color-mix(in srgb, var(--fail) 8%, transparent); border: 1px solid color-mix(in srgb, var(--fail) 40%, transparent); }
+.nofit h5 { margin: 0 0 var(--sp-2); font-size: var(--fs-2); color: var(--text-primary); }
+.nofit ul { margin: 0; padding-left: 1.3em; font-size: var(--fs-1); color: var(--text-secondary); line-height: 1.6; }
+
+/* ---------- Lab reduced motion (§8) -------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .sim-conveyor .chip { animation: none !important; }
+}

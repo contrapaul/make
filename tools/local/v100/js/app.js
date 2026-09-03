@@ -13,6 +13,7 @@ import { initTheme } from './theme.js';
 import { initReveals, bindRangeFill } from './motion/scroll.js';
 import { store, TAB_IDS } from './state/store.js';
 import { initHome } from './tabs/home.js';
+import { initLab } from './tabs/lab.js';
 
 export const TABS = ['home', 'how', 'lab', 'compare'];
 
@@ -156,6 +157,7 @@ export function initApp() {
   const router = initRouter();
   const tracker = initTracker();
   initHome();
+  const lab = initLab({ store }); // P6: Lab controls bound two-way to the shared store
 
   // §4: the tab shown on load counts as visited too (deep links like #/lab).
   if (router.initial) tracker.markVisited(router.initial);
@@ -167,7 +169,7 @@ export function initApp() {
     tracker.markVisited(t); // every shown tab marks visited + persists (store)
   });
 
-  return { theme, reveals, router, tracker };
+  return { theme, reveals, router, tracker, lab };
 }
 
 /* Auto-bootstrap when loaded in a browser as the app entry point. */

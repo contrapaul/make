@@ -237,11 +237,218 @@
       </div>
     </section>
 
+    <!-- ============ Tab 3 · Hardware Lab (blueprint §6 Tab 3) ============
+         Three rails at ≥1280 px: controls | simulation | printouts.
+         All values are computed live by the signed-off P2 engine; this tab
+         only renders them. Controls bind two-way to the shared store (P6). -->
     <section class="tab-panel" data-tab="lab" aria-label="Hardware Lab">
-      <div class="shell-pad stack">
-        <div class="card" data-reveal>
-          <h2>Phase 6 lands here</h2>
-          <p>The centerpiece: hardware/model/quantization controls, the Run Inference simulation, and live printouts (blueprint §6 Tab 3).</p>
+      <div class="shell-pad lab-wrap">
+
+        <header class="lab-head">
+          <h2>Hardware Lab</h2>
+          <p>Pick your hardware, model and precision — every number on the right is computed live by the same engine behind this site’s estimates. Change anything and watch it move.</p>
+        </header>
+
+        <div class="lab-grid">
+
+          <!-- ================= LEFT RAIL · controls ================= -->
+          <div class="card lab-controls" id="lab-controls" role="group" aria-label="Configuration controls">
+
+            <div class="ctl-group">
+              <h4>Platform</h4>
+              <div class="segmented" role="group" aria-label="Platform type">
+                <label><input type="radio" name="lab-mode" value="allInOne"><span class="seg-opt">All-in-one</span></label>
+                <label><input type="radio" name="lab-mode" value="rig" checked><span class="seg-opt">GPU rig</span></label>
+              </div>
+
+              <!-- All-in-one picker (visible when mode = allInOne) -->
+              <div class="ctl-sub is-hidden" id="lab-aio-group">
+                <h5>All-in-one machine</h5>
+                <div class="segmented" role="group" aria-label="All-in-one platform">
+                  <label><input type="radio" name="lab-platform" value="mba-m5"><span class="seg-opt">MacBook Air M5 · 16 GB</span></label>
+                  <label><input type="radio" name="lab-platform" value="mbp-m4pro-48"><span class="seg-opt">MacBook Pro M4 Pro · 48 GB</span></label>
+                  <label><input type="radio" name="lab-platform" value="dgx-spark"><span class="seg-opt">DGX Spark · 128 GB</span></label>
+                </div>
+              </div>
+
+              <!-- Rig pickers (visible when mode = rig) -->
+              <div class="ctl-sub" id="lab-rig-group">
+                <h5>GPU model</h5>
+                <div class="segmented" role="group" aria-label="GPU model">
+                  <label><input type="radio" name="lab-gpu" value="v100-pcie-16g"><span class="seg-opt">V100 PCIe 16 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rtx-3060-12g"><span class="seg-opt">RTX 3060 12 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rtx-3090-24g" checked><span class="seg-opt">RTX 3090 24 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rx-9070xt-16g"><span class="seg-opt">RX 9070 XT 16 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rtx-5070ti-16g"><span class="seg-opt">RTX 5070 Ti 16 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rtx-5090-32g"><span class="seg-opt">RTX 5090 32 GB</span></label>
+                  <label><input type="radio" name="lab-gpu" value="rtx-6000-ada-48g"><span class="seg-opt">RTX 6000 Ada 48 GB</span></label>
+                </div>
+
+                <h5>GPU count</h5>
+                <div class="segmented" role="group" aria-label="GPU count">
+                  <label><input type="radio" name="lab-gpucount" value="1" checked><span class="seg-opt">×1</span></label>
+                  <label><input type="radio" name="lab-gpucount" value="2"><span class="seg-opt">×2</span></label>
+                  <label><input type="radio" name="lab-gpucount" value="4"><span class="seg-opt">×4</span></label>
+                </div>
+
+                <h5>System RAM</h5>
+                <div class="segmented" role="group" aria-label="RAM tier">
+                  <label><input type="radio" name="lab-ramtier" value="ddr4-3200"><span class="seg-opt">DDR4-3200 · 51 GB/s</span></label>
+                  <label><input type="radio" name="lab-ramtier" value="ddr5-6000" checked><span class="seg-opt">DDR5-6000 · 96 GB/s</span></label>
+                </div>
+
+                <!-- Capacity chips for both tiers; lab.js hides the ones a tier can’t offer (192/256 = DDR5 only) -->
+                <div class="segmented" id="lab-cap-group" role="group" aria-label="RAM capacity">
+                  <label><input type="radio" name="lab-capacity" value="16"><span class="seg-opt">16 GB</span></label>
+                  <label><input type="radio" name="lab-capacity" value="32"><span class="seg-opt">32 GB</span></label>
+                  <label><input type="radio" name="lab-capacity" value="48"><span class="seg-opt">48 GB</span></label>
+                  <label><input type="radio" name="lab-capacity" value="64" checked><span class="seg-opt">64 GB</span></label>
+                  <label><input type="radio" name="lab-capacity" value="128"><span class="seg-opt">128 GB</span></label>
+                  <label data-tier-only="ddr5-6000"><input type="radio" name="lab-capacity" value="192"><span class="seg-opt">192 GB</span></label>
+                  <label data-tier-only="ddr5-6000"><input type="radio" name="lab-capacity" value="256"><span class="seg-opt">256 GB</span></label>
+                </div>
+
+                <h5>CPU (matters for offloaded layers)</h5>
+                <div class="segmented" role="group" aria-label="CPU">
+                  <label><input type="radio" name="lab-cpu" value="ryzen5-3600"><span class="seg-opt">Ryzen 5 3600</span></label>
+                  <label><input type="radio" name="lab-cpu" value="ryzen9-5800x3d"><span class="seg-opt">Ryzen 9 5800X3D</span></label>
+                  <label><input type="radio" name="lab-cpu" value="i5-13600k" checked><span class="seg-opt">Core i5-13600K</span></label>
+                  <label><input type="radio" name="lab-cpu" value="i9-13900kf"><span class="seg-opt">Core i9-13900KF</span></label>
+                  <label><input type="radio" name="lab-cpu" value="ryzen7-7800x3d"><span class="seg-opt">Ryzen 7 7800X3D</span></label>
+                  <label><input type="radio" name="lab-cpu" value="threadripper-7960x"><span class="seg-opt">Threadripper 7960X</span></label>
+                </div>
+              </div>
+            </div>
+
+            <div class="ctl-group">
+              <h4>Model size</h4>
+              <input type="range" class="slider" id="lab-model" min="0" max="9" step="1" value="1" aria-label="Model size stop">
+              <div class="slider-stops"><span>4B</span><span>8B</span><span>12B</span><span>14B</span><span>16B</span><span>27B</span><span>32B</span><span>70B</span><span>80B</span><span>405B</span></div>
+              <p class="ctl-note" id="lab-model-anchor">Anchored to Llama 3.1 8B · 32 layers, GQA 8 KV heads [M5]</p>
+            </div>
+
+            <div class="ctl-group">
+              <h4>Precision (quantization)</h4>
+              <div class="segmented" role="group" aria-label="Quantization level">
+                <label><input type="radio" name="lab-quant" value="fp16"><span class="seg-opt">FP16</span></label>
+                <label><input type="radio" name="lab-quant" value="int8-awq"><span class="seg-opt">INT8 / AWQ</span></label>
+                <label><input type="radio" name="lab-quant" value="q6_k"><span class="seg-opt">Q6_K</span></label>
+                <label><input type="radio" name="lab-quant" value="q5_k_m"><span class="seg-opt">Q5_K_M</span></label>
+                <label><input type="radio" name="lab-quant" value="q4_k_m" checked><span class="seg-opt">Q4_K_M</span></label>
+              </div>
+              <!-- Student explainer for the selected level (P6 M2 fills this card) -->
+              <div class="card ctl-explain" id="lab-quant-explain">
+                <h5>Q4_K_M (GGUF)</h5>
+                <p>The most popular GGUF quantization in the local-AI world. Weights are packed to roughly 4–5 bits using K-quant blocks with per-group scales.</p>
+              </div>
+            </div>
+
+            <div class="ctl-group">
+              <h4>Workload</h4>
+              <p class="ctl-sublabel">Context window</p>
+              <div class="segmented" role="group" aria-label="Context window">
+                <label><input type="radio" name="lab-ctx" value="8192" checked><span class="seg-opt">8K tokens</span></label>
+                <label><input type="radio" name="lab-ctx" value="32768"><span class="seg-opt">32K tokens</span></label>
+                <label><input type="radio" name="lab-ctx" value="131072"><span class="seg-opt">128K tokens</span></label>
+              </div>
+
+              <p class="ctl-sublabel">Prompt length (prefill work)</p>
+              <div class="segmented" role="group" aria-label="Prompt split preset">
+                <label><input type="radio" name="lab-split" value="short"><span class="seg-opt">Short · 256</span></label>
+                <label><input type="radio" name="lab-split" value="balanced" checked><span class="seg-opt">Balanced · 2048</span></label>
+                <label><input type="radio" name="lab-split" value="long"><span class="seg-opt">Long · 8192</span></label>
+              </div>
+
+              <p class="ctl-sublabel">Concurrent requests</p>
+              <div class="segmented" role="group" aria-label="Concurrency">
+                <label><input type="radio" name="lab-conc" value="1" checked><span class="seg-opt">×1</span></label>
+                <label><input type="radio" name="lab-conc" value="4"><span class="seg-opt">×4</span></label>
+                <label><input type="radio" name="lab-conc" value="16"><span class="seg-opt">×16</span></label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ================= CENTER · simulation ================= -->
+          <section class="card lab-sim" id="lab-sim" aria-label="Inference simulation">
+            <div class="sim-top">
+              <button class="btn btn--primary run-btn" id="lab-run" type="button" data-run-state="idle">
+                <span class="run-indicator" aria-hidden="true"></span>
+                <span class="label label-idle">Run Inference</span>
+                <span class="label label-charging">Loading weights…</span>
+                <span class="label label-running">Generating…</span>
+              </button>
+              <p class="sim-stage" id="lab-sim-stage" role="status">Ready — 256-token generation task (blueprint §6).</p>
+            </div>
+
+            <!-- Load phase: weights pouring into the memory bar -->
+            <div class="sim-load">
+              <p class="ctl-sublabel">Model load</p>
+              <div class="membar" id="lab-sim-loadbar"><span class="seg seg-gpu" style="--w: 0%"></span></div>
+            </div>
+
+            <!-- Decode phase: token conveyor (chips appear as tokens are emitted) -->
+            <div class="sim-conveyor-wrap">
+              <p class="ctl-sublabel">Token stream</p>
+              <div class="sim-conveyor" id="lab-conveyor" aria-live="off"></div>
+            </div>
+
+            <!-- Live gauge + progress to the 256-token target -->
+            <div class="sim-readout">
+              <div class="gauge-wrap">
+                <div class="gauge" id="lab-gauge" style="--val: 0"></div>
+                <span class="gauge-label"><b id="lab-tps-value">—</b><small>tok/s</small></span>
+              </div>
+              <div class="sim-progress">
+                <div class="membar" id="lab-progress-bar"><span class="seg seg-gpu" style="--w: 0%"></span></div>
+                <p class="ctl-note" id="lab-progress-label">0 / 256 tokens</p>
+              </div>
+            </div>
+
+            <!-- Run meta: time-compression label + per-request vs total throughput (P6 M3/M4) -->
+            <p class="ctl-note sim-meta" id="lab-run-meta"></p>
+          </section>
+
+          <!-- ================= RIGHT RAIL · printouts ================= -->
+          <aside class="card lab-printouts" id="lab-printouts" aria-label="Live results">
+            <h4>Printouts</h4>
+
+            <div class="printout" id="po-tps"><span class="k">Decode speed (per request)</span><span class="v">—</span></div>
+            <div class="printout" id="po-ttft"><span class="k">Time to first token</span><span class="v">—</span></div>
+            <div class="printout" id="po-power"><span class="k">Power draw (load)</span><span class="v">—</span></div>
+            <div class="printout" id="po-cost"><span class="k">Cost / M output tokens</span><span class="v">—</span></div>
+
+            <!-- Memory fill: VRAM vs RAM split (blueprint §6 Tab 3) -->
+            <div class="memblock">
+              <p class="ctl-sublabel">Memory fill</p>
+              <div class="membar" id="lab-membar" data-state="ok">
+                <span class="seg seg-gpu" style="--w: 0%"></span><span class="seg seg-cpu" style="--w: 0%"></span>
+              </div>
+              <p class="ctl-note" id="lab-mem-caption">—</p>
+            </div>
+
+            <!-- Fit state chip + doesn’t-fit diagnosis (P6 M2) -->
+            <p class="fit-chip" id="lab-fit-state">—</p>
+            <div class="nofit is-hidden" id="lab-nofit">
+              <h5>Doesn’t fit — here’s why, and what to try</h5>
+              <ul id="lab-nofit-list"></ul>
+            </div>
+
+            <!-- Max model that fits (blueprint §6 Tab 3) -->
+            <div class="printout" id="po-maxfit"><span class="k">Max model that fits</span><span class="v">—</span></div>
+
+            <!-- “How we estimate this” — blueprint §5: formulas + labeled assumptions -->
+            <details class="estimates">
+              <summary><span class="twist" aria-hidden="true"></span>How we estimate this</summary>
+              <div class="body">
+                <p><b>Decode speed</b> is bandwidth-bound: each token step re-reads the weights of every layer plus that layer’s KV-cache history. <code>t = Σ (layer bytes ÷ device bandwidth) ÷ η</code>, with one global efficiency constant <b>η = 0.85</b>, calibrated so five real-world anchors land in range.</p>
+                <p><b>Prefill / TTFT</b> is compute-bound: <code>t ≈ prompt tokens × 2 × params ÷ (TFLOPS × 0.6) + 0.1 s</code>. CPU-resident layers use the RAM tier’s bandwidth — that’s why offloading feels slow.</p>
+                <p><b>Labeled assumptions:</b> multi-GPU scaling ×1 / ×1.75 / ×3.2 (NVLink/PCIe overhead) · Apple/DGX pools lose ⅛ to the OS · all-in-one prefill TFLOPS are estimates · rig power = GPU TDP × 0.9 + ~100 W system base.</p>
+                <p><b>Prices</b> (used for amortization in Local vs Cloud) are owner-provided Taobao listings, 2026-09-02 — a date-stamped snapshot, not live prices [H7]. Electricity: Shenzhen residential ≈ ¥0.65/kWh at ≈6.72 CNY/USD.</p>
+              </div>
+            </details>
+          </aside>
+
         </div>
       </div>
     </section>
