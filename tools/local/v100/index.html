@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>v100 — How Local AI Works</title>
+  <title>v100 · How Local AI Works</title>
   <meta name="description" content="An interactive guide to how local AI models run: hardware, memory bandwidth, and the real cost of inference.">
 
   <!-- Pre-paint theme + JS flag (runs before first paint; no FOUC).
@@ -97,7 +97,7 @@
         <div class="hero-inner">
           <p class="eyebrow" data-reveal>An interactive guide for students &amp; educators</p>
           <h1 data-reveal>AI, running on <em class="accent-text">your</em> hardware.</h1>
-          <p class="hero-sub" data-reveal>What a model actually is, why memory bandwidth sets its speed, and what inference really costs — with real numbers you can poke at in the Hardware Lab.</p>
+          <p class="hero-sub" data-reveal>What a model actually is, why memory bandwidth sets its speed, and what inference really costs, with real numbers you can poke at in the Hardware Lab.</p>
           <div class="hero-cta" data-reveal>
             <button class="btn btn--primary" id="start-exploring" type="button">Start exploring</button>
             <a class="btn btn--ghost" href="#/lab">Skip to the Lab</a>
@@ -113,7 +113,7 @@
               <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
               <span class="glyph">memory</span><span class="glyph">at</span>
               <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
-              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">—</span>
+              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">·</span>
               <span class="glyph">your</span><span class="glyph">hardware</span>
             </span>
             <span class="token-half">
@@ -122,7 +122,7 @@
               <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
               <span class="glyph">memory</span><span class="glyph">at</span>
               <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
-              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">—</span>
+              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">·</span>
               <span class="glyph">your</span><span class="glyph">hardware</span>
             </span>
           </div>
@@ -135,7 +135,7 @@
         <section class="beat" data-reveal>
           <div class="beat-copy">
             <h3>A “model” is billions of numbers</h3>
-            <p>An AI model isn’t magic — it’s a giant table of weights, one number per learned connection. Qwen3-4B carries about <b>4.2 billion</b> of them. Every answer you get is those numbers doing arithmetic on your input.</p>
+            <p>An AI model isn’t magic; it’s a giant table of weights, one number per learned connection. Qwen3-4B carries about <b>4.2 billion</b> of them. Every answer you get is those numbers doing arithmetic on your input.</p>
           </div>
           <div class="card beat-visual" aria-hidden="true">
             <h4>A corner of the weight table</h4>
@@ -145,7 +145,7 @@
               <span class="w-cell">−2.115</span><span class="w-cell w-cell--hot">1.0093</span><span class="w-cell">0.4468</span>
               <span class="w-cell">−0.7205</span><span class="w-cell">0.1583</span><span class="w-cell w-cell--hot">−0.9644</span>
             </div>
-            <p class="beat-caption">Qwen3-4B · 36 layers, GQA 8 KV heads — values illustrative (blueprint §3.2 [M1]).</p>
+            <p class="beat-caption">Qwen3-4B · 36 layers, GQA 8 KV heads; values illustrative (blueprint §3.2 [M1]).</p>
           </div>
         </section>
 
@@ -156,24 +156,24 @@
               <div class="bw-row"><span class="bw-label">RTX 3090 · GDDR6X</span><span class="bw-bar"><i style="--w:100%"></i></span><b class="bw-val">936 GB/s</b></div>
               <div class="bw-row"><span class="bw-label">DDR5-6000 RAM</span><span class="bw-bar"><i style="--w:10.3%"></i></span><b class="bw-val">96 GB/s</b></div>
             </div>
-            <p class="beat-caption">Memory bandwidth (blueprint §3.1) — the decode bottleneck.</p>
+            <p class="beat-caption">Memory bandwidth (blueprint §3.1): the decode bottleneck.</p>
           </div>
           <div class="beat-copy">
             <h3>Speed is set by memory bandwidth</h3>
-            <p>To write a single token, the model re-reads most of its weights from memory. That’s why a GPU with <b>936 GB/s</b> streams tokens roughly ten times faster than DDR5 RAM at <b>96 GB/s</b> — and why offloading layers to CPU RAM feels painfully slow.</p>
+            <p>To write a single token, the model re-reads most of its weights from memory. That’s why a GPU with <b>936 GB/s</b> streams tokens roughly ten times faster than DDR5 RAM at <b>96 GB/s</b>, and why offloading layers to CPU RAM feels painfully slow.</p>
           </div>
         </section>
 
         <section class="beat" data-reveal>
           <div class="beat-copy">
             <h3>The fork: local or cloud?</h3>
-            <p>You can run these models on hardware you own — in Shenzhen that’s about <b>¥0.65 per kWh</b> of electricity, and your data never leaves the room. Or call a cloud API priced per million tokens. Both are legitimate; the right answer depends on your model, your usage, and what privacy means to you.</p>
+            <p>You can run these models on hardware you own; in Shenzhen, that’s about <b>¥0.65 per kWh</b> of electricity, and your data never leaves the room. Or call a cloud API priced per million tokens. Both are legitimate; the right answer depends on your model, your usage, and what privacy means to you.</p>
           </div>
           <div class="fork-grid">
             <div class="card fork-card">
               <h4>Local</h4>
               <ul>
-                <li>Runs on your machine — no per-token billing</li>
+                <li>Runs on your machine; no per-token billing</li>
                 <li>Cost = electricity (~¥0.65/kWh) + hardware you already own</li>
                 <li>Works offline; data stays with you</li>
               </ul>
@@ -183,7 +183,7 @@
               <ul>
                 <li>Priced per million tokens (GPT-5, DeepSeek V4, Claude Opus 5)</li>
                 <li>No hardware to buy or maintain</li>
-                <li>Always the newest models — but your prompts leave the building</li>
+                <li>Always the newest models, but your prompts leave the building</li>
               </ul>
             </div>
           </div>
@@ -211,12 +211,12 @@
           <a class="card tab-card" href="#/how" data-track-tab="how">
             <span class="dot-new is-hidden"></span>
             <h3>How It Works</h3>
-            <p>The five-stage pipeline — tokenization to sampling — bound live to your config.</p>
+            <p>The five-stage pipeline, from tokenization to sampling, bound live to your config.</p>
           </a>
           <a class="card tab-card" href="#/lab" data-track-tab="lab">
             <span class="dot-new is-hidden"></span>
             <h3>Hardware Lab</h3>
-            <p>Pick hardware, model and precision — then run inference and watch the numbers move.</p>
+            <p>Pick hardware, model and precision, then run inference and watch the numbers move.</p>
           </a>
           <a class="card tab-card" href="#/compare" data-track-tab="compare">
             <span class="dot-new is-hidden"></span>
@@ -232,7 +232,7 @@
       <div class="shell-pad stack">
         <div class="card" data-reveal>
           <h2>Phase 5 lands here</h2>
-          <p>The five-stage pipeline — tokenization, model load, prefill vs decode, KV-cache growth, sampling — bound live to the shared store (blueprint §6 Tab 2).</p>
+          <p>The five-stage pipeline (tokenization, model load, prefill vs decode, KV-cache growth, sampling), bound live to the shared store (blueprint §6 Tab 2).</p>
         </div>
       </div>
     </section>
@@ -258,7 +258,7 @@
 
   <footer class="foot">
     <div class="shell-pad foot-inner">
-      <p>v100 · a static interactive guide — no build step, no external assets.</p>
+      <p>v100 · a static interactive guide; no build step, no external assets.</p>
       <p>Footer content to be added by the owner (blueprint §2).</p>
     </div>
   </footer>

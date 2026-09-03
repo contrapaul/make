@@ -77,10 +77,10 @@ export const MODEL_STOPS = [
 ];
 
 export const MODEL_SOURCES = [
-  { id: 'M1', label: 'Qwen3-4B config.json (HF) — 36 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-4B/blob/main/config.json' },
-  { id: 'M2', label: 'Gemma 3 12B config (google/gemma_pytorch get_config_for_12b) — 48 layers, GQA 8 KV heads, head dim 256', url: 'https://github.com/google/gemma_pytorch/blob/main/gemma/config.py' },
-  { id: 'M3', label: 'Qwen3-14B config.json (HF) — 40 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-14B/blob/main/config.json' },
-  { id: 'M4', label: 'Gemma 3 27B config (google/gemma_pytorch get_config_for_27b_v3; matches HF fp8 mirror) — 62 layers, GQA 16 KV heads, head dim 128', url: 'https://github.com/google/gemma_pytorch/blob/main/gemma/config.py' },
-  { id: 'M5', label: 'Llama 3.1/3.3 architecture (Meta) — 8B: 32 layers; 70B: 80 layers; 405B: 126 layers; all GQA 8 KV heads, head dim 128', url: 'https://ai.meta.com/research/publications/llama-3-model-card/' },
-  { id: 'M6', label: 'Qwen3-32B config.json (HF) — 64 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-32B/blob/main/config.json' },
+  { id: 'M1', label: 'Qwen3-4B config.json (HF): 36 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-4B/blob/main/config.json' },
+  { id: 'M2', label: 'Gemma 3 12B config (google/gemma_pytorch get_config_for_12b): 48 layers, GQA 8 KV heads, head dim 256', url: 'https://github.com/google/gemma_pytorch/blob/main/gemma/config.py' },
+  { id: 'M3', label: 'Qwen3-14B config.json (HF): 40 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-14B/blob/main/config.json' },
+  { id: 'M4', label: 'Gemma 3 27B config (google/gemma_pytorch get_config_for_27b_v3; matches HF fp8 mirror): 62 layers, GQA 16 KV heads, head dim 128', url: 'https://github.com/google/gemma_pytorch/blob/main/gemma/config.py' },
+  { id: 'M5', label: 'Llama 3.1/3.3 architecture (Meta): 8B: 32 layers; 70B: 80 layers; 405B: 126 layers; all GQA 8 KV heads, head dim 128', url: 'https://ai.meta.com/research/publications/llama-3-model-card/' },
+  { id: 'M6', label: 'Qwen3-32B config.json (HF): 64 layers, GQA 8 KV heads, head dim 128', url: 'https://huggingface.co/Qwen/Qwen3-32B/blob/main/config.json' },
 ];

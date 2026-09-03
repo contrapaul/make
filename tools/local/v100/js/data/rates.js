@@ -29,6 +29,6 @@ export const RATES = {
 
 export const RATES_SOURCES = [
   { id: 'R8a', label: 'Shenzhen residential electricity price schedule (tier-1 ≈0.6629 RMB/kWh)', url: 'https://www.eyeshenzhen.com' },
-  { id: 'R8b', label: 'CEIC — Shenzhen industrial electricity, 35 kV & above: 0.610 RMB/kWh (Jul 2026, constant from prior month)', url: 'https://www.ceicdata.com' },
-  { id: 'FX1', label: 'Wise mid-market USD/CNY history — 6.7193 on Aug 31, 2026; 6-month average 6.8057', url: 'https://wise.com/us/currency-converter/usd-to-cny-rate/history' },
+  { id: 'R8b', label: 'CEIC: Shenzhen industrial electricity, 35 kV & above: 0.610 RMB/kWh (Jul 2026, constant from prior month)', url: 'https://www.ceicdata.com' },
+  { id: 'FX1', label: 'Wise mid-market USD/CNY history: 6.7193 on Aug 31, 2026; 6-month average 6.8057', url: 'https://wise.com/us/currency-converter/usd-to-cny-rate/history' },
 ];

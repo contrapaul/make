@@ -35,7 +35,7 @@ export const CLOUD_MODELS = [
     id: 'gpt-56-sol',
     vendor: 'OpenAI',
     name: 'GPT-5.6 Sol',
-    tierNote: 'Flagship of the GPT-5.6 family — the "ChatGPT 5+" tier (the `gpt-5.6` alias routes to it).',
+    tierNote: 'Flagship of the GPT-5.6 family, the "ChatGPT 5+" tier (the `gpt-5.6` alias routes to it).',
     contextTokens: 1_050_000, // OpenAI docs; Artificial Analysis rounds to ~1M
     maxOutputTokens: 128_000,
     pricing: { inputUSD: 5.0, outputUSD: 30.0 },
@@ -94,7 +94,7 @@ export const CLOUD_MODELS = [
     ttftNote: null,
     intelligenceIndex: { score: 53, rank: '#6 / 111 (open-weights class)' },
     highlights: [
-      'SWE-bench Verified ≈80.6% — highest open-weights score at time of writing (third-party aggregation; verify before publishing).',
+      'SWE-bench Verified ≈80.6%, highest open-weights score at time of writing (third-party aggregation; verify before publishing).',
       'Concurrency limit 500 requests (2,500 for V4 Flash).',
       'Supports non-thinking and thinking modes, tool calls, JSON output.',
     ],
@@ -137,12 +137,12 @@ export const CLOUD_SUBSCRIPTIONS = [
 
 /** Flat source list for on-page footnote rendering (P7). */
 export const CLOUD_SOURCES = [
-  { id: 'C1', label: 'OpenAI — GPT-5.6 Sol model docs (pricing, context window, limits)', url: 'https://developers.openai.com/api/docs/models/gpt-5.6-sol' },
-  { id: 'C2', label: 'Anthropic — "Introducing Claude Opus 5" (Jul 24, 2026): pricing, Fast mode, customer agentic-coding results', url: 'https://www.anthropic.com/news/claude-opus-5' },
-  { id: 'C3', label: 'Artificial Analysis — GPT-5.6 Sol (max): Intelligence Index 61, 82.8 tok/s, TTFT 115.7 s, $4/$20 promo pricing', url: 'https://artificialanalysis.ai/models/gpt-5-6-sol' },
-  { id: 'C4', label: 'Artificial Analysis — Claude Opus 5 (max): Intelligence Index 63 (#1/187), ≈53 tok/s; provider page for TTFT spread', url: 'https://artificialanalysis.ai/models/claude-opus-5' },
-  { id: 'C5', label: 'Artificial Analysis — DeepSeek V4 Pro 0813 (max): Intelligence Index 53, 54.1 tok/s, TTFT 1.65 s', url: 'https://artificialanalysis.ai/models/deepseek-v4-pro' },
-  { id: 'C6', label: 'DeepSeek API docs — Models & Pricing (official peak/off-peak rates, context length, concurrency limits)', url: 'https://api-docs.deepseek.com/quick_start/pricing/' },
-  { id: 'C7', label: 'OpenAI Help Center — "What is ChatGPT Plus?" ($20/month)', url: 'https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus' },
-  { id: 'C8', label: 'OpenAI — Business pricing page (Standard/Premium seats, plan list incl. Go/Plus/Business/Enterprise)', url: 'https://openai.com/api/pricing/' },
+  { id: 'C1', label: 'OpenAI: GPT-5.6 Sol model docs (pricing, context window, limits)', url: 'https://developers.openai.com/api/docs/models/gpt-5.6-sol' },
+  { id: 'C2', label: 'Anthropic: "Introducing Claude Opus 5" (Jul 24, 2026): pricing, Fast mode, customer agentic-coding results', url: 'https://www.anthropic.com/news/claude-opus-5' },
+  { id: 'C3', label: 'Artificial Analysis: GPT-5.6 Sol (max): Intelligence Index 61, 82.8 tok/s, TTFT 115.7 s, $4/$20 promo pricing', url: 'https://artificialanalysis.ai/models/gpt-5-6-sol' },
+  { id: 'C4', label: 'Artificial Analysis: Claude Opus 5 (max): Intelligence Index 63 (#1/187), ≈53 tok/s; provider page for TTFT spread', url: 'https://artificialanalysis.ai/models/claude-opus-5' },
+  { id: 'C5', label: 'Artificial Analysis: DeepSeek V4 Pro 0813 (max): Intelligence Index 53, 54.1 tok/s, TTFT 1.65 s', url: 'https://artificialanalysis.ai/models/deepseek-v4-pro' },
+  { id: 'C6', label: 'DeepSeek API docs: Models & Pricing (official peak/off-peak rates, context length, concurrency limits)', url: 'https://api-docs.deepseek.com/quick_start/pricing/' },
+  { id: 'C7', label: 'OpenAI Help Center: "What is ChatGPT Plus?" ($20/month)', url: 'https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus' },
+  { id: 'C8', label: 'OpenAI: Business pricing page (Standard/Premium seats, plan list incl. Go/Plus/Business/Enterprise)', url: 'https://openai.com/api/pricing/' },
 ];

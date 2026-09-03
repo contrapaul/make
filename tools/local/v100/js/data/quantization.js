@@ -20,14 +20,14 @@ export const QUANT_LEVELS = [
     name: 'FP16 / BF16',
     bytesPerParam: 2.0,
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'Reference quality — the model as trained',
+    qualityLabel: 'Reference quality: the model as trained',
     explainer: {
       whatItIs:
-        'Full precision. Every weight is stored as a 16-bit floating-point number — exactly how the model was trained and evaluated.',
+        'Full precision. Every weight is stored as a 16-bit floating-point number, exactly how the model was trained and evaluated.',
       tradeOff:
         'Biggest files and slowest to move through memory, but zero quality loss from compression. This is the baseline every other level is measured against.',
       whyItMatters:
-        'If a model fits at FP16, you get its full intended behavior — useful for benchmarking and for models small enough that size never matters (think 4B on a 32 GB machine).',
+        'If a model fits at FP16, you get its full intended behavior, useful for benchmarking and for models small enough that size never matters (think 4B on a 32 GB machine).',
     },
   },
   {
@@ -42,7 +42,7 @@ export const QUANT_LEVELS = [
       tradeOff:
         'You get about half the memory footprint and roughly double the decode speed, while quality stays very close to full precision on most everyday tasks. Hard reasoning can still show small dips.',
       whyItMatters:
-        'The sweet spot when you have decent VRAM but want headroom for a long context window — the KV cache gets room to grow because weights got smaller.',
+        'The sweet spot when you have decent VRAM but want headroom for a long context window, the KV cache gets room to grow because weights got smaller.',
     },
   },
   {
@@ -55,7 +55,7 @@ export const QUANT_LEVELS = [
       whatItIs:
         'A GGUF "K-quant" at 6 bits per weight. The K-format stores groups of weights with shared scales, so it compresses better than a naive 6-bit scheme.',
       tradeOff:
-        'About 25% smaller than INT8 with only a modest quality cost — the dip mostly shows up on hard reasoning and long multi-step tasks rather than everyday chat.',
+        'About 25% smaller than INT8 with only a modest quality cost, the dip mostly shows up on hard reasoning and long multi-step tasks rather than everyday chat.',
       whyItMatters:
         'The pick when you want maximum quality that still fits: e.g. a 70B model at Q6_K (~52 GB) is the largest sensible size for a 48–64 GB machine.',
     },
@@ -68,11 +68,11 @@ export const QUANT_LEVELS = [
     qualityLabel: 'The balance pick',
     explainer: {
       whatItIs:
-        'A 5-bit K-quant with "medium" block granularity — a mix of finer and coarser quantized blocks that keeps accuracy high where it counts.',
+        'A 5-bit K-quant with "medium" block granularity, a mix of finer and coarser quantized blocks that keeps accuracy high where it counts.',
       tradeOff:
         'Noticeably smaller than Q6_K, still very close to full quality for most tasks. The community default when a model is *just* too big at higher precision.',
       whyItMatters:
-        'This is often the level that turns "doesn\'t fit" into "fits with room for context" — watch the memory bar in the Lab as you switch levels.',
+        'This is often the level that turns "doesn\'t fit" into "fits with room for context"; watch the memory bar in the Lab as you switch levels.',
     },
   },
   {
@@ -85,7 +85,7 @@ export const QUANT_LEVELS = [
       whatItIs:
         'The most popular GGUF quantization in the local-AI world. Weights are packed to roughly 4–5 bits using K-quant blocks with per-group scales.',
       tradeOff:
-        'About half the size of FP16 and proportionally faster, at a real but usually acceptable quality cost — creative writing and casual chat hold up well; precise reasoning and code can slip.',
+        'About half the size of FP16 and proportionally faster, at a real but usually acceptable quality cost, creative writing and casual chat hold up well; precise reasoning and code can slip.',
       whyItMatters:
         'Q4_K_M is what makes 70B-class models runnable on consumer hardware at all. It\'s the reason "big model on one GPU" exists in the first place.',
     },

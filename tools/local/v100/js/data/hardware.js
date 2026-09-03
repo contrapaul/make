@@ -30,7 +30,7 @@ export const ALL_IN_ONES = [
     kind: 'allInOne',
     unifiedMemoryGB: 16,
     bandwidthGBs: 153, // Apple spec page (M5) [H1]
-    computeNote: 'Apple M5 — 10-core CPU + 8/10-core GPU; memory-bandwidth-bound decode.',
+    computeNote: 'Apple M5: 10-core CPU + 8/10-core GPU; memory-bandwidth-bound decode.',
     tdpW: 30, // ASSUMPTION (blueprint §3.1): sustained load ~30 W for the Air class
     priceRMB: 8_500,
     priceBasis: 'taobao-listing', // Owner-provided current Taobao listing, 2026-09-02 [H7]; Apple.cn MSRP context [H6]
@@ -42,7 +42,7 @@ export const ALL_IN_ONES = [
     kind: 'allInOne',
     unifiedMemoryGB: 48,
     bandwidthGBs: 273, // Apple spec page (M4 Pro) [H2]
-    computeNote: 'Apple M4 Pro — 14-core CPU + 20-core GPU.',
+    computeNote: 'Apple M4 Pro: 14-core CPU + 20-core GPU.',
     tdpW: 90, // ASSUMPTION range 65–120 W under sustained load (blueprint §3.1); midpoint used
     priceRMB: 18_000,
     priceBasis: 'taobao-listing', // Owner-provided current Taobao listing, 2026-09-02 [H7]; prior-gen config, Apple.cn MSRP context [H6]
@@ -54,7 +54,7 @@ export const ALL_IN_ONES = [
     kind: 'allInOne',
     unifiedMemoryGB: 128, // LPDDR5x unified pool
     bandwidthGBs: 273, // NVIDIA DGX Spark spec [H3]
-    computeNote: 'GB10 Grace Blackwell — up to 1 PFLOP FP4 sparse; 20-core Arm CPU.',
+    computeNote: 'GB10 Grace Blackwell: up to 1 PFLOP FP4 sparse; 20-core Arm CPU.',
     tdpW: 140, // GB10 TDP per NVIDIA (PSU rated 240 W) [H3]
     priceRMB: 38_900,
     priceBasis: 'taobao-listing', // Owner-provided current Taobao listing, 2026-09-02 [H7]; US$3,999 list context [H3]
@@ -183,11 +183,11 @@ export const RAM_TIERS = [
 
 export const CPUS = [
   { id: 'ryzen5-3600', name: 'AMD Ryzen 5 3600 (6C/12T, Zen 2)', prefillTflopsEff: 2.0, note: 'estimate' },
-  { id: 'ryzen9-5800x3d', name: 'AMD Ryzen 9 5800X3D (8C/16T, Zen 3 + V-Cache)', prefillTflopsEff: 3.5, note: 'estimate — cache helps prompt processing' },
+  { id: 'ryzen9-5800x3d', name: 'AMD Ryzen 9 5800X3D (8C/16T, Zen 3 + V-Cache)', prefillTflopsEff: 3.5, note: 'estimate; cache helps prompt processing' },
   { id: 'i5-13600k', name: 'Intel Core i5-13600K (14C/20T, Raptor Lake)', prefillTflopsEff: 4.5, note: 'estimate' },
   { id: 'i9-13900kf', name: 'Intel Core i9-13900KF (24C/32T, Raptor Lake)', prefillTflopsEff: 7.0, note: 'estimate' },
-  { id: 'ryzen7-7800x3d', name: 'AMD Ryzen 7 7800X3D (8C/16T, Zen 4 + V-Cache)', prefillTflopsEff: 4.0, note: 'estimate — proposed add, user-approved' },
-  { id: 'threadripper-7960x', name: 'AMD Threadripper 7960X (24C/48T, DDR5 12-ch ≈ 400 GB/s)', prefillTflopsEff: 15.0, note: 'estimate — workstation tier; proposed add, user-approved' },
+  { id: 'ryzen7-7800x3d', name: 'AMD Ryzen 7 7800X3D (8C/16T, Zen 4 + V-Cache)', prefillTflopsEff: 4.0, note: 'estimate; proposed add, user-approved' },
+  { id: 'threadripper-7960x', name: 'AMD Threadripper 7960X (24C/48T, DDR5 12-ch ≈ 400 GB/s)', prefillTflopsEff: 15.0, note: 'estimate; workstation tier; proposed add, user-approved' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -229,13 +229,13 @@ export const ENGINE_CONSTANTS = {
 /* ------------------------------------------------------------------ */
 
 export const HARDWARE_SOURCES = [
-  { id: 'H1', label: 'Apple — MacBook Air tech specs (M5, 153 GB/s memory bandwidth)', url: 'https://www.apple.com/macbook-air/specs/' },
-  { id: 'H2', label: 'Apple — MacBook Pro tech specs (M4 Pro, 273 GB/s) — re-verify at P2 sign-off', url: 'https://www.apple.com/macbook-pro/specs/' },
-  { id: 'H3', label: 'NVIDIA — DGX Spark product page (128 GB LPDDR5x, 273 GB/s, GB10 TDP 140 W / PSU 240 W)', url: 'https://www.nvidia.com/en-us/products/workstations/dgx-spark' },
+  { id: 'H1', label: 'Apple: MacBook Air tech specs (M5, 153 GB/s memory bandwidth)', url: 'https://www.apple.com/macbook-air/specs/' },
+  { id: 'H2', label: 'Apple: MacBook Pro tech specs (M4 Pro, 273 GB/s); re-verify at P2 sign-off', url: 'https://www.apple.com/macbook-pro/specs/' },
+  { id: 'H3', label: 'NVIDIA: DGX Spark product page (128 GB LPDDR5x, 273 GB/s, GB10 TDP 140 W / PSU 240 W)', url: 'https://www.nvidia.com/en-us/products/workstations/dgx-spark' },
   { id: 'H4', label: 'NVIDIA V100 datasheet + user-provided values (900 GB/s HBM2, FP32 15.7 / Tensor 125 TFLOPS, PCIe Gen3 x16 ≈ 32 GB/s)', url: 'https://www.nvidia.com/en-us/data-center/v100/' },
-  { id: 'H5', label: 'TechPowerUp GPU database — RTX 3060/3090/5070 Ti/5090/RTX 6000 Ada (bandwidth, TDP, CUDA counts)', url: 'https://www.techpowerup.com/gpu-specs/' },
-  { id: 'H6', label: 'Apple China store + EveryMac China MSRP archive — Mac street-price anchors (M5 14" ¥13,499; M5 Pro 32GB ¥17,999)', url: 'https://www.apple.com.cn/shop/buy-mac/macbook-pro' },
-  { id: 'H7', label: 'Owner-provided current Taobao listings, 2026-09-02 — all priceRMB values in this file (supersedes the earlier estimate ranges; listing snapshot, not live prices)', url: null },
-  { id: 'H8', label: 'TechPowerUp — RX 9070 XT (644.6 GB/s, RDNA4)', url: 'https://www.techpowerup.com/gpu-specs/radeon-rx-9070-xt.c4229' },
-  { id: 'H9', label: 'Corsair — RX 9070/XT power guide (~304 W TDP)', url: null },
+  { id: 'H5', label: 'TechPowerUp GPU database: RTX 3060/3090/5070 Ti/5090/RTX 6000 Ada (bandwidth, TDP, CUDA counts)', url: 'https://www.techpowerup.com/gpu-specs/' },
+  { id: 'H6', label: 'Apple China store + EveryMac China MSRP archive: Mac street-price anchors (M5 14" ¥13,499; M5 Pro 32GB ¥17,999)', url: 'https://www.apple.com.cn/shop/buy-mac/macbook-pro' },
+  { id: 'H7', label: 'Owner-provided current Taobao listings, 2026-09-02: all priceRMB values in this file (supersedes the earlier estimate ranges; listing snapshot, not live prices)', url: null },
+  { id: 'H8', label: 'TechPowerUp: RX 9070 XT (644.6 GB/s, RDNA4)', url: 'https://www.techpowerup.com/gpu-specs/radeon-rx-9070-xt.c4229' },
+  { id: 'H9', label: 'Corsair: RX 9070/XT power guide (~304 W TDP)', url: null },
 ];
