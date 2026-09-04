@@ -26,7 +26,7 @@ import {
 } from '../js/tabs/lab.js';
 import { tokenizeWith, tokenize, initPipeline, modelLoadView, loadCaption, prefillDecodeView, prefillCaption, decodeCaption, speedNote } from '../js/tabs/pipeline.js';
 import { VOCAB } from '../js/data/vocab.js';
-import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
+import { createStore, DEFAULT_CONFIG, store as appStore } from '../js/state/store.js';
 import { evaluate, PROMPT_SPLIT_TOKENS, GENERATION_TARGET_TOKENS } from '../js/engine/perf.js';
 
 let passed = 0;
@@ -1279,5 +1279,110 @@ console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
   ok(`store change re-renders Stage 3 (decode rate ${before} → ${after})`);
 }
 
+
+/* ---------------- js/app.js — BOOTSTRAP SMOKE (bug-fix gap #1) -------------
+   Closes the gap logged in the 2026-09-04 bug-fix pass. A fatal TDZ in
+   app.js (`const defaultDoc` declared below the `initApp()` call that reached
+   it through a default parameter) left every page dead in a browser while all
+   56 UI checks passed — because every other check dependency-injects `doc`
+   into a module and NOTHING ever evaluated app.js's auto-bootstrap branch.
+
+   This fixture supplies just enough globals for that branch to run: routable
+   .tab-panel / [data-tab-link] nodes so the router really routes, and a
+   documentElement whose setAttribute is recorded so the theme is observable.
+   It asserts wiring, not rendering — the fault class it guards is
+   "the bootstrap throws or silently does nothing", which is what shipped.
+
+   Note: it initialises ONCE, deliberately. Calling initLab({store}) a second
+   time against one store hangs (two Lab instances bound two-way to the same
+   store echo each other) — latent, since production bootstraps once. */
+function makeBootEl(tag = 'div', id = '') {
+  const L = {}; const attrs = {};
+  const el = {
+    tagName: String(tag).toUpperCase(), id, className: '', textContent: '', innerHTML: '',
+    value: '', checked: false, hidden: false, disabled: false, offsetWidth: 0,
+    children: [], dataset: {}, attrs,
+    classList: { _s: new Set(),
+      add(...c) { c.forEach((x) => this._s.add(x)); },
+      remove(...c) { c.forEach((x) => this._s.delete(x)); },
+      toggle(c, f) { const on = f ?? !this._s.has(c); on ? this._s.add(c) : this._s.delete(c); return on; },
+      contains(c) { return this._s.has(c); } },
+    style: { _v: {}, setProperty(k, v) { this._v[k] = v; }, removeProperty(k) { delete this._v[k]; },
+      getPropertyValue(k) { return this._v[k] ?? ''; } },
+    setAttribute(k, v) { attrs[k] = String(v); }, removeAttribute(k) { delete attrs[k]; },
+    getAttribute(k) { return k in attrs ? attrs[k] : null; }, hasAttribute(k) { return k in attrs; },
+    appendChild(c) { this.children.push(c); return c; },
+    removeChild(c) { const i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); return c; },
+    append(...c) { this.children.push(...c); }, remove() {},
+    querySelector() { return null; }, querySelectorAll() { return []; },
+    getElementsByClassName() { return []; }, closest() { return null; },
+    addEventListener(ev, fn) { (L[ev] ??= []).push(fn); }, removeEventListener() {},
+    dispatchEvent(e) { for (const fn of L[e?.type] ?? []) fn(e); return true; },
+    getBoundingClientRect() { return { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 }; },
+    scrollIntoView() {}, focus() {}, blur() {}, click() {}, insertAdjacentHTML() {},
+  };
+  el.cloneNode = () => makeBootEl(tag, id);
+  return el;
+}
+function makeBootDoc(tabs = ['home', 'how', 'lab', 'compare']) {
+  const byId = new Map();
+  const panels = tabs.map((t) => { const p = makeBootEl('section'); p.dataset.tab = t; return p; });
+  const links = tabs.map((t) => { const a = makeBootEl('a'); a.dataset.tabLink = t; return a; });
+  const pick = (sel) => (sel === '.tab-panel' ? panels : sel === '[data-tab-link]' ? links : []);
+  return {
+    documentElement: makeBootEl('html'), body: makeBootEl('body'), head: makeBootEl('head'),
+    readyState: 'complete', panels, links,
+    getElementById(id) { if (!byId.has(id)) byId.set(id, makeBootEl('div', id)); return byId.get(id); },
+    querySelector(sel) { return pick(sel)[0] ?? null; },
+    querySelectorAll(sel) { return pick(sel); },
+    createElement(t) { return makeBootEl(t); },
+    createTextNode(t) { const e = makeBootEl('#text'); e.textContent = t; return e; },
+    createDocumentFragment() { return makeBootEl('#fragment'); },
+    addEventListener() {}, removeEventListener() {},
+  };
+}
+
+console.log('js/app.js — bootstrap smoke (auto-bootstrap branch)');
+{
+  const saved = new Map();
+  const set = (k, v) => { saved.set(k, globalThis[k]); globalThis[k] = v; };
+  const bootDoc = makeBootDoc();
+  set('document', bootDoc);
+  set('window', globalThis);
+  set('location', { hash: '#/lab', href: 'http://localhost/#/lab' });
+  set('history', { replaceState() {} });
+  set('localStorage', { _m: new Map(),
+    getItem(k) { return this._m.has(k) ? this._m.get(k) : null; },
+    setItem(k, v) { this._m.set(k, String(v)); }, removeItem(k) { this._m.delete(k); } });
+  set('matchMedia', () => ({ matches: false, addEventListener() {}, removeEventListener() {},
+    addListener() {}, removeListener() {} }));
+  set('IntersectionObserver', class { observe() {} unobserve() {} disconnect() {} });
+  set('requestAnimationFrame', () => 1); // no-op: never start the Stage 3 drip loop
+  set('cancelAnimationFrame', () => {});
+  set('getComputedStyle', () => ({ getPropertyValue: () => '' }));
+  if (typeof globalThis.addEventListener !== 'function') set('addEventListener', () => {});
+
+  try {
+    // Cache-busted so the module body — and its auto-bootstrap — really re-evaluates.
+    // A TDZ or any bootstrap-order fault throws here.
+    await import(`../js/app.js?bootstrap=${Date.now()}`);
+    ok('initApp() auto-bootstrap evaluates against a full-document fixture without throwing');
+
+    assert.equal(bootDoc.documentElement.getAttribute('data-theme'), 'light');
+    ok('bootstrap wires the theme (data-theme set on documentElement)');
+
+    const lab = bootDoc.panels.find((p) => p.dataset.tab === 'lab');
+    const home = bootDoc.panels.find((p) => p.dataset.tab === 'home');
+    assert.equal(lab.classList.contains('is-active'), true);
+    assert.equal(home.classList.contains('is-active'), false);
+    ok('bootstrap wires the router (deep link #/lab activates the Lab panel only)');
+
+    assert.deepEqual(appStore.getState().ui.visitedTabs, ['lab']);
+    ok('bootstrap wires the tracker (deep-link load counts as a visit)');
+  } finally {
+    for (const [k, v] of saved) { if (v === undefined) delete globalThis[k]; else globalThis[k] = v; }
+  }
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + app.js bootstrap smoke).`);

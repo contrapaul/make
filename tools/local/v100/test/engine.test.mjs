@@ -319,6 +319,32 @@ section('Labeled engine contracts (documented in perf.js header / blueprint §5�
   check('promptTokens follows the split preset (balanced → 2048)', a1.promptTokens === 2048);
   check('TTFT > fixed overhead floor', a1.ttftMsBase > 100, `got ${a1.ttftMsBase}`);
 
+  /* Bug-fix gap #2 (2026-09-04): the TFLOPS→FLOPs unit error inflated every
+     TTFT by exactly 1e12 and survived the whole suite, because the only
+     assertions were "scales with B" and "> 100 ms" — both of which a 1e12
+     error satisfies. These pin the ABSOLUTE magnitude instead.
+     Derived, not magic: prefill throughput must land in a physically sane
+     band for consumer/workstation hardware. A 1e12 slip misses it by twelve
+     orders of magnitude in either direction. */
+  const a1PrefillTps = a1.promptTokens / (a1.ttftMsBase / 1000);
+  check('TTFT implies a sane prefill throughput (1e2–1e6 tok/s)',
+    a1PrefillTps > 1e2 && a1PrefillTps < 1e6, `got ${a1PrefillTps.toExponential(2)} tok/s`);
+  check('TTFT for the default 8B rig is seconds, not eons (0.1 s–60 s)',
+    a1.ttftMsBase > 100 && a1.ttftMsBase < 60_000, `got ${a1.ttftMsBase} ms`);
+
+  // Every reachable config must stay in that band — catches a unit slip on any branch
+  // (GPU-resident, offload split, CPU-only), not just the default rig.
+  for (const [label, cfg] of [
+    ['8B GPU-resident', rig({ modelStopIndex: STOP_8B })],
+    ['70B offload split', rig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', ramCapacityGB: 64, modelStopIndex: STOP_70B })],
+    ['8B long prompt', rig({ modelStopIndex: STOP_8B, promptSplit: 'long' })],
+  ]) {
+    const p = evaluate(cfg);
+    if (p.ttftMsBase == null) continue; // noFit legitimately has null speed metrics
+    check(`TTFT stays in the sane band — ${label}`,
+      p.ttftMsBase > 50 && p.ttftMsBase < 300_000, `got ${p.ttftMsBase} ms`);
+  }
+
   // maxModelFits: A5 rig (3060 12 GB + 64 GB RAM) at Q4/8K → 70B and 80B fit via offload pool
   const a5 = evaluate(rig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', ramCapacityGB: 64, modelStopIndex: STOP_70B }));
   check('maxModelFits finds the largest stop in VRAM+RAM (A5 rig → 80B)', a5.maxModelFits && a5.maxModelFits.paramsB === 80, `got ${JSON.stringify(a5.maxModelFits)}`);
