@@ -15,6 +15,9 @@ import { store, TAB_IDS } from './state/store.js';
 import { initHome } from './tabs/home.js';
 import { initLab } from './tabs/lab.js';
 
+const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
+const defaultHash = () => (typeof location !== 'undefined' ? location.hash : '');
+
 export const TABS = ['home', 'how', 'lab', 'compare'];
 
 export function tabFromHash(hash) {
@@ -176,6 +179,3 @@ export function initApp() {
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {
   initApp();
 }
-
-const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
-const defaultHash = () => (typeof location !== 'undefined' ? location.hash : '');

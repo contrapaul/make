@@ -171,16 +171,17 @@ export function evaluate(config) {
     const flopsPerToken = 2 * stop.paramsB * 1e9; // ≈2 FLOPs per param per token (matmul bound)
     let ttftS;
     if (dev.kind === 'unified') {
-      const tflopsEff =
-        (ENGINE_CONSTANTS.unifiedPrefillTflopsEstimate[dev.platform.id] ?? 0) * ENGINE_CONSTANTS.etaPrefillGpu;
-      if (!(tflopsEff > 0)) throw new Error(`No prefill estimate for platform ${dev.platform.id}`);
-      ttftS = (promptTokens * flopsPerToken) / tflopsEff + ENGINE_CONSTANTS.prefillOverheadS;
+      // Hardware figures are TFLOPS; flopsPerToken is raw FLOPs — convert before dividing.
+      const flopsEff =
+        (ENGINE_CONSTANTS.unifiedPrefillTflopsEstimate[dev.platform.id] ?? 0) * ENGINE_CONSTANTS.etaPrefillGpu * 1e12;
+      if (!(flopsEff > 0)) throw new Error(`No prefill estimate for platform ${dev.platform.id}`);
+      ttftS = (promptTokens * flopsPerToken) / flopsEff + ENGINE_CONSTANTS.prefillOverheadS;
     } else {
-      const gpuTflopsEff = dev.gpu.tflopsFp32Dense * ENGINE_CONSTANTS.etaPrefillGpu;
-      const cpuTflopsEff = dev.cpu.prefillTflopsEff; // η=1 by definition (hardware.js header)
+      const gpuFlopsEff = dev.gpu.tflopsFp32Dense * ENGINE_CONSTANTS.etaPrefillGpu * 1e12;
+      const cpuFlopsEff = dev.cpu.prefillTflopsEff * 1e12; // η=1 by definition (hardware.js header)
       ttftS =
-        (promptTokens * flopsPerToken * layersOnGpu) / L / gpuTflopsEff +
-        (promptTokens * flopsPerToken * layersOnCpu) / L / cpuTflopsEff +
+        (promptTokens * flopsPerToken * layersOnGpu) / L / gpuFlopsEff +
+        (promptTokens * flopsPerToken * layersOnCpu) / L / cpuFlopsEff +
         ENGINE_CONSTANTS.prefillOverheadS;
     }
     ttftMsBase = ttftS * 1000;
