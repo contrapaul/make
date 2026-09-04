@@ -24,8 +24,10 @@ import {
   renderPrintouts, memoryCaption, concTeaching, offloadNote,
   simPlan, tokensAt, simPhase, gaugeFill, stageText, SIM_REAL_BUDGET_S, initSim,
 } from '../js/tabs/lab.js';
+import { tokenizeWith, tokenize, initPipeline, modelLoadView, loadCaption, prefillDecodeView, prefillCaption, decodeCaption, speedNote } from '../js/tabs/pipeline.js';
+import { VOCAB } from '../js/data/vocab.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
-import { evaluate } from '../js/engine/perf.js';
+import { evaluate, PROMPT_SPLIT_TOKENS, GENERATION_TARGET_TOKENS } from '../js/engine/perf.js';
 
 let passed = 0;
 const ok = (name) => { passed += 1; console.log(`  ✓ ${name}`); };
@@ -984,5 +986,298 @@ function makeClock() {
   ok('M4 run finish: Done line shows per-request rate and the ×B total');
 }
 
+/* ---------------- js/tabs/pipeline.js — P5 M1 ------------------ */
+console.log('tabs/pipeline.js — P5 M1');
+
+function makePipeDoc(prefill = '') {
+  const input = {
+    value: prefill,
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatch(ev) { for (const fn of this.listeners[ev] ?? []) fn({}); },
+  };
+  const chips = {
+    children: [],
+    appendChild(c) { this.children.push(c); },
+    removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+  };
+  const count = { textContent: '' };
+  const makeSeg = () => ({ style: { props: {}, setProperty(k, v) { this.props[k] = v; } } });
+  const segGpu = makeSeg();
+  const segCpu = makeSeg();
+  const loadbar = {
+    setAttributes: {},
+    setAttribute(k, v) { this.setAttributes[k] = v; },
+    querySelector: (sel) => (sel === '.seg-gpu' ? segGpu : sel === '.seg-cpu' ? segCpu : null),
+  };
+  const loadcaption = { textContent: '' };
+  const loadlayers = { textContent: '', classes: new Set(['is-hidden']), classList: { toggle(c, on) { on ? this.set.add(c) : this.set.delete(c); } } };
+  loadlayers.classList.set = loadlayers.classes;
+  // P5 M3 (Stage 3) fakes
+  const drip = {
+    children: [],
+    appendChild(c) { this.children.push(c); },
+    removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+  };
+  const prefilltokens = { textContent: '' };
+  const prefillnote = { textContent: '' };
+  const decodetps = { textContent: '' };
+  const decodenote = { textContent: '' };
+  const phase = { textContent: '' };
+  const driplabel = { textContent: '' };
+  const speednote = { textContent: '' };
+  return {
+    input, chips, count,
+    loadbar, loadcaption, loadlayers,
+    drip, driplabel, prefilltokens, decodetps, phase,
+    getElementById: (id) => ({
+      'pipe-token-input': input, 'pipe-token-chips': chips, 'pipe-token-count': count,
+      'pipe-loadbar': loadbar, 'pipe-load-caption': loadcaption, 'pipe-load-layers': loadlayers,
+      'pipe-prefill-tokens': prefilltokens, 'pipe-prefill-note': prefillnote,
+      'pipe-decode-tps': decodetps, 'pipe-decode-note': decodenote,
+      'pipe-phase': phase, 'pipe-drip': drip, 'pipe-drip-label': driplabel,
+      'pipe-speed-note': speednote,
+    }[id] ?? null),
+    createElement: (tag) => ({ tag, textContent: '', children: [], appendChild(c) { this.children.push(c); } }),
+  };
+}
+
+{ // tokenizeWith — real Qwen3 vocab (the fix): a long word splits into many pieces
+  const t = tokenizeWith(VOCAB, 'Antidisestablishmentarianism');
+  assert.ok(t.length > 3, `long word → more than 3 tokens (got ${t.length})`);
+  ok(`tokenizeWith: "Antidisestablishmentarianism" → ${t.length} tokens (not one)`);
+}
+
+{ // tokenizeWith — digit run "936" splits into separate digit tokens
+  const t = tokenizeWith(VOCAB, '936');
+  assert.deepEqual(t.map((x) => x.text), ['9', '3', '6'], 'each digit is its own token');
+  assert.ok(t.every((x) => Number.isInteger(x.id) && x.id >= 0), 'digit tokens carry real ids');
+  ok('tokenizeWith: "936" splits into separate digit tokens');
+}
+
+{ // tokenizeWith — a common word stays ONE token with its real id
+  const t = tokenizeWith(VOCAB, ' world');
+  assert.equal(t.length, 1, '" world" is a single token');
+  assert.equal(t[0].text, ' world');
+  assert.equal(t[0].id, 1814, '" world" → real Qwen3 id 1814');
+  ok('tokenizeWith: " world" → ONE token, id 1814');
+}
+
+{ // tokenizeWith — empty/null-safe + determinism
+  assert.deepEqual(tokenizeWith(VOCAB, ''), [], 'empty string → no tokens');
+  assert.deepEqual(tokenizeWith(VOCAB, null), [], 'null → no tokens (no throw)');
+  assert.deepEqual(tokenizeWith(VOCAB, 'Hello, world!'), tokenizeWith(VOCAB, 'Hello, world!'), 'deterministic across calls');
+  ok('tokenizeWith: empty/null-safe and deterministic');
+}
+
+{ // tokenizeWith — punctuation stays attached where BPE puts it
+  const t = tokenizeWith(VOCAB, 'Hello, world!');
+  assert.deepEqual(t.map((x) => x.text), ['Hello', ',', ' world', '!']);
+  assert.equal(t[1].id, VOCAB.get(','), 'punctuation id comes from the real vocab');
+  ok('tokenizeWith: "Hello, world!" → 4 tokens, punctuation kept');
+}
+
+{ // tokenize() — async convenience wrapper resolves to the same tokens
+  const t = await tokenize(' world');
+  assert.equal(t.length, 1);
+  assert.equal(t[0].id, 1814);
+  ok('tokenize: async wrapper awaits the lazy vocab');
+}
+
+{ // chip lifecycle — empty (sync) + type → chips, empty → cleared
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store: null });
+  assert.equal(doc.chips.children.length, 0, 'empty input → no chips on init');
+  assert.equal(doc.count.textContent, '0 tokens');
+
+  doc.input.value = 'Hello world';
+  doc.input.dispatch('input');
+  await api.pending;
+  assert.equal(doc.chips.children.length, 2, 'one chip per token');
+  assert.equal(doc.count.textContent, '2 tokens');
+
+  doc.input.value = '';
+  doc.input.dispatch('input');
+  await api.pending;
+  assert.equal(doc.chips.children.length, 0, 'chips clear as the input empties');
+  assert.equal(doc.count.textContent, '0 tokens');
+  ok('chip lifecycle: input events re-render chips + count, clearing on empty');
+}
+
+{ // chip lifecycle — initial paint covers a pre-filled value (like index.html's "Hello, world!")
+  const doc = makePipeDoc('Hello, world!');
+  const api = initPipeline({ doc, store: null });
+  await api.pending;
+  assert.equal(doc.chips.children.length, 4, 'pre-filled input renders on init, not on first keystroke');
+  ok('initial paint renders a pre-filled input');
+}
+
+{ // chip anatomy — .chip with visible text + a .id span carrying the real token id
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store: null });
+  doc.input.value = 'Hi there';
+  doc.input.dispatch('input');
+  await api.pending;
+  const [c0, c1] = doc.chips.children;
+  assert.equal(c0.className, 'chip');
+  assert.equal(c0.textContent, 'Hi');
+  const id0 = c0.children.find((c) => c.className === 'id');
+  assert.equal(id0.textContent, String(VOCAB.get('Hi')));
+  const id1 = c1.children.find((c) => c.className === 'id');
+  assert.equal(id1.textContent, String(VOCAB.get(' there')), 'leading-space chunk id shown');
+  ok('chip anatomy: .chip text + .id span with the real token id');
+}
+
+/* ---------------- js/tabs/pipeline.js — P5 M2 ------------------ */
+console.log('tabs/pipeline.js — P5 M2 (Stage 2 · Model load)');
+
+{ // modelLoadView — fitting config: real engine numbers, bar in range, 'ok'
+  const perf = evaluate(DEFAULT_CONFIG);
+  assert.equal(perf.fitsState, 'gpu', 'test premise: default config fits on GPU');
+  const v = modelLoadView(perf);
+  assert.ok(v, 'view present for a fitting config');
+  assert.equal(v.usedGB, perf.weightsGB + perf.kvTotalGB, 'used = weights + KV (what the engine\'s fits check uses)');
+  assert.equal(v.availableGB, perf.gpuUsableGB, 'available = VRAM on the fast path');
+  assert.ok(v.pct > 0 && v.pct <= 1, 'fill fraction in (0, 1]');
+  assert.equal(v.state, 'ok', 'comfortable fit → ok');
+  assert.equal(v.gpuPct, Math.min(1, (perf.weightsGB + perf.kvTotalGB) / perf.gpuUsableGB), 'gpu segment reuses membarView math');
+  ok(`modelLoadView: fitting config → ${v.usedGB.toFixed(1)} GB of ${v.availableGB} GB, state ok`);
+}
+
+{ // modelLoadView — noFit config: demand exceeds every pool → pct 1, state fail
+  const perf = evaluate({ ...DEFAULT_CONFIG, gpuId: 'v100-pcie-16g', modelStopIndex: 9, ramCapacityGB: 32 });
+  assert.equal(perf.fitsState, 'noFit', 'test premise: 405B on 16 GB VRAM + 32 GB RAM doesn\'t fit');
+  const v = modelLoadView(perf);
+  assert.ok(v.pct >= 1, 'bar reads full');
+  assert.equal(v.state, 'fail');
+  assert.equal(v.availableGB, perf.gpuUsableGB + perf.ramUsableGB, 'available sums both pools');
+  assert.ok(v.usedGB > v.availableGB, 'demand exceeds the rig');
+  const cap = loadCaption(perf, { mode: 'rig' });
+  assert.match(cap, /doesn't fit/);
+  ok(`modelLoadView: noFit → ${v.usedGB.toFixed(0)} GB needed of ${v.availableGB} GB, state fail + "doesn't fit" caption`);
+}
+
+{ // loadCaption — offload: names the split, not just the total
+  const perf = evaluate({ ...DEFAULT_CONFIG, gpuId: 'v100-pcie-16g', modelStopIndex: 7, ramCapacityGB: 128 });
+  assert.equal(perf.fitsState, 'offload', 'test premise: 70B offloads onto 16 GB VRAM + 128 GB RAM');
+  const v = modelLoadView(perf);
+  assert.ok(v.cpuPct > 0, 'some of the bar lives in the RAM segment');
+  const cap = loadCaption(perf, { mode: 'rig' });
+  assert.match(cap, /VRAM/);
+  assert.match(cap, /RAM/);
+  ok(`loadCaption: offload → "${cap}"`);
+}
+
+{ // store binding — config change in the "Lab" re-renders the Stage 2 caption live
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, v); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, gpuId: 'rtx-3090-24g' }, storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store });
+  await api.pending; // let Stage 1 settle so the next assertion is about Stage 2
+  const before = doc.loadcaption.textContent;
+  assert.notEqual(before, '—', 'initial paint writes a real caption from evaluate()');
+  assert.match(before, /24 GB of VRAM/);
+
+  store.setConfig({ gpuId: 'rtx-3060-12g' }); // "change hardware in the Lab"
+  assert.notEqual(doc.loadcaption.textContent, before, 'caption changed');
+  assert.match(doc.loadcaption.textContent, /12 GB of VRAM/);
+  api.destroy();
+  ok(`store binding: 24 GB → 12 GB VRAM re-rendered Stage 2 ("${doc.loadcaption.textContent}")`);
+}
+
+{ // store binding — destroy() unsubscribes (no further re-renders)
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, v); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, gpuId: 'rtx-3090-24g' }, storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store });
+  const before = doc.loadcaption.textContent;
+  api.destroy();
+  store.setConfig({ gpuId: 'rtx-3060-12g' });
+  assert.equal(doc.loadcaption.textContent, before, 'after destroy() the store no longer re-renders Stage 2');
+  ok('destroy() unsubscribes the Stage 2 store binding');
+}
+
+/* ---------------- js/tabs/pipeline.js — P5 M3 ------------------ */
+console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
+
+{ // prefillDecodeView — fast config: real engine numbers, both halves present
+  const perf = evaluate(DEFAULT_CONFIG); // RTX 3090 + 8B → fast
+  assert.equal(perf.decodeTpsPerRequest > 50, true, 'test premise: a fast config');
+  const v = prefillDecodeView(perf);
+  assert.ok(v, 'view present for a fast config');
+  assert.equal(v.promptTokens, perf.promptTokens, 'prompt tokens come from the engine');
+  assert.equal(v.tps, perf.decodeTpsPerRequest, 'decode rate is the engine\'s exact value');
+  assert.equal(v.targetTokens, GENERATION_TARGET_TOKENS);
+  assert.ok(v.prefillS > 0, 'prefill beat has a real (TTFT-derived) duration');
+  assert.ok(v.decodeS > 0 && v.perTokenMs > 0, 'decode drip has a per-token cadence');
+  assert.equal(v.speedup, 1, 'fast run needs no compression');
+  ok(`prefillDecodeView: fast config → ${v.promptTokens} prompt tokens, ${v.tps.toFixed(1)} tok/s, ${v.prefillS.toFixed(2)} s prefill`);
+}
+
+{ // prefillDecodeView — slow config: low tok/s → long drip, compression labelled
+  const perf = evaluate({ ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 });
+  assert.ok(perf.decodeTpsPerRequest < 5, 'test premise: an offloaded slow config');
+  const v = prefillDecodeView(perf);
+  assert.ok(v.tps < 5, 'slow config → low tok/s');
+  assert.ok(v.decodeS > 1, 'the drip is long at this rate');
+  assert.ok(v.speedup > 1, 'a slow run is time-compressed (and must be labelled)');
+  assert.match(speedNote(perf), /time-compressed/, 'compression label present');
+  ok(`prefillDecodeView: slow config → ${v.tps.toFixed(2)} tok/s, ×${v.speedup.toFixed(1)} compressed`);
+}
+
+{ // prefill half — reports the engine's prompt-token count for the split
+  const perf = evaluate({ ...DEFAULT_CONFIG, promptSplit: 'long' }); // 8192 prompt tokens
+  const v = prefillDecodeView(perf);
+  assert.equal(v.promptTokens, PROMPT_SPLIT_TOKENS.long, 'prompt tokens = the engine split for "long"');
+  assert.match(prefillCaption(perf), new RegExp(v.promptTokens.toLocaleString()), 'caption names that count');
+  assert.match(prefillCaption(perf), /compute-bound/);
+  assert.match(decodeCaption(perf), /bandwidth-bound/);
+  ok(`prefill half reports the engine's prompt-token count (${v.promptTokens})`);
+}
+
+{ // animation — driving the injected clock advances decode tokens over time
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, v); } };
+  const store = createStore({ storage });
+  const doc = makePipeDoc();
+  const clock = makeClock();
+  const api = initPipeline({ doc, store, raf: clock.raf, now: clock.now });
+  clock.step(16); // first frame: inside the prefill beat → 0 tokens yet
+  assert.match(doc.driplabel.textContent, /^0 \/ 256/, 'empty during the prefill beat');
+  assert.match(doc.phase.textContent, /Prefill/, 'phase reads the prefill pass');
+  while (clock.isPending() && clock.now() < 60000) clock.step(100); // drive to completion
+  assert.ok(!clock.isPending(), 'animation loop stopped at the end');
+  assert.match(doc.driplabel.textContent, /256 \/ 256/, 'drives to the full target');
+  assert.equal(doc.drip.children.length, 256, 'one chip per decoded token');
+  assert.match(doc.phase.textContent, /Done/, 'phase lands on Done');
+  api.destroy();
+  ok('driving the injected clock advances decode tokens one-by-one to completion');
+}
+
+{ // animation — reduced motion paints the final state instantly (no raf)
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, v); } };
+  const store = createStore({ storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store, reduced: true, raf: () => { throw new Error('must not animate'); }, now: () => 0 });
+  assert.equal(doc.driplabel.textContent, '256 / 256 tokens', 'reduced motion → final state instantly');
+  assert.equal(doc.drip.children.length, 256);
+  api.destroy();
+  ok('reduced motion paints the Stage 3 final state instantly (raf never called)');
+}
+
+{ // store binding — a Lab config change re-renders Stage 3 live (shared subscription)
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, v); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, gpuId: 'rtx-3090-24g' }, storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store });
+  const before = doc.decodetps.textContent;
+  assert.match(before, /tok\/s/, 'initial paint shows a real decode rate');
+  assert.equal(doc.prefilltokens.textContent, evaluate(store.getState().config).promptTokens.toLocaleString(), 'prefill half shows the engine count');
+  store.setConfig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 }); // "change hardware in the Lab"
+  const after = doc.decodetps.textContent;
+  assert.notEqual(after, before, 'decode tok/s moves with the config');
+  api.destroy();
+  ok(`store change re-renders Stage 3 (decode rate ${before} → ${after})`);
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode).`);

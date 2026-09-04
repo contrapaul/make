@@ -228,11 +228,86 @@
 
     </section>
 
+    <!-- ============ Tab 2 · How It Works (blueprint §6 Tab 2) ============
+         P5 M1: 5-stage glass-card pipeline shell + Stage 1 (Tokenization)
+         live demo. P5 M2: Stage 2 (Model load) live — .membar reused from
+         base.css, bound to the shared store. Stages 3–5 remain visible
+         placeholder cards (P5 M3–M5).
+         Existing utilities only (.card, .chip, .ctl-note, .membar); the
+         inline flex wrappers stand in for a horizontal-pipeline class
+         (no new CSS files in M1/M2 — one reduced-motion rule in tabs.css). -->
     <section class="tab-panel" data-tab="how" aria-label="How It Works">
       <div class="shell-pad stack">
-        <div class="card" data-reveal>
-          <h2>Phase 5 lands here</h2>
-          <p>The five-stage pipeline (tokenization, model load, prefill vs decode, KV-cache growth, sampling), bound live to the shared store (blueprint §6 Tab 2).</p>
+        <header data-reveal>
+          <h2>How It Works</h2>
+          <p>Five stages turn the sentence you type into the answer you read. Stage 1 is live — try it. The rest land in the next milestones, bound live to your hardware config (blueprint §6 Tab 2).</p>
+        </header>
+
+        <div style="display:flex;flex-wrap:wrap;gap:var(--sp-4);align-items:stretch">
+          <!-- Stage 1 · Tokenization — LIVE (P5 M1) -->
+          <article class="card" data-reveal aria-label="Stage 1: Tokenization">
+            <h3>1 · Tokenization</h3>
+            <p>Text becomes numbered pieces. Type below and watch it split into token chips, each carrying a real token id.</p>
+            <p class="ctl-note">This uses a real subset of the Qwen3 vocabulary — 30,747 of its 248,320 tokens — so every chip shows the model’s genuine token id (for example, “ world” is one real token, id 1814). Two honest limits: it is only a subset, so words outside it split into smaller pieces, and the matching is greedy longest-first rather than true BPE merge-order.</p>
+            <label for="pipe-token-input">Try a sentence</label>
+            <input type="text" id="pipe-token-input" value="Hello, world!" aria-label="Sentence to tokenize">
+            <div id="pipe-token-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--sp-3)" aria-live="polite"></div>
+            <p class="ctl-note" id="pipe-token-count" aria-live="polite"></p>
+          </article>
+
+          <!-- Stage 2 · Model load — LIVE (P5 M2): memory bar reuses the Lab
+               .membar/.seg primitives (base.css) + .ctl-note; live-bound to
+               the shared store via js/tabs/pipeline.js -->
+          <article class="card" data-reveal aria-label="Stage 2: Model load">
+            <h3>2 · Model load</h3>
+            <p>Weights “pour” from disk into the memory of your current config — GB used vs available. Change the hardware in the Lab and this bar moves with it.</p>
+            <div class="membar" id="pipe-loadbar" data-state="ok" style="margin-top:var(--sp-3)">
+              <span class="seg seg-gpu" style="--w: 0%"></span><span class="seg seg-cpu" style="--w: 0%"></span>
+            </div>
+            <p class="ctl-note" id="pipe-load-caption" aria-live="polite">—</p>
+            <p class="ctl-note is-hidden" id="pipe-load-layers" aria-live="polite"></p>
+          </article>
+
+          <!-- Stage 3 · Prefill vs decode — LIVE (P5 M3): two-speed contrast.
+               Reuses the Lab's .sim-conveyor token stream (chips drip in via
+               base.css/tabs.css) + .ctl-note; live-bound to the shared store via
+               js/tabs/pipeline.js (the SAME subscription as Stage 2) -->
+          <article class="card" data-reveal aria-label="Stage 3: Prefill vs decode">
+            <h3>3 · Prefill vs decode</h3>
+            <p>Two speeds, one contrast: the whole prompt is chewed in a single fast pass, then the answer trickles out one token at a time. That gap — not either side alone — is the core lesson. Change the hardware in the Lab and both halves move with it.</p>
+
+            <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-3)">
+              <div style="flex:1 1 200px;min-width:180px">
+                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Prefill · one gulp</h4>
+                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-prefill-tokens" aria-live="polite">—</p>
+                <p class="ctl-note" id="pipe-prefill-note" aria-live="polite">—</p>
+              </div>
+              <div style="flex:1 1 200px;min-width:180px">
+                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Decode · a drip</h4>
+                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-decode-tps" aria-live="polite">—</p>
+                <p class="ctl-note" id="pipe-decode-note" aria-live="polite">—</p>
+              </div>
+            </div>
+
+            <p class="ctl-note" id="pipe-phase" aria-live="polite" style="margin-top:var(--sp-3)">—</p>
+            <div class="sim-conveyor" id="pipe-drip" aria-live="polite"></div>
+            <p class="ctl-note" id="pipe-drip-label" aria-live="polite">—</p>
+            <p class="ctl-note" id="pipe-speed-note"></p>
+          </article>
+
+          <!-- Stage 4 · KV cache growth — lands in P5 M4 -->
+          <article class="card" data-reveal aria-label="Stage 4: KV cache growth">
+            <h3>4 · KV cache growth</h3>
+            <p>A bar fills as context grows — live GB from the engine’s formulas for your model and context window.</p>
+            <p class="ctl-note">Lands in P5 M4.</p>
+          </article>
+
+          <!-- Stage 5 · Sampling — lands in P5 M5 -->
+          <article class="card" data-reveal aria-label="Stage 5: Sampling">
+            <h3>5 · Sampling</h3>
+            <p>Temperature and top-p sliders reshape the next-token probability bars — the model’s coin flip, visualized.</p>
+            <p class="ctl-note">Lands in P5 M5.</p>
+          </article>
         </div>
       </div>
     </section>

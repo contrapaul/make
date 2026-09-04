@@ -199,6 +199,21 @@
 }
 
 /* ============================================================
+   Tab 2 · How It Works (blueprint §6 Tab 2) — P5 M2
+   ------------------------------------------------------------
+   Stage 2's bar reuses base.css's .membar/.seg primitives; the
+   “pouring” beat rides the existing .seg width transition. One rule
+   here: kill that transition on the reduced-motion path (final state
+   is painted instantly by pipeline.js anyway — this is the belt to
+   its suspenders). All colors via tokens (§7).
+   ============================================================ */
+
+/* ---------- Tab 2 reduced motion (§8) ------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  #pipe-loadbar .seg { transition: none !important; }
+}
+
+/* ============================================================
    Tab 3 · Hardware Lab — layout & motion (blueprint §6 Tab 3)
    ------------------------------------------------------------
    Three rails at ≥1280 px: controls | simulation | printouts.
