@@ -1,6 +1,8 @@
-# v100 Handoff — P5 M3 BUILT (uncommitted, awaiting owner review) · P6 (M1–M4) COMPLETE, awaiting owner sign-off
+# v100 Handoff — P5 M1–M3 BUILT · P6 (M1–M4) COMPLETE + bug-fix pass, awaiting owner sign-off
 
-**Date:** 2026-09-04 · **Status: P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) — on disk, UNCOMMITTED, awaiting owner review.** Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store (Lab hardware changes re-render it). Stage 3 now shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time at the engine's tok/s — animated (DI `raf`/`now`, reduced-motion instant) and live-bound to the same store subscription. Both suites green (ui **76/76**, engine 62/62). P6 M1–M4 remain committed + awaiting sign-off as before.
+**Date:** 2026-09-04 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **76/76**, engine 62/62). P6 still awaits owner sign-off.
+
+> ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
 
 ## What changed — P5 M3 (Stage 3 · Prefill vs decode, blueprint §6 Tab 2.3)
 
@@ -11,7 +13,7 @@
 | `test/ui.test.mjs` | +6 P5 M3 blocks: `prefillDecodeView` on a fast config (engine prompt tokens + tok/s + TTFT-derived prefill, speedup 1) and a slow offloaded one (low tok/s, long drip, ×N compression labelled); the prefill half reports the engine's prompt-token count ("long" split → 8192) with compute-/bandwidth-bound copy; driving the injected `makeClock()` advances decode tokens 0→256 one-by-one to Done; reduced-motion paints the final 256 instantly without calling raf; a store config change re-renders Stage 3 live (decode tok/s moves, shared subscription). `makePipeDoc` extended with Stage 3 fakes (`pipe-prefill-*`, `pipe-decode-*`, `pipe-phase`, `pipe-drip`, `pipe-drip-label`, `pipe-speed-note`). Final log now "+ P5 M3 Prefill vs decode". **76/76 green** (was 70) |
 | `HANDOFF.md` | This document |
 
-**Verification (P5 M3):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **76/76 green** (was 70) · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level vocab.js import** in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Nothing committed. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`; **css/tabs.css NOT touched this milestone** (the pre-existing uncommitted M2 reduced-motion rule is unchanged).
+**Verification (P5 M3):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **76/76 green** (was 70) · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level vocab.js import** in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`; **css/tabs.css NOT touched this milestone** (the M2 reduced-motion rule is unchanged).
 
 ## What changed — P5 M2 (Stage 2 · Model load, blueprint §6 Tab 2.2)
 
@@ -23,7 +25,7 @@
 | `test/ui.test.mjs` | +5 P5 M2 blocks: `modelLoadView` fitting (8B/RTX 3090: 5.5 GB of 24 GB, state ok, segment math matches membarView); `modelLoadView` noFit (405B on 16 GB VRAM + 32 GB RAM: pct ≥1, state fail, “doesn't fit” caption); `loadCaption` offload (70B: names VRAM + RAM split); store binding (24 GB → 12 GB VRAM GPU swap re-renders the caption live via `store.setConfig`); `destroy()` unsubscribes (no further re-renders). `makePipeDoc` extended with `pipe-loadbar`/`pipe-load-caption`/`pipe-load-layers` fakes. Final log now “+ P5 M2 Model load”. **70/70 green** (was 65) |
 | `HANDOFF.md` | This document |
 
-**Verification (P5 M2):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **70/70 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms the only top-level import in `pipeline.js` is `./lab.js` — **no top-level vocab.js import** (still the memoised dynamic `import()` inside `loadVocabModule`). Nothing committed. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, `js/app.js`, or `test/engine.test.mjs`.
+**Verification (P5 M2):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **70/70 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms the only top-level import in `pipeline.js` is `./lab.js` — **no top-level vocab.js import** (still the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, `js/app.js`, or `test/engine.test.mjs`.
 
 ## What changed — P5 M1 tokenizer rewrite (real Qwen3 vocab subset)
 
@@ -38,7 +40,7 @@ The owner rejected the original FNV-hash / regex tokenizer (it emitted every wor
 | `test/ui.test.mjs` | Dropped the `tokenId`/old `tokenize` tests; rewrote to `tokenizeWith(VOCAB, …)` (VOCAB imported directly from `js/data/vocab.js`). New checks: "Antidisestablishmentarianism" → **more than 3** tokens (6); digit run "936" → separate digit tokens; " world" → **ONE token, id 1814**; empty string → no tokens. DOM chip tests now `await api.pending` (async lazy load). Final log updated. **65/65 green** (was 62) |
 | `HANDOFF.md` | This document |
 
-**Verification (tokenizer rewrite):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **65/65 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level static import** of `vocab.js` in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Nothing committed. Zero changes to `js/data/*` (vocab.js only read), `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`.
+**Verification (tokenizer rewrite):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **65/65 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level static import** of `vocab.js` in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*` (vocab.js only read), `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`.
 
 Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. Git repo root is `/home/paul/Documents/GitHub/make`; if a new session gets "No permission to write", re-request via `request_read_write_access`.
 
@@ -72,6 +74,25 @@ Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×
 
 **Verification:** `node --check js/tabs/lab.js` OK · `test/ui.test.mjs` **56/56 green** (was 52) · `test/engine.test.mjs` **62/62 unchanged**. Commit: `v100 P6 M4: concurrency + offload teaching moments`.
 
+## Bug-fix pass (2026-09-04, commit `f21797b`) — what changed and why it matters
+
+Owner reported: *"Qwen tells me to try it out, but nothing happens on page when I use any links on page."* Diagnosed by serving the site over HTTP and reading the browser console. **This was NOT the P3-style false alarm** logged in `blueprint.md` (2026-09-02, "none of the links work" → correctly closed as placeholder panels). This time the page was genuinely dead.
+
+| # | File | Defect | Fix |
+|---|---|---|---|
+| 1 | `js/app.js` | **Fatal TDZ — killed 100 % of page JS.** `const defaultDoc` / `defaultHash` sat on the last two lines of the module; the auto-bootstrap `initApp()` reaches them via `initRouter({ doc = defaultDoc() })` default params. `const` isn't hoisted → `Uncaught ReferenceError: Cannot access 'defaultDoc' before initialization`. Router, tracker, Home and Lab never wired up. | Both declarations moved directly under the imports (now lines 18–19). |
+| 2 | `js/engine/perf.js` | **TFLOPS/FLOPs unit error — every TTFT 1e12 too large.** `flopsPerToken` is raw FLOPs; `tflopsFp32Dense` / `prefillTflopsEff` / `unifiedPrefillTflopsEstimate` are **tera**FLOPS. Default rig printed `1534082397003.85 s`. | `× 1e12` applied where the effective throughput is derived; locals renamed `tflopsEff`/`gpuTflopsEff`/`cpuTflopsEff` → `flopsEff`/`gpuFlopsEff`/`cpuFlopsEff` so names match units. Line 190 `prefillTflopsEff` **deliberately untouched** — it divides by `1e12` assuming `ttftS` is correct, so it self-corrected. Do **not** double-correct it. |
+| 3 | `index.html` | Literal two-character `\n` escape between spark spans #5 and #6 inside `#explorer-celebrate`, rendering as visible text beside the theme toggle. | Replaced with a real newline. Only occurrence in the tree (verified by grep). |
+
+**On the "do not modify" rule for `js/engine/perf.js`:** fix #2 is a restored **unit conversion**, not a formula change — the §5.4 rule ("never change formula shape, calibrate constants only") is intact. Decode-path anchors are untouched; `test/engine.test.mjs` remains **62/62 green**. TTFT was never anchored by any test, which is exactly why a 1e12 error survived four milestones.
+
+**Live verification after the fixes** (served over HTTP — ES modules fail on `file://`): console clean · `#/lab` routes and paints · printouts `145.3 tok/s · 1.63 s · 415 W · ¥0.516 · $0.077 · 80B` · controls two-way live (128K ctx → 36.9 tok/s, caption `4.4 GB weights + 17.2 GB KV of 24 GB VRAM`) · Run Inference completes 256/256 tokens, 256 chips, gauge 36.9, `×1.0 time-compressed`. Hand-check of the new TTFT: 2048 × 1.6e10 ÷ (35.6 × 0.6 × 1e12) + 0.1 = **1.63 s**. ✅
+
+**Two test gaps left OPEN — close these before P6 sign-off:**
+
+1. **Nothing ever calls `initApp()`.** `test/ui.test.mjs` dependency-injects `doc` into every module, so the bootstrap path has zero coverage — that is precisely how a fatal error shipped with 56/56 green. Add a test that runs `initApp()` against a full-document fixture and asserts it doesn't throw.
+2. **No absolute-magnitude assertion on TTFT.** Existing checks only assert `ttftMs ≈ ttftMsBase × B` (relative) and `ttftMsBase > 100` (a floor) — a 1e12 error satisfies both. Add a plausible-range check for the default config (≈ 1.6 s).
+
 ## Agent-decided, NOT yet owner-approved (ships with P6 sign-off review)
 
 - Placement of the three teaching rows: total-throughput row + TTFT queueing note in the printouts rail; offload sentence under the memory caption.
@@ -89,16 +110,19 @@ Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×
 
 ## Next steps (in order)
 
-1. **Owner reviews P5 M1 + M2 + M3 (all uncommitted)** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html#/how`. Eyeball: 5 horizontal glass cards; Stage 1 prefilled with “Hello, world!” → brief “loading vocabulary…” then 4 chips with **real Qwen3 ids** (“ world” = 1814); typing re-renders live; empty input clears; real-vocab-subset note (30,747 of 248,320 tokens; subset + greedy-longest-first limits) visible. **Stage 2:** memory bar pours in on load (instant under prefers-reduced-motion); caption shows real GB used vs available from the engine. **Stage 3 (the core lesson):** the two-speed contrast — on load the drip animates: a brief “Prefill — one fast pass over the N-token prompt…” beat, then decode chips (`.sim-conveyor`) trickle in one-by-one to 256; the two columns show the prefill gulp (prompt-token count + TTFT, compute-bound) vs the decode drip (engine tok/s + per-token ms, bandwidth-bound); the run line labels the real time + any ×N compression. Change hardware in the Lab (e.g. RTX 3060 12 GB + 70B offload → both halves slow down live, compression label appears) and Stage 3 re-renders on the same subscription as Stage 2. Confirm Home/Lab do **not** load the 381 KB vocab. Review the **uncommitted** diff (owner asked for no commit).
-2. **Owner sign-off P5 M1+M2+M3 → P5 M4 (KV cache growth stage)** — blueprint §6 Tab 2.4: a bar that fills as context grows, with a live GB readout from the engine's §5 KV formulas for the current model/context window. Then M5 sampling (temperature/top-p + next-token probability bars).
-3. Owner reviews P6 in light + dark (unchanged): concurrency ×4 → total row + TTFT note; RTX 3060 + DDR4 + 70B stop → offload sentence under the memory caption.
+1. **Owner reviews P5 M1 + M2 + M3 (committed, awaiting review)** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html#/how`. Eyeball: 5 horizontal glass cards; Stage 1 prefilled with “Hello, world!” → brief “loading vocabulary…” then 4 chips with **real Qwen3 ids** (“ world” = 1814); typing re-renders live; empty input clears; real-vocab-subset note (30,747 of 248,320 tokens; subset + greedy-longest-first limits) visible. **Stage 2:** memory bar pours in on load (instant under prefers-reduced-motion); caption shows real GB used vs available from the engine. **Stage 3 (the core lesson):** the two-speed contrast — on load the drip animates: a brief “Prefill — one fast pass over the N-token prompt…” beat, then decode chips (`.sim-conveyor`) trickle in one-by-one to 256; the two columns show the prefill gulp (prompt-token count + TTFT, compute-bound) vs the decode drip (engine tok/s + per-token ms, bandwidth-bound); the run line labels the real time + any ×N compression. Change hardware in the Lab (e.g. RTX 3060 12 GB + 70B offload → both halves slow down live, compression label appears) and Stage 3 re-renders on the same subscription as Stage 2. Confirm Home/Lab do **not** load the 381 KB vocab. Review the diff in `85780dc`.
+2. **Owner reviews P6 in light + dark** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html` and `#dark`. Eyeball the new rows: concurrency ×4 → total row + TTFT note appear; RTX 3060 + DDR4 + 70B stop → offload sentence appears under the memory caption.
+3. **Close the two open test gaps** from the bug-fix pass (`initApp()` bootstrap test · absolute TTFT range assertion) — cheap, and both guard defects that already shipped once.
 4. **Owner sign-off** on P6 (incl. the agent-decided placement/copy list above) → flip blueprint §11 P6 row to SIGNED OFF with date.
-5. Then P7 Compare tab / P8 polish per blueprint §11 order.
+5. **Next build step: P5 M4 (KV cache growth stage)** — blueprint §6 Tab 2.4: a bar that fills as context grows, with a live GB readout from the engine's §5 KV formulas for the current model/context window. Then M5 sampling (temperature/top-p + next-token probability bars).
+6. Then P7 Compare tab / P8 polish per blueprint §11 order.
 
 ## Observations / gotchas
 
 - `search_file_line` tool returned false "No matches found" on `test/ui.test.mjs` and `HANDOFF.md` for strings that demonstrably exist — **don't trust it there; read files directly** (shell grep is fine).
 - No headless browser on this box; ES modules fail over `file://`, always serve HTTP :8077.
+- **"Links don't work" has now had one false alarm (P3: placeholder panels) and one real cause (2026-09-04: fatal TDZ in `app.js`). Never close it from reasoning alone — serve the page and READ THE BROWSER CONSOLE first.** Green tests prove nothing about the bootstrap path.
+- `requestAnimationFrame` does not fire in some embedded/hidden preview panes, so Run Inference will look frozen there. That is a harness artifact, not a bug — verify the sim via `initSim({raf, now})` DI, or use a real browser window.
 - Store says `'pipeline'`, router/hash says `'how'` — always via `TAB_TO_STORE`. Button class is `.btn--primary`. Store appends `visitedTabs` in visit order (compare as sets).
 - Engine facts used by M4 copy: RTX 3060 = 360 GB/s, DDR4-3200 = 51.2 GB/s (`hardware.js`); `decodeTpsTotal = perRequest × B` exactly; `ttftMs = ttftMsBase × B` (prefills serialized — labeled assumption in perf.js header).
 - AIO configs can never be offload/cpuOnly (unified pool → gpu or noFit), so the offload note is rig-only by construction.
@@ -107,13 +131,15 @@ Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×
 
 | File | Status / significance |
 |---|---|
-| `js/data/*` (incl. new `vocab.js`), `js/engine/perf.js`+`cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green — **do not modify** (M4 deliberately didn't). `js/data/vocab.js` (new, ~381 KB, 30,747-entry real Qwen3 token subset) is **read-only** — pipeline.js lazy-imports it, tests read `VOCAB` directly |
+| `js/data/*` (incl. new `vocab.js`), `js/engine/cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green — **do not modify**. `vocab.js` is a generated 30,747-entry Qwen3 vocabulary subset (381 KB) — regenerate, don't hand-edit |
+| `js/engine/perf.js` | ✅ P2 signed off, 62/62 green — **do not modify except**: prefill TFLOPS→FLOPs unit fix landed 2026-09-04 (`f21797b`, see bug-fix pass). Formula shape unchanged. |
 | `css/tokens.css`, `base.css`, `tabs.css` | ✅ P3/P4 signed off; `.is-hidden` + `.ctl-note` utilities already exist (used by M4 rows) |
-| `js/app.js`, `js/theme.js`, `js/motion/scroll.js`, `js/tabs/home.js` | ✅ built; `app.js` now also wires `initPipeline({store})` (P5 M1, uncommitted) |
+| `js/app.js` | ✅ built; **fatal TDZ fixed 2026-09-04** — `defaultDoc`/`defaultHash` must stay ABOVE `initApp()`, never at the file's end; also wires `initPipeline({store})` (P5 M1) |
+| `js/theme.js`, `js/motion/scroll.js`, `js/tabs/home.js` | ✅ built, unchanged |
 | `js/tabs/lab.js` | ✅ **M1–M4 complete** (624 lines); M4 helpers exported for tests |
-| `js/tabs/pipeline.js` | 🆕 **P5 M1+M2+M3 (uncommitted, REWORKED)** — `tokenizeWith(vocab, text)` (pure, greedy longest-first) + async `tokenize(text)` (lazy memoised `import('../data/vocab.js')`) + **P5 M2: `modelLoadView(perf)` / `loadCaption(perf, config)`** (Stage 2 memory bar + GB caption, reuses lab.js `membarView`) + **P5 M3: `prefillDecodeView(perf)` / `prefillCaption` / `decodeCaption` / `speedNote`** (Stage 3 two-speed contrast, reuses lab.js `simPlan`/`simPhase`/`tokensAt`/`stageText`) + `runStage3Drip` (DI raf/now, reduced-motion instant) + `initPipeline({doc,store,raf,now,reduced})` factory (ONE store subscription drives Stages 2+3, `api.pending`, `api.destroy()` cancels drip + unsubs); M4–M5 seam ready |
-| `index.html` | ✅ Lab panel + 3 M4 elements; **How tab = P5 M1 shell + Stage 1 live + Stage 2 (Model load) live + Stage 3 (Prefill vs decode) live** (uncommitted); Stages 4–5 still placeholder; Compare still "Phase 7 lands here" |
-| `test/ui.test.mjs` | ✅ **76 checks green** (was 70; +6 P5 M3 blocks: prefillDecodeView fast/slow, prefill-half engine prompt-token count, clock-driven drip 0→256, reduced-motion instant, store-change re-render; uncommitted); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()`, `makePipeDoc()` (now incl. pipe-loadbar/-caption/-layers + pipe-prefill/-decode/-phase/-drip fakes) patterns in-file |
-| `blueprint.md` | ✅ §11 P6 row + verification log updated for M1–M4; awaiting sign-off flip |
+| `js/tabs/pipeline.js` | 🆕 **P5 M1+M2+M3 (committed `85780dc`, REWORKED)** — `tokenizeWith(vocab, text)` (pure, greedy longest-first) + async `tokenize(text)` (lazy memoised `import('../data/vocab.js')`) + **P5 M2: `modelLoadView(perf)` / `loadCaption(perf, config)`** (Stage 2 memory bar + GB caption, reuses lab.js `membarView`) + **P5 M3: `prefillDecodeView(perf)` / `prefillCaption` / `decodeCaption` / `speedNote`** (Stage 3 two-speed contrast, reuses lab.js `simPlan`/`simPhase`/`tokensAt`/`stageText`) + `runStage3Drip` (DI raf/now, reduced-motion instant) + `initPipeline({doc,store,raf,now,reduced})` factory (ONE store subscription drives Stages 2+3, `api.pending`, `api.destroy()` cancels drip + unsubs); M4–M5 seam ready |
+| `index.html` | ✅ Lab panel + 3 M4 elements; **How tab = P5 M1 shell + Stage 1 live + Stage 2 (Model load) live + Stage 3 (Prefill vs decode) live**; Stages 4–5 still placeholder; Compare still "Phase 7 lands here"; stray literal `\n` in `#explorer-celebrate` removed 2026-09-04 |
+| `test/ui.test.mjs` | ✅ **76 checks green** (was 70; +6 P5 M3 blocks: prefillDecodeView fast/slow, prefill-half engine prompt-token count, clock-driven drip 0→256, reduced-motion instant, store-change re-render); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()`, `makePipeDoc()` (now incl. pipe-loadbar/-caption/-layers + pipe-prefill/-decode/-phase/-drip fakes) patterns in-file. ⚠ **Two known test gaps remain** from the bug-fix pass: nothing calls `initApp()` against a full-document fixture, and no test pins TTFT to an absolute magnitude |
+| `blueprint.md` | ✅ §11 P6 row + verification log updated for M1–M4 **and the 2026-09-04 bug-fix pass**; awaiting sign-off flip |
 | `HANDOFF.md` | ✅ this document — replace on disk when writing it |
 | `dev/design-system.html` | P3 acceptance harness (signed off); unchanged |
