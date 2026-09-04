@@ -414,7 +414,9 @@
             <h4>Printouts</h4>
 
             <div class="printout" id="po-tps"><span class="k">Decode speed (per request)</span><span class="v">—</span></div>
+            <div class="printout is-hidden" id="po-tps-total"><span class="k">Total throughput (all requests)</span><span class="v">—</span></div>
             <div class="printout" id="po-ttft"><span class="k">Time to first token</span><span class="v">—</span></div>
+            <p class="ctl-note is-hidden" id="po-ttft-note"></p>
             <div class="printout" id="po-power"><span class="k">Power draw (load)</span><span class="v">—</span></div>
             <div class="printout" id="po-cost"><span class="k">Cost / M output tokens</span><span class="v">—</span></div>
 
@@ -425,6 +427,7 @@
                 <span class="seg seg-gpu" style="--w: 0%"></span><span class="seg seg-cpu" style="--w: 0%"></span>
               </div>
               <p class="ctl-note" id="lab-mem-caption">—</p>
+              <p class="ctl-note is-hidden" id="lab-offload-note"></p>
             </div>
 
             <!-- Fit state chip + doesn’t-fit diagnosis (P6 M2) -->

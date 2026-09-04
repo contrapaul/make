@@ -7,9 +7,11 @@
      - quantization segmented control (+ explainer card slot — M2 fills it)
      - context window · prompt split · concurrency toggles
 
-   P6 M2 (next): printouts rail, memory bar states, doesn't-fit diagnosis,
+   P6 M2 (done): printouts rail, memory bar states, doesn't-fit diagnosis,
                  pulse-on-change, quant explainer content.
-   P6 M3/M4: Run Inference simulation + concurrency/offload teaching moments.
+   P6 M3 (done): Run Inference simulation — load → prefill → decode at the engine's rate.
+   P6 M4 (done): concurrency teaching moment (per-request vs total throughput, TTFT ×B
+                 queueing) + offload teaching moment (one-sentence why).
 
    The store is the single source of truth — this module never stores config
    itself; it renders `state.config` and calls `store.setConfig(partial)`.
@@ -36,9 +38,13 @@
      #lab-run (data-run-state) · #lab-sim-stage · #lab-sim-loadbar (.seg)
      #lab-conveyor (chips appended as tokens emit) · #lab-gauge (--val) · #lab-tps-value
      #lab-progress-bar (.seg) · #lab-progress-label · #lab-run-meta
+
+   M4 (teaching moments):
+     #po-tps-total (row, hidden at B=1) · #po-ttft-note (queueing note, hidden at B=1)
+     #lab-offload-note (one-sentence why; hidden on the fast path and noFit)
    ============================================================ */
 
-import { ALL_IN_ONES, RAM_TIERS } from '../data/hardware.js';
+import { ALL_IN_ONES, GPUS, RAM_TIERS } from '../data/hardware.js';
 import { MODEL_STOPS } from '../data/models.js';
 import { QUANT_LEVELS } from '../data/quantization.js';
 import { pulse } from '../motion/scroll.js';
@@ -188,6 +194,26 @@ export function renderPrintouts(doc, state, { pulse: doPulse = true } = {}) {
   setPrintout(doc, 'po-cost', perf ? fmtCost(cost?.costRMBPerMOut, cost?.costUSDPerMOut) : '—', doPulse);
   setPrintout(doc, 'po-maxfit', perf?.maxModelFits ? `${perf.maxModelFits.label}` : 'none at this precision/ctx', doPulse);
 
+  // M4 teaching moments — each row appears only when it teaches something.
+  const conc = concTeaching(perf, state.config);
+  if (conc) setPrintout(doc, 'po-tps-total', conc.total, doPulse);
+  const tpsTotalRow = doc.getElementById?.('po-tps-total');
+  if (tpsTotalRow && tpsTotalRow.classList) tpsTotalRow.classList.toggle('is-hidden', !conc);
+  const ttftNoteEl = doc.getElementById?.('po-ttft-note');
+  if (ttftNoteEl) {
+    const noteText = conc ? conc.ttftNote : '';
+    if (ttftNoteEl.textContent !== noteText) ttftNoteEl.textContent = noteText;
+    if (ttftNoteEl.classList) ttftNoteEl.classList.toggle('is-hidden', !conc);
+  }
+
+  const off = offloadNote(perf, state.config);
+  const offEl = doc.getElementById?.('lab-offload-note');
+  if (offEl) {
+    const offText = off ?? '';
+    if (offEl.textContent !== offText) offEl.textContent = offText;
+    if (offEl.classList) offEl.classList.toggle('is-hidden', !off);
+  }
+
   // Memory fill bar (VRAM/RAM split) + state border
   const membar = doc.getElementById?.('lab-membar');
   if (membar && perf) {
@@ -251,6 +277,35 @@ export function memoryCaption(perf, config) {
     return `Needs ~${(perf.weightsGB + perf.kvTotalGB).toFixed(0)} GB — more than this rig offers`;
   }
   return `${w} GB weights + ${kv} GB KV of ${perf.gpuUsableGB.toFixed(0)} GB VRAM`;
+}
+
+/* ---------------- M4 · teaching moments (pure) ---------------- */
+
+/** Pure: concurrency teaching moment — null when there is nothing to teach
+ *  (concurrency 1, or no perf). The engine already computes both rates and the
+ *  queued TTFT (P2 signed off); this only shapes the student-facing copy. */
+export function concTeaching(perf, config) {
+  const B = Math.max(1, Number(config?.concurrency) || 1);
+  if (!perf || perf.decodeTpsPerRequest == null || B < 2) return null;
+  return {
+    total: fmtTps(perf.decodeTpsTotal),
+    perReq: fmtTps(perf.decodeTpsPerRequest),
+    ttftNote: `×${B} queueing — prefills are serialized, so the last request waits ~${fmtMs(perf.ttftMs)} (one alone ≈ ${fmtMs(perf.ttftMsBase)})`,
+  };
+}
+
+/** Pure: offload teaching moment — one sentence on why the stream slows down.
+ *  null when everything is on the fast path, or doesn't fit at all. */
+export function offloadNote(perf, config) {
+  if (!perf || (perf.fitsState !== 'offload' && perf.fitsState !== 'cpuOnly')) return null;
+  const gpu = GPUS.find((g) => g.id === config?.gpuId);
+  const ram = RAM_TIERS.find((t) => t.id === config?.ramTierId);
+  const bwGpu = gpu ? `${gpu.bandwidthGBs} GB/s` : 'GPU bandwidth';
+  const bwRam = ram ? `${ram.bandwidthGBs} GB/s` : 'RAM bandwidth';
+  if (perf.fitsState === 'cpuOnly') {
+    return `Why it's slow: every layer lives in system RAM (${bwRam}) — far below ${bwGpu}, so each token waits on the memory bus.`;
+  }
+  return `Why it's slow: ${perf.layersOnCpu} of ${perf.totalLayers} layers live in system RAM (${bwRam}), and every token must wait for them instead of the GPU's ${bwGpu}.`;
 }
 
 /* ---------------- M3 · Run Inference simulation --------------
@@ -388,8 +443,17 @@ export function initSim({ doc = defaultDoc(), store, raf = defaultRaf(), now = d
     running = false;
     setRunState('idle');
     const compressed = plan.speedup > 1 ? ` · ×${plan.speedup.toFixed(1)} time-compressed` : '';
+    // M4: at concurrency >1, name both rates — per-request vs total (the divergence).
+    let concLine = '';
+    const cfgB = Math.max(1, Number(store.getState()?.config?.concurrency) || 1);
+    if (cfgB > 1) {
+      const perfNow = store.getState()?.derived?.perf ?? null;
+      if (perfNow && perfNow.decodeTpsTotal != null) {
+        concLine = ` · ${cfgB} requests at ${fmtTps(perfNow.decodeTpsPerRequest)} each ≈ ${fmtTps(perfNow.decodeTpsTotal)} total`;
+      }
+    }
     if (metaEl) metaEl.textContent =
-      `Done — ${plan.targetTokens} tokens in ${plan.realDurationS.toFixed(1)} s real time${compressed}. The gauge shows the engine's estimated rate for this config.`;
+      `Done — ${plan.targetTokens} tokens${cfgB > 1 ? ' per request' : ''} in ${plan.realDurationS.toFixed(1)} s real time${compressed}${concLine}. The gauge shows the engine's estimated rate for this config.`;
   }
 
   function start() {

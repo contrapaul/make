@@ -1,118 +1,64 @@
-# v100 Handoff — Phase 6 (Hardware Lab), M3 of 4
+# v100 Handoff — P6 COMPLETE (M1–M4), awaiting owner sign-off
 
-**Date:** 2026-09-03 · **Status: P4 SIGNED OFF by owner ("this site is looking ridiculously good"); JSON error CLOSED as external.** Owner picked **P6 (Hardware Lab)** over P5. **P6 M1+M2+M3 COMPLETE**: control rail two-way bound to the store; printouts live-bound to the engine; Run Inference simulation (load → prefill → decode at the engine's exact rate, gauge + 256-token progress, labeled time-compression ≤8 s budget, reduced-motion instant path); `test/ui.test.mjs` **52/52 green** · `test/engine.test.mjs` **62/62 green**; committed. Next: **M4 concurrency/offload teaching moments + final verification.**
+**Date:** 2026-09-04 · **Status: M4 DONE + committed.** Code, tests, docs all landed; both suites green. Supersedes the prior "M4 ~70% in progress" handoff (P1–P5 context unchanged).
 
-Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. This file supersedes the session-9 handoff and completes its P4 kickoff + build.
+Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. Git repo root is `/home/paul/Documents/GitHub/make`; if a new session gets "No permission to write", re-request via `request_read_write_access`.
 
----
+## What M4 was (owner's ask)
 
-## The task right now (owner's latest instructions)
+Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×B queueing) + offload teaching moment (visible slowdown + one-sentence why), then full verification. Owner constraint: small bounded job only — GPU-fan noise around class time. It stayed small: **zero engine changes**, tests + docs + commit.
 
-Owner: *"Proceed with P6."* (after reviewing state; P4 was the last signed-off phase). Building **Phase 6 — Hardware Lab** per blueprint §6 Tab 3 in four sub-milestones, each tests-green + handoff-updated + committed:
-
-| # | Scope | Status |
-|---|---|---|
-| **M1** | Lab shell (3-rail layout) + control rail bound two-way to the store: platform mode/AIO/GPU×count/RAM tier+capacity/CPU, model slider w/ anchor readout, quant segmented (+explainer slot), context/prompt-split/concurrency toggles | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 40/40 (was 31) · engine 62/62 · committed |
-| **M2** | Printouts rail: decode speed, TTFT, power, ¥/$ per M tokens, memory-fill bar w/ VRAM/RAM split + ok/warn/fail states, fit-state chip, doesn't-fit diagnosis (suggestions from engine), pulse-on-change (§8), quant explainer card content | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 45/45 · engine 62/62 · committed |
-| **M3** | Run Inference simulation: idle→charging→running state machine on `.run-btn`, load bar → prefill beat → token conveyor at the engine's rate (displayed tok/s = engine value, ±5% acceptance by construction), gauge + 256-token progress, labeled time-compression for slow configs, reduced-motion path | ✅ DONE 2026-09-03 — `test/ui.test.mjs` 52/52 · engine 62/62 · committed |
-| **M4** | Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×B queueing) + offload teaching moment (visible slowdown + one-sentence why), then full verification: both suites, `node --check`, live light+dark review, blueprint §11 P6 row flipped + verification log | ⏳ NEXT |
-
-**M2 agent-decided (labeled in code):** warn threshold = any pool ≥90 % full · noFit bar reads full + fail border with demand caption · first paint sets printout values without pulsing (§8 pulses only on actual changes) · explainer card rendered via escaped innerHTML from the signed-off `quantization.js` data (no user input → safe).
-
-**M3 agent-decided (labeled in code):** real-time budget 8 s — slower configs compress ×N and say so on screen (blueprint Tab 4 "time-compressed, labeled" precedent) · load phase = illustrative weightsGB/20 clamped [0.5, 2] s (choreography, not physics) · prefill is a fixed 0.8 s virtual beat; true TTFT lives in the printouts · gauge full at ≥200 tok/s (label carries exact value) · click mid-run = restart · any store change mid-run cancels the run · reduced motion → instant final state, no loop.
-
-**Agent-decided so far in P6 (labeled in code):** first AIO switch seeds `platformId` with the first AIO (`mba-m5`) since DEFAULT_CONFIG has none · RAM tier switch clamps a stranded capacity to nearest offered value (192→128 on DDR4) and hides tier-exclusive chips · slider fill refresh via guarded `input` dispatch (no event loops; P3's `bindRangeFill` listener does the work).
-
-## ✅ The JSON error (owner-reported) — CLOSED 2026-09-02
-
-**RESOLVED:** owner supplied the exact message — **"Unterminated string in JSON at position 347 (line 1 column 348)"** — and confirmed it appeared **in harness stream/output, not on any v100 page**, with no file reference. That matches the audit below: there is no code path in v100 that throws a JSON error. **Closed as external to v100; owner said "no worries."**
-
-Session-10 audit (kept for the record):
-
-- **The v100 codebase cannot produce an uncaught JSON error.** Verified by full-project search + reading every JSON touchpoint:
-  - `js/state/store.js` is the ONLY runtime JSON user. `loadPersisted()` wraps `JSON.parse` in try/catch → corrupt state falls back to defaults (a green test proves exactly this path); `persist()` wraps `JSON.stringify` in try/catch. Neither can throw.
-  - Zero `fetch()` calls anywhere; no `.json` assets are loaded by the site; `package.json` is valid JSON and browsers ignore it anyway.
-- Both suites were re-run green at session start (21/21 + 62/62) **before** any P4 code was written, so the error predates this build and isn't caused by it.
-- **Conclusion: the error almost certainly came from OUTSIDE the v100 site** — most likely the Bionic/LM Studio app UI itself (attachment/session payload), a browser extension, or another tab.
-
-**Status: closed — no further action.** If it recurs, note where it appears (app UI vs browser console); per the audit above there is no code path in v100 that throws a JSON error.
-
-## What was built this session (P4 — Home tab)
+## What landed this session (all committed)
 
 | File | Change |
 |---|---|
-| `css/tabs.css` **NEW** (~200 lines) | Per-tab layout/motion per blueprint §2: full-viewport hero, floating glass panels (`translate`-property animation, hidden <900 px), pure-CSS token-glyph stream (two identical halves → seamless −50 % translate; `mask-image` edge fade), 3-beat story grid, bandwidth bars, local/cloud fork cards, explore grid + tab-card link styling. All colors via tokens; own reduced-motion block. |
-| `js/tabs/home.js` **NEW** | Hero "Start exploring" CTA → smooth-scroll to `#story` (reduced-motion → instant). DI-friendly for Node tests. |
-| `js/app.js` | **+ exploration tracker (blueprint §4)**: `TAB_TO_STORE` mapping (`how`↔`pipeline`), pure `trackerView()`/`unseenRouterTabs()`, `initTracker({doc, storage, store})` rendering nav dots + Home tab-card dots + progress ring (`--progress`, label n/4, aria-label) + Explorer badge; one-time celebration (`.is-once` restart pattern from the P3 harness) gated on localStorage flag **`v100-celebrated`** (agent-decided: separate key — signed-off P2 persisted shape untouched). `initRouter` now also returns `initial` (additive); `initApp` marks the load-time tab visited + wires hashchange → `markVisited`. |
-| `index.html` | Home placeholder **replaced**: hero (eyebrow/H1/sub/CTA pair incl. "Skip to the Lab" ghost link) + 3 story beats (weights table · bandwidth bars 936 vs 96 GB/s · local/cloud fork at ¥0.65/kWh) + explore grid (ring `#explore-ring` + 3 tab cards with dots). Celebrate spans added next to `#explorer-badge`. `tabs.css` linked after base.css. |
-| `test/ui.test.mjs` | **+10 checks → 31/31 green**: mapping, pure view fns (incl. foreign-id rejection), fresh-visitor render state, dot hiding + ring 1/4 on visit, no burst before 4/4, all-4 → badge+burst+flag, persistence round-trip through the real P2 store (`createStore({storage})`), one-time celebration across fresh instances (no re-fire on load or later updates), hero CTA scroll. |
+| `js/tabs/lab.js` (624 lines) | M4 code: exported pure helpers `concTeaching(perf, config)` → null at B=1/no-perf, else `{total, perReq, ttftNote}`; `offloadNote(perf, config)` → null unless offload/cpuOnly, else one sentence naming real bandwidths + layer split; `renderPrintouts()` renders all three M4 rows (value set only when teaching, `.is-hidden` toggled, text cleared otherwise); `initSim.finish()` appends at B>1: "…tokens **per request** … · N requests at X tok/s each ≈ Y total" |
+| `index.html` (478 lines) | Printouts rail: `<div class="printout is-hidden" id="po-tps-total">`; `<p class="ctl-note is-hidden" id="po-ttft-note">`; memblock: `<p class="ctl-note is-hidden" id="lab-offload-note">` after #lab-mem-caption |
+| `test/ui.test.mjs` (988 lines) | +4 M4 test blocks (concTeaching pure · offloadNote pure · renderPrintouts show/hide lifecycle · run-finish Done line); byId stubs for the 3 new ids; imports extended; final log now "P6 M1–M4 Lab" |
+| `blueprint.md` | Header status: P6 BUILT (M1–M4), awaiting sign-off; Last updated 2026-09-04; §11 P6 row marked built (NOT signed off); new verification-log entry "(P6, 2026-09-03→04)" covering M1–M4 + test counts |
+| `HANDOFF.md` | This document — replaced on disk |
 
-**Test results this session:** `node test/ui.test.mjs` → **31/31 green** · `node test/engine.test.mjs` → **62/62 green** · `node --check` clean on new JS · all assets HTTP 200 on :8077.
+**Verification:** `node --check js/tabs/lab.js` OK · `test/ui.test.mjs` **56/56 green** (was 52) · `test/engine.test.mjs` **62/62 unchanged**. Commit: `v100 P6 M4: concurrency + offload teaching moments`.
 
-## Design decisions — agent-decided this session (labeled in code, NOT yet owner-approved)
+## Agent-decided, NOT yet owner-approved (ships with P6 sign-off review)
 
-1. `TAB_TO_STORE = {home:'home', how:'pipeline', lab:'lab', compare:'compare'}` in app.js — URLs keep `#/how`; never compare raw ids across the two systems.
-2. One-time celebration flag = separate localStorage key **`v100-celebrated`** owned by the tracker (P2 store shape is signed off; don't touch it).
-3. "Start exploring" CTA = `<button>` + JS smooth-scroll to `#story` (NOT a hash link) so router URLs stay clean.
-4. Token stream: pure-CSS keyframe loop, duplicated track for seamless −50 % translate, edge fade via `mask-image`; disabled under `prefers-reduced-motion`.
-5. Floating hero panels: decorative glass cards, `aria-hidden`, animate the individual `translate` property (avoids transform clashes), hidden below ~900 px.
-6. Beat copy as shipped: "A model is billions of numbers" (Qwen3-4B ≈ 4.2×10⁹) · "Speed is set by memory bandwidth" (RTX 3090 936 GB/s vs DDR5-6000 96 GB/s, blueprint §3.1) · "The fork: local or cloud?" (Shenzhen ¥0.65/kWh default vs $/M tokens).
-7. A deep-link load counts as a visit (`initApp` marks `router.initial`) — so first-time visitors land at ring 1/4 with Home's dot already cleared; the other three tabs show dots in nav AND on the explore cards.
+- Placement of the three teaching rows: total-throughput row + TTFT queueing note in the printouts rail; offload sentence under the memory caption.
+- Copy wording ("Why it's slow: …"; "×B queueing — prefills are serialized…").
+- Finish-line phrasing "per request" + both rates at B>1.
+- Rows hidden at B=1 / on fast path so they only appear when they teach.
+- (Carried from M1–M3, already labeled in code: TAB_TO_STORE mapping, `v100-celebrated` key, button CTA, token stream, float panels, beat copy, deep-link counts as visit; first AIO seeds platformId, RAM-tier capacity clamp, 8 s sim budget + labeled compression, load = weightsGB/20 clamped [0.5,2] s, prefill 0.8 s virtual beat, gauge full ≥200 tok/s, click mid-run restarts, store change cancels run, reduced-motion instant path; warn threshold any pool ≥90 %.)
 
-## Owner review checklist — COMPLETED 2026-09-02 ("this site is looking ridiculously good")
+## Owner-approved (do not revisit)
 
-Light: `http://localhost:8077/index.html` · Dark: `http://localhost:8077/index.html#dark`
+- NEVER change formula shape — calibrate constants only (§5.4 rule). M4 added zero engine changes — it only surfaces P2-signed-off values (`decodeTpsTotal`, `ttftMs`/`ttftMsBase`).
+- Audience: high school students + educators; English only; must pass muster with seasoned local-AI enthusiasts (labeled assumptions, footnoted sources); desktop-first; glassmorphism light+dark; zero image/video/font-file assets; plain static hosting; Shenzhen ¥0.65/kWh @ FX 6.72; local cost = hardware + electricity ONLY; no custom hardware entry; semantic HTML only.
+- P1–P4 signed off (2026-09-02); owner picked P6 over P5; P6 M1+M2+M3 built 2026-09-03, committed (`e67fdde`, `50f4bbf`, `3e018a5`).
+- Persist work to disk early/often (context limits have killed sessions before); keep HANDOFF.md current and **verify writes landed**. Owner is noise-sensitive around class time: prefer small, bounded agent runs.
 
-- **§6 acceptance:** first-time visitor reaches Tab 3 within ~60 s of scrolling (hero → 3 beats → explore grid; "Start exploring" smooth-scrolls); all beats reverse cleanly on scroll-up.
-- **Tracker across tabs (§11 P4 gate):** dots visible on unvisited tabs (nav + cards) → visit How It Works / Lab / Compare and return to Home: dot clears, ring climbs 2/4→3/4→4/4; at 4/4 the Explorer badge appears in nav with a one-time spark burst. Reload → badge persists, **no** re-burst.
-- Hero: floating panels + token stream (both decorative); light+dark contrast on glass chips/bars/cards.
-- "Skip to the Lab" ghost link routes to `#/lab` and marks it visited.
+## Next steps (in order)
 
-## Immediate next steps (in order)
-
-1. ~~Owner reviews per checklist~~ — **DONE 2026-09-02:** "this site is looking ridiculously good."
-2. ~~On sign-off: flip `blueprint.md` + verification log + this handoff~~ — **DONE in session 11** (status line, §11 P4 row → SIGNED OFF, three new verification-log entries incl. JSON-error closure; writes verified by reading back).
-3. ~~Owner picks P5 or P6~~ — **DONE 2026-09-03: owner picked P6.**
-4. ~~**Build P6 M2 (printouts rail)**~~ — **DONE 2026-09-03.**
-5. ~~**Build P6 M3 (Run Inference simulation)**~~ — **DONE 2026-09-03.**
-6. **Build P6 M4 (concurrency + offload teaching moments) + final verification** per the table above.
-7. After P6 sign-off: P5 Pipeline tab, P7 Compare tab, P8 polish (blueprint §11).
-
-## User preferences & constraints (all owner-approved)
-
-- NEVER change formula shape — calibrate constants only (§5.4 rule).
-- Audience: high school students + educators; **English only**; must pass muster with seasoned local-AI enthusiasts (labeled assumptions, footnoted sources); desktop-first; glassmorphism light+dark; zero image/video/font-file assets; plain static hosting; Shenzhen 0.65 RMB/kWh default @ FX 6.72; local cost = hardware + electricity ONLY; no custom hardware entry; semantic HTML only.
-- Persist work to disk early/often (context limits have killed sessions before); keep this handoff current and **verify writes landed**.
-
-## Key decisions — MINE vs OWNER-APPROVED
-
-**Owner-approved:** all constraints above; P1 prices (Taobao listings [H7]); P2 KV-inclusive decode semantics + η=0.85; theme default = `prefers-color-scheme` with manual toggle persisted (§7); **P3 visual sign-off 2026-09-02 ("Looks fantastic")**; "links don't work" accepted as expected at P3 after test proof; proceed to Phase 4.
-
-**Agent-decided (labeled in code):** theme precedence hash > stored > system (pure-system not persisted); `--i` stagger = ordinal among data-reveal siblings; no-JS reveal gating under `html.js`; scroll.js owns §8 micro-interactions; app.js minimal bootstrap; router safe no-op without `.tab-panel`s; gauge label outside masked ring. **P4 (session 10) — SIGNED OFF by owner 2026-09-02 with the phase:** the seven decisions listed above — mapping, celebration key, button-CTA, token stream, float panels, beat copy, deep-link counts as visit.
+1. **Owner reviews P6 in light + dark** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html` and `#dark`. Eyeball the new rows: concurrency ×4 → total row + TTFT note appear; RTX 3060 + DDR4 + 70B stop → offload sentence appears under the memory caption.
+2. **Owner sign-off** on P6 (incl. the agent-decided placement/copy list above) → flip blueprint §11 P6 row to SIGNED OFF with date.
+3. Then P5 Pipeline tab / P7 Compare tab / P8 polish per blueprint §11 order.
 
 ## Observations / gotchas
 
-- **No headless browser on this box** — visual checks via `open_url_in_app_browser` + static server; ES modules fail over `file://`, always serve HTTP.
-- Write access to the project folder is read-only by default in new sessions — re-request if edits are needed (granted again this session).
-- Pre-paint theme snippets duplicate `resolveInitialTheme()` in both HTML files + `js/theme.js` — KEEP-IN-SYNC comments mark them; keep all three in sync.
-- Dark tokens duplicated for no-JS fallback in `tokens.css` — keep both blocks in sync.
-- **Store says `'pipeline'`, router/hash says `'how'`** — always go through `TAB_TO_STORE`; never compare raw ids across the two.
-- Button class is `.btn--primary` (BEM double-dash), not `.btn-primary`.
-- Static server on :8077 may be dead in a new session — restart from project dir before opening pages (`python3 -m http.server 8077 --bind 127.0.0.1`). It was alive this session (all assets 200).
-- Store appends `visitedTabs` **in visit order** (not TAB_IDS order) — compare as a set in tests.
-- Scratchpad progress note: `/home/paul/.lmstudio/scratchpads/wi/progress.md` (stale from session 9; flip to "P4 built, awaiting sign-off" if accessible).
+- `search_file_line` tool returned false "No matches found" on `test/ui.test.mjs` and `HANDOFF.md` for strings that demonstrably exist — **don't trust it there; read files directly** (shell grep is fine).
+- No headless browser on this box; ES modules fail over `file://`, always serve HTTP :8077.
+- Store says `'pipeline'`, router/hash says `'how'` — always via `TAB_TO_STORE`. Button class is `.btn--primary`. Store appends `visitedTabs` in visit order (compare as sets).
+- Engine facts used by M4 copy: RTX 3060 = 360 GB/s, DDR4-3200 = 51.2 GB/s (`hardware.js`); `decodeTpsTotal = perRequest × B` exactly; `ttftMs = ttftMsBase × B` (prefills serialized — labeled assumption in perf.js header).
+- AIO configs can never be offload/cpuOnly (unified pool → gpu or noFit), so the offload note is rig-only by construction.
 
 ## Important files & reference map
 
 | File | Status / significance |
 |---|---|
-| `js/data/*`, `js/engine/perf.js`, `cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green. Store = tracker's state source (`setActiveTab`, `subscribe`, `ui.visitedTabs`) — **do not modify** (signed off) |
-| `css/tokens.css`, `css/base.css` | ✅ P3 signed off — all component primitives live here |
-| `js/theme.js`, `js/motion/scroll.js` | ✅ built, unchanged this session |
-| `js/app.js` | ✅ router + **P4 tracker** (this session); bootstrap wires theme/reveals/router/tracker/home |
-| `index.html` | shell; **Home panel now real content**; nav dots/badge/celebrate slots wired |
-| `css/tabs.css`, `js/tabs/home.js` | ✅ NEW this session — P4 deliverables per blueprint §3 layout |
-| `dev/design-system.html` | P3 acceptance harness (signed off); ring/celebrate markup reference |
-| `test/ui.test.mjs` | **31/31 green** incl. tracker block + home CTA |
-| `blueprint.md` | ✅ flipped session 11: P4 SIGNED OFF + §11 row met + verification log (incl. JSON-error closure) |
-| `HANDOFF.md` (on disk) | ✅ this document — updated session 11: P4 signed off, JSON error closed |
+| `js/data/*`, `js/engine/perf.js`+`cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green — **do not modify** (M4 deliberately didn't) |
+| `css/tokens.css`, `base.css`, `tabs.css` | ✅ P3/P4 signed off; `.is-hidden` + `.ctl-note` utilities already exist (used by M4 rows) |
+| `js/app.js`, `js/theme.js`, `js/motion/scroll.js`, `js/tabs/home.js` | ✅ built, unchanged in M4 |
+| `js/tabs/lab.js` | ✅ **M1–M4 complete** (624 lines); M4 helpers exported for tests |
+| `index.html` | ✅ Lab panel + 3 M4 elements; How/Compare tabs still "Phase 5/7 lands here" placeholders |
+| `test/ui.test.mjs` | ✅ **988 lines, 56 checks green** (incl. 4 M4 blocks); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()` patterns in-file |
+| `blueprint.md` | ✅ §11 P6 row + verification log updated for M1–M4; awaiting sign-off flip |
+| `HANDOFF.md` | ✅ this document — replace on disk when writing it |
+| `dev/design-system.html` | P3 acceptance harness (signed off); unchanged |

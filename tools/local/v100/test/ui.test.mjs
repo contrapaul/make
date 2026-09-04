@@ -21,7 +21,7 @@ import { initHome } from '../js/tabs/home.js';
 import {
   clampCapacity, modeSwitchPartial, tierSwitchPartial, anchorNote, initLab,
   membarView, fitChipText, quantExplainer, fmtTps, fmtMs, fmtWatts, fmtCost,
-  renderPrintouts, memoryCaption,
+  renderPrintouts, memoryCaption, concTeaching, offloadNote,
   simPlan, tokensAt, simPhase, gaugeFill, stageText, SIM_REAL_BUDGET_S, initSim,
 } from '../js/tabs/lab.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
@@ -519,6 +519,10 @@ function makeLabDoc() {
     'lab-model-anchor': { textContent: '' },
     'po-tps': makePrintout(), 'po-ttft': makePrintout(), 'po-power': makePrintout(),
     'po-cost': makePrintout(), 'po-maxfit': makePrintout(),
+    // M4 teaching rows (total-throughput row + TTFT queueing note + offload sentence)
+    'po-tps-total': makePrintout(),
+    'po-ttft-note': makeLabClassEl({ textContent: '' }),
+    'lab-offload-note': makeLabClassEl({ textContent: '' }),
     'lab-membar': membarEl,
     'lab-mem-caption': { textContent: '' },
     'lab-fit-state': { textContent: '', attrs: {}, setAttribute(k, v) { this.attrs[k] = v; } },
@@ -911,5 +915,74 @@ function makeClock() {
   ok('M3 wiring: click starts · store change mid-run cancels cleanly');
 }
 
+{ // M4 concTeaching — null at B=1; shapes both rates + the queueing note at B>1
+  const perf1 = evaluate(DEFAULT_CONFIG);
+  assert.equal(concTeaching(perf1, DEFAULT_CONFIG), null, 'nothing to teach at concurrency 1');
+
+  const cfg4 = { ...DEFAULT_CONFIG, concurrency: 4 };
+  const perf4 = evaluate(cfg4);
+  const t = concTeaching(perf4, cfg4);
+  assert.equal(t.total, fmtTps(perf4.decodeTpsTotal));
+  assert.equal(t.perReq, fmtTps(perf4.decodeTpsPerRequest));
+  assert.match(t.ttftNote, /×4 queueing/);
+  assert.ok(Math.abs(perf4.decodeTpsTotal - perf4.decodeTpsPerRequest * 4) < 1e-9, 'engine: total = per-request × B');
+  ok('M4 concTeaching: null at B=1 · both rates + ×B queueing note at B>1');
+}
+
+{ // M4 offloadNote — one sentence naming the real bandwidths; null on the fast path
+  const perfFast = evaluate(DEFAULT_CONFIG);
+  assert.equal(offloadNote(perfFast, DEFAULT_CONFIG), null, 'GPU-resident → nothing to explain');
+
+  const cfgOff = { ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 };
+  const perfOff = evaluate(cfgOff);
+  assert.equal(perfOff.fitsState, 'offload');
+  const note = offloadNote(perfOff, cfgOff);
+  assert.match(note, /Why it's slow/);
+  assert.match(note, /51\.2 GB\/s/, 'DDR4-3200 bandwidth named');
+  assert.match(note, /360 GB\/s/, 'RTX 3060 bandwidth named');
+  assert.ok(note.includes(`${perfOff.layersOnCpu} of ${perfOff.totalLayers}`), 'layer split stated');
+  ok('M4 offloadNote: one sentence · real bandwidths + layer split · null on fast path');
+}
+
+{ // M4 renderPrintouts — teaching rows appear only while they teach, then hide again
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  initLab({ doc, store: st });
+
+  assert.ok(doc.getElementById('po-tps-total').classList.contains('is-hidden'), 'total row hidden at B=1');
+  assert.ok(doc.getElementById('po-ttft-note').classList.contains('is-hidden'), 'TTFT note hidden at B=1');
+  assert.ok(doc.getElementById('lab-offload-note').classList.contains('is-hidden'), 'offload note hidden on fast path');
+
+  st.setConfig({ concurrency: 4 });
+  const perfB4 = evaluate(st.getState().config);
+  assert.ok(!doc.getElementById('po-tps-total').classList.contains('is-hidden'));
+  assert.equal(doc.getElementById('po-tps-total').v.textContent, fmtTps(perfB4.decodeTpsTotal));
+  assert.match(doc.getElementById('po-ttft-note').textContent, /×4 queueing/);
+
+  st.setConfig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 }); // offload (anchor A5 shape)
+  const offEl = doc.getElementById('lab-offload-note');
+  assert.ok(!offEl.classList.contains('is-hidden'), 'offload note visible in offload state');
+  assert.match(offEl.textContent, /Why it's slow/);
+
+  st.setConfig({ gpuId: 'rtx-3090-24g', ramTierId: 'ddr5-6000', modelStopIndex: 1 }); // back on GPU (still B=4)
+  assert.ok(doc.getElementById('lab-offload-note').classList.contains('is-hidden'), 'note hides again when it fits');
+  ok('M4 renderPrintouts: rows appear only while they teach, then hide again');
+}
+
+{ // M4 run finish — the Done line names both rates at concurrency >1
+  const doc = makeLabDoc();
+  const st = createStore({ storage: null });
+  const clock = makeClock();
+  const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
+
+  st.setConfig({ concurrency: 4 });
+  assert.equal(sim.start(), true);
+  while (clock.isPending() && clock.now() < 20000) clock.step(100); // drive to completion
+  const meta = doc.getElementById('lab-run-meta').textContent;
+  assert.match(meta, /per request/);
+  assert.match(meta, /4 requests at .* each ≈ .* total/);
+  ok('M4 run finish: Done line shows per-request rate and the ×B total');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M3 Lab).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab).`);
