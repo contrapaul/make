@@ -1430,11 +1430,20 @@ console.log('tabs/glossary.js');
 { // data integrity: the glossary is the single source of truth for both surfaces
   const ids = new Set(GLOSSARY.map((t) => t.id));
   assert.equal(ids.size, GLOSSARY.length, 'term ids are unique');
+  let linkCount = 0;
   for (const t of GLOSSARY) {
     assert.ok(t.term && t.short && t.full, `${t.id} has term/short/full`);
-    for (const ref of t.see ?? []) assert.ok(ids.has(ref), `${t.id} "see also" ${ref} exists`);
+    assert.ok(Array.isArray(t.links) && t.links.length > 0, `${t.id} has at least one Learn more link`);
+    for (const l of t.links) {
+      linkCount += 1;
+      assert.ok(l.title && l.source, `${t.id} link is labelled`);
+      // https only, and no relative or javascript: URL can sneak in.
+      assert.match(l.url, /^https:\/\//, `${t.id} link is https`);
+      assert.match(l.url, /^https:\/\/en\.wikipedia\.org\/wiki\/\S+$/, `${t.id} link is a Wikipedia article`);
+      assert.ok(!/\s/.test(l.url), `${t.id} link has no whitespace`);
+    }
   }
-  ok(`glossary data: ${GLOSSARY.length} terms, unique ids, every cross reference resolves`);
+  ok(`glossary data: ${GLOSSARY.length} terms, unique ids, ${linkCount} outbound links, all https Wikipedia articles`);
 }
 
 { // style-guide.md: the banned characters must never reach a reader
@@ -1488,6 +1497,7 @@ function makeGlossDoc() {
     list, tip, listeners,
     getElementById: (id) => byId[id] ?? null,
     createElement: () => makeGlossEl(),
+    createTextNode: (text) => ({ text }),
     addEventListener(ev, fn) { (listeners[ev] ??= []).push(fn); },
     removeEventListener(ev, fn) {
       const a = listeners[ev] ?? []; const i = a.indexOf(fn); if (i >= 0) a.splice(i, 1);
@@ -1508,7 +1518,16 @@ function makeGlossDoc() {
   assert.ok(first.classList.contains('gloss-entry'));
   assert.equal(first.children[0].textContent, GLOSSARY[0].term, 'heading is the term');
   assert.equal(first.children[1].textContent, GLOSSARY[0].full, 'body is the full definition');
-  assert.match(first.children[2].textContent, /^See also: /, 'cross references are rendered');
+  const more = first.children[2];
+  assert.ok(more.classList.contains('gloss-more'), 'the third block is the Learn more row');
+  assert.equal(more.textContent, 'Learn more: ');
+  const anchor = more.children[0];
+  assert.equal(anchor.textContent, `Wikipedia \u201c${GLOSSARY[0].links[0].title}\u201d`,
+    'rendered as Wikipedia \u201cArticle title\u201d');
+  assert.equal(anchor.attrs.href, GLOSSARY[0].links[0].url);
+  // External links must not hand the opener to the target page.
+  assert.equal(anchor.attrs.target, '_blank');
+  assert.equal(anchor.attrs.rel, 'noopener noreferrer');
   ok(`renderGlossary builds ${n} anchored entries from the data file`);
 }
 

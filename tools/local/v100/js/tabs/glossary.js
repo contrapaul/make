@@ -71,13 +71,31 @@ export function renderGlossary(doc, list, terms = GLOSSARY) {
     p.textContent = t.full;
     if (typeof entry.appendChild === 'function') entry.appendChild(p);
 
-    // "See also" cross links, so a reader can walk between related ideas.
-    const related = (t.see ?? []).map((id) => glossaryTerm(id)).filter(Boolean);
-    if (related.length) {
-      const see = doc.createElement('p');
-      if (see.classList && typeof see.classList.add === 'function') see.classList.add('gloss-see');
-      see.textContent = `See also: ${related.map((r) => r.term).join(', ')}`;
-      if (typeof entry.appendChild === 'function') entry.appendChild(see);
+    // "Learn more" row: outbound references for a reader who wants the
+    // full article. Rendered as real links, e.g. Wikipedia "Central
+    // processing unit". Opens in a new tab so this page, which is a
+    // single hash-routed document, does not lose the reader's place.
+    const links = (t.links ?? []).filter((l) => l && l.url && l.title);
+    if (links.length) {
+      const row = doc.createElement('p');
+      if (row.classList && typeof row.classList.add === 'function') row.classList.add('gloss-more');
+      row.textContent = 'Learn more: ';
+
+      links.forEach((l, i) => {
+        const a = doc.createElement('a');
+        a.textContent = `${l.source ?? 'Wikipedia'} \u201c${l.title}\u201d`;
+        if (typeof a.setAttribute === 'function') {
+          a.setAttribute('href', l.url);
+          a.setAttribute('target', '_blank');
+          a.setAttribute('rel', 'noopener noreferrer');
+        }
+        if (typeof row.appendChild === 'function') row.appendChild(a);
+        if (i < links.length - 1 && typeof doc.createTextNode === 'function' && typeof row.appendChild === 'function') {
+          row.appendChild(doc.createTextNode(', '));
+        }
+      });
+
+      if (typeof entry.appendChild === 'function') entry.appendChild(row);
     }
 
     if (typeof list.appendChild === 'function') list.appendChild(entry);

@@ -4,6 +4,34 @@
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
 
+## Glossary: full-width definitions + outbound "Learn more" links (2026-09-05, owner request)
+
+1. **Definitions use the full card width.** `.gloss-entry p` had `max-width: 68ch`, which left roughly half of each card empty on a desktop screen. Removed. Measured at a 1440px viewport: card 1152px, paragraph 1102px, so the only remaining gutter is the card's own padding.
+
+2. **"See also" is replaced by "Learn more".** The old row listed other glossary terms. It now carries outbound links, rendered exactly as `Learn more: Wikipedia “Central processing unit”`.
+
+### The data shape changed: `see` became `links`
+
+Each term in `js/data/glossary.js` now carries:
+
+```js
+links: [
+  { source: 'Wikipedia', title: 'Central processing unit', url: 'https://en.wikipedia.org/wiki/Central_processing_unit' },
+],
+```
+
+The array is deliberate: the owner asked to be able to add further links per term later. They render in order, comma separated.
+
+**Every one of the 34 URLs was verified live before shipping**, in two passes. First a `curl` of each URL for HTTP 200. Then the Wikipedia API with `redirects=1` to get each article's **canonical** title, because four of the titles first chosen were redirects: `Throughput` resolves to *Network throughput*, `Byte pair encoding` to *Byte-pair encoding*, `Transformer (deep learning architecture)` to *Transformer (deep learning)*, and `Open-weight model` to *Open weights*. The stored titles are the canonical ones, so the label always matches the page the reader actually lands on. **Re-run that check if you add a link.**
+
+Links open in a new tab with `rel="noopener noreferrer"`. New tab because this site is a single hash-routed document, so an in-place navigation would lose the reader's position and tab state.
+
+### Tests
+
+The data-integrity check was rewritten: every term must carry at least one labelled link, and every URL must match `^https://en\.wikipedia\.org/wiki/\S+$`, which also blocks a relative or `javascript:` URL from creeping in. The render test now asserts the row's class, the `Learn more: ` prefix, the anchor text in the `Wikipedia “Title”` form, the `href`, and both `target` and `rel`. The fake document in the harness gained `createTextNode`, which the renderer uses for the separator between multiple links. **102/102 green.**
+
+Terms without an obvious dedicated article point at the best real one rather than inventing a URL: `kv-cache` goes to *Attention (machine learning)*, `gguf` and `offloading` to *llama.cpp*, `prefill` and `decode` to *Transformer (deep learning)*, `temperature`, `top-p` and `sampling` to *Softmax function*. Those are the entries most worth replacing first if a better source turns up.
+
 ## Home hero layout pass (2026-09-05, owner request)
 
 Three changes, all in `css/tabs.css` plus one markup removal:

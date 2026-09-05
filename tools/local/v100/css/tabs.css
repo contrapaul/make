@@ -392,13 +392,26 @@
 .gloss-entry p {
   margin: 0;
   color: var(--text-secondary);
-  max-width: 68ch;
+  /* Full card width. There is no reason to leave half the card empty
+     (owner request, 2026-09-05). */
 }
 
-.gloss-entry .gloss-see {
+.gloss-entry .gloss-more {
   margin-top: var(--sp-3);
   font-size: var(--fs-1);
   color: var(--text-faint);
+}
+
+.gloss-entry .gloss-more a {
+  color: var(--accent-solid);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.gloss-entry .gloss-more a:hover,
+.gloss-entry .gloss-more a:focus-visible {
+  text-decoration-thickness: 2px;
 }
 
 /* The entry a reader was sent to by clicking a term. */
