@@ -15,11 +15,16 @@ import { store, TAB_IDS } from './state/store.js';
 import { initHome } from './tabs/home.js';
 import { initLab } from './tabs/lab.js';
 import { initPipeline } from './tabs/pipeline.js';
+import { initGlossary } from './tabs/glossary.js';
 
 const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
 const defaultHash = () => (typeof location !== 'undefined' ? location.hash : '');
 
-export const TABS = ['home', 'how', 'lab', 'compare'];
+/* Router tabs. NOTE: 'glossary' is deliberately absent from the store's
+   TAB_IDS, so the Explorer badge still counts the original four tabs and
+   js/state/store.js (P2, signed off) needs no change. Anything here without
+   a TAB_TO_STORE mapping is simply not tracked. */
+export const TABS = ['home', 'how', 'lab', 'compare', 'glossary'];
 
 export function tabFromHash(hash) {
   const m = /^#\/([a-z]+)/.exec(String(hash || ''));
@@ -46,7 +51,11 @@ export function initRouter({ doc = defaultDoc(), hash = defaultHash() } = {}) {
   // Make the URL bookmarkable without a full navigation (§4).
   try {
     if (typeof history !== 'undefined' && typeof location !== 'undefined') {
-      if (location.hash !== `#/${initial}`) history.replaceState(null, '', `#/${initial}`);
+      const want = `#/${initial}`;
+      // '#/glossary/kv-cache' already names this tab: keep the sub-path.
+      if (location.hash !== want && !location.hash.startsWith(`${want}/`)) {
+        history.replaceState(null, '', want);
+      }
     }
   } catch { /* non-browser context */ }
 
@@ -80,7 +89,7 @@ export function trackerView(visitedTabs) {
 /** Pure: which ROUTER tabs still show a "new" dot. */
 export function unseenRouterTabs(visitedTabs) {
   const seen = new Set(Array.isArray(visitedTabs) ? visitedTabs : []);
-  return TABS.filter((t) => !seen.has(TAB_TO_STORE[t]));
+  return TABS.filter((t) => TAB_TO_STORE[t] && !seen.has(TAB_TO_STORE[t]));
 }
 
 const safeStorage = () => {
@@ -163,6 +172,7 @@ export function initApp() {
   initHome();
   const lab = initLab({ store }); // P6: Lab controls bound two-way to the shared store
   initPipeline({ store }); // P5 M1: Pipeline shell + Stage 1 tokenization demo
+  const glossary = initGlossary(); // renders the glossary page + wires hover cards
 
   // §4: the tab shown on load counts as visited too (deep links like #/lab).
   if (router.initial) tracker.markVisited(router.initial);
@@ -172,9 +182,10 @@ export function initApp() {
     if (!t) return;
     router.show(t);
     tracker.markVisited(t); // every shown tab marks visited + persists (store)
+    glossary.focusTerm(globalThis.location.hash); // '#/glossary/<term>' deep links
   });
 
-  return { theme, reveals, router, tracker, lab };
+  return { theme, reveals, router, tracker, lab, glossary };
 }
 
 /* Auto-bootstrap when loaded in a browser as the app entry point. */

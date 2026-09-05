@@ -54,6 +54,7 @@
       <a class="tab-link" data-tab-link="how" href="#/how">How It Works<span class="dot-new is-hidden"></span></a>
       <a class="tab-link" data-tab-link="lab" href="#/lab">Hardware Lab<span class="dot-new is-hidden"></span></a>
       <a class="tab-link" data-tab-link="compare" href="#/compare">Local vs Cloud<span class="dot-new is-hidden"></span></a>
+      <a class="tab-link" data-tab-link="glossary" href="#/glossary">Glossary</a>
     </nav>
 
     <!-- Exploration badge + one-time spark burst (blueprint §4; tracker in js/app.js) -->
@@ -98,7 +99,7 @@
         <div class="hero-inner">
           <p class="eyebrow" data-reveal>An interactive guide for students &amp; educators</p>
           <h1 data-reveal>AI, running on <em class="accent-text">your</em> hardware.</h1>
-          <p class="hero-sub" data-reveal>What a model actually is, why memory bandwidth sets its speed, and what inference really costs, with real numbers you can poke at in the Hardware Lab.</p>
+          <p class="hero-sub" data-reveal>Most people meet AI as a website that answers questions, with no sense of what is happening behind it. This guide explains what an AI <a class="gloss" data-term="model" href="#/glossary/model">model</a> actually is, what it takes to run one on a computer you own, and what that costs. Every number here is calculated, and you can change the hardware yourself in the Hardware Lab.</p>
           <div class="hero-cta" data-reveal>
             <button class="btn btn--primary" id="start-exploring" type="button">Start exploring</button>
             <a class="btn btn--ghost" href="#/lab">Skip to the Lab</a>
@@ -135,8 +136,9 @@
 
         <section class="beat" data-reveal>
           <div class="beat-copy">
-            <h3>A “model” is billions of numbers</h3>
-            <p>An AI model isn’t magic; it’s a giant table of weights, one number per learned connection. Qwen3-4B carries about <b>4.2 billion</b> of them. Every answer you get is those numbers doing arithmetic on your input.</p>
+            <h3>What an AI model actually is</h3>
+            <p>An AI <a class="gloss" data-term="model" href="#/glossary/model">model</a> is a very large list of numbers, saved in a file. Those numbers are called <a class="gloss" data-term="weights" href="#/glossary/weights">weights</a>, and a model such as Qwen3-4B holds about <b>4.2 billion</b> of them. They were set during training, which is the long and expensive process of building the model, and they never change afterwards.</p>
+            <p>When you send a question, the software multiplies your words through those numbers to work out which fragment of text should come next. Then it does the whole thing again for the fragment after that. There is no thinking behind the screen and no lookup of stored answers. There is a file of numbers and a great deal of arithmetic.</p>
           </div>
           <div class="card beat-visual" aria-hidden="true">
             <h4>A corner of the weight table</h4>
@@ -152,41 +154,39 @@
 
         <section class="beat" data-reveal>
           <div class="card beat-visual">
-            <h4>Who’s the bottleneck?</h4>
-            <div class="bw">
-              <div class="bw-row"><span class="bw-label">RTX 3090 · GDDR6X</span><span class="bw-bar"><i style="--w:100%"></i></span><b class="bw-val">936 GB/s</b></div>
-              <div class="bw-row"><span class="bw-label">DDR5-6000 RAM</span><span class="bw-bar"><i style="--w:10.3%"></i></span><b class="bw-val">96 GB/s</b></div>
-            </div>
-            <p class="beat-caption">Memory bandwidth (blueprint §3.1): the decode bottleneck.</p>
+            <h4>What happens when you use a chatbot</h4>
+            <ul class="flow-list">
+              <li>You type a question in a browser or an app.</li>
+              <li>The text travels over the internet to a <a class="gloss" data-term="datacenter" href="#/glossary/datacenter">datacenter</a>.</li>
+              <li>A very large model runs there, on hardware worth more than a car.</li>
+              <li>The answer travels back and appears on your screen.</li>
+            </ul>
+            <p class="beat-caption">The model never runs on your device. Your text always leaves it.</p>
           </div>
           <div class="beat-copy">
-            <h3>Speed is set by memory bandwidth</h3>
-            <p>To write a single token, the model re-reads most of its weights from memory. That’s why a GPU with <b>936 GB/s</b> streams tokens roughly ten times faster than DDR5 RAM at <b>96 GB/s</b>, and why offloading layers to CPU RAM feels painfully slow.</p>
+            <h3>You have probably used a cloud model</h3>
+            <p>ChatGPT, Claude and Gemini are <a class="gloss" data-term="cloud-ai" href="#/glossary/cloud-ai">cloud AI</a> services. The model does not run on your phone or laptop. It runs on computers owned by a company, housed in a <a class="gloss" data-term="datacenter" href="#/glossary/datacenter">datacenter</a>, which is a building holding thousands of machines with the power and cooling to run them continuously.</p>
+            <p>Those machines are not ordinary computers. A single server can hold eight specialised processors wired together, so that one model far too large for any home machine can be spread across all of them. That is why cloud services can offer the largest and most capable models available.</p>
+            <p>The arrangement has real costs. You need a working internet connection, someone is billing for every question and answer, and whatever you type leaves your control and is handled on someone else’s hardware.</p>
           </div>
         </section>
 
         <section class="beat" data-reveal>
           <div class="beat-copy">
-            <h3>The fork: local or cloud?</h3>
-            <p>You can run these models on hardware you own; in Shenzhen, that’s about <b>¥0.65 per kWh</b> of electricity, and your data never leaves the room. Or call a cloud API priced per million tokens. Both are legitimate; the right answer depends on your model, your usage, and what privacy means to you.</p>
+            <h3>Defining local AI</h3>
+            <p>Local AI is the same idea with the location changed. You download the file of <a class="gloss" data-term="weights" href="#/glossary/weights">weights</a> onto a computer you own, and software on that machine loads it into memory and runs it. Nothing is sent anywhere. This works with the network cable unplugged.</p>
+            <p>It is possible at all because some organisations publish their weight files for anyone to download, which is called releasing a model with <a class="gloss" data-term="open-weights" href="#/glossary/open-weights">open weights</a>. Llama, Qwen and Mistral are released this way. The models behind ChatGPT and Claude are not, which is why you cannot run those at home at any price.</p>
+            <p>The honest trade is capability for control. Models small enough to run on your own hardware are generally less capable than the largest cloud models. In exchange, nothing you type leaves the room, nobody bills you per question, and the only running cost is the electricity the machine draws. In Shenzhen that is about <b>¥0.65 per kWh</b>.</p>
           </div>
-          <div class="fork-grid">
-            <div class="card fork-card">
-              <h4>Local</h4>
-              <ul>
-                <li>Runs on your machine; no per-token billing</li>
-                <li>Cost = electricity (~¥0.65/kWh) + hardware you already own</li>
-                <li>Works offline; data stays with you</li>
-              </ul>
-            </div>
-            <div class="card fork-card">
-              <h4>Cloud</h4>
-              <ul>
-                <li>Priced per million tokens (GPT-5, DeepSeek V4, Claude Opus 5)</li>
-                <li>No hardware to buy or maintain</li>
-                <li>Always the newest models, but your prompts leave the building</li>
-              </ul>
-            </div>
+          <div class="card beat-visual">
+            <h4>What you need to run a model yourself</h4>
+            <ul class="flow-list">
+              <li>A published weight file, downloaded once and kept on your drive.</li>
+              <li>Enough memory to hold it. This is the real limit, and it is usually the <a class="gloss" data-term="vram" href="#/glossary/vram">memory on a graphics card</a>.</li>
+              <li>Software that loads the file and does the arithmetic.</li>
+              <li>Electricity. No subscription, no per question charge.</li>
+            </ul>
+            <p class="beat-caption">The Hardware Lab lets you test any combination of these against real hardware.</p>
           </div>
         </section>
 
@@ -232,8 +232,10 @@
     <!-- ============ Tab 2 · How It Works (blueprint §6 Tab 2) ============
          P5 M1: 5-stage glass-card pipeline shell + Stage 1 (Tokenization)
          live demo. P5 M2: Stage 2 (Model load) live — .membar reused from
-         base.css, bound to the shared store. Stages 3–5 remain visible
-         placeholder cards (P5 M3–M5).
+         base.css, bound to the shared store. P5 M3: Stage 3 (Prefill vs
+         decode) live — the two-speed contrast, drip animated on the same
+         store subscription. Stages 4–5 remain visible placeholder cards
+         (P5 M4–M5).
          Existing utilities only (.card, .chip, .ctl-note, .membar); the
          inline flex wrappers stand in for a horizontal-pipeline class
          (no new CSS files in M1/M2 — one reduced-motion rule in tabs.css). -->
@@ -310,6 +312,20 @@
             <p class="ctl-note">Lands in P5 M5.</p>
           </article>
         </div>
+
+        <!-- Relocated from the Home story 2026-09-05: it explains WHY stage 3's
+             decode half is slow, so it belongs after the reader has met it. -->
+        <article class="card bandwidth-card" data-reveal aria-label="Why memory speed limits how fast a model writes">
+          <h3>Why memory speed limits how fast a model writes</h3>
+          <p>To produce one <a class="gloss" data-term="token" href="#/glossary/token">token</a>, the model has to read almost all of its <a class="gloss" data-term="weights" href="#/glossary/weights">weights</a> out of memory. Not some of them, and not a summary: nearly the whole file, for every single token it writes. A four billion number model reading its weights 30 times a second is moving an enormous amount of data.</p>
+          <p>So the question that decides writing speed is not how clever the processor is. It is how fast the hardware can pull data out of memory. That rate is called <a class="gloss" data-term="bandwidth" href="#/glossary/bandwidth">memory bandwidth</a>, and it is measured in gigabytes per second.</p>
+          <div class="bw">
+            <div class="bw-row"><span class="bw-label">RTX 3090 graphics card</span><span class="bw-bar"><i style="--w:100%"></i></span><b class="bw-val">936 GB/s</b></div>
+            <div class="bw-row"><span class="bw-label">DDR5-6000 system memory</span><span class="bw-bar"><i style="--w:10.3%"></i></span><b class="bw-val">96 GB/s</b></div>
+          </div>
+          <p>A graphics card reads its own memory almost ten times faster than a computer reads its main memory. That single gap explains most of what the Hardware Lab shows you. It is why a model that fits on the graphics card feels quick, and why a model too large to fit, so that part of it must sit in system memory, slows down so sharply. That situation is called <a class="gloss" data-term="offloading" href="#/glossary/offloading">offloading</a>, and every token has to wait for the slow part.</p>
+          <p class="ctl-note">Bandwidth figures are manufacturer specifications (blueprint §3.1).</p>
+        </article>
       </div>
     </section>
 
@@ -532,6 +548,20 @@
       </div>
     </section>
 
+    <!-- ============ Tab 5 · Glossary ============
+         Entries are rendered from js/data/glossary.js by
+         js/tabs/glossary.js, so the hover cards and this page can
+         never disagree. Deep links are '#/glossary/<term-id>'. -->
+    <section class="tab-panel" data-tab="glossary" aria-label="Glossary">
+      <div class="shell-pad stack">
+        <header data-reveal>
+          <h2>Glossary</h2>
+          <p>Every technical word used on this site, defined in plain language. You can also hover any underlined word anywhere on the site to read a short version without leaving the page.</p>
+        </header>
+        <div id="glossary-list" class="glossary-list"></div>
+      </div>
+    </section>
+
     <section class="tab-panel" data-tab="compare" aria-label="Local vs Cloud">
       <div class="shell-pad stack">
         <div class="card" data-reveal>
@@ -541,6 +571,10 @@
       </div>
     </section>
   </main>
+
+  <!-- Shared glossary hover card (js/tabs/glossary.js fills + positions it).
+       Outside <main> so an overflow-clipped panel can never cut it off. -->
+  <div class="gloss-tip" id="gloss-tip" role="tooltip" aria-hidden="true"></div>
 
   <footer class="foot">
     <div class="shell-pad foot-inner">

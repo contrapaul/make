@@ -730,10 +730,14 @@ ol.fn-list {
   to   { opacity: 1; transform: none; }
 }
 
-/* ---------- Scroll reveals (§8, reversible) --------------------
+/* ---------- Scroll reveals (§8, ONE-WAY) -----------------------
    Base hidden state only when JS is present (html.js), so a
    no-JS visitor still sees all content. --i stagger comes from
-   js/motion/scroll.js (ordinal among data-reveal siblings). */
+   js/motion/scroll.js (ordinal among data-reveal siblings).
+   These are transitions, never animations, and .in-view is added
+   once and never removed (the observer unobserves on reveal), so
+   an element cannot replay its entrance however the visitor
+   scrolls. Do not add a rule that strips .in-view. */
 .js [data-reveal] {
   opacity: 0;
   transform: translateY(32px);

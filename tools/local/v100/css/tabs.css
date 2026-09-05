@@ -170,11 +170,6 @@
 .bw-val { font-size: var(--fs-2); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* Beat 3 — the local/cloud fork */
-.fork-grid { display: grid; gap: var(--sp-4); }
-
-.fork-card h4 { margin: 0 0 var(--sp-2); font-size: var(--fs-3); color: var(--text-primary); }
-.fork-card ul { margin: 0; padding-left: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-1, 6px); }
-.fork-card li { font-size: var(--fs-2); color: var(--text-secondary); line-height: 1.5; }
 
 /* ---------- Explore grid (ring + tab cards, §4 tracker) ------- */
 .home-explore { max-width: 920px; margin-inline: auto; padding: 0 var(--sp-5) var(--sp-7); }
@@ -339,3 +334,112 @@
 @media (prefers-reduced-motion: reduce) {
   .sim-conveyor .chip { animation: none !important; }
 }
+
+/* ============================================================
+   Tab 5 · Glossary + inline term hover cards
+   ------------------------------------------------------------
+   One shared card (#gloss-tip) is positioned by js/tabs/glossary.js.
+   Marked-up terms are real links, so click navigates to the full
+   entry and keyboard focus shows the same card as hover.
+   ============================================================ */
+
+/* ---------- an inline term anywhere on the site --------------- */
+.gloss {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--accent-2);
+  cursor: help;
+  transition: color var(--dur-micro) var(--ease-toggle),
+    text-decoration-color var(--dur-micro) var(--ease-toggle);
+}
+
+.gloss:hover,
+.gloss:focus-visible {
+  color: var(--accent-solid);
+  text-decoration-color: var(--accent-solid);
+}
+
+/* ---------- the shared hover card ----------------------------- */
+.gloss-tip {
+  position: fixed;
+  z-index: 60;
+  max-width: 320px;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--fs-1);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-panel), var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity var(--dur-micro) var(--ease-toggle),
+    transform var(--dur-micro) var(--ease-toggle),
+    visibility var(--dur-micro);
+  pointer-events: none; /* the card must never eat the hover it describes */
+}
+
+.gloss-tip.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+/* ---------- the glossary page --------------------------------- */
+.glossary-list {
+  display: grid;
+  gap: var(--sp-4);
+  margin-top: var(--sp-5);
+}
+
+.gloss-entry {
+  padding: var(--sp-5);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--glass-highlight);
+  scroll-margin-top: 96px; /* clear the fixed nav when deep-linked */
+  transition: border-color var(--dur-base) var(--ease-toggle),
+    box-shadow var(--dur-base) var(--ease-toggle);
+}
+
+.gloss-entry h3 {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-4);
+}
+
+.gloss-entry p {
+  margin: 0;
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.gloss-entry .gloss-see {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-1);
+  color: var(--text-faint);
+}
+
+/* The entry a reader was sent to by clicking a term. */
+.gloss-entry.is-target {
+  border-color: var(--accent-solid);
+  box-shadow: var(--glass-highlight), 0 0 0 3px color-mix(in srgb, var(--accent-solid) 22%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gloss-tip { transition-duration: 1ms; transform: none; }
+  .gloss-entry { transition: none; }
+}
+
+/* ---------- Home beat lists (Tab 1) --------------------------
+   Used by the cloud and local beats: short factual lines rather
+   than prose, so a reader can scan the shape of each option. */
+.flow-list { margin: 0 0 var(--sp-3); padding-left: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-2); }
+.flow-list li { font-size: var(--fs-2); color: var(--text-secondary); line-height: 1.55; }

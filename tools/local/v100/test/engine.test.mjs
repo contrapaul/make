@@ -319,6 +319,15 @@ section('Labeled engine contracts (documented in perf.js header / blueprint §5�
   check('promptTokens follows the split preset (balanced → 2048)', a1.promptTokens === 2048);
   check('TTFT > fixed overhead floor', a1.ttftMsBase > 100, `got ${a1.ttftMsBase}`);
 
+  // Absolute magnitude, not just a floor. The 2026-09-04 TFLOPS-vs-FLOPs unit bug
+  // made every TTFT 1e12 too large (default rig printed 1,534,082,397,003 s) and
+  // still satisfied BOTH the >100 ms floor above and the ttftMs = ttftMsBase x B
+  // ratio check, so it survived four milestones. Hand-check for this exact config
+  // (RTX 3090, 8B Q4, 2048-token prompt):
+  //   2048 x 1.6e10 FLOPs / (35.6 TFLOPS x 0.6 x 1e12) + 0.1 s overhead = 1.63 s
+  check('TTFT has a plausible absolute magnitude for the default rig (0.5-5 s)',
+    a1.ttftMsBase > 500 && a1.ttftMsBase < 5000, `got ${a1.ttftMsBase} ms`);
+
   // maxModelFits: A5 rig (3060 12 GB + 64 GB RAM) at Q4/8K → 70B and 80B fit via offload pool
   const a5 = evaluate(rig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', ramCapacityGB: 64, modelStopIndex: STOP_70B }));
   check('maxModelFits finds the largest stop in VRAM+RAM (A5 rig → 80B)', a5.maxModelFits && a5.maxModelFits.paramsB === 80, `got ${JSON.stringify(a5.maxModelFits)}`);

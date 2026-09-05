@@ -3,7 +3,7 @@
    ------------------------------------------------------------
    Runs the browser modules against minimal DOM stubs:
      - js/theme.js        theme resolution precedence + toggle/persist
-     - js/motion/scroll.js stagger index, IO wiring, reversibility,
+     - js/motion/scroll.js stagger index, IO wiring, one-way reveals,
                           pulse micro-interaction, slider fill binding
      - js/app.js          hash router + exploration tracker (P4)
      - js/tabs/home.js    hero CTA → story scroll (P4)
@@ -11,10 +11,11 @@
    ============================================================ */
 
 import { strict as assert } from 'node:assert';
+import { readFileSync } from 'node:fs';
 import { STORAGE_KEY, resolveInitialTheme, initTheme } from '../js/theme.js';
 import { revealStaggerIndex, initReveals, pulse, bindRangeFill } from '../js/motion/scroll.js';
 import {
-  tabFromHash, initRouter,
+  tabFromHash, initRouter, TABS,
   TAB_TO_STORE, trackerView, unseenRouterTabs, initTracker, CELEBRATED_KEY,
 } from '../js/app.js';
 import { initHome } from '../js/tabs/home.js';
@@ -26,6 +27,8 @@ import {
 } from '../js/tabs/lab.js';
 import { tokenizeWith, tokenize, initPipeline, modelLoadView, loadCaption, prefillDecodeView, prefillCaption, decodeCaption, speedNote } from '../js/tabs/pipeline.js';
 import { VOCAB } from '../js/data/vocab.js';
+import { termIdFromHash, tooltipText, renderGlossary, initTermCards, initGlossary } from '../js/tabs/glossary.js';
+import { GLOSSARY } from '../js/data/glossary.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
 import { evaluate, PROMPT_SPLIT_TOKENS, GENERATION_TARGET_TOKENS } from '../js/engine/perf.js';
 
@@ -151,17 +154,22 @@ function makeEl(extra = {}) {
   ok('--i = ordinal among data-reveal siblings in the same parent');
 }
 
-{ // IO wiring: rootMargin, observe list, reversible class toggling, disconnect
+{ // IO wiring: rootMargin, observe list, one-way reveal + unobserve, disconnect
   const b = makeEl({ attrs: { 'data-reveal': true } });
   const c = makeEl({ attrs: { 'data-reveal': true } });
   for (const el of [b, c]) el.parentElement = { children: [b, c] };
 
-  let cb = null; let opts = null; const observed = []; let disconnected = false;
+  let cb = null; let opts = null; const observed = []; const unobserved = []; let disconnected = false;
+  const live = new Set(); // what the observer is still watching, as a real IO would track
   class IOStub {
     constructor(callback, options) { cb = callback; opts = options; }
-    observe(el) { observed.push(el); }
-    disconnect() { disconnected = true; }
+    observe(el) { observed.push(el); live.add(el); }
+    unobserve(el) { unobserved.push(el); live.delete(el); }
+    disconnect() { disconnected = true; live.clear(); }
   }
+  // A real IntersectionObserver stops delivering entries for unobserved
+  // targets; scroll past them all you like and the callback never runs.
+  const scroll = (entries) => cb(entries.filter((e) => live.has(e.target)));
 
   const root = { querySelectorAll: () => [b, c] };
   const r = initReveals({ root, IO: IOStub });
@@ -172,13 +180,30 @@ function makeEl(extra = {}) {
   assert.equal(b.style.vars['--i'], '0');
   assert.equal(c.style.vars['--i'], '1');
 
-  cb([{ target: b, isIntersecting: true }]);
+  scroll([{ target: b, isIntersecting: true }]);
   assert.ok(b.classList.contains('in-view'));
-  ok('.in-view added when the element enters the band');
+  assert.deepEqual(unobserved, [b], 'a revealed element is unobserved immediately');
+  ok('.in-view added when the element enters the band, then the element is unobserved');
 
-  cb([{ target: b, isIntersecting: false }]);
-  assert.ok(!b.classList.contains('in-view'));
-  ok('.in-view removed when it leaves — reversible on scroll-up (§8)');
+  /* Reveals are ONE-WAY (changed 2026-09-05). Reversible reveals meant an
+     element parked at the band edge flipped in/out on scroll jitter and
+     replayed its fade+slide — the looping/bouncing the owner reported. */
+  scroll([{ target: b, isIntersecting: false }]);
+  assert.ok(b.classList.contains('in-view'), 'leaving the band must NOT strip .in-view');
+  scroll([{ target: b, isIntersecting: true }]);
+  assert.ok(b.classList.contains('in-view'));
+  assert.deepEqual(unobserved, [b], 'scrolling back over it delivers nothing — no re-trigger');
+  ok('reveals are one-way: an element that left and re-entered never re-animates (§8)');
+
+  // The jitter case that caused the bug report: stop scrolling right at the
+  // band edge and the browser fires a burst of alternating entries.
+  for (let i = 0; i < 8; i += 1) scroll([{ target: b, isIntersecting: i % 2 === 0 }]);
+  assert.ok(b.classList.contains('in-view'), 'jitter at the band edge cannot flip it back');
+  ok('8 alternating intersection events at the band edge leave the reveal untouched');
+
+  assert.ok(!c.classList.contains('in-view'), 'an element that never entered stays hidden');
+  assert.ok(live.has(c), 'and is still being watched');
+  ok('elements below the fold stay hidden until they first enter the band');
 
   r.disconnect();
   assert.equal(disconnected, true);
@@ -1279,5 +1304,375 @@ console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
   ok(`store change re-renders Stage 3 (decode rate ${before} → ${after})`);
 }
 
+/* ---------------- js/app.js — initApp() bootstrap ------------- */
+console.log('app.js — initApp() bootstrap');
+
+/* Every other block in this file dependency-injects `doc`, so the real
+   bootstrap path — the one the browser actually runs — had zero coverage.
+   That is exactly how the 2026-09-04 fatal TDZ in app.js shipped with a
+   fully green suite: `initApp()` reaches `defaultDoc()` through a default
+   parameter, which no DI test ever touches. This block runs the real
+   `initApp()` against globals, wiring every tab module at once. */
+
+function makeAppDoc() {
+  const lab = makeLabDoc();
+  const pipe = makePipeDoc('Hello, world!');
+  const track = makeTrackerDoc();
+  const links = track.querySelectorAll(); // [data-tab-link] nav + [data-track-tab] cards
+
+  const panels = TABS.map((t) => tEl({ dataset: { tab: t } }));
+  const themeBtn = tEl({
+    dataset: { themeToggle: '' },
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+  });
+
+  // Two reveal targets sharing a parent, so revealStaggerIndex() runs for real.
+  const revealParent = { children: [] };
+  const reveals = [tEl({ attrs: { 'data-reveal': true }, hasAttribute(a) { return a in this.attrs; } }),
+    tEl({ attrs: { 'data-reveal': true }, hasAttribute(a) { return a in this.attrs; } })];
+  for (const r of reveals) { r.parentElement = revealParent; revealParent.children.push(r); }
+
+  const story = tEl({ scrolled: null, scrollIntoView(opts) { this.scrolled = opts; } });
+  const startBtn = tEl({
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatch(ev) { for (const fn of this.listeners[ev] ?? []) fn({}); },
+  });
+
+  const extra = { 'start-exploring': startBtn, story };
+
+  return {
+    lab, pipe, track, panels, links, themeBtn, reveals, story, startBtn,
+    documentElement: {
+      attrs: {},
+      setAttribute(k, v) { this.attrs[k] = v; },
+      getAttribute(k) { return this.attrs[k] ?? null; },
+    },
+    createElement: pipe.createElement,
+    getElementById: (id) =>
+      lab.getElementById(id) ?? pipe.getElementById(id) ?? track.getElementById(id) ?? extra[id] ?? null,
+    querySelectorAll(sel) {
+      if (sel === '.tab-panel') return panels;
+      if (sel === '[data-tab-link]') return links.filter((l) => l.dataset.tabLink);
+      if (sel === '[data-tab-link], [data-track-tab]') return links;
+      if (sel === '[data-theme-toggle]') return [themeBtn];
+      if (sel === '[data-reveal]') return reveals;
+      if (sel === '.slider') return [lab.modelInput];
+      return lab.querySelectorAll(sel); // input[name="lab-*"] radio groups
+    },
+  };
+}
+
+{
+  /* The TDZ only fired during MODULE EVALUATION — the auto-bootstrap at the
+     foot of app.js calls initApp() before a trailing `const` is initialized.
+     Calling the already-evaluated initApp() cannot reproduce that, so this
+     block installs browser globals and then imports a FRESH copy of app.js
+     (cache-busting query string), letting its own auto-bootstrap run. */
+  const doc = makeAppDoc();
+  const winListeners = {};
+  const saved = {};
+  const install = (k, v) => { saved[k] = globalThis[k]; globalThis[k] = v; };
+
+  install('document', doc);
+  install('window', {});
+  install('location', { hash: '#/lab' }); // deep link: the tab shown on load counts as visited
+  install('addEventListener', (ev, fn) => { (winListeners[ev] ??= []).push(fn); });
+  install('localStorage', (() => {
+    const m = new Map();
+    return { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)) };
+  })());
+
+  try {
+    await assert.doesNotReject(
+      () => import('../js/app.js?bootstrap-test=1'),
+      'app.js must bootstrap cleanly when it evaluates in a browser-like context'
+    );
+    ok('app.js auto-bootstraps against browser globals without throwing');
+
+    // The bootstrap really wired each piece — not a silent no-op chain.
+    assert.ok(doc.panels.find((p) => p.dataset.tab === 'lab').classList.contains('is-active'),
+      'the deep-linked Lab panel is the active one');
+    assert.equal(doc.panels.filter((p) => p.classList.contains('is-active')).length, 1,
+      'exactly one panel is active');
+    assert.equal(doc.track.ringLabel.textContent, '1/4', 'the deep-linked tab counts as a visit');
+    assert.match(doc.lab.getElementById('po-tps').v.textContent, /tok\/s/, 'the Lab printouts painted');
+    assert.match(doc.pipe.decodetps.textContent, /tok\/s/, 'the Pipeline tab painted (Stage 3)');
+    assert.equal(doc.themeBtn.listeners.click?.length, 1, 'the theme toggle is wired');
+    assert.equal(winListeners.hashchange?.length, 1, 'one hashchange listener on the window');
+    ok('bootstrap paints the router, tracker, theme toggle, Lab and Pipeline');
+
+    // hashchange → route + mark visited, end to end through the real handler.
+    globalThis.location.hash = '#/how';
+    winListeners.hashchange[0]();
+    assert.ok(doc.panels.find((p) => p.dataset.tab === 'how').classList.contains('is-active'));
+    assert.equal(doc.track.ringLabel.textContent, '2/4');
+    ok('the bootstrapped hashchange handler routes to the new tab and counts the visit');
+  } finally {
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete globalThis[k]; else globalThis[k] = v;
+    }
+  }
+}
+
+/* ---------------- js/tabs/glossary.js (Tab 5) ---------------- */
+console.log('tabs/glossary.js');
+
+{ // data integrity: the glossary is the single source of truth for both surfaces
+  const ids = new Set(GLOSSARY.map((t) => t.id));
+  assert.equal(ids.size, GLOSSARY.length, 'term ids are unique');
+  for (const t of GLOSSARY) {
+    assert.ok(t.term && t.short && t.full, `${t.id} has term/short/full`);
+    for (const ref of t.see ?? []) assert.ok(ids.has(ref), `${t.id} "see also" ${ref} exists`);
+  }
+  ok(`glossary data: ${GLOSSARY.length} terms, unique ids, every cross reference resolves`);
+}
+
+{ // style-guide.md: the banned characters must never reach a reader
+  const offenders = GLOSSARY.filter((t) => /[—]/.test(`${t.term}${t.short}${t.full}`));
+  assert.deepEqual(offenders.map((t) => t.id), [], 'no em dash in any definition');
+  const middots = GLOSSARY.filter((t) => /·/.test(`${t.short}${t.full}`));
+  assert.deepEqual(middots.map((t) => t.id), [], 'no middot inside definition prose');
+  ok('every definition obeys the style guide (no em dash, no middot in prose)');
+}
+
+{ // pure: deep-link parsing
+  assert.equal(termIdFromHash('#/glossary/kv-cache'), 'kv-cache');
+  assert.equal(termIdFromHash('#/glossary/KV-Cache'), 'kv-cache', 'case-insensitive');
+  assert.equal(termIdFromHash('#/glossary'), null, 'the bare tab is not a term link');
+  assert.equal(termIdFromHash('#/lab'), null);
+  assert.equal(termIdFromHash(''), null);
+  assert.equal(termIdFromHash(null), null);
+  ok('termIdFromHash reads "#/glossary/<term>" and ignores everything else');
+}
+
+{ // pure: hover text
+  assert.match(tooltipText('token'), /unit of text/i);
+  assert.equal(tooltipText('not-a-real-term'), null);
+  assert.equal(tooltipText(null), null);
+  ok('tooltipText returns the short definition, null for unknown terms');
+}
+
+function makeGlossEl(extra = {}) {
+  const classes = new Set();
+  return Object.assign({
+    attrs: {}, textContent: '', style: {}, children: [], dataset: {},
+    classList: {
+      add(c) { classes.add(c); }, remove(c) { classes.delete(c); }, contains: (c) => classes.has(c),
+      toggle(c, on) { if (on) classes.add(c); else classes.delete(c); },
+    },
+    setAttribute(k, v) { this.attrs[k] = v; },
+    getAttribute(k) { return this.attrs[k] ?? null; },
+    removeAttribute(k) { delete this.attrs[k]; },
+    appendChild(c) { this.children.push(c); return c; },
+    removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+    get firstChild() { return this.children[0] ?? null; },
+  }, extra);
+}
+
+function makeGlossDoc() {
+  const list = makeGlossEl();
+  const tip = makeGlossEl();
+  const byId = { 'glossary-list': list, 'gloss-tip': tip };
+  const listeners = {};
+  return {
+    list, tip, listeners,
+    getElementById: (id) => byId[id] ?? null,
+    createElement: () => makeGlossEl(),
+    addEventListener(ev, fn) { (listeners[ev] ??= []).push(fn); },
+    removeEventListener(ev, fn) {
+      const a = listeners[ev] ?? []; const i = a.indexOf(fn); if (i >= 0) a.splice(i, 1);
+    },
+    fire(ev, event) { for (const fn of [...(listeners[ev] ?? [])]) fn(event); },
+    /** Register rendered entries so getElementById finds them, as a real DOM would. */
+    index() { for (const e of list.children) byId[e.attrs.id] = e; },
+  };
+}
+
+{ // page rendering: one anchored entry per term
+  const doc = makeGlossDoc();
+  const n = renderGlossary(doc, doc.list);
+  assert.equal(n, GLOSSARY.length);
+  assert.equal(doc.list.children.length, GLOSSARY.length);
+  const first = doc.list.children[0];
+  assert.equal(first.attrs.id, GLOSSARY[0].id, 'entry id is the term id, so it can be linked to');
+  assert.ok(first.classList.contains('gloss-entry'));
+  assert.equal(first.children[0].textContent, GLOSSARY[0].term, 'heading is the term');
+  assert.equal(first.children[1].textContent, GLOSSARY[0].full, 'body is the full definition');
+  assert.match(first.children[2].textContent, /^See also: /, 'cross references are rendered');
+  ok(`renderGlossary builds ${n} anchored entries from the data file`);
+}
+
+{ // rendering twice must not duplicate (a re-render clears first)
+  const doc = makeGlossDoc();
+  renderGlossary(doc, doc.list);
+  renderGlossary(doc, doc.list);
+  assert.equal(doc.list.children.length, GLOSSARY.length, 'no duplicated entries');
+  ok('renderGlossary clears before it rebuilds');
+}
+
+{ // hover cards: show on hover, hide on leave, describedby for screen readers
+  const doc = makeGlossDoc();
+  const cards = initTermCards({ doc });
+  assert.equal(doc.tip.getAttribute('aria-hidden'), 'true', 'starts hidden');
+
+  const word = makeGlossEl({ dataset: { term: 'kv-cache' } });
+  word.closest = function (sel) { return sel === '[data-term]' ? this : null; };
+
+  doc.fire('mouseover', { target: word });
+  assert.ok(doc.tip.classList.contains('is-visible'));
+  assert.match(doc.tip.textContent, /keys and values/i, 'shows that term’s short definition');
+  assert.equal(doc.tip.getAttribute('aria-hidden'), 'false');
+  assert.equal(word.getAttribute('aria-describedby'), 'gloss-tip', 'wired for screen readers');
+  ok('hovering a marked-up term shows its definition and announces it');
+
+  doc.fire('mouseout', { target: word });
+  assert.ok(!doc.tip.classList.contains('is-visible'));
+  assert.equal(word.getAttribute('aria-describedby'), null, 'describedby is cleaned up');
+  ok('leaving the term hides the card again');
+
+  // Keyboard parity: focus does what hover does, Escape dismisses.
+  doc.fire('focusin', { target: word });
+  assert.ok(doc.tip.classList.contains('is-visible'), 'keyboard focus shows the same card');
+  doc.fire('keydown', { key: 'Escape' });
+  assert.ok(!doc.tip.classList.contains('is-visible'), 'Escape dismisses it');
+  ok('keyboard users get the same card via focus, and Escape dismisses it');
+
+  // An unknown term must not show an empty card.
+  const bogus = makeGlossEl({ dataset: { term: 'nonsense' } });
+  bogus.closest = function () { return this; };
+  doc.fire('mouseover', { target: bogus });
+  assert.ok(!doc.tip.classList.contains('is-visible'), 'unknown term shows nothing');
+  ok('an unknown data-term shows no card rather than an empty one');
+
+  cards.destroy();
+  doc.fire('mouseover', { target: word });
+  assert.ok(!doc.tip.classList.contains('is-visible'), 'destroy() unwires the listeners');
+  ok('destroy() removes every delegated listener');
+}
+
+{ // deep link: '#/glossary/<term>' scrolls to and marks that entry
+  const doc = makeGlossDoc();
+  const api = initGlossary({ doc, hash: '#/glossary/vram' });
+  doc.index();
+  assert.equal(api.count, GLOSSARY.length);
+
+  // initGlossary ran focusTerm before the entries were indexed, so drive it
+  // again the way the hashchange handler does.
+  const el = api.focusTerm('#/glossary/vram');
+  assert.ok(el, 'the deep-linked entry was found');
+  assert.ok(el.classList.contains('is-target'), 'it is marked as the target');
+
+  const other = api.focusTerm('#/glossary/token');
+  assert.ok(other.classList.contains('is-target'));
+  assert.ok(!el.classList.contains('is-target'), 'only one entry is ever the target');
+  ok('a "#/glossary/<term>" deep link marks exactly one entry as the target');
+
+  assert.equal(api.focusTerm('#/glossary'), null, 'the bare tab targets nothing');
+  assert.equal(api.focusTerm('#/glossary/not-a-term'), null, 'an unknown term targets nothing');
+  ok('bare and unknown glossary links target nothing, without throwing');
+}
+
+{ // the glossary is a router tab but NOT a tracked one (owner, 2026-09-05)
+  assert.ok(TABS.includes('glossary'), 'it routes');
+  assert.equal(TAB_TO_STORE.glossary, undefined, 'it has no store id');
+  assert.equal(trackerView([]).total, 4, 'the Explorer badge still counts four tabs');
+  assert.ok(!unseenRouterTabs([]).includes('glossary'), 'and it never shows a "new" dot');
+  ok('the glossary routes without joining the Explorer badge (ring stays n/4)');
+}
+
+{ // router regression: a deep-link sub-path must survive the load rewrite
+  const saved = { location: globalThis.location, history: globalThis.history };
+  let replacedWith = null;
+  globalThis.history = { replaceState: (a, b, url) => { replacedWith = url; } };
+  try {
+    const panels = TABS.map((t) => makeGlossEl({ dataset: { tab: t } }));
+    const doc = { querySelectorAll: (sel) => (sel === '.tab-panel' ? panels : []) };
+
+    globalThis.location = { hash: '#/glossary/kv-cache' };
+    const r = initRouter({ doc, hash: '#/glossary/kv-cache' });
+    assert.equal(r.initial, 'glossary');
+    assert.equal(replacedWith, null,
+      'the router must NOT rewrite "#/glossary/kv-cache" to "#/glossary" and drop the term');
+    ok('initRouter preserves a deep-link sub-path (the term survives page load)');
+
+    replacedWith = null;
+    globalThis.location = { hash: '' };
+    initRouter({ doc, hash: '' });
+    assert.equal(replacedWith, '#/home', 'a bare load still gets a bookmarkable hash');
+    ok('initRouter still normalises a bare load to #/home');
+  } finally {
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete globalThis[k]; else globalThis[k] = v;
+    }
+  }
+}
+
+/* ---------------- style-guide.md enforcement ----------------- */
+console.log('style guide (copy rules)');
+
+/* The em dash ban is a writing rule, so it needs a mechanical guard or it
+   rots. Two halves:
+     1. Panels whose copy has been rewritten must hold at ZERO. Add each
+        panel here as its rewrite lands.
+     2. Everything not yet rewritten gets a budget that may only ever go
+        DOWN. Lower these numbers as sections are rewritten; a rise means
+        new copy shipped in the old voice.
+   HTML comments are stripped first: the rule governs what a reader sees,
+   not what a developer reads. */
+{
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+    .replace(/<!--[\s\S]*?-->/g, '');
+
+  const panel = (tab) => {
+    const i = html.indexOf(`data-tab="${tab}"`);
+    if (i < 0) return '';
+    const j = html.indexOf('<section class="tab-panel', i + 10);
+    return html.slice(i, j < 0 ? html.length : j);
+  };
+  const emDashes = (text) => (text.match(/—/g) ?? []).length;
+
+  // 1. Rewritten panels: zero, permanently.
+  for (const tab of ['home', 'glossary']) {
+    assert.equal(emDashes(panel(tab)), 0, `the ${tab} panel must contain no em dash`);
+  }
+  ok('rewritten panels (home, glossary) contain no em dash in reader-facing text');
+
+  // 2. Ratchet for the panels still awaiting their rewrite.
+  const budget = { how: 15, lab: 13, compare: 0 };
+  for (const [tab, max] of Object.entries(budget)) {
+    const n = emDashes(panel(tab));
+    assert.ok(n <= max,
+      `the ${tab} panel has ${n} em dashes, above its budget of ${max}. Lower the budget as copy is rewritten; never raise it.`);
+  }
+  ok(`em dash budget holds for panels not yet rewritten (how ≤ 15, lab ≤ 13)`);
+
+  // The middot is a data-label separator, never sentence punctuation. Catch
+  // the clear violation: a middot sitting between two lowercase words.
+  const proseMiddot = (panel('home').match(/[a-z]\s·\s[a-z]/g) ?? []).length;
+  assert.equal(proseMiddot, 0, 'no middot used as punctuation inside a sentence on Home');
+  ok('no middot used as sentence punctuation in rewritten copy');
+}
+
+{ // Glossary terms must be marked up so the hover cards can find them.
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const marked = [...html.matchAll(/data-term="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  assert.ok(marked.length > 0, 'the copy marks up at least one glossary term');
+
+  const ids = new Set(GLOSSARY.map((t) => t.id));
+  const unknown = [...new Set(marked)].filter((id) => !ids.has(id));
+  assert.deepEqual(unknown, [], 'every data-term in the markup exists in the glossary data');
+  ok(`all ${new Set(marked).size} marked-up terms in the page resolve to a real definition`);
+
+  // A marked term must also be a real link, so clicking reaches the glossary.
+  const links = [...html.matchAll(/<a class="gloss" data-term="([a-z0-9-]+)" href="#\/glossary\/([a-z0-9-]+)"/g)];
+  assert.equal(links.length, marked.length, 'every marked term is a link to the glossary');
+  for (const [, term, href] of links) {
+    assert.equal(term, href, `data-term and href must name the same term (${term} vs ${href})`);
+  }
+  ok('every marked term links to its own glossary entry (click goes to the definition)');
+}
+
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + app.js bootstrap).`);

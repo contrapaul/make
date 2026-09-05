@@ -1,8 +1,108 @@
-# v100 Handoff — P5 M1–M3 BUILT · P6 (M1–M4) COMPLETE + bug-fix pass, awaiting owner sign-off
+# v100 Handoff — P9 COPY REWRITE started (style guide + glossary + Home done) · P5 M1–M3 · P6 M1–M4 awaiting sign-off
 
-**Date:** 2026-09-04 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **76/76**, engine 62/62). P6 still awaits owner sign-off.
+**Date:** 2026-09-05 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **102/102**, engine **63/63**). **2026-09-05: the two open test gaps from the bug-fix pass are CLOSED** — see the section below; both new tests were regression-proven against the original defects. P6 still awaits owner sign-off.
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
+
+## P9 (NEW PHASE) — rewrite every word for a novice audience · 2026-09-05
+
+Owner's brief: the page is for high school students and people who think ChatGPT is a magic box, and the current copy fails them. It reads like a TED talk, it uses terms it never defines, and its headers are catchy rather than informative. This is a new phase of work, not a milestone of an existing one.
+
+### The governing document: `style-guide.md` (NEW, read it before writing any copy)
+
+Codifies the whole brief: the audience, the **em dash ban** and what to write instead, the cadence rules that kill the TED-talk voice, textbook header rules, and the term-introduction rule. Every user-facing string on the site is governed by it, in `index.html` **and** in `js/tabs/*.js`. It carries before-and-after examples taken from the real page.
+
+### Done in this pass
+
+| Piece | State |
+|---|---|
+| `style-guide.md` | **NEW.** The rules, with worked examples. Start here. |
+| `js/data/glossary.js` | **NEW.** 34 terms, each with `short` (hover card) and `full` (glossary page) definitions plus `see` cross references. Alphabetical by id; ids are stable because they are public URLs. |
+| `js/tabs/glossary.js` | **NEW.** Renders the glossary page from that data, wires the hover cards by **delegated** document listeners (so terms rendered later by other tabs work with no re-init), and handles `#/glossary/<term>` deep links. |
+| Tab 5 + hover card markup | `index.html`: nav link, glossary panel with `#glossary-list`, and one shared `#gloss-tip` card placed **outside `<main>`** so no overflow-clipped panel can cut it off. |
+| `css/tabs.css` | New "Tab 5" section: `.gloss` inline term (dotted accent underline, help cursor), `.gloss-tip` card, `.gloss-entry` page entries with `scroll-margin-top: 96px` for deep links, `.is-target` highlight. |
+| `js/app.js` | 5th router tab; deep-link sub-path preservation (see the trap below); `unseenRouterTabs` now skips untracked tabs. |
+| **Home tab copy** | **Rewritten.** Hero subtitle, plus the three beats restructured as the owner specified. |
+| `test/ui.test.mjs` | +21 checks (glossary module, router regression, and a mechanical style guard). **102/102 green.** |
+
+### Owner decisions taken in this pass
+
+1. **The glossary is a router tab but NOT a tracked one.** `'glossary'` is in `TABS` (js/app.js) and deliberately **absent from `TAB_IDS`** in `js/state/store.js`. So the Explorer badge still counts the original four tabs, the ring stays n/4, the glossary link never shows a "new" dot, and **the signed-off store needed no change at all**. Anything in `TABS` without a `TAB_TO_STORE` mapping is simply untracked. There is a test pinning this.
+2. **The memory-bandwidth explanation moved from Home into How It Works.** Home is now pure orientation. The explanation was rewritten and placed after the pipeline stages, where the reader has already met decode, as `.bandwidth-card`. Nothing was dropped.
+
+### Home restructure, as built
+
+Beats are now: **"What an AI model actually is"**, **"You have probably used a cloud model"**, **"Defining local AI"**. The old "The fork: local or cloud?" and "Speed is set by memory bandwidth" beats are gone. The two new beats each carry a scannable `.flow-list` card instead of the old side-by-side fork cards; `.fork-grid` / `.fork-card` CSS was removed because this change is what orphaned it.
+
+### ⚠ Trap for the next session: the router used to eat deep links
+
+`initRouter` rewrote the hash to `#/<tab>` on load whenever it differed. That silently destroyed `#/glossary/kv-cache`, turning it into `#/glossary` **before** the glossary module could read the term. The fix keeps the rewrite but skips it when the hash already starts with `#/<tab>/`. There is a regression test. Do not "simplify" that condition back.
+
+### Mechanical enforcement of the copy rules
+
+The em dash ban rots without a guard, so `test/ui.test.mjs` now enforces it, counting only reader-facing text (HTML comments are stripped first, since the rule governs what a reader sees):
+
+* **Rewritten panels hold at zero.** Currently `home` and `glossary`. **Add each panel to that list as its rewrite lands.**
+* **Everything else has a budget that may only go DOWN:** `how` ≤ 15, `lab` ≤ 13. Lower these as you rewrite; a rise means new copy shipped in the old voice.
+* Every `data-term` in the markup must resolve to a real glossary entry, and every marked term must link to its own definition.
+
+### What REMAINS of P9 (the bulk of the work)
+
+1. **How It Works copy** (15 em dashes left). Stage names are still jargon-first: "Prefill vs decode" names two undefined terms in a header. Mark up terms as you go.
+2. **Hardware Lab copy** (13 in the panel, 44 in `js/tabs/lab.js`). Worst offender for undefined jargon: `Q4_K_M (GGUF)`, "K-quant blocks with per-group scales", "GQA 8 KV heads". Note that **most Lab prose lives in JavaScript strings**, not HTML, and roughly 63 test assertions match that copy exactly, so budget for test churn.
+3. **`js/tabs/pipeline.js`** (39). Same situation.
+4. **Mark up glossary terms throughout.** Only 9 distinct terms are marked so far, all on Home and in the relocated bandwidth card. All 34 exist and are ready to use.
+5. Consider whether the Compare tab (P7, not yet built) should be written to the guide from the start. It should.
+
+## Scroll reveals made ONE-WAY (2026-09-05) — the looping/bouncing fix
+
+Owner: *"animations can loop/bounce depending where the user stops scrolling"* — against the pi.dev reference feel, where things fade/move into place and then stay.
+
+**Cause.** Reveals were deliberately **reversible**: `js/motion/scroll.js` stripped `.in-view` whenever an element left the IntersectionObserver band (`rootMargin: -10% 0px`). Stop scrolling with an element parked at that edge and the browser emits a burst of alternating intersect/unintersect events — each one replays the 400 ms opacity+translateY transition. Nothing was "animating" in the CSS sense; the class was being toggled underneath it.
+
+**Fix.** One behaviour change in the observer callback: add `.in-view` on first entry, then `io.unobserve(el)` immediately, so no later event can reach that element. Reveals are transitions (`animation-name: none`), so once the class sticks there is no mechanism left to replay them.
+
+⚠ **This reverses a P3 sign-off criterion** — "reveals reversible" was part of the P3 acceptance gate (blueprint §11 P3 row, signed off 2026-09-02). The owner reversed that decision on 2026-09-05. The §11 row is **annotated, not rewritten**, so the original record stands.
+
+| File | Change |
+|---|---|
+| `js/motion/scroll.js` | Observer callback: reveal once + `unobserve()`; non-intersecting entries are ignored. Module header rewritten to say one-way and to record why (so nobody "restores" reversibility) |
+| `css/base.css` | Section comment `(§8, reversible)` → `(§8, ONE-WAY)`, with a "do not add a rule that strips `.in-view`" note. **No rule changed** |
+| `test/ui.test.mjs` | `motion/scroll.js` block rewritten. `IOStub` now models `unobserve()` faithfully (a `live` set + a `scroll()` helper that filters out unobserved targets, because a real observer stops delivering for them). New checks: revealed → unobserved immediately · leave + re-enter never re-animates · **8 alternating events at the band edge (the reported symptom) leave the reveal untouched** · below-the-fold elements stay hidden and stay watched. **81/81 green** (was 79) |
+| `blueprint.md` | §11 P3 row annotated (reversibility superseded); new verification-log entry |
+| `HANDOFF.md` | This document |
+
+**Not changed — owner decision wanted.** Eight *ambient* infinite animations remain, confirmed live in the browser: four `.mesh .blob` drifts (44–60 s), three `.hero-float` bobs (9–13 s), the `.token-track` marquee (36 s). They are continuous background motion rather than scroll-triggered entrances, none replays an element's arrival, and all are killed under `prefers-reduced-motion`. If "never loop" is meant literally, these are what is left.
+
+⚠ **The fix could NOT be scroll-verified in the agent browser pane** — do not read the earlier attempt as evidence either way. The pane reports `document.visibilityState: "hidden"`, and a hidden page never delivers IntersectionObserver callbacks (`innerHeight` was even 0 before an explicit resize). Instrumenting `.in-view` with a MutationObserver and scrolling the whole page produced **zero** class changes, every reveal stuck at `opacity: 0`. Same class of harness artifact as the documented `requestAnimationFrame` one — **not** a dead page: console clean, `html.js` set, correct panel active. **Owner: please confirm in a real browser window.**
+
+## Test gaps CLOSED (2026-09-05) — tests + docs only, zero source changes
+
+Both gaps the bug-fix pass left open are now covered. **Each new test was regression-proven**: the original defect was reintroduced, the test was watched to fail, and the source was restored (`git diff` clean).
+
+| Gap | Where the test lives | What it does |
+|---|---|---|
+| **1. Nothing called `initApp()`** | `test/ui.test.mjs`, new `app.js — initApp() bootstrap` section (+3 checks) | `makeAppDoc()` composes the existing `makeLabDoc()` / `makePipeDoc()` / `makeTrackerDoc()` fixtures into one document, installs browser globals (`document`, `window`, `location` = `#/lab`, `addEventListener`, `localStorage`), then **imports a fresh copy of `app.js` through a cache-busting query string** so the module's own auto-bootstrap runs. Asserts: exactly one active panel and it is the deep-linked one · tracker ring 1/4 · theme toggle wired · Lab printouts painted · Pipeline Stage 3 painted · one `hashchange` listener — then fires that handler for real and checks it routes to `#/how` at 2/4. Globals are restored in a `finally`, so no later test sees them. |
+| **2. No absolute TTFT magnitude** | `test/engine.test.mjs`, beside the existing floor check (+1 check) | `TTFT has a plausible absolute magnitude for the default rig (0.5–5 s)`, with the hand-check arithmetic in a comment. |
+
+> ⚠ **Do not "simplify" gap 1 into a plain `initApp()` call.** That was the first attempt and it is worthless: a TDZ fault exists only *during module evaluation*, and by the time any test can call the exported `initApp()`, the `const` bindings are already initialized. Proven — with `defaultDoc`/`defaultHash` moved back to the foot of `app.js`, the direct-call version stayed **79/79 green** while the fresh-import version fails. The cache-busting query string is load-bearing.
+
+Regression proofs, for the record:
+
+* **TDZ:** moved `defaultDoc`/`defaultHash` back to the last two lines of `app.js` → `ui.test.mjs` fails at the `doesNotReject` on the fresh import. Restored → 79/79.
+* **Unit bug:** deleted one `× 1e12` on `js/engine/perf.js:180` → the old floor check **still passed**, the new check failed with `got 1534082397003845.5 ms`. Restored → 63/63.
+
+Also corrected in the same pass: `index.html`'s Tab 2 header comment still described Stages 3–5 as placeholders after M3 shipped (now Stages 4–5).
+
+| File | Change |
+|---|---|
+| `test/ui.test.mjs` | `makeAppDoc()` + the bootstrap section (3 checks); `initApp` NOT imported — `TABS` is, for the panel fixtures; final log now "+ app.js bootstrap". **79/79 green** (was 76) |
+| `test/engine.test.mjs` | +1 absolute-magnitude TTFT check. **63/63 green** (was 62). First change to this file since P2 sign-off — an added anchor, no engine behaviour touched |
+| `index.html` | Tab 2 header comment: Stages 3–5 → Stages 4–5 placeholders (M3 is live) |
+| `blueprint.md` | Status line: P5 M1–M3 built + current suite counts; §11 P5 row shows M1–M3 built / M4–M5 to build; §11 P6 row count refreshed (was stale at 56/56); new verification-log entry for the closed gaps; Last updated 2026-09-05 |
+| `HANDOFF.md` | This document |
+
+**Verification:** `node --check` OK on both test files · `test/ui.test.mjs` **79/79** · `test/engine.test.mjs` **63/63** · `git diff` clean on `js/app.js` and `js/engine/perf.js` after both regression proofs. **Zero changes to any `js/` source file.**
 
 ## What changed — P5 M3 (Stage 3 · Prefill vs decode, blueprint §6 Tab 2.3)
 
@@ -88,10 +188,10 @@ Owner reported: *"Qwen tells me to try it out, but nothing happens on page when 
 
 **Live verification after the fixes** (served over HTTP — ES modules fail on `file://`): console clean · `#/lab` routes and paints · printouts `145.3 tok/s · 1.63 s · 415 W · ¥0.516 · $0.077 · 80B` · controls two-way live (128K ctx → 36.9 tok/s, caption `4.4 GB weights + 17.2 GB KV of 24 GB VRAM`) · Run Inference completes 256/256 tokens, 256 chips, gauge 36.9, `×1.0 time-compressed`. Hand-check of the new TTFT: 2048 × 1.6e10 ÷ (35.6 × 0.6 × 1e12) + 0.1 = **1.63 s**. ✅
 
-**Two test gaps left OPEN — close these before P6 sign-off:**
+**Two test gaps — both CLOSED 2026-09-05** (see the section at the top of this document; each was regression-proven against the original defect):
 
-1. **Nothing ever calls `initApp()`.** `test/ui.test.mjs` dependency-injects `doc` into every module, so the bootstrap path has zero coverage — that is precisely how a fatal error shipped with 56/56 green. Add a test that runs `initApp()` against a full-document fixture and asserts it doesn't throw.
-2. **No absolute-magnitude assertion on TTFT.** Existing checks only assert `ttftMs ≈ ttftMsBase × B` (relative) and `ttftMsBase > 100` (a floor) — a 1e12 error satisfies both. Add a plausible-range check for the default config (≈ 1.6 s).
+1. ~~**Nothing ever calls `initApp()`.**~~ **CLOSED.** Covered by importing a fresh copy of `app.js` against browser globals so its auto-bootstrap runs — a direct `initApp()` call does NOT reproduce a TDZ and was proven insufficient.
+2. ~~**No absolute-magnitude assertion on TTFT.**~~ **CLOSED.** `test/engine.test.mjs` now pins the default rig to 0.5–5 s (real value 1.634 s).
 
 ## Agent-decided, NOT yet owner-approved (ships with P6 sign-off review)
 
@@ -112,7 +212,7 @@ Owner reported: *"Qwen tells me to try it out, but nothing happens on page when 
 
 1. **Owner reviews P5 M1 + M2 + M3 (committed, awaiting review)** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html#/how`. Eyeball: 5 horizontal glass cards; Stage 1 prefilled with “Hello, world!” → brief “loading vocabulary…” then 4 chips with **real Qwen3 ids** (“ world” = 1814); typing re-renders live; empty input clears; real-vocab-subset note (30,747 of 248,320 tokens; subset + greedy-longest-first limits) visible. **Stage 2:** memory bar pours in on load (instant under prefers-reduced-motion); caption shows real GB used vs available from the engine. **Stage 3 (the core lesson):** the two-speed contrast — on load the drip animates: a brief “Prefill — one fast pass over the N-token prompt…” beat, then decode chips (`.sim-conveyor`) trickle in one-by-one to 256; the two columns show the prefill gulp (prompt-token count + TTFT, compute-bound) vs the decode drip (engine tok/s + per-token ms, bandwidth-bound); the run line labels the real time + any ×N compression. Change hardware in the Lab (e.g. RTX 3060 12 GB + 70B offload → both halves slow down live, compression label appears) and Stage 3 re-renders on the same subscription as Stage 2. Confirm Home/Lab do **not** load the 381 KB vocab. Review the diff in `85780dc`.
 2. **Owner reviews P6 in light + dark** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html` and `#dark`. Eyeball the new rows: concurrency ×4 → total row + TTFT note appear; RTX 3060 + DDR4 + 70B stop → offload sentence appears under the memory caption.
-3. **Close the two open test gaps** from the bug-fix pass (`initApp()` bootstrap test · absolute TTFT range assertion) — cheap, and both guard defects that already shipped once.
+3. ~~Close the two open test gaps~~ — **DONE 2026-09-05** (ui 79/79, engine 63/63; both regression-proven).
 4. **Owner sign-off** on P6 (incl. the agent-decided placement/copy list above) → flip blueprint §11 P6 row to SIGNED OFF with date.
 5. **Next build step: P5 M4 (KV cache growth stage)** — blueprint §6 Tab 2.4: a bar that fills as context grows, with a live GB readout from the engine's §5 KV formulas for the current model/context window. Then M5 sampling (temperature/top-p + next-token probability bars).
 6. Then P7 Compare tab / P8 polish per blueprint §11 order.
@@ -131,15 +231,15 @@ Owner reported: *"Qwen tells me to try it out, but nothing happens on page when 
 
 | File | Status / significance |
 |---|---|
-| `js/data/*` (incl. new `vocab.js`), `js/engine/cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; 62/62 green — **do not modify**. `vocab.js` is a generated 30,747-entry Qwen3 vocabulary subset (381 KB) — regenerate, don't hand-edit |
-| `js/engine/perf.js` | ✅ P2 signed off, 62/62 green — **do not modify except**: prefill TFLOPS→FLOPs unit fix landed 2026-09-04 (`f21797b`, see bug-fix pass). Formula shape unchanged. |
+| `js/data/*` (incl. new `vocab.js`), `js/engine/cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; engine suite 63/63 green — **do not modify**. `vocab.js` is a generated 30,747-entry Qwen3 vocabulary subset (381 KB) — regenerate, don't hand-edit |
+| `js/engine/perf.js` | ✅ P2 signed off, engine suite 63/63 green — **do not modify except**: prefill TFLOPS→FLOPs unit fix landed 2026-09-04 (`f21797b`, see bug-fix pass). Formula shape unchanged. |
 | `css/tokens.css`, `base.css`, `tabs.css` | ✅ P3/P4 signed off; `.is-hidden` + `.ctl-note` utilities already exist (used by M4 rows) |
-| `js/app.js` | ✅ built; **fatal TDZ fixed 2026-09-04** — `defaultDoc`/`defaultHash` must stay ABOVE `initApp()`, never at the file's end; also wires `initPipeline({store})` (P5 M1) |
+| `js/app.js` | ✅ built; **fatal TDZ fixed 2026-09-04, now covered by a bootstrap test** — `defaultDoc`/`defaultHash` must stay ABOVE `initApp()`, never at the file's end; also wires `initPipeline({store})` (P5 M1) |
 | `js/theme.js`, `js/motion/scroll.js`, `js/tabs/home.js` | ✅ built, unchanged |
 | `js/tabs/lab.js` | ✅ **M1–M4 complete** (624 lines); M4 helpers exported for tests |
 | `js/tabs/pipeline.js` | 🆕 **P5 M1+M2+M3 (committed `85780dc`, REWORKED)** — `tokenizeWith(vocab, text)` (pure, greedy longest-first) + async `tokenize(text)` (lazy memoised `import('../data/vocab.js')`) + **P5 M2: `modelLoadView(perf)` / `loadCaption(perf, config)`** (Stage 2 memory bar + GB caption, reuses lab.js `membarView`) + **P5 M3: `prefillDecodeView(perf)` / `prefillCaption` / `decodeCaption` / `speedNote`** (Stage 3 two-speed contrast, reuses lab.js `simPlan`/`simPhase`/`tokensAt`/`stageText`) + `runStage3Drip` (DI raf/now, reduced-motion instant) + `initPipeline({doc,store,raf,now,reduced})` factory (ONE store subscription drives Stages 2+3, `api.pending`, `api.destroy()` cancels drip + unsubs); M4–M5 seam ready |
 | `index.html` | ✅ Lab panel + 3 M4 elements; **How tab = P5 M1 shell + Stage 1 live + Stage 2 (Model load) live + Stage 3 (Prefill vs decode) live**; Stages 4–5 still placeholder; Compare still "Phase 7 lands here"; stray literal `\n` in `#explorer-celebrate` removed 2026-09-04 |
-| `test/ui.test.mjs` | ✅ **76 checks green** (was 70; +6 P5 M3 blocks: prefillDecodeView fast/slow, prefill-half engine prompt-token count, clock-driven drip 0→256, reduced-motion instant, store-change re-render); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()`, `makePipeDoc()` (now incl. pipe-loadbar/-caption/-layers + pipe-prefill/-decode/-phase/-drip fakes) patterns in-file. ⚠ **Two known test gaps remain** from the bug-fix pass: nothing calls `initApp()` against a full-document fixture, and no test pins TTFT to an absolute magnitude |
+| `test/ui.test.mjs` | ✅ **79 checks green** (was 70; +6 P5 M3 blocks: prefillDecodeView fast/slow, prefill-half engine prompt-token count, clock-driven drip 0→256, reduced-motion instant, store-change re-render); plus the 2026-09-05 `app.js — initApp() bootstrap` section (+3); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()`, `makePipeDoc()`, `makeAppDoc()` patterns in-file. ✅ **Both bug-fix-pass test gaps are now closed** |
 | `blueprint.md` | ✅ §11 P6 row + verification log updated for M1–M4 **and the 2026-09-04 bug-fix pass**; awaiting sign-off flip |
 | `HANDOFF.md` | ✅ this document — replace on disk when writing it |
 | `dev/design-system.html` | P3 acceptance harness (signed off); unchanged |

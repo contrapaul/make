@@ -1,9 +1,14 @@
 /* ============================================================
    v100 — Scroll reveal engine + micro-interactions (blueprint §8)
    ------------------------------------------------------------
-   - Reversible reveals: IntersectionObserver with rootMargin
-     "-10% 0px". Elements gain .in-view when they enter the band,
-     lose it when they leave → clean reverse on scroll-up. No lib.
+   - One-way reveals: IntersectionObserver with rootMargin
+     "-10% 0px". An element gains .in-view the first time it enters
+     the band and is then UNOBSERVED — it never re-animates. No lib.
+     (2026-09-05: reveals used to be reversible, removing .in-view on
+     exit. An element left parked at the band edge then flipped in/out
+     on the smallest scroll jitter and replayed its fade+slide, which
+     read as looping/bouncing. Reveal-once is the pi.dev behaviour the
+     page was modelled on: things arrive, then stay put.)
    - Stagger: --i = ordinal among data-reveal siblings within the
      same parent; CSS applies transition-delay calc(var(--i)*60ms).
    - prefers-reduced-motion is handled in base.css (instant,
@@ -42,9 +47,11 @@ export function initReveals({ root = defaultRoot(), IO = defaultIO() } = {}) {
     (entries) => {
       for (const entry of entries) {
         const el = entry && entry.target;
-        if (!el || !el.classList) continue;
-        if (entry.isIntersecting) el.classList.add('in-view');
-        else el.classList.remove('in-view'); // reversible on scroll-up (§8)
+        if (!el || !el.classList || !entry.isIntersecting) continue;
+        el.classList.add('in-view');
+        // Reveal once, then stop watching: nothing can replay the
+        // animation, however the visitor scrolls (§8).
+        if (typeof io.unobserve === 'function') io.unobserve(el);
       }
     },
     { rootMargin: '-10% 0px', threshold: 0 }
