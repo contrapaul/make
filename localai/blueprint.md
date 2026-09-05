@@ -22,7 +22,7 @@ A static, multi-tab interactive site for **high school students and educators** 
 ## 2. Architecture & File Layout
 
 ```
-v100/
+localai/
 ├── index.html              # App shell: tab nav, theme toggle, footer placeholder
 ├── css/
 │   ├── tokens.css          # Design tokens + light/dark themes (CSS custom properties)

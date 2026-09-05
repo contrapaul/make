@@ -446,7 +446,7 @@ The owner rejected the original FNV-hash / regex tokenizer (it emitted every wor
 
 **Verification (tokenizer rewrite):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **65/65 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level static import** of `vocab.js` in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*` (vocab.js only read), `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`.
 
-Project: `/home/paul/Documents/GitHub/make/tools/local/v100/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. Git repo root is `/home/paul/Documents/GitHub/make`; if a new session gets "No permission to write", re-request via `request_read_write_access`.
+Project: `/home/paul/Documents/GitHub/make/localai/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. Git repo root is `/home/paul/Documents/GitHub/make`; if a new session gets "No permission to write", re-request via `request_read_write_access`.
 
 ## What M4 was (owner's ask)
 

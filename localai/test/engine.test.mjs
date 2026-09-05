@@ -1,7 +1,7 @@
 /**
  * v100 — Phase 2 engine acceptance tests (blueprint §5.4 anchors + unit checks)
  * =============================================================================
- * Plain Node, no framework. Run from the v100 directory:
+ * Plain Node, no framework. Run from the localai directory:
  *
  *   node test/engine.test.mjs
  *
