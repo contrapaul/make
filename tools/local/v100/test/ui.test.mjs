@@ -32,7 +32,11 @@ import { GLOSSARY } from '../js/data/glossary.js';
 import {
   RACE_REAL_BUDGET_S, localRacer, cloudRacers, waitLabel, racePlan,
   racerTokensAt, racerStatus, raceNote, renderRace, runRace, initCompare,
+  localModelName, compareColumns, compareRows, usedSources, pricingCaveats,
+  agenticHighlight, renderCompareTable, renderFootnotes, displayName,
 } from '../js/tabs/compare.js';
+import { CLOUD_SOURCES } from '../js/data/cloud.js';
+import { computeCost } from '../js/engine/cost.js';
 import { CLOUD_MODELS } from '../js/data/cloud.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
 import { evaluate, PROMPT_SPLIT_TOKENS, GENERATION_TARGET_TOKENS } from '../js/engine/perf.js';
@@ -2067,6 +2071,170 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   ok(`a Lab hardware change rebuilds the field (${before.toFixed(0)} → ${after.toFixed(0)} tok/s, then out of the race)`);
 }
 
+/* ------------- js/tabs/compare.js — P7 M2 (comparison table) ------------- */
+console.log('tabs/compare.js — P7 M2 (the comparison table)');
+
+const cmpFixture = () => {
+  const config = { ...DEFAULT_CONFIG };
+  const perf = evaluate(config);
+  return { config, perf, cost: computeCost(config, perf) };
+};
+
+{ // columns: the reader first, then every cloud model, each named
+  const { config } = cmpFixture();
+  const cols = compareColumns(config);
+  assert.equal(cols[0].id, 'local', "the reader's own column comes first");
+  assert.equal(cols.length, CLOUD_MODELS.length + 1);
+  assert.match(localModelName(config), /8B, Llama 3\.1 8B/, 'the local column names the actual model');
+  // A representative stop must say so rather than claim an anchor it does not have.
+  assert.match(localModelName({ ...config, modelStopIndex: 4 }), /no single anchor/);
+
+  // A vendor already inside the model name must not be repeated: cloud.js
+  // stores "DeepSeek V4 Pro" under vendor "DeepSeek".
+  assert.equal(displayName('DeepSeek', 'DeepSeek V4 Pro'), 'DeepSeek V4 Pro');
+  assert.equal(displayName('OpenAI', 'GPT-5.6 Sol'), 'OpenAI GPT-5.6 Sol');
+  assert.equal(displayName('', 'Solo'), 'Solo');
+  for (const c of cols) {
+    assert.ok(!/\b(\w+)\b \1\b/i.test(c.label), `column header "${c.label}" repeats a word`);
+  }
+  ok(`compareColumns: ${cols.length} columns, local first, named "${localModelName(config)}"`);
+}
+
+{ // every row has a cell per column, and the numbers are the engine's
+  const { config, perf, cost } = cmpFixture();
+  const rows = compareRows(perf, config, cost);
+  assert.equal(rows.length, 10, 'all ten blueprint dimensions are present');
+  for (const r of rows) {
+    assert.equal(r.cells.length, CLOUD_MODELS.length + 1, `"${r.label}" has a cell per column`);
+    for (const c of r.cells) assert.ok(typeof c.text === 'string' && c.text.length > 0, 'no empty cells');
+  }
+
+  const speed = rows.find((r) => r.label === 'Writing speed');
+  assert.match(speed.cells[0].text, new RegExp(perf.decodeTpsPerRequest.toFixed(1)), 'local speed is the engine figure');
+  const cost0 = rows.find((r) => r.label.startsWith('Cost per million'));
+  assert.match(cost0.cells[0].text, /^¥/, 'local cost is shown in yuan');
+  ok('compareRows covers all ten dimensions with a cell per column, local values from the engine');
+}
+
+{ // §6 Tab 4 acceptance: every authoritative CLOUD number carries a footnote
+  const { config, perf, cost } = cmpFixture();
+  const rows = compareRows(perf, config, cost);
+  const numeric = ['Writing speed', 'Wait before the first word', 'Cost per million words written', 'How much it can hold in mind'];
+
+  for (const label of numeric) {
+    const row = rows.find((r) => r.label === label);
+    // cells[0] is the reader's own machine: computed live, so it cites nothing.
+    for (let i = 1; i < row.cells.length; i += 1) {
+      const c = row.cells[i];
+      if (/Not published|Not available/.test(c.text)) continue; // nothing asserted, nothing to cite
+      assert.ok(c.sources.length > 0, `"${label}" cloud cell "${c.text}" must carry a source`);
+    }
+  }
+  ok('every authoritative cloud number in the table carries a footnote (§6 Tab 4 acceptance)');
+}
+
+{ // the footnote list shows only what was actually cited, and resolves
+  const { config, perf, cost } = cmpFixture();
+  const used = usedSources(compareRows(perf, config, cost));
+  assert.ok(used.length > 0);
+  const allIds = new Set(CLOUD_SOURCES.map((x) => x.id));
+  for (const src of used) {
+    assert.ok(allIds.has(src.id), `${src.id} is a real source`);
+    assert.match(src.url, /^https:\/\//, `${src.id} has an https url`);
+    assert.ok(src.label.length > 0);
+  }
+  assert.deepEqual(usedSources([]), [], 'nothing cited means no footnote list');
+  ok(`the footnote list carries the ${used.length} sources actually cited, each resolving to a real entry`);
+}
+
+{ // agentic coding: only real coding claims, and never an unverified one
+  const claude = CLOUD_MODELS.find((m) => m.id === 'claude-opus-5');
+  assert.match(agenticHighlight(claude), /agentic coding/i, 'a genuine coding claim is used');
+
+  // GPT-5.6's highlights are a knowledge cutoff and a reasoning-effort note.
+  // Neither is an agentic coding result, so the cell must stay empty.
+  const sol = CLOUD_MODELS.find((m) => m.id === 'gpt-56-sol');
+  assert.equal(agenticHighlight(sol), null, 'a knowledge cutoff is not a coding result');
+
+  // DeepSeek V4 Pro's SWE-bench highlight carries P1's own
+  // "verify before publishing" caveat. Publishing it would put an unverified
+  // third-party number on the page, so it must be withheld.
+  const ds = CLOUD_MODELS.find((m) => m.id === 'deepseek-v4-pro');
+  assert.ok(ds.highlights.some((h) => /verify before publishing/i.test(h)), 'test premise: the caveat is in the data');
+  assert.equal(agenticHighlight(ds), null, 'an unverified figure is never published');
+
+  const { config, perf, cost } = cmpFixture();
+  const row = compareRows(perf, config, cost).find((r) => r.label === 'Agentic coding');
+  assert.match(row.cells[1].text, /No agentic coding result/, 'and the cell says so plainly');
+  assert.ok(!/SWE-bench/.test(row.cells.map((c) => c.text).join(' ')), 'the unverified figure never reaches the table');
+  ok('agentic coding uses only genuine coding claims, and withholds the one flagged "verify before publishing"');
+}
+
+{ // pricing caveats come from the data, not from hardcoded prose
+  const caveats = pricingCaveats();
+  assert.ok(caveats.length >= 3, 'the models with pricing notes are surfaced');
+  assert.ok(caveats.some((c) => /off-peak/i.test(c.note)), "DeepSeek's peak/off-peak split is stated");
+  assert.ok(caveats.some((c) => /[Pp]romotional/.test(c.note)), "GPT-5.6's promotional pricing is stated");
+  ok(`pricingCaveats surfaces ${caveats.length} pricing notes straight from cloud.js`);
+}
+
+{ // rendering the table and its footnotes
+  const doc = makeGlossDoc();
+  const { config, perf, cost } = cmpFixture();
+  const rows = compareRows(perf, config, cost);
+
+  assert.equal(renderCompareTable(doc, doc.list, compareColumns(config), rows), 10);
+  const table = doc.list.children[0];
+  assert.ok(table.classList.contains('data'), 'reuses the signed-off table.data styling');
+  const [thead, tbody] = table.children;
+  assert.equal(thead.children[0].children.length, CLOUD_MODELS.length + 2, 'corner cell plus one per column');
+  assert.equal(tbody.children.length, 10);
+
+  // A cited cell renders its marker as a real element, not baked into the text.
+  const speedRow = tbody.children[0];
+  const cloudCell = speedRow.children[2];
+  assert.ok(cloudCell.children.some((n) => n.classList.contains('fn')), 'footnote marker is rendered');
+  assert.ok(!/\[C\d/.test(cloudCell.textContent), 'and is not smuggled into the cell text');
+
+  assert.equal(renderCompareTable(doc, null, [], rows), 0, 'no host is safe');
+
+  const fnDoc = makeGlossDoc();
+  const n = renderFootnotes(fnDoc, fnDoc.list, usedSources(rows));
+  assert.equal(n, usedSources(rows).length);
+  const first = fnDoc.list.children[0];
+  assert.match(first.children[0].textContent, /^\[C\d\] $/, 'each footnote is tagged with its id');
+  assert.equal(first.children[1].attrs.target, '_blank', 'sources open in a new tab');
+  assert.equal(first.children[1].attrs.rel, 'noopener noreferrer');
+  ok('the table and its footnote list render, with markers as elements and sources as real links');
+}
+
+{ // the table follows the hardware, since half of it is the reader's column
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, String(v)); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG }, storage });
+  const doc = makeGlossDoc();
+  const tableHost = { children: [], appendChild(c) { this.children.push(c); return c; }, removeChild(c) { this.children.splice(this.children.indexOf(c), 1); } };
+  const notesHost = { children: [], appendChild(c) { this.children.push(c); return c; }, removeChild(c) { this.children.splice(this.children.indexOf(c), 1); } };
+  const fnHost = { children: [], appendChild(c) { this.children.push(c); return c; }, removeChild(c) { this.children.splice(this.children.indexOf(c), 1); } };
+  const stub = { textContent: '' };
+  doc.getElementById = (id) => ({
+    'cmp-race': doc.list, 'cmp-run': { addEventListener() {} },
+    'cmp-race-note': stub, 'cmp-race-local': stub,
+    'cmp-table': tableHost, 'cmp-table-notes': notesHost, 'cmp-footnotes': fnHost,
+  }[id] ?? null);
+
+  const api = initCompare({ doc, store, reduced: true });
+  const readSpeed = () => tableHost.children[0].children[1].children[0].children[1].textContent;
+  const before = readSpeed();
+  assert.ok(notesHost.children.length > 0, 'the reading notes render');
+  assert.ok(fnHost.children.length > 0, 'the footnotes render');
+
+  store.setConfig({ gpuId: 'rtx-3060-12g' });
+  assert.notEqual(readSpeed(), before, "the reader's column moves with the hardware");
+  assert.equal(tableHost.children.length, 1, 'and the table is replaced, not appended to');
+  api.destroy();
+  ok(`the table re-renders on a hardware change (${before} → ${readSpeed()})`);
+}
+
 /* ---------------- style-guide.md enforcement ----------------- */
 console.log('style guide (copy rules)');
 
@@ -2159,4 +2327,4 @@ console.log('style guide (copy rules)');
 }
 
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + P5 M4 KV cache + P5 M5 Sampling + P7 M1 race + app.js bootstrap).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + P5 M4 KV cache + P5 M5 Sampling + P7 M1 race + P7 M2 table + app.js bootstrap).`);
