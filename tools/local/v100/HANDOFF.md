@@ -1,8 +1,70 @@
-# v100 Handoff — P9 COPY REWRITE started (style guide + glossary + Home done) · P5 M1–M3 · P6 M1–M4 awaiting sign-off
+# v100 Handoff — P9 COPY REWRITE COMPLETE (every surface) · P5 M1–M3 · P6 M1–M4 awaiting sign-off
 
 **Date:** 2026-09-05 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **102/102**, engine **63/63**). **2026-09-05: the two open test gaps from the bug-fix pass are CLOSED** — see the section below; both new tests were regression-proven against the original defects. P6 still awaits owner sign-off.
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
+
+## Home hero layout pass (2026-09-05, owner request)
+
+Three changes, all in `css/tabs.css` plus one markup removal:
+
+1. **The scrolling token marquee is gone.** Removed from `index.html`, and with it the now-orphaned `.token-stream` / `.token-track` / `.token-half` / `.glyph` / `.glyph--accent` rules and the `token-drift` keyframes. The reduced-motion block referenced `.token-track` and was updated too. That also removes one of the page's remaining infinite animations.
+2. **The description matches the title width.** It was capped at `58ch`, visibly narrower than the h1. Rather than hard-coding a width on the paragraph, `.hero-inner` was narrowed from 780px to **700px**, which makes the content column equal the h1's single-line width at 48px type. Both elements now share identical edges: measured live at 387px left, 651px title against 652px description.
+3. **The first story beat sits at the fold.** `.home-hero` min-height went from `100vh` to `82vh` (the marquee no longer needs the room) and `.home-story` top padding from `sp-7` to `sp-4`. At 1440x900 the "What an AI model actually is" heading is now visible without scrolling, with its top at 755px of a 900px viewport.
+
+Verified by screenshot in a real browser at 1440x900.
+
+> Note for the next session: judging hero layout in the agent browser pane requires injecting `.js [data-reveal]{opacity:1 !important}` first. The hidden pane never fires IntersectionObserver, so every revealed element sits at opacity 0 and the screenshot comes out looking blank. That is the same harness artifact already logged for `requestAnimationFrame` and for class-change restyling.
+
+## P9 COPY REWRITE — FINISHED 2026-09-05 (second pass: How It Works, Hardware Lab, all runtime strings)
+
+Every reader-facing surface now obeys `style-guide.md`. **Zero em dashes reach a reader**, verified both by the test suite and by reading `document.body.innerText` in a live browser on all five tabs, in the fast, offloading, does-not-fit and four-users-at-once states.
+
+### The owner's own edits taught the guide four new rules
+
+The owner committed the first pass with hand edits (`6c3d03b`). Those edits were the useful part, and `style-guide.md` §3 now carries them as rules 8 to 11:
+
+* **Use contractions.** "You've probably used" beat "You have probably used".
+* **Pick the everyday word.** "math", not "arithmetic".
+* **No clever phrasing, even when accurate.** "the same idea with the location changed" and "with the network cable unplugged" were both replaced with direct statements.
+* **Say it once.** "Electricity. No subscription, no per question charge." became just "Electricity." because the paragraph above already said it.
+
+Apply these to any new copy. They are owner preferences, not agent taste.
+
+### What was rewritten in this pass
+
+| Surface | Notes |
+|---|---|
+| **How It Works** | Stage headings were jargon-first and are now plain: "Prefill vs decode" is **"Step 3. Reading your question, then writing the answer"**, "KV cache growth" is **"Step 4. Remembering the conversation"**, "Sampling" is **"Step 5. Choosing the next word"**. Step 4 now builds keys and values from scratch before naming the KV cache, per the guide's worked example. `aria-label`s were updated to match the new headings. |
+| **Hardware Lab** | Control group labels: "Precision (quantization)" is now "How tightly the model is compressed", with a note defining it. Every results row is plain English: "Decode speed (per request)" is **"Writing speed, one user"**, "Time to first token" is **"Wait before the first word"**, "Cost / M output tokens" is **"Cost per million words written"**. The "How we estimate this" panel keeps every formula and every labeled assumption, rewritten so a student can follow the reasoning. |
+| `js/tabs/lab.js` | 9 prose strings plus the memory captions, the fit chip, the offload teaching sentence (both branches), the concurrency queueing note and the finish line. |
+| `js/tabs/pipeline.js` | 6 prose strings plus the offload caption. |
+| **`js/data/quantization.js`** | See the warning below. |
+| Explore grid + Compare placeholder | Card blurbs rewritten. The Compare tab no longer says "Phase 7 lands here", which meant nothing to a reader; it now explains what the page will do. |
+| `test/ui.test.mjs` | ~20 copy-coupled assertions updated, plus a new runtime-copy guard. **102/102 green.** |
+
+### ⚠ `js/data/quantization.js` was edited, and it is a P1 signed-off file
+
+The quantization explainer prose lives in that data file, and the brief required rewriting it ("K-quant blocks with per-group scales" is exactly the failure the owner named). **Only the prose fields changed**: `qualityLabel` and the three `explainer` strings on all five levels. **Every number and id is untouched**, which was verified mechanically by diffing the `bytesPerParam` / `kvBytesPerElement` / `id:` lines before and after (identical), and `test/engine.test.mjs` stays 63/63. Same principle as the P2 `perf.js` unit fix: the signed-off thing is the value, not the sentence next to it.
+
+### The "no value yet" placeholder changed
+
+`'—'` was the placeholder for a missing value in both HTML and JS. It is now `'…'`, which also reads as "still waiting", which is what it actually means. It appears in `fmtTps`, `fmtMs`, `fmtWatts`, `fmtCost`, `memoryCaption`, `fitChipText`, `loadCaption` and the static HTML readouts. If you add a new formatter, use the ellipsis.
+
+### The guard is now absolute
+
+The em dash ratchet is gone because there is nothing left to ratchet:
+
+* **All five panels must hold at zero**, plus a whole-file check on `index.html`.
+* **A middot may never sit between two lowercase words** anywhere in the page. It remains legal in data labels such as `¥0.516 · $0.077`.
+* **A new runtime-copy test** drives the real Lab and Pipeline functions across four hardware states (fast path, offloading, does not fit, four users at once) and asserts no em dash appears in anything they generate. This matters because most site prose lives in JavaScript template strings that no scan of `index.html` can reach.
+* 31 marked-up glossary terms on the page, every one resolving to a real entry and linking to its own definition.
+
+### What P9 did NOT cover
+
+* The Compare tab (P7) is still a placeholder. Its real copy should be written to the guide from the start.
+* Steps 4 and 5 of How It Works explain the concepts but their live visuals are still P5 M4 and M5.
+* The glossary is 34 terms. Adding a term means adding it to `js/data/glossary.js` only; both the page and the hover cards pick it up automatically.
 
 ## P9 (NEW PHASE) — rewrite every word for a novice audience · 2026-09-05
 
@@ -46,7 +108,7 @@ The em dash ban rots without a guard, so `test/ui.test.mjs` now enforces it, cou
 * **Everything else has a budget that may only go DOWN:** `how` ≤ 15, `lab` ≤ 13. Lower these as you rewrite; a rise means new copy shipped in the old voice.
 * Every `data-term` in the markup must resolve to a real glossary entry, and every marked term must link to its own definition.
 
-### What REMAINS of P9 (the bulk of the work)
+### What remained after the first pass (ALL DONE in the second pass, see the section above)
 
 1. **How It Works copy** (15 em dashes left). Stage names are still jargon-first: "Prefill vs decode" names two undefined terms in a header. Mark up terms as you go.
 2. **Hardware Lab copy** (13 in the panel, 44 in `js/tabs/lab.js`). Worst offender for undefined jargon: `Q4_K_M (GGUF)`, "K-quant blocks with per-group scales", "GQA 8 KV heads". Note that **most Lab prose lives in JavaScript strings**, not HTML, and roughly 63 test assertions match that copy exactly, so budget for test churn.

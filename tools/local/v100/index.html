@@ -106,29 +106,6 @@
           </div>
         </div>
 
-        <!-- Token-glyph stream (pure CSS loop, §6) — two identical halves for a seamless −50 % translate -->
-        <div class="token-stream" aria-hidden="true">
-          <div class="token-track">
-            <span class="token-half">
-              <span class="glyph">“The”</span><span class="glyph">model</span><span class="glyph">“is”</span>
-              <span class="glyph glyph--accent">4.2×10⁹ numbers</span><span class="glyph">·</span>
-              <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
-              <span class="glyph">memory</span><span class="glyph">at</span>
-              <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
-              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">·</span>
-              <span class="glyph">your</span><span class="glyph">hardware</span>
-            </span>
-            <span class="token-half">
-              <span class="glyph">“The”</span><span class="glyph">model</span><span class="glyph">“is”</span>
-              <span class="glyph glyph--accent">4.2×10⁹ numbers</span><span class="glyph">·</span>
-              <span class="glyph">weights</span><span class="glyph">stream</span><span class="glyph">through</span>
-              <span class="glyph">memory</span><span class="glyph">at</span>
-              <span class="glyph glyph--accent">936 GB/s</span><span class="glyph">→</span>
-              <span class="glyph">tokens</span><span class="glyph">out</span><span class="glyph">·</span>
-              <span class="glyph">your</span><span class="glyph">hardware</span>
-            </span>
-          </div>
-        </div>
       </div>
 
       <!-- ============ Scroll story: 3 beats (§6 Tab 1) ============ -->
@@ -212,17 +189,17 @@
           <a class="card tab-card" href="#/how" data-track-tab="how">
             <span class="dot-new is-hidden"></span>
             <h3>How It Works</h3>
-            <p>The five-stage pipeline, from tokenization to sampling, bound live to your config.</p>
+            <p>The five steps that turn your question into an answer, explained in order. The first three are working, so you can type into them.</p>
           </a>
           <a class="card tab-card" href="#/lab" data-track-tab="lab">
             <span class="dot-new is-hidden"></span>
             <h3>Hardware Lab</h3>
-            <p>Pick hardware, model and precision, then run inference and watch the numbers move.</p>
+            <p>Choose a machine and a model, then watch what it would actually cost you in speed, memory and electricity.</p>
           </a>
           <a class="card tab-card" href="#/compare" data-track-tab="compare">
             <span class="dot-new is-hidden"></span>
             <h3>Local vs Cloud</h3>
-            <p>The race, the full comparison table, and what it all costs at Shenzhen rates.</p>
+            <p>A side by side comparison of running a model yourself against paying a cloud provider, priced at Shenzhen electricity rates.</p>
           </a>
         </div>
       </section>
@@ -243,15 +220,16 @@
       <div class="shell-pad stack">
         <header data-reveal>
           <h2>How It Works</h2>
-          <p>Five stages turn the sentence you type into the answer you read. Stage 1 is live — try it. The rest land in the next milestones, bound live to your hardware config (blueprint §6 Tab 2).</p>
+          <p>Getting from the sentence you type to the answer you read takes five steps. This page walks through them in order, and the first three are working right now, so you can type into them and watch what happens. Every number they show is calculated for the hardware currently selected in the Hardware Lab, so if you change the hardware there, these change too.</p>
         </header>
 
         <div style="display:flex;flex-wrap:wrap;gap:var(--sp-4);align-items:stretch">
           <!-- Stage 1 · Tokenization — LIVE (P5 M1) -->
-          <article class="card" data-reveal aria-label="Stage 1: Tokenization">
-            <h3>1 · Tokenization</h3>
-            <p>Text becomes numbered pieces. Type below and watch it split into token chips, each carrying a real token id.</p>
-            <p class="ctl-note">This uses a real subset of the Qwen3 vocabulary — 30,747 of its 248,320 tokens — so every chip shows the model’s genuine token id (for example, “ world” is one real token, id 1814). Two honest limits: it is only a subset, so words outside it split into smaller pieces, and the matching is greedy longest-first rather than true BPE merge-order.</p>
+          <article class="card" data-reveal aria-label="Step 1: Splitting your text into tokens">
+            <h3>Step 1. Splitting your text into tokens</h3>
+            <p>A model can't read letters or words. It reads <a class="gloss" data-term="token" href="#/glossary/token">tokens</a>, which are fragments of text from a fixed list the model was built with. Common words are a single token, and rarer words get split into several pieces. Every token has an identity number, and those numbers are what actually goes into the model.</p>
+            <p>Type in the box and watch your sentence get split up. Each chip is one token, and the small number on it is that token's real id.</p>
+            <p class="ctl-note">This runs against a real slice of the Qwen3 <a class="gloss" data-term="vocabulary" href="#/glossary/vocabulary">vocabulary</a>, 30,747 of its 248,320 tokens, so the ids you see are genuine. For example " world" is one token, id 1814. Two limits worth stating: it's only a slice, so a word missing from it gets split into smaller pieces than the real model would use, and it matches the longest fragment first rather than following the model's exact merge order.</p>
             <label for="pipe-token-input">Try a sentence</label>
             <input type="text" id="pipe-token-input" value="Hello, world!" aria-label="Sentence to tokenize">
             <div id="pipe-token-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:var(--sp-3)" aria-live="polite"></div>
@@ -261,13 +239,14 @@
           <!-- Stage 2 · Model load — LIVE (P5 M2): memory bar reuses the Lab
                .membar/.seg primitives (base.css) + .ctl-note; live-bound to
                the shared store via js/tabs/pipeline.js -->
-          <article class="card" data-reveal aria-label="Stage 2: Model load">
-            <h3>2 · Model load</h3>
-            <p>Weights “pour” from disk into the memory of your current config — GB used vs available. Change the hardware in the Lab and this bar moves with it.</p>
+          <article class="card" data-reveal aria-label="Step 2: Loading the model into memory">
+            <h3>Step 2. Loading the model into memory</h3>
+            <p>Before it can answer anything, the whole file of <a class="gloss" data-term="weights" href="#/glossary/weights">weights</a> has to be copied from your drive into memory, and it has to stay there for as long as you're using it. This is the step that decides whether you can run a model at all. If it doesn't fit, nothing else matters.</p>
+            <p>The bar shows how much memory the current model needs against how much the selected hardware has. The first segment is the <a class="gloss" data-term="vram" href="#/glossary/vram">graphics card</a>, and if the model is too large to fit there, the overflow spills into ordinary system memory.</p>
             <div class="membar" id="pipe-loadbar" data-state="ok" style="margin-top:var(--sp-3)">
               <span class="seg seg-gpu" style="--w: 0%"></span><span class="seg seg-cpu" style="--w: 0%"></span>
             </div>
-            <p class="ctl-note" id="pipe-load-caption" aria-live="polite">—</p>
+            <p class="ctl-note" id="pipe-load-caption" aria-live="polite">…</p>
             <p class="ctl-note is-hidden" id="pipe-load-layers" aria-live="polite"></p>
           </article>
 
@@ -275,41 +254,45 @@
                Reuses the Lab's .sim-conveyor token stream (chips drip in via
                base.css/tabs.css) + .ctl-note; live-bound to the shared store via
                js/tabs/pipeline.js (the SAME subscription as Stage 2) -->
-          <article class="card" data-reveal aria-label="Stage 3: Prefill vs decode">
-            <h3>3 · Prefill vs decode</h3>
-            <p>Two speeds, one contrast: the whole prompt is chewed in a single fast pass, then the answer trickles out one token at a time. That gap — not either side alone — is the core lesson. Change the hardware in the Lab and both halves move with it.</p>
+          <article class="card" data-reveal aria-label="Step 3: Reading your question, then writing the answer">
+            <h3>Step 3. Reading your question, then writing the answer</h3>
+            <p>Running a model happens at two very different speeds, and this is the most useful thing on the page to understand. First it reads everything you sent. Because that text already exists, the model can work through all of it at once, which is fast. That stage is called <a class="gloss" data-term="prefill" href="#/glossary/prefill">prefill</a>, and it's why there's a pause before the first word shows up.</p>
+            <p>Then it writes. It can only produce one token at a time, because each one depends on the one before it, so the answer arrives as a steady trickle rather than all at once. That stage is called <a class="gloss" data-term="decode" href="#/glossary/decode">decode</a>, and its speed is what you actually watch on screen.</p>
+            <p>Compare the two numbers below. The gap between them is the point: reading is cheap, and writing is what costs you time.</p>
 
             <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-3)">
               <div style="flex:1 1 200px;min-width:180px">
-                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Prefill · one gulp</h4>
-                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-prefill-tokens" aria-live="polite">—</p>
-                <p class="ctl-note" id="pipe-prefill-note" aria-live="polite">—</p>
+                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Reading your question</h4>
+                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-prefill-tokens" aria-live="polite">…</p>
+                <p class="ctl-note" id="pipe-prefill-note" aria-live="polite">…</p>
               </div>
               <div style="flex:1 1 200px;min-width:180px">
-                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Decode · a drip</h4>
-                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-decode-tps" aria-live="polite">—</p>
-                <p class="ctl-note" id="pipe-decode-note" aria-live="polite">—</p>
+                <h4 style="margin:0 0 var(--sp-1);font-size:var(--fs-1);text-transform:uppercase;letter-spacing:.07em;color:var(--text-faint)">Writing the answer</h4>
+                <p style="margin:0;font-size:var(--fs-4);font-weight:700" id="pipe-decode-tps" aria-live="polite">…</p>
+                <p class="ctl-note" id="pipe-decode-note" aria-live="polite">…</p>
               </div>
             </div>
 
-            <p class="ctl-note" id="pipe-phase" aria-live="polite" style="margin-top:var(--sp-3)">—</p>
+            <p class="ctl-note" id="pipe-phase" aria-live="polite" style="margin-top:var(--sp-3)">…</p>
             <div class="sim-conveyor" id="pipe-drip" aria-live="polite"></div>
-            <p class="ctl-note" id="pipe-drip-label" aria-live="polite">—</p>
+            <p class="ctl-note" id="pipe-drip-label" aria-live="polite">…</p>
             <p class="ctl-note" id="pipe-speed-note"></p>
           </article>
 
           <!-- Stage 4 · KV cache growth — lands in P5 M4 -->
-          <article class="card" data-reveal aria-label="Stage 4: KV cache growth">
-            <h3>4 · KV cache growth</h3>
-            <p>A bar fills as context grows — live GB from the engine’s formulas for your model and context window.</p>
-            <p class="ctl-note">Lands in P5 M4.</p>
+          <article class="card" data-reveal aria-label="Step 4: Remembering the conversation">
+            <h3>Step 4. Remembering the conversation</h3>
+            <p>As the model reads, it works out two things about every token it has seen: a <b>key</b>, which is how that token gets found again later, and a <b>value</b>, which is what that token contributes once it's found. Redoing that for the whole conversation every time it writes a new word would be enormously wasteful, so it keeps them in memory instead. That store is the <a class="gloss" data-term="kv-cache" href="#/glossary/kv-cache">KV cache</a>, named for keys and values.</p>
+            <p>It matters because it grows with every token in the conversation, and it sits in the same memory as the model. A long conversation can end up needing more space than the model itself.</p>
+            <p class="ctl-note">The live bar for this step is still to be built.</p>
           </article>
 
           <!-- Stage 5 · Sampling — lands in P5 M5 -->
-          <article class="card" data-reveal aria-label="Stage 5: Sampling">
-            <h3>5 · Sampling</h3>
-            <p>Temperature and top-p sliders reshape the next-token probability bars — the model’s coin flip, visualized.</p>
-            <p class="ctl-note">Lands in P5 M5.</p>
+          <article class="card" data-reveal aria-label="Step 5: Choosing the next word">
+            <h3>Step 5. Choosing the next word</h3>
+            <p>The model never picks a word. What it produces is a probability for every token in its <a class="gloss" data-term="vocabulary" href="#/glossary/vocabulary">vocabulary</a>, tens of thousands of numbers saying how likely each one is to come next. Turning that list into a single choice is called <a class="gloss" data-term="sampling" href="#/glossary/sampling">sampling</a>.</p>
+            <p>Always taking the most likely token makes text that's flat and repetitive, so a controlled amount of randomness gets added, tuned by settings called <a class="gloss" data-term="temperature" href="#/glossary/temperature">temperature</a> and <a class="gloss" data-term="top-p" href="#/glossary/top-p">top-p</a>. That's why asking the same question twice can give you two different answers.</p>
+            <p class="ctl-note">The live probability bars for this step are still to be built.</p>
           </article>
         </div>
 
@@ -338,7 +321,8 @@
 
         <header class="lab-head">
           <h2>Hardware Lab</h2>
-          <p>Pick your hardware, model and precision — every number on the right is computed live by the same engine behind this site’s estimates. Change anything and watch it move.</p>
+          <p>This is where you test combinations for yourself. Choose a machine, a model size and how tightly the model is compressed, and the panel on the right recalculates immediately. Nothing here is a guess or a stored example. The same formulas run behind every number quoted elsewhere on this site, and the section at the bottom of the results shows you what they are.</p>
+          <p class="ctl-note">A good first experiment: leave everything alone and drag the model size slider up until the memory bar turns red. That point is the honest limit of this hardware.</p>
         </header>
 
         <div class="lab-grid">
@@ -347,7 +331,8 @@
           <div class="card lab-controls" id="lab-controls" role="group" aria-label="Configuration controls">
 
             <div class="ctl-group">
-              <h4>Platform</h4>
+              <h4>The machine</h4>
+              <p class="ctl-note">An all-in-one machine shares a single pool of memory between its processor and graphics. A rig is a desktop computer with a separate <a class="gloss" data-term="gpu" href="#/glossary/gpu">graphics card</a> in it.</p>
               <div class="segmented" role="group" aria-label="Platform type">
                 <label><input type="radio" name="lab-mode" value="allInOne"><span class="seg-opt">All-in-one</span></label>
                 <label><input type="radio" name="lab-mode" value="rig" checked><span class="seg-opt">GPU rig</span></label>
@@ -400,7 +385,8 @@
                   <label data-tier-only="ddr5-6000"><input type="radio" name="lab-capacity" value="256"><span class="seg-opt">256 GB</span></label>
                 </div>
 
-                <h5>CPU (matters for offloaded layers)</h5>
+                <h5>Processor</h5>
+                <p class="ctl-note">This only changes the result when part of the model doesn't fit on the graphics card, because the processor is what handles the leftover part. See <a class="gloss" data-term="offloading" href="#/glossary/offloading">offloading</a>.</p>
                 <div class="segmented" role="group" aria-label="CPU">
                   <label><input type="radio" name="lab-cpu" value="ryzen5-3600"><span class="seg-opt">Ryzen 5 3600</span></label>
                   <label><input type="radio" name="lab-cpu" value="ryzen9-5800x3d"><span class="seg-opt">Ryzen 9 5800X3D</span></label>
@@ -414,13 +400,15 @@
 
             <div class="ctl-group">
               <h4>Model size</h4>
+              <p class="ctl-note">Measured in billions of <a class="gloss" data-term="parameters" href="#/glossary/parameters">parameters</a>, which are the individual numbers inside the model. Bigger models generally answer better, and they need more memory and run more slowly.</p>
               <input type="range" class="slider" id="lab-model" min="0" max="9" step="1" value="1" aria-label="Model size stop">
               <div class="slider-stops"><span>4B</span><span>8B</span><span>12B</span><span>14B</span><span>16B</span><span>27B</span><span>32B</span><span>70B</span><span>80B</span><span>405B</span></div>
               <p class="ctl-note" id="lab-model-anchor">Anchored to Llama 3.1 8B · 32 layers, GQA 8 KV heads [M5]</p>
             </div>
 
             <div class="ctl-group">
-              <h4>Precision (quantization)</h4>
+              <h4>How tightly the model is compressed</h4>
+              <p class="ctl-note">Each number in a model can be stored using more bits or fewer. Storing fewer makes the file smaller and faster to read, at some cost in accuracy. This is called <a class="gloss" data-term="quantization" href="#/glossary/quantization">quantization</a>, and it's the main reason large models can run on ordinary hardware at all.</p>
               <div class="segmented" role="group" aria-label="Quantization level">
                 <label><input type="radio" name="lab-quant" value="fp16"><span class="seg-opt">FP16</span></label>
                 <label><input type="radio" name="lab-quant" value="int8-awq"><span class="seg-opt">INT8 / AWQ</span></label>
@@ -430,13 +418,14 @@
               </div>
               <!-- Student explainer for the selected level (P6 M2 fills this card) -->
               <div class="card ctl-explain" id="lab-quant-explain">
-                <h5>Q4_K_M (GGUF)</h5>
-                <p>The most popular GGUF quantization in the local-AI world. Weights are packed to roughly 4–5 bits using K-quant blocks with per-group scales.</p>
+                <h5>Q4_K_M</h5>
+                <p>The most widely used setting for running models at home. Each weight is stored in roughly 4 to 5 bits instead of the original 16, which makes the file about a quarter of the size. The numbers are stored in small groups that each carry their own scaling factor, which keeps the loss of accuracy low enough that most people never notice it. The name is a format convention rather than anything meaningful: Q4 is the bit count, and K_M is the particular packing method.</p>
               </div>
             </div>
 
             <div class="ctl-group">
-              <h4>Workload</h4>
+              <h4>What you're asking it to do</h4>
+              <p class="ctl-note">How much text the model has to hold in mind, how long your question is, and how many people are asking at once. All three change the answer.</p>
               <p class="ctl-sublabel">Context window</p>
               <div class="segmented" role="group" aria-label="Context window">
                 <label><input type="radio" name="lab-ctx" value="8192" checked><span class="seg-opt">8K tokens</span></label>
@@ -489,7 +478,7 @@
             <div class="sim-readout">
               <div class="gauge-wrap">
                 <div class="gauge" id="lab-gauge" style="--val: 0"></div>
-                <span class="gauge-label"><b id="lab-tps-value">—</b><small>tok/s</small></span>
+                <span class="gauge-label"><b id="lab-tps-value">…</b><small>tok/s</small></span>
               </div>
               <div class="sim-progress">
                 <div class="membar" id="lab-progress-bar"><span class="seg seg-gpu" style="--w: 0%"></span></div>
@@ -503,14 +492,15 @@
 
           <!-- ================= RIGHT RAIL · printouts ================= -->
           <aside class="card lab-printouts" id="lab-printouts" aria-label="Live results">
-            <h4>Printouts</h4>
+            <h4>Results</h4>
+            <p class="ctl-note">Every row recalculates as you change the controls.</p>
 
-            <div class="printout" id="po-tps"><span class="k">Decode speed (per request)</span><span class="v">—</span></div>
-            <div class="printout is-hidden" id="po-tps-total"><span class="k">Total throughput (all requests)</span><span class="v">—</span></div>
-            <div class="printout" id="po-ttft"><span class="k">Time to first token</span><span class="v">—</span></div>
+            <div class="printout" id="po-tps"><span class="k">Writing speed, one user</span><span class="v">…</span></div>
+            <div class="printout is-hidden" id="po-tps-total"><span class="k">Total writing speed, everyone</span><span class="v">…</span></div>
+            <div class="printout" id="po-ttft"><span class="k">Wait before the first word</span><span class="v">…</span></div>
             <p class="ctl-note is-hidden" id="po-ttft-note"></p>
-            <div class="printout" id="po-power"><span class="k">Power draw (load)</span><span class="v">—</span></div>
-            <div class="printout" id="po-cost"><span class="k">Cost / M output tokens</span><span class="v">—</span></div>
+            <div class="printout" id="po-power"><span class="k">Electricity used while running</span><span class="v">…</span></div>
+            <div class="printout" id="po-cost"><span class="k">Cost per million words written</span><span class="v">…</span></div>
 
             <!-- Memory fill: VRAM vs RAM split (blueprint §6 Tab 3) -->
             <div class="memblock">
@@ -518,28 +508,28 @@
               <div class="membar" id="lab-membar" data-state="ok">
                 <span class="seg seg-gpu" style="--w: 0%"></span><span class="seg seg-cpu" style="--w: 0%"></span>
               </div>
-              <p class="ctl-note" id="lab-mem-caption">—</p>
+              <p class="ctl-note" id="lab-mem-caption">…</p>
               <p class="ctl-note is-hidden" id="lab-offload-note"></p>
             </div>
 
             <!-- Fit state chip + doesn’t-fit diagnosis (P6 M2) -->
-            <p class="fit-chip" id="lab-fit-state">—</p>
+            <p class="fit-chip" id="lab-fit-state">…</p>
             <div class="nofit is-hidden" id="lab-nofit">
-              <h5>Doesn’t fit — here’s why, and what to try</h5>
+              <h5>This combination doesn't fit</h5>
               <ul id="lab-nofit-list"></ul>
             </div>
 
             <!-- Max model that fits (blueprint §6 Tab 3) -->
-            <div class="printout" id="po-maxfit"><span class="k">Max model that fits</span><span class="v">—</span></div>
+            <div class="printout" id="po-maxfit"><span class="k">Largest model this machine can hold</span><span class="v">…</span></div>
 
             <!-- “How we estimate this” — blueprint §5: formulas + labeled assumptions -->
             <details class="estimates">
               <summary><span class="twist" aria-hidden="true"></span>How we estimate this</summary>
               <div class="body">
-                <p><b>Decode speed</b> is bandwidth-bound: each token step re-reads the weights of every layer plus that layer’s KV-cache history. <code>t = Σ (layer bytes ÷ device bandwidth) ÷ η</code>, with one global efficiency constant <b>η = 0.85</b>, calibrated so five real-world anchors land in range.</p>
-                <p><b>Prefill / TTFT</b> is compute-bound: <code>t ≈ prompt tokens × 2 × params ÷ (TFLOPS × 0.6) + 0.1 s</code>. CPU-resident layers use the RAM tier’s bandwidth — that’s why offloading feels slow.</p>
-                <p><b>Labeled assumptions:</b> multi-GPU scaling ×1 / ×1.75 / ×3.2 (NVLink/PCIe overhead) · Apple/DGX pools lose ⅛ to the OS · all-in-one prefill TFLOPS are estimates · rig power = GPU TDP × 0.9 + ~100 W system base.</p>
-                <p><b>Prices</b> (used for amortization in Local vs Cloud) are owner-provided Taobao listings, 2026-09-02 — a date-stamped snapshot, not live prices [H7]. Electricity: Shenzhen residential ≈ ¥0.65/kWh at ≈6.72 CNY/USD.</p>
+                <p><b>Writing speed</b> is limited by how fast the hardware reads memory, not by how fast it calculates. Producing one token means re-reading the weights of every <a class="gloss" data-term="layer" href="#/glossary/layer">layer</a>, plus the stored history for that layer. So the time per token is the total bytes divided by the <a class="gloss" data-term="bandwidth" href="#/glossary/bandwidth">memory bandwidth</a>: <code>t = Σ (layer bytes ÷ device bandwidth) ÷ η</code>. The one fudge factor, <b>η = 0.85</b>, accounts for the hardware never quite reaching its rated speed, and it was set so that five real measured machines land in the right range.</p>
+                <p><b>The wait before the first word</b> works the other way round: it's limited by calculation speed, because the model processes your whole question at once. <code>t ≈ prompt tokens × 2 × params ÷ (TFLOPS × 0.6) + 0.1 s</code>. Any layer sitting in system memory rather than on the graphics card is read at the slower speed of system memory, which is the whole reason <a class="gloss" data-term="offloading" href="#/glossary/offloading">offloading</a> hurts so much.</p>
+                <p><b>Assumptions, stated plainly.</b> Adding graphics cards does not double speed, so scaling is counted as ×1, ×1.75 and ×3.2 for one, two and four cards. Machines with one shared memory pool lose about an eighth of it to the operating system. Calculation speeds for all-in-one machines are estimates rather than measurements. Power for a desktop rig is counted as the graphics card's rated draw times 0.9, plus about 100 W for the rest of the system.</p>
+                <p><b>Prices</b> are Taobao listings recorded on 2026-09-02 and used to spread hardware cost over time in Local vs Cloud. They are a dated snapshot, not live prices [H7]. Electricity is Shenzhen residential at about ¥0.65 per kWh, converted at about 6.72 CNY to the dollar.</p>
               </div>
             </details>
           </aside>
@@ -565,8 +555,9 @@
     <section class="tab-panel" data-tab="compare" aria-label="Local vs Cloud">
       <div class="shell-pad stack">
         <div class="card" data-reveal>
-          <h2>Phase 7 lands here</h2>
-          <p>The local-vs-cloud race, full comparison table, and the Shenzhen cost panel (blueprint §6 Tab 4).</p>
+          <h2>Local vs Cloud</h2>
+          <p>This page is still being built. It will put the two options side by side: the same question answered by a model on your own machine and by a cloud provider, with the real cost of each. Local cost is counted as the electricity used plus the hardware spread over its life, at Shenzhen rates. Cloud cost is counted per million tokens at published prices.</p>
+          <p class="ctl-note">In the meantime, the Hardware Lab already calculates the local side of that comparison.</p>
         </div>
       </div>
     </section>

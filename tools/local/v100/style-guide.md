@@ -58,6 +58,10 @@ Rules:
 5. **State the mechanism, not the vibe.** "Offloading feels painfully slow" tells the reader nothing. "The layers stored in system RAM are read about ten times more slowly than the ones on the GPU, so every token has to wait for them" tells them why.
 6. **Second person, active voice.** "You type a sentence. The model splits it into tokens." Not "text becomes numbered pieces."
 7. **Cut the throat clearing.** "It's worth noting that", "Think of it like", "Here's the thing:". Delete and start at the noun.
+8. **Use contractions.** "You've probably used a cloud model" reads like a person. "You have probably used" reads like a form. (Owner edit, 2026-09-05.)
+9. **Pick the everyday word.** "math", not "arithmetic". "building", not "facility". If a plainer word means the same thing, it wins. (Owner edit, 2026-09-05.)
+10. **No clever phrasing, even when it is accurate.** "Local AI is the same idea with the location changed" and "this works with the network cable unplugged" were both replaced by the owner with direct statements: it runs on your own hardware, and you can use it totally offline. Elegance that costs a beat of decoding is not worth it here.
+11. **Say it once.** If the paragraph above already said there is no per use charge, the list item is just "Electricity." Redundancy is the other way a page becomes a slog.
 
 One useful test: read the paragraph and ask **"could the reader now explain this to someone else?"** If they could only repeat the phrasing, rewrite it.
 

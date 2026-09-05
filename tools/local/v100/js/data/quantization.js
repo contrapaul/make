@@ -20,14 +20,14 @@ export const QUANT_LEVELS = [
     name: 'FP16 / BF16',
     bytesPerParam: 2.0,
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'Reference quality: the model as trained',
+    qualityLabel: 'The model exactly as it was built',
     explainer: {
       whatItIs:
-        'Full precision. Every weight is stored as a 16-bit floating-point number, exactly how the model was trained and evaluated.',
+        'No compression at all. Every number in the model is stored using 16 bits, which is how it was stored when the model was built and tested.',
       tradeOff:
-        'Biggest files and slowest to move through memory, but zero quality loss from compression. This is the baseline every other level is measured against.',
+        'This gives the largest file and the slowest reading speed, and in exchange it loses nothing. Every other setting on this list is measured against it.',
       whyItMatters:
-        'If a model fits at FP16, you get its full intended behavior, useful for benchmarking and for models small enough that size never matters (think 4B on a 32 GB machine).',
+        'If a model fits at this setting, you are getting exactly the behaviour its makers intended. That is worth having when the model is small enough that size was never going to be a problem, such as a 4 billion parameter model on a 32 GB machine.',
     },
   },
   {
@@ -35,14 +35,14 @@ export const QUANT_LEVELS = [
     name: 'INT8 / AWQ',
     bytesPerParam: 1.05, // ~8 bits + per-channel scales/zero-points overhead
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'Near-identical answers for most tasks',
+    qualityLabel: 'Almost the same answers, half the size',
     explainer: {
       whatItIs:
-        'Weights rounded to 8-bit integers with small correction tables (AWQ keeps the "important" weights at higher precision). Roughly halves the file size of FP16.',
+        'Each number is rounded to 8 bits instead of 16, which roughly halves the file. Small correction tables are stored alongside to limit the damage, and one method, called AWQ, keeps the numbers it judges most important at higher precision.',
       tradeOff:
-        'You get about half the memory footprint and roughly double the decode speed, while quality stays very close to full precision on most everyday tasks. Hard reasoning can still show small dips.',
+        'You get half the memory use and roughly double the writing speed, and for everyday tasks the answers stay very close to full precision. Difficult reasoning can still slip a little.',
       whyItMatters:
-        'The sweet spot when you have decent VRAM but want headroom for a long context window, the KV cache gets room to grow because weights got smaller.',
+        'A good choice when you have reasonable graphics card memory but want to leave room for a long conversation. Shrinking the weights leaves space for the conversation store to grow into.',
     },
   },
   {
@@ -50,14 +50,14 @@ export const QUANT_LEVELS = [
     name: 'Q6_K (GGUF)',
     bytesPerParam: 0.75, // ~6 bits/param in K-quants block layout
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'Small dip on hard reasoning',
+    qualityLabel: 'A small drop on difficult questions',
     explainer: {
       whatItIs:
-        'A GGUF "K-quant" at 6 bits per weight. The K-format stores groups of weights with shared scales, so it compresses better than a naive 6-bit scheme.',
+        'Six bits per number, stored in the GGUF file format used by most software for running models at home. Rather than shrinking each number on its own, it stores them in small groups that share a scaling factor, which packs them more tightly for the same accuracy.',
       tradeOff:
-        'About 25% smaller than INT8 with only a modest quality cost, the dip mostly shows up on hard reasoning and long multi-step tasks rather than everyday chat.',
+        'About a quarter smaller than the 8-bit setting, for a modest cost. What suffers is difficult reasoning and long multi-step tasks, not ordinary conversation.',
       whyItMatters:
-        'The pick when you want maximum quality that still fits: e.g. a 70B model at Q6_K (~52 GB) is the largest sensible size for a 48–64 GB machine.',
+        'Choose this when you want the best quality that will still fit. A 70 billion parameter model at this setting needs about 52 GB, which is the largest sensible choice for a machine with 48 to 64 GB.',
     },
   },
   {
@@ -65,14 +65,14 @@ export const QUANT_LEVELS = [
     name: 'Q5_K_M (GGUF)',
     bytesPerParam: 0.63, // ~5 bits/param + medium block overhead
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'The balance pick',
+    qualityLabel: 'The usual compromise',
     explainer: {
       whatItIs:
-        'A 5-bit K-quant with "medium" block granularity, a mix of finer and coarser quantized blocks that keeps accuracy high where it counts.',
+        'Five bits per number, using a mix of finer and coarser groups so that accuracy is kept where it matters most. The M in the name stands for medium, which refers to that mix.',
       tradeOff:
-        'Noticeably smaller than Q6_K, still very close to full quality for most tasks. The community default when a model is *just* too big at higher precision.',
+        'Noticeably smaller than the 6-bit setting while staying close to full quality on most tasks. It is what most people reach for when a model is only slightly too big at a higher setting.',
       whyItMatters:
-        'This is often the level that turns "doesn\'t fit" into "fits with room for context"; watch the memory bar in the Lab as you switch levels.',
+        'This is often the setting that turns a model which will not fit into one that fits with room to spare. Watch the memory bar in the Hardware Lab as you switch between settings.',
     },
   },
   {
@@ -80,14 +80,14 @@ export const QUANT_LEVELS = [
     name: 'Q4_K_M (GGUF)',
     bytesPerParam: 0.55, // ~4.5 bits/param effective incl. block scales — the community default
     kvBytesPerElement: KV_BYTES_DEFAULT,
-    qualityLabel: 'Fits more, slightly dumber',
+    qualityLabel: 'Fits far more, gives up a little accuracy',
     explainer: {
       whatItIs:
-        'The most popular GGUF quantization in the local-AI world. Weights are packed to roughly 4–5 bits using K-quant blocks with per-group scales.',
+        'The setting most people use for running models at home. Each number is packed into roughly 4 to 5 bits, again in small groups that share a scaling factor.',
       tradeOff:
-        'About half the size of FP16 and proportionally faster, at a real but usually acceptable quality cost, creative writing and casual chat hold up well; precise reasoning and code can slip.',
+        'A quarter of the size of the uncompressed model, and faster in proportion. The quality cost is real but usually acceptable. Creative writing and casual conversation hold up well, while exact reasoning and code can slip.',
       whyItMatters:
-        'Q4_K_M is what makes 70B-class models runnable on consumer hardware at all. It\'s the reason "big model on one GPU" exists in the first place.',
+        'This setting is the only reason 70 billion parameter models can run on hardware an ordinary person owns. Without it, a large model on a single graphics card would not be possible.',
     },
   },
 ];

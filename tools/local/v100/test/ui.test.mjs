@@ -494,7 +494,7 @@ function makeLabDoc() {
   // M2 printouts rail stubs (pulse() needs classList + offsetWidth + addEventListener)
   const makePrintout = () => {
     const classes = new Set();
-    const v = { textContent: '—' };
+    const v = { textContent: '…' };
     return {
       v,
       querySelector: (sel) => (sel === '.v' ? v : null),
@@ -724,7 +724,7 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
 
 { // M2 formatting helpers
   assert.equal(fmtTps(145.3), '145.3 tok/s');
-  assert.equal(fmtTps(null), '—');
+  assert.equal(fmtTps(null), '…', 'the no-value placeholder is an ellipsis, not the banned em dash');
   assert.equal(fmtMs(850), '850 ms');
   assert.equal(fmtMs(1650), '1.65 s');
   assert.equal(fmtWatts(415), '415 W');
@@ -772,16 +772,20 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
   const v = membarView(perf);
   assert.ok(doc.membarEl.querySelector('.seg-gpu').style.vars['--w'].endsWith('%'));
   assert.equal(doc.membarEl.getAttribute('data-state'), 'ok');
-  assert.match(doc.getElementById('lab-mem-caption').textContent, /weights \+ .*KV of 24 GB VRAM/);
+  assert.match(doc.getElementById('lab-mem-caption').textContent,
+    /GB of weights and .* GB of conversation store, in 24 GB of graphics card memory/);
 
   const chip = doc.getElementById('lab-fit-state');
-  assert.equal(chip.textContent, 'GPU-resident — fast path');
+  assert.equal(chip.textContent, 'The whole model sits on the graphics card, which is the fast case.');
   assert.equal(chip.attrs['data-fit'], 'gpu');
   assert.ok(doc.getElementById('lab-nofit').classList.contains('is-hidden'), 'diagnosis hidden when it fits');
 
   const ex = doc.getElementById('lab-quant-explain').innerHTML;
-  assert.match(ex, /Q4_K_M \(GGUF\) — Fits more, slightly dumber/);
-  assert.match(ex, /K-quant blocks/); // whatItIs from the signed-off data layer
+  assert.match(ex, /Q4_K_M \(GGUF\)\. Fits far more, gives up a little accuracy\./);
+  // whatItIs from the data layer, rewritten in P9 to explain rather than name:
+  // it must describe the mechanism without leaning on unexplained jargon.
+  assert.match(ex, /small groups that share a scaling factor/);
+  assert.ok(!/K-quant|per-group scales/.test(ex), 'the explainer no longer uses undefined jargon');
   ok('M2 printouts: exact engine values · membar + caption · fit chip · quant explainer');
 }
 
@@ -799,7 +803,7 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
   assert.equal(doc.nofitList.children.length, perf.noFitSuggestions.length);
   assert.equal(doc.nofitList.children[0].textContent, perf.noFitSuggestions[0]);
 
-  assert.equal(doc.getElementById('po-tps').v.textContent, '—', 'speed unavailable when it doesn’t fit');
+  assert.equal(doc.getElementById('po-tps').v.textContent, '…', 'speed unavailable when it doesn’t fit');
   assert.equal(doc.membarEl.getAttribute('data-state'), 'fail');
   const chip = doc.getElementById('lab-fit-state');
   assert.equal(chip.attrs['data-fit'], 'noFit');
@@ -886,7 +890,7 @@ function makeClock() {
   const shown = parseFloat(doc.getElementById('lab-tps-value').textContent);
   assert.ok(Math.abs(shown - engineTps) / engineTps < 0.05, '§6 acceptance: displayed rate within ±5 % of the engine');
 
-  assert.match(doc.getElementById('lab-run-meta').textContent, /Done — 256 tokens/);
+  assert.match(doc.getElementById('lab-run-meta').textContent, /Finished\. 256 tokens/);
   ok('M3 run: phases in order · 256 chips · gauge + progress land exactly on the engine values');
 }
 
@@ -898,7 +902,7 @@ function makeClock() {
   const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
   assert.equal(sim.start(), true);
   while (clock.isPending() && clock.now() < 60000) clock.step(250);
-  assert.match(doc.getElementById('lab-run-meta').textContent, /time-compressed/);
+  assert.match(doc.getElementById('lab-run-meta').textContent, /sped up .* times/);
   ok('M3 slow run: ×N compression labeled on screen');
 }
 
@@ -910,7 +914,7 @@ function makeClock() {
   const clock = makeClock();
   const sim = initSim({ doc, store: st, raf: clock.raf, now: clock.now });
   assert.equal(sim.start(), false);
-  assert.match(doc.getElementById('lab-sim-stage').textContent, /doesn't fit/);
+  assert.match(doc.getElementById('lab-sim-stage').textContent, /does not fit/);
   assert.equal(doc.conveyorStub.children.length, 0);
   ok("M3 noFit: run refused with a pointer to the diagnosis");
 }
@@ -922,7 +926,7 @@ function makeClock() {
   assert.equal(sim.start(), true);
   assert.equal(doc.getElementById('lab-progress-label').textContent, '256 / 256 tokens');
   assert.equal(doc.conveyorStub.children.length, 256);
-  assert.match(doc.getElementById('lab-run-meta').textContent, /Done/);
+  assert.match(doc.getElementById('lab-run-meta').textContent, /Finished/);
   ok('M3 reduced motion: no animation loop, instant final state');
 }
 
@@ -951,7 +955,7 @@ function makeClock() {
   const t = concTeaching(perf4, cfg4);
   assert.equal(t.total, fmtTps(perf4.decodeTpsTotal));
   assert.equal(t.perReq, fmtTps(perf4.decodeTpsPerRequest));
-  assert.match(t.ttftNote, /×4 queueing/);
+  assert.match(t.ttftNote, /4 people asking at once/);
   assert.ok(Math.abs(perf4.decodeTpsTotal - perf4.decodeTpsPerRequest * 4) < 1e-9, 'engine: total = per-request × B');
   ok('M4 concTeaching: null at B=1 · both rates + ×B queueing note at B>1');
 }
@@ -964,10 +968,12 @@ function makeClock() {
   const perfOff = evaluate(cfgOff);
   assert.equal(perfOff.fitsState, 'offload');
   const note = offloadNote(perfOff, cfgOff);
-  assert.match(note, /Why it's slow/);
+  assert.match(note, /Why this is slow/);
   assert.match(note, /51\.2 GB\/s/, 'DDR4-3200 bandwidth named');
   assert.match(note, /360 GB\/s/, 'RTX 3060 bandwidth named');
-  assert.ok(note.includes(`${perfOff.layersOnCpu} of ${perfOff.totalLayers}`), 'layer split stated');
+  // Intent, not phrasing: both halves of the split must reach the reader.
+  assert.ok(note.includes(String(perfOff.layersOnCpu)) && note.includes(String(perfOff.totalLayers)),
+    'layer split stated');
   ok('M4 offloadNote: one sentence · real bandwidths + layer split · null on fast path');
 }
 
@@ -984,12 +990,12 @@ function makeClock() {
   const perfB4 = evaluate(st.getState().config);
   assert.ok(!doc.getElementById('po-tps-total').classList.contains('is-hidden'));
   assert.equal(doc.getElementById('po-tps-total').v.textContent, fmtTps(perfB4.decodeTpsTotal));
-  assert.match(doc.getElementById('po-ttft-note').textContent, /×4 queueing/);
+  assert.match(doc.getElementById('po-ttft-note').textContent, /4 people asking at once/);
 
   st.setConfig({ gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 }); // offload (anchor A5 shape)
   const offEl = doc.getElementById('lab-offload-note');
   assert.ok(!offEl.classList.contains('is-hidden'), 'offload note visible in offload state');
-  assert.match(offEl.textContent, /Why it's slow/);
+  assert.match(offEl.textContent, /Why this is slow/);
 
   st.setConfig({ gpuId: 'rtx-3090-24g', ramTierId: 'ddr5-6000', modelStopIndex: 1 }); // back on GPU (still B=4)
   assert.ok(doc.getElementById('lab-offload-note').classList.contains('is-hidden'), 'note hides again when it fits');
@@ -1006,8 +1012,8 @@ function makeClock() {
   assert.equal(sim.start(), true);
   while (clock.isPending() && clock.now() < 20000) clock.step(100); // drive to completion
   const meta = doc.getElementById('lab-run-meta').textContent;
-  assert.match(meta, /per request/);
-  assert.match(meta, /4 requests at .* each ≈ .* total/);
+  assert.match(meta, /for each person/);
+  assert.match(meta, /4 people getting .* each, or .* of work in total/);
   ok('M4 run finish: Done line shows per-request rate and the ×B total');
 }
 
@@ -1178,7 +1184,7 @@ console.log('tabs/pipeline.js — P5 M2 (Stage 2 · Model load)');
   assert.equal(v.availableGB, perf.gpuUsableGB + perf.ramUsableGB, 'available sums both pools');
   assert.ok(v.usedGB > v.availableGB, 'demand exceeds the rig');
   const cap = loadCaption(perf, { mode: 'rig' });
-  assert.match(cap, /doesn't fit/);
+  assert.match(cap, /will not fit/);
   ok(`modelLoadView: noFit → ${v.usedGB.toFixed(0)} GB needed of ${v.availableGB} GB, state fail + "doesn't fit" caption`);
 }
 
@@ -1188,8 +1194,9 @@ console.log('tabs/pipeline.js — P5 M2 (Stage 2 · Model load)');
   const v = modelLoadView(perf);
   assert.ok(v.cpuPct > 0, 'some of the bar lives in the RAM segment');
   const cap = loadCaption(perf, { mode: 'rig' });
-  assert.match(cap, /VRAM/);
-  assert.match(cap, /RAM/);
+  // Intent: the caption must name BOTH places the model ends up split across.
+  assert.match(cap, /graphics card memory/);
+  assert.match(cap, /system memory/);
   ok(`loadCaption: offload → "${cap}"`);
 }
 
@@ -1200,12 +1207,12 @@ console.log('tabs/pipeline.js — P5 M2 (Stage 2 · Model load)');
   const api = initPipeline({ doc, store });
   await api.pending; // let Stage 1 settle so the next assertion is about Stage 2
   const before = doc.loadcaption.textContent;
-  assert.notEqual(before, '—', 'initial paint writes a real caption from evaluate()');
-  assert.match(before, /24 GB of VRAM/);
+  assert.notEqual(before, '…', 'initial paint writes a real caption from evaluate()');
+  assert.match(before, /24 GB of graphics card memory/);
 
   store.setConfig({ gpuId: 'rtx-3060-12g' }); // "change hardware in the Lab"
   assert.notEqual(doc.loadcaption.textContent, before, 'caption changed');
-  assert.match(doc.loadcaption.textContent, /12 GB of VRAM/);
+  assert.match(doc.loadcaption.textContent, /12 GB of graphics card memory/);
   api.destroy();
   ok(`store binding: 24 GB → 12 GB VRAM re-rendered Stage 2 ("${doc.loadcaption.textContent}")`);
 }
@@ -1246,7 +1253,7 @@ console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
   assert.ok(v.tps < 5, 'slow config → low tok/s');
   assert.ok(v.decodeS > 1, 'the drip is long at this rate');
   assert.ok(v.speedup > 1, 'a slow run is time-compressed (and must be labelled)');
-  assert.match(speedNote(perf), /time-compressed/, 'compression label present');
+  assert.match(speedNote(perf), /sped up .* times/, 'compression label present');
   ok(`prefillDecodeView: slow config → ${v.tps.toFixed(2)} tok/s, ×${v.speedup.toFixed(1)} compressed`);
 }
 
@@ -1255,8 +1262,9 @@ console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
   const v = prefillDecodeView(perf);
   assert.equal(v.promptTokens, PROMPT_SPLIT_TOKENS.long, 'prompt tokens = the engine split for "long"');
   assert.match(prefillCaption(perf), new RegExp(v.promptTokens.toLocaleString()), 'caption names that count');
-  assert.match(prefillCaption(perf), /compute-bound/);
-  assert.match(decodeCaption(perf), /bandwidth-bound/);
+  // Intent: each half must name WHAT limits it, in words a novice can read.
+  assert.match(prefillCaption(perf), /Limited by calculation speed/);
+  assert.match(decodeCaption(perf), /Limited by memory speed/);
   ok(`prefill half reports the engine's prompt-token count (${v.promptTokens})`);
 }
 
@@ -1268,7 +1276,7 @@ console.log('tabs/pipeline.js — P5 M3 (Stage 3 · Prefill vs decode)');
   const api = initPipeline({ doc, store, raf: clock.raf, now: clock.now });
   clock.step(16); // first frame: inside the prefill beat → 0 tokens yet
   assert.match(doc.driplabel.textContent, /^0 \/ 256/, 'empty during the prefill beat');
-  assert.match(doc.phase.textContent, /Prefill/, 'phase reads the prefill pass');
+  assert.match(doc.phase.textContent, /Reading your question/, 'phase reads the prefill pass');
   while (clock.isPending() && clock.now() < 60000) clock.step(100); // drive to completion
   assert.ok(!clock.isPending(), 'animation loop stopped at the end');
   assert.match(doc.driplabel.textContent, /256 \/ 256/, 'drives to the full target');
@@ -1633,26 +1641,52 @@ console.log('style guide (copy rules)');
   };
   const emDashes = (text) => (text.match(/—/g) ?? []).length;
 
-  // 1. Rewritten panels: zero, permanently.
-  for (const tab of ['home', 'glossary']) {
-    assert.equal(emDashes(panel(tab)), 0, `the ${tab} panel must contain no em dash`);
-  }
-  ok('rewritten panels (home, glossary) contain no em dash in reader-facing text');
-
-  // 2. Ratchet for the panels still awaiting their rewrite.
-  const budget = { how: 15, lab: 13, compare: 0 };
-  for (const [tab, max] of Object.entries(budget)) {
+  // Every panel is now rewritten, so every panel holds at zero. There is no
+  // budget left: if this fails, new copy shipped in the banned voice.
+  for (const tab of ['home', 'how', 'lab', 'glossary', 'compare']) {
     const n = emDashes(panel(tab));
-    assert.ok(n <= max,
-      `the ${tab} panel has ${n} em dashes, above its budget of ${max}. Lower the budget as copy is rewritten; never raise it.`);
+    assert.equal(n, 0, `the ${tab} panel must contain no em dash, found ${n}`);
   }
-  ok(`em dash budget holds for panels not yet rewritten (how ≤ 15, lab ≤ 13)`);
+  assert.equal(emDashes(html), 0, 'no em dash anywhere a reader can see it');
+  ok('every panel is free of em dashes in reader-facing text');
 
   // The middot is a data-label separator, never sentence punctuation. Catch
   // the clear violation: a middot sitting between two lowercase words.
-  const proseMiddot = (panel('home').match(/[a-z]\s·\s[a-z]/g) ?? []).length;
-  assert.equal(proseMiddot, 0, 'no middot used as punctuation inside a sentence on Home');
-  ok('no middot used as sentence punctuation in rewritten copy');
+  const proseMiddot = [...html.matchAll(/[a-z]\s·\s[a-z]/g)].map((m) => m[0]);
+  assert.deepEqual(proseMiddot, [], 'no middot used as punctuation inside a sentence');
+  ok('no middot used as sentence punctuation anywhere in the page');
+}
+
+{ // Copy generated at RUNTIME by the Lab and Pipeline. Most of the site's
+  // prose lives in JavaScript template strings, which the index.html scan
+  // above cannot reach, so drive the real functions across the interesting
+  // hardware states and check what a reader would actually be shown.
+  const configs = [
+    ['fast path', { ...DEFAULT_CONFIG }],
+    ['offloading', { ...DEFAULT_CONFIG, gpuId: 'v100-pcie-16g', modelStopIndex: 7, ramCapacityGB: 128 }],
+    ['does not fit', { ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', modelStopIndex: 9 }],
+    ['four at once', { ...DEFAULT_CONFIG, concurrency: 4 }],
+  ];
+
+  const offenders = [];
+  for (const [label, config] of configs) {
+    const perf = evaluate(config);
+    const strings = [
+      memoryCaption(perf, config), fitChipText(perf, config), loadCaption(perf, config),
+      prefillCaption(perf), decodeCaption(perf), speedNote(perf),
+      offloadNote(perf, config), concTeaching(perf, config)?.ttftNote,
+      // simPlan is null when the model does not fit, and stageText needs one.
+      ...(simPlan(perf) ? [stageText('prefill', simPlan(perf)), stageText('decoding', simPlan(perf))] : []),
+      fmtTps(perf.decodeTpsPerRequest), fmtMs(perf.ttftMs), fmtTps(null), fmtMs(null),
+      quantExplainer(config.quantId),
+    ].filter((x) => typeof x === 'string');
+
+    for (const str of strings) {
+      if (/—/.test(str)) offenders.push(`${label}: ${str.slice(0, 70)}`);
+    }
+  }
+  assert.deepEqual(offenders, [], 'no em dash in any string the Lab or Pipeline shows a reader');
+  ok('runtime copy from the Lab and Pipeline is clean across fast, offload, no-fit and multi-user states');
 }
 
 { // Glossary terms must be marked up so the hover cards can find them.

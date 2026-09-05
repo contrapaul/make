@@ -122,16 +122,18 @@ export function membarView(perf) {
 
 /** Pure: fit-state chip text for a perf result (blueprint §6 Tab 3). */
 export function fitChipText(perf, config) {
-  if (!perf) return '—';
+  if (!perf) return '…';
   switch (perf.fitsState) {
     case 'gpu':
-      return config && config.mode === 'allInOne' ? 'Unified-memory resident — fast path' : 'GPU-resident — fast path';
+      return config && config.mode === 'allInOne'
+        ? 'The whole model sits in shared memory, which is the fast case.'
+        : 'The whole model sits on the graphics card, which is the fast case.';
     case 'offload':
-      return `Offloaded: ${perf.layersOnGpu} GPU / ${perf.layersOnCpu} CPU layers`;
+      return `Split: ${perf.layersOnGpu} layers on the graphics card, ${perf.layersOnCpu} in system memory`;
     case 'cpuOnly':
-      return 'CPU-only — RAM-bandwidth bound';
+      return 'Running entirely on the processor, so the speed of system memory sets the pace.';
     default:
-      return "Doesn't fit";
+      return 'Does not fit on this machine';
   }
 }
 
@@ -140,7 +142,7 @@ export function quantExplainer(quantId) {
   const q = QUANT_LEVELS.find((x) => x.id === quantId);
   if (!q || !q.explainer) return null;
   return {
-    title: `${q.name} — ${q.qualityLabel}`,
+    title: `${q.name}. ${q.qualityLabel}.`,
     whatItIs: q.explainer.whatItIs,
     tradeOff: q.explainer.tradeOff,
     whyItMatters: q.explainer.whyItMatters,
@@ -150,12 +152,12 @@ export function quantExplainer(quantId) {
 /* ---- formatting (pure, unit-tested) ---- */
 const esc = (s) => String(s).replace(/[&<>\"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
-export function fmtTps(x) { return x == null ? '—' : `${(Math.round(x * 10) / 10).toLocaleString()} tok/s`; }
+export function fmtTps(x) { return x == null ? '…' : `${(Math.round(x * 10) / 10).toLocaleString()} tok/s`; }
 export function fmtMs(ms) {
-  if (ms == null) return '—';
+  if (ms == null) return '…';
   return ms < 1000 ? `${Math.round(ms)} ms` : `${(ms / 1000).toFixed(2)} s`;
 }
-export function fmtWatts(w) { return w == null ? '—' : `${w} W`; }
+export function fmtWatts(w) { return w == null ? '…' : `${w} W`; }
 /** Money: ¥/$ values are small — keep 3 decimals under 1, 2 above. */
 function money(v) {
   if (v == null) return null;
@@ -165,8 +167,8 @@ function money(v) {
 }
 export function fmtCost(rmb, usd) {
   const a = money(rmb), b = money(usd);
-  if (a == null && b == null) return '—';
-  return `¥${a ?? '—'} · $${b ?? '—'}`;
+  if (a == null && b == null) return '…';
+  return `¥${a ?? '…'} · $${b ?? '…'}`;
 }
 
 /** Set one printout row's value; pulses it (§8) only when the text actually changed.
@@ -191,7 +193,7 @@ export function renderPrintouts(doc, state, { pulse: doPulse = true } = {}) {
   setPrintout(doc, 'po-tps', fmtTps(perf?.decodeTpsPerRequest), doPulse);
   setPrintout(doc, 'po-ttft', fmtMs(perf?.ttftMs), doPulse);
   setPrintout(doc, 'po-power', fmtWatts(cost?.watts), doPulse);
-  setPrintout(doc, 'po-cost', perf ? fmtCost(cost?.costRMBPerMOut, cost?.costUSDPerMOut) : '—', doPulse);
+  setPrintout(doc, 'po-cost', perf ? fmtCost(cost?.costRMBPerMOut, cost?.costUSDPerMOut) : '…', doPulse);
   setPrintout(doc, 'po-maxfit', perf?.maxModelFits ? `${perf.maxModelFits.label}` : 'none at this precision/ctx', doPulse);
 
   // M4 teaching moments — each row appears only when it teaches something.
@@ -262,21 +264,21 @@ export function renderPrintouts(doc, state, { pulse: doPulse = true } = {}) {
 
 /** Pure: one-line memory caption under the fill bar. */
 export function memoryCaption(perf, config) {
-  if (!perf) return '—';
+  if (!perf) return '…';
   const w = perf.weightsGB.toFixed(1);
   const kv = (perf.kvCacheGB * Math.max(1, config?.concurrency ?? 1)).toFixed(1);
   if (config && config.mode === 'allInOne') {
-    return `${w} GB weights + ${kv} GB KV of ${perf.gpuUsableGB.toFixed(0)} GB unified pool`;
+    return `${w} GB of weights and ${kv} GB of conversation store, in ${perf.gpuUsableGB.toFixed(0)} GB of shared memory`;
   }
   if (perf.fitsState === 'offload' || perf.fitsState === 'cpuOnly') {
     const L = perf.totalLayers;
     const perLayer = (perf.weightsGB + perf.kvCacheGB) / L;
-    return `${(perf.layersOnGpu * perLayer).toFixed(1)} GB in ${perf.gpuUsableGB.toFixed(0)} GB VRAM · ${(perf.layersOnCpu * perLayer).toFixed(1)} GB in ${perf.ramUsableGB} GB RAM`;
+    return `${(perf.layersOnGpu * perLayer).toFixed(1)} GB on the graphics card, which holds ${perf.gpuUsableGB.toFixed(0)} GB. The other ${(perf.layersOnCpu * perLayer).toFixed(1)} GB sits in ${perf.ramUsableGB} GB of system memory.`;
   }
   if (perf.fitsState === 'noFit') {
-    return `Needs ~${(perf.weightsGB + perf.kvTotalGB).toFixed(0)} GB — more than this rig offers`;
+    return `Needs about ${(perf.weightsGB + perf.kvTotalGB).toFixed(0)} GB, which is more than this machine has`;
   }
-  return `${w} GB weights + ${kv} GB KV of ${perf.gpuUsableGB.toFixed(0)} GB VRAM`;
+  return `${w} GB of weights and ${kv} GB of conversation store, in ${perf.gpuUsableGB.toFixed(0)} GB of graphics card memory`;
 }
 
 /* ---------------- M4 · teaching moments (pure) ---------------- */
@@ -290,7 +292,7 @@ export function concTeaching(perf, config) {
   return {
     total: fmtTps(perf.decodeTpsTotal),
     perReq: fmtTps(perf.decodeTpsPerRequest),
-    ttftNote: `×${B} queueing — prefills are serialized, so the last request waits ~${fmtMs(perf.ttftMs)} (one alone ≈ ${fmtMs(perf.ttftMsBase)})`,
+    ttftNote: `With ${B} people asking at once, the machine reads their questions one after another rather than together. So the last person waits about ${fmtMs(perf.ttftMs)} for a first word, where one person alone would wait about ${fmtMs(perf.ttftMsBase)}.`,
   };
 }
 
@@ -303,9 +305,9 @@ export function offloadNote(perf, config) {
   const bwGpu = gpu ? `${gpu.bandwidthGBs} GB/s` : 'GPU bandwidth';
   const bwRam = ram ? `${ram.bandwidthGBs} GB/s` : 'RAM bandwidth';
   if (perf.fitsState === 'cpuOnly') {
-    return `Why it's slow: every layer lives in system RAM (${bwRam}) — far below ${bwGpu}, so each token waits on the memory bus.`;
+    return `Why this is slow: every layer sits in system memory, which is read at ${bwRam}. The graphics card would read it at ${bwGpu}. Every single token has to wait for the slower one.`;
   }
-  return `Why it's slow: ${perf.layersOnCpu} of ${perf.totalLayers} layers live in system RAM (${bwRam}), and every token must wait for them instead of the GPU's ${bwGpu}.`;
+  return `Why this is slow: ${perf.layersOnCpu} of the model's ${perf.totalLayers} layers did not fit on the graphics card, so they sit in system memory instead. That memory is read at ${bwRam}, where the graphics card manages ${bwGpu}. Every token has to pass through all of the layers, so it waits for the slow ones.`;
 }
 
 /* ---------------- M3 · Run Inference simulation --------------
@@ -368,8 +370,8 @@ export function gaugeFill(tps) {
 /** Pure: stage line for a phase (rendered into #lab-sim-stage). */
 export function stageText(phase, plan) {
   if (phase === 'loading') return 'Loading weights into memory…';
-  if (phase === 'prefill') return `Prefill — one fast pass over the ${plan.promptTokens.toLocaleString()}-token prompt…`;
-  if (phase === 'decoding') return `Decoding — tokens out at ${fmtTps(plan.tps)} per request`;
+  if (phase === 'prefill') return `Reading your question: ${plan.promptTokens.toLocaleString()} tokens in one pass.`;
+  if (phase === 'decoding') return `Writing the answer at ${fmtTps(plan.tps)}, one token at a time.`;
   return 'Done';
 }
 
@@ -442,18 +444,20 @@ export function initSim({ doc = defaultDoc(), store, raf = defaultRaf(), now = d
     paintFrame(plan, plan.totalVirtualS); // land on the exact final state
     running = false;
     setRunState('idle');
-    const compressed = plan.speedup > 1 ? ` · ×${plan.speedup.toFixed(1)} time-compressed` : '';
+    const compressed = plan.speedup > 1
+      ? `, sped up ${plan.speedup.toFixed(1)} times so you do not have to wait for the real thing`
+      : '';
     // M4: at concurrency >1, name both rates — per-request vs total (the divergence).
     let concLine = '';
     const cfgB = Math.max(1, Number(store.getState()?.config?.concurrency) || 1);
     if (cfgB > 1) {
       const perfNow = store.getState()?.derived?.perf ?? null;
       if (perfNow && perfNow.decodeTpsTotal != null) {
-        concLine = ` · ${cfgB} requests at ${fmtTps(perfNow.decodeTpsPerRequest)} each ≈ ${fmtTps(perfNow.decodeTpsTotal)} total`;
+        concLine = `, which is ${cfgB} people getting ${fmtTps(perfNow.decodeTpsPerRequest)} each, or ${fmtTps(perfNow.decodeTpsTotal)} of work in total`;
       }
     }
     if (metaEl) metaEl.textContent =
-      `Done — ${plan.targetTokens} tokens${cfgB > 1 ? ' per request' : ''} in ${plan.realDurationS.toFixed(1)} s real time${compressed}${concLine}. The gauge shows the engine's estimated rate for this config.`;
+      `Finished. ${plan.targetTokens} tokens${cfgB > 1 ? ' for each person' : ''} in ${plan.realDurationS.toFixed(1)} seconds of real time${compressed}${concLine}. The dial shows the writing speed calculated for this hardware.`;
   }
 
   function start() {
@@ -461,7 +465,7 @@ export function initSim({ doc = defaultDoc(), store, raf = defaultRaf(), now = d
     const plan = simPlan(perf);
     if (!plan) {
       setRunState('idle');
-      if (stageEl) stageEl.textContent = "Can't run — the model doesn't fit this hardware. See the diagnosis on the right.";
+      if (stageEl) stageEl.textContent = "This model does not fit on the selected hardware. The results panel explains why and what to change.";
       return false;
     }
     cancel(); // click mid-run = restart with the current config

@@ -130,21 +130,21 @@ export function modelLoadView(perf) {
 /** Pure: one-line caption under the Stage 2 bar — GB used vs available,
  *  same voice as lab.js's memoryCaption. */
 export function loadCaption(perf, config) {
-  if (!perf || !modelLoadView(perf)) return '—';
+  if (!perf || !modelLoadView(perf)) return '…';
   const w = perf.weightsGB.toFixed(1);
   if (perf.fitsState === 'noFit') {
     const avail = (perf.gpuUsableGB + (perf.ramUsableGB ?? 0)).toFixed(0);
-    return `Needs ~${w} GB of weights, but this rig offers ${avail} GB — it doesn't fit`;
+    return `This model needs about ${w} GB of memory. This machine has ${avail} GB, so it will not fit.`;
   }
   if (perf.fitsState === 'offload' || perf.fitsState === 'cpuOnly') {
     const L = perf.totalLayers;
     const perLayer = (perf.weightsGB + perf.kvCacheGB) / L;
-    return `${(perf.layersOnGpu * perLayer).toFixed(1)} GB of weights pour into ${perf.gpuUsableGB.toFixed(0)} GB of VRAM, the rest overflows into RAM`;
+    return `${(perf.layersOnGpu * perLayer).toFixed(1)} GB of weights fit into ${perf.gpuUsableGB.toFixed(0)} GB of graphics card memory. The rest has to sit in system memory, which is much slower to read.`;
   }
   // fitsState === 'gpu' — AIOs report their pool as gpuUsableGB
   return config && config.mode === 'allInOne'
-    ? `${w} GB of weights pour into ${perf.gpuUsableGB.toFixed(0)} GB of unified memory — it fits`
-    : `${w} GB of weights pour into ${perf.gpuUsableGB.toFixed(0)} GB of VRAM — it fits`;
+    ? `${w} GB of weights loaded into ${perf.gpuUsableGB.toFixed(0)} GB of shared memory. It fits.`
+    : `${w} GB of weights loaded into ${perf.gpuUsableGB.toFixed(0)} GB of graphics card memory. It fits.`;
 }
 
 /** True when the user asks for reduced motion (guarded — no matchMedia in Node). */
@@ -232,27 +232,29 @@ export function prefillDecodeView(perf) {
 /** Pure: the prefill-half line (one gulp, compute-bound). */
 export function prefillCaption(perf) {
   const v = prefillDecodeView(perf);
-  if (!v) return '—';
+  if (!v) return '…';
   const when = v.prefillS != null
-    ? (v.prefillS < 1 ? `~${v.prefillS.toFixed(2)} s` : `~${v.prefillS.toFixed(1)} s`)
+    ? (v.prefillS < 1 ? `about ${v.prefillS.toFixed(2)} seconds` : `about ${v.prefillS.toFixed(1)} seconds`)
     : 'a flash';
-  return `one fast pass — ${v.promptTokens.toLocaleString()} tokens chewed in ${when} (compute-bound)`;
+  return `${v.promptTokens.toLocaleString()} tokens read in one pass, taking ${when}. Limited by calculation speed.`;
 }
 
 /** Pure: the decode-half line (a drip, bandwidth-bound). */
 export function decodeCaption(perf) {
   const v = prefillDecodeView(perf);
-  if (!v) return '—';
+  if (!v) return '…';
   const each = v.perTokenMs >= 1000 ? `${(v.perTokenMs / 1000).toFixed(1)} s` : `${Math.round(v.perTokenMs)} ms`;
-  return `${v.targetTokens} tokens out one at a time — ~${each} each (bandwidth-bound)`;
+  return `${v.targetTokens} tokens written one at a time, about ${each} each. Limited by memory speed.`;
 }
 
 /** Pure: the run's real time, with the compression LABELLED when >1. */
 export function speedNote(perf) {
   const v = prefillDecodeView(perf);
   if (!v) return '';
-  const compressed = v.speedup > 1 ? ` · ×${v.speedup.toFixed(1)} time-compressed` : '';
-  return `A full ${v.targetTokens}-token run takes ~${v.realDurationS.toFixed(1)} s real time${compressed} — the gulp and the drip run at very different speeds, and that gap is the point.`;
+  const compressed = v.speedup > 1
+    ? `, sped up ${v.speedup.toFixed(1)} times here so you do not have to wait for the real thing`
+    : '';
+  return `Writing all ${v.targetTokens} tokens takes about ${v.realDurationS.toFixed(1)} seconds in real time${compressed}. Reading and writing run at very different speeds, and that gap is the point.`;
 }
 
 /** Append decode chips up to `n` in the Stage 3 conveyor (bounded at target). */
@@ -338,9 +340,9 @@ export function initPipeline({ doc = defaultDoc(), store, raf, now, reduced } = 
     const perf = state?.derived?.perf ?? null;
     const v = prefillDecodeView(perf);
     const setText = (id, txt) => { const el = doc.getElementById?.(id); if (el) el.textContent = txt; };
-    setText('pipe-prefill-tokens', v ? v.promptTokens.toLocaleString() : '—');
+    setText('pipe-prefill-tokens', v ? v.promptTokens.toLocaleString() : '…');
     setText('pipe-prefill-note', prefillCaption(perf));
-    setText('pipe-decode-tps', v ? fmtTps(v.tps) : '—');
+    setText('pipe-decode-tps', v ? fmtTps(v.tps) : '…');
     setText('pipe-decode-note', decodeCaption(perf));
     setText('pipe-speed-note', speedNote(perf));
 
@@ -348,8 +350,8 @@ export function initPipeline({ doc = defaultDoc(), store, raf, now, reduced } = 
     const plan = simPlan(perf);
     if (!plan) {
       dripClear(doc);
-      setText('pipe-drip-label', '—');
-      setText('pipe-phase', "Can't run — the model doesn't fit this hardware.");
+      setText('pipe-drip-label', '…');
+      setText('pipe-phase', "This model does not fit on the selected hardware, so there is nothing to run.");
       return;
     }
     if (animate) {

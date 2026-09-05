@@ -10,8 +10,10 @@
 .home-hero {
   position: relative;
   overflow: hidden; /* clip the floating panels at the edges */
-  min-height: calc(100vh - 56px);  /* nav = sp-2 ×2 + 40 px toggle */
-  min-height: calc(100svh - 56px);
+  /* Was a full viewport. Trimmed 2026-09-05 with the marquee removal so the
+     first story beat sits just under the fold instead of a screen below it. */
+  min-height: calc(82vh - 56px);
+  min-height: calc(82svh - 56px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +22,10 @@
 .hero-inner {
   position: relative;
   z-index: 1;
-  max-width: 780px;
+  /* Sized so the content column matches the width of the h1 on one line
+     (48px type, ~651px). The description then spans exactly the same
+     measure as the title above it (owner request, 2026-09-05). */
+  max-width: 700px;
   padding: var(--sp-7) var(--sp-5);
   display: flex;
   flex-direction: column;
@@ -47,7 +52,9 @@
 
 .hero-sub {
   margin: 0;
-  max-width: 58ch;
+  /* No narrower measure than the title: the description spans the same
+     width as the h1 above it (owner request, 2026-09-05). */
+  max-width: none;
   font-size: var(--fs-3);
   line-height: 1.6;
   color: var(--text-secondary);
@@ -79,45 +86,13 @@
 
 @media (max-width: 900px) { .hero-float { display: none; } }
 
-/* Token-glyph stream — pure CSS loop (§6). Agent-decided: two identical
-   halves so a −50 % translate is seamless; edge fade via mask. */
-.token-stream {
-  position: absolute;
-  left: 0; right: 0; bottom: var(--sp-5);
-  z-index: 1;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-}
-
-.token-track { display: flex; width: max-content; animation: token-drift 36s linear infinite; }
-
-.token-half { display: inline-flex; gap: var(--sp-2); padding-right: var(--sp-2); }
-
-@keyframes token-drift { to { transform: translateX(-50%); } }
-
-.glyph {
-  font-family: var(--font-mono);
-  font-size: var(--fs-1);
-  line-height: 1;
-  padding: 6px 12px;
-  border-radius: var(--radius-chip);
-  background: var(--chip-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text-secondary);
-}
-
-.glyph--accent {
-  background: var(--accent-gradient);
-  border-color: transparent;
-  color: var(--on-accent);
-}
-
 /* ---------- Scroll story (§6 Tab 1: beats) -------------------- */
 .home-story {
   max-width: 920px;
   margin-inline: auto;
-  padding: var(--sp-7) var(--sp-5);
+  /* Tight at the top so the first beat is reached almost immediately when
+     the reader starts scrolling (owner request, 2026-09-05). */
+  padding: var(--sp-4) var(--sp-5) var(--sp-7);
   display: flex;
   flex-direction: column;
   gap: var(--sp-7);
@@ -189,7 +164,6 @@
 
 /* ---------- Reduced motion (§8 courtesy) ---------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .token-track,
   .hero-float--a, .hero-float--b, .hero-float--c { animation: none !important; }
 }
 
