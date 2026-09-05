@@ -98,15 +98,84 @@ sup.fn { color: var(--accent-solid); font-weight: 700; white-space: nowrap; }
 .fn-list { padding-left: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-2); }
 .fn-list a { color: var(--accent-solid); }
 
-/* The reader's own machine in the Tab 4 race (P7 M1): their row is the one
-   they care about, so it is not left to look like any other contestant. */
-.bw-row.is-local .bw-label { color: var(--text-primary); font-weight: 700; }
+/* ---------- Tab 4 race cards (P7 M1) -------------------------
+   The race is five real answers arriving in real time, so each contestant
+   needs a card it can write into rather than a bar in a chart. The panes are
+   a fixed height and scroll: text landing token by token must not push the
+   card below it down the page mid-race. */
+.race-prompt {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--accent-solid);
+  background: var(--surface-2, rgba(127, 127, 127, 0.08));
+  border-radius: 0 var(--r-2, 8px) var(--r-2, 8px) 0;
+  color: var(--text-primary);
+  font-size: var(--fs-1);
+}
 
-/* Race status text ("Finished in 3.4 s", "Thinking, 47 s so far") needs more
-   room than the bandwidth figures the .bw grid was sized for, or it wraps. */
-#cmp-race .bw-row { grid-template-columns: 170px minmax(0, 1fr) 132px; }
-#cmp-race .bw-val { font-size: var(--fs-1); font-variant-numeric: normal; }
-@media (max-width: 560px) { #cmp-race .bw-row { grid-template-columns: 120px minmax(0, 1fr) 104px; } }
+.race-grid {
+  display: grid;
+  /* 330px rather than something narrower: five lanes will not fit the site's
+     content width at a size anyone would want to read two paragraphs in, and
+     reading the answers is half the point of the race. Three across, then two. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+}
+
+.race-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border: 1px solid var(--border, rgba(127, 127, 127, 0.28));
+  border-radius: var(--r-3, 12px);
+  background: var(--surface-1, rgba(127, 127, 127, 0.05));
+  transition: border-color 160ms ease, opacity 160ms ease;
+}
+/* The reader's own machine is the one they care about, so the two local
+   cards are not left looking like any other contestant. */
+.race-card.is-local { border-color: var(--accent-solid); }
+.race-card.is-done { border-color: var(--accent-solid); }
+.race-card.is-blocked { opacity: 0.55; }
+
+.race-head { display: flex; align-items: baseline; gap: var(--sp-2); flex-wrap: wrap; }
+.race-who { font-size: var(--fs-2); color: var(--text-primary); }
+.race-tag {
+  font-size: var(--fs-0, 0.75rem);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  border: 1px solid var(--border, rgba(127, 127, 127, 0.28));
+  border-radius: 999px;
+  padding: 0 0.5em;
+}
+.race-card.is-local .race-tag { color: var(--accent-solid); border-color: var(--accent-solid); }
+.race-place { margin-left: auto; font-weight: 700; color: var(--accent-solid); }
+
+.race-speed { margin: 0; font-size: var(--fs-1); color: var(--text-secondary); }
+.race-status { margin: 0; font-size: var(--fs-1); font-weight: 600; color: var(--text-primary); }
+
+.race-answer {
+  height: 13.5em;
+  overflow-y: auto;
+  margin: 0;
+  font-size: var(--fs-1);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  white-space: pre-wrap;   /* keeps the model's own paragraph breaks */
+  overflow-wrap: break-word;
+}
+/* The cursor only belongs on a card that is actually mid-answer. */
+.race-card.is-done .race-answer::after { content: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .race-answer:not(:empty)::after {
+    content: '▌';
+    color: var(--accent-solid);
+    animation: race-caret 1s steps(2) infinite;
+  }
+}
+@keyframes race-caret { 50% { opacity: 0; } }
 
 /* A candidate that top-p threw away (P5 M5). Dimmed rather than removed,
    so a reader can see what the setting is actually discarding. */

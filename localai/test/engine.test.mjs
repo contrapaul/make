@@ -56,7 +56,7 @@ const rig = (over = {}) => ({
   ramTierId: 'ddr5-6000',
   ramCapacityGB: 64,
   cpuId: 'i5-13600k',
-  modelStopIndex: 1, // 8B (Llama 3.1 8B anchor)
+  modelStopIndex: 1, // 8B (Gemma 4 E4B anchor)
   quantId: 'q4_k_m',
   contextWindow: 8192,
   promptSplit: 'balanced',
@@ -81,7 +81,7 @@ const aio = (platformId, over = {}) => ({
 });
 
 const STOP_4B = 0;   // Qwen3-4B anchor
-const STOP_8B = 1;   // Llama 3.1 8B anchor
+const STOP_8B = 1;   // Gemma 4 E4B anchor
 const STOP_70B = 7;  // Llama 3.3 70B anchor
 
 /* ---------------- §5.4 sanity anchors (P2 acceptance) ---------------- */
@@ -132,8 +132,21 @@ section('Memory accounting (weights / KV cache / usable pools)');
   const r = evaluate(rig({ modelStopIndex: STOP_8B }));
   check('weightsGB(8B, Q4_K_M) = 4.4', near(r.weightsGB, 4.4, 1e-9), `got ${r.weightsGB}`);
 
+  // Gemma 4 E4B is a hybrid: 7 global layers grow with the context, 35
+  // sliding-window layers stop growing at 512 tokens. So the slot count is
+  // 7×8192 + 35×512 = 75,264, not 42×8192, and the cache is ~7× smaller than
+  // the full-attention model that used to anchor this stop.
   const kv8k = kvCacheGB(MODEL_STOPS[STOP_8B].anchor, 8192, QUANT_BY_ID.q4_k_m);
-  check('kvCacheGB(8B @ 8K) ≈ 1.074 GB', near(kv8k, 1.073741824, 1e-6), `got ${kv8k}`);
+  check('kvCacheGB(8B @ 8K) ≈ 0.154 GB', near(kv8k, 0.154140672, 1e-6), `got ${kv8k}`);
+
+  // The sliding layers must genuinely stop growing: doubling the context does
+  // not double this cache, which is the whole point of the architecture.
+  const kv16k = kvCacheGB(MODEL_STOPS[STOP_8B].anchor, 16384, QUANT_BY_ID.q4_k_m);
+  check('sliding-window layers stop growing (16K < 2× the 8K cache)', kv16k < kv8k * 2, `got ${kv16k} vs ${kv8k}`);
+
+  // A full-attention anchor declares no hybrid fields and must be unchanged.
+  const kv70 = kvCacheGB(MODEL_STOPS[STOP_70B].anchor, 8192, QUANT_BY_ID.q4_k_m);
+  check('full-attention anchors still use every layer', near(kv70, 2.68435456, 1e-6), `got ${kv70}`);
 
   const kv32k = kvCacheGB(MODEL_STOPS[STOP_70B].anchor, 32768, QUANT_BY_ID.q4_k_m);
   check('kvCacheGB(70B @ 32K) ≈ 10.737 GB', near(kv32k, 10.73741824, 1e-6), `got ${kv32k}`);
@@ -261,12 +274,15 @@ function makeMockStorage(initial = {}) {
   const st0 = s.getState();
   check('fresh store starts at DEFAULT_CONFIG with ok derived state', st0.config.quantId === 'q4_k_m' && st0.derived.ok === true);
 
-  // recompute + emit on change
+  // recompute + emit on change. Asserted as growth against the starting
+  // context rather than a fixed threshold: how much the cache grows depends
+  // on the anchor's attention design, but that it grows does not.
   let emits = 0;
+  const kvBefore = s.getState().derived.perf.kvCacheGB;
   const unsub = s.subscribe(() => emits++);
   s.setConfig({ contextWindow: 32768 });
   unsub();
-  check('setConfig recomputes derived (KV grows with ctx)', s.getState().derived.perf.kvCacheGB > 4, `got ${s.getState().derived.perf.kvCacheGB}`);
+  check('setConfig recomputes derived (KV grows with ctx)', s.getState().derived.perf.kvCacheGB > kvBefore, `got ${s.getState().derived.perf.kvCacheGB} vs ${kvBefore}`);
   check('setConfig emits exactly once', emits === 1, `emits=${emits}`);
 
   // persistence happened

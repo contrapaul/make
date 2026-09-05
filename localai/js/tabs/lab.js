@@ -88,7 +88,14 @@ export function tierSwitchPartial(config, tierId) {
 export function anchorNote(index) {
   const s = MODEL_STOPS[index] ?? MODEL_STOPS[0];
   if (s.representative) return `${s.label} · representative stop (interpolated metadata)`;
-  return `Anchored to ${s.anchor.name} · ${s.anchor.layers} layers, GQA ${s.anchor.kvHeads} KV heads`;
+  const a = s.anchor;
+  const base = `Anchored to ${a.name} · ${a.layers} layers, GQA ${a.kvHeads} KV heads`;
+  // A hybrid anchor caches on only some of its layers. Saying "42 layers" and
+  // stopping there would overstate how fast its KV cache grows.
+  if (a.kvLayers != null && a.kvLayers < a.layers) {
+    return `${base}, only ${a.kvLayers} caching the whole context`;
+  }
+  return base;
 }
 
 /* ---------------- M2 · printouts rail (pure + render) -------- */

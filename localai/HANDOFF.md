@@ -40,11 +40,29 @@ Carries `RACE_PROMPT`, and a `RACE_ENTRIES` row per model with `answer`, `waitS`
 
 **The honesty rules are written into the file header:** no estimated numbers, null where unmeasured, and local answers tagged with the machine that produced them so nobody reads a one-off run as a claim about all hardware.
 
-### An open design question, flagged not decided
+### An open design question — RESOLVED IN BUILD (2026-09-05, see below)
 
 These recorded runs are one machine on one day. The site's premise everywhere else is that *your* hardware determines *your* speed, computed live by the engine. Those are different claims and should not be blurred.
 
 The proposal: **the race becomes a recorded demonstration**, clearly labelled with machine and date, and the engine-computed "your machine" projection stays in the comparison table where it already lives. The cost is that the race would stop responding to the Hardware Lab, which is a nice connection to lose. **A sixth row, "your machine", projected live by the engine alongside the five recorded runs, would keep both** and is a small addition. Owner has not ruled on this.
+
+**Resolved differently, and better, when the race was built.** No sixth row was needed. The split runs *through* the field rather than beside it: the three CLOUD answers are recorded demonstrations and keep their measured times, while the two LOCAL answers keep only their text — their speed is computed live by the engine against the reader's own config, with the model swapped to the stop that model sits at. So the race still answers to the Hardware Lab (half of it moves), and no recorded number is ever presented as a live projection. Each card says which kind it is: "measured on …" or "calculated for your hardware".
+
+## P7 M1 — the race REBUILT as five real answers (2026-09-05)
+
+`js/data/race-sample.js` is filled in from `responses.md`, and the race now streams each model's real reply token by token at the speed it was really produced.
+
+* **Speed sources.** Cloud: the owner's stopwatch, fixed. Local: `evaluate({...config, modelStopIndex})` per racer. A local model the reader's memory cannot hold stays on screen marked `cannotRun` rather than being dropped — that is the useful answer for that reader.
+* **Token counts are real**, from the site's own Qwen3 vocabulary (`tokenizeWith`), not a words-per-token guess. `streamedText()` round-trips to exactly the captured answer, and a test asserts it.
+* **Plays at TRUE speed** on a normal rig (slowest finisher ≈16 s, inside `RACE_REAL_BUDGET_S`). Compression only engages on a slow rig, still labelled.
+* **What is NOT measured is stated, not filled in.** GPT-5.6 Luna and DeepSeek V4 Instant were timed end to end on a free tier with no separate first-word measurement, so `waitMeasured: false` and the label admits it. Claude Opus 5 was re-timed: 16 s total, 7 s of it thinking, so its row says "Thinking".
+* **DOM:** `#cmp-race-prompt` (new) · `#cmp-race` now holds `.race-card`s, not `.bw-row`s. Card children order is head/speed/bar/status/answer — the tests index these.
+
+### Engine change that came with it
+
+The two local models replaced the two older anchors: **Gemma 4 E4B at the 8B stop** (was Llama 3.1 8B) and **Qwen3.8-27B at the 27B stop** (was Gemma 3 27B). Both are hybrids, so `kvCacheGB()` was generalised: an anchor may declare `kvLayers` (layers whose cache grows with context) and `slidingLayers` + `slidingWindow`. A plain full-attention anchor declares neither and is unchanged.
+
+**This has a teaching consequence, and it is not a bug.** Gemma 4 E4B caches on only 7 of its 42 layers, so its KV store *never overtakes its weights*, even at 128K — the opposite of the Pipeline tab's long-context lesson. `kvCompareNote()` already branched both ways, so the page stays truthful; the tests were re-pinned to a full-attention stop (12B) for the overtake lesson, with a new test locking in the sliding-window counterpoint. All five §5.4 acceptance anchors still pass unchanged.
 
 ### Landed already in response to the same report
 

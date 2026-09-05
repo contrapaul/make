@@ -8,7 +8,9 @@
  *
  * MEMORY ACCOUNTING
  *   weightsGB      = paramsB × bytesPerParam(quant)                          [§3.3]
- *   kvCacheGB/req  = 2 × layers × kvHeads × headDim × ctxTokens × dtypeBytes / 1e9
+ *   kvCacheGB/req  = 2 × (globalLayers × ctxTokens + slidingLayers × min(ctxTokens, window))
+ *                        × kvHeads × headDim × dtypeBytes / 1e9
+ *                    (a plain full-attention anchor has globalLayers = layers, no sliding)
  *   usable (rig)   = VRAM per card × count; system RAM capacity as-is
  *   usable (AIO)   = unified pool × (1 − unifiedMemoryOsCarveout)            [labeled assumption]
  *
@@ -84,9 +86,22 @@ function resolveDevices(config) {
   return { kind: 'rig', platform: null, gpu, ram, cpu };
 }
 
-/** KV cache size in GB for one request at a given context length (blueprint §5 formula). */
+/** KV cache size in GB for one request at a given context length (blueprint §5 formula).
+ *
+ *  Not every layer keeps a cache that grows with the context. Two of the
+ *  anchors are hybrids and say so in their own config:
+ *    - Gemma 4 E4B: 7 of 42 layers are global; the other 35 are sliding-window
+ *      attention, whose cache stops growing once the context passes the window.
+ *    - Qwen3.8-27B: 16 of 64 layers are full attention; the other 48 are Gated
+ *      DeltaNet, whose state is a fixed size no matter how long the context is.
+ *  An anchor that declares neither field is a plain full-attention model, and
+ *  falls back to every layer growing — which is exactly what it does. */
 export function kvCacheGB(anchor, ctxTokens, quant) {
-  return (2 * anchor.layers * anchor.kvHeads * anchor.headDim * ctxTokens * quant.kvBytesPerElement) / 1e9;
+  const globalLayers = anchor.kvLayers ?? anchor.layers;
+  const slidingLayers = anchor.slidingLayers ?? 0;
+  const windowTokens = anchor.slidingWindow ? Math.min(ctxTokens, anchor.slidingWindow) : 0;
+  const tokenSlots = globalLayers * ctxTokens + slidingLayers * windowTokens;
+  return (2 * tokenSlots * anchor.kvHeads * anchor.headDim * quant.kvBytesPerElement) / 1e9;
 }
 
 /** Usable memory in GB for the config's primary pool. */

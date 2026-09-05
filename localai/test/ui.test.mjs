@@ -30,11 +30,13 @@ import { VOCAB } from '../js/data/vocab.js';
 import { termIdFromHash, tooltipText, renderGlossary, initTermCards, initGlossary } from '../js/tabs/glossary.js';
 import { GLOSSARY } from '../js/data/glossary.js';
 import {
-  RACE_REAL_BUDGET_S, localRacer, cloudRacers, waitLabel, racePlan,
-  racerTokensAt, racerStatus, raceNote, renderRace, runRace, initCompare,
+  RACE_REAL_BUDGET_S, makeRacer, stopIndexFor, waitLabel, racePlan, streamedText,
+  racerTokensAt, racerStatus, raceNote, speedLine, localSummary, renderRace, runRace, initCompare,
   localModelName, compareColumns, compareRows, usedSources, pricingCaveats,
   agenticHighlight, renderCompareTable, renderFootnotes, displayName, raceCaveats, forReaders,
 } from '../js/tabs/compare.js';
+import { RACE_ENTRIES, RACE_PROMPT, displayText } from '../js/data/race-sample.js';
+import { MODEL_STOPS } from '../js/data/models.js';
 import { CLOUD_SOURCES } from '../js/data/cloud.js';
 import { computeCost } from '../js/engine/cost.js';
 import { CLOUD_MODELS } from '../js/data/cloud.js';
@@ -608,9 +610,14 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
 }
 
 { // pure helper — anchor readout labels representative stops (§3.2)
-  assert.match(anchorNote(1), /Llama 3\.1 8B/);
+  assert.match(anchorNote(1), /Gemma 4 E4B/);
   assert.match(anchorNote(4), /representative/i); // 16B stop is interpolated
-  ok('anchorNote names the anchor model and flags representative stops');
+  // Hybrid anchors say how many layers actually cache the whole context;
+  // full-attention ones have nothing extra to say.
+  assert.match(anchorNote(1), /only 7 caching the whole context/);
+  assert.match(anchorNote(5), /only 16 caching the whole context/); // Qwen3.8-27B
+  assert.doesNotMatch(anchorNote(7), /caching the whole context/);          // Llama 3.3 70B
+  ok('anchorNote names the anchor model, flags representative stops and hybrid caching');
 }
 
 { // initial paint reflects DEFAULT_CONFIG (rig mode)
@@ -622,7 +629,7 @@ const checkedOf = (doc, name) => doc.groups[name].find((r) => r.checked)?.value 
   assert.equal(checkedOf(doc, 'lab-gpu'), 'rtx-3090-24g');
   assert.equal(checkedOf(doc, 'lab-capacity'), '64');
   assert.equal(doc.modelInput.value, '1');
-  assert.match(doc.getElementById('lab-model-anchor').textContent, /Llama 3\.1 8B/);
+  assert.match(doc.getElementById('lab-model-anchor').textContent, /Gemma 4 E4B/);
   ok('initial paint: controls reflect the store config (rig · RTX 3090 · 64 GB · 8B)');
 }
 
@@ -1514,9 +1521,13 @@ console.log('tabs/pipeline.js — P5 M4 (Step 4 · KV cache growth)');
   ok('kvGrowthView clamps to the window, refuses negatives, and is null-safe');
 }
 
-{ // the teaching moment: at a long context the store outgrows the model
-  const short = { ...DEFAULT_CONFIG, contextWindow: 8192 };
-  const long = { ...DEFAULT_CONFIG, contextWindow: 131072 };
+{ // the teaching moment: at a long context the store outgrows the model.
+  // Pinned to a FULL-ATTENTION stop (12B, Gemma 3 12B) on purpose. Whether the
+  // store overtakes the weights is a property of the attention design, not of
+  // the window alone — the hybrid counterpoint is the block below.
+  const FULL_ATTENTION_STOP = 2;
+  const short = { ...DEFAULT_CONFIG, modelStopIndex: FULL_ATTENTION_STOP, contextWindow: 8192 };
+  const long = { ...DEFAULT_CONFIG, modelStopIndex: FULL_ATTENTION_STOP, contextWindow: 131072 };
   const vShort = kvGrowthView(evaluate(short), short, 8192);
   const vLong = kvGrowthView(evaluate(long), long, 131072);
 
@@ -1530,6 +1541,19 @@ console.log('tabs/pipeline.js — P5 M4 (Step 4 · KV cache growth)');
   // The per-token cost is a property of the model, not of the window.
   assert.ok(Math.abs(vShort.perTokenMB - vLong.perTokenMB) < 1e-9, 'per-token cost does not depend on the window');
   ok(`the store overtakes the weights at ${vLong.overtakeTokens.toLocaleString()} tokens (within a 128K window, not an 8K one)`);
+}
+
+{ // the counterpoint: a sliding-window anchor never gets there.
+  // Gemma 4 E4B caches the whole context on only 7 of its 42 layers; the other
+  // 35 stop growing at 512 tokens, so its store stays well under the weights
+  // even at 128K. The page must say so rather than repeating the 128K lesson.
+  const cfg = { ...DEFAULT_CONFIG, contextWindow: 131072 }; // 8B stop = Gemma 4 E4B
+  const perf = evaluate(cfg);
+  const v = kvGrowthView(perf, cfg, 131072);
+  assert.ok(!v.overtakesWithinWindow, 'a sliding-window anchor does not overtake its weights at 128K');
+  assert.ok(v.shareOfWeightsPct < 100, `got ${v.shareOfWeightsPct.toFixed(0)}%`);
+  assert.match(kvCompareNote(perf, cfg, 131072), /stays smaller than the model/);
+  ok(`sliding-window attention holds the store at ${v.shareOfWeightsPct.toFixed(0)}% of the weights at 128K`);
 }
 
 { // DOM: first paint, slider drag, and the bar
@@ -1562,7 +1586,10 @@ console.log('tabs/pipeline.js — P5 M4 (Step 4 · KV cache growth)');
 
 { // a context change in the Lab re-renders Step 4 and re-clamps the slider
   const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, String(v)); } };
-  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, contextWindow: 131072 }, storage });
+  // modelStopIndex 2 is the 12B full-attention stop: the warn state is about a
+  // store that outgrows its weights, which only a full-attention anchor does
+  // within a 128K window (see the sliding-window block above).
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, modelStopIndex: 2, contextWindow: 131072 }, storage });
   const doc = makePipeDoc();
   const api = initPipeline({ doc, store });
 
@@ -1912,117 +1939,181 @@ function makeGlossDoc() {
 /* ---------------- js/tabs/compare.js — P7 M1 (the race) ---------------- */
 console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
 
-{ // the field is built from real data, and unmeasured models are left out
-  const racers = cloudRacers();
-  assert.ok(racers.length >= 3, 'at least three cloud models can be raced');
+// The race is built from real token counts, so the fixtures are the real
+// answers run through the real vocabulary — the same thing the page does,
+// minus the lazy import.
+const RACE_TOKENS = Object.fromEntries(
+  RACE_ENTRIES.map((e) => [e.id, tokenizeWith(VOCAB, displayText(e.answer))]),
+);
 
-  // DeepSeek V4 Flash carries outputTps: null in cloud.js. It must be EXCLUDED
-  // rather than guessed at, which is the whole point of the filter.
-  const flash = CLOUD_MODELS.find((m) => m.id === 'deepseek-v4-flash');
-  assert.ok(flash && flash.outputTps == null, 'test premise: Flash has no measured speed');
-  assert.ok(!racers.some((r) => r.id === 'deepseek-v4-flash'), 'a model with no measured speed is not raced');
-
-  for (const r of racers) {
-    assert.ok(r.tps > 0 && r.waitS != null, `${r.id} has a real speed and wait`);
-    assert.ok(r.sources.length > 0, `${r.id} carries its source ids`);
-  }
-  ok(`cloudRacers builds ${racers.length} racers from sourced data and drops the unmeasured one`);
-}
-
-{ // the local racer comes from the engine, and sits out when it cannot fit
+{ // the field is five real answers, counted by the real tokenizer
   const cfg = { ...DEFAULT_CONFIG };
-  const perf = evaluate(cfg);
-  const me = localRacer(perf, cfg);
-  assert.equal(me.tps, perf.decodeTpsPerRequest, 'speed is the engine figure, not a copy');
-  assert.ok(Math.abs(me.waitS - perf.ttftMs / 1000) < 1e-9, 'wait is the engine TTFT in seconds');
-
-  const tooBig = { ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', modelStopIndex: 9 };
-  const noFit = evaluate(tooBig);
-  assert.equal(noFit.decodeTpsPerRequest, null, 'test premise: this config does not fit');
-  assert.equal(localRacer(noFit, tooBig), null, 'a machine that cannot run does not enter');
-  ok('the local racer is taken straight from the engine, and sits out when the model does not fit');
-}
-
-{ // racePlan: ordering, finishing times, and the labeled compression
-  const cfg = { ...DEFAULT_CONFIG };
-  const plan = racePlan(evaluate(cfg), cfg);
-  assert.equal(plan.racers.length, 4, 'local plus three raceable cloud models');
-  assert.equal(plan.targetTokens, 256);
+  const plan = racePlan(cfg, RACE_TOKENS);
+  assert.equal(plan.racers.length, 5, 'five captured answers, five racers');
+  assert.equal(plan.runners.length, 5, 'the default rig can run both local models');
+  assert.equal(plan.prompt, RACE_PROMPT, 'the plan carries the one prompt they all answered');
 
   for (const r of plan.racers) {
-    assert.ok(Math.abs(r.finishS - (r.waitS + 256 / r.tps)) < 1e-9, `${r.id} finish = wait + writing time`);
+    assert.ok(r.targetTokens > 100, `${r.id} has a real token count (${r.targetTokens})`);
+    assert.equal(r.tokens.length, r.targetTokens, `${r.id} target matches its token array`);
+    assert.ok(r.tps > 0, `${r.id} has a positive rate`);
   }
-
-  // Places must follow finishing time, not list order.
-  const byPlace = [...plan.racers].sort((a, b) => a.place - b.place);
-  for (let i = 1; i < byPlace.length; i += 1) {
-    assert.ok(byPlace[i].finishS >= byPlace[i - 1].finishS, 'places are ordered by finishing time');
-  }
-
-  // Blueprint §6 Tab 4 acceptance: the race fits in 20 s of real time.
-  assert.ok(plan.realDurationS <= RACE_REAL_BUDGET_S + 1e-9, `race fits the ${RACE_REAL_BUDGET_S} s budget`);
-  assert.ok(plan.speedup > 1, 'and needs compressing to do it');
-  assert.match(raceNote(plan), /sped up .* times/, 'the compression is labelled');
-  ok(`racePlan: 4 racers, slowest ${plan.slowestS.toFixed(0)} s compressed ${plan.speedup.toFixed(1)}x into ${plan.realDurationS.toFixed(1)} s`);
+  ok(`racePlan fields five real answers (${plan.racers.map((r) => r.targetTokens).join('/')} tokens)`);
 }
 
-{ // the honest bit: GPT-5.6's wait is thinking time, and is described as such
+{ // a cloud racer keeps the owner's stopwatch, exactly
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+  for (const id of ['gpt-56-luna', 'deepseek-v4-instant', 'claude-opus-5']) {
+    const r = plan.racers.find((x) => x.id === id);
+    const e = RACE_ENTRIES.find((x) => x.id === id);
+    assert.ok(Math.abs(r.finishS - e.totalS) < 1e-9, `${id} finishes at its measured ${e.totalS} s`);
+    assert.ok(Math.abs(r.tps - r.targetTokens / (e.totalS - e.waitS)) < 1e-9, `${id} rate = tokens / writing seconds`);
+  }
+  ok('each cloud racer finishes at exactly the time it was measured at');
+}
+
+{ // cloud speeds are fixed; local speeds follow the reader's hardware
+  const fast = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+  const slow = racePlan({ ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200' }, RACE_TOKENS);
+
+  for (const r of fast.racers.filter((x) => !x.isLocal)) {
+    const other = slow.racers.find((x) => x.id === r.id);
+    assert.equal(other.tps, r.tps, `${r.id} does not get faster because the reader bought a card`);
+  }
+  for (const r of fast.racers.filter((x) => x.isLocal)) {
+    const other = slow.racers.find((x) => x.id === r.id);
+    assert.notEqual(other.tps, r.tps, `${r.id} moves with the reader's hardware`);
+  }
+  ok('cloud rates are fixed while both local rates track the Hardware Lab');
+}
+
+{ // a local racer is the engine's own answer at that model's stop
   const cfg = { ...DEFAULT_CONFIG };
-  const plan = racePlan(evaluate(cfg), cfg);
-  const sol = plan.racers.find((r) => r.id === 'gpt-56-sol');
-  assert.ok(sol.waitIsThinking, 'cloud.js flags this wait as thinking time');
-  assert.match(waitLabel(sol), /thinking/, 'and the label says so rather than blaming the network');
+  const plan = racePlan(cfg, RACE_TOKENS);
 
-  const fast = plan.racers.find((r) => r.id === 'deepseek-v4-pro');
-  assert.ok(!fast.waitIsThinking);
-  assert.match(waitLabel(fast), /before the first word/);
+  const cases = [['qwen-3-8-27b', '27B', 'Qwen3.8-27B'], ['gemma-4-e4b', '8B', 'Gemma 4 E4B']];
+  for (const [id, stopLabel, anchorName] of cases) {
+    const idx = stopIndexFor(stopLabel);
+    assert.ok(idx >= 0, `${stopLabel} is a real stop`);
+    assert.equal(MODEL_STOPS[idx].anchor.name, anchorName, `the ${stopLabel} stop is anchored to ${anchorName}`);
 
-  // It finishes last despite being the fastest writer of the cloud models.
-  const cloud = plan.racers.filter((r) => !r.isLocal);
-  assert.equal(Math.max(...cloud.map((r) => r.tps)), sol.tps, 'it writes fastest of the cloud models');
-  assert.equal(Math.max(...cloud.map((r) => r.finishS)), sol.finishS, 'yet finishes last');
-  ok('the reasoning model finishes last despite writing fastest, and its wait is labelled as thinking');
+    const perf = evaluate({ ...cfg, modelStopIndex: idx });
+    const r = plan.racers.find((x) => x.id === id);
+    assert.equal(r.tps, perf.decodeTpsPerRequest, `${id} speed is the engine figure, not a copy`);
+    assert.ok(Math.abs(r.waitS - perf.ttftMs / 1000) < 1e-9, `${id} wait is the engine TTFT`);
+  }
+  ok('both local racers are evaluated by the engine at their own model stop');
+}
+
+{ // a model the machine cannot hold stays visible, marked, rather than vanishing
+  const small = {
+    ...DEFAULT_CONFIG, mode: 'allInOne', platformId: 'mba-m5',
+    gpuId: null, ramTierId: null, ramCapacityGB: null, cpuId: null,
+  };
+  const plan = racePlan(small, RACE_TOKENS);
+  const qwen = plan.racers.find((r) => r.id === 'qwen-3-8-27b');
+  const gemma = plan.racers.find((r) => r.id === 'gemma-4-e4b');
+
+  assert.ok(qwen.cannotRun, '27B does not fit a 16 GB Air');
+  assert.ok(!gemma.cannotRun, 'but the small one still runs');
+  assert.equal(plan.racers.length, 5, 'it stays on screen');
+  assert.equal(plan.runners.length, 4, 'and out of the timing');
+  assert.equal(racerTokensAt(qwen, 999), 0, 'a blocked racer never writes');
+  assert.equal(streamedText(qwen, 999), '', 'and shows no text');
+  assert.match(racerStatus(qwen, 5), /cannot hold this model/);
+  assert.match(localSummary(plan), /Qwen3\.8-27B do(es)? not fit/);
+  assert.match(localSummary(plan), /Change the hardware/);
+  ok('a model too big for the machine is shown as blocked instead of quietly dropped');
+}
+
+{ // the honest bits: thinking time, and the wait that was never measured
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+
+  const claude = plan.racers.find((r) => r.id === 'claude-opus-5');
+  assert.ok(claude.waitIsThinking && claude.waitMeasured, 'its 7 s of thinking was actually timed');
+  assert.equal(claude.waitS, 7);
+  assert.match(waitLabel(claude), /thinking/, 'and is described as thinking, not as the network');
+  assert.equal(racerStatus(claude, 5), 'Thinking, 5 s so far');
+  assert.equal(racerStatus(claude, 0.5), 'Thinking…', 'it does not count from a standing start');
+
+  // The free-tier pair were timed end to end only. Claiming a 0 s wait as if
+  // measured would flatter them; the label has to admit it.
+  for (const id of ['gpt-56-luna', 'deepseek-v4-instant']) {
+    const r = plan.racers.find((x) => x.id === id);
+    assert.equal(r.waitMeasured, false, `${id} never had its first-word wait timed`);
+    assert.match(waitLabel(r), /not timed separately/, `${id} says so rather than claiming a 0 s wait`);
+  }
+  ok('thinking time is named as thinking, and an untimed wait admits it was not timed');
+}
+
+{ // the answer streams in and lands on exactly the real text
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+  const r = plan.racers.find((x) => x.id === 'deepseek-v4-instant');
+  const whole = displayText(RACE_ENTRIES.find((e) => e.id === 'deepseek-v4-instant').answer);
+
+  assert.equal(streamedText(r, null), '', 'nothing before the gun');
+  assert.equal(streamedText(r, 0), '', 'nothing at the start line');
+
+  const mid = streamedText(r, r.finishS / 2);
+  assert.ok(mid.length > 0 && mid.length < whole.length, 'partway through, it is partway written');
+  assert.ok(whole.startsWith(mid), 'the stream only ever appends — it never rewrites what it showed');
+
+  // The round trip matters: if the tokenizer lost a character the reader would
+  // be shown a subtly different answer from the one the model gave.
+  assert.equal(streamedText(r, r.finishS), whole, 'it ends on exactly the captured answer');
+  assert.equal(streamedText(r, r.finishS + 500), whole, 'and never more than that');
+  ok(`the answer streams token by token to exactly the captured text (${r.targetTokens} tokens)`);
 }
 
 { // progress over time
-  const cfg = { ...DEFAULT_CONFIG };
-  const plan = racePlan(evaluate(cfg), cfg);
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
   const r = plan.racers.find((x) => x.isLocal);
 
   assert.equal(racerTokensAt(r, 0), 0, 'nothing written at the start');
   assert.equal(racerTokensAt(r, r.waitS), 0, 'still nothing at the end of the wait');
-  // Before the gun nobody is waiting or thinking yet.
   assert.equal(racerStatus(r, null), 'Ready', 'no status before the race starts');
   assert.equal(racerStatus(r, 0), 'Waiting…');
   assert.ok(racerTokensAt(r, r.waitS + 1) > 0, 'writing has begun a second later');
-  assert.equal(racerTokensAt(r, r.finishS), 256, 'exactly the target at the finish');
-  assert.equal(racerTokensAt(r, r.finishS + 100), 256, 'and never more than the target');
+  assert.equal(racerTokensAt(r, r.finishS), r.targetTokens, 'exactly the target at the finish');
+  assert.equal(racerTokensAt(r, r.finishS + 100), r.targetTokens, 'and never more than the target');
   assert.match(racerStatus(r, r.finishS), /^Finished in /);
-
-  const sol = plan.racers.find((x) => x.id === 'gpt-56-sol');
-  assert.equal(racerStatus(sol, 5), 'Thinking, 5 s so far', 'a reasoning model says it is thinking, not waiting');
-  assert.equal(racerStatus(sol, 0.5), 'Thinking…', 'and does not count from a standing start');
-  // The wait must visibly tick, or the reasoning model shows a frozen row for
-  // nearly the whole race.
-  assert.notEqual(racerStatus(sol, 40), racerStatus(sol, 41), 'the wait counts up every second');
   ok('racerTokensAt holds at zero through the wait, then fills to exactly the target');
+}
+
+{ // places follow finishing time, and the budget is honoured or labelled
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+  const byPlace = [...plan.runners].sort((a, b) => a.place - b.place);
+  for (let i = 1; i < byPlace.length; i += 1) {
+    assert.ok(byPlace[i].finishS >= byPlace[i - 1].finishS, 'places are ordered by finishing time');
+  }
+  assert.ok(plan.realDurationS <= RACE_REAL_BUDGET_S + 1e-9, `race fits the ${RACE_REAL_BUDGET_S} s budget`);
+  assert.equal(plan.speedup, 1, 'on a normal rig the whole race plays at true speed');
+  assert.match(raceNote(plan), /true speed/, 'and says so');
+
+  // A slow enough machine overruns the budget, and then the compression must
+  // be stated rather than silently applied.
+  const slow = racePlan({ ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', ramTierId: 'ddr4-3200', modelStopIndex: 7 }, RACE_TOKENS);
+  if (slow.speedup > 1) {
+    assert.ok(slow.realDurationS <= RACE_REAL_BUDGET_S + 1e-9);
+    assert.match(raceNote(slow), /sped up .* times/, 'the compression is labelled');
+  }
+  ok(`the race plays at true speed on the default rig (slowest finisher ${plan.slowestS.toFixed(1)} s)`);
 }
 
 { // rendering + a clock-driven run
   const doc = makeGlossDoc(); // reuse: same element factory shape
   const host = doc.list;
-  const cfg = { ...DEFAULT_CONFIG };
-  const plan = racePlan(evaluate(cfg), cfg);
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
 
-  // The pre-race paint must show every racer as Ready, including the
-  // reasoning model, which used to announce it was already thinking.
-  assert.equal(renderRace(doc, host, plan), 4, 'one row per racer');
-  for (const row of host.children) {
-    assert.equal(row.children[2].textContent, 'Ready', 'nobody is running before the start');
+  // The pre-race paint shows everyone Ready with an empty pane — nobody is
+  // thinking or writing before the gun.
+  assert.equal(renderRace(doc, host, plan), 5, 'one card per racer');
+  for (const card of host.children) {
+    assert.ok(card.classList.contains('race-card'));
+    assert.equal(card.children[3].textContent, 'Ready', 'nobody is running before the start');
+    assert.equal(card.children[4].textContent, '', 'and nothing is written yet');
   }
-  assert.equal(renderRace(doc, host, plan, 0), 4, 'one row per racer');
-  assert.ok(host.children[0].classList.contains('bw-row'));
-  assert.ok(host.children.some((r) => r.classList.contains('is-local')), "the reader's own row is marked");
+  assert.ok(host.children.filter((c) => c.classList.contains('is-local')).length === 2, 'both local cards are marked');
   assert.equal(renderRace(doc, null, plan, 0), 0, 'no host is safe');
   assert.equal(renderRace(doc, host, null, 0), 0, 'no plan is safe');
 
@@ -2030,23 +2121,24 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   const clock = makeClock();
   const ctl = runRace({ doc, host, plan, raf: clock.raf, now: clock.now, reduced: false });
   clock.step(0); // paint the start line
-  // Step to the end of the compressed run, a frame at a time.
   while (clock.isPending()) clock.step(plan.realDurationS * 100);
-  const last = host.children.find((r) => r.classList.contains('is-local'));
-  assert.match(last.children[2].textContent, /^Finished in /, 'the local racer finished by the end');
+  for (const card of host.children) {
+    assert.match(card.children[3].textContent, /^Finished in /, 'every racer finished by the end');
+    assert.ok(card.children[4].textContent.length > 100, 'and its full answer is on screen to read');
+  }
   ctl.cancel();
-  ok('the race renders a row per racer and runs to completion on an injected clock');
+  ok('the race renders a card per racer and runs to completion on an injected clock');
 }
 
 { // reduced motion paints the finished state instantly, never calling raf
   const doc = makeGlossDoc();
-  const cfg = { ...DEFAULT_CONFIG };
-  const plan = racePlan(evaluate(cfg), cfg);
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
   let rafCalls = 0;
   runRace({ doc, host: doc.list, plan, raf: () => { rafCalls += 1; }, now: () => 0, reduced: true });
   assert.equal(rafCalls, 0, 'raf is never called under reduced motion');
-  for (const row of doc.list.children) {
-    assert.match(row.children[2].textContent, /^Finished in /, 'every racer is shown finished');
+  for (const card of doc.list.children) {
+    assert.match(card.children[3].textContent, /^Finished in /, 'every racer is shown finished');
+    assert.ok(card.children[4].textContent.length > 100, 'with its answer readable straight away');
   }
   ok('reduced motion paints the finished race instantly without animating');
 }
@@ -2058,38 +2150,39 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   const runBtn = { listeners: {}, addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); } };
   const note = { textContent: '' };
   const localNote = { textContent: '' };
+  const promptEl = { textContent: '' };
   doc.getElementById = (id) => ({
-    'cmp-race': doc.list, 'cmp-run': runBtn, 'cmp-race-note': note, 'cmp-race-local': localNote,
+    'cmp-race': doc.list, 'cmp-run': runBtn, 'cmp-race-note': note,
+    'cmp-race-local': localNote, 'cmp-race-prompt': promptEl,
   }[id] ?? null);
 
-  const api = initCompare({ doc, store, reduced: true });
-  const before = api.getPlan().racers.find((r) => r.isLocal).tps;
-  assert.match(localNote.textContent, /Your machine is in the race/);
+  // tokensById is injected so the tab does not need the lazy vocab import.
+  const api = initCompare({ doc, store, reduced: true, tokensById: RACE_TOKENS });
+  assert.equal(promptEl.textContent, RACE_PROMPT, 'the reader is shown the prompt they all answered');
+  const before = api.getPlan().racers.find((r) => r.id === 'qwen-3-8-27b').tps;
+  assert.match(localNote.textContent, /Hardware Lab/);
 
   store.setConfig({ gpuId: 'rtx-3060-12g' });
-  const after = api.getPlan().racers.find((r) => r.isLocal).tps;
-  assert.notEqual(after, before, 'the local racer moves with the hardware');
+  const after = api.getPlan().racers.find((r) => r.id === 'qwen-3-8-27b').tps;
+  assert.notEqual(after, before, 'the local racers move with the hardware');
 
-  // Push it past what the hardware can hold: the reader drops out of the race.
-  store.setConfig({ modelStopIndex: 9 });
-  assert.ok(!api.getPlan().localRan, 'a machine that cannot fit the model leaves the race');
-  assert.match(localNote.textContent, /cannot fit this model/);
-  assert.equal(api.getPlan().racers.length, 3, 'the cloud models race on without it');
+  // The cloud three must sit still through all of that.
+  assert.equal(api.getPlan().racers.find((r) => r.id === 'claude-opus-5').tps,
+    racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS).racers.find((r) => r.id === 'claude-opus-5').tps,
+    'the cloud racers are untouched by a hardware change');
   api.destroy();
-  ok(`a Lab hardware change rebuilds the field (${before.toFixed(0)} → ${after.toFixed(0)} tok/s, then out of the race)`);
+  ok(`a Lab hardware change rebuilds the local side of the field (${before.toFixed(0)} → ${after.toFixed(0)} tok/s)`);
 }
 
 { // measurement conditions reach the reader, builder instructions do not
   const caveats = raceCaveats();
-  assert.ok(caveats.length >= 1, 'the reasoning model states its measurement conditions');
+  assert.equal(caveats.length, 5, 'every answer states how it was captured');
 
-  const sol = caveats.find((c) => /GPT-5\.6/.test(c.who));
-  assert.match(sol.note, /max effort/, 'the effort setting is stated, so a fast model is not read as slow');
-  assert.match(sol.note, /much lower at default/, 'and so is the fact that the default is faster');
+  const gpt = caveats.find((c) => /GPT-5\.6/.test(c.who));
+  assert.match(gpt.note, /not timed separately/, 'the unmeasured wait is admitted');
+  const local = caveats.find((c) => /Qwen3\.8-27B/.test(c.who));
+  assert.match(local.note, /computed by this site/, 'a local answer says its speed is calculated, not recorded');
 
-  // cloud.js mixes reader-facing notes with instructions to whoever builds
-  // the site. The second kind must never reach the page.
-  assert.ok(!/Race tab should/i.test(sol.note), 'a note aimed at the developer is stripped');
   for (const c of caveats) {
     assert.ok(!/verify before publishing|estimate at build|race tab should/i.test(c.note),
       `"${c.who}" caveat still carries a builder instruction`);
@@ -2098,6 +2191,23 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   assert.equal(forReaders('Real fact. Race tab should do a thing.'), 'Real fact.');
   assert.equal(forReaders(null), '');
   ok('measurement conditions reach the reader with builder instructions stripped out');
+}
+
+{ // makeRacer refuses to invent a racer out of missing data
+  const local = RACE_ENTRIES.find((e) => e.kind === 'local');
+  assert.equal(makeRacer(null, RACE_TOKENS['gpt-56-luna'], DEFAULT_CONFIG), null, 'no entry, no racer');
+  assert.equal(makeRacer(RACE_ENTRIES[0], [], DEFAULT_CONFIG), null, 'no tokens, no racer');
+  assert.equal(makeRacer(local, RACE_TOKENS[local.id], null), null, 'a local racer needs a config to evaluate against');
+  assert.equal(makeRacer({ ...local, modelStopId: 'nope' }, RACE_TOKENS[local.id], DEFAULT_CONFIG), null,
+    'an unknown model stop is refused rather than guessed at');
+  ok('makeRacer refuses to build a racer from missing data');
+}
+
+{ // the speed line says where each number came from
+  const plan = racePlan({ ...DEFAULT_CONFIG }, RACE_TOKENS);
+  assert.match(speedLine(plan.racers.find((r) => r.isLocal)), /calculated for your hardware/);
+  assert.match(speedLine(plan.racers.find((r) => !r.isLocal)), /measured on/);
+  ok('the speed line distinguishes a calculated rate from a measured one');
 }
 
 /* ------------- js/tabs/compare.js — P7 M2 (comparison table) ------------- */
@@ -2114,7 +2224,7 @@ const cmpFixture = () => {
   const cols = compareColumns(config);
   assert.equal(cols[0].id, 'local', "the reader's own column comes first");
   assert.equal(cols.length, CLOUD_MODELS.length + 1);
-  assert.match(localModelName(config), /8B, Llama 3\.1 8B/, 'the local column names the actual model');
+  assert.match(localModelName(config), /8B, Gemma 4 E4B/, 'the local column names the actual model');
   // A representative stop must say so rather than claim an anchor it does not have.
   assert.match(localModelName({ ...config, modelStopIndex: 4 }), /no single anchor/);
 

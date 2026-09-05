@@ -1,37 +1,51 @@
 /* ============================================================
    v100 — Tab 4 (Local vs Cloud), blueprint §6 Tab 4
    ------------------------------------------------------------
-   P7 M1: the race. The same job, 256 output tokens, run by the
-   reader's local configuration and by three cloud models, each
-   moving at its own measured speed after its own waiting time.
+   P7 M1: the race. It used to be five bars filling at published
+   benchmark rates, which taught speed and nothing else. It is
+   now ONE REAL PROMPT AND FIVE REAL ANSWERS (responses.md, via
+   js/data/race-sample.js): each model's actual reply, streamed
+   token by token at the speed that model actually produced it.
+   A reader watches the wait, then reads what the wait bought.
 
-   Where the numbers come from:
-     - LOCAL: the signed-off engine, via the shared store. Speed
-       is perf.decodeTpsPerRequest and the wait is perf.ttftMs.
-     - CLOUD: js/data/cloud.js, which P1 built as the single
-       source of truth, every figure carrying a source id and an
-       as-of date. Nothing is invented here. A model with no
-       measured speed is EXCLUDED from the race rather than
-       guessed at (DeepSeek V4 Flash has outputTps: null).
+   Where the speed comes from — the two kinds differ on purpose:
+     - CLOUD: the owner's own stopwatch, in race-sample.js. Fixed.
+       A cloud model does not get faster because you bought a
+       graphics card, so these three never move.
+     - LOCAL: nothing is stored. The engine evaluates the reader's
+       own configuration with the model swapped to the stop that
+       model sits at (Qwen3.8-27B at 27B, Gemma 4 E4B at 8B), so
+       the two local racers move with the Hardware Lab. A model
+       the reader's memory cannot hold stays on screen marked
+       `cannotRun`, because that is the useful answer for them.
 
-   The honest bit worth preserving: GPT-5.6 Sol's wait is ~116
-   seconds because it is a reasoning model and that figure
-   includes thinking time at max effort. cloud.js says so, and
-   asks that the race label it as thinking rather than as
-   network latency. `waitLabel` below does exactly that.
+   The honest bits, which the page states rather than hides:
+     - Two of the three cloud answers were free-tier and timed
+       end to end, with no separate first-word measurement. That
+       FLATTERS them: some of those seconds were really waiting.
+     - Claude Opus 5 spent 7 of its 16 seconds thinking before a
+       word appeared, so its row says "Thinking", not "Waiting".
+     - Token counts are real, from the site's own Qwen3 tokenizer,
+       not a words-per-token guess.
 
-   Time compression: a real race would take about two minutes,
-   so it is compressed to fit RACE_REAL_BUDGET_S and the factor
-   is LABELED on screen, the same contract the Lab's simulation
-   uses (blueprint §6 Tab 4 acceptance: "≤20 s, labeled").
+   Time compression: at a normal rig the whole race runs inside
+   RACE_REAL_BUDGET_S and plays at TRUE speed, second for second.
+   On a slow rig the slowest finisher would overrun it, so it is
+   compressed and the factor is LABELED on screen — the same
+   contract the Lab's simulation uses (blueprint §6 Tab 4
+   acceptance: "≤20 s, labeled").
 
    No DOM access at import time, so it stays Node-testable.
    ============================================================ */
 
 import { CLOUD_MODELS, CLOUD_DATA_AS_OF, CLOUD_SUBSCRIPTIONS, CLOUD_SOURCES } from '../data/cloud.js';
-import { GENERATION_TARGET_TOKENS } from '../engine/perf.js';
+import { evaluate } from '../engine/perf.js';
 import { RATES } from '../data/rates.js';
 import { MODEL_STOPS } from '../data/models.js';
+import { RACE_ENTRIES, RACE_PROMPT, RACE_SAMPLE_AS_OF, displayText, entryTps } from '../data/race-sample.js';
+// Reuses the pipeline's memoised lazy vocab loader rather than pulling the
+// ~381 KB tokenizer in a second time.
+import { tokenize } from './pipeline.js';
 
 const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
 const defaultRaf = () => (typeof requestAnimationFrame === 'function' ? requestAnimationFrame : null);
@@ -51,43 +65,76 @@ function prefersReducedMotion() {
 
 /* ---------- building the field ------------------------------- */
 
-/** Pure: the local machine as a racer, or null when it cannot run at all. */
-export function localRacer(perf, config) {
-  if (!perf || perf.decodeTpsPerRequest == null || !(perf.decodeTpsPerRequest > 0)) return null;
-  return {
-    id: 'local',
-    isLocal: true,
-    vendor: 'Your machine',
-    name: config?.mode === 'allInOne' ? 'Local, all-in-one' : 'Local, your rig',
-    tps: perf.decodeTpsPerRequest,
-    waitS: (perf.ttftMs ?? 0) / 1000,
-    waitIsThinking: false,
-    contextTokens: config?.contextWindow ?? null,
-    sources: [],
-  };
+/** Pure: index into MODEL_STOPS for a stop label like '27B'. -1 when absent. */
+export function stopIndexFor(label, stops = MODEL_STOPS) {
+  return (stops ?? []).findIndex((s) => s.label === label);
 }
 
-/** Pure: the cloud models that can actually be raced.
- *  A model with no measured speed is left out rather than guessed. */
-export function cloudRacers(models = CLOUD_MODELS) {
-  return (models ?? [])
-    .filter((m) => m && m.outputTps > 0 && m.ttftS != null)
-    .map((m) => ({
-      id: m.id,
-      isLocal: false,
-      vendor: m.vendor,
-      name: m.name,
-      tps: m.outputTps,
-      waitS: m.ttftS,
-      // cloud.js flags this one: the wait is the model thinking, not the network.
-      waitIsThinking: /thinking/i.test(m.ttftNote ?? ''),
-      contextTokens: m.contextTokens,
-      sources: m.sources ?? [],
-    }));
+/**
+ * Pure: one racer from one captured answer.
+ *
+ * `tokens` is the answer already run through the site's real tokenizer, so
+ * the length is a real token count rather than a words-per-token guess.
+ *
+ * The two kinds get their speed from different places on purpose:
+ *   - CLOUD keeps the rate the owner actually measured. It does not move when
+ *     the reader changes hardware, because a cloud model does not.
+ *   - LOCAL has no stored rate at all. The text came from a real local run,
+ *     but the speed is computed here by the same engine the Lab uses, against
+ *     the reader's own configuration with the model swapped to the stop this
+ *     model sits at. Change the rig and these two change; the cloud three do not.
+ *
+ * A local model the reader's hardware cannot hold is NOT dropped. It stays in
+ * the field marked `cannotRun`, because "this machine cannot run that model"
+ * is the most useful thing the race can tell that reader.
+ */
+export function makeRacer(entry, tokens, config, { stops = MODEL_STOPS, evaluateFn = evaluate } = {}) {
+  const targetTokens = tokens?.length ?? 0;
+  if (!entry || !targetTokens) return null;
+
+  const base = {
+    id: entry.id,
+    kind: entry.kind,
+    isLocal: entry.kind === 'local',
+    vendor: entry.vendor,
+    name: entry.name,
+    setting: entry.setting,
+    capturedNote: entry.capturedNote,
+    ranOn: entry.ranOn,
+    tokens,
+    targetTokens,
+    waitIsThinking: !!entry.waitIsThinking,
+    waitMeasured: !!entry.waitMeasured,
+    cannotRun: false,
+  };
+
+  if (entry.kind === 'cloud') {
+    const tps = entryTps(entry, targetTokens);
+    if (!(tps > 0)) return null;
+    const waitS = entry.waitS ?? 0;
+    return { ...base, tps, waitS, writeS: targetTokens / tps, finishS: waitS + targetTokens / tps };
+  }
+
+  const idx = stopIndexFor(entry.modelStopId, stops);
+  if (idx < 0 || !config) return null;
+
+  let perf = null;
+  try {
+    perf = evaluateFn({ ...config, modelStopIndex: idx });
+  } catch {
+    return null; // an invalid rig is the Lab's problem to report, not the race's
+  }
+
+  const tps = perf?.decodeTpsPerRequest;
+  if (!(tps > 0)) {
+    return { ...base, tps: null, waitS: null, writeS: null, finishS: null, cannotRun: true, fitsState: perf?.fitsState ?? 'noFit' };
+  }
+  const waitS = (perf.ttftMs ?? 0) / 1000;
+  return { ...base, tps, waitS, writeS: targetTokens / tps, finishS: waitS + targetTokens / tps, fitsState: perf.fitsState };
 }
 
 /** Pure: vendor plus model, without repeating a vendor the name already
- *  carries ("DeepSeek DeepSeek V4 Pro" reads like a typo). */
+ *  carries ("DeepSeek DeepSeek V4 Instant" reads like a typo). */
 export function displayName(vendor, name) {
   const v = String(vendor ?? '').trim();
   const n = String(name ?? '').trim();
@@ -97,56 +144,50 @@ export function displayName(vendor, name) {
 
 /** Pure: how a racer's waiting time should be described to a reader. */
 export function waitLabel(racer) {
-  if (!racer) return '';
+  if (!racer || racer.cannotRun || racer.waitS == null) return '';
   const s = racer.waitS;
   const time = s >= 10 ? `${Math.round(s)} seconds` : `${s.toFixed(1)} seconds`;
-  if (racer.waitIsThinking) {
-    return `${time} before it writes anything, most of it spent thinking before it answers`;
-  }
+  if (racer.waitIsThinking) return `${time} of thinking before it wrote anything`;
+  if (!racer.waitMeasured) return 'the wait before the first word was not timed separately';
   return `${time} before the first word`;
 }
 
 /**
  * Pure: the whole race.
- * Every racer waits, then writes at its own rate. The slowest finisher sets
- * the length of the race, and the compression factor is derived from that.
+ * Every racer waits, then writes its own real answer at its own rate. The
+ * slowest finisher sets the length, and the compression factor comes from that.
  */
-export function racePlan(perf, config, { models = CLOUD_MODELS, targetTokens = GENERATION_TARGET_TOKENS } = {}) {
-  const field = [];
-  const local = localRacer(perf, config);
-  if (local) field.push(local);
-  field.push(...cloudRacers(models));
-  if (field.length === 0) return null;
-
-  const racers = field.map((r) => ({
-    ...r,
-    targetTokens,
-    writeS: targetTokens / r.tps,
-    finishS: r.waitS + targetTokens / r.tps,
-  }));
-
-  const slowestS = Math.max(...racers.map((r) => r.finishS));
-  const speedup = Math.max(1, slowestS / RACE_REAL_BUDGET_S);
+export function racePlan(config, tokensById, { entries = RACE_ENTRIES, stops = MODEL_STOPS, evaluateFn = evaluate } = {}) {
+  const racers = (entries ?? [])
+    .map((e) => makeRacer(e, tokensById?.[e.id], config, { stops, evaluateFn }))
+    .filter(Boolean);
+  const runners = racers.filter((r) => !r.cannotRun);
+  if (runners.length === 0) return null;
 
   // Ranking is by finish time, so first place is genuinely first.
-  const order = [...racers].sort((a, b) => a.finishS - b.finishS);
-  racers.forEach((r) => { r.place = order.findIndex((o) => o.id === r.id) + 1; });
+  const order = [...runners].sort((a, b) => a.finishS - b.finishS);
+  runners.forEach((r) => { r.place = order.findIndex((o) => o.id === r.id) + 1; });
+
+  const slowestS = Math.max(...runners.map((r) => r.finishS));
+  const speedup = Math.max(1, slowestS / RACE_REAL_BUDGET_S);
 
   return {
     racers,
-    targetTokens,
+    runners,
+    prompt: RACE_PROMPT,
     slowestS,
-    fastestS: Math.min(...racers.map((r) => r.finishS)),
+    fastestS: Math.min(...runners.map((r) => r.finishS)),
     speedup,
     realDurationS: slowestS / speedup,
-    localRan: !!local,
-    asOf: CLOUD_DATA_AS_OF,
+    localRan: runners.some((r) => r.isLocal),
+    localBlocked: racers.filter((r) => r.cannotRun).map((r) => r.name),
+    asOf: RACE_SAMPLE_AS_OF,
   };
 }
 
 /** Pure: tokens written by one racer at `tVirtual` seconds into the race. */
 export function racerTokensAt(racer, tVirtual) {
-  if (!racer) return 0;
+  if (!racer || racer.cannotRun) return 0;
   const t = Math.max(0, Number(tVirtual) || 0);
   if (t <= racer.waitS) return 0; // still waiting
   // Past the finishing time it is done, stated exactly. Deriving this by
@@ -157,19 +198,30 @@ export function racerTokensAt(racer, tVirtual) {
   return Math.min(racer.targetTokens, Math.floor((t - racer.waitS) * racer.tps));
 }
 
+/** Pure: the answer text visible at `tVirtual`, streamed token by token the
+ *  way a chat window fills in. Before the gun there is nothing to show. */
+export function streamedText(racer, tVirtual) {
+  if (!racer || racer.cannotRun || tVirtual == null) return '';
+  const n = racerTokensAt(racer, tVirtual);
+  if (n <= 0) return '';
+  let out = '';
+  for (let i = 0; i < n; i += 1) out += racer.tokens[i].text;
+  return out;
+}
+
 /** Pure: what a racer's row should say right now.
  *  `tVirtual` of null means the race has NOT started. Before the gun,
  *  nobody is waiting or thinking yet, so no row claims to be. */
 export function racerStatus(racer, tVirtual) {
   if (!racer) return '';
+  if (racer.cannotRun) return 'Your hardware cannot hold this model';
   if (tVirtual == null) return 'Ready';
   const t = Math.max(0, Number(tVirtual) || 0);
   const done = racerTokensAt(racer, t);
   if (done >= racer.targetTokens) return `Finished in ${racer.finishS.toFixed(1)} s`;
   if (t <= racer.waitS) {
-    // Count the wait up. Without this the reasoning model shows a frozen row
-    // for most of the race, since its ~116 s of thinking is nearly the whole
-    // thing. The bar stays empty because no tokens exist yet, which is true.
+    // Count the wait up, so a thinking model shows a live row rather than a
+    // frozen one. The text stays empty because no tokens exist yet, which is true.
     const word = racer.waitIsThinking ? 'Thinking' : 'Waiting';
     return t >= 1 ? `${word}, ${Math.floor(t)} s so far` : `${word}…`;
   }
@@ -180,32 +232,29 @@ export function racerStatus(racer, tVirtual) {
 export function raceNote(plan) {
   if (!plan) return '…';
   const real = `A real run of this race would take about ${Math.round(plan.slowestS)} seconds, set by the slowest finisher.`;
-  if (plan.speedup <= 1) return `${real} It plays here at normal speed.`;
+  if (plan.speedup <= 1) return `${real} It plays here at true speed, second for second.`;
   return `${real} It is sped up ${plan.speedup.toFixed(1)} times here so you do not have to wait for it.`;
 }
 
 /**
- * Pure: measurement conditions a reader needs in order to read the race
- * honestly, taken from each model's own note in cloud.js.
+ * Pure: the conditions a reader needs in order to read this race honestly,
+ * taken from each answer's own note in race-sample.js.
  *
- * This exists because of a real misreading. GPT-5.6 Sol's figures are the
- * MAX reasoning effort variant, where the ~116 s wait is mostly thinking.
- * Its own note says the default effort is medium and the wait is "much
- * lower" there, which is the setting a person meets in a chat app. Racing
- * the max-effort number without saying so makes a fast model look slow.
+ * These matter more than usual here. Two of the three cloud answers were timed
+ * end to end on a free tier with no separate first-word measurement, which
+ * flatters them; the third spent 7 of its 16 seconds thinking. Racing those
+ * numbers without saying so would sell the cloud as blazing fast.
  */
-export function raceCaveats(models = CLOUD_MODELS) {
-  return (models ?? [])
-    .filter((m) => m.ttftNote && m.outputTps > 0 && m.ttftS != null)
-    .map((m) => ({ who: displayName(m.vendor, m.name), note: forReaders(m.ttftNote) }))
+export function raceCaveats(entries = RACE_ENTRIES) {
+  return (entries ?? [])
+    .filter((e) => e.capturedNote)
+    .map((e) => ({ who: displayName(e.vendor, e.name), note: forReaders(e.capturedNote) }))
     .filter((c) => c.note.length > 0);
 }
 
 /**
  * Pure: strip sentences written for whoever builds this site rather than for
- * whoever reads it. cloud.js mixes the two, e.g. GPT-5.6's TTFT note ends
- * "Race tab should label the latency offset as 'thinking time'", which is an
- * instruction to a developer and meaningless on the page.
+ * whoever reads it, so a builder's note in a data file cannot leak onto the page.
  */
 export function forReaders(note) {
   const toBuilder = /\b(race tab|cost panel|this tab|the ui) (should|must|can)\b|verify before publishing|estimate at build/i;
@@ -218,40 +267,85 @@ export function forReaders(note) {
 
 /* ---------- rendering ---------------------------------------- */
 
-/** Render one row per racer into `host`. Reuses the .bw bar primitives. */
+/** Pure: the speed line under a racer's name. */
+export function speedLine(racer) {
+  if (!racer) return '';
+  if (racer.cannotRun) return 'Not enough memory on the hardware you picked';
+  const rate = `${racer.tps.toFixed(1)} tokens/s`;
+  // The setting is quoted as the owner wrote it. Lower-casing it to make the
+  // sentence flow turned "ChatGPT" into "chatgpt".
+  return racer.isLocal
+    ? `${rate}, calculated for your hardware`
+    : `${rate}, measured on ${racer.setting}`;
+}
+
+/** Render one card per racer into `host`: name, speed, live status and the
+ *  answer filling in. After the race the cards are simply the five answers,
+ *  side by side, which is the point of racing them. */
 export function renderRace(doc, host, plan, tVirtual = null) {
   if (!doc || !host || typeof doc.createElement !== 'function' || !plan) return 0;
 
   while (host.children && host.children.length > 0) host.removeChild(host.children[0]);
 
   for (const racer of plan.racers) {
-    const row = doc.createElement('div');
-    if (row.classList && typeof row.classList.add === 'function') {
-      row.classList.add('bw-row');
-      if (racer.isLocal) row.classList.add('is-local');
+    const card = doc.createElement('article');
+    if (card.classList && typeof card.classList.add === 'function') {
+      card.classList.add('race-card');
+      if (racer.isLocal) card.classList.add('is-local');
+      if (racer.cannotRun) card.classList.add('is-blocked');
+      if (!racer.cannotRun && racerTokensAt(racer, tVirtual ?? 0) >= racer.targetTokens && tVirtual != null) {
+        card.classList.add('is-done');
+      }
     }
 
-    const label = doc.createElement('span');
-    if (label.classList) label.classList.add('bw-label');
-    label.textContent = racer.isLocal ? racer.name : displayName(racer.vendor, racer.name);
-    row.appendChild(label);
+    const head = doc.createElement('header');
+    if (head.classList) head.classList.add('race-head');
+
+    const who = doc.createElement('b');
+    if (who.classList) who.classList.add('race-who');
+    who.textContent = displayName(racer.vendor, racer.name);
+    head.appendChild(who);
+
+    const tag = doc.createElement('span');
+    if (tag.classList) tag.classList.add('race-tag');
+    tag.textContent = racer.isLocal ? 'Local' : 'Cloud';
+    head.appendChild(tag);
+
+    if (racer.place && tVirtual != null && racerTokensAt(racer, tVirtual) >= racer.targetTokens) {
+      const place = doc.createElement('span');
+      if (place.classList) place.classList.add('race-place');
+      place.textContent = `#${racer.place}`;
+      head.appendChild(place);
+    }
+    card.appendChild(head);
+
+    const speed = doc.createElement('p');
+    if (speed.classList) speed.classList.add('race-speed');
+    speed.textContent = speedLine(racer);
+    card.appendChild(speed);
 
     const bar = doc.createElement('span');
     if (bar.classList) bar.classList.add('bw-bar');
     const fill = doc.createElement('i');
-    const pct = (racerTokensAt(racer, tVirtual ?? 0) / racer.targetTokens) * 100;
+    const pct = racer.cannotRun ? 0 : (racerTokensAt(racer, tVirtual ?? 0) / racer.targetTokens) * 100;
     if (fill.style && typeof fill.style.setProperty === 'function') {
       fill.style.setProperty('--w', `${pct.toFixed(1)}%`);
     }
     bar.appendChild(fill);
-    row.appendChild(bar);
+    card.appendChild(bar);
 
-    const val = doc.createElement('b');
-    if (val.classList) val.classList.add('bw-val');
-    val.textContent = racerStatus(racer, tVirtual);
-    row.appendChild(val);
+    const status = doc.createElement('p');
+    if (status.classList) status.classList.add('race-status');
+    status.textContent = racerStatus(racer, tVirtual);
+    card.appendChild(status);
 
-    host.appendChild(row);
+    const answer = doc.createElement('div');
+    if (answer.classList) answer.classList.add('race-answer');
+    if (typeof answer.setAttribute === 'function') answer.setAttribute('aria-live', 'off');
+    answer.textContent = streamedText(racer, tVirtual);
+    card.appendChild(answer);
+
+    host.appendChild(card);
   }
   return plan.racers.length;
 }
@@ -513,8 +607,37 @@ export function renderFootnotes(doc, host, sources) {
 
 /* ---------- tab wiring --------------------------------------- */
 
-/** Wire the Compare tab. Same DI shape as the Lab's simulation. */
-export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {}) {
+/** Count every answer's tokens once, with the site's real tokenizer.
+ *  Keyed by entry id, which is what racePlan expects. */
+export async function tokenizeAnswers(entries = RACE_ENTRIES, tokenizeFn = tokenize) {
+  const out = {};
+  for (const e of entries ?? []) out[e.id] = await tokenizeFn(displayText(e.answer));
+  return out;
+}
+
+/** Pure: the line that tells a reader where their own machine stands.
+ *  Both local racers are theirs, so it names both, and says plainly when one
+ *  will not fit rather than quietly dropping it from the field. */
+export function localSummary(plan) {
+  if (!plan) return 'Preparing the answers…';
+  const local = plan.racers.filter((r) => r.isLocal);
+  const running = local.filter((r) => !r.cannotRun);
+  const blocked = local.filter((r) => r.cannotRun);
+  const parts = [];
+  if (running.length > 0) {
+    const list = running.map((r) => `${r.name} at ${r.tps.toFixed(1)} tokens/s`).join(' and ');
+    parts.push(`On the hardware you picked in the Hardware Lab: ${list}.`);
+  }
+  if (blocked.length > 0) {
+    const one = blocked.length === 1;
+    parts.push(`${blocked.map((r) => r.name).join(' and ')} ${one ? 'does' : 'do'} not fit in that machine's memory, so ${one ? 'it sits' : 'they sit'} this one out. Change the hardware in the Hardware Lab and ${one ? 'it joins' : 'they join'}.`);
+  }
+  return parts.join(' ');
+}
+
+/** Wire the Compare tab. Same DI shape as the Lab's simulation.
+ *  `tokensById` is injectable so tests can skip the async vocab load. */
+export function initCompare({ doc = defaultDoc(), store, raf, now, reduced, tokensById = null, tokenizeFn } = {}) {
   if (!doc) return {};
 
   const byId = (id) => doc.getElementById?.(id) ?? null;
@@ -524,6 +647,7 @@ export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {
 
   let ctl = null;
   let plan = null;
+  let tokens = tokensById;
 
   function setText(id, text) {
     const el = byId(id);
@@ -535,14 +659,18 @@ export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {
     if (ctl && typeof ctl.cancel === 'function') { ctl.cancel(); ctl = null; }
     const perf = state?.derived?.perf ?? null;
     const config = state?.config ?? null;
-    plan = racePlan(perf, config);
+    // No plan until the answers have been tokenised: the field is built from
+    // real token counts, so there is nothing honest to draw before then.
+    plan = tokens ? racePlan(config, tokens) : null;
 
+    setText('cmp-race-prompt', RACE_PROMPT);
     const host = byId('cmp-race');
     if (host) renderRace(doc, host, plan, null); // at the start line, not waiting
     setText('cmp-race-note', raceNote(plan));
 
-    // Measurement conditions, straight from cloud.js. Without these the
-    // max-effort figures read as if they were typical.
+    // Measurement conditions, straight from the owner's own capture notes.
+    // Without these the free-tier end-to-end timings read as if they were
+    // careful benchmarks.
     const caveatHost = byId('cmp-race-caveats');
     if (caveatHost && typeof doc.createElement === 'function') {
       while (caveatHost.children && caveatHost.children.length > 0) caveatHost.removeChild(caveatHost.children[0]);
@@ -574,9 +702,7 @@ export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {
     }
     const fnHost = byId('cmp-footnotes');
     if (fnHost) renderFootnotes(doc, fnHost, usedSources(rows));
-    setText('cmp-race-local', plan?.localRan
-      ? `Your machine is in the race, running at ${plan.racers.find((r) => r.isLocal).tps.toFixed(1)} tokens per second.`
-      : 'Your current hardware cannot fit this model, so it is not in the race. Change the hardware in the Hardware Lab and it will join.');
+    setText('cmp-race-local', localSummary(plan));
   }
 
   function start() {
@@ -595,9 +721,18 @@ export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {
   let unsub = null;
   if (store && typeof store.subscribe === 'function' && typeof store.getState === 'function') {
     rebuild(store.getState());
-    // A hardware change in the Lab rebuilds the field, since the local racer
-    // moves. It resets to the start line rather than animating unprompted.
+    // A hardware change in the Lab rebuilds the field, since the two local
+    // racers move with it. It resets to the start line rather than animating
+    // unprompted.
     unsub = store.subscribe(rebuild);
+
+    // The vocabulary is a lazy ~381 KB import, so the field arrives a moment
+    // after the tab does. Tests inject `tokensById` and skip this entirely.
+    if (!tokens) {
+      tokenizeAnswers(RACE_ENTRIES, tokenizeFn ?? tokenize)
+        .then((t) => { tokens = t; rebuild(store.getState()); })
+        .catch(() => { setText('cmp-race-note', 'The answers could not be loaded, so the race cannot run.'); });
+    }
   }
 
   return {

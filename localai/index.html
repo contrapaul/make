@@ -440,7 +440,7 @@
               <p class="ctl-note">Measured in billions of <a class="gloss" data-term="parameters" href="#/glossary/parameters">parameters</a>, which are the individual numbers inside the model. Bigger models generally answer better, and they need more memory and run more slowly.</p>
               <input type="range" class="slider" id="lab-model" min="0" max="9" step="1" value="1" aria-label="Model size stop">
               <div class="slider-stops"><span>4B</span><span>8B</span><span>12B</span><span>14B</span><span>16B</span><span>27B</span><span>32B</span><span>70B</span><span>80B</span><span>405B</span></div>
-              <p class="ctl-note" id="lab-model-anchor">Anchored to Llama 3.1 8B · 32 layers, GQA 8 KV heads [M5]</p>
+              <p class="ctl-note" id="lab-model-anchor">Anchored to Gemma 4 E4B · 42 layers, GQA 2 KV heads, only 7 caching the whole context [M7]</p>
             </div>
 
             <div class="ctl-group">
@@ -590,33 +590,35 @@
     </section>
 
     <!-- ============ Tab 4 · Local vs Cloud (blueprint §6 Tab 4) ============
-         P7 M1: the race. Local speed comes from the signed-off engine via the
-         shared store; cloud speeds and waits come from js/data/cloud.js, where
-         every figure carries a source id and an as-of date. A cloud model with
-         no measured speed is excluded rather than guessed at. Chart rows reuse
-         the .bw bar primitives. M2 (comparison table) and M3 (cost panel) still
-         to build. -->
+         P7 M1: the race. One prompt, five real answers from js/data/race-sample.js
+         (captured in responses.md), streamed token by token. Cloud speeds are the
+         owner's measured times and never move; the two local racers are evaluated
+         live by the signed-off engine against the reader's own config, with the
+         model swapped to the stop it sits at. Cards are built by renderRace and
+         reuse the .bw-bar primitive. M3 (cost panel) still to build. -->
     <section class="tab-panel" data-tab="compare" aria-label="Local vs Cloud">
       <div class="shell-pad stack">
         <header data-reveal>
           <h2>Local vs Cloud</h2>
-          <p>Here is the same job given to your own machine and to three of the largest cloud models: write an answer of 256 <a class="gloss" data-term="token" href="#/glossary/token">tokens</a>, which is a paragraph or two. Each one waits, then writes at its own speed. Press the button and watch them go.</p>
+          <p>One question, five real answers. Three came from cloud models and two ran on a local machine. Press the button and each one waits, then writes its actual reply <a class="gloss" data-term="token" href="#/glossary/token">token</a> by token at the speed it really wrote it. Watching tells you who is fast; reading tells you what the waiting bought.</p>
         </header>
 
         <article class="card" data-reveal aria-label="The race">
           <h3>The race</h3>
+          <p class="ctl-note">Every model was given the same prompt, once:</p>
+          <blockquote class="race-prompt" id="cmp-race-prompt">…</blockquote>
           <p class="ctl-note" id="cmp-race-local" aria-live="polite">…</p>
 
           <button class="btn btn--primary" id="cmp-run" type="button">Start the race</button>
 
-          <div class="bw" id="cmp-race" style="margin-top:var(--sp-4)" aria-live="polite"></div>
+          <div class="race-grid" id="cmp-race" style="margin-top:var(--sp-4)" aria-live="polite"></div>
 
           <p class="ctl-note" id="cmp-race-note" aria-live="polite">…</p>
-          <p class="ctl-note">Two things worth noticing. Your machine is only racing a job it can already hold in memory, so the Hardware Lab decides whether it is in the race at all. And the model that finishes last is not slow at writing: it is the fastest writer of the three cloud models. It spends around two minutes thinking before it writes a single word, which is what a reasoning model does.</p>
-          <p class="ctl-note">Cloud speeds and waiting times are measured figures from the sources listed in <code>js/data/cloud.js</code>, recorded 2026-09-01. Your own figures are calculated live by the same engine used everywhere else on this site.</p>
+          <p class="ctl-note">The two local models are not playing back a recording of a stopwatch. Their words are from a real local run, but the speed you are watching is worked out live by the same engine as the rest of this site, for the hardware you picked in the Hardware Lab. Change the rig and they change. The three cloud models keep the times they were actually measured at, because a cloud model does not get faster when you buy a graphics card.</p>
+          <p class="ctl-note">Notice that finishing first and answering best are not the same thing. Read the five answers above once the race is over: the longest one here also finished last, and whether that was worth the wait is a judgement this site cannot make for you.</p>
 
           <h4>How these were measured</h4>
-          <p class="ctl-note"><b>This matters for reading the result.</b> A reasoning model can be set to think for longer or shorter, and the figures below are not all from the same setting. A model that looks slow here may be much faster at the setting you would actually meet in a chat app.</p>
+          <p class="ctl-note"><b>This matters for reading the result.</b> These are five one-off runs on one machine and one network on 2026-09-05, not benchmarks, and the cloud answers were not all captured the same way. Two of them were free-tier and timed end to end, which if anything flatters them: some of those seconds were really spent waiting for the first word.</p>
           <ul class="ctl-note" id="cmp-race-caveats"></ul>
         </article>
 
