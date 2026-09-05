@@ -4,6 +4,54 @@
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
 
+## ⚠ P7 RACE PIVOT (owner decision, 2026-09-05) — READ BEFORE TOUCHING THE RACE
+
+The race is being redesigned. **Do not "fix" it back toward what M1 built.**
+
+### What the owner changed and why
+
+The owner challenged the race result: GPT-5.6 Sol finished last, but it is "blisteringly fast when used on the web". They were right, and the data said so. Both of its figures in `cloud.js` are the **maximum reasoning effort** variant, and its own note reads "~116 s at max effort (includes thinking); much lower at default/medium effort", with "default is medium". The race was showing a worst case as if it were typical.
+
+**Two decisions followed.**
+
+1. **The race shows quality as well as speed.** Owner: "The race is more than speed, people should see the quality/difference in the response as well." One real prompt, each model's real answer, streamed at the speed that model actually produced it. A reader sees what they got for the wait, not just how long it was.
+
+2. **A new lineup, all set for a quick response**, because that is what an ordinary person meets:
+
+| Kind | Model | Setting |
+|---|---|---|
+| Cloud | **GPT-5.6 Luna** (replaces Sol) | Free-tier ChatGPT |
+| Cloud | **DeepSeek Instant** | Deepthink off |
+| Cloud | **Claude Opus 5** | Standard chat, high effort (medium if faster) |
+| Local | **Gemma 4 12B QAT** | Reasoning off |
+| Local | **Qwen 3.8 27B** | Reasoning off |
+
+Replacing Sol with Luna removes the max-effort problem at its root rather than papering over it.
+
+### What this invalidates
+
+* **Every cloud figure currently in the race.** `cloud.js` holds Sol's numbers, DeepSeek with thinking on by default, and Claude at max effort. **GPT-5.6 Luna and DeepSeek Instant are not in the file at all.** These are the owner's to supply; do not source or estimate them.
+* **The two local models are not in `models.js`.** It has Gemma 3 12B and Qwen3-32B, not Gemma 4 12B QAT or Qwen 3.8 27B.
+* The M1 race code still works and still passes its tests. It is the *data* and the *framing* that change.
+
+### `js/data/race-sample.js` (NEW, template awaiting content)
+
+Carries `RACE_PROMPT`, and a `RACE_ENTRIES` row per model with `answer`, `waitS`, `totalS`, `tps`, `ranOn`, `capturedOn`, `capturedNote`. Also `raceSampleReady()` (false until filled) and `entryTps()`, which derives a rate from wall-clock timings when a tool did not report tokens per second, so the owner can supply either.
+
+**The honesty rules are written into the file header:** no estimated numbers, null where unmeasured, and local answers tagged with the machine that produced them so nobody reads a one-off run as a claim about all hardware.
+
+### An open design question, flagged not decided
+
+These recorded runs are one machine on one day. The site's premise everywhere else is that *your* hardware determines *your* speed, computed live by the engine. Those are different claims and should not be blurred.
+
+The proposal: **the race becomes a recorded demonstration**, clearly labelled with machine and date, and the engine-computed "your machine" projection stays in the comparison table where it already lives. The cost is that the race would stop responding to the Hardware Lab, which is a nice connection to lose. **A sixth row, "your machine", projected live by the engine alongside the five recorded runs, would keep both** and is a small addition. Owner has not ruled on this.
+
+### Landed already in response to the same report
+
+* **Pre-race status bug fixed.** Rows announced "Thinking…" and "Waiting…" before the race had started. `racerStatus(racer, null)` now returns "Ready", treating "not started" as its own state. Tested.
+* **Measurement conditions surfaced** under the race from the data, so a max-effort figure cannot be read as typical.
+* **`forReaders()` strips builder instructions** from published notes. GPT-5.6's TTFT note ends "Race tab should label the latency offset as 'thinking time'", which is an instruction to a developer and was reaching the page. Same class of filter as the "verify before publishing" one on the SWE-bench figure.
+
 ## P7 M2 — the comparison table (BUILT 2026-09-05)
 
 All ten dimensions from blueprint §6 Tab 4, five columns (the reader's machine plus four cloud models), rendered from `js/data/cloud.js` and the live engine.

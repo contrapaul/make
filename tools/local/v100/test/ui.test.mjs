@@ -33,7 +33,7 @@ import {
   RACE_REAL_BUDGET_S, localRacer, cloudRacers, waitLabel, racePlan,
   racerTokensAt, racerStatus, raceNote, renderRace, runRace, initCompare,
   localModelName, compareColumns, compareRows, usedSources, pricingCaveats,
-  agenticHighlight, renderCompareTable, renderFootnotes, displayName,
+  agenticHighlight, renderCompareTable, renderFootnotes, displayName, raceCaveats, forReaders,
 } from '../js/tabs/compare.js';
 import { CLOUD_SOURCES } from '../js/data/cloud.js';
 import { computeCost } from '../js/engine/cost.js';
@@ -1991,6 +1991,8 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
 
   assert.equal(racerTokensAt(r, 0), 0, 'nothing written at the start');
   assert.equal(racerTokensAt(r, r.waitS), 0, 'still nothing at the end of the wait');
+  // Before the gun nobody is waiting or thinking yet.
+  assert.equal(racerStatus(r, null), 'Ready', 'no status before the race starts');
   assert.equal(racerStatus(r, 0), 'Waiting…');
   assert.ok(racerTokensAt(r, r.waitS + 1) > 0, 'writing has begun a second later');
   assert.equal(racerTokensAt(r, r.finishS), 256, 'exactly the target at the finish');
@@ -2012,6 +2014,12 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   const cfg = { ...DEFAULT_CONFIG };
   const plan = racePlan(evaluate(cfg), cfg);
 
+  // The pre-race paint must show every racer as Ready, including the
+  // reasoning model, which used to announce it was already thinking.
+  assert.equal(renderRace(doc, host, plan), 4, 'one row per racer');
+  for (const row of host.children) {
+    assert.equal(row.children[2].textContent, 'Ready', 'nobody is running before the start');
+  }
   assert.equal(renderRace(doc, host, plan, 0), 4, 'one row per racer');
   assert.ok(host.children[0].classList.contains('bw-row'));
   assert.ok(host.children.some((r) => r.classList.contains('is-local')), "the reader's own row is marked");
@@ -2069,6 +2077,27 @@ console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
   assert.equal(api.getPlan().racers.length, 3, 'the cloud models race on without it');
   api.destroy();
   ok(`a Lab hardware change rebuilds the field (${before.toFixed(0)} → ${after.toFixed(0)} tok/s, then out of the race)`);
+}
+
+{ // measurement conditions reach the reader, builder instructions do not
+  const caveats = raceCaveats();
+  assert.ok(caveats.length >= 1, 'the reasoning model states its measurement conditions');
+
+  const sol = caveats.find((c) => /GPT-5\.6/.test(c.who));
+  assert.match(sol.note, /max effort/, 'the effort setting is stated, so a fast model is not read as slow');
+  assert.match(sol.note, /much lower at default/, 'and so is the fact that the default is faster');
+
+  // cloud.js mixes reader-facing notes with instructions to whoever builds
+  // the site. The second kind must never reach the page.
+  assert.ok(!/Race tab should/i.test(sol.note), 'a note aimed at the developer is stripped');
+  for (const c of caveats) {
+    assert.ok(!/verify before publishing|estimate at build|race tab should/i.test(c.note),
+      `"${c.who}" caveat still carries a builder instruction`);
+  }
+
+  assert.equal(forReaders('Real fact. Race tab should do a thing.'), 'Real fact.');
+  assert.equal(forReaders(null), '');
+  ok('measurement conditions reach the reader with builder instructions stripped out');
 }
 
 /* ------------- js/tabs/compare.js — P7 M2 (comparison table) ------------- */

@@ -157,9 +157,12 @@ export function racerTokensAt(racer, tVirtual) {
   return Math.min(racer.targetTokens, Math.floor((t - racer.waitS) * racer.tps));
 }
 
-/** Pure: what a racer's row should say right now. */
+/** Pure: what a racer's row should say right now.
+ *  `tVirtual` of null means the race has NOT started. Before the gun,
+ *  nobody is waiting or thinking yet, so no row claims to be. */
 export function racerStatus(racer, tVirtual) {
   if (!racer) return '';
+  if (tVirtual == null) return 'Ready';
   const t = Math.max(0, Number(tVirtual) || 0);
   const done = racerTokensAt(racer, t);
   if (done >= racer.targetTokens) return `Finished in ${racer.finishS.toFixed(1)} s`;
@@ -181,10 +184,42 @@ export function raceNote(plan) {
   return `${real} It is sped up ${plan.speedup.toFixed(1)} times here so you do not have to wait for it.`;
 }
 
+/**
+ * Pure: measurement conditions a reader needs in order to read the race
+ * honestly, taken from each model's own note in cloud.js.
+ *
+ * This exists because of a real misreading. GPT-5.6 Sol's figures are the
+ * MAX reasoning effort variant, where the ~116 s wait is mostly thinking.
+ * Its own note says the default effort is medium and the wait is "much
+ * lower" there, which is the setting a person meets in a chat app. Racing
+ * the max-effort number without saying so makes a fast model look slow.
+ */
+export function raceCaveats(models = CLOUD_MODELS) {
+  return (models ?? [])
+    .filter((m) => m.ttftNote && m.outputTps > 0 && m.ttftS != null)
+    .map((m) => ({ who: displayName(m.vendor, m.name), note: forReaders(m.ttftNote) }))
+    .filter((c) => c.note.length > 0);
+}
+
+/**
+ * Pure: strip sentences written for whoever builds this site rather than for
+ * whoever reads it. cloud.js mixes the two, e.g. GPT-5.6's TTFT note ends
+ * "Race tab should label the latency offset as 'thinking time'", which is an
+ * instruction to a developer and meaningless on the page.
+ */
+export function forReaders(note) {
+  const toBuilder = /\b(race tab|cost panel|this tab|the ui) (should|must|can)\b|verify before publishing|estimate at build/i;
+  return String(note ?? '')
+    .split(/(?<=\.)\s+/)
+    .filter((sentence) => sentence.trim() && !toBuilder.test(sentence))
+    .join(' ')
+    .trim();
+}
+
 /* ---------- rendering ---------------------------------------- */
 
 /** Render one row per racer into `host`. Reuses the .bw bar primitives. */
-export function renderRace(doc, host, plan, tVirtual = 0) {
+export function renderRace(doc, host, plan, tVirtual = null) {
   if (!doc || !host || typeof doc.createElement !== 'function' || !plan) return 0;
 
   while (host.children && host.children.length > 0) host.removeChild(host.children[0]);
@@ -204,7 +239,7 @@ export function renderRace(doc, host, plan, tVirtual = 0) {
     const bar = doc.createElement('span');
     if (bar.classList) bar.classList.add('bw-bar');
     const fill = doc.createElement('i');
-    const pct = (racerTokensAt(racer, tVirtual) / racer.targetTokens) * 100;
+    const pct = (racerTokensAt(racer, tVirtual ?? 0) / racer.targetTokens) * 100;
     if (fill.style && typeof fill.style.setProperty === 'function') {
       fill.style.setProperty('--w', `${pct.toFixed(1)}%`);
     }
@@ -503,8 +538,20 @@ export function initCompare({ doc = defaultDoc(), store, raf, now, reduced } = {
     plan = racePlan(perf, config);
 
     const host = byId('cmp-race');
-    if (host) renderRace(doc, host, plan, 0);
+    if (host) renderRace(doc, host, plan, null); // at the start line, not waiting
     setText('cmp-race-note', raceNote(plan));
+
+    // Measurement conditions, straight from cloud.js. Without these the
+    // max-effort figures read as if they were typical.
+    const caveatHost = byId('cmp-race-caveats');
+    if (caveatHost && typeof doc.createElement === 'function') {
+      while (caveatHost.children && caveatHost.children.length > 0) caveatHost.removeChild(caveatHost.children[0]);
+      for (const c of raceCaveats()) {
+        const li = doc.createElement('li');
+        li.textContent = `${c.who}: ${c.note}`;
+        caveatHost.appendChild(li);
+      }
+    }
 
     // P7 M2: the table moves with the hardware too, since half of it is the
     // reader's own column.

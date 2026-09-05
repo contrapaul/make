@@ -614,6 +614,10 @@
           <p class="ctl-note" id="cmp-race-note" aria-live="polite">…</p>
           <p class="ctl-note">Two things worth noticing. Your machine is only racing a job it can already hold in memory, so the Hardware Lab decides whether it is in the race at all. And the model that finishes last is not slow at writing: it is the fastest writer of the three cloud models. It spends around two minutes thinking before it writes a single word, which is what a reasoning model does.</p>
           <p class="ctl-note">Cloud speeds and waiting times are measured figures from the sources listed in <code>js/data/cloud.js</code>, recorded 2026-09-01. Your own figures are calculated live by the same engine used everywhere else on this site.</p>
+
+          <h4>How these were measured</h4>
+          <p class="ctl-note"><b>This matters for reading the result.</b> A reasoning model can be set to think for longer or shorter, and the figures below are not all from the same setting. A model that looks slow here may be much faster at the setting you would actually meet in a chat app.</p>
+          <ul class="ctl-note" id="cmp-race-caveats"></ul>
         </article>
 
         <article class="card" data-reveal aria-label="Comparison table">
