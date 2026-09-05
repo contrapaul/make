@@ -16,6 +16,7 @@ import { initHome } from './tabs/home.js';
 import { initLab } from './tabs/lab.js';
 import { initPipeline } from './tabs/pipeline.js';
 import { initGlossary } from './tabs/glossary.js';
+import { initCompare } from './tabs/compare.js';
 
 const defaultDoc = () => (typeof document !== 'undefined' ? document : null);
 const defaultHash = () => (typeof location !== 'undefined' ? location.hash : '');
@@ -173,6 +174,7 @@ export function initApp() {
   const lab = initLab({ store }); // P6: Lab controls bound two-way to the shared store
   initPipeline({ store }); // P5 M1: Pipeline shell + Stage 1 tokenization demo
   const glossary = initGlossary(); // renders the glossary page + wires hover cards
+  initCompare({ store }); // P7 M1: the local-vs-cloud race, bound to the same store
 
   // §4: the tab shown on load counts as visited too (deep links like #/lab).
   if (router.initial) tracker.markVisited(router.initial);

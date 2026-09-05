@@ -147,6 +147,223 @@ export function loadCaption(perf, config) {
     : `${w} GB of weights loaded into ${perf.gpuUsableGB.toFixed(0)} GB of graphics card memory. It fits.`;
 }
 
+/* ---------- Step 5 · Sampling (P5 M5) ------------------------
+   The one step on this tab with NO engine number, and it cannot
+   have one: the site models memory, bandwidth and time, not what
+   a model would actually predict. Producing real probabilities
+   would mean running a real model in the browser.
+
+   So the candidate list below is ILLUSTRATIVE and is labelled as
+   such in the UI. What is NOT illustrative is the maths: the
+   temperature and top-p transforms here are the real ones, so the
+   shape a reader sees when they drag a slider is exactly how a
+   real distribution responds.
+   ------------------------------------------------------------ */
+
+/** Illustrative next-token candidates after "The cat sat on the".
+ *  Probabilities are made up but plausible, and sum to 1. */
+export const SAMPLE_CANDIDATES = Object.freeze([
+  { token: ' mat', p: 0.42 },
+  { token: ' floor', p: 0.18 },
+  { token: ' couch', p: 0.12 },
+  { token: ' roof', p: 0.07 },
+  { token: ' chair', p: 0.06 },
+  { token: ' ground', p: 0.05 },
+  { token: ' bed', p: 0.04 },
+  { token: ' table', p: 0.03 },
+  { token: ' windowsill', p: 0.02 },
+  { token: ' porch', p: 0.01 },
+]);
+
+/** Pure: reshape a distribution by temperature.
+ *  Softmax on scaled logits reduces to p^(1/T), renormalised.
+ *  T below 1 sharpens, above 1 flattens, and at 0 it goes greedy. */
+export function applyTemperature(base, temperature) {
+  const list = Array.isArray(base) ? base : [];
+  if (list.length === 0) return [];
+  const T = Number(temperature);
+
+  // T at or near zero is deterministic: all mass on the favourite.
+  if (!Number.isFinite(T) || T <= 0.01) {
+    let best = 0;
+    for (let i = 1; i < list.length; i += 1) if (list[i].p > list[best].p) best = i;
+    return list.map((c, i) => ({ ...c, p: i === best ? 1 : 0 }));
+  }
+
+  const powered = list.map((c) => Math.pow(Math.max(c.p, 0), 1 / T));
+  const total = powered.reduce((a, b) => a + b, 0);
+  if (total <= 0) return list.map((c) => ({ ...c, p: 0 }));
+  return list.map((c, i) => ({ ...c, p: powered[i] / total }));
+}
+
+/** Pure: keep the smallest set of most likely tokens whose probability
+ *  adds up to `topP`, discard the rest, then renormalise. Each entry is
+ *  marked `kept` so the chart can show what was thrown away. */
+export function applyTopP(dist, topP) {
+  const list = Array.isArray(dist) ? dist : [];
+  if (list.length === 0) return [];
+  const limit = Math.min(Math.max(Number(topP) || 0, 0), 1);
+
+  // Walk in probability order, keeping until the running total reaches p.
+  const order = list.map((c, i) => ({ i, p: c.p })).sort((a, b) => b.p - a.p);
+  const kept = new Set();
+  let cum = 0;
+  for (const { i, p } of order) {
+    if (cum >= limit && kept.size > 0) break;
+    kept.add(i);
+    cum += p;
+  }
+
+  const total = list.reduce((sum, c, i) => sum + (kept.has(i) ? c.p : 0), 0);
+  return list.map((c, i) => ({
+    ...c,
+    kept: kept.has(i),
+    p: kept.has(i) && total > 0 ? c.p / total : 0,
+  }));
+}
+
+/** Pure: the full chart state for the current settings. */
+export function samplingView(base, { temperature = 1, topP = 1 } = {}) {
+  const shaped = applyTopP(applyTemperature(base ?? SAMPLE_CANDIDATES, temperature), topP);
+  const keptCount = shaped.filter((c) => c.kept).length;
+  const top = shaped.reduce((a, b) => (b.p > a.p ? b : a), shaped[0] ?? { p: 0 });
+  return {
+    rows: shaped,
+    keptCount,
+    discardedCount: shaped.length - keptCount,
+    topShare: top ? top.p : 0,
+    topToken: top ? top.token : null,
+  };
+}
+
+/** Pure: one sentence describing what the current settings did. */
+export function samplingCaption(view, { temperature = 1, topP = 1 } = {}) {
+  if (!view || !view.rows.length) return '…';
+  const share = Math.round(view.topShare * 100);
+
+  const shape = temperature <= 0.01
+    ? 'At a temperature of 0, the model always takes its favourite word, so the same question gives the same answer every time.'
+    : temperature < 1
+      ? `A temperature below 1 sharpens the odds, so "${view.topToken}" now holds ${share}% of the probability and the safe choice gets safer.`
+      : temperature > 1
+        ? `A temperature above 1 flattens the odds, so "${view.topToken}" is down to ${share}% and unlikely words get a real chance.`
+        : `At a temperature of 1 the odds are exactly as the model produced them, with "${view.topToken}" at ${share}%.`;
+
+  const cut = view.discardedCount === 0
+    ? 'Top-p is keeping every option on the list.'
+    : `Top-p keeps the ${view.keptCount} most likely ${view.keptCount === 1 ? 'option' : 'options'} and discards the other ${view.discardedCount}.`;
+
+  return `${shape} ${cut}`;
+}
+
+/** Render the probability chart into `host`. Reuses the .bw bar
+ *  primitives already used by the memory-speed card, so this adds no
+ *  new chart CSS: one row per candidate, discarded rows dimmed. */
+export function renderSampling(doc, host, view) {
+  if (!doc || !host || typeof doc.createElement !== 'function' || !view) return 0;
+
+  while (host.children && host.children.length > 0) host.removeChild(host.children[0]);
+
+  let n = 0;
+  for (const row of view.rows) {
+    const line = doc.createElement('div');
+    if (line.classList && typeof line.classList.add === 'function') {
+      line.classList.add('bw-row');
+      if (!row.kept) line.classList.add('is-cut');
+    }
+
+    const label = doc.createElement('span');
+    if (label.classList) label.classList.add('bw-label');
+    label.textContent = `"${row.token}"`;
+    line.appendChild(label);
+
+    const bar = doc.createElement('span');
+    if (bar.classList) bar.classList.add('bw-bar');
+    const fill = doc.createElement('i');
+    if (fill.style && typeof fill.style.setProperty === 'function') {
+      fill.style.setProperty('--w', `${(row.p * 100).toFixed(1)}%`);
+    }
+    bar.appendChild(fill);
+    line.appendChild(bar);
+
+    const val = doc.createElement('b');
+    if (val.classList) val.classList.add('bw-val');
+    // A discarded token is not "0%", it is out of the running entirely.
+    val.textContent = row.kept ? `${(row.p * 100).toFixed(1)}%` : 'cut';
+    line.appendChild(val);
+
+    host.appendChild(line);
+    n += 1;
+  }
+  return n;
+}
+
+/* ---------- Stage 4 · KV cache growth (P5 M4) ----------------
+   The store of keys and values grows linearly with the number of
+   tokens in the conversation, straight from the blueprint §5
+   formula: kvCacheGB = 2 × layers × kvHeads × headDim × tokens ×
+   bytesPerElement / 1e9. Everything below is that one line divided
+   by the context window to get a per-token cost, so nothing is
+   re-derived and nothing can drift from the engine.
+
+   The teaching moment is the comparison with the weights: on a long
+   context the conversation store can grow LARGER than the model
+   itself, which is why context length costs memory.
+   ------------------------------------------------------------ */
+
+/** Pure: the state of the conversation store at `tokens` tokens.
+ *  Returns null without a config or engine result. */
+export function kvGrowthView(perf, config, tokens) {
+  if (!perf || !config || perf.kvCacheGB == null) return null;
+  const ctx = Math.max(1, config.contextWindow | 0);
+
+  // §5 is linear in token count, so the full-window figure the engine
+  // already computed divides straight down to a per-token cost.
+  const perTokenGB = perf.kvCacheGB / ctx;
+  const t = Math.max(0, Math.min(Math.round(Number(tokens) || 0), ctx));
+  const usedGB = perTokenGB * t;
+  const weightsGB = perf.weightsGB;
+
+  // The conversation length at which the store overtakes the model.
+  const overtakeTokens = perTokenGB > 0 ? Math.ceil(weightsGB / perTokenGB) : null;
+
+  return {
+    tokens: t,
+    contextWindow: ctx,
+    perTokenMB: perTokenGB * 1000,
+    usedGB,
+    fullGB: perf.kvCacheGB,
+    pct: t / ctx,
+    weightsGB,
+    shareOfWeightsPct: weightsGB > 0 ? (usedGB / weightsGB) * 100 : null,
+    overtakeTokens,
+    overtakesWithinWindow: overtakeTokens != null && overtakeTokens <= ctx,
+  };
+}
+
+/** Pure: the GB readout under the bar. */
+export function kvCaption(perf, config, tokens) {
+  const v = kvGrowthView(perf, config, tokens);
+  if (!v) return '…';
+  const pct = Math.round(v.pct * 100);
+  return `${v.usedGB.toFixed(2)} GB of memory for ${v.tokens.toLocaleString()} tokens, which is ${pct}% of this model's ${v.contextWindow.toLocaleString()} token limit.`;
+}
+
+/** Pure: the teaching line comparing the store against the model. */
+export function kvCompareNote(perf, config, tokens) {
+  const v = kvGrowthView(perf, config, tokens);
+  if (!v) return '…';
+  const each = v.perTokenMB < 1
+    ? `${(v.perTokenMB * 1000).toFixed(0)} KB`
+    : `${v.perTokenMB.toFixed(2)} MB`;
+
+  if (v.overtakesWithinWindow) {
+    return `Every token adds about ${each}. At around ${v.overtakeTokens.toLocaleString()} tokens the conversation store grows larger than the model itself, and it is competing with the model for the same memory.`;
+  }
+  const full = v.weightsGB > 0 ? Math.round((v.fullGB / v.weightsGB) * 100) : 0;
+  return `Every token adds about ${each}. Even a completely full conversation stays smaller than the model here, reaching ${full}% of its size.`;
+}
+
 /** True when the user asks for reduced motion (guarded — no matchMedia in Node). */
 function prefersReducedMotion() {
   try { return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true; }
@@ -363,19 +580,119 @@ export function initPipeline({ doc = defaultDoc(), store, raf, now, reduced } = 
     }
   }
 
-  // P5 M2 + M3: Stage 2 (Model load) and Stage 3 (Prefill vs decode) bound
-  // live to the shared store via ONE subscription — changing hardware/model in
-  // the Lab re-renders both here. First paint "pours" (S2) and drips (S3).
+  /* P5 M4: Stage 4 (KV cache growth). `kvTokens` is how far along the
+     conversation the reader has dragged the slider. It is view state, not
+     config, so it stays local rather than going into the shared store: it
+     changes nothing about the hardware being modelled. It is clamped
+     whenever the context window changes under it. */
+  let kvTokens = null;
+
+  function paintStage4(state) {
+    const perf = state?.derived?.perf ?? null;
+    const config = state?.config ?? null;
+    const setText = (id, txt) => { const el = doc.getElementById?.(id); if (el) el.textContent = txt; };
+    const ctx = Math.max(1, config?.contextWindow | 0);
+
+    // First paint starts a quarter of the way in, so both the bar and the
+    // numbers say something, rather than opening at a flat zero.
+    if (kvTokens == null) kvTokens = Math.round(ctx / 4);
+    kvTokens = Math.max(0, Math.min(kvTokens, ctx)); // context may have shrunk
+
+    const slider = byId('pipe-kv-slider');
+    if (slider) {
+      slider.max = String(ctx);
+      slider.step = String(Math.max(1, Math.round(ctx / 256)));
+      slider.value = String(kvTokens);
+      // Keep the filled track in sync (base.css reads --val).
+      if (slider.style && typeof slider.style.setProperty === 'function') {
+        slider.style.setProperty('--val', `${((kvTokens / ctx) * 100).toFixed(2)}%`);
+      }
+    }
+
+    const v = kvGrowthView(perf, config, kvTokens);
+    setText('pipe-kv-used', v ? `${v.usedGB.toFixed(2)} GB` : '…');
+    setText('pipe-kv-tokens', v ? `${v.tokens.toLocaleString()} tokens` : '…');
+    setText('pipe-kv-caption', kvCaption(perf, config, kvTokens));
+    setText('pipe-kv-compare', kvCompareNote(perf, config, kvTokens));
+
+    const bar = byId('pipe-kv-bar');
+    const seg = bar && typeof bar.querySelector === 'function' ? bar.querySelector('.seg') : null;
+    if (seg && seg.style && typeof seg.style.setProperty === 'function') {
+      seg.style.setProperty('--w', `${((v ? v.pct : 0) * 100).toFixed(1)}%`);
+    }
+    // Warn once the store has outgrown the model it is sitting next to.
+    if (bar && typeof bar.setAttribute === 'function') {
+      bar.setAttribute('data-state', v && v.shareOfWeightsPct > 100 ? 'warn' : 'ok');
+    }
+  }
+
+  // P5 M2 + M3 + M4: Stages 2, 3 and 4 are bound live to the shared store via
+  // ONE subscription. Changing hardware or model in the Lab re-renders all of
+  // them here. First paint "pours" (S2) and drips (S3).
   let unsubStage2 = null;
   if (store && typeof store.subscribe === 'function' && typeof store.getState === 'function') {
     const first = store.getState();
     renderStage2(doc, first, { pour: true });
     paintStage3(first, { animate: true });
+    paintStage4(first);
     unsubStage2 = store.subscribe((state) => {
       renderStage2(doc, state);
       paintStage3(state, { animate: false });
+      paintStage4(state);
+    });
+
+    // Dragging the slider repaints Stage 4 only. It never touches the store,
+    // so it cannot restart the Stage 3 drip.
+    const kvSlider = byId('pipe-kv-slider');
+    if (kvSlider && typeof kvSlider.addEventListener === 'function') {
+      kvSlider.addEventListener('input', () => {
+        kvTokens = Math.round(Number(kvSlider.value) || 0);
+        paintStage4(store.getState());
+      });
+    }
+  }
+
+  /* P5 M5: Step 5 (Sampling). Like the Step 4 slider these are view state,
+     not config: temperature and top-p change how a model chooses words, not
+     what the hardware can do, and nothing in the engine reads them. The
+     store is not involved at all here, so this paints without one. */
+  let temperature = 1;
+  let topP = 0.9;
+
+  function paintStage5() {
+    const view = samplingView(SAMPLE_CANDIDATES, { temperature, topP });
+    const setText = (id, txt) => { const el = doc.getElementById?.(id); if (el) el.textContent = txt; };
+
+    setText('pipe-temp-value', temperature.toFixed(2));
+    setText('pipe-topp-value', topP.toFixed(2));
+    setText('pipe-sample-caption', samplingCaption(view, { temperature, topP }));
+
+    const host = byId('pipe-sample-bars');
+    if (host) renderSampling(doc, host, view);
+
+    for (const [id, value, min, max] of [['pipe-temp', temperature, 0, 2], ['pipe-topp', topP, 0.05, 1]]) {
+      const el = byId(id);
+      if (el && el.style && typeof el.style.setProperty === 'function') {
+        el.style.setProperty('--val', `${(((value - min) / (max - min)) * 100).toFixed(2)}%`);
+      }
+    }
+  }
+
+  const tempSlider = byId('pipe-temp');
+  if (tempSlider && typeof tempSlider.addEventListener === 'function') {
+    tempSlider.addEventListener('input', () => {
+      temperature = Number(tempSlider.value);
+      paintStage5();
     });
   }
+  const toppSlider = byId('pipe-topp');
+  if (toppSlider && typeof toppSlider.addEventListener === 'function') {
+    toppSlider.addEventListener('input', () => {
+      topP = Number(toppSlider.value);
+      paintStage5();
+    });
+  }
+  paintStage5();
 
   const hasDom = !!(chips && typeof doc.createElement === 'function');
 

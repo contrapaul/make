@@ -1,8 +1,124 @@
-# v100 Handoff — P9 COPY REWRITE COMPLETE (every surface) · P5 M1–M3 · P6 M1–M4 awaiting sign-off
+# v100 Handoff — P7 M1 BUILT (the race) · P5 COMPLETE · P9 complete · P5 + P6 + P9 awaiting sign-off
 
 **Date:** 2026-09-05 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **102/102**, engine **63/63**). **2026-09-05: the two open test gaps from the bug-fix pass are CLOSED** — see the section below; both new tests were regression-proven against the original defects. P6 still awaits owner sign-off.
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
+
+## P7 M1 — the Local vs Cloud race (BUILT 2026-09-05)
+
+Tab 4 is no longer a placeholder. The same job, 256 output tokens, run by the reader's machine and by three cloud models, each waiting its own waiting time then writing at its own measured speed.
+
+### Where every number comes from
+
+**Nothing here is invented.** Local speed and wait are the signed-off engine's `decodeTpsPerRequest` and `ttftMs`, read through the shared store. Cloud figures come from `js/data/cloud.js`, which P1 built as the single source of truth with a source id and an as-of date on every entry.
+
+**A model with no measured speed is excluded rather than guessed at.** DeepSeek V4 Flash carries `outputTps: null` in cloud.js with the note "estimate at build if the race needs it". It is filtered out instead, and there is a test pinning that behaviour. It still belongs in M3's cost panel as the cheap-cloud reference, where only its price is needed.
+
+### The result is genuinely interesting, and honest
+
+With the default rig: **local finishes first at 3.4 s**, DeepSeek V4 Pro at 6.4 s, Claude Opus 5 at 7.7 s, and **GPT-5.6 Sol last at 118.8 s**. It comes last despite being the *fastest writer of the three cloud models*, because ~116 s of its time is thinking before it writes a word. cloud.js explicitly asked the race to label that as thinking rather than as network latency, and `waitLabel` / `racerStatus` do. There is a test asserting the fastest writer still finishes last.
+
+### ⚠ A pacing consequence the owner should weigh
+
+Because the slowest finisher sets the length, compression is 5.9x and **three of the four racers finish inside the first ~1.3 real seconds**. The remaining ~19 seconds are one model thinking. That is the truth of the data, and arguably the whole lesson, but it is a lopsided thing to watch.
+
+Mitigated, not hidden: the wait now **counts up** ("Thinking, 47 s so far") so the row is visibly doing something rather than frozen. The bar stays empty throughout, because no tokens exist yet, which is accurate.
+
+If you want a livelier race, the honest lever is cloud.js, not this module: its `ttftNote` says the ~116 s figure is max reasoning effort and that default effort is "much lower". We have no *measured* default-effort figure, so using one would mean inventing a number. Your call.
+
+### Files
+
+| File | Change |
+|---|---|
+| `js/tabs/compare.js` (new) | Pure `localRacer`, `cloudRacers`, `waitLabel`, `racePlan`, `racerTokensAt`, `racerStatus`, `raceNote`, plus `renderRace` and `runRace` (DI raf/now, instant paint under reduced motion), and `initCompare({doc, store, raf, now, reduced})`. |
+| `index.html` | Compare panel rebuilt: header, the race card, and honest placeholders for M2 and M3. |
+| `css/tabs.css` | Two small additions: the reader's own row is bolded, and the race grid gets a wider status column so "Finished in 3.4 s" does not wrap. |
+| `js/app.js` | `initCompare({ store })` wired into the bootstrap. |
+| `test/ui.test.mjs` | +8 checks. **125/125 green.** |
+
+### One real bug found and fixed during the build
+
+`racerTokensAt` left the **slowest racer permanently one token short**. Deriving progress as `floor(elapsed × rate)` lands a hair under the target at the finishing time in floating point, so the race leader's row would have read `255 of 256 tokens` forever and the race would never have shown as finished. Now anything at or past `finishS` returns the target exactly. Caught by the reduced-motion test, which paints the finished state directly.
+
+### ⚠ New harness gotcha: a stale cached module looked exactly like a broken feature
+
+The race rendered nothing on first check, with a clean console. The module imported fine, `racePlan` returned a good plan, and calling `initCompare` by hand painted all four rows. The cause was **`python -m http.server` serving a cached `js/app.js`**, so `location.reload()` kept running the pre-wiring version. Loading `index.html?cachebust=1` fixed it instantly.
+
+**Add a cache-busting query string when a change to a JS module appears to do nothing.** This is a third way to be fooled here, alongside the `requestAnimationFrame` and IntersectionObserver artifacts already logged.
+
+### Still to build
+
+* **P7 M2, the comparison table:** speed and wait, cost per million tokens, subscription alternative, privacy, offline use, quality scores, context window, agentic coding, trainability. Every authoritative number needs its footnote; `CLOUD_SOURCES` and `RATES_SOURCES` exist for exactly this.
+* **P7 M3, the cost panel:** messages per day times tokens per message, to a monthly figure for local against each cloud tier at Shenzhen rates. `computeCost` already returns `blendedRMBPerMOut`, labelled "Tab 4 comparison basis", so the local side is ready.
+
+## P5 M5 — Step 5, Sampling (BUILT 2026-09-05). **P5 IS NOW COMPLETE.**
+
+Tab 2 has no placeholders left. All five steps are live.
+
+### ⚠ Read this before touching Step 5: it is the one step with no engine number
+
+Every other number on this site comes from the signed-off engine. Step 5 cannot, and no amount of work will change that: the engine models memory, bandwidth, time and cost. It does not model what a language model would predict, and getting real probabilities would mean running a real model in the browser.
+
+So the ten candidates after "The cat sat on the" are **illustrative and labelled as such in bold in the UI copy**, in the same voice as the tokenizer's honest-limits note. Do not quietly present them as real output, and do not let a future change drop that label.
+
+**What is real is the maths.** `applyTemperature` and `applyTopP` are the genuine transforms, so the way the bars reshape when a reader drags a slider is exactly how a real distribution behaves. That is the part worth teaching, and it is fully tested.
+
+This is a documented deviation from blueprint §11's P5 acceptance line ("each stage shows at least one real number from the engine"). Step 5 is exempt by nature. Flagging it for the sign-off review rather than quietly failing the criterion.
+
+### What it does
+
+Two sliders, temperature (0 to 2) and top-p (0.05 to 1), drive a live bar chart of the ten candidates:
+
+* **Temperature 1** leaves the odds untouched. **Below 1** sharpens them, so the favourite grows. **Above 1** flattens them, so unlikely words get a real chance. **At 0** it goes greedy: one option at 100%, and the caption says the same question now gives the same answer every time.
+* **Top-p** keeps the smallest set of most likely tokens whose probability adds up to the threshold, renormalises the survivors, and **dims the discarded rows rather than deleting them**, so a reader can see what the setting actually throws away. A cut row reads `cut`, not `0%`.
+
+A caption underneath narrates the current state in plain words.
+
+### How it is built
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | `SAMPLE_CANDIDATES` (frozen, sums to 1) plus pure `applyTemperature`, `applyTopP`, `samplingView`, `samplingCaption`, and `renderSampling(doc, host, view)`. |
+| `index.html` | Step 5 card gains the two sliders with live value readouts, the chart host, and the caption. |
+| `css/tabs.css` | **One** new rule pair: `.bw-row.is-cut` dims a discarded candidate. |
+| `test/ui.test.mjs` | +9 checks. **117/117 green.** |
+
+**Agent decision, not owner-approved:** blueprint §6 Tab 2.5 says "hand-rolled SVG" for this chart. It is built instead from the existing `.bw` bar primitives already used by the memory-speed card. The acceptance criterion is a probability chart that visibly reshapes, which this meets, and reusing the primitives keeps the page visually consistent and added one CSS rule instead of a new chart system. Say the word if you want actual SVG.
+
+Temperature and top-p are view state inside `initPipeline`, like the Step 4 slider, because nothing in the engine reads them. Step 5 needs no store at all, so it paints even without one.
+
+### Maths worth trusting
+
+Softmax on scaled logits reduces to `p^(1/T)` renormalised, which is what `applyTemperature` computes. Every path is asserted to stay normalised to 1, including the greedy path and the top-p renormalisation. Verified live: temperature 1.8 drops the favourite from 45% to 27.5% and widens the top-p keep set from 7 to 8; top-p 0.7 leaves three survivors at 58.3 / 25.0 / 16.7, which is 42 / 18 / 12 renormalised over 72.
+
+## P5 M4 — Step 4, KV cache growth (BUILT 2026-09-05)
+
+Tab 2's fourth step is live. It was the last thing on that page still saying "the live bar for this step is still to be built".
+
+### What it does
+
+A slider drags the conversation from empty to the full context window. As it moves, the card shows the memory the conversation store is using, a bar filling toward the window limit, and a sentence comparing that against the size of the model itself.
+
+The teaching moment is the comparison. On a long context the store **outgrows the model**: with the default rig at a 128K window it crosses at about 33,570 tokens, and a full window costs 17.18 GB against 4.4 GB of weights. That is the concrete answer to "why does context length cost memory", and the bar flips to the amber `warn` state once the store is larger than the model.
+
+### How it is built
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | Pure exports `kvGrowthView(perf, config, tokens)`, `kvCaption(...)`, `kvCompareNote(...)`. The view **does not re-derive the formula**: blueprint §5 is linear in token count, so it takes the engine's own `perf.kvCacheGB` (per request, at the full window) and divides by the context window for a per-token cost. Nothing can drift from the engine. `paintStage4` joins the **same single store subscription** as steps 2 and 3. |
+| `index.html` | Step 4 card gains a `.slider`, a token readout, a big GB figure, a `.membar` with one `.seg`, the caption and the comparison note. **No new CSS**, it reuses the existing `.membar` / `.seg` / `.slider` / `.ctl-note` primitives. |
+| `test/ui.test.mjs` | +6 checks. `makePipeDoc` extended with the Stage 4 fakes. **108/108 green.** |
+
+### Two decisions worth knowing
+
+1. **The slider position is view state, not config.** `kvTokens` lives inside `initPipeline` and never enters the shared store, because how far a reader has dragged a demo says nothing about the hardware being modelled. A consequence worth keeping: dragging repaints step 4 only, so it **cannot restart the step 3 drip animation**.
+2. **It opens a quarter of the way in**, not at zero, so the bar and every number say something on first paint.
+
+The slider is clamped on every paint, so shrinking the context window in the Lab pulls the dragged position down with it instead of leaving it past the end. Widening the window keeps the position and just extends the range. Both directions are tested, and verified live in a browser.
+
+### Still to build on this tab
+
+**P5 M5 (Step 5, sampling)** is the last one: temperature and top-p controls driving a next-token probability bar chart, hand-rolled SVG per blueprint §6 Tab 2.5. Step 5 already explains the concept in prose and says its visual is still to be built.
 
 ## Glossary: full-width definitions + outbound "Learn more" links (2026-09-05, owner request)
 
@@ -300,12 +416,23 @@ Owner reported: *"Qwen tells me to try it out, but nothing happens on page when 
 
 ## Next steps (in order)
 
-1. **Owner reviews P5 M1 + M2 + M3 (committed, awaiting review)** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html#/how`. Eyeball: 5 horizontal glass cards; Stage 1 prefilled with “Hello, world!” → brief “loading vocabulary…” then 4 chips with **real Qwen3 ids** (“ world” = 1814); typing re-renders live; empty input clears; real-vocab-subset note (30,747 of 248,320 tokens; subset + greedy-longest-first limits) visible. **Stage 2:** memory bar pours in on load (instant under prefers-reduced-motion); caption shows real GB used vs available from the engine. **Stage 3 (the core lesson):** the two-speed contrast — on load the drip animates: a brief “Prefill — one fast pass over the N-token prompt…” beat, then decode chips (`.sim-conveyor`) trickle in one-by-one to 256; the two columns show the prefill gulp (prompt-token count + TTFT, compute-bound) vs the decode drip (engine tok/s + per-token ms, bandwidth-bound); the run line labels the real time + any ×N compression. Change hardware in the Lab (e.g. RTX 3060 12 GB + 70B offload → both halves slow down live, compression label appears) and Stage 3 re-renders on the same subscription as Stage 2. Confirm Home/Lab do **not** load the 381 KB vocab. Review the diff in `85780dc`.
-2. **Owner reviews P6 in light + dark** — serve from project dir (`python3 -m http.server 8077 --bind 127.0.0.1`), open `http://localhost:8077/index.html` and `#dark`. Eyeball the new rows: concurrency ×4 → total row + TTFT note appear; RTX 3060 + DDR4 + 70B stop → offload sentence appears under the memory caption.
-3. ~~Close the two open test gaps~~ — **DONE 2026-09-05** (ui 79/79, engine 63/63; both regression-proven).
-4. **Owner sign-off** on P6 (incl. the agent-decided placement/copy list above) → flip blueprint §11 P6 row to SIGNED OFF with date.
-5. **Next build step: P5 M4 (KV cache growth stage)** — blueprint §6 Tab 2.4: a bar that fills as context grows, with a live GB readout from the engine's §5 KV formulas for the current model/context window. Then M5 sampling (temperature/top-p + next-token probability bars).
-6. Then P7 Compare tab / P8 polish per blueprint §11 order.
+> The P5 review script below was rewritten 2026-09-05. The previous version
+> quoted the OLD copy ("Prefill — one fast pass over the N-token prompt", "the
+> prefill gulp ... compute-bound"), all of which P9 replaced. Anyone following
+> the old text would have gone looking for sentences that no longer exist.
+
+1. **Owner reviews P5 M1 + M2 + M3** (built, and since rewritten by P9). Serve from the project directory (`python3 -m http.server 8077 --bind 127.0.0.1`) and open `http://localhost:8077/index.html#/how`. Expect five step cards, the first three live:
+   * **Step 1, splitting your text into tokens:** prefilled with "Hello, world!", a brief loading state, then four chips carrying **real Qwen3 ids** (" world" is 1814). Typing re-renders live; emptying the box clears it. The note about the vocabulary slice is visible.
+   * **Step 2, loading the model into memory:** the bar fills on load (instantly under `prefers-reduced-motion`), and the caption reads real GB used against GB available.
+   * **Step 3, reading your question then writing the answer:** the drip animates, one chip per token up to 256. The two columns show the read pass and the write speed, each naming what limits it. Change hardware in the Lab (RTX 3060 12 GB with a 70B model) and both halves slow down live on the same subscription.
+   * Confirm Home and Lab do **not** load the 381 KB vocabulary file.
+2. **Owner reviews P6 (Hardware Lab) in light and dark.** Set concurrency to 4 and the total-throughput row plus the queueing note should appear. Set RTX 3060 + DDR4 + a 70B model and the offload explanation should appear under the memory caption.
+3. **Owner reviews P9 copy** across all five tabs, in both themes. This is the largest single change to the site so far and it touched every reader-facing string.
+4. **Owner sign-off** on P6 (including the agent-decided placement and copy list above) and on P9, then flip the blueprint §11 rows with the date.
+5. **Next build work, owner's call between two:**
+   * **P5 M4 + M5** finish Tab 2. Step 4 (KV cache growth) needs a bar that fills as the conversation grows, with a live GB readout from the engine's §5 formulas. Step 5 (sampling) needs temperature and top-p controls driving next-token probability bars. **Both steps already explain themselves in prose and say "The live bar for this step is still to be built", so the promise is visible to a reader today.**
+   * **P7 Compare tab** is a whole placeholder tab: the local-vs-cloud comparison, the race, and the Shenzhen cost panel. Its copy should be written to `style-guide.md` from the start rather than rewritten later.
+6. Then **P8 polish and QA** per blueprint §11: motion pass, edge cases (does not fit, 4 GPUs with 405B), performance on a mid-range GPU, and a final walkthrough.
 
 ## Observations / gotchas
 

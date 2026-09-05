@@ -25,10 +25,15 @@ import {
   renderPrintouts, memoryCaption, concTeaching, offloadNote,
   simPlan, tokensAt, simPhase, gaugeFill, stageText, SIM_REAL_BUDGET_S, initSim,
 } from '../js/tabs/lab.js';
-import { tokenizeWith, tokenize, initPipeline, modelLoadView, loadCaption, prefillDecodeView, prefillCaption, decodeCaption, speedNote } from '../js/tabs/pipeline.js';
+import { tokenizeWith, tokenize, initPipeline, modelLoadView, loadCaption, prefillDecodeView, prefillCaption, decodeCaption, speedNote, kvGrowthView, kvCaption, kvCompareNote, SAMPLE_CANDIDATES, applyTemperature, applyTopP, samplingView, samplingCaption, renderSampling } from '../js/tabs/pipeline.js';
 import { VOCAB } from '../js/data/vocab.js';
 import { termIdFromHash, tooltipText, renderGlossary, initTermCards, initGlossary } from '../js/tabs/glossary.js';
 import { GLOSSARY } from '../js/data/glossary.js';
+import {
+  RACE_REAL_BUDGET_S, localRacer, cloudRacers, waitLabel, racePlan,
+  racerTokensAt, racerStatus, raceNote, renderRace, runRace, initCompare,
+} from '../js/tabs/compare.js';
+import { CLOUD_MODELS } from '../js/data/cloud.js';
 import { createStore, DEFAULT_CONFIG } from '../js/state/store.js';
 import { evaluate, PROMPT_SPLIT_TOKENS, GENERATION_TARGET_TOKENS } from '../js/engine/perf.js';
 
@@ -1050,6 +1055,43 @@ function makePipeDoc(prefill = '') {
     appendChild(c) { this.children.push(c); },
     removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
   };
+  // P5 M5 (Stage 5) fakes
+  const makeSlider = (value) => ({
+    value: String(value),
+    style: { props: {}, setProperty(k, v) { this.props[k] = v; } },
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatch(ev) { for (const fn of this.listeners[ev] ?? []) fn({}); },
+  });
+  const temp = makeSlider(1);
+  const topp = makeSlider(0.9);
+  const tempvalue = { textContent: '' };
+  const toppvalue = { textContent: '' };
+  const samplebars = {
+    children: [],
+    appendChild(c) { this.children.push(c); return c; },
+    removeChild(c) { this.children.splice(this.children.indexOf(c), 1); },
+  };
+  const samplecaption = { textContent: '' };
+
+  // P5 M4 (Stage 4) fakes
+  const kvseg = { style: { props: {}, setProperty(k, v) { this.props[k] = v; } } };
+  const kvbar = {
+    attrs: {},
+    setAttribute(k, v) { this.attrs[k] = v; },
+    querySelector: (sel) => (sel === '.seg' ? kvseg : null),
+  };
+  const kvslider = {
+    min: '0', max: '8192', step: '32', value: '2048',
+    style: { props: {}, setProperty(k, v) { this.props[k] = v; } },
+    listeners: {},
+    addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); },
+    dispatch(ev) { for (const fn of this.listeners[ev] ?? []) fn({}); },
+  };
+  const kvused = { textContent: '' };
+  const kvtokens = { textContent: '' };
+  const kvcaption = { textContent: '' };
+  const kvcompare = { textContent: '' };
   const prefilltokens = { textContent: '' };
   const prefillnote = { textContent: '' };
   const decodetps = { textContent: '' };
@@ -1061,6 +1103,8 @@ function makePipeDoc(prefill = '') {
     input, chips, count,
     loadbar, loadcaption, loadlayers,
     drip, driplabel, prefilltokens, decodetps, phase,
+    kvbar, kvseg, kvslider, kvused, kvtokens, kvcaption, kvcompare,
+    temp, topp, tempvalue, toppvalue, samplebars, samplecaption,
     getElementById: (id) => ({
       'pipe-token-input': input, 'pipe-token-chips': chips, 'pipe-token-count': count,
       'pipe-loadbar': loadbar, 'pipe-load-caption': loadcaption, 'pipe-load-layers': loadlayers,
@@ -1068,8 +1112,20 @@ function makePipeDoc(prefill = '') {
       'pipe-decode-tps': decodetps, 'pipe-decode-note': decodenote,
       'pipe-phase': phase, 'pipe-drip': drip, 'pipe-drip-label': driplabel,
       'pipe-speed-note': speednote,
+      'pipe-kv-bar': kvbar, 'pipe-kv-slider': kvslider, 'pipe-kv-used': kvused,
+      'pipe-kv-tokens': kvtokens, 'pipe-kv-caption': kvcaption, 'pipe-kv-compare': kvcompare,
+      'pipe-temp': temp, 'pipe-topp': topp, 'pipe-temp-value': tempvalue,
+      'pipe-topp-value': toppvalue, 'pipe-sample-bars': samplebars, 'pipe-sample-caption': samplecaption,
     }[id] ?? null),
-    createElement: (tag) => ({ tag, textContent: '', children: [], appendChild(c) { this.children.push(c); } }),
+    createElement: (tag) => {
+      const classes = new Set();
+      return {
+        tag, textContent: '', children: [],
+        classList: { add: (c) => classes.add(c), contains: (c) => classes.has(c), _set: classes },
+        style: { props: {}, setProperty(k, v) { this.props[k] = v; } },
+        appendChild(c) { this.children.push(c); return c; },
+      };
+    },
   };
 }
 
@@ -1424,6 +1480,219 @@ function makeAppDoc() {
   }
 }
 
+/* ------------- js/tabs/pipeline.js — P5 M4 (Step 4 · KV cache) ------------- */
+console.log('tabs/pipeline.js — P5 M4 (Step 4 · KV cache growth)');
+
+{ // kvGrowthView — linear in tokens, straight off the engine's §5 figure
+  const cfg = { ...DEFAULT_CONFIG, contextWindow: 8192 };
+  const perf = evaluate(cfg);
+
+  const full = kvGrowthView(perf, cfg, 8192);
+  assert.equal(full.tokens, 8192);
+  assert.equal(full.pct, 1);
+  // A full window must reproduce the engine's own per-request number exactly.
+  assert.ok(Math.abs(full.usedGB - perf.kvCacheGB) < 1e-12, 'full window equals the engine kvCacheGB');
+
+  const half = kvGrowthView(perf, cfg, 4096);
+  assert.ok(Math.abs(half.usedGB - full.usedGB / 2) < 1e-12, 'half the tokens is half the memory');
+  assert.equal(kvGrowthView(perf, cfg, 0).usedGB, 0, 'an empty conversation costs nothing');
+  ok(`kvGrowthView is linear in tokens and matches the engine (${full.usedGB.toFixed(2)} GB at 8K)`);
+}
+
+{ // clamping and null safety
+  const cfg = { ...DEFAULT_CONFIG, contextWindow: 8192 };
+  const perf = evaluate(cfg);
+  assert.equal(kvGrowthView(perf, cfg, 99999).tokens, 8192, 'clamped to the context window');
+  assert.equal(kvGrowthView(perf, cfg, -50).tokens, 0, 'never negative');
+  assert.equal(kvGrowthView(null, cfg, 100), null);
+  assert.equal(kvGrowthView(perf, null, 100), null);
+  assert.equal(kvCaption(null, null, 0), '…');
+  ok('kvGrowthView clamps to the window, refuses negatives, and is null-safe');
+}
+
+{ // the teaching moment: at a long context the store outgrows the model
+  const short = { ...DEFAULT_CONFIG, contextWindow: 8192 };
+  const long = { ...DEFAULT_CONFIG, contextWindow: 131072 };
+  const vShort = kvGrowthView(evaluate(short), short, 8192);
+  const vLong = kvGrowthView(evaluate(long), long, 131072);
+
+  assert.ok(!vShort.overtakesWithinWindow, '8K never overtakes the weights');
+  assert.ok(vShort.shareOfWeightsPct < 100);
+  assert.match(kvCompareNote(evaluate(short), short, 8192), /stays smaller than the model/);
+
+  assert.ok(vLong.overtakesWithinWindow, '128K does overtake the weights');
+  assert.ok(vLong.shareOfWeightsPct > 100, `128K store is ${vLong.shareOfWeightsPct.toFixed(0)}% of the weights`);
+  assert.match(kvCompareNote(evaluate(long), long, 131072), /larger than the model itself/);
+  // The per-token cost is a property of the model, not of the window.
+  assert.ok(Math.abs(vShort.perTokenMB - vLong.perTokenMB) < 1e-9, 'per-token cost does not depend on the window');
+  ok(`the store overtakes the weights at ${vLong.overtakeTokens.toLocaleString()} tokens (within a 128K window, not an 8K one)`);
+}
+
+{ // DOM: first paint, slider drag, and the bar
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, String(v)); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, contextWindow: 8192 }, storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store });
+
+  // Opens a quarter of the way in rather than at a flat zero.
+  assert.equal(doc.kvslider.value, '2048');
+  assert.equal(doc.kvslider.max, '8192');
+  assert.match(doc.kvtokens.textContent, /^2,048 tokens$/);
+  assert.match(doc.kvused.textContent, /^0\.\d+ GB$/);
+  assert.match(doc.kvcaption.textContent, /25% of this model's 8,192 token limit/);
+  const quarterFill = doc.kvseg.style.props['--w'];
+  assert.equal(quarterFill, '25.0%');
+  ok(`Step 4 first paint: 2,048 of 8,192 tokens, bar at ${quarterFill}, ${doc.kvused.textContent}`);
+
+  // Dragging repaints Stage 4 from the same engine numbers.
+  doc.kvslider.value = '8192';
+  doc.kvslider.dispatch('input');
+  assert.equal(doc.kvseg.style.props['--w'], '100.0%');
+  assert.match(doc.kvtokens.textContent, /^8,192 tokens$/);
+  const fullGB = parseFloat(doc.kvused.textContent);
+  assert.ok(Math.abs(fullGB - evaluate(store.getState().config).kvCacheGB) < 0.01, 'reads the engine figure at full window');
+  ok(`dragging to the end fills the bar and reports ${doc.kvused.textContent}`);
+
+  api.destroy();
+}
+
+{ // a context change in the Lab re-renders Step 4 and re-clamps the slider
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, String(v)); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG, contextWindow: 131072 }, storage });
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc, store });
+
+  doc.kvslider.value = '131072';
+  doc.kvslider.dispatch('input');
+  const before = doc.kvused.textContent;
+  assert.ok(doc.kvbar.attrs['data-state'] === 'warn', 'the bar warns once the store outgrows the model');
+  assert.match(doc.kvcompare.textContent, /larger than the model itself/);
+
+  // Shrinking the window must clamp the dragged position, not leave it past the end.
+  store.setConfig({ contextWindow: 8192 });
+  assert.equal(doc.kvslider.max, '8192');
+  assert.equal(doc.kvslider.value, '8192', 'the slider was clamped to the smaller window');
+  assert.notEqual(doc.kvused.textContent, before, 'the readout moved with the window');
+  assert.equal(doc.kvbar.attrs['data-state'], 'ok', 'and the warning clears');
+  ok(`a Lab context change re-clamps Step 4 (${before} at 128K → ${doc.kvused.textContent} at 8K)`);
+
+  api.destroy();
+}
+
+/* ------------- js/tabs/pipeline.js — P5 M5 (Step 5 · Sampling) ------------- */
+console.log('tabs/pipeline.js — P5 M5 (Step 5 · Sampling)');
+
+const psum = (rows) => rows.reduce((a, b) => a + b.p, 0);
+
+{ // the illustrative candidate list is a real distribution
+  assert.equal(SAMPLE_CANDIDATES.length, 10);
+  assert.ok(Math.abs(psum(SAMPLE_CANDIDATES) - 1) < 1e-9, 'candidate probabilities sum to 1');
+  ok('the illustrative candidate list is a valid distribution summing to 1');
+}
+
+{ // temperature: 1 is a no-op, below 1 sharpens, above 1 flattens
+  const at1 = applyTemperature(SAMPLE_CANDIDATES, 1);
+  for (let i = 0; i < at1.length; i += 1) {
+    assert.ok(Math.abs(at1[i].p - SAMPLE_CANDIDATES[i].p) < 1e-12, 'temperature 1 changes nothing');
+  }
+
+  const cold = applyTemperature(SAMPLE_CANDIDATES, 0.2);
+  const hot = applyTemperature(SAMPLE_CANDIDATES, 2);
+  assert.ok(cold[0].p > SAMPLE_CANDIDATES[0].p, 'a low temperature sharpens the favourite');
+  assert.ok(hot[0].p < SAMPLE_CANDIDATES[0].p, 'a high temperature flattens it');
+  assert.ok(hot[9].p > SAMPLE_CANDIDATES[9].p, 'and lifts the least likely option');
+
+  for (const [name, d] of [['cold', cold], ['hot', hot]]) {
+    assert.ok(Math.abs(psum(d) - 1) < 1e-9, `${name} still sums to 1`);
+  }
+  ok(`temperature reshapes correctly (favourite ${(cold[0].p * 100).toFixed(0)}% cold, ${(hot[0].p * 100).toFixed(0)}% hot)`);
+}
+
+{ // temperature 0 is greedy, and every path stays normalised
+  const greedy = applyTemperature(SAMPLE_CANDIDATES, 0);
+  assert.equal(greedy[0].p, 1, 'all the mass on the favourite');
+  assert.equal(psum(greedy), 1);
+  assert.ok(greedy.slice(1).every((c) => c.p === 0), 'nothing left for anything else');
+  assert.deepEqual(applyTemperature([], 1), [], 'empty input is safe');
+  assert.deepEqual(applyTemperature(null, 1), [], 'null input is safe');
+  ok('temperature 0 is greedy (one option at 100%), and empty input is safe');
+}
+
+{ // top-p keeps the smallest set reaching p, then renormalises
+  const half = applyTopP(SAMPLE_CANDIDATES, 0.5);
+  const kept = half.filter((c) => c.kept);
+  // 0.42 then 0.60 crosses 0.5, so exactly two survive.
+  assert.equal(kept.length, 2, 'top-p 0.5 keeps two options');
+  assert.ok(Math.abs(kept[0].p - 0.42 / 0.6) < 1e-9, 'survivors are renormalised');
+  assert.ok(Math.abs(psum(half) - 1) < 1e-9, 'and still sum to 1');
+  assert.ok(half.filter((c) => !c.kept).every((c) => c.p === 0), 'discarded options carry no probability');
+
+  assert.equal(applyTopP(SAMPLE_CANDIDATES, 1).filter((c) => c.kept).length, 10, 'top-p 1 keeps everything');
+  assert.equal(applyTopP(SAMPLE_CANDIDATES, 0).filter((c) => c.kept).length, 1, 'top-p 0 still keeps one');
+  ok('top-p keeps the smallest set reaching the threshold and renormalises the survivors');
+}
+
+{ // samplingView + caption
+  const v = samplingView(SAMPLE_CANDIDATES, { temperature: 1, topP: 0.9 });
+  assert.equal(v.keptCount + v.discardedCount, 10);
+  assert.equal(v.topToken, ' mat');
+  assert.match(samplingCaption(v, { temperature: 1, topP: 0.9 }), /temperature of 1/);
+
+  const coldCap = samplingCaption(samplingView(SAMPLE_CANDIDATES, { temperature: 0.3, topP: 1 }), { temperature: 0.3, topP: 1 });
+  assert.match(coldCap, /sharpens/);
+  assert.match(coldCap, /keeping every option/);
+
+  const hotCap = samplingCaption(samplingView(SAMPLE_CANDIDATES, { temperature: 1.6, topP: 0.5 }), { temperature: 1.6, topP: 0.5 });
+  assert.match(hotCap, /flattens/);
+  assert.match(hotCap, /discards the other/);
+
+  const zeroCap = samplingCaption(samplingView(SAMPLE_CANDIDATES, { temperature: 0, topP: 1 }), { temperature: 0, topP: 1 });
+  assert.match(zeroCap, /same question gives the same answer/);
+  ok('samplingCaption describes sharpening, flattening, greedy and the top-p cut');
+}
+
+{ // DOM: the chart renders and reshapes when the sliders move
+  const doc = makePipeDoc();
+  const api = initPipeline({ doc });
+
+  assert.equal(doc.samplebars.children.length, 10, 'one row per candidate');
+  assert.equal(doc.tempvalue.textContent, '1.00');
+  assert.equal(doc.toppvalue.textContent, '0.90');
+  const firstRow = doc.samplebars.children[0];
+  assert.ok(firstRow.classList.contains('bw-row'));
+  assert.equal(firstRow.children[0].textContent, '" mat"', 'label is the token, quoted');
+  const widthAt1 = firstRow.children[1].children[0].style.props['--w'];
+  ok(`Step 5 first paint: 10 rows, favourite bar at ${widthAt1}, caption written`);
+
+  // Drop the temperature: the favourite's bar must grow.
+  doc.temp.value = '0.2';
+  doc.temp.dispatch('input');
+  const widthCold = doc.samplebars.children[0].children[1].children[0].style.props['--w'];
+  assert.ok(parseFloat(widthCold) > parseFloat(widthAt1), 'a colder temperature grows the favourite bar');
+  assert.equal(doc.tempvalue.textContent, '0.20');
+  assert.match(doc.samplecaption.textContent, /sharpens/);
+  ok(`dragging temperature to 0.20 reshapes the chart (${widthAt1} → ${widthCold})`);
+
+  // Tighten top-p: rows below the cut are marked, not deleted.
+  doc.temp.value = '1'; doc.temp.dispatch('input');
+  doc.topp.value = '0.5'; doc.topp.dispatch('input');
+  const rows = doc.samplebars.children;
+  assert.equal(rows.length, 10, 'discarded rows stay visible so the reader sees the cut');
+  const cut = rows.filter((r) => r.classList.contains('is-cut'));
+  assert.equal(cut.length, 8, 'eight of the ten are cut at top-p 0.5');
+  assert.equal(cut[0].children[2].textContent, 'cut', 'a discarded row reads "cut", not "0%"');
+  ok('tightening top-p marks the discarded rows instead of removing them');
+
+  api.destroy?.();
+}
+
+{ // renderSampling is null-safe on a page without the chart
+  const doc = makePipeDoc();
+  assert.equal(renderSampling(doc, null, samplingView(SAMPLE_CANDIDATES, {})), 0);
+  assert.equal(renderSampling(null, doc.samplebars, null), 0);
+  ok('renderSampling is safe without a host or a view');
+}
+
 /* ---------------- js/tabs/glossary.js (Tab 5) ---------------- */
 console.log('tabs/glossary.js');
 
@@ -1636,6 +1905,168 @@ function makeGlossDoc() {
   }
 }
 
+/* ---------------- js/tabs/compare.js — P7 M1 (the race) ---------------- */
+console.log('tabs/compare.js — P7 M1 (Local vs Cloud race)');
+
+{ // the field is built from real data, and unmeasured models are left out
+  const racers = cloudRacers();
+  assert.ok(racers.length >= 3, 'at least three cloud models can be raced');
+
+  // DeepSeek V4 Flash carries outputTps: null in cloud.js. It must be EXCLUDED
+  // rather than guessed at, which is the whole point of the filter.
+  const flash = CLOUD_MODELS.find((m) => m.id === 'deepseek-v4-flash');
+  assert.ok(flash && flash.outputTps == null, 'test premise: Flash has no measured speed');
+  assert.ok(!racers.some((r) => r.id === 'deepseek-v4-flash'), 'a model with no measured speed is not raced');
+
+  for (const r of racers) {
+    assert.ok(r.tps > 0 && r.waitS != null, `${r.id} has a real speed and wait`);
+    assert.ok(r.sources.length > 0, `${r.id} carries its source ids`);
+  }
+  ok(`cloudRacers builds ${racers.length} racers from sourced data and drops the unmeasured one`);
+}
+
+{ // the local racer comes from the engine, and sits out when it cannot fit
+  const cfg = { ...DEFAULT_CONFIG };
+  const perf = evaluate(cfg);
+  const me = localRacer(perf, cfg);
+  assert.equal(me.tps, perf.decodeTpsPerRequest, 'speed is the engine figure, not a copy');
+  assert.ok(Math.abs(me.waitS - perf.ttftMs / 1000) < 1e-9, 'wait is the engine TTFT in seconds');
+
+  const tooBig = { ...DEFAULT_CONFIG, gpuId: 'rtx-3060-12g', modelStopIndex: 9 };
+  const noFit = evaluate(tooBig);
+  assert.equal(noFit.decodeTpsPerRequest, null, 'test premise: this config does not fit');
+  assert.equal(localRacer(noFit, tooBig), null, 'a machine that cannot run does not enter');
+  ok('the local racer is taken straight from the engine, and sits out when the model does not fit');
+}
+
+{ // racePlan: ordering, finishing times, and the labeled compression
+  const cfg = { ...DEFAULT_CONFIG };
+  const plan = racePlan(evaluate(cfg), cfg);
+  assert.equal(plan.racers.length, 4, 'local plus three raceable cloud models');
+  assert.equal(plan.targetTokens, 256);
+
+  for (const r of plan.racers) {
+    assert.ok(Math.abs(r.finishS - (r.waitS + 256 / r.tps)) < 1e-9, `${r.id} finish = wait + writing time`);
+  }
+
+  // Places must follow finishing time, not list order.
+  const byPlace = [...plan.racers].sort((a, b) => a.place - b.place);
+  for (let i = 1; i < byPlace.length; i += 1) {
+    assert.ok(byPlace[i].finishS >= byPlace[i - 1].finishS, 'places are ordered by finishing time');
+  }
+
+  // Blueprint §6 Tab 4 acceptance: the race fits in 20 s of real time.
+  assert.ok(plan.realDurationS <= RACE_REAL_BUDGET_S + 1e-9, `race fits the ${RACE_REAL_BUDGET_S} s budget`);
+  assert.ok(plan.speedup > 1, 'and needs compressing to do it');
+  assert.match(raceNote(plan), /sped up .* times/, 'the compression is labelled');
+  ok(`racePlan: 4 racers, slowest ${plan.slowestS.toFixed(0)} s compressed ${plan.speedup.toFixed(1)}x into ${plan.realDurationS.toFixed(1)} s`);
+}
+
+{ // the honest bit: GPT-5.6's wait is thinking time, and is described as such
+  const cfg = { ...DEFAULT_CONFIG };
+  const plan = racePlan(evaluate(cfg), cfg);
+  const sol = plan.racers.find((r) => r.id === 'gpt-56-sol');
+  assert.ok(sol.waitIsThinking, 'cloud.js flags this wait as thinking time');
+  assert.match(waitLabel(sol), /thinking/, 'and the label says so rather than blaming the network');
+
+  const fast = plan.racers.find((r) => r.id === 'deepseek-v4-pro');
+  assert.ok(!fast.waitIsThinking);
+  assert.match(waitLabel(fast), /before the first word/);
+
+  // It finishes last despite being the fastest writer of the cloud models.
+  const cloud = plan.racers.filter((r) => !r.isLocal);
+  assert.equal(Math.max(...cloud.map((r) => r.tps)), sol.tps, 'it writes fastest of the cloud models');
+  assert.equal(Math.max(...cloud.map((r) => r.finishS)), sol.finishS, 'yet finishes last');
+  ok('the reasoning model finishes last despite writing fastest, and its wait is labelled as thinking');
+}
+
+{ // progress over time
+  const cfg = { ...DEFAULT_CONFIG };
+  const plan = racePlan(evaluate(cfg), cfg);
+  const r = plan.racers.find((x) => x.isLocal);
+
+  assert.equal(racerTokensAt(r, 0), 0, 'nothing written at the start');
+  assert.equal(racerTokensAt(r, r.waitS), 0, 'still nothing at the end of the wait');
+  assert.equal(racerStatus(r, 0), 'Waiting…');
+  assert.ok(racerTokensAt(r, r.waitS + 1) > 0, 'writing has begun a second later');
+  assert.equal(racerTokensAt(r, r.finishS), 256, 'exactly the target at the finish');
+  assert.equal(racerTokensAt(r, r.finishS + 100), 256, 'and never more than the target');
+  assert.match(racerStatus(r, r.finishS), /^Finished in /);
+
+  const sol = plan.racers.find((x) => x.id === 'gpt-56-sol');
+  assert.equal(racerStatus(sol, 5), 'Thinking, 5 s so far', 'a reasoning model says it is thinking, not waiting');
+  assert.equal(racerStatus(sol, 0.5), 'Thinking…', 'and does not count from a standing start');
+  // The wait must visibly tick, or the reasoning model shows a frozen row for
+  // nearly the whole race.
+  assert.notEqual(racerStatus(sol, 40), racerStatus(sol, 41), 'the wait counts up every second');
+  ok('racerTokensAt holds at zero through the wait, then fills to exactly the target');
+}
+
+{ // rendering + a clock-driven run
+  const doc = makeGlossDoc(); // reuse: same element factory shape
+  const host = doc.list;
+  const cfg = { ...DEFAULT_CONFIG };
+  const plan = racePlan(evaluate(cfg), cfg);
+
+  assert.equal(renderRace(doc, host, plan, 0), 4, 'one row per racer');
+  assert.ok(host.children[0].classList.contains('bw-row'));
+  assert.ok(host.children.some((r) => r.classList.contains('is-local')), "the reader's own row is marked");
+  assert.equal(renderRace(doc, null, plan, 0), 0, 'no host is safe');
+  assert.equal(renderRace(doc, host, null, 0), 0, 'no plan is safe');
+
+  // Drive it with an injected clock rather than a real one.
+  const clock = makeClock();
+  const ctl = runRace({ doc, host, plan, raf: clock.raf, now: clock.now, reduced: false });
+  clock.step(0); // paint the start line
+  // Step to the end of the compressed run, a frame at a time.
+  while (clock.isPending()) clock.step(plan.realDurationS * 100);
+  const last = host.children.find((r) => r.classList.contains('is-local'));
+  assert.match(last.children[2].textContent, /^Finished in /, 'the local racer finished by the end');
+  ctl.cancel();
+  ok('the race renders a row per racer and runs to completion on an injected clock');
+}
+
+{ // reduced motion paints the finished state instantly, never calling raf
+  const doc = makeGlossDoc();
+  const cfg = { ...DEFAULT_CONFIG };
+  const plan = racePlan(evaluate(cfg), cfg);
+  let rafCalls = 0;
+  runRace({ doc, host: doc.list, plan, raf: () => { rafCalls += 1; }, now: () => 0, reduced: true });
+  assert.equal(rafCalls, 0, 'raf is never called under reduced motion');
+  for (const row of doc.list.children) {
+    assert.match(row.children[2].textContent, /^Finished in /, 'every racer is shown finished');
+  }
+  ok('reduced motion paints the finished race instantly without animating');
+}
+
+{ // a hardware change in the Lab rebuilds the field
+  const storage = { _m: new Map(), getItem(k) { return this._m.get(k) ?? null; }, setItem(k, v) { this._m.set(k, String(v)); } };
+  const store = createStore({ initialConfig: { ...DEFAULT_CONFIG }, storage });
+  const doc = makeGlossDoc();
+  const runBtn = { listeners: {}, addEventListener(ev, fn) { (this.listeners[ev] ??= []).push(fn); } };
+  const note = { textContent: '' };
+  const localNote = { textContent: '' };
+  doc.getElementById = (id) => ({
+    'cmp-race': doc.list, 'cmp-run': runBtn, 'cmp-race-note': note, 'cmp-race-local': localNote,
+  }[id] ?? null);
+
+  const api = initCompare({ doc, store, reduced: true });
+  const before = api.getPlan().racers.find((r) => r.isLocal).tps;
+  assert.match(localNote.textContent, /Your machine is in the race/);
+
+  store.setConfig({ gpuId: 'rtx-3060-12g' });
+  const after = api.getPlan().racers.find((r) => r.isLocal).tps;
+  assert.notEqual(after, before, 'the local racer moves with the hardware');
+
+  // Push it past what the hardware can hold: the reader drops out of the race.
+  store.setConfig({ modelStopIndex: 9 });
+  assert.ok(!api.getPlan().localRan, 'a machine that cannot fit the model leaves the race');
+  assert.match(localNote.textContent, /cannot fit this model/);
+  assert.equal(api.getPlan().racers.length, 3, 'the cloud models race on without it');
+  api.destroy();
+  ok(`a Lab hardware change rebuilds the field (${before.toFixed(0)} → ${after.toFixed(0)} tok/s, then out of the race)`);
+}
+
 /* ---------------- style-guide.md enforcement ----------------- */
 console.log('style guide (copy rules)');
 
@@ -1728,4 +2159,4 @@ console.log('style guide (copy rules)');
 }
 
 console.log(`\n============================================================`);
-console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + app.js bootstrap).`);
+console.log(`ALL PASS — ${passed} checks green (UI logic incl. P6 M1–M4 Lab + P5 M1 Pipeline w/ real Qwen3 vocab subset + P5 M2 Model load + P5 M3 Prefill vs decode + P5 M4 KV cache + P5 M5 Sampling + P7 M1 race + app.js bootstrap).`);

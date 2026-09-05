@@ -86,6 +86,21 @@
 
 @media (max-width: 900px) { .hero-float { display: none; } }
 
+/* The reader's own machine in the Tab 4 race (P7 M1): their row is the one
+   they care about, so it is not left to look like any other contestant. */
+.bw-row.is-local .bw-label { color: var(--text-primary); font-weight: 700; }
+
+/* Race status text ("Finished in 3.4 s", "Thinking, 47 s so far") needs more
+   room than the bandwidth figures the .bw grid was sized for, or it wraps. */
+#cmp-race .bw-row { grid-template-columns: 170px minmax(0, 1fr) 132px; }
+#cmp-race .bw-val { font-size: var(--fs-1); font-variant-numeric: normal; }
+@media (max-width: 560px) { #cmp-race .bw-row { grid-template-columns: 120px minmax(0, 1fr) 104px; } }
+
+/* A candidate that top-p threw away (P5 M5). Dimmed rather than removed,
+   so a reader can see what the setting is actually discarding. */
+.bw-row.is-cut { opacity: 0.38; }
+.bw-row.is-cut .bw-val { font-weight: 600; font-style: italic; }
+
 /* ---------- Scroll story (§6 Tab 1: beats) -------------------- */
 .home-story {
   max-width: 920px;

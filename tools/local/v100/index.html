@@ -279,20 +279,57 @@
             <p class="ctl-note" id="pipe-speed-note"></p>
           </article>
 
-          <!-- Stage 4 · KV cache growth — lands in P5 M4 -->
+          <!-- Step 4 · KV cache growth — LIVE (P5 M4). Reuses the .membar/.seg
+               primitives and the .slider control; every GB comes from the
+               engine's §5 formula via kvGrowthView() in js/tabs/pipeline.js,
+               on the SAME store subscription as steps 2 and 3. -->
           <article class="card" data-reveal aria-label="Step 4: Remembering the conversation">
             <h3>Step 4. Remembering the conversation</h3>
             <p>As the model reads, it works out two things about every token it has seen: a <b>key</b>, which is how that token gets found again later, and a <b>value</b>, which is what that token contributes once it's found. Redoing that for the whole conversation every time it writes a new word would be enormously wasteful, so it keeps them in memory instead. That store is the <a class="gloss" data-term="kv-cache" href="#/glossary/kv-cache">KV cache</a>, named for keys and values.</p>
             <p>It matters because it grows with every token in the conversation, and it sits in the same memory as the model. A long conversation can end up needing more space than the model itself.</p>
-            <p class="ctl-note">The live bar for this step is still to be built.</p>
+
+            <label for="pipe-kv-slider">Drag to grow the conversation</label>
+            <input type="range" class="slider" id="pipe-kv-slider" min="0" max="8192" step="32" value="2048"
+                   aria-label="Length of the conversation so far, in tokens">
+            <p class="ctl-note" id="pipe-kv-tokens" aria-live="polite">…</p>
+
+            <p style="margin:var(--sp-3) 0 0;font-size:var(--fs-4);font-weight:700" id="pipe-kv-used" aria-live="polite">…</p>
+            <div class="membar" id="pipe-kv-bar" data-state="ok" style="margin-top:var(--sp-2)">
+              <span class="seg seg-gpu" style="--w: 0%"></span>
+            </div>
+            <p class="ctl-note" id="pipe-kv-caption" aria-live="polite">…</p>
+            <p class="ctl-note" id="pipe-kv-compare" aria-live="polite">…</p>
           </article>
 
-          <!-- Stage 5 · Sampling — lands in P5 M5 -->
+          <!-- Step 5 · Sampling — LIVE (P5 M5). The candidate list is
+               ILLUSTRATIVE and labelled as such in the copy: the engine models
+               memory and speed, not predictions. The temperature and top-p
+               transforms are the real ones, so the reshaping is accurate.
+               Chart reuses the .bw bar primitives from the memory-speed card. -->
           <article class="card" data-reveal aria-label="Step 5: Choosing the next word">
             <h3>Step 5. Choosing the next word</h3>
             <p>The model never picks a word. What it produces is a probability for every token in its <a class="gloss" data-term="vocabulary" href="#/glossary/vocabulary">vocabulary</a>, tens of thousands of numbers saying how likely each one is to come next. Turning that list into a single choice is called <a class="gloss" data-term="sampling" href="#/glossary/sampling">sampling</a>.</p>
             <p>Always taking the most likely token makes text that's flat and repetitive, so a controlled amount of randomness gets added, tuned by settings called <a class="gloss" data-term="temperature" href="#/glossary/temperature">temperature</a> and <a class="gloss" data-term="top-p" href="#/glossary/top-p">top-p</a>. That's why asking the same question twice can give you two different answers.</p>
-            <p class="ctl-note">The live probability bars for this step are still to be built.</p>
+
+            <p class="ctl-note">Below is what the model might produce after the words "The cat sat on the". <b>These ten candidates are an illustration, not a real model's output</b>, because this site models memory and speed rather than running a model in your browser. The two controls, however, do exactly what they do in real software, so the way the bars reshape is accurate.</p>
+
+            <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-3)">
+              <div style="flex:1 1 220px;min-width:200px">
+                <label for="pipe-temp">Temperature <b id="pipe-temp-value">1.00</b></label>
+                <input type="range" class="slider" id="pipe-temp" min="0" max="2" step="0.05" value="1"
+                       aria-label="Temperature, from 0 to 2">
+                <p class="ctl-note">Low keeps it predictable. High makes it adventurous.</p>
+              </div>
+              <div style="flex:1 1 220px;min-width:200px">
+                <label for="pipe-topp">Top-p <b id="pipe-topp-value">0.90</b></label>
+                <input type="range" class="slider" id="pipe-topp" min="0.05" max="1" step="0.05" value="0.9"
+                       aria-label="Top-p, from 0.05 to 1">
+                <p class="ctl-note">Trims the least likely words off the bottom of the list.</p>
+              </div>
+            </div>
+
+            <div class="bw" id="pipe-sample-bars" style="margin-top:var(--sp-4)" aria-live="polite"></div>
+            <p class="ctl-note" id="pipe-sample-caption" aria-live="polite">…</p>
           </article>
         </div>
 
@@ -552,13 +589,42 @@
       </div>
     </section>
 
+    <!-- ============ Tab 4 · Local vs Cloud (blueprint §6 Tab 4) ============
+         P7 M1: the race. Local speed comes from the signed-off engine via the
+         shared store; cloud speeds and waits come from js/data/cloud.js, where
+         every figure carries a source id and an as-of date. A cloud model with
+         no measured speed is excluded rather than guessed at. Chart rows reuse
+         the .bw bar primitives. M2 (comparison table) and M3 (cost panel) still
+         to build. -->
     <section class="tab-panel" data-tab="compare" aria-label="Local vs Cloud">
       <div class="shell-pad stack">
-        <div class="card" data-reveal>
+        <header data-reveal>
           <h2>Local vs Cloud</h2>
-          <p>This page is still being built. It will put the two options side by side: the same question answered by a model on your own machine and by a cloud provider, with the real cost of each. Local cost is counted as the electricity used plus the hardware spread over its life, at Shenzhen rates. Cloud cost is counted per million tokens at published prices.</p>
-          <p class="ctl-note">In the meantime, the Hardware Lab already calculates the local side of that comparison.</p>
-        </div>
+          <p>Here is the same job given to your own machine and to three of the largest cloud models: write an answer of 256 <a class="gloss" data-term="token" href="#/glossary/token">tokens</a>, which is a paragraph or two. Each one waits, then writes at its own speed. Press the button and watch them go.</p>
+        </header>
+
+        <article class="card" data-reveal aria-label="The race">
+          <h3>The race</h3>
+          <p class="ctl-note" id="cmp-race-local" aria-live="polite">…</p>
+
+          <button class="btn btn--primary" id="cmp-run" type="button">Start the race</button>
+
+          <div class="bw" id="cmp-race" style="margin-top:var(--sp-4)" aria-live="polite"></div>
+
+          <p class="ctl-note" id="cmp-race-note" aria-live="polite">…</p>
+          <p class="ctl-note">Two things worth noticing. Your machine is only racing a job it can already hold in memory, so the Hardware Lab decides whether it is in the race at all. And the model that finishes last is not slow at writing: it is the fastest writer of the three cloud models. It spends around two minutes thinking before it writes a single word, which is what a reasoning model does.</p>
+          <p class="ctl-note">Cloud speeds and waiting times are measured figures from the sources listed in <code>js/data/cloud.js</code>, recorded 2026-09-01. Your own figures are calculated live by the same engine used everywhere else on this site.</p>
+        </article>
+
+        <article class="card" data-reveal aria-label="Comparison table">
+          <h3>The full comparison</h3>
+          <p class="ctl-note">The side by side table of speed, cost, privacy, offline use and context length is still to be built.</p>
+        </article>
+
+        <article class="card" data-reveal aria-label="What it costs you">
+          <h3>What it costs you</h3>
+          <p class="ctl-note">The usage estimator, which turns your messages per day into a monthly cost for each option at Shenzhen rates, is still to be built.</p>
+        </article>
       </div>
     </section>
   </main>
