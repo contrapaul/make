@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>contrapaul.com / make / Code with AI</title>
+  <meta name="description" content="A guide for high school students learning to code with AI: the words, the tools, and how to work with an assistant without letting it work for you.">
+
+  <!-- Pre-paint theme + JS flag (runs before first paint; no FOUC).
+       ⚠ KEEP IN SYNC with resolveInitialTheme() in js/theme.js -->
+  <script>
+    document.documentElement.classList.add('js');
+    (function () {
+      try {
+        var h = location.hash.replace('#', '').toLowerCase();
+        if (h !== 'light' && h !== 'dark') {
+          var s = localStorage.getItem('cwa-theme');
+          if (s !== 'light' && s !== 'dark') {
+            s = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          h = s;
+        }
+        document.documentElement.setAttribute('data-theme', h);
+      } catch (e) { /* CSS defaults to light */ }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/tabs.css">
+</head>
+<body>
+
+  <!-- Ambient gradient mesh: 4 soft blobs, slow drift loops -->
+  <div class="mesh" aria-hidden="true">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+    <span class="blob blob-c"></span>
+    <span class="blob blob-d"></span>
+  </div>
+
+  <header class="nav">
+    <!-- The wordmark is the way back up to the parent site, matching the
+         CONTRAPAUL/MAKE breadcrumb the rest of make.contrapaul.com uses. -->
+    <a class="brand" href="https://make.contrapaul.com">
+      <span class="mark" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13 2 4.5 13.5H11L9.5 22 19 9.5h-6.5L13 2Z" fill="currentColor"/>
+        </svg>
+      </span>
+      contrapaul.com<span class="brand-sep">/</span>make<span class="brand-sep">/</span>Code with AI
+    </a>
+
+    <nav class="tabs" aria-label="Site tabs">
+      <a class="tab-link" data-tab-link="home" href="#/home">Home</a>
+      <a class="tab-link" data-tab-link="setup" href="#/setup">Setup</a>
+      <a class="tab-link" data-tab-link="workflow" href="#/workflow">Workflow</a>
+      <a class="tab-link" data-tab-link="prompting" href="#/prompting">Prompting</a>
+      <a class="tab-link" data-tab-link="glossary" href="#/glossary">Glossary</a>
+    </nav>
+
+    <button class="theme-toggle" data-theme-toggle type="button" aria-label="Switch color theme" aria-pressed="false">
+      <!-- sun: shown in dark mode (switches to light) -->
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="4"/>
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>
+      </svg>
+      <!-- moon: shown in light mode (switches to dark) -->
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+      </svg>
+    </button>
+  </header>
+
+  <main id="app">
+
+    <!-- ============ Tab 1 · Home ============ -->
+    <section class="tab-panel is-active" data-tab="home" aria-label="Home">
+
+      <div class="home-hero">
+        <!-- Decorative floating glass panels — hidden below 900 px -->
+        <span class="hero-float hero-float--a panel" aria-hidden="true"><b>repo</b> · 仓库</span>
+        <span class="hero-float hero-float--b panel" aria-hidden="true"><b>CLI</b> · 命令行界面</span>
+        <span class="hero-float hero-float--c panel" aria-hidden="true"><b>commit</b> · 提交</span>
+
+        <div class="hero-inner">
+          <p class="eyebrow" data-reveal>A guide for high school students</p>
+          <h1 data-reveal>Code <em class="accent-text">with</em> AI, not instead of it.</h1>
+          <p class="hero-sub" data-reveal>An AI assistant will write you code in seconds. What it will not do is tell you when the code is wrong, explain the words everyone around you is using, or take responsibility when the project breaks the day before it is due. This site is for the part that is still yours: knowing what a <a class="gloss" data-term="repo" href="#/glossary/repo">repository</a> is, reading an <a class="gloss" data-term="error-message" href="#/glossary/error-message">error message</a>, and asking a good question.</p>
+          <div class="hero-cta" data-reveal>
+            <a class="btn btn--primary" href="#/glossary">Open the glossary</a>
+            <a class="btn btn--ghost" href="#/workflow">How to work with an assistant</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-story" id="story">
+
+        <section class="beat" data-reveal>
+          <div class="beat-copy">
+            <h3>Start with the words</h3>
+            <p>The hardest part of learning to code with an AI is not the code. It is that everyone, including the assistant, talks in a vocabulary nobody stopped to teach you. An answer that begins <i>just clone the repo and run it from the CLI</i> is useless if three of those words are unfamiliar, and it is worse than useless if you nod along and paste the commands anyway.</p>
+            <p>So the <a class="gloss" data-term="cli" href="#/glossary/cli">glossary</a> is the first real page here, and it is the one to come back to. Sixty terms, each defined in plain language, with the English term always shown so you can recognise it on a button, in a menu or in somebody else's answer.</p>
+          </div>
+          <div class="card beat-visual">
+            <h4>What the glossary covers</h4>
+            <ul class="flow-list">
+              <li>Code and languages: <a class="gloss" data-term="html" href="#/glossary/html">HTML</a>, <a class="gloss" data-term="css" href="#/glossary/css">CSS</a>, <a class="gloss" data-term="python" href="#/glossary/python">Python</a>, <a class="gloss" data-term="function" href="#/glossary/function">functions</a>, <a class="gloss" data-term="library" href="#/glossary/library">libraries</a>.</li>
+              <li>Running code: the <a class="gloss" data-term="terminal" href="#/glossary/terminal">terminal</a>, the <a class="gloss" data-term="cli" href="#/glossary/cli">command line</a>, <a class="gloss" data-term="path" href="#/glossary/path">paths</a>, <a class="gloss" data-term="server" href="#/glossary/server">servers</a>.</li>
+              <li>Version control: <a class="gloss" data-term="git" href="#/glossary/git">Git</a>, <a class="gloss" data-term="commit" href="#/glossary/commit">commits</a>, <a class="gloss" data-term="branch" href="#/glossary/branch">branches</a>, <a class="gloss" data-term="github" href="#/glossary/github">GitHub</a>.</li>
+              <li>When things break: <a class="gloss" data-term="bug" href="#/glossary/bug">bugs</a>, <a class="gloss" data-term="debug" href="#/glossary/debug">debugging</a>, <a class="gloss" data-term="stack-trace" href="#/glossary/stack-trace">stack traces</a>.</li>
+              <li>Working with AI: <a class="gloss" data-term="prompt" href="#/glossary/prompt">prompts</a>, <a class="gloss" data-term="token" href="#/glossary/token">tokens</a>, <a class="gloss" data-term="hallucination" href="#/glossary/hallucination">hallucinations</a>.</li>
+            </ul>
+            <p class="beat-caption">Hover any underlined word on this site to read the short version without leaving the page.</p>
+          </div>
+        </section>
+
+        <section class="beat" data-reveal>
+          <div class="card beat-visual">
+            <h4>Both languages, on purpose</h4>
+            <ul class="flow-list">
+              <li>The glossary has a switch: <b>English</b> or <b>中文</b>.</li>
+              <li>The English term stays visible in both modes.</li>
+              <li>The Chinese term sits underneath it, not in place of it.</li>
+              <li>Definitions are written twice, not machine translated.</li>
+            </ul>
+            <p class="beat-caption">Understand it in the language you think in. Recognise it in the language the tools are written in.</p>
+          </div>
+          <div class="beat-copy">
+            <h3>Read it in Chinese, recognise it in English</h3>
+            <p>Nearly every menu, button and error message you will meet is in English. A student who learns only 仓库 has understood the idea but still cannot find the word <i>repository</i> in GitHub, and a student who learns only the English word may not have understood the idea at all.</p>
+            <p>That is why the switch never hides the English. Turn it on and the explanation becomes Chinese while the term itself stays where it was, with the Chinese term added beneath it. You get the concept and the label together, which is what you need to take part in a conversation about code.</p>
+          </div>
+        </section>
+
+        <section class="beat" data-reveal>
+          <div class="beat-copy">
+            <h3>The assistant is a colleague, not an oracle</h3>
+            <p>A language model predicts text. It is very good at this, and writing code is largely a text problem, which is why the results can be remarkable. But prediction is not understanding, and a wrong answer arrives with exactly the same confidence as a right one. It cannot see your screen, run your program or know what you tried an hour ago.</p>
+            <p>Everything that follows from that is practical rather than philosophical. Ask for one piece at a time. Run it. Read the error yourself before you paste it. <a class="gloss" data-term="commit" href="#/glossary/commit">Commit</a> before you accept a large change, so you can always get back. None of this is about distrusting the tool; it is about staying the person who knows what the project does.</p>
+          </div>
+          <div class="card beat-visual">
+            <h4>Four habits worth having early</h4>
+            <ul class="flow-list">
+              <li>Never accept a line you could not have written yourself, until you understand it.</li>
+              <li>Run the code after every small change, not after fifty.</li>
+              <li>Give the assistant the real error text, not a description of it.</li>
+              <li>Keep the project in <a class="gloss" data-term="version-control" href="#/glossary/version-control">version control</a> from the first day.</li>
+            </ul>
+            <p class="beat-caption">The Workflow tab will go through each of these properly.</p>
+          </div>
+        </section>
+
+      </div>
+
+      <section class="home-explore" id="explore">
+        <div class="explore-head" data-reveal>
+          <div>
+            <h3>Where to go next</h3>
+            <p>The glossary is finished and ready to use. The other three tabs are being written.</p>
+          </div>
+        </div>
+
+        <div class="tab-card-grid" data-reveal>
+          <a class="card tab-card" href="#/glossary">
+            <h3>Glossary</h3>
+            <p>Sixty terms in plain language, in English and Chinese. Start here.</p>
+          </a>
+          <a class="card tab-card" href="#/setup">
+            <h3>Setup</h3>
+            <p>Getting an editor, a terminal and Git working on your own machine.</p>
+          </a>
+          <a class="card tab-card" href="#/workflow">
+            <h3>Workflow</h3>
+            <p>How to run a real project with an assistant without losing the thread.</p>
+          </a>
+        </div>
+      </section>
+    </section>
+
+    <!-- ============ Tab 2 · Setup (placeholder) ============ -->
+    <section class="tab-panel" data-tab="setup" aria-label="Setup">
+      <div class="shell-pad stack">
+        <header data-reveal>
+          <h2>Setup</h2>
+          <p>Getting the tools onto your own computer: a <a class="gloss" data-term="editor" href="#/glossary/editor">code editor</a>, a <a class="gloss" data-term="terminal" href="#/glossary/terminal">terminal</a> you are not afraid of, and <a class="gloss" data-term="git" href="#/glossary/git">Git</a>.</p>
+        </header>
+        <article class="card" data-reveal>
+          <h3>Not written yet</h3>
+          <p>This page is a placeholder. In the meantime, every tool named above is defined in the <a href="#/glossary">glossary</a>.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ Tab 3 · Workflow (placeholder) ============ -->
+    <section class="tab-panel" data-tab="workflow" aria-label="Workflow">
+      <div class="shell-pad stack">
+        <header data-reveal>
+          <h2>Workflow</h2>
+          <p>How to run a real project alongside an assistant: small steps, frequent <a class="gloss" data-term="commit" href="#/glossary/commit">commits</a>, and reading a change before you keep it.</p>
+        </header>
+        <article class="card" data-reveal>
+          <h3>Not written yet</h3>
+          <p>This page is a placeholder. The four habits listed on the <a href="#/home">home page</a> are the outline it will follow.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ Tab 4 · Prompting (placeholder) ============ -->
+    <section class="tab-panel" data-tab="prompting" aria-label="Prompting">
+      <div class="shell-pad stack">
+        <header data-reveal>
+          <h2>Prompting</h2>
+          <p>Asking well: what to include, what to leave out, and why <a class="gloss" data-term="pseudocode" href="#/glossary/pseudocode">pseudocode</a> gets you better code than a description does.</p>
+        </header>
+        <article class="card" data-reveal>
+          <h3>Not written yet</h3>
+          <p>This page is a placeholder. See <a href="#/glossary/prompt">prompt</a> and <a href="#/glossary/context-window">context window</a> in the glossary for the idea underneath it.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ Tab 5 · Glossary ============
+         Entries are rendered from js/data/glossary.js by
+         js/tabs/glossary.js, so the hover cards and this page can
+         never disagree. Deep links are '#/glossary/<term-id>'.
+         The language switch swaps the definitions and adds the
+         Chinese term; the English term never disappears. -->
+    <section class="tab-panel" data-tab="glossary" aria-label="Glossary">
+      <div class="shell-pad stack">
+        <header class="gloss-head" data-reveal>
+          <div>
+            <h2>Glossary</h2>
+            <p>Every technical word used on this site, defined in plain language. Hover any underlined word anywhere here to read a short version without leaving the page. The switch changes the definitions to Chinese and keeps the English term.</p>
+          </div>
+          <button class="lang-switch" data-lang-toggle type="button" aria-pressed="false" aria-label="Show the glossary in Chinese">中文</button>
+        </header>
+        <div id="glossary-list" class="glossary-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared glossary hover card (js/tabs/glossary.js fills + positions it).
+       Outside <main> so an overflow-clipped panel can never cut it off. -->
+  <div class="gloss-tip" id="gloss-tip" role="tooltip" aria-hidden="true"></div>
+
+  <footer class="foot">
+    <div class="shell-pad foot-inner">
+      <p>Code with AI · a static site; no build step, no external assets.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

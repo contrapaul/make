@@ -1,0 +1,578 @@
+# v100 Handoff — P7 M1+M2 BUILT (race + comparison table) · P5 COMPLETE · P9 complete · P5 + P6 + P9 awaiting sign-off
+
+**Date:** 2026-09-05 · **Status:** P5 M1 (Pipeline shell + Stage 1 Tokenization) + P5 M2 (Stage 2 Model load) + P5 M3 (Stage 3 Prefill vs decode) built and committed. Stage 1 tokenizes against a **real subset of the Qwen3 vocabulary** (30,747 of 248,320 tokens) with real token ids, lazy-loaded. Stage 2 pours the current config's weights into a live memory bar bound to the shared store. Stage 3 shows the **two-speed contrast** — prompt chewed in one fast pass vs the answer dripping one token at a time — animated (DI `raf`/`now`, reduced-motion instant). P6 M1–M4 complete, then three real bugs found and fixed (`f21797b`); see the bug-fix pass below. Both suites green (ui **102/102**, engine **63/63**). **2026-09-05: the two open test gaps from the bug-fix pass are CLOSED** — see the section below; both new tests were regression-proven against the original defects. P6 still awaits owner sign-off.
+
+> ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
+
+## ⚠ P7 RACE PIVOT (owner decision, 2026-09-05) — READ BEFORE TOUCHING THE RACE
+
+The race is being redesigned. **Do not "fix" it back toward what M1 built.**
+
+### What the owner changed and why
+
+The owner challenged the race result: GPT-5.6 Sol finished last, but it is "blisteringly fast when used on the web". They were right, and the data said so. Both of its figures in `cloud.js` are the **maximum reasoning effort** variant, and its own note reads "~116 s at max effort (includes thinking); much lower at default/medium effort", with "default is medium". The race was showing a worst case as if it were typical.
+
+**Two decisions followed.**
+
+1. **The race shows quality as well as speed.** Owner: "The race is more than speed, people should see the quality/difference in the response as well." One real prompt, each model's real answer, streamed at the speed that model actually produced it. A reader sees what they got for the wait, not just how long it was.
+
+2. **A new lineup, all set for a quick response**, because that is what an ordinary person meets:
+
+| Kind | Model | Setting |
+|---|---|---|
+| Cloud | **GPT-5.6 Luna** (replaces Sol) | Free-tier ChatGPT |
+| Cloud | **DeepSeek Instant** | Deepthink off |
+| Cloud | **Claude Opus 5** | Standard chat, high effort (medium if faster) |
+| Local | **Gemma 4 12B QAT** | Reasoning off |
+| Local | **Qwen 3.8 27B** | Reasoning off |
+
+Replacing Sol with Luna removes the max-effort problem at its root rather than papering over it.
+
+### What this invalidates
+
+* **Every cloud figure currently in the race.** `cloud.js` holds Sol's numbers, DeepSeek with thinking on by default, and Claude at max effort. **GPT-5.6 Luna and DeepSeek Instant are not in the file at all.** These are the owner's to supply; do not source or estimate them.
+* **The two local models are not in `models.js`.** It has Gemma 3 12B and Qwen3-32B, not Gemma 4 12B QAT or Qwen 3.8 27B.
+* The M1 race code still works and still passes its tests. It is the *data* and the *framing* that change.
+
+### `js/data/race-sample.js` (NEW, template awaiting content)
+
+Carries `RACE_PROMPT`, and a `RACE_ENTRIES` row per model with `answer`, `waitS`, `totalS`, `tps`, `ranOn`, `capturedOn`, `capturedNote`. Also `raceSampleReady()` (false until filled) and `entryTps()`, which derives a rate from wall-clock timings when a tool did not report tokens per second, so the owner can supply either.
+
+**The honesty rules are written into the file header:** no estimated numbers, null where unmeasured, and local answers tagged with the machine that produced them so nobody reads a one-off run as a claim about all hardware.
+
+### An open design question — RESOLVED IN BUILD (2026-09-05, see below)
+
+These recorded runs are one machine on one day. The site's premise everywhere else is that *your* hardware determines *your* speed, computed live by the engine. Those are different claims and should not be blurred.
+
+The proposal: **the race becomes a recorded demonstration**, clearly labelled with machine and date, and the engine-computed "your machine" projection stays in the comparison table where it already lives. The cost is that the race would stop responding to the Hardware Lab, which is a nice connection to lose. **A sixth row, "your machine", projected live by the engine alongside the five recorded runs, would keep both** and is a small addition. Owner has not ruled on this.
+
+**Resolved differently, and better, when the race was built.** No sixth row was needed. The split runs *through* the field rather than beside it: the three CLOUD answers are recorded demonstrations and keep their measured times, while the two LOCAL answers keep only their text — their speed is computed live by the engine against the reader's own config, with the model swapped to the stop that model sits at. So the race still answers to the Hardware Lab (half of it moves), and no recorded number is ever presented as a live projection. Each card says which kind it is: "measured on …" or "calculated for your hardware".
+
+## P7 M1 — the race REBUILT as five real answers (2026-09-05)
+
+`js/data/race-sample.js` is filled in from `responses.md`, and the race now streams each model's real reply token by token at the speed it was really produced.
+
+* **Speed sources.** Cloud: the owner's stopwatch, fixed. Local: `evaluate({...config, modelStopIndex})` per racer. A local model the reader's memory cannot hold stays on screen marked `cannotRun` rather than being dropped — that is the useful answer for that reader.
+* **Token counts are real**, from the site's own Qwen3 vocabulary (`tokenizeWith`), not a words-per-token guess. `streamedText()` round-trips to exactly the captured answer, and a test asserts it.
+* **Plays at TRUE speed** on a normal rig (slowest finisher ≈16 s, inside `RACE_REAL_BUDGET_S`). Compression only engages on a slow rig, still labelled.
+* **What is NOT measured is stated, not filled in.** GPT-5.6 Luna and DeepSeek V4 Instant were timed end to end on a free tier with no separate first-word measurement, so `waitMeasured: false` and the label admits it. Claude Opus 5 was re-timed: 16 s total, 7 s of it thinking, so its row says "Thinking".
+* **DOM:** `#cmp-race-prompt` (new) · `#cmp-race` now holds `.race-card`s, not `.bw-row`s. Card children order is head/speed/bar/status/answer — the tests index these.
+
+### Engine change that came with it
+
+The two local models replaced the two older anchors: **Gemma 4 E4B at the 8B stop** (was Llama 3.1 8B) and **Qwen3.8-27B at the 27B stop** (was Gemma 3 27B). Both are hybrids, so `kvCacheGB()` was generalised: an anchor may declare `kvLayers` (layers whose cache grows with context) and `slidingLayers` + `slidingWindow`. A plain full-attention anchor declares neither and is unchanged.
+
+**This has a teaching consequence, and it is not a bug.** Gemma 4 E4B caches on only 7 of its 42 layers, so its KV store *never overtakes its weights*, even at 128K — the opposite of the Pipeline tab's long-context lesson. `kvCompareNote()` already branched both ways, so the page stays truthful; the tests were re-pinned to a full-attention stop (12B) for the overtake lesson, with a new test locking in the sliding-window counterpoint. All five §5.4 acceptance anchors still pass unchanged.
+
+### Landed already in response to the same report
+
+* **Pre-race status bug fixed.** Rows announced "Thinking…" and "Waiting…" before the race had started. `racerStatus(racer, null)` now returns "Ready", treating "not started" as its own state. Tested.
+* **Measurement conditions surfaced** under the race from the data, so a max-effort figure cannot be read as typical.
+* **`forReaders()` strips builder instructions** from published notes. GPT-5.6's TTFT note ends "Race tab should label the latency offset as 'thinking time'", which is an instruction to a developer and was reaching the page. Same class of filter as the "verify before publishing" one on the SWE-bench figure.
+
+## P7 M2 — the comparison table (BUILT 2026-09-05)
+
+All ten dimensions from blueprint §6 Tab 4, five columns (the reader's machine plus four cloud models), rendered from `js/data/cloud.js` and the live engine.
+
+### The acceptance rule shaped the design
+
+"Every authoritative number has a footnote" is a §6 Tab 4 acceptance line, so **a cell is not a string, it is `{ text, sources }`**. Footnote markers render as real `<sup class="fn">` elements rather than being baked into the cell text, and the source list under the table is built from `usedSources(rows)`, which returns only the sources actually cited rather than dumping all of `CLOUD_SOURCES` on the reader.
+
+There is a test that walks every numeric row, skips the reader's own column (computed live, so it cites nothing) and any cell reading "Not published", and **fails if any remaining cloud number lacks a source id**.
+
+### ⚠ One number is deliberately withheld, and you should know why
+
+DeepSeek V4 Pro's highlight in cloud.js reads:
+
+> "SWE-bench Verified ≈80.6%, highest open-weights score at time of writing (**third-party aggregation; verify before publishing**)."
+
+That parenthesis is P1 leaving an instruction for whoever built this tab. Publishing the figure would put an unverified third-party number on a page whose whole promise is that every number is sourced. **`agenticHighlight()` filters it out**, and the cell reads "No agentic coding result in the sources used here."
+
+Two consequences worth accepting or overriding:
+
+* **DeepSeek's agentic coding cell is empty**, even though the figure is probably fine. If you verify it against a primary source, remove the caveat text from cloud.js and it will appear automatically.
+* **GPT-5.6 Sol's cell is empty too**, for a different reason: its highlights are a knowledge cutoff and a note about reasoning effort. Neither is a coding result. The old code would have printed the knowledge cutoff under "Agentic coding", which is why the selector matches on coding terms rather than taking `highlights[0]`.
+
+Only Claude Opus 5 has a genuine, uncaveated agentic coding claim, so it is the only filled cell in that row. That is an honest picture of the sources, not a gap in the build.
+
+### What the table shows
+
+The cost row is the striking one. Per million output tokens: **your machine ¥1.10**, DeepSeek V4 Flash ¥8.87, DeepSeek V4 Pro ¥26.61, Claude Opus 5 ¥168.00, GPT-5.6 Sol ¥201.60.
+
+That comparison is rough by construction and the table says so in its notes: your figure is electricity plus hardware spread over three years, while the cloud figure is a published token price converted at 6.72. Different kinds of cost. The "Reading the table" list under it carries that caveat plus the per-row notes and **every pricing caveat from cloud.js**, generated by `pricingCaveats()` rather than retyped, so DeepSeek's peak/off-peak split and GPT-5.6's promotional pricing reach the reader.
+
+The local column is honest where this site has nothing to say: "How capable the model is" and "Agentic coding" both state plainly that quality is not measured here, because the engine models memory, speed and cost.
+
+### Files
+
+| File | Change |
+|---|---|
+| `js/tabs/compare.js` | `localModelName`, `displayName`, `compareColumns`, `compareRows`, `agenticHighlight`, `usedSources`, `pricingCaveats`, `renderCompareTable`, `renderFootnotes`. The table is painted on the same store subscription as the race, so it follows the hardware. |
+| `index.html` | Comparison card: scrolling table box, a "Reading the table" list, and a "Sources" list. |
+| `css/tabs.css` | `.table-scroll` (the table scrolls in its own box rather than the page going sideways), `sup.fn` markers, `.fn-list`. Reuses the signed-off `table.data` from base.css. |
+| `test/ui.test.mjs` | +8 checks. **133/133 green.** |
+
+### Also fixed
+
+Column headers and race labels read **"DeepSeek DeepSeek V4 Pro"**, because cloud.js stores the vendor separately and the model name already carries it. `displayName()` now skips a vendor the name already starts with, and a test asserts no column header repeats a word.
+
+### Remaining in P7
+
+**M3, the cost panel:** messages per day times tokens per message, to a monthly figure for local against each cloud tier at Shenzhen rates. `computeCost` already returns `blendedRMBPerMOut` and the cloud prices are in hand, so this is mostly the estimator UI and its arithmetic.
+
+## P7 M1 — the Local vs Cloud race (BUILT 2026-09-05)
+
+Tab 4 is no longer a placeholder. The same job, 256 output tokens, run by the reader's machine and by three cloud models, each waiting its own waiting time then writing at its own measured speed.
+
+### Where every number comes from
+
+**Nothing here is invented.** Local speed and wait are the signed-off engine's `decodeTpsPerRequest` and `ttftMs`, read through the shared store. Cloud figures come from `js/data/cloud.js`, which P1 built as the single source of truth with a source id and an as-of date on every entry.
+
+**A model with no measured speed is excluded rather than guessed at.** DeepSeek V4 Flash carries `outputTps: null` in cloud.js with the note "estimate at build if the race needs it". It is filtered out instead, and there is a test pinning that behaviour. It still belongs in M3's cost panel as the cheap-cloud reference, where only its price is needed.
+
+### The result is genuinely interesting, and honest
+
+With the default rig: **local finishes first at 3.4 s**, DeepSeek V4 Pro at 6.4 s, Claude Opus 5 at 7.7 s, and **GPT-5.6 Sol last at 118.8 s**. It comes last despite being the *fastest writer of the three cloud models*, because ~116 s of its time is thinking before it writes a word. cloud.js explicitly asked the race to label that as thinking rather than as network latency, and `waitLabel` / `racerStatus` do. There is a test asserting the fastest writer still finishes last.
+
+### ⚠ A pacing consequence the owner should weigh
+
+Because the slowest finisher sets the length, compression is 5.9x and **three of the four racers finish inside the first ~1.3 real seconds**. The remaining ~19 seconds are one model thinking. That is the truth of the data, and arguably the whole lesson, but it is a lopsided thing to watch.
+
+Mitigated, not hidden: the wait now **counts up** ("Thinking, 47 s so far") so the row is visibly doing something rather than frozen. The bar stays empty throughout, because no tokens exist yet, which is accurate.
+
+If you want a livelier race, the honest lever is cloud.js, not this module: its `ttftNote` says the ~116 s figure is max reasoning effort and that default effort is "much lower". We have no *measured* default-effort figure, so using one would mean inventing a number. Your call.
+
+### Files
+
+| File | Change |
+|---|---|
+| `js/tabs/compare.js` (new) | Pure `localRacer`, `cloudRacers`, `waitLabel`, `racePlan`, `racerTokensAt`, `racerStatus`, `raceNote`, plus `renderRace` and `runRace` (DI raf/now, instant paint under reduced motion), and `initCompare({doc, store, raf, now, reduced})`. |
+| `index.html` | Compare panel rebuilt: header, the race card, and honest placeholders for M2 and M3. |
+| `css/tabs.css` | Two small additions: the reader's own row is bolded, and the race grid gets a wider status column so "Finished in 3.4 s" does not wrap. |
+| `js/app.js` | `initCompare({ store })` wired into the bootstrap. |
+| `test/ui.test.mjs` | +8 checks. **125/125 green.** |
+
+### One real bug found and fixed during the build
+
+`racerTokensAt` left the **slowest racer permanently one token short**. Deriving progress as `floor(elapsed × rate)` lands a hair under the target at the finishing time in floating point, so the race leader's row would have read `255 of 256 tokens` forever and the race would never have shown as finished. Now anything at or past `finishS` returns the target exactly. Caught by the reduced-motion test, which paints the finished state directly.
+
+### ⚠ New harness gotcha: a stale cached module looked exactly like a broken feature
+
+The race rendered nothing on first check, with a clean console. The module imported fine, `racePlan` returned a good plan, and calling `initCompare` by hand painted all four rows. The cause was **`python -m http.server` serving a cached `js/app.js`**, so `location.reload()` kept running the pre-wiring version. Loading `index.html?cachebust=1` fixed it instantly.
+
+**Add a cache-busting query string when a change to a JS module appears to do nothing.** This is a third way to be fooled here, alongside the `requestAnimationFrame` and IntersectionObserver artifacts already logged.
+
+### Still to build
+
+* **P7 M2, the comparison table:** speed and wait, cost per million tokens, subscription alternative, privacy, offline use, quality scores, context window, agentic coding, trainability. Every authoritative number needs its footnote; `CLOUD_SOURCES` and `RATES_SOURCES` exist for exactly this.
+* **P7 M3, the cost panel:** messages per day times tokens per message, to a monthly figure for local against each cloud tier at Shenzhen rates. `computeCost` already returns `blendedRMBPerMOut`, labelled "Tab 4 comparison basis", so the local side is ready.
+
+## P5 M5 — Step 5, Sampling (BUILT 2026-09-05). **P5 IS NOW COMPLETE.**
+
+Tab 2 has no placeholders left. All five steps are live.
+
+### ⚠ Read this before touching Step 5: it is the one step with no engine number
+
+Every other number on this site comes from the signed-off engine. Step 5 cannot, and no amount of work will change that: the engine models memory, bandwidth, time and cost. It does not model what a language model would predict, and getting real probabilities would mean running a real model in the browser.
+
+So the ten candidates after "The cat sat on the" are **illustrative and labelled as such in bold in the UI copy**, in the same voice as the tokenizer's honest-limits note. Do not quietly present them as real output, and do not let a future change drop that label.
+
+**What is real is the maths.** `applyTemperature` and `applyTopP` are the genuine transforms, so the way the bars reshape when a reader drags a slider is exactly how a real distribution behaves. That is the part worth teaching, and it is fully tested.
+
+This is a documented deviation from blueprint §11's P5 acceptance line ("each stage shows at least one real number from the engine"). Step 5 is exempt by nature. Flagging it for the sign-off review rather than quietly failing the criterion.
+
+### What it does
+
+Two sliders, temperature (0 to 2) and top-p (0.05 to 1), drive a live bar chart of the ten candidates:
+
+* **Temperature 1** leaves the odds untouched. **Below 1** sharpens them, so the favourite grows. **Above 1** flattens them, so unlikely words get a real chance. **At 0** it goes greedy: one option at 100%, and the caption says the same question now gives the same answer every time.
+* **Top-p** keeps the smallest set of most likely tokens whose probability adds up to the threshold, renormalises the survivors, and **dims the discarded rows rather than deleting them**, so a reader can see what the setting actually throws away. A cut row reads `cut`, not `0%`.
+
+A caption underneath narrates the current state in plain words.
+
+### How it is built
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | `SAMPLE_CANDIDATES` (frozen, sums to 1) plus pure `applyTemperature`, `applyTopP`, `samplingView`, `samplingCaption`, and `renderSampling(doc, host, view)`. |
+| `index.html` | Step 5 card gains the two sliders with live value readouts, the chart host, and the caption. |
+| `css/tabs.css` | **One** new rule pair: `.bw-row.is-cut` dims a discarded candidate. |
+| `test/ui.test.mjs` | +9 checks. **117/117 green.** |
+
+**Agent decision, not owner-approved:** blueprint §6 Tab 2.5 says "hand-rolled SVG" for this chart. It is built instead from the existing `.bw` bar primitives already used by the memory-speed card. The acceptance criterion is a probability chart that visibly reshapes, which this meets, and reusing the primitives keeps the page visually consistent and added one CSS rule instead of a new chart system. Say the word if you want actual SVG.
+
+Temperature and top-p are view state inside `initPipeline`, like the Step 4 slider, because nothing in the engine reads them. Step 5 needs no store at all, so it paints even without one.
+
+### Maths worth trusting
+
+Softmax on scaled logits reduces to `p^(1/T)` renormalised, which is what `applyTemperature` computes. Every path is asserted to stay normalised to 1, including the greedy path and the top-p renormalisation. Verified live: temperature 1.8 drops the favourite from 45% to 27.5% and widens the top-p keep set from 7 to 8; top-p 0.7 leaves three survivors at 58.3 / 25.0 / 16.7, which is 42 / 18 / 12 renormalised over 72.
+
+## P5 M4 — Step 4, KV cache growth (BUILT 2026-09-05)
+
+Tab 2's fourth step is live. It was the last thing on that page still saying "the live bar for this step is still to be built".
+
+### What it does
+
+A slider drags the conversation from empty to the full context window. As it moves, the card shows the memory the conversation store is using, a bar filling toward the window limit, and a sentence comparing that against the size of the model itself.
+
+The teaching moment is the comparison. On a long context the store **outgrows the model**: with the default rig at a 128K window it crosses at about 33,570 tokens, and a full window costs 17.18 GB against 4.4 GB of weights. That is the concrete answer to "why does context length cost memory", and the bar flips to the amber `warn` state once the store is larger than the model.
+
+### How it is built
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | Pure exports `kvGrowthView(perf, config, tokens)`, `kvCaption(...)`, `kvCompareNote(...)`. The view **does not re-derive the formula**: blueprint §5 is linear in token count, so it takes the engine's own `perf.kvCacheGB` (per request, at the full window) and divides by the context window for a per-token cost. Nothing can drift from the engine. `paintStage4` joins the **same single store subscription** as steps 2 and 3. |
+| `index.html` | Step 4 card gains a `.slider`, a token readout, a big GB figure, a `.membar` with one `.seg`, the caption and the comparison note. **No new CSS**, it reuses the existing `.membar` / `.seg` / `.slider` / `.ctl-note` primitives. |
+| `test/ui.test.mjs` | +6 checks. `makePipeDoc` extended with the Stage 4 fakes. **108/108 green.** |
+
+### Two decisions worth knowing
+
+1. **The slider position is view state, not config.** `kvTokens` lives inside `initPipeline` and never enters the shared store, because how far a reader has dragged a demo says nothing about the hardware being modelled. A consequence worth keeping: dragging repaints step 4 only, so it **cannot restart the step 3 drip animation**.
+2. **It opens a quarter of the way in**, not at zero, so the bar and every number say something on first paint.
+
+The slider is clamped on every paint, so shrinking the context window in the Lab pulls the dragged position down with it instead of leaving it past the end. Widening the window keeps the position and just extends the range. Both directions are tested, and verified live in a browser.
+
+### Still to build on this tab
+
+**P5 M5 (Step 5, sampling)** is the last one: temperature and top-p controls driving a next-token probability bar chart, hand-rolled SVG per blueprint §6 Tab 2.5. Step 5 already explains the concept in prose and says its visual is still to be built.
+
+## Glossary: full-width definitions + outbound "Learn more" links (2026-09-05, owner request)
+
+1. **Definitions use the full card width.** `.gloss-entry p` had `max-width: 68ch`, which left roughly half of each card empty on a desktop screen. Removed. Measured at a 1440px viewport: card 1152px, paragraph 1102px, so the only remaining gutter is the card's own padding.
+
+2. **"See also" is replaced by "Learn more".** The old row listed other glossary terms. It now carries outbound links, rendered exactly as `Learn more: Wikipedia “Central processing unit”`.
+
+### The data shape changed: `see` became `links`
+
+Each term in `js/data/glossary.js` now carries:
+
+```js
+links: [
+  { source: 'Wikipedia', title: 'Central processing unit', url: 'https://en.wikipedia.org/wiki/Central_processing_unit' },
+],
+```
+
+The array is deliberate: the owner asked to be able to add further links per term later. They render in order, comma separated.
+
+**Every one of the 34 URLs was verified live before shipping**, in two passes. First a `curl` of each URL for HTTP 200. Then the Wikipedia API with `redirects=1` to get each article's **canonical** title, because four of the titles first chosen were redirects: `Throughput` resolves to *Network throughput*, `Byte pair encoding` to *Byte-pair encoding*, `Transformer (deep learning architecture)` to *Transformer (deep learning)*, and `Open-weight model` to *Open weights*. The stored titles are the canonical ones, so the label always matches the page the reader actually lands on. **Re-run that check if you add a link.**
+
+Links open in a new tab with `rel="noopener noreferrer"`. New tab because this site is a single hash-routed document, so an in-place navigation would lose the reader's position and tab state.
+
+### Tests
+
+The data-integrity check was rewritten: every term must carry at least one labelled link, and every URL must match `^https://en\.wikipedia\.org/wiki/\S+$`, which also blocks a relative or `javascript:` URL from creeping in. The render test now asserts the row's class, the `Learn more: ` prefix, the anchor text in the `Wikipedia “Title”` form, the `href`, and both `target` and `rel`. The fake document in the harness gained `createTextNode`, which the renderer uses for the separator between multiple links. **102/102 green.**
+
+Terms without an obvious dedicated article point at the best real one rather than inventing a URL: `kv-cache` goes to *Attention (machine learning)*, `gguf` and `offloading` to *llama.cpp*, `prefill` and `decode` to *Transformer (deep learning)*, `temperature`, `top-p` and `sampling` to *Softmax function*. Those are the entries most worth replacing first if a better source turns up.
+
+## Home hero layout pass (2026-09-05, owner request)
+
+Three changes, all in `css/tabs.css` plus one markup removal:
+
+1. **The scrolling token marquee is gone.** Removed from `index.html`, and with it the now-orphaned `.token-stream` / `.token-track` / `.token-half` / `.glyph` / `.glyph--accent` rules and the `token-drift` keyframes. The reduced-motion block referenced `.token-track` and was updated too. That also removes one of the page's remaining infinite animations.
+2. **The description matches the title width.** It was capped at `58ch`, visibly narrower than the h1. Rather than hard-coding a width on the paragraph, `.hero-inner` was narrowed from 780px to **700px**, which makes the content column equal the h1's single-line width at 48px type. Both elements now share identical edges: measured live at 387px left, 651px title against 652px description.
+3. **The first story beat sits at the fold.** `.home-hero` min-height went from `100vh` to `82vh` (the marquee no longer needs the room) and `.home-story` top padding from `sp-7` to `sp-4`. At 1440x900 the "What an AI model actually is" heading is now visible without scrolling, with its top at 755px of a 900px viewport.
+
+Verified by screenshot in a real browser at 1440x900.
+
+> Note for the next session: judging hero layout in the agent browser pane requires injecting `.js [data-reveal]{opacity:1 !important}` first. The hidden pane never fires IntersectionObserver, so every revealed element sits at opacity 0 and the screenshot comes out looking blank. That is the same harness artifact already logged for `requestAnimationFrame` and for class-change restyling.
+
+## P9 COPY REWRITE — FINISHED 2026-09-05 (second pass: How It Works, Hardware Lab, all runtime strings)
+
+Every reader-facing surface now obeys `style-guide.md`. **Zero em dashes reach a reader**, verified both by the test suite and by reading `document.body.innerText` in a live browser on all five tabs, in the fast, offloading, does-not-fit and four-users-at-once states.
+
+### The owner's own edits taught the guide four new rules
+
+The owner committed the first pass with hand edits (`6c3d03b`). Those edits were the useful part, and `style-guide.md` §3 now carries them as rules 8 to 11:
+
+* **Use contractions.** "You've probably used" beat "You have probably used".
+* **Pick the everyday word.** "math", not "arithmetic".
+* **No clever phrasing, even when accurate.** "the same idea with the location changed" and "with the network cable unplugged" were both replaced with direct statements.
+* **Say it once.** "Electricity. No subscription, no per question charge." became just "Electricity." because the paragraph above already said it.
+
+Apply these to any new copy. They are owner preferences, not agent taste.
+
+### What was rewritten in this pass
+
+| Surface | Notes |
+|---|---|
+| **How It Works** | Stage headings were jargon-first and are now plain: "Prefill vs decode" is **"Step 3. Reading your question, then writing the answer"**, "KV cache growth" is **"Step 4. Remembering the conversation"**, "Sampling" is **"Step 5. Choosing the next word"**. Step 4 now builds keys and values from scratch before naming the KV cache, per the guide's worked example. `aria-label`s were updated to match the new headings. |
+| **Hardware Lab** | Control group labels: "Precision (quantization)" is now "How tightly the model is compressed", with a note defining it. Every results row is plain English: "Decode speed (per request)" is **"Writing speed, one user"**, "Time to first token" is **"Wait before the first word"**, "Cost / M output tokens" is **"Cost per million words written"**. The "How we estimate this" panel keeps every formula and every labeled assumption, rewritten so a student can follow the reasoning. |
+| `js/tabs/lab.js` | 9 prose strings plus the memory captions, the fit chip, the offload teaching sentence (both branches), the concurrency queueing note and the finish line. |
+| `js/tabs/pipeline.js` | 6 prose strings plus the offload caption. |
+| **`js/data/quantization.js`** | See the warning below. |
+| Explore grid + Compare placeholder | Card blurbs rewritten. The Compare tab no longer says "Phase 7 lands here", which meant nothing to a reader; it now explains what the page will do. |
+| `test/ui.test.mjs` | ~20 copy-coupled assertions updated, plus a new runtime-copy guard. **102/102 green.** |
+
+### ⚠ `js/data/quantization.js` was edited, and it is a P1 signed-off file
+
+The quantization explainer prose lives in that data file, and the brief required rewriting it ("K-quant blocks with per-group scales" is exactly the failure the owner named). **Only the prose fields changed**: `qualityLabel` and the three `explainer` strings on all five levels. **Every number and id is untouched**, which was verified mechanically by diffing the `bytesPerParam` / `kvBytesPerElement` / `id:` lines before and after (identical), and `test/engine.test.mjs` stays 63/63. Same principle as the P2 `perf.js` unit fix: the signed-off thing is the value, not the sentence next to it.
+
+### The "no value yet" placeholder changed
+
+`'—'` was the placeholder for a missing value in both HTML and JS. It is now `'…'`, which also reads as "still waiting", which is what it actually means. It appears in `fmtTps`, `fmtMs`, `fmtWatts`, `fmtCost`, `memoryCaption`, `fitChipText`, `loadCaption` and the static HTML readouts. If you add a new formatter, use the ellipsis.
+
+### The guard is now absolute
+
+The em dash ratchet is gone because there is nothing left to ratchet:
+
+* **All five panels must hold at zero**, plus a whole-file check on `index.html`.
+* **A middot may never sit between two lowercase words** anywhere in the page. It remains legal in data labels such as `¥0.516 · $0.077`.
+* **A new runtime-copy test** drives the real Lab and Pipeline functions across four hardware states (fast path, offloading, does not fit, four users at once) and asserts no em dash appears in anything they generate. This matters because most site prose lives in JavaScript template strings that no scan of `index.html` can reach.
+* 31 marked-up glossary terms on the page, every one resolving to a real entry and linking to its own definition.
+
+### What P9 did NOT cover
+
+* The Compare tab (P7) is still a placeholder. Its real copy should be written to the guide from the start.
+* Steps 4 and 5 of How It Works explain the concepts but their live visuals are still P5 M4 and M5.
+* The glossary is 34 terms. Adding a term means adding it to `js/data/glossary.js` only; both the page and the hover cards pick it up automatically.
+
+## P9 (NEW PHASE) — rewrite every word for a novice audience · 2026-09-05
+
+Owner's brief: the page is for high school students and people who think ChatGPT is a magic box, and the current copy fails them. It reads like a TED talk, it uses terms it never defines, and its headers are catchy rather than informative. This is a new phase of work, not a milestone of an existing one.
+
+### The governing document: `style-guide.md` (NEW, read it before writing any copy)
+
+Codifies the whole brief: the audience, the **em dash ban** and what to write instead, the cadence rules that kill the TED-talk voice, textbook header rules, and the term-introduction rule. Every user-facing string on the site is governed by it, in `index.html` **and** in `js/tabs/*.js`. It carries before-and-after examples taken from the real page.
+
+### Done in this pass
+
+| Piece | State |
+|---|---|
+| `style-guide.md` | **NEW.** The rules, with worked examples. Start here. |
+| `js/data/glossary.js` | **NEW.** 34 terms, each with `short` (hover card) and `full` (glossary page) definitions plus `see` cross references. Alphabetical by id; ids are stable because they are public URLs. |
+| `js/tabs/glossary.js` | **NEW.** Renders the glossary page from that data, wires the hover cards by **delegated** document listeners (so terms rendered later by other tabs work with no re-init), and handles `#/glossary/<term>` deep links. |
+| Tab 5 + hover card markup | `index.html`: nav link, glossary panel with `#glossary-list`, and one shared `#gloss-tip` card placed **outside `<main>`** so no overflow-clipped panel can cut it off. |
+| `css/tabs.css` | New "Tab 5" section: `.gloss` inline term (dotted accent underline, help cursor), `.gloss-tip` card, `.gloss-entry` page entries with `scroll-margin-top: 96px` for deep links, `.is-target` highlight. |
+| `js/app.js` | 5th router tab; deep-link sub-path preservation (see the trap below); `unseenRouterTabs` now skips untracked tabs. |
+| **Home tab copy** | **Rewritten.** Hero subtitle, plus the three beats restructured as the owner specified. |
+| `test/ui.test.mjs` | +21 checks (glossary module, router regression, and a mechanical style guard). **102/102 green.** |
+
+### Owner decisions taken in this pass
+
+1. **The glossary is a router tab but NOT a tracked one.** `'glossary'` is in `TABS` (js/app.js) and deliberately **absent from `TAB_IDS`** in `js/state/store.js`. So the Explorer badge still counts the original four tabs, the ring stays n/4, the glossary link never shows a "new" dot, and **the signed-off store needed no change at all**. Anything in `TABS` without a `TAB_TO_STORE` mapping is simply untracked. There is a test pinning this.
+2. **The memory-bandwidth explanation moved from Home into How It Works.** Home is now pure orientation. The explanation was rewritten and placed after the pipeline stages, where the reader has already met decode, as `.bandwidth-card`. Nothing was dropped.
+
+### Home restructure, as built
+
+Beats are now: **"What an AI model actually is"**, **"You have probably used a cloud model"**, **"Defining local AI"**. The old "The fork: local or cloud?" and "Speed is set by memory bandwidth" beats are gone. The two new beats each carry a scannable `.flow-list` card instead of the old side-by-side fork cards; `.fork-grid` / `.fork-card` CSS was removed because this change is what orphaned it.
+
+### ⚠ Trap for the next session: the router used to eat deep links
+
+`initRouter` rewrote the hash to `#/<tab>` on load whenever it differed. That silently destroyed `#/glossary/kv-cache`, turning it into `#/glossary` **before** the glossary module could read the term. The fix keeps the rewrite but skips it when the hash already starts with `#/<tab>/`. There is a regression test. Do not "simplify" that condition back.
+
+### Mechanical enforcement of the copy rules
+
+The em dash ban rots without a guard, so `test/ui.test.mjs` now enforces it, counting only reader-facing text (HTML comments are stripped first, since the rule governs what a reader sees):
+
+* **Rewritten panels hold at zero.** Currently `home` and `glossary`. **Add each panel to that list as its rewrite lands.**
+* **Everything else has a budget that may only go DOWN:** `how` ≤ 15, `lab` ≤ 13. Lower these as you rewrite; a rise means new copy shipped in the old voice.
+* Every `data-term` in the markup must resolve to a real glossary entry, and every marked term must link to its own definition.
+
+### What remained after the first pass (ALL DONE in the second pass, see the section above)
+
+1. **How It Works copy** (15 em dashes left). Stage names are still jargon-first: "Prefill vs decode" names two undefined terms in a header. Mark up terms as you go.
+2. **Hardware Lab copy** (13 in the panel, 44 in `js/tabs/lab.js`). Worst offender for undefined jargon: `Q4_K_M (GGUF)`, "K-quant blocks with per-group scales", "GQA 8 KV heads". Note that **most Lab prose lives in JavaScript strings**, not HTML, and roughly 63 test assertions match that copy exactly, so budget for test churn.
+3. **`js/tabs/pipeline.js`** (39). Same situation.
+4. **Mark up glossary terms throughout.** Only 9 distinct terms are marked so far, all on Home and in the relocated bandwidth card. All 34 exist and are ready to use.
+5. Consider whether the Compare tab (P7, not yet built) should be written to the guide from the start. It should.
+
+## Scroll reveals made ONE-WAY (2026-09-05) — the looping/bouncing fix
+
+Owner: *"animations can loop/bounce depending where the user stops scrolling"* — against the pi.dev reference feel, where things fade/move into place and then stay.
+
+**Cause.** Reveals were deliberately **reversible**: `js/motion/scroll.js` stripped `.in-view` whenever an element left the IntersectionObserver band (`rootMargin: -10% 0px`). Stop scrolling with an element parked at that edge and the browser emits a burst of alternating intersect/unintersect events — each one replays the 400 ms opacity+translateY transition. Nothing was "animating" in the CSS sense; the class was being toggled underneath it.
+
+**Fix.** One behaviour change in the observer callback: add `.in-view` on first entry, then `io.unobserve(el)` immediately, so no later event can reach that element. Reveals are transitions (`animation-name: none`), so once the class sticks there is no mechanism left to replay them.
+
+⚠ **This reverses a P3 sign-off criterion** — "reveals reversible" was part of the P3 acceptance gate (blueprint §11 P3 row, signed off 2026-09-02). The owner reversed that decision on 2026-09-05. The §11 row is **annotated, not rewritten**, so the original record stands.
+
+| File | Change |
+|---|---|
+| `js/motion/scroll.js` | Observer callback: reveal once + `unobserve()`; non-intersecting entries are ignored. Module header rewritten to say one-way and to record why (so nobody "restores" reversibility) |
+| `css/base.css` | Section comment `(§8, reversible)` → `(§8, ONE-WAY)`, with a "do not add a rule that strips `.in-view`" note. **No rule changed** |
+| `test/ui.test.mjs` | `motion/scroll.js` block rewritten. `IOStub` now models `unobserve()` faithfully (a `live` set + a `scroll()` helper that filters out unobserved targets, because a real observer stops delivering for them). New checks: revealed → unobserved immediately · leave + re-enter never re-animates · **8 alternating events at the band edge (the reported symptom) leave the reveal untouched** · below-the-fold elements stay hidden and stay watched. **81/81 green** (was 79) |
+| `blueprint.md` | §11 P3 row annotated (reversibility superseded); new verification-log entry |
+| `HANDOFF.md` | This document |
+
+**Not changed — owner decision wanted.** Eight *ambient* infinite animations remain, confirmed live in the browser: four `.mesh .blob` drifts (44–60 s), three `.hero-float` bobs (9–13 s), the `.token-track` marquee (36 s). They are continuous background motion rather than scroll-triggered entrances, none replays an element's arrival, and all are killed under `prefers-reduced-motion`. If "never loop" is meant literally, these are what is left.
+
+⚠ **The fix could NOT be scroll-verified in the agent browser pane** — do not read the earlier attempt as evidence either way. The pane reports `document.visibilityState: "hidden"`, and a hidden page never delivers IntersectionObserver callbacks (`innerHeight` was even 0 before an explicit resize). Instrumenting `.in-view` with a MutationObserver and scrolling the whole page produced **zero** class changes, every reveal stuck at `opacity: 0`. Same class of harness artifact as the documented `requestAnimationFrame` one — **not** a dead page: console clean, `html.js` set, correct panel active. **Owner: please confirm in a real browser window.**
+
+## Test gaps CLOSED (2026-09-05) — tests + docs only, zero source changes
+
+Both gaps the bug-fix pass left open are now covered. **Each new test was regression-proven**: the original defect was reintroduced, the test was watched to fail, and the source was restored (`git diff` clean).
+
+| Gap | Where the test lives | What it does |
+|---|---|---|
+| **1. Nothing called `initApp()`** | `test/ui.test.mjs`, new `app.js — initApp() bootstrap` section (+3 checks) | `makeAppDoc()` composes the existing `makeLabDoc()` / `makePipeDoc()` / `makeTrackerDoc()` fixtures into one document, installs browser globals (`document`, `window`, `location` = `#/lab`, `addEventListener`, `localStorage`), then **imports a fresh copy of `app.js` through a cache-busting query string** so the module's own auto-bootstrap runs. Asserts: exactly one active panel and it is the deep-linked one · tracker ring 1/4 · theme toggle wired · Lab printouts painted · Pipeline Stage 3 painted · one `hashchange` listener — then fires that handler for real and checks it routes to `#/how` at 2/4. Globals are restored in a `finally`, so no later test sees them. |
+| **2. No absolute TTFT magnitude** | `test/engine.test.mjs`, beside the existing floor check (+1 check) | `TTFT has a plausible absolute magnitude for the default rig (0.5–5 s)`, with the hand-check arithmetic in a comment. |
+
+> ⚠ **Do not "simplify" gap 1 into a plain `initApp()` call.** That was the first attempt and it is worthless: a TDZ fault exists only *during module evaluation*, and by the time any test can call the exported `initApp()`, the `const` bindings are already initialized. Proven — with `defaultDoc`/`defaultHash` moved back to the foot of `app.js`, the direct-call version stayed **79/79 green** while the fresh-import version fails. The cache-busting query string is load-bearing.
+
+Regression proofs, for the record:
+
+* **TDZ:** moved `defaultDoc`/`defaultHash` back to the last two lines of `app.js` → `ui.test.mjs` fails at the `doesNotReject` on the fresh import. Restored → 79/79.
+* **Unit bug:** deleted one `× 1e12` on `js/engine/perf.js:180` → the old floor check **still passed**, the new check failed with `got 1534082397003845.5 ms`. Restored → 63/63.
+
+Also corrected in the same pass: `index.html`'s Tab 2 header comment still described Stages 3–5 as placeholders after M3 shipped (now Stages 4–5).
+
+| File | Change |
+|---|---|
+| `test/ui.test.mjs` | `makeAppDoc()` + the bootstrap section (3 checks); `initApp` NOT imported — `TABS` is, for the panel fixtures; final log now "+ app.js bootstrap". **79/79 green** (was 76) |
+| `test/engine.test.mjs` | +1 absolute-magnitude TTFT check. **63/63 green** (was 62). First change to this file since P2 sign-off — an added anchor, no engine behaviour touched |
+| `index.html` | Tab 2 header comment: Stages 3–5 → Stages 4–5 placeholders (M3 is live) |
+| `blueprint.md` | Status line: P5 M1–M3 built + current suite counts; §11 P5 row shows M1–M3 built / M4–M5 to build; §11 P6 row count refreshed (was stale at 56/56); new verification-log entry for the closed gaps; Last updated 2026-09-05 |
+| `HANDOFF.md` | This document |
+
+**Verification:** `node --check` OK on both test files · `test/ui.test.mjs` **79/79** · `test/engine.test.mjs` **63/63** · `git diff` clean on `js/app.js` and `js/engine/perf.js` after both regression proofs. **Zero changes to any `js/` source file.**
+
+## What changed — P5 M3 (Stage 3 · Prefill vs decode, blueprint §6 Tab 2.3)
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | **Stage 3 live.** Extended the `./lab.js` import to reuse the tested two-speed model (`simPlan`, `simPhase`, `tokensAt`, `stageText`, `fmtTps`) — the drip math is NOT re-derived (tVirtual is VIRTUAL SECONDS, the same units the Lab's run drives). New pure exports `prefillDecodeView(perf)` → `{promptTokens, targetTokens, tps, perTokenMs, ttftMs, prefillS, decodeS, speedup, realDurationS}` (reuses `simPlan`; adds the engine's real per-request TTFT as the honest "one fast pass" duration) + `prefillCaption` / `decodeCaption` / `speedNote` (the two halves + the labelled compression line). `runStage3Drip({doc,plan,raf,now,reduced})` animates the decode drip into the Lab's `.sim-conveyor` (chips appear via `tokensAt`, phase line via `stageText`), skipping the load beat (Stage 2's) and starting at the prefill; reduced-motion / no-raf paints the final state instantly. `initPipeline` gains `{raf, now, reduced}` DI (same shape as `initSim`) and paints Stage 3 on the **same** store subscription as Stage 2 (first paint animates, subsequent changes re-render to final state — no replay jitter); `api.destroy()` also cancels any in-flight drip. Stage 1 untouched; vocab.js still lazy dynamic-import only |
+| `index.html` | Stage 3 placeholder card replaced: real card with a two-column contrast (Prefill · one gulp / Decode · a drip, each a big engine number + `.ctl-note`), a `#pipe-phase` line, a `.sim-conveyor#pipe-drip` chip stream (chips drip in), `#pipe-drip-label`, and `#pipe-speed-note` (compression labelled). Only existing CSS (`.card .chip .ctl-note` + the Lab's `.sim-conveyor` token stream) — **no new css/tabs.css rule** this milestone |
+| `test/ui.test.mjs` | +6 P5 M3 blocks: `prefillDecodeView` on a fast config (engine prompt tokens + tok/s + TTFT-derived prefill, speedup 1) and a slow offloaded one (low tok/s, long drip, ×N compression labelled); the prefill half reports the engine's prompt-token count ("long" split → 8192) with compute-/bandwidth-bound copy; driving the injected `makeClock()` advances decode tokens 0→256 one-by-one to Done; reduced-motion paints the final 256 instantly without calling raf; a store config change re-renders Stage 3 live (decode tok/s moves, shared subscription). `makePipeDoc` extended with Stage 3 fakes (`pipe-prefill-*`, `pipe-decode-*`, `pipe-phase`, `pipe-drip`, `pipe-drip-label`, `pipe-speed-note`). Final log now "+ P5 M3 Prefill vs decode". **76/76 green** (was 70) |
+| `HANDOFF.md` | This document |
+
+**Verification (P5 M3):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **76/76 green** (was 70) · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level vocab.js import** in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`; **css/tabs.css NOT touched this milestone** (the M2 reduced-motion rule is unchanged).
+
+## What changed — P5 M2 (Stage 2 · Model load, blueprint §6 Tab 2.2)
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | **Stage 2 live.** Added `import { membarView } from './lab.js'` (reused the tested fill math — not re-derived) + pure exports `modelLoadView(perf)` → `{usedGB, availableGB, pct, state, gpuPct, cpuPct}` (used = weightsGB + kvTotalGB, the engine's fits-check demand; available = VRAM on the fast path, VRAM+RAM when it splits or overflows) and `loadCaption(perf, config)` (GB used vs available, memoryCaption voice; names the split when offloading). `initPipeline` now subscribes the store (when provided): first paint “pours” — `.seg` widths set to 0 then to target on the next frame(s), riding the existing `.membar .seg` width transition in base.css; `prefersReducedMotion()` (guarded matchMedia) paints the final state instantly instead. Offload/cpuOnly also reveal a `#pipe-load-layers` one-liner (`is-hidden` toggle). New `api.destroy()` unsubscribes cleanly. Stage 1 untouched; vocab.js still lazy dynamic-import only |
+| `index.html` | Stage 2 placeholder card replaced: real card with `.membar#pipe-loadbar` (`.seg seg-gpu` / `.seg seg-cpu`, `--w` inline, same structure as `#lab-membar`), `#pipe-load-caption` (`.ctl-note`, aria-live), `#pipe-load-layers` (`.ctl-note is-hidden`); only existing CSS classes used |
+| `css/tabs.css` | One new rule, in a small new “Tab 2” section: `@media (prefers-reduced-motion: reduce) { #pipe-loadbar .seg { transition: none !important; } }` — belt to the JS reduced-motion instant-paint suspenders (JS already skips the pour; this kills the width transition too) |
+| `test/ui.test.mjs` | +5 P5 M2 blocks: `modelLoadView` fitting (8B/RTX 3090: 5.5 GB of 24 GB, state ok, segment math matches membarView); `modelLoadView` noFit (405B on 16 GB VRAM + 32 GB RAM: pct ≥1, state fail, “doesn't fit” caption); `loadCaption` offload (70B: names VRAM + RAM split); store binding (24 GB → 12 GB VRAM GPU swap re-renders the caption live via `store.setConfig`); `destroy()` unsubscribes (no further re-renders). `makePipeDoc` extended with `pipe-loadbar`/`pipe-load-caption`/`pipe-load-layers` fakes. Final log now “+ P5 M2 Model load”. **70/70 green** (was 65) |
+| `HANDOFF.md` | This document |
+
+**Verification (P5 M2):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **70/70 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms the only top-level import in `pipeline.js` is `./lab.js` — **no top-level vocab.js import** (still the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`, `js/app.js`, or `test/engine.test.mjs`.
+
+## What changed — P5 M1 tokenizer rewrite (real Qwen3 vocab subset)
+
+## What changed — P5 M1 tokenizer rewrite (real Qwen3 vocab subset)
+
+The owner rejected the original FNV-hash / regex tokenizer (it emitted every word as one token, undercounting tokens ~21% vs a real Qwen3 tokenizer). Stage 1 was rewritten to do **greedy longest-first matching against `js/data/vocab.js`** (a 30,747-entry subset of Qwen3's 248,320-token vocabulary, real token ids, genuine BPE leading-space convention).
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` | **Rewrote Stage 1.** Deleted the `tokenId()` FNV helper and the old regex `tokenize()`. Added pure, DI-friendly `tokenizeWith(vocab, text)` → `[{text, id, unknown}]` (greedy longest-first; unmatched char → `{id:null, unknown:true}`), and async convenience `tokenize(text)` that awaits a **memoised dynamic `import('../data/vocab.js')`** (no top-level static import — never loads on Home/Lab). `initPipeline` shows a brief accessible "loading vocabulary…" state in the chip area until the vocab resolves, then renders; empty input short-circuits with no vocab load; exposes `api.pending` so tests can await. Reuses `.chip` / `.chip .id` / `.ctl-note` only — no new CSS |
+| `index.html` | Stage 1 labelled-assumption note rewritten: now states it uses a **real subset of the Qwen3 vocabulary (30,747 of 248,320 tokens) with real token ids**, and names the two honest limits (it's a subset — words outside it split into sub-pieces; matching is greedy longest-first, not true BPE merge-order). One short paragraph, high-school readable |
+| `test/ui.test.mjs` | Dropped the `tokenId`/old `tokenize` tests; rewrote to `tokenizeWith(VOCAB, …)` (VOCAB imported directly from `js/data/vocab.js`). New checks: "Antidisestablishmentarianism" → **more than 3** tokens (6); digit run "936" → separate digit tokens; " world" → **ONE token, id 1814**; empty string → no tokens. DOM chip tests now `await api.pending` (async lazy load). Final log updated. **65/65 green** (was 62) |
+| `HANDOFF.md` | This document |
+
+**Verification (tokenizer rewrite):** `node --check` OK on `pipeline.js` + `test/ui.test.mjs` · `test/ui.test.mjs` **65/65 green** · `test/engine.test.mjs` **62/62 unchanged** · `grep` confirms **no top-level static import** of `vocab.js` in `pipeline.js` (only the memoised dynamic `import()` inside `loadVocabModule`). Committed in `85780dc`. Zero changes to `js/data/*` (vocab.js only read), `js/engine/*`, `js/state/store.js`, or `test/engine.test.mjs`.
+
+Project: `/home/paul/Documents/GitHub/make/localai/` (NOT the Bionic workspace folder). Static multi-tab site, vanilla HTML/CSS/JS ES modules, no build step. Spec in `blueprint.md`, owner Q&A in `plans.md`. Git repo root is `/home/paul/Documents/GitHub/make`; if a new session gets "No permission to write", re-request via `request_read_write_access`.
+
+## What M4 was (owner's ask)
+
+Concurrency teaching moment (per-request vs total throughput divergence, TTFT ×B queueing) + offload teaching moment (visible slowdown + one-sentence why), then full verification. Owner constraint: small bounded job only — GPU-fan noise around class time. It stayed small: **zero engine changes**, tests + docs + commit.
+
+## What landed — P5 M1 (UNCOMMITTED, for owner review)
+
+> ⚠ **Superseded:** the original M1 tokenizer below was a regex/FNV approximation and was **rejected by the owner** as unrealistic. See the **"What changed — P5 M1 tokenizer rewrite"** section above for the current implementation (real Qwen3 vocabulary subset, greedy longest-first, real token ids, lazy-loaded). The tab shell / DOM contract / `initPipeline` DI seam below are unchanged.
+
+| File | Change |
+|---|---|
+| `js/tabs/pipeline.js` (new) | P5 M1 shell: `initPipeline({doc, store})` DI factory (store reserved for M2–M5 binding); renders `.chip` + `.chip .id` into `#pipe-token-chips`, count line in `#pipe-token-count`. **Tokenizer helpers now per the rewrite section above** (`tokenizeWith(vocab, text)` + async `tokenize(text)`; old FNV `tokenId` deleted) |
+| `index.html` | "Phase 5 lands here" placeholder replaced with the horizontal 5-stage glass-card pipeline (existing utilities only: `.card`, `.chip`, `.ctl-note`; two inline flex wrappers stand in for a pipeline class — no new CSS files). Stage 1 live (prefilled "Hello, world!"); stages 2–5 placeholder cards with blueprint one-liners + "Lands in P5 M2/M3/M4/M5" notes |
+| `js/app.js` | `initPipeline({ store })` wired in `initApp()` alongside `initLab({ store })` |
+| `test/ui.test.mjs` | P5 M1 checks now exercise `tokenizeWith(VOCAB, …)` (real Qwen3 subset) — see rewrite section above. **65/65 green** (was 62) |
+| `HANDOFF.md` | This document — status line + P5 M1 rows + Next steps flipped to P5 M2 |
+
+**Verification (P5 M1):** `node --check` OK on `pipeline.js`, `app.js`, `test/ui.test.mjs` · `test/ui.test.mjs` **62/62 green** · `test/engine.test.mjs` **62/62 unchanged**. Nothing committed — left for owner review per instruction. Zero changes to `js/data/*`, `js/engine/*`, `js/state/store.js`.
+
+## What landed — P6 M1–M4 (committed)
+
+| File | Change |
+|---|---|
+| `js/tabs/lab.js` (624 lines) | M4 code: exported pure helpers `concTeaching(perf, config)` → null at B=1/no-perf, else `{total, perReq, ttftNote}`; `offloadNote(perf, config)` → null unless offload/cpuOnly, else one sentence naming real bandwidths + layer split; `renderPrintouts()` renders all three M4 rows (value set only when teaching, `.is-hidden` toggled, text cleared otherwise); `initSim.finish()` appends at B>1: "…tokens **per request** … · N requests at X tok/s each ≈ Y total" |
+| `index.html` (478 lines) | Printouts rail: `<div class="printout is-hidden" id="po-tps-total">`; `<p class="ctl-note is-hidden" id="po-ttft-note">`; memblock: `<p class="ctl-note is-hidden" id="lab-offload-note">` after #lab-mem-caption |
+| `test/ui.test.mjs` (988 lines) | +4 M4 test blocks (concTeaching pure · offloadNote pure · renderPrintouts show/hide lifecycle · run-finish Done line); byId stubs for the 3 new ids; imports extended; final log now "P6 M1–M4 Lab" |
+| `blueprint.md` | Header status: P6 BUILT (M1–M4), awaiting sign-off; Last updated 2026-09-04; §11 P6 row marked built (NOT signed off); new verification-log entry "(P6, 2026-09-03→04)" covering M1–M4 + test counts |
+| `HANDOFF.md` | This document — replaced on disk |
+
+**Verification:** `node --check js/tabs/lab.js` OK · `test/ui.test.mjs` **56/56 green** (was 52) · `test/engine.test.mjs` **62/62 unchanged**. Commit: `v100 P6 M4: concurrency + offload teaching moments`.
+
+## Bug-fix pass (2026-09-04, commit `f21797b`) — what changed and why it matters
+
+Owner reported: *"Qwen tells me to try it out, but nothing happens on page when I use any links on page."* Diagnosed by serving the site over HTTP and reading the browser console. **This was NOT the P3-style false alarm** logged in `blueprint.md` (2026-09-02, "none of the links work" → correctly closed as placeholder panels). This time the page was genuinely dead.
+
+| # | File | Defect | Fix |
+|---|---|---|---|
+| 1 | `js/app.js` | **Fatal TDZ — killed 100 % of page JS.** `const defaultDoc` / `defaultHash` sat on the last two lines of the module; the auto-bootstrap `initApp()` reaches them via `initRouter({ doc = defaultDoc() })` default params. `const` isn't hoisted → `Uncaught ReferenceError: Cannot access 'defaultDoc' before initialization`. Router, tracker, Home and Lab never wired up. | Both declarations moved directly under the imports (now lines 18–19). |
+| 2 | `js/engine/perf.js` | **TFLOPS/FLOPs unit error — every TTFT 1e12 too large.** `flopsPerToken` is raw FLOPs; `tflopsFp32Dense` / `prefillTflopsEff` / `unifiedPrefillTflopsEstimate` are **tera**FLOPS. Default rig printed `1534082397003.85 s`. | `× 1e12` applied where the effective throughput is derived; locals renamed `tflopsEff`/`gpuTflopsEff`/`cpuTflopsEff` → `flopsEff`/`gpuFlopsEff`/`cpuFlopsEff` so names match units. Line 190 `prefillTflopsEff` **deliberately untouched** — it divides by `1e12` assuming `ttftS` is correct, so it self-corrected. Do **not** double-correct it. |
+| 3 | `index.html` | Literal two-character `\n` escape between spark spans #5 and #6 inside `#explorer-celebrate`, rendering as visible text beside the theme toggle. | Replaced with a real newline. Only occurrence in the tree (verified by grep). |
+
+**On the "do not modify" rule for `js/engine/perf.js`:** fix #2 is a restored **unit conversion**, not a formula change — the §5.4 rule ("never change formula shape, calibrate constants only") is intact. Decode-path anchors are untouched; `test/engine.test.mjs` remains **62/62 green**. TTFT was never anchored by any test, which is exactly why a 1e12 error survived four milestones.
+
+**Live verification after the fixes** (served over HTTP — ES modules fail on `file://`): console clean · `#/lab` routes and paints · printouts `145.3 tok/s · 1.63 s · 415 W · ¥0.516 · $0.077 · 80B` · controls two-way live (128K ctx → 36.9 tok/s, caption `4.4 GB weights + 17.2 GB KV of 24 GB VRAM`) · Run Inference completes 256/256 tokens, 256 chips, gauge 36.9, `×1.0 time-compressed`. Hand-check of the new TTFT: 2048 × 1.6e10 ÷ (35.6 × 0.6 × 1e12) + 0.1 = **1.63 s**. ✅
+
+**Two test gaps — both CLOSED 2026-09-05** (see the section at the top of this document; each was regression-proven against the original defect):
+
+1. ~~**Nothing ever calls `initApp()`.**~~ **CLOSED.** Covered by importing a fresh copy of `app.js` against browser globals so its auto-bootstrap runs — a direct `initApp()` call does NOT reproduce a TDZ and was proven insufficient.
+2. ~~**No absolute-magnitude assertion on TTFT.**~~ **CLOSED.** `test/engine.test.mjs` now pins the default rig to 0.5–5 s (real value 1.634 s).
+
+## Agent-decided, NOT yet owner-approved (ships with P6 sign-off review)
+
+- Placement of the three teaching rows: total-throughput row + TTFT queueing note in the printouts rail; offload sentence under the memory caption.
+- Copy wording ("Why it's slow: …"; "×B queueing — prefills are serialized…").
+- Finish-line phrasing "per request" + both rates at B>1.
+- Rows hidden at B=1 / on fast path so they only appear when they teach.
+- (Carried from M1–M3, already labeled in code: TAB_TO_STORE mapping, `v100-celebrated` key, button CTA, token stream, float panels, beat copy, deep-link counts as visit; first AIO seeds platformId, RAM-tier capacity clamp, 8 s sim budget + labeled compression, load = weightsGB/20 clamped [0.5,2] s, prefill 0.8 s virtual beat, gauge full ≥200 tok/s, click mid-run restarts, store change cancels run, reduced-motion instant path; warn threshold any pool ≥90 %.)
+
+## Owner-approved (do not revisit)
+
+- NEVER change formula shape — calibrate constants only (§5.4 rule). M4 added zero engine changes — it only surfaces P2-signed-off values (`decodeTpsTotal`, `ttftMs`/`ttftMsBase`).
+- Audience: high school students + educators; English only; must pass muster with seasoned local-AI enthusiasts (labeled assumptions, footnoted sources); desktop-first; glassmorphism light+dark; zero image/video/font-file assets; plain static hosting; Shenzhen ¥0.65/kWh @ FX 6.72; local cost = hardware + electricity ONLY; no custom hardware entry; semantic HTML only.
+- P1–P4 signed off (2026-09-02); owner picked P6 over P5; P6 M1+M2+M3 built 2026-09-03, committed (`e67fdde`, `50f4bbf`, `3e018a5`).
+- Persist work to disk early/often (context limits have killed sessions before); keep HANDOFF.md current and **verify writes landed**. Owner is noise-sensitive around class time: prefer small, bounded agent runs.
+
+## Next steps (in order)
+
+> The P5 review script below was rewritten 2026-09-05. The previous version
+> quoted the OLD copy ("Prefill — one fast pass over the N-token prompt", "the
+> prefill gulp ... compute-bound"), all of which P9 replaced. Anyone following
+> the old text would have gone looking for sentences that no longer exist.
+
+1. **Owner reviews P5 M1 + M2 + M3** (built, and since rewritten by P9). Serve from the project directory (`python3 -m http.server 8077 --bind 127.0.0.1`) and open `http://localhost:8077/index.html#/how`. Expect five step cards, the first three live:
+   * **Step 1, splitting your text into tokens:** prefilled with "Hello, world!", a brief loading state, then four chips carrying **real Qwen3 ids** (" world" is 1814). Typing re-renders live; emptying the box clears it. The note about the vocabulary slice is visible.
+   * **Step 2, loading the model into memory:** the bar fills on load (instantly under `prefers-reduced-motion`), and the caption reads real GB used against GB available.
+   * **Step 3, reading your question then writing the answer:** the drip animates, one chip per token up to 256. The two columns show the read pass and the write speed, each naming what limits it. Change hardware in the Lab (RTX 3060 12 GB with a 70B model) and both halves slow down live on the same subscription.
+   * Confirm Home and Lab do **not** load the 381 KB vocabulary file.
+2. **Owner reviews P6 (Hardware Lab) in light and dark.** Set concurrency to 4 and the total-throughput row plus the queueing note should appear. Set RTX 3060 + DDR4 + a 70B model and the offload explanation should appear under the memory caption.
+3. **Owner reviews P9 copy** across all five tabs, in both themes. This is the largest single change to the site so far and it touched every reader-facing string.
+4. **Owner sign-off** on P6 (including the agent-decided placement and copy list above) and on P9, then flip the blueprint §11 rows with the date.
+5. **Next build work, owner's call between two:**
+   * **P5 M4 + M5** finish Tab 2. Step 4 (KV cache growth) needs a bar that fills as the conversation grows, with a live GB readout from the engine's §5 formulas. Step 5 (sampling) needs temperature and top-p controls driving next-token probability bars. **Both steps already explain themselves in prose and say "The live bar for this step is still to be built", so the promise is visible to a reader today.**
+   * **P7 Compare tab** is a whole placeholder tab: the local-vs-cloud comparison, the race, and the Shenzhen cost panel. Its copy should be written to `style-guide.md` from the start rather than rewritten later.
+6. Then **P8 polish and QA** per blueprint §11: motion pass, edge cases (does not fit, 4 GPUs with 405B), performance on a mid-range GPU, and a final walkthrough.
+
+## Observations / gotchas
+
+- `search_file_line` tool returned false "No matches found" on `test/ui.test.mjs` and `HANDOFF.md` for strings that demonstrably exist — **don't trust it there; read files directly** (shell grep is fine).
+- No headless browser on this box; ES modules fail over `file://`, always serve HTTP :8077.
+- **"Links don't work" has now had one false alarm (P3: placeholder panels) and one real cause (2026-09-04: fatal TDZ in `app.js`). Never close it from reasoning alone — serve the page and READ THE BROWSER CONSOLE first.** Green tests prove nothing about the bootstrap path.
+- `requestAnimationFrame` does not fire in some embedded/hidden preview panes, so Run Inference will look frozen there. That is a harness artifact, not a bug — verify the sim via `initSim({raf, now})` DI, or use a real browser window.
+- Store says `'pipeline'`, router/hash says `'how'` — always via `TAB_TO_STORE`. Button class is `.btn--primary`. Store appends `visitedTabs` in visit order (compare as sets).
+- Engine facts used by M4 copy: RTX 3060 = 360 GB/s, DDR4-3200 = 51.2 GB/s (`hardware.js`); `decodeTpsTotal = perRequest × B` exactly; `ttftMs = ttftMsBase × B` (prefills serialized — labeled assumption in perf.js header).
+- AIO configs can never be offload/cpuOnly (unified pool → gpu or noFit), so the offload note is rig-only by construction.
+
+## Important files & reference map
+
+| File | Status / significance |
+|---|---|
+| `js/data/*` (incl. new `vocab.js`), `js/engine/cost.js`, `js/state/store.js` | ✅ P1+P2 signed off; engine suite 63/63 green — **do not modify**. `vocab.js` is a generated 30,747-entry Qwen3 vocabulary subset (381 KB) — regenerate, don't hand-edit |
+| `js/engine/perf.js` | ✅ P2 signed off, engine suite 63/63 green — **do not modify except**: prefill TFLOPS→FLOPs unit fix landed 2026-09-04 (`f21797b`, see bug-fix pass). Formula shape unchanged. |
+| `css/tokens.css`, `base.css`, `tabs.css` | ✅ P3/P4 signed off; `.is-hidden` + `.ctl-note` utilities already exist (used by M4 rows) |
+| `js/app.js` | ✅ built; **fatal TDZ fixed 2026-09-04, now covered by a bootstrap test** — `defaultDoc`/`defaultHash` must stay ABOVE `initApp()`, never at the file's end; also wires `initPipeline({store})` (P5 M1) |
+| `js/theme.js`, `js/motion/scroll.js`, `js/tabs/home.js` | ✅ built, unchanged |
+| `js/tabs/lab.js` | ✅ **M1–M4 complete** (624 lines); M4 helpers exported for tests |
+| `js/tabs/pipeline.js` | 🆕 **P5 M1+M2+M3 (committed `85780dc`, REWORKED)** — `tokenizeWith(vocab, text)` (pure, greedy longest-first) + async `tokenize(text)` (lazy memoised `import('../data/vocab.js')`) + **P5 M2: `modelLoadView(perf)` / `loadCaption(perf, config)`** (Stage 2 memory bar + GB caption, reuses lab.js `membarView`) + **P5 M3: `prefillDecodeView(perf)` / `prefillCaption` / `decodeCaption` / `speedNote`** (Stage 3 two-speed contrast, reuses lab.js `simPlan`/`simPhase`/`tokensAt`/`stageText`) + `runStage3Drip` (DI raf/now, reduced-motion instant) + `initPipeline({doc,store,raf,now,reduced})` factory (ONE store subscription drives Stages 2+3, `api.pending`, `api.destroy()` cancels drip + unsubs); M4–M5 seam ready |
+| `index.html` | ✅ Lab panel + 3 M4 elements; **How tab = P5 M1 shell + Stage 1 live + Stage 2 (Model load) live + Stage 3 (Prefill vs decode) live**; Stages 4–5 still placeholder; Compare still "Phase 7 lands here"; stray literal `\n` in `#explorer-celebrate` removed 2026-09-04 |
+| `test/ui.test.mjs` | ✅ **79 checks green** (was 70; +6 P5 M3 blocks: prefillDecodeView fast/slow, prefill-half engine prompt-token count, clock-driven drip 0→256, reduced-motion instant, store-change re-render); plus the 2026-09-05 `app.js — initApp() bootstrap` section (+3); harness: `makeLabDoc()`, `makePrintout()`, `makeClock()`, `makePipeDoc()`, `makeAppDoc()` patterns in-file. ✅ **Both bug-fix-pass test gaps are now closed** |
+| `blueprint.md` | ✅ §11 P6 row + verification log updated for M1–M4 **and the 2026-09-04 bug-fix pass**; awaiting sign-off flip |
+| `HANDOFF.md` | ✅ this document — replace on disk when writing it |
+| `dev/design-system.html` | P3 acceptance harness (signed off); unchanged |

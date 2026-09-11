@@ -44,6 +44,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese"],
       "port": 7788
+    },
+    {
+      "name": "codewithai",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8787", "--directory", "."],
+      "port": 8787
     }
   ]
 }
