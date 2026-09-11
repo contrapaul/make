@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPACE</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <section data-screen="splash" class="screen">
+    <div class="panel">
+      <h1>SPACE</h1>
+      <p class="tag">direct-control fleet combat</p>
+      <button data-go="hangar">Hangar</button>
+      <button data-go="settings">Settings</button>
+    </div>
+  </section>
+
+  <section data-screen="hangar" class="screen" hidden>
+    <div class="panel">
+      <h2>Hangar</h2>
+      <canvas id="hangar-view" width="320" height="220"></canvas>
+      <div class="row">
+        <label>SHIP <input type="text" id="ship-name" maxlength="18" spellcheck="false"></label>
+        <label>HULL
+          <select id="ship-hull">
+            <option value="corvette">Corvette</option>
+          </select>
+        </label>
+      </div>
+      <div class="row swatches">
+        <label>PRIMARY <input type="color" id="col-primary"></label>
+        <label>ACCENT <input type="color" id="col-accent"></label>
+        <label>GLOW <input type="color" id="col-glow"></label>
+      </div>
+      <div class="hardpoints">
+        <div class="hp-title">HARDPOINTS <span class="tag">weapon swap: later</span></div>
+        <ul id="hardpoint-list"></ul>
+      </div>
+      <button data-go="game">Launch</button>
+      <button data-go="splash">Back</button>
+    </div>
+  </section>
+
+  <section data-screen="settings" class="screen" hidden>
+    <div class="panel">
+      <h2>Settings</h2>
+      <label class="row">CAMERA SENSITIVITY <input type="range" id="set-sens" min="0.5" max="2" step="0.1"></label>
+      <label class="row"><input type="checkbox" id="set-invert"> INVERT CAMERA Y</label>
+      <label class="row"><input type="checkbox" id="set-lmb"> LEFT MOUSE FIRES <span class="tag">(off: left orbits, right fires)</span></label>
+      <label class="row">QUALITY
+        <select id="set-quality">
+          <option value="1">1×</option>
+          <option value="1.5">1.5×</option>
+          <option value="2">2×</option>
+        </select>
+      </label>
+      <label class="row"><input type="checkbox" id="set-dmg"> SHOW DAMAGE NUMBERS</label>
+      <div class="row">
+        <button id="set-reset">Reset to defaults</button>
+        <button data-go="splash">Back</button>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen="game" class="screen" hidden>
+    <canvas id="view"></canvas>
+    <div id="hud"></div>
+    <div id="pause" class="panel" hidden>
+      <h2>Paused</h2>
+      <button id="pause-resume">Resume</button>
+      <button data-go="hangar">Quit to hangar</button>
+    </div>
+  </section>
+
+  <dialog id="end-dialog"></dialog>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+  } }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

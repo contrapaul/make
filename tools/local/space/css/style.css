@@ -1,0 +1,305 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #05060a;
+  overflow: hidden;
+  color: #dbe4ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Screens: one <section data-screen> visible at a time via [hidden]. */
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.screen[hidden] {
+  display: none;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 320px;
+  padding: 32px 48px;
+  text-align: center;
+  background: rgba(10, 12, 20, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 64px;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  color: #eef3ff;
+}
+
+.end-title {
+  font-size: 42px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+}
+
+.tag {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+button {
+  padding: 12px 28px;
+  font: inherit;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: #dbe4ff;
+  background: #141b30;
+  border: 1px solid #3a4a7a;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover {
+  background: #1d2747;
+  border-color: #55699f;
+}
+button:active {
+  transform: translateY(1px);
+}
+
+/* Game screen: full-viewport canvas + HUD overlay. */
+#view {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hud {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  background: rgba(10, 12, 20, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+#pause {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+}
+#pause[hidden] {
+  display: none;
+}
+
+.hud-weapons {
+  display: flex;
+  gap: 8px;
+  margin: 6px 0;
+}
+.wcell {
+  display: flex;
+  flex-direction: column;
+  min-width: 76px;
+  padding: 4px 8px;
+  border: 1px solid #2a3350;
+  border-radius: 6px;
+  opacity: 0.7;
+}
+.wcell.sel {
+  border-color: #59d8ff;
+  background: rgba(89, 216, 255, 0.12);
+  opacity: 1;
+}
+.wk {
+  color: #7fe8ff;
+  font-size: 11px;
+}
+.wn {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.wbar {
+  height: 3px;
+  margin-top: 3px;
+  background: #1a2238;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.wbar i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: #59d8ff;
+}
+#radar {
+  display: block;
+  margin-top: 6px;
+  opacity: 0.92;
+}
+
+dialog#end-dialog {
+  padding: 24px 32px;
+  color: #dbe4ff;
+  background: rgba(10, 12, 20, 0.95);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+}
+
+.hp {
+  height: 6px;
+  background: #1a2238;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 4px 0;
+}
+.hp i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: #59d8ff;
+}
+
+#enemies {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+}
+
+#warn {
+  color: #ff6b6b;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  animation: warn-blink 0.5s steps(2) infinite;
+}
+
+@keyframes warn-blink {
+  50% { opacity: 0.25; }
+}
+
+/* ---- M6: hangar / settings / end dialog / damage numbers ---- */
+
+#hangar-view {
+  background: radial-gradient(ellipse at 50% 60%, #10162b 0%, #070a14 70%);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.panel label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  opacity: 0.9;
+}
+input[type="text"], select {
+  font: inherit;
+  font-size: 13px;
+  color: #dbe4ff;
+  background: #10162b;
+  border: 1px solid #3a4a7a;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+input[type="color"] {
+  inline-size: 34px;
+  block-size: 24px;
+  padding: 0;
+  border: 1px solid #3a4a7a;
+  border-radius: 6px;
+  background: #10162b;
+  cursor: pointer;
+}
+input[type="range"] {
+  accent-color: #59d8ff;
+}
+input[type="checkbox"] {
+  accent-color: #59d8ff;
+}
+.swatches label { gap: 6px; }
+.hardpoints {
+  text-align: left;
+  border: 1px solid #2a3350;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.hp-title {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+#hardpoint-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+dialog#end-dialog h2 {
+  font-size: 34px;
+  letter-spacing: 0.25em;
+  text-indent: 0.25em;
+}
+dialog#end-dialog h2.win { color: #7fe8ff; }
+dialog#end-dialog h2.lost { color: #ff6b6b; }
+dialog .stats {
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 13px;
+}
+dialog .stats td {
+  padding: 4px 18px 4px 0;
+  text-align: left;
+}
+dialog .stats td:last-child {
+  text-align: right;
+  color: #7fe8ff;
+}
+.end-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.dmg-labels {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+.dmg {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffd27f;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+  will-change: opacity;
+}
