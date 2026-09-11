@@ -29,9 +29,13 @@ export function createWorld(THREE, canvas, defaultColors) {
 
   const stars = buildStars(THREE, { count: 4000, rMin: 4000, rMax: 6000 });
   scene.add(stars);
+  // Near star shell: small radius → strong parallax → sense of speed (M7).
+  const speedStars = buildStars(THREE, { count: 200, rMin: 200, rMax: 400 });
+  scene.add(speedStars);
 
   const shipMeshes = new Map();
-  const syncShips = (state) => {
+  // playerThrust: -1|0|1, drives the engine-glow emissive on the player ship.
+  const syncShips = (state, playerThrust = 0) => {
     const alive = new Set();
     for (const ship of state.ships) {
       if (!ship.alive) continue;
@@ -46,6 +50,8 @@ export function createWorld(THREE, canvas, defaultColors) {
       }
       mesh.position.set(ship.x, 0, ship.z);
       mesh.rotation.y = -ship.heading;
+      const gm = mesh.userData.glowMat;
+      if (gm) gm.emissiveIntensity = ship.id === state.playerId ? 0.8 + 2 * Math.abs(playerThrust) : 0.8;
       const mounts = mesh.userData.mounts;
       for (const id in mounts) {
         if (id === 'lance') continue; // near-static: ±5° arc, rotation not visible
@@ -116,5 +122,5 @@ export function createWorld(THREE, canvas, defaultColors) {
   resize();
   window.addEventListener('resize', resize);
 
-  return { scene, camera, renderer, stars, resize, syncShips, syncMissiles, syncChunks };
+  return { scene, camera, renderer, stars, speedStars, resize, syncShips, syncMissiles, syncChunks };
 }

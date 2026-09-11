@@ -10,6 +10,7 @@ import { stepCollisions } from './collide.js';
 import { accumulateDistance } from './stats.js';
 
 export function step(state, input, dt) {
+  state.events.length = 0; // last tick's events were consumed by the renderer
   const player = state.ships.find((s) => s.id === state.playerId) || state.ships[0];
   const hull = HULLS[player.hull];
 
@@ -43,7 +44,6 @@ export function step(state, input, dt) {
   state.stats.time = state.time;
   updateOver(state);
 
-  state.events.length = 0; // consumed by the renderer this frame
   state.tick += 1;
   state.time += dt;
 }

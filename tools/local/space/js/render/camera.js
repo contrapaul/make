@@ -10,6 +10,9 @@ const PITCH_MAX = 1.45;
 const DIST_MIN = 60;
 const DIST_MAX = 500;
 const FOLLOW_K = 8; // exponential lerp rate for the follow target
+const FOLLOW_K_TURNING = 5; // slower while hard-turning → slight camera lag
+const SHAKE_S = 0.3; // collision shake duration
+const SHAKE_MAX = 1.5; // …and max offset in world units
 
 function clamp(v, lo, hi) {
   return v < lo ? lo : v > hi ? hi : v;
@@ -50,9 +53,15 @@ export function createCameraRig(THREE, camera) {
     canvas.addEventListener('contextmenu', (e) => e.preventDefault());
   };
 
+  let shakeLeft = 0; // seconds of shake remaining
+  rig.shake = () => {
+    shakeLeft = Math.max(shakeLeft, SHAKE_S);
+  };
+
   // target: { x, z } ship position (y ignored — world is the XZ plane).
   const update = (targetPos, dt) => {
-    const k = 1 - Math.exp(-FOLLOW_K * dt);
+    const turning = Math.abs(targetPos.angVel || 0) > 0.5;
+    const k = 1 - Math.exp(-(turning ? FOLLOW_K_TURNING : FOLLOW_K) * dt);
     target.x += (targetPos.x - target.x) * k;
     target.z += (targetPos.z - target.z) * k;
     const cp = Math.cos(rig.pitch);
@@ -61,6 +70,15 @@ export function createCameraRig(THREE, camera) {
       rig.dist * Math.sin(rig.pitch),
       target.z + rig.dist * cp * Math.cos(rig.yaw)
     );
+    if (shakeLeft > 0) {
+      shakeLeft = Math.max(0, shakeLeft - dt);
+      const s = SHAKE_MAX * (shakeLeft / SHAKE_S);
+      const t = performance.now() * 0.001;
+      // deterministic wobble (sin, not RNG) — render-side only
+      camera.position.x += Math.sin(t * 61) * s;
+      camera.position.y += Math.sin(t * 47 + 2) * s;
+      camera.position.z += Math.sin(t * 53 + 4) * s;
+    }
     camera.lookAt(target.x, 0, target.z);
   };
 

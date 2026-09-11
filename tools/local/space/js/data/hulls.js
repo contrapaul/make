@@ -17,11 +17,11 @@ export const HULLS = {
     thrust: 180,
     reverseFactor: 0.4,
     maxSpeed: 60,
-    turnAccel: 1.6,
-    maxTurn: 0.9,
+    turnAccel: 2.0, // M7: snappier A/D response; 1.6 felt mushy
+    maxTurn: 1.0, // M7: a touch faster hard turns — evading missiles needs it
     linearDamping: 0.35,
     angularDamping: 2.5,
-    collisionK: 0.08,
+    collisionK: 0.06, // M7: ramming should hurt, not nearly kill (was 0.08)
     hardpoints: [
       { id: 'turret', weapon: 'gun', offset: [0, 0], arcCenter: 0, arcHalf: Math.PI },
       { id: 'port', weapon: 'cannon', offset: [0, 8], arcCenter: Math.PI / 2, arcHalf: 0.61 },

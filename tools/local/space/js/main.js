@@ -7,6 +7,7 @@ import { createInput } from './input.js';
 import { createHud } from './render/hud.js';
 import { createEffects } from './render/effects.js';
 import { HULLS, TEAM_COLORS } from './data/hulls.js';
+import { WEAPONS } from './data/weapons.js';
 import { MAPS } from './data/maps.js';
 import { createState, createShip, spawnJunk } from './sim/state.js';
 import { spawnEnemies } from './sim/enemies.js';
@@ -84,15 +85,23 @@ function frame(now) {
       step(state, sample, TICK);
       acc -= TICK;
     }
+    if (state.events.some((ev) => ev.kind === 'collision')) rig.shake();
   }
   const player = state.ships[0];
   rig.update(player, Math.max(dtReal, 1e-4));
-  world.syncShips(state);
+  world.syncShips(state, sample.thrust);
   world.syncMissiles(state);
   world.syncChunks(state);
   effects.sync(state);
   hud.update(state, player);
   world.stars.position.copy(world.camera.position);
+  world.speedStars.position.copy(world.camera.position);
+  if (tuneLive) {
+    tuneLive.ships = state.ships.filter((s) => s.alive).length;
+    tuneLive.projectiles = state.projectiles.length;
+    tuneLive.missiles = state.missiles.length;
+    tuneLive.chunks = state.chunks.length;
+  }
   world.renderer.render(world.scene, world.camera);
 
   // Game over: freeze the sim, hold 1.5 s (let wreckage tumble), then open
@@ -129,6 +138,38 @@ onEndButtons({
   again: start, // same map, new seed
   hangar: () => showScreen('hangar'),
 });
+
+// ?tune — live tuning panel (lil-gui), bound to the data objects. In-memory
+// only: nothing here is persisted, and the sim stays pure/deterministic.
+let tuneLive = null;
+if (new URLSearchParams(location.search).has('tune')) {
+  const { GUI } = await import('three/addons/libs/lil-gui.module.min.js');
+  const gui = new GUI({ title: 'TUNE — not persisted' });
+  const hull = HULLS.corvette;
+  const hullF = gui.addFolder('corvette');
+  hullF.add(hull, 'thrust', 50, 400, 5).name('thrust');
+  hullF.add(hull, 'turnAccel', 0.5, 5, 0.1).name('turnAccel');
+  hullF.add(hull, 'maxTurn', 0.2, 2, 0.05).name('maxTurn');
+  hullF.add(hull, 'maxSpeed', 20, 200, 5).name('maxSpeed');
+  hullF.add(hull, 'linearDamping', 0.1, 1, 0.01).name('linearDamping');
+  hullF.add(hull, 'angularDamping', 0.5, 5, 0.1).name('angularDamping');
+  hullF.add(hull, 'collisionK', 0.01, 0.3, 0.01).name('collisionK');
+  for (const [name, wp] of Object.entries(WEAPONS)) {
+    const f = gui.addFolder(name);
+    f.add(wp, 'damage', 1, 500, 1).name('damage');
+    if (wp.kind === 'gun') f.add(wp, 'rate', 1, 40, 1).name('rate (rounds/s)');
+    else f.add(wp, 'reload', 0.2, 12, 0.1).name('reload (s)');
+    f.add(wp, 'speed', 50, 600, 10).name('projSpeed');
+    if (wp.range) f.add(wp, 'range', 100, 1000, 10).name('range');
+  }
+  tuneLive = { tick: '60 Hz · dt 1/60', ships: 0, projectiles: 0, missiles: 0, chunks: 0 };
+  const liveF = gui.addFolder('live');
+  liveF.add(tuneLive, 'tick').listen();
+  liveF.add(tuneLive, 'ships').listen();
+  liveF.add(tuneLive, 'projectiles').listen();
+  liveF.add(tuneLive, 'missiles').listen();
+  liveF.add(tuneLive, 'chunks').listen();
+}
 
 wireScreens();
 showScreen('splash');
