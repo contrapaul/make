@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #05060a;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#hud {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  background: rgba(10, 12, 20, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #dbe4ff;
+  font: 13px/1.4 ui-monospace, monospace;
+  white-space: pre-line;
+  pointer-events: none;
+}
+
+#help {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  min-width: 260px;
+  background: rgba(10, 12, 20, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid #2a3350;
+  border-radius: 8px;
+  padding: 14px 18px;
+  color: #dbe4ff;
+  font: 13px/1.6 ui-monospace, monospace;
+}
+
+#help .help-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+#help ul {
+  margin: 0;
+  padding-left: 18px;
+}

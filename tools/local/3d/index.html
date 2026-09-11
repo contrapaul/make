@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orbital Playground</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="hud"></div>
+  <div id="help" hidden>
+    <div class="help-title">Orbital Playground</div>
+    <ul>
+      <li><b>Click planet</b> — inspect (HUD shows details)</li>
+      <li><b>Drag</b> — orbit camera · <b>Scroll</b> — zoom</li>
+      <li><b>Space</b> — pause / resume orbits</li>
+      <li><b>R</b> — reset camera</li>
+      <li><b>1–6</b> — select planet by index</li>
+      <li><b>Esc</b> — deselect</li>
+      <li><b>?</b> — toggle this help</li>
+    </ul>
+  </div>
+  <canvas id="view"></canvas>
+
+  <script type="importmap">
+  { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+  } }
+  </script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
