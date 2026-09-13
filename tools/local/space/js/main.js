@@ -61,6 +61,8 @@ function beginGame() {
   });
   state.playerId = player.id;
   state.ships.push(player);
+  // Chase view: start with the camera astern of the spawn heading.
+  rig.yaw = -player.heading - Math.PI / 2;
   spawnEnemies(state, MAP, hull);
   spawnJunk(state, MAP);
   hud = createHud(document.getElementById('hud'), hull, world.camera);
@@ -95,7 +97,6 @@ function frame(now) {
   effects.sync(state);
   hud.update(state, player);
   world.stars.position.copy(world.camera.position);
-  world.speedStars.position.copy(world.camera.position);
   if (tuneLive) {
     tuneLive.ships = state.ships.filter((s) => s.alive).length;
     tuneLive.projectiles = state.projectiles.length;

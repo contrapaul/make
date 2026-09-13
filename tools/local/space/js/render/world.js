@@ -29,9 +29,6 @@ export function createWorld(THREE, canvas, defaultColors) {
 
   const stars = buildStars(THREE, { count: 4000, rMin: 4000, rMax: 6000 });
   scene.add(stars);
-  // Near star shell: small radius → strong parallax → sense of speed (M7).
-  const speedStars = buildStars(THREE, { count: 200, rMin: 200, rMax: 400 });
-  scene.add(speedStars);
 
   const shipMeshes = new Map();
   // playerThrust: -1|0|1, drives the engine-glow emissive on the player ship.
@@ -122,5 +119,5 @@ export function createWorld(THREE, canvas, defaultColors) {
   resize();
   window.addEventListener('resize', resize);
 
-  return { scene, camera, renderer, stars, speedStars, resize, syncShips, syncMissiles, syncChunks };
+  return { scene, camera, renderer, stars, resize, syncShips, syncMissiles, syncChunks };
 }

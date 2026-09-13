@@ -3,6 +3,7 @@
 import { WEAPONS } from '../data/weapons.js';
 import { HULLS } from '../data/hulls.js';
 import { applyHit } from './damage.js';
+import { emit } from './state.js';
 
 const EPS = 1e-9; // cooldown zero-crossing tolerance (keeps rate 15 exact at 60 Hz)
 const TWO_PI = Math.PI * 2;
@@ -12,7 +13,9 @@ export function findHardpoint(hull, id) {
 }
 
 export function selectMount(ship, id) {
-  if (ship.mounts[id]) ship.selected = id;
+  if (!ship.mounts[id]) return ship.selected;
+  if (id !== ship.selected) ship.mounts[id].charge = 0; // switching resets any charge
+  ship.selected = id;
   return ship.selected;
 }
 
@@ -56,9 +59,10 @@ export function tickCooldowns(ship, dt) {
   }
 }
 
-// Returns null if cooling down; else the projectile (gun/cannon) or
-// { beam, hit } record (lance).
-export function tryFire(state, ship, hull, id) {
+// dt: tick length — the lance charges over wp.charge seconds of held fire.
+// Returns null if cooling down / still charging; else the projectile
+// (gun/cannon) or { beam, hit } record (lance).
+export function tryFire(state, ship, hull, id, dt = 1) {
   const mount = ship.mounts[id];
   if (!mount || mount.cooldown > EPS) return null;
   const hp = findHardpoint(hull, id);
@@ -66,6 +70,14 @@ export function tryFire(state, ship, hull, id) {
   const { angle, x, z } = worldAim(ship, hull, id);
 
   if (wp.kind === 'lance') {
+    if (wp.charge > 0) {
+      const c = (mount.charge || 0) + dt / wp.charge;
+      if (c < 1) {
+        mount.charge = c;
+        return null; // still charging
+      }
+      mount.charge = 0;
+    }
     const targets = collectTargets(state, ship.team);
     const hit = hitscanCircles({ x, z }, angle, wp.range, targets);
     const end = hit
@@ -73,8 +85,9 @@ export function tryFire(state, ship, hull, id) {
       : { x: x + Math.cos(angle) * wp.range, z: z + Math.sin(angle) * wp.range };
     const beam = { x0: x, z0: z, x1: end.x, z1: end.z, expires: state.time + wp.beamMs / 1000 };
     state.beams.push(beam);
+    emit(state, { type: 'fire', point: { x, z }, kind: 'lance' });
     if (hit) {
-      state.events.push({ type: 'hit', target: hit.target.ref, point: hit.point, kind: 'lance', damage: wp.damage });
+      emit(state, { type: 'hit', target: hit.target.ref, point: hit.point, kind: 'lance', damage: wp.damage });
     }
     mount.cooldown = wp.reload;
     bumpRounds(state, 'lance');
@@ -96,6 +109,7 @@ export function tryFire(state, ship, hull, id) {
   };
   state.projectiles.push(p);
   mount.cooldown = wp.kind === 'gun' ? 1 / wp.rate : wp.reload;
+  emit(state, { type: 'fire', point: { x, z }, kind: wp.kind });
   bumpRounds(state, wp.kind);
   return p;
 }
@@ -130,7 +144,7 @@ export function stepProjectiles(state, dt) {
     p.z += p.vz * dt;
     const target = findHit(state, p);
     if (target) {
-      state.events.push({ type: 'hit', point: { x: p.x, z: p.z }, kind: p.kind, damage: p.damage });
+      emit(state, { type: 'hit', point: { x: p.x, z: p.z }, kind: p.kind, damage: p.damage });
       applyHit(state, target, p.damage, { team: p.team, kind: p.kind });
       continue;
     }

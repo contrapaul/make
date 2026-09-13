@@ -116,14 +116,12 @@ function wireSettings() {
     const s = getSettings();
     $('set-sens').value = String(s.camSens);
     $('set-invert').checked = !!s.invertY;
-    $('set-lmb').checked = !!s.lmbFires;
     $('set-quality').value = String(s.pixelRatio);
     $('set-dmg').checked = !!s.damageNumbers;
   };
   apply();
   $('set-sens').addEventListener('input', (e) => saveSettings({ camSens: Number(e.target.value) }));
   $('set-invert').addEventListener('change', (e) => saveSettings({ invertY: e.target.checked }));
-  $('set-lmb').addEventListener('change', (e) => saveSettings({ lmbFires: e.target.checked }));
   $('set-quality').addEventListener('change', (e) => saveSettings({ pixelRatio: Number(e.target.value) }));
   $('set-dmg').addEventListener('change', (e) => saveSettings({ damageNumbers: e.target.checked }));
   $('set-reset').addEventListener('click', () => {

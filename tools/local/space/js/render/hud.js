@@ -59,6 +59,7 @@ export function createHud(el, hull, camera) {
   }
   const tmpV = new THREE.Vector3();
   const FADE = 0.8; // seconds
+  let lastDmgSeq = 0; // consume each hit event exactly once (HUD is rebuilt per game)
 
   const maxCd = (hp) => {
     const wp = WEAPONS[hp.weapon];
@@ -139,7 +140,8 @@ export function createHud(el, hull, camera) {
         const cell = cellEls[hp.id];
         cell.classList.toggle('sel', player.selected === hp.id);
         const m = player.mounts[hp.id];
-        const frac = m.cooldown > 0 ? 1 - m.cooldown / maxCd(hp) : 1;
+        // bar: cooldown refill normally; while the lance charges, charge progress
+        const frac = m.cooldown > 0 ? 1 - m.cooldown / maxCd(hp) : m.charge > 0 ? m.charge : 1;
         cell.querySelector('i').style.width = (100 * Math.max(0, Math.min(1, frac))).toFixed(0) + '%';
       }
       hpEl.style.width = (100 * Math.max(0, player.hp) / hull.hp).toFixed(1) + '%';
@@ -149,6 +151,8 @@ export function createHud(el, hull, camera) {
       if (camera) {
         if (getSettings().damageNumbers) {
           for (const ev of state.events) {
+            if (!ev.seq || ev.seq <= lastDmgSeq) continue;
+            lastDmgSeq = ev.seq;
             if (!ev.point || ev.damage === undefined) continue;
             const slot = labelPool.find((l) => !l.active) || labelPool[0];
             slot.active = true;

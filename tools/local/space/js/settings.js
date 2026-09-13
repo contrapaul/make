@@ -5,9 +5,8 @@ const KEY = 'space.settings';
 export const DEFAULT_SETTINGS = {
   camSens: 1, // camera sensitivity multiplier (0.5–2)
   invertY: false, // invert camera pitch
-  lmbFires: true, // left mouse fires (false: left orbits, right fires)
   pixelRatio: 1, // 1 | 1.5 | 2
-  damageNumbers: false,
+  damageNumbers: true, // M7.5: hit visibility was a complaint; opt-out now
 };
 
 export function getSettings() {
@@ -17,6 +16,8 @@ export function getSettings() {
   } catch {
     saved = {};
   }
+  // Note: older profiles may carry a 'lmbFires' key — it is simply never read
+  // (LMB always fires now), so it is inert.
   return { ...DEFAULT_SETTINGS, ...saved };
 }
 

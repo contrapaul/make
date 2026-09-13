@@ -5,7 +5,7 @@ import { createStats } from './stats.js';
 export function createShip(hull, { id = 1, x = 0, z = 0, heading = 0, team = 'blue', colors = null } = {}) {
   const mounts = {};
   for (const hp of hull.hardpoints) {
-    mounts[hp.id] = { aim: hp.arcCenter, cooldown: 0 };
+    mounts[hp.id] = { aim: hp.arcCenter, cooldown: 0, charge: 0 };
   }
   return {
     id,
@@ -36,6 +36,7 @@ export function createState({ seed = 1 } = {}) {
     chunks: [],
     beams: [],
     events: [],
+    nextEventSeq: 1,
     bounds: { half: 1000 },
     nextId: 1,
     stats: createStats(),
@@ -58,6 +59,14 @@ export function makeChunk(state, { x, z, vx = 0, vz = 0, size = 6, gen = 0, team
     sx: state.rng.range(0.6, 1.4),
     sz: state.rng.range(0.6, 1.4),
   };
+}
+
+// Events get a monotonic seq so the renderer (pools, damage labels) can
+// consume each one exactly once even when state.events outlives a frame.
+export function emit(state, ev) {
+  ev.seq = state.nextEventSeq++;
+  state.events.push(ev);
+  return ev;
 }
 
 export function spawnJunk(state, map) {

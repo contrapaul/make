@@ -1,11 +1,7 @@
 // Keyboard + mouse → plain per-frame input object.
 // thrust: -1|0|1 (W/S) · turn: -1|0|1 (A=left/D=right) · aim: -1|0|1 (Q/E)
 // select: edge-triggered mount id (keys 1–4, hull hardpoint order)
-// fire: held (Space or the fire mouse button — see settings lmbFires) · pause: edge (Esc)
-import { getSettings } from './settings.js';
-
-const fireButton = () => (getSettings().lmbFires ? 0 : 2);
-
+// fire: held (Space or left mouse) · pause: edge (Esc)
 export function createInput(canvas, mountIds) {
   const keys = new Set();
   let fireHeld = false;
@@ -25,10 +21,10 @@ export function createInput(canvas, mountIds) {
   window.addEventListener('blur', () => { keys.clear(); fireHeld = false; });
 
   canvas.addEventListener('pointerdown', (e) => {
-    if (e.button === fireButton()) fireHeld = true;
+    if (e.button === 0) fireHeld = true;
   });
   window.addEventListener('pointerup', (e) => {
-    if (e.button === fireButton()) fireHeld = false;
+    if (e.button === 0) fireHeld = false;
   });
 
   const sample = () => {

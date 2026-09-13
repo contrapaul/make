@@ -93,14 +93,38 @@ test('hitscan picks the nearest of two circles and ignores ones behind', () => {
   assert.equal(hitscanCircles(origin, 0, 50, [far]), null, 'out of range ignored');
 });
 
-test('lance fires a beam record and sets its reload', () => {
+function holdLance(state, ship, sec) {
+  let fired = null; // first successful fire (later calls return null on cooldown)
+  for (let i = 0; i < Math.round(sec / DT); i++) {
+    state.time += DT;
+    const r = tryFire(state, ship, hull, 'lance', DT);
+    if (r && !fired) fired = r;
+  }
+  return fired;
+}
+
+test('lance charges its full charge time, then fires one beam', () => {
   const { state, ship } = setup();
   selectMount(ship, 'lance');
-  const r = tryFire(state, ship, hull, 'lance');
-  assert.ok(r.beam, 'beam returned');
+  let r = holdLance(state, ship, 1.1);
+  assert.equal(r, null, 'still charging at 1.1 s');
+  assert.ok(ship.mounts.lance.charge > 0 && ship.mounts.lance.charge < 1);
+  r = holdLance(state, ship, 0.4);
+  assert.ok(r && r.beam, 'fired once charge completed (1.5 s held ≥ 1.2 s)');
   assert.equal(state.beams.length, 1);
   assert.equal(ship.mounts.lance.cooldown, WEAPONS.lance.reload);
   assert.equal(state.stats.rounds.lance, 1);
+});
+
+test('lance charge resets when fire is released (no banking)', () => {
+  const { state, ship } = setup();
+  selectMount(ship, 'lance');
+  holdLance(state, ship, 0.6);
+  assert.ok(ship.mounts.lance.charge > 0 && ship.mounts.lance.charge < 1);
+  ship.mounts.lance.charge = 0; // step.js does this when the fire input drops
+  holdLance(state, ship, 0.6);
+  assert.equal(state.beams.length, 0, 'split 1.2 s of holding must not fire');
+  assert.ok(ship.mounts.lance.charge < 1, 'charge restarts from zero');
 });
 
 test('determinism: 600 ticks with continuous firing', () => {

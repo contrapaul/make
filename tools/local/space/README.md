@@ -18,12 +18,12 @@ No build step, no npm. From `tools/local/`: `python3 -m http.server 8000` →
 | A / D | turn left / right |
 | 1–4 | select hardpoint (turret, port, stbd, lance) |
 | Q / E | aim selected mount |
-| Space / LMB | fire (LMB = right mouse if "left fires" is off in Settings) |
-| right-drag / wheel | orbit / zoom (flippable in Settings) |
+| Space / LMB | fire (lance: hold through the 1.2 s charge) |
+| right-drag / wheel | orbit / zoom |
 | Esc | pause |
 
-Hangar (name/hull/colors) and Settings (camera, mouse, quality, damage
-numbers) persist to localStorage.
+Hangar (name/hull/colors) and Settings (camera, quality, damage numbers)
+persist to localStorage.
 
 ## File map
 

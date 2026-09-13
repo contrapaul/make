@@ -33,7 +33,11 @@ export function step(state, input, dt) {
   stepChunks(state, dt);
 
   tickCooldowns(player, dt);
-  if (input.fire) tryFire(state, player, hull, player.selected);
+  if (input.fire) {
+    tryFire(state, player, hull, player.selected, dt);
+  } else {
+    for (const id in player.mounts) player.mounts[id].charge = 0; // release = reset charge
+  }
   stepProjectiles(state, dt);
   expireBeams(state);
 

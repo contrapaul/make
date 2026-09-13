@@ -3,6 +3,7 @@
 // No broad-phase: entity counts are tiny.
 import { HULLS } from '../data/hulls.js';
 import { applyHit } from './damage.js';
+import { emit } from './state.js';
 
 const RESTITUTION = 0.3;
 const CHUNK_K = 0.08; // collision-damage factor for chunks (mirrors hull.collisionK)
@@ -44,7 +45,7 @@ export function stepCollisions(state, dt) {
     }
     if (!hit) for (const c of state.chunks) if (dist(m, c) < c.size + (m.radius || 4)) { hit = c; break; }
     if (hit) {
-      state.events.push({ type: 'hit', point: { x: m.x, z: m.z }, kind: 'missile', damage: m.damage });
+      emit(state, { type: 'hit', point: { x: m.x, z: m.z }, kind: 'missile', damage: m.damage });
       applyHit(state, hit, m.damage, { team: m.team, kind: 'missile' });
       state.missiles.splice(i, 1);
     }
@@ -52,7 +53,7 @@ export function stepCollisions(state, dt) {
 
   for (const { t, d } of pending) {
     applyHit(state, t, d, { kind: 'collision' });
-    if (d > 0) state.events.push({ type: 'hit', point: { x: t.x, z: t.z }, kind: 'collision', damage: d });
+    if (d > 0) emit(state, { type: 'hit', point: { x: t.x, z: t.z }, kind: 'collision', damage: d });
   }
 }
 

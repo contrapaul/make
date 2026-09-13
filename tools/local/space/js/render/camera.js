@@ -1,6 +1,6 @@
-// Orbit camera rig locked to the player ship. Drag orbits (which button
-// depends on the lmbFires setting), wheel zooms. Sensitivity + Y-invert
-// come from settings.
+// Orbit camera rig locked to the player ship. Right/middle-drag orbits
+// (LMB is fire, see input.js), wheel zooms. Sensitivity + Y-invert come
+// from settings.
 import { getSettings } from '../settings.js';
 
 const YAW_SENS = 0.005;
@@ -27,8 +27,7 @@ export function createCameraRig(THREE, camera) {
 
   const attach = (canvas) => {
     canvas.addEventListener('pointerdown', (e) => {
-      const orbit = getSettings().lmbFires ? e.button >= 1 : e.button === 0 || e.button === 1;
-      if (!orbit) return;
+      if (e.button !== 1 && e.button !== 2) return; // LMB is fire (see input.js)
       dragging = true;
       lastX = e.clientX;
       lastY = e.clientY;
