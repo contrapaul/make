@@ -5,7 +5,7 @@ Brainstorm and rationale: `brainstorm.md`. This file is the working plan; update
 the checkboxes and the status line as work lands, so a new session can pick up
 from here without re-reading the conversation.
 
-**Status:** Phases 0–4 built and verified locally. 0–3 pushed; 4 committed, not yet pushed. Phase 5 next. Last updated 2026-09-16.
+**Status:** All five phases built and verified. Phase 5 committed, not yet pushed. Fourteen tools live. Last updated 2026-09-16.
 
 ---
 
@@ -304,26 +304,39 @@ studies, one worksheet.
 ## Phase 5: Team and extras
 
 ### Roles (`tools/roles.js`)
-- [ ] Four roles mapped to the four skill tracks; 3-person pairings.
-- [ ] Two-track minimum enforced on each card.
-- [ ] Reads manifest owners to show the ownership board.
-- [ ] Randomiser with one swap.
-- [ ] Print role cards and ownership board.
+- [x] Rules, Art, Fab, Build leads, each carrying two skill tracks (the
+      second is the natural neighbour: rules→graphic, art→systems,
+      fab→hand, build→digital). Team of 3 doubles up a pair that shares a
+      track.
+- [x] Every card shows both tracks, what it owns, a "by session 4"
+      checkpoint, and four skills to evidence.
+- [x] Embeds the manifest with the owner column; pieces-by-owner bars with
+      warnings for >50% and for unowned pieces.
+- [x] Randomise, then one swap (typed as two role ids), then it stands.
+- [x] Print role cards; print the ownership board with a done column.
 
 ### Box (`tools/box.js`)
-- [ ] Reads manifest sizes → inner box dimensions, printable net, tray dims.
+- [x] Per-component W/H/thickness in mm (stored on the manifest rows,
+      defaults by kind, board folds once). Inner and outer box size, volume,
+      3D-printed tray dimensions, and cross nets for base and lid as SVG,
+      printable and PNG. Says when the net is bigger than A4.
 
-### Extras, each small, in this order as time allows
-- [ ] Spinner
-- [ ] Random table builder (rolls with Dice)
-- [ ] Score pad
-- [ ] Turn tracker with 30 s buzz
-- [ ] Race simulator
-- [ ] Point-cost balancer
+### Extras (`tools/extras.js`, one tile, six sections)
+- [x] Spinner with weighted wedges, real spin, pointer lands in the wedge.
+- [x] Random tables: name, d4–d20, one line per result, roll with a flicker,
+      print.
+- [x] Score pad: names, rounds, totals, leader highlighted, CSV.
+- [x] Turn tracker: whose turn, round, countdown with a beep and flash at
+      20/30/45/60 s or none.
+- [x] Race: 2–8 players, track length, roll-again-on-6, 1,000 races → rounds
+      per race, first-seat win rate against fair, wins by seat.
+- [x] Balance: price per stat point, units priced, anything >25% from the
+      median flagged.
 
-### If the campaign demo earns it
-- [ ] Campaign map as a real tool: named regions, session log, persistent state,
-      export.
+### Not built
+- Campaign map as a real tool. The Simplify demo persists a six-region map
+  and log already; if a team wants one for their own game, promote that
+  code into `tools/campaign.js` with named regions.
 
 ---
 
@@ -338,7 +351,7 @@ studies, one worksheet.
 - [ ] Dark mode has no unreadable pairs.
 - [ ] No console errors on load or on any tool switch.
 - [ ] Nothing fetched from outside the directory.
-- [ ] `fun/index.html` card updated (WIP → LIVE at Phase 2).
+- [x] `fun/index.html` card updated (WIP → LIVE at Phase 2).
 
 ---
 
@@ -360,6 +373,17 @@ when there's enough to be worth a student's click.
 
 _(Append here at the end of each session: what landed, what's half done, what
 surprised you. Newest at the top.)_
+
+- 2026-09-16 (Phase 5, done): Roles, Box, Extras built and verified at
+  desktop and 375px. `README.md` added for the directory. Fourteen tiles.
+  Things that would be worth doing next, none of them blocking:
+  - A screenshot for `images/fun/gamebench.png` (the fun card hides the
+    missing image).
+  - Link from the unit page in `edu/curriculum/myp/g9-game-design.html`.
+  - Rewrite `data/demos.js` in the teacher's voice if wanted.
+  - A "Table" mode for Playtest + Turn tracker + Score pad on one phone
+    screen, if teams turn out to use all three at once.
+  - The manifest now carries `w`, `h`, `d` from Box; Setup ignores them.
 
 - 2026-09-16 (Phase 4): Rules and Simplify built and verified at desktop
   and 375px. Committed locally. Eleven tools on the nav now; nothing is
