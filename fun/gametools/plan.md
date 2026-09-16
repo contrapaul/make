@@ -5,7 +5,7 @@ Brainstorm and rationale: `brainstorm.md`. This file is the working plan; update
 the checkboxes and the status line as work lands, so a new session can pick up
 from here without re-reading the conversation.
 
-**Status:** Phases 0–3 built and verified locally, committed, not yet pushed. Phase 4 next. Last updated 2026-09-16.
+**Status:** Phases 0–4 built and verified locally. 0–3 pushed; 4 committed, not yet pushed. Phase 5 next. Last updated 2026-09-16.
 
 ---
 
@@ -36,7 +36,7 @@ the directory as is. One shell, one JS file per tool, one shared store.
 | `dicemath.js` | `Bench.dice`: parse a roll, roll it, exact distribution. Shared by Dice and Odds. |
 | `tools/<name>.js` | One per tool. Calls `Bench.register({ id, mount, unmount })`. |
 | `data/cards.js` | Card sizes, zone descriptions, and the eight pre-baked layouts (rows of cells). |
-| `data/demos.js` | Simplification demo content (case study copy and tables). |
+| `data/demos.js` | The six case studies: big / small / lesson and the kept / cut / cost lists. Edit copy here. |
 | `fonts/` | Self-hosted woff2: Lexend 400/500/600/700/900, JetBrains Mono 400/700. |
 | `media/` | Images for demos and layout examples. |
 | `mood.html` | The approved look, as a single page. Reference only; not linked. |
@@ -271,24 +271,33 @@ cut guides, and check type and colour. Verified 2026-09-16.
 ## Phase 4: Simplify
 
 ### Demos (`tools/simplify.js`, `data/demos.js`)
-Micro first, macro second. Each demo is a section on one scrolling page, with an
-index at the top.
-- [ ] Roll-and-move vs choose-and-move, playable side by side.
-- [ ] Exceptions counter (paste text).
-- [ ] Three currencies vs one.
-- [ ] Twelve types vs five.
-- [ ] Cut-half exercise.
-- [ ] D&D → archetypes, with the timed build-a-character both ways.
-- [ ] Risk → campaign chunks, with the clickable campaign map.
-- [ ] Monopoly, Catan, Magic, Pandemic as copy plus kept / cut / cost tables.
-- [ ] "Shrink your own" worksheet, exports CSV / print.
+One scrolling page, index chips at the top, five micro demos, six case
+studies, one worksheet.
+- [x] Roll-and-move vs roll-and-choose: two 12-space tracks, the right one
+      offers Road (move N) or Tunnel (move N+2, two visible traps send you
+      back 3). Counts rolls and decisions per side.
+- [x] Three currencies vs one: same shop, counts the sums done in your head.
+- [x] Twelve kinds vs five: ten-second look, then tick what you could
+      explain.
+- [x] Exceptions: paste a rule, the *unless / except / cannot* words light up
+      (uses `Bench.rules.analyse`).
+- [x] Cut it in half: list mechanics, cut half, answer the meaningful-choice
+      question, cut half again. Persists; CSV of what survived.
+- [x] D&D → archetypes: build a character the long way (three selects, roll
+      six scores, two skills, a pack) and the archetype way (a card, a move,
+      a flaw), each timed, best times kept.
+- [x] Risk → campaign chunks: six-hex map, click a region, 3d6-high skirmish,
+      the map and a dated log persist. Four regions wins the war.
+- [x] Monopoly, Catan, Magic, Pandemic: big / small / lesson plus the kept /
+      cut / cost table.
+- [x] Shrink your own: name, three columns, "the one thing", CSV and print.
 
-### Rules budget (`tools/rules.js`)
-- [ ] Paste text → words, pages at chosen type size, reading time, exception
-      count.
-- [ ] Structure skeleton (Setup / Turn / Actions / Winning / Reference) with
-      target lengths.
-- [ ] Cold-read checklist, printable.
+### Rules (`tools/rules.js`)
+- [x] Paste text → words, pages at 9–12 pt, reading time at 150 wpm, a gauge
+      against the 4-page cap, exception list with snippets, count of
+      "rules to hold in your head".
+- [x] Six-part skeleton with target lengths and a copy button.
+- [x] Ten-question cold-read checklist, ticks persist, printable.
 
 ---
 
@@ -352,6 +361,20 @@ when there's enough to be worth a student's click.
 _(Append here at the end of each session: what landed, what's half done, what
 surprised you. Newest at the top.)_
 
+- 2026-09-16 (Phase 4): Rules and Simplify built and verified at desktop
+  and 375px. Committed locally. Eleven tools on the nav now; nothing is
+  "Soon". For Phase 5:
+  - **Shell fix worth knowing:** each tool now mounts into a fresh
+    `div.tool-root` inside `<main>`, discarded on route change. Before this,
+    Sheet and Checks hung delegated listeners on `<main>` itself and kept
+    firing after unmount. Attach to `el` freely now; it dies with the tool.
+  - `Bench.rules.analyse(text)` returns words, sentences, exceptions
+    (with offsets) and hold-in-your-head sentences.
+  - Simplify keeps its own state under `store.simplify`: `cut`, `campaign`,
+    `own`, `dnd` (best times). The campaign map is the seed for a real
+    campaign tracker if Phase 5 wants it.
+  - Case-study copy is mine; the teacher may want to rewrite `data/demos.js`
+    in their own voice. Nothing else depends on the wording.
 - 2026-09-16 (Phase 3): Cards, Sheet, Checks built and verified at desktop
   and 375px. Two tools (Sheet, Checks) were added to the roster, so the nav
   is now ten tiles. Committed locally, not pushed. For Phase 4:

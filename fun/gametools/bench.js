@@ -4,7 +4,7 @@
   'use strict';
 
   var STORE_KEY = 'gamebench.v1';
-  var EMPTY = { rolls: [], dice: {}, odds: {}, deck: {}, manifest: [], setup: {}, session: {}, cards: {}, sheet: {}, checks: {}, playtests: [], playtestLive: null, prefs: {} };
+  var EMPTY = { rolls: [], dice: {}, odds: {}, deck: {}, manifest: [], setup: {}, session: {}, cards: {}, sheet: {}, checks: {}, rules: {}, simplify: {}, playtests: [], playtestLive: null, prefs: {} };
 
   /* ---------- store ---------- */
   var data = load();
@@ -118,6 +118,7 @@
     { id: 'cards',    title: 'Cards',    blurb: 'Layouts borrowed from games you know.' },
     { id: 'sheet',    title: 'Sheet',    blurb: 'Cards and tokens, N-up with crop marks.' },
     { id: 'checks',   title: 'Checks',   blurb: 'Type size, colour-blind safe, grid paper.' },
+    { id: 'rules',    title: 'Rules',    blurb: 'Pages, reading time, exceptions, cold read.' },
     { id: 'simplify', title: 'Simplify', blurb: 'Big games made recess-sized.' }
   ];
   var ICONS = {
@@ -130,6 +131,7 @@
     cards:    '<rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="10" height="12" rx="1" stroke-dasharray="2 2"/>',
     sheet:    '<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/>',
     checks:   '<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    rules:    '<path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M15 4v5h5M8 13h8M8 17h6"/>',
     simplify: '<circle cx="7" cy="6" r="3"/><circle cx="7" cy="18" r="3"/><path d="M9.5 7.5 21 16M9.5 16.5 21 8"/>'
   };
   function icon(id) {
@@ -179,7 +181,10 @@
     renderNav(id);
     document.title = tool.title + ' — Game Bench';
     current = tool;
-    tool.mount(main, store);
+    // A fresh container per mount, so listeners a tool hangs on its root die with it.
+    var box = document.createElement('div'); box.className = 'tool-root';
+    main.appendChild(box);
+    tool.mount(box, store);
     window.scrollTo(0, 0);
   }
 

@@ -497,6 +497,89 @@ table.costs .input { width: 54px; min-height: 36px; padding: 4px 4px; text-align
 .checks-grid { margin-top: 12px; max-width: 360px; }
 .checks-grid svg { width: 100%; height: auto; display: block; box-shadow: 0 2px 8px rgba(0,0,0,.25); border-radius: 3px; }
 
+/* rules */
+.rules-grid { grid-template-columns: minmax(300px, 3fr) minmax(260px, 2fr); }
+@media (max-width: 760px) { .rules-grid { grid-template-columns: 1fr; } }
+.rules-text { font-family: var(--font-body); font-size: 14px; line-height: 1.5; resize: vertical; }
+.rules-gauge { position: relative; height: 18px; background: var(--paper-2); border-radius: 999px; overflow: hidden; margin-top: 10px; }
+.rules-gauge i { display: block; height: 100%; background: var(--brass); transition: width .2s; }
+.rules-gauge.over i { background: var(--berry); }
+.rules-gauge b { position: absolute; right: 10px; top: 0; line-height: 18px; font: 700 11px var(--font-mono); color: var(--ink); }
+.rules-exc { margin: 0; padding: 0; list-style: none; font-size: 13px; display: grid; gap: 4px; max-height: 260px; overflow: auto; }
+.rules-exc b { color: var(--berry); }
+.rules-skel { margin: 0 0 12px; padding-left: 20px; font-size: 14px; }
+.rules-skel li { margin: 8px 0; }
+.rules-skel li > span:last-child { color: var(--ink-soft); font-size: 13px; }
+.rules-check { list-style: none; margin: 0 0 10px; padding: 0; font-size: 14px; }
+.rules-check li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.rules-check label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.rules-check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--berry); }
+.rules-score { font-size: 14px; color: var(--ink-soft); }
+
+/* simplify */
+.sim-index { display: flex; flex-wrap: wrap; gap: 6px; }
+.sim-index a { font: 600 13px var(--font-body); color: var(--ink); background: var(--paper-2); text-decoration: none; border-radius: 999px; padding: 8px 12px; min-height: 36px; display: inline-flex; align-items: center; }
+.sim-index a:hover { background: var(--brass); color: var(--brass-ink); }
+.sim h3 { font-family: var(--font-display); font-weight: 800; font-size: 16px; margin: 0 0 8px; }
+.sim-half { background: var(--paper-2); border-radius: var(--r); padding: 14px; }
+.sim-half .btn-row { margin-top: 8px; }
+.sim-msg { font-size: 13px; color: var(--ink-soft); }
+.sim-ask { margin: 14px 0 0 !important; padding: 10px 14px; border-left: 4px solid var(--brass); background: var(--paper-2); border-radius: 6px; font-size: 14px; color: var(--ink) !important; }
+.sim-track { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; margin-bottom: 8px; }
+.sim-track i { aspect-ratio: 1; background: var(--bone); border-radius: 4px; display: grid; place-items: center; font-size: 11px; color: var(--ink-faint); font-style: normal; position: relative; }
+.sim-track i.trap { color: var(--berry); }
+.sim-track i.goal { color: var(--brass-deep); font-size: 14px; }
+.sim-track i.pawn::after { content: ""; position: absolute; inset: 20%; border-radius: 50%; background: var(--berry); box-shadow: 0 2px 0 var(--berry-deep); }
+[data-theme="dark"] .sim-track i { background: var(--paper-3); }
+.sim-choice { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.sim-purse { margin: 0 0 8px !important; font-size: 13px; }
+.sim-item { display: grid; grid-template-columns: 60px 1fr auto; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.sim-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; margin: 10px 0; min-height: 40px; }
+.sim-mini { background: var(--bone); border-radius: 7px; padding: 8px 10px; font-size: 13px; border-top: 5px solid var(--brass); }
+.sim-mini b { display: block; font-family: var(--font-display); font-weight: 800; }
+.sim-mini span { color: var(--ink-soft); font-size: 12px; }
+.sim-mini.quiz { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+[data-theme="dark"] .sim-mini { background: var(--paper-3); }
+.sim-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.sim-chip { font: 600 13px var(--font-body); color: var(--ink); background: var(--paper-2); border: 2px solid transparent; border-radius: 999px; padding: 8px 12px; cursor: pointer; min-height: 36px; }
+.sim-chip:hover { border-color: var(--berry); }
+.sim-chip.cut { text-decoration: line-through; opacity: .45; }
+.sim-halfq { background: var(--paper-2); border-radius: var(--r); padding: 12px 14px; }
+.sim-halfq p { margin: 0 0 8px; font-size: 14px; }
+.sim-bigsmall { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 12px; }
+.sim-bigsmall p { font-size: 14px; }
+@media (max-width: 640px) { .sim-bigsmall { grid-template-columns: 1fr; } }
+.sim-lesson { font-size: 15px; color: var(--ink) !important; border-left: 4px solid var(--berry); padding: 8px 14px; background: var(--paper-2); border-radius: 6px; margin: 12px 0 14px !important; }
+.sim-kcc th:first-child, .sim-kcc td:first-child { color: var(--felt); font-weight: 600; }
+[data-theme="dark"] .sim-kcc th:first-child, [data-theme="dark"] .sim-kcc td:first-child { color: var(--brass); }
+.sim-kcc td:nth-child(2) { color: var(--ink-faint); text-decoration: line-through; }
+.sim-kcc td:nth-child(3) { color: var(--berry); }
+.sim-form { display: grid; gap: 8px; margin-top: 10px; }
+.sim-form.locked { opacity: .45; pointer-events: none; }
+.sim-form .input { min-height: 40px; padding: 6px 10px; }
+.sim-stats { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+.sim-skills, .sim-radios { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 13px; align-items: center; }
+.sim-skills .label, .sim-radios .label { width: 100%; }
+.sim-arch { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.sim-archcard { font: inherit; text-align: left; background: var(--bone); color: var(--ink); border: 3px solid transparent; border-radius: var(--r-sm); padding: 8px 10px; cursor: pointer; border-top: 6px solid var(--brass); }
+.sim-archcard b { display: block; font-family: var(--font-display); font-weight: 800; }
+.sim-archcard span { font-size: 12px; color: var(--ink-soft); }
+.sim-archcard.on { border-color: var(--berry); }
+[data-theme="dark"] .sim-archcard { background: var(--paper-3); }
+.sim-campaign { display: grid; grid-template-columns: minmax(200px, 1fr) minmax(220px, 1fr); gap: 14px; align-items: start; margin-bottom: 12px; }
+@media (max-width: 640px) { .sim-campaign { grid-template-columns: 1fr; } }
+.sim-map svg { width: 100%; max-width: 320px; height: auto; display: block; margin: 0 auto; }
+.sim-region { cursor: pointer; }
+.sim-region:hover polygon { stroke-width: 2; }
+.sim-region.on polygon { stroke: var(--berry); stroke-width: 2.5; }
+.sim-skirmish { background: var(--paper-2); border-radius: var(--r); padding: 10px 12px; }
+.sim-skirmish b { display: block; font-family: var(--font-display); font-weight: 800; margin-bottom: 6px; }
+.sim-dice-off { display: flex; gap: 14px; align-items: baseline; font-size: 22px; margin-bottom: 8px; }
+.sim-camp-log { margin: 0 0 10px; padding-left: 20px; font-size: 13px; max-height: 160px; overflow: auto; }
+.sim-own { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.sim-own textarea { font-family: var(--font-body); font-size: 14px; resize: vertical; }
+@media (max-width: 640px) { .sim-own { grid-template-columns: 1fr; } }
+
 /* ---------- 5. print ---------- */
 body.print-only { background: #fff; display: block; padding: 16px; }
 body.print-only::before { display: none; }
