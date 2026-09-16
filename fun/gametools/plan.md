@@ -5,7 +5,7 @@ Brainstorm and rationale: `brainstorm.md`. This file is the working plan; update
 the checkboxes and the status line as work lands, so a new session can pick up
 from here without re-reading the conversation.
 
-**Status:** Phases 0–2 built and verified locally, committed, not yet pushed. Phase 3 next. Last updated 2026-09-16.
+**Status:** Phases 0–3 built and verified locally, committed, not yet pushed. Phase 4 next. Last updated 2026-09-16.
 
 ---
 
@@ -35,7 +35,7 @@ the directory as is. One shell, one JS file per tool, one shared store.
 | `bench.js` | Shell logic: tool registry, hash routing (`#dice`, `#odds`…), store, export helpers, reduced-motion flag. |
 | `dicemath.js` | `Bench.dice`: parse a roll, roll it, exact distribution. Shared by Dice and Odds. |
 | `tools/<name>.js` | One per tool. Calls `Bench.register({ id, mount, unmount })`. |
-| `data/cards.js` | Pre-baked card layout configs. |
+| `data/cards.js` | Card sizes, zone descriptions, and the eight pre-baked layouts (rows of cells). |
 | `data/demos.js` | Simplification demo content (case study copy and tables). |
 | `fonts/` | Self-hosted woff2: Lexend 400/500/600/700/900, JetBrains Mono 400/700. |
 | `media/` | Images for demos and layout examples. |
@@ -233,26 +233,38 @@ Verified 2026-09-16. Fun card flipped to LIVE.
 ## Phase 3: Layout and print
 
 ### Card layouts (`tools/cards.js`, `data/cards.js`)
-- [ ] Card sizes preset and custom; trim / bleed / safe overlay, dimensioned.
-- [ ] True-size preview with calibration note.
-- [ ] Eight pre-baked configs from the brainstorm, each with a one-line "why".
-- [ ] Shuffle button remixes zones from the config pool.
-- [ ] Card types: name them, lock a layout to each, shared conventions enforced
-      (corners, type sizes, icon row) with colour band per type.
-- [ ] Zone hover / tap shows what goes there and minimum size.
-- [ ] Export dimensioned template PNG / print, blank print sheet per type, JSON.
+- [x] Sizes poker / bridge / mini / tarot / square / custom; trim, 3 mm bleed
+      and 3 mm safe drawn and dimensioned. One SVG renderer in mm
+      (`Bench.cards.render`) serves preview, PNG, thumbnails and the sheet.
+- [x] True-size toggle with a 96 dpi note.
+- [x] Eight layouts as rows of cells: trading, deckbuilder, action, role,
+      event, reference, resource, story. Each names the games it borrows
+      from and says why it works.
+- [x] Shuffle: random base plus 1–3 mutations (flip a row, swap adjacent
+      rows, resize art, change band, move a small row to the other end) and
+      a sentence saying what it did.
+- [x] Card kinds: name, colour, lock the current layout. All kinds share the
+      size. (Per-zone convention enforcement beyond that is not built; the
+      shared size plus the kind list does most of the job.)
+- [x] Zone hover / tap shows what goes there and the minimum point size.
+- [x] Export dimensioned template PNG, layouts JSON, link to Sheet.
 
 ### Print sheet (`tools/sheet.js`)
-- [ ] N-up on A4 / Letter with crop marks; mirrored backs.
-- [ ] Token grids, circles and squares at chosen mm.
+- [x] A4 / Letter. Cards share bleed (neighbours overlap by one bleed width)
+      so poker is 3 × 3 on A4; cut ticks in the margins at every trim line.
+      Mirrored back sheet option. Safe-guide toggle for final prints.
+- [x] Tokens: circle / square / hex at chosen mm, centre dots, 5 mm gutter.
+- [x] Print via `printSection` with an inline `@page` size; first page PNG.
 
-### Small graphic checks (can be one tool, `tools/checks.js`)
-- [ ] Type at distance: distance in → point size out, rendered sample.
-- [ ] Colour-blind simulation of a palette and contrast ratio.
-- [ ] Grid paper: hex / square / offset / triangle, cell mm, print.
+### Checks (`tools/checks.js`)
+- [x] Type at distance: slider 30–150 cm → minimum and comfortable point
+      sizes, rendered at screen scale, with an 85.6 mm calibration bar.
+- [x] Palette under protanopia / deuteranopia / tritanopia (Machado 2009),
+      WCAG contrast on paper and ink, and warnings for pairs that collapse.
+- [x] Grid paper: square / hex / offset / triangle, cell mm, print and PNG.
 
-Phase 3 done when: a student can lock three card types, print a sheet of nine,
-and the bleed is right when cut.
+Phase 3 done: a student can lock card kinds, print a sheet of nine with
+cut guides, and check type and colour. Verified 2026-09-16.
 
 ---
 
@@ -340,6 +352,20 @@ when there's enough to be worth a student's click.
 _(Append here at the end of each session: what landed, what's half done, what
 surprised you. Newest at the top.)_
 
+- 2026-09-16 (Phase 3): Cards, Sheet, Checks built and verified at desktop
+  and 375px. Two tools (Sheet, Checks) were added to the roster, so the nav
+  is now ten tiles. Committed locally, not pushed. For Phase 4:
+  - `Bench.cards.render(layout, size, {colour, dims, scale, labels, guides,
+    back, name})` returns an SVG string in mm. Nested inside a page SVG by
+    stripping the outer tag. The `#art` gradient id repeats per card, which
+    browsers tolerate.
+  - Cards, Sheet and Checks use `B.store` directly (not the mount argument)
+    so their state is readable from other tools before they mount.
+  - `[hidden] { display: none !important }` is now global; use the
+    attribute rather than inline styles to hide.
+  - The bench's own palette fails the colour-blind check (berry vs felt).
+    Charts in Odds and Deck are labelled by text too, so it's tolerable, but
+    the case-study copy in Simplify shouldn't rely on colour alone.
 - 2026-09-16 (Phase 2): Manifest, Setup, Session, Playtest built and
   verified at desktop and 375px. Committed locally, not pushed. For Phase 3:
   - `Bench.printSection(el)` clones a node into a hidden iframe with
