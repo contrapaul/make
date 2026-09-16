@@ -4,13 +4,24 @@
     {
       "name": "bloodbowl",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5500"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5500"
+      ],
       "port": 5500
     },
     {
       "name": "site-with-api",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "pages", "dev", ".", "--port", "8788"],
+      "runtimeArgs": [
+        "wrangler",
+        "pages",
+        "dev",
+        ".",
+        "--port",
+        "8788"
+      ],
       "port": 8788
     },
     {
@@ -42,14 +53,38 @@
     {
       "name": "chinese-vocab",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "7788",
+        "--directory",
+        "tools/chinese"
+      ],
       "port": 7788
     },
     {
       "name": "codewithai",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8787", "--directory", "."],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8787",
+        "--directory",
+        "."
+      ],
       "port": 8787
+    },
+    {
+      "name": "gamebench",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8791",
+        "--directory",
+        "."
+      ],
+      "port": 8791
     }
   ]
 }
