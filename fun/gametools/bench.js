@@ -4,7 +4,7 @@
   'use strict';
 
   var STORE_KEY = 'gamebench.v1';
-  var EMPTY = { rolls: [], manifest: [], session: {}, cards: { types: [] }, playtests: [], prefs: {} };
+  var EMPTY = { rolls: [], dice: {}, odds: {}, deck: {}, manifest: [], session: {}, cards: { types: [] }, playtests: [], prefs: {} };
 
   /* ---------- store ---------- */
   var data = load();
@@ -199,6 +199,15 @@
   }
 
   /* ---------- utils ---------- */
+  // 0.9964 -> "99.6%", 0.0004 -> "<0.1%", 0.25 -> "25%"
+  function pct(p) {
+    if (!(p > 0)) return '0%';
+    if (p >= 1) return '100%';
+    var v = p * 100;
+    if (v < 0.1) return '<0.1%';
+    if (v > 99.9) return '>99.9%';
+    return v.toFixed(v < 10 || v > 90 ? 1 : 0) + '%';
+  }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function el(html) { var t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
   function rand(n) {
@@ -232,6 +241,6 @@
   window.Bench = {
     register: register, start: start, store: store,
     downloadCSV: downloadCSV, downloadJSON: downloadJSON, downloadPNG: downloadPNG, printSection: printSection,
-    esc: esc, el: el, rand: rand, reducedMotion: reducedMotion, icon: icon
+    esc: esc, el: el, pct: pct, rand: rand, reducedMotion: reducedMotion, icon: icon
   };
 })();

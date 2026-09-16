@@ -5,7 +5,7 @@ Brainstorm and rationale: `brainstorm.md`. This file is the working plan; update
 the checkboxes and the status line as work lands, so a new session can pick up
 from here without re-reading the conversation.
 
-**Status:** Phase 0 built and verified locally, awaiting deploy. Phase 1 next. Last updated 2026-09-16.
+**Status:** Phases 0 and 1 built and verified locally, committed, not yet pushed. Phase 2 next. Last updated 2026-09-16.
 
 ---
 
@@ -33,7 +33,8 @@ the directory as is. One shell, one JS file per tool, one shared store.
 | `index.html` | Shell: header, tool nav, one `<main>` the active tool renders into, footer. No tool markup lives here. |
 | `bench.css` | Everything visual. Design tokens at the top, tool-specific sections below, print rules at the end. |
 | `bench.js` | Shell logic: tool registry, hash routing (`#dice`, `#odds`…), store, export helpers, reduced-motion flag. |
-| `tools/<name>.js` | One per tool. Exports `{ id, title, blurb, mount(el, store), unmount() }`. Registered in `bench.js`. |
+| `dicemath.js` | `Bench.dice`: parse a roll, roll it, exact distribution. Shared by Dice and Odds. |
+| `tools/<name>.js` | One per tool. Calls `Bench.register({ id, mount, unmount })`. |
 | `data/cards.js` | Pre-baked card layout configs. |
 | `data/demos.js` | Simplification demo content (case study copy and tables). |
 | `fonts/` | Self-hosted woff2: Lexend 400/500/600/700/900, JetBrains Mono 400/700. |
@@ -131,40 +132,47 @@ Goal: the two tools the whole thing was started for, plus the deck lab because
 it shares the machinery.
 
 ### Dice (`tools/dice.js`)
-- [ ] Standard dice d4–d100, custom dN, coin.
-- [ ] Pool syntax: `3d6`, `2d20kh1`, `4d6dl1`, `+N`. Parsed with a tiny grammar,
-      errors shown inline, never a crash.
-- [ ] Custom faces: name each face of a die, save named dice to the store.
-- [ ] Animated roll, ~0.8 s, skippable by clicking again. CSS 3D cube for d6,
-      number wheel for the rest. Reduced motion shows the result with a short
-      fade.
-- [ ] History column, last 50 shown, all written to `store.rolls`.
-- [ ] Roll again with Space or Enter. Works with a thumb on a phone.
-- [ ] Export history CSV.
+- [x] Standard dice d4–d100 as quick picks, any dN typed, coin as a built-in
+      custom die.
+- [x] Pool syntax: `3d6`, `2d20kh1`, `4d6dl1`, `2d6+1d4-1`. Errors inline.
+      Caps: 20 dice, 1000 sides. Subtracting dice is refused.
+- [x] Custom faces: name and faces, saved to `store.dice.custom`, rolled ×1–10
+      with a flicker; results go to history as strings (`custom: true`,
+      `total: null`).
+- [x] Animated roll ~0.8 s, click again to skip. CSS cube for d6, clip-path
+      polyhedra with a slowing number flicker for everything else. Dropped
+      dice dim and strike through in the breakdown. Reduced motion lands
+      instantly.
+- [x] History, last 50 shown, all written to `store.rolls`.
+- [x] Space rolls again (outside inputs). Enter in the roll box rolls.
+- [x] Export history CSV.
 
 ### Odds (`tools/odds.js`, the probability lab)
-- [ ] Define roll with the same parser as Dice.
-- [ ] Label outcomes by value or range. Unlabelled values get a neutral label.
-- [ ] Run 10 / 100 / 1,000 / 10,000. Hard cap 10,000 rolls and 20 dice, stated
-      in the UI with a reason.
-- [ ] Histogram fills live for 10 and 100, snaps for 1,000 and 10,000.
-- [ ] Exact distribution overlay by convolution, toggleable.
-- [ ] "Per game" line: student enters expected rolls per game, gets expected
-      count of each label.
-- [ ] "Use my rolls" button loads `store.rolls` for the current spec as the
-      sample.
-- [ ] Export histogram PNG, results CSV, setup JSON.
+- [x] Same parser as Dice. Last spec and labels persist in `store.odds`.
+- [x] Label ranges with a colour each; unlabelled values are outlined bars.
+- [x] Run 10 / 100 / 1,000 / 10,000. Cap stated in the UI with the reason.
+- [x] 10 and 100 fill live over ~1.2 s via rAF; 1,000 and 10,000 snap.
+- [x] Exact distribution as a dashed brass step line, always on. (Toggle
+      dropped: it's the point of the chart.) Keep/drop rolls enumerate up to
+      2M combos, otherwise estimate from 200k samples and say so.
+- [x] Per-game expectation column from a "rolls per game" input.
+- [x] "Use my N rolls" loads matching non-custom rolls from history.
+- [x] Export chart PNG (SVG rasterised at 2×, colours resolved from CSS vars
+      at draw time), table + per-value CSV.
+- [ ] Setup JSON export. Not needed: the whole bench exports from the Data
+      menu.
 
 ### Deck (`tools/deck.js`)
-- [ ] Define card counts by name.
-- [ ] Draw a hand of N; shuffle and draw repeatedly with animation.
-- [ ] "Chance of at least K of X in a hand of N": hypergeometric, shown
-      alongside 1,000 simulated draws.
-- [ ] Sliders on counts update the odds live.
-- [ ] Export CSV.
+- [x] Card kinds with name, slider and number; capped at 200 cards.
+- [x] Draw a hand of N with cards dealing in.
+- [x] "At least K of X in a hand of N": hypergeometric exact beside 1,000
+      simulated shuffles. Table per kind: share, expected in hand, P(≥1),
+      P(none).
+- [x] Sliders update the odds live.
+- [x] Export CSV.
 
-Phase 1 done when: a student can label `1 = backfire`, run 100 and 1,000, see
-the bars settle onto the outline, and download the chart.
+Phase 1 done: a student can label `1 = backfire`, run 100 and 1,000, see
+the bars settle onto the outline, and download the chart. Verified 2026-09-16.
 
 ---
 
@@ -316,6 +324,22 @@ when there's enough to be worth a student's click.
 
 _(Append here at the end of each session: what landed, what's half done, what
 surprised you. Newest at the top.)_
+
+- 2026-09-16 (Phase 1): Dice, Odds, Deck built and verified at desktop and
+  375px, light and dark. Committed locally, not pushed. For Phase 2:
+  - `Bench.pct(p)` formats probabilities (keeps a decimal near 0% and 100%).
+    Use it anywhere a percentage is shown.
+  - Series colours for anything multi-coloured: `--berry --brass --felt
+    --slate --plum --rust`, in that order. Both Odds and Deck use the same
+    `SWATCH` list; if a third tool needs it, lift it into `bench.js`.
+  - `.sw` is the small colour swatch; `table.sheet` the data table; `.seg`
+    the segmented control. `.tool-grid` is the two-column panel layout and
+    collapses on its own.
+  - Odds resets its sample when the spec changes but keeps labels, so a
+    label can sit outside the new range (shows 0%). Deliberate.
+  - The Dice cube sits at `rotateX(-10) rotateY(12)` for a hint of 3D;
+    `showCubeFace` composes the face rotation after that.
+  - No `media/` yet and no `images/fun/gamebench.png` for the fun card.
 
 - 2026-09-16 (later): Phase 0 built. Shell, store, routing, theme, seed Dice
   tool, all verified in the browser at desktop and 375px, light and dark, no
