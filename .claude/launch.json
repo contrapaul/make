@@ -85,6 +85,17 @@
         "."
       ],
       "port": 8791
+    },
+    {
+      "name": "tome",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/paul/Documents/GitHub/tomeofsecrets",
+        "run",
+        "dev"
+      ],
+      "port": 5174
     }
   ]
 }
