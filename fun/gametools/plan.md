@@ -5,7 +5,7 @@ Brainstorm and rationale: `brainstorm.md`. This file is the working plan; update
 the checkboxes and the status line as work lands, so a new session can pick up
 from here without re-reading the conversation.
 
-**Status:** Phases 0 and 1 built and verified locally, committed, not yet pushed. Phase 2 next. Last updated 2026-09-16.
+**Status:** Phases 0–2 built and verified locally, committed, not yet pushed. Phase 3 next. Last updated 2026-09-16.
 
 ---
 
@@ -181,37 +181,52 @@ the bars settle onto the outline, and download the chart. Verified 2026-09-16.
 Goal: the tools that answer "will this fit in a recess".
 
 ### Manifest (`tools/manifest.js`)
-The shared component list. Not a tool in its own right on the nav; it's an
-editable table that Setup, Owners and Box all embed.
-- [ ] Add / edit / delete rows: name, type (card, token, board, die, other),
-      count, starts where (table, reserve, dealt, bag), owner, size mm.
-- [ ] Writes to `store.manifest`.
-- [ ] Export CSV and print.
+The shared component list. Not on the nav; `Bench.manifest.mount(el, store,
+{owners})` embeds it and returns an unmount. Setup embeds it now; Owners and
+Box will.
+- [x] Add / edit / delete rows: name, kind (card, token, board, die, tile,
+      other), count, starts where (table, reserve, dealt, bag). Owner column
+      only when `{owners: true}`. Size in mm deferred to Box (Phase 5).
+- [x] Writes to `store.manifest`; seeds an example on first open with a
+      "this is an example" note.
+- [x] Export CSV and print.
 
 ### Setup (`tools/setup.js`)
-- [ ] Reads manifest. Per-placement time costs (documented in the file, editable
-      in an "advanced" fold).
-- [ ] Setup minutes, pack-away minutes, pieces-on-table count.
-- [ ] Warnings at 60 and 120 pieces on table.
-- [ ] Shows which component type eats the most time.
+- [x] Reads manifest. Seconds-per-piece by kind × start in `DEFAULT_COST`,
+      editable in the Assumptions panel, saved to `store.setup.cost`.
+      Shuffle 20 s per deck. Pack-away 60% / 15%.
+- [x] Setup, pack-away, pieces on the table.
+- [x] Warnings at 60 and 120 pieces on the table.
+- [x] "Where the time goes" bars by kind.
+- [x] `Bench.setupEstimate(store)` for Session.
 
 ### Session (`tools/session.js`)
-- [ ] Inputs per brainstorm. Setup and pack-away prefilled from Setup if present.
-- [ ] 0–30 min stacked bar, phases coloured, overflow shown in red beyond 30.
-- [ ] "To fit" suggestions when over.
-- [ ] Prefills turn time from the latest playtest if there is one.
-- [ ] Export PNG of the bar.
+- [x] Players, turns each, seconds a turn, set up, teach, pack away. Target
+      20 / 25 / 30.
+- [x] Stacked bar SVG, target as a dashed line, overflow hatched.
+- [x] "Any one of these fits it": fewer turns, shorter turns, shorter teach
+      or setup, one fewer player, each computed to fit alone.
+- [x] "Use Setup's estimate" and "Use my last playtest" buttons (the latter
+      derives seconds a turn from play time ÷ players × turns).
+- [x] Export PNG of the bar.
 
 ### Playtest (`tools/playtest.js`)
 Phone-first.
-- [ ] Stopwatch with lap buttons Setup / Teach / Play / Pack.
-- [ ] Named tally counters, big tap targets, add your own.
-- [ ] Question log: text field + timestamp, listed by time.
-- [ ] Saves a session to `store.playtests` on stop.
-- [ ] Export session CSV; print a blank tally sheet.
+- [x] Stopwatch with Set up / Teach / Play / Pack away phase buttons, pause,
+      finish, discard. Time is Date.now() deltas, so it survives the screen
+      sleeping; the live session persists in `store.playtestLive` across
+      reloads.
+- [x] Tally counters with 56 px tap targets, rename in place, add your own.
+      Counts update in place so renaming isn't interrupted.
+- [x] Question log with elapsed time and phase.
+- [x] Finish saves to `store.playtests`; counter names carry over to the next
+      session.
+- [x] CSV per session, CSV of all sessions (one row each), printable blank
+      sheet with the current counter names.
 
-Phase 2 done when: a team can enter their components, see setup time, run a
-timed playtest on a phone, and watch the session bar update from real numbers.
+Phase 2 done: a team can enter their components, see setup time, run a timed
+playtest on a phone, and watch the session bar update from real numbers.
+Verified 2026-09-16. Fun card flipped to LIVE.
 
 ---
 
@@ -325,6 +340,19 @@ when there's enough to be worth a student's click.
 _(Append here at the end of each session: what landed, what's half done, what
 surprised you. Newest at the top.)_
 
+- 2026-09-16 (Phase 2): Manifest, Setup, Session, Playtest built and
+  verified at desktop and 375px. Committed locally, not pushed. For Phase 3:
+  - `Bench.printSection(el)` clones a node into a hidden iframe with
+    `bench.css` (resolved against the page URL) and prints once the CSS
+    loads. Body class `print-only` strips chrome. Card sheets should use it.
+  - The manifest table keeps focus on keystrokes by setting `quiet` around
+    its own `store.set`; other tools that embed an editable list want the
+    same trick.
+  - Playtest and Session share the phase list and colours (setup brass,
+    teach slate, play berry, pack felt). Keep that mapping if anything else
+    shows phases.
+  - Still to do outside this repo: link Game Bench from the unit page in
+    `edu/curriculum/myp/g9-game-design.html` once pushed.
 - 2026-09-16 (Phase 1): Dice, Odds, Deck built and verified at desktop and
   375px, light and dark. Committed locally, not pushed. For Phase 2:
   - `Bench.pct(p)` formats probabilities (keeps a decimal near 0% and 100%).

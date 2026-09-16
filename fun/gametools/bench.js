@@ -4,7 +4,7 @@
   'use strict';
 
   var STORE_KEY = 'gamebench.v1';
-  var EMPTY = { rolls: [], dice: {}, odds: {}, deck: {}, manifest: [], session: {}, cards: { types: [] }, playtests: [], prefs: {} };
+  var EMPTY = { rolls: [], dice: {}, odds: {}, deck: {}, manifest: [], setup: {}, session: {}, cards: { types: [] }, playtests: [], playtestLive: null, prefs: {} };
 
   /* ---------- store ---------- */
   var data = load();
@@ -93,9 +93,11 @@
     document.body.appendChild(frame);
     var d = frame.contentDocument;
     d.open();
-    d.write('<!DOCTYPE html><html><head><link rel="stylesheet" href="bench.css"></head><body class="print-only">' + el.outerHTML + '</body></html>');
+    var css = new URL('bench.css', location.href).href;
+    d.write('<!DOCTYPE html><html><head><link rel="stylesheet" href="' + css + '"></head><body class="print-only">' + el.outerHTML + '</body></html>');
     d.close();
-    frame.onload = function () { frame.contentWindow.focus(); frame.contentWindow.print(); setTimeout(function () { frame.remove(); }, 1000); };
+    var go = function () { frame.contentWindow.focus(); frame.contentWindow.print(); setTimeout(function () { frame.remove(); }, 2000); };
+    var link = d.querySelector('link'); link.onload = go; link.onerror = go;
   }
 
   /* ---------- registry and routing ---------- */
