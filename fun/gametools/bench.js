@@ -185,7 +185,7 @@
     }
     var old = document.querySelector('.home-intro'); if (old) old.remove();
     renderNav(id);
-    document.title = tool.title + ' — Game Bench';
+    document.title = tool.title + ' | Game Bench';
     current = tool;
     // A fresh container per mount, so listeners a tool hangs on its root die with it.
     var box = document.createElement('div'); box.className = 'tool-root';

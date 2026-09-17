@@ -158,7 +158,7 @@ body::before {
   background: var(--paper); color: var(--ink); border-radius: var(--r-lg);
   box-shadow: var(--shadow-card); padding: 20px;
 }
-.panel + .panel, .panel + .tool-grid, .tool-grid + .panel { margin-top: var(--gap); }
+.panel + .panel, .panel + .tool-grid, .tool-grid + .panel, .tool-grid + .tool-grid { margin-top: var(--gap); }
 .panel h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
 .panel p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; }
 .kicker { font: 700 11px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--berry); margin: 0 0 10px; }
