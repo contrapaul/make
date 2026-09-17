@@ -603,12 +603,12 @@
       <div class="shell-pad stack">
         <header data-reveal>
           <h2>Local vs Cloud</h2>
-          <p>One question, five real answers. Three came from cloud models and two ran on a local machine. Press the button and each one waits, then writes its actual reply <a class="gloss" data-term="token" href="#/glossary/token">token</a> by token at the speed it really wrote it. Watching tells you who is fast; reading tells you what the waiting bought.</p>
+          <p>One question, five real answers. Three came from cloud models and two ran on a local machine. Press the button and each one waits, then writes its actual reply <a class="gloss" data-term="token" href="#/glossary/token">token</a> by token at the speed it really wrote it. Speed isn't everything! These responses are quite similar, but worth a closer look to see linguistic and substantive training and choices in action.</p>
         </header>
 
         <article class="card" data-reveal aria-label="The race">
           <h3>The race</h3>
-          <p class="ctl-note">Every model was given the same prompt, once:</p>
+          <p class="ctl-note">Every model was given the same prompt:</p>
           <blockquote class="race-prompt" id="cmp-race-prompt">…</blockquote>
           <p class="ctl-note" id="cmp-race-local" aria-live="polite">…</p>
 
@@ -617,11 +617,11 @@
           <div class="race-grid" id="cmp-race" style="margin-top:var(--sp-4)" aria-live="polite"></div>
 
           <p class="ctl-note" id="cmp-race-note" aria-live="polite">…</p>
-          <p class="ctl-note">The two local models are not playing back a recording of a stopwatch. Their words are from a real local run, but the speed you are watching is worked out live by the same engine as the rest of this site, for the hardware you picked in the Hardware Lab. Change the rig and they change. The three cloud models keep the times they were actually measured at, because a cloud model does not get faster when you buy a graphics card.</p>
+          <p class="ctl-note">Qwen3.8-27B and Gemma 4 E4B are calculated based on the hardware cobfiguration in the lab tab. The output is real, but the speed you are watching is worked out live by the same engine as the rest of this site. The three cloud models keep the times I recorded for them, including Claude's "lengthy" thinking at the start.</p>
           <p class="ctl-note">Notice that finishing first and answering best are not the same thing. Read the five answers above once the race is over: the longest one here also finished last, and whether that was worth the wait is a judgement this site cannot make for you.</p>
 
           <h4>How these were measured</h4>
-          <p class="ctl-note"><b>This matters for reading the result.</b> These are five one-off runs on one machine and one network on 2026-09-05, not benchmarks, and the cloud answers were not all captured the same way. Two of them were free-tier and timed end to end, which if anything flatters them: some of those seconds were really spent waiting for the first word.</p>
+          <p>I timed these responses on one machine (3 web, 2 local) on 2026-09-05. They aren't scientific benchmarks, and the cloud answers were not all captured the same way. Two of them were free-tier (Deepseek and ChatGPT), while Claude's response was timed on a paid account. Paying for an account doesn't speed it up, it would seem.</p>
           <ul class="ctl-note" id="cmp-race-caveats"></ul>
         </article>
 
@@ -652,8 +652,8 @@
 
   <footer class="foot">
     <div class="shell-pad foot-inner">
-      <p>localAI · a static interactive guide; no build step, no external assets.</p>
-      <p>Footer content to be added by the owner (blueprint §2).</p>
+      <p>localAI · a static interactive guide</p>
+      <p>Footer content to be added by the Mr. K (blueprint §2).</p>
     </div>
   </footer>
 
