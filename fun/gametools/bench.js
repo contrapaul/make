@@ -175,15 +175,13 @@
       if (id) history.replaceState(null, '', location.pathname + location.search);
       renderNav(null);
       main.innerHTML = '';
-      // Home: nav grid is the content. A short intro sits above it.
-      var intro = document.createElement('div'); intro.className = 'home-intro';
-      intro.innerHTML = '<p class="lede">Roll it, count it, lay it out, time it.</p><p>A bench for people making tabletop games. Pick a tool.</p>';
-      nav.before(intro);
+      // Home: the nav grid is the content; the tagline under the wordmark shows.
+      document.body.classList.add('is-home');
       document.title = 'Game Bench';
       window.scrollTo(0, 0);
       return;
     }
-    var old = document.querySelector('.home-intro'); if (old) old.remove();
+    document.body.classList.remove('is-home');
     renderNav(id);
     document.title = tool.title + ' | Game Bench';
     current = tool;

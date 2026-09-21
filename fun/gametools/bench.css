@@ -99,7 +99,9 @@ body::before {
 .bench-head, .bench-nav, .bench-main, .bench-foot { position: relative; z-index: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
 
 .bench-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 18px; padding-bottom: 12px; }
-.brand { text-decoration: none; color: var(--on-felt); }
+.brand { text-decoration: none; color: var(--on-felt); display: flex; flex-direction: column; gap: 6px; }
+.brand-tag { display: none; font-size: 15px; opacity: .85; }
+body.is-home .brand-tag { display: block; }
 .brand-name { font-family: var(--font-display); font-weight: 900; font-size: clamp(30px, 6vw, 44px); line-height: 1; letter-spacing: -.02em; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
 .brand-name span { color: var(--brass); }
 .head-tools { display: flex; gap: 8px; align-items: center; }
@@ -148,10 +150,6 @@ body::before {
 .bench-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--on-felt); opacity: .8; font-size: 13px; padding-top: 12px; padding-bottom: 28px; }
 .bench-foot a { color: inherit; }
 
-/* home intro */
-.home-intro { color: var(--on-felt); max-width: 56ch; margin: 4px 0 18px; font-size: 16px; }
-.home-intro p { margin: 0; }
-.home-intro .lede { font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 3.4vw, 26px); line-height: 1.2; letter-spacing: -.01em; margin-bottom: 6px; }
 
 /* ---------- 3. shared components ---------- */
 .panel {

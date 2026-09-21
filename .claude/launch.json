@@ -78,13 +78,11 @@
       "name": "gamebench",
       "runtimeExecutable": "python3",
       "runtimeArgs": [
-        "-m",
-        "http.server",
-        "8791",
-        "--directory",
-        "."
+        "-c",
+        "import os,http.server as h;h.test(HandlerClass=h.SimpleHTTPRequestHandler,port=int(os.environ.get('PORT','8791')),bind='127.0.0.1')"
       ],
-      "port": 8791
+      "port": 8791,
+      "autoPort": true
     },
     {
       "name": "tome",
