@@ -105,6 +105,16 @@
         "dev:api"
       ],
       "port": 8788
+    },
+    {
+      "name": "edu-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os,http.server as h,functools;h.test(HandlerClass=functools.partial(h.SimpleHTTPRequestHandler,directory='/Users/paul/Documents/GitHub/edu'),port=int(os.environ.get('PORT','8899')),bind='127.0.0.1')"
+      ],
+      "port": 8899,
+      "autoPort": true
     }
   ]
 }
