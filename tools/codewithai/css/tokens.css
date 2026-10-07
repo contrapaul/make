@@ -37,7 +37,9 @@
   /* System font stack (§7): SF Pro / Segoe UI, CJK fallback */
   --font-sans: system-ui, -apple-system, "SF Pro Text", "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+  /* JetBrains Mono is the site-wide mono face, served from /WEB (see the
+     <link> in index.html); the rest is the fallback stack. */
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
     "Liberation Mono", monospace;
 
   /* Motion (§7): durations + easings */

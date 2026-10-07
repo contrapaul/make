@@ -25,6 +25,9 @@
     })();
   </script>
 
+  <!-- JetBrains Mono, shared across make.contrapaul.com (WEB/Jetbrains). Same
+       origin, so it is not an external asset; only the weights used download. -->
+  <link rel="stylesheet" href="/WEB/css/jetbrains-mono.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/tabs.css">
@@ -48,7 +51,7 @@
           <path d="M13 2 4.5 13.5H11L9.5 22 19 9.5h-6.5L13 2Z" fill="currentColor"/>
         </svg>
       </span>
-      contrapaul.com<span class="brand-sep">/</span>make<span class="brand-sep">/</span>Code with AI
+      <span class="brand-root">contrapaul.com<span class="brand-sep">/</span></span>make<span class="brand-sep">/</span>Code with AI
     </a>
 
     <nav class="tabs" aria-label="Site tabs">
@@ -86,7 +89,7 @@
         <div class="hero-inner">
           <p class="eyebrow" data-reveal>A guide for high school students</p>
           <h1 data-reveal>Code <em class="accent-text">with</em> AI, not instead of it.</h1>
-          <p class="hero-sub" data-reveal>An AI assistant will write you code in seconds. What it will not do is tell you when the code is wrong, explain the words everyone around you is using, or take responsibility when the project breaks the day before it is due. This site is for the part that is still yours: knowing what a <a class="gloss" data-term="repo" href="#/glossary/repo">repository</a> is, reading an <a class="gloss" data-term="error-message" href="#/glossary/error-message">error message</a>, and asking a good question.</p>
+          <p class="hero-sub" data-reveal>An AI assistant can write code for you in seconds. But it cannot tell you when that code is wrong. It cannot explain the words that everyone around you is using. And when your project breaks the day before it is due, the problem is still yours. This site is for the parts that stay yours: knowing what a <a class="gloss" data-term="repo" href="#/glossary/repo">repository</a> is, reading an <a class="gloss" data-term="error-message" href="#/glossary/error-message">error message</a>, and asking a good question.</p>
           <div class="hero-cta" data-reveal>
             <a class="btn btn--primary" href="#/glossary">Open the glossary</a>
             <a class="btn btn--ghost" href="#/workflow">How to work with an assistant</a>
@@ -99,19 +102,21 @@
         <section class="beat" data-reveal>
           <div class="beat-copy">
             <h3>Start with the words</h3>
-            <p>The hardest part of learning to code with an AI is not the code. It is that everyone, including the assistant, talks in a vocabulary nobody stopped to teach you. An answer that begins <i>just clone the repo and run it from the CLI</i> is useless if three of those words are unfamiliar, and it is worse than useless if you nod along and paste the commands anyway.</p>
-            <p>So the <a class="gloss" data-term="cli" href="#/glossary/cli">glossary</a> is the first real page here, and it is the one to come back to. Sixty terms, each defined in plain language, with the English term always shown so you can recognise it on a button, in a menu or in somebody else's answer.</p>
+            <p>The hardest part of learning to code with AI is not the code. It is the words. Everyone, including the AI, uses words that nobody taught you. Imagine an answer that starts <q>Just clone the repo and run it from the CLI.</q> If you do not know three of those words, the answer is useless. If you paste the commands anyway without understanding them, you can break your project.</p>
+            <p>So the <a href="#/glossary">glossary</a> is the first real page on this site, and you will come back to it often. Every term is explained in plain English. The English term is always shown, so you can find it on a button, in a menu or in an answer from someone else.</p>
           </div>
           <div class="card beat-visual">
             <h4>What the glossary covers</h4>
             <ul class="flow-list">
               <li>Code and languages: <a class="gloss" data-term="html" href="#/glossary/html">HTML</a>, <a class="gloss" data-term="css" href="#/glossary/css">CSS</a>, <a class="gloss" data-term="python" href="#/glossary/python">Python</a>, <a class="gloss" data-term="function" href="#/glossary/function">functions</a>, <a class="gloss" data-term="library" href="#/glossary/library">libraries</a>.</li>
+              <li>Building a webpage: <a class="gloss" data-term="element" href="#/glossary/element">elements</a>, <a class="gloss" data-term="tag" href="#/glossary/tag">tags</a>, <a class="gloss" data-term="class" href="#/glossary/class">classes</a>, <a class="gloss" data-term="selector" href="#/glossary/selector">selectors</a>.</li>
               <li>Running code: the <a class="gloss" data-term="terminal" href="#/glossary/terminal">terminal</a>, the <a class="gloss" data-term="cli" href="#/glossary/cli">command line</a>, <a class="gloss" data-term="path" href="#/glossary/path">paths</a>, <a class="gloss" data-term="server" href="#/glossary/server">servers</a>.</li>
               <li>Version control: <a class="gloss" data-term="git" href="#/glossary/git">Git</a>, <a class="gloss" data-term="commit" href="#/glossary/commit">commits</a>, <a class="gloss" data-term="branch" href="#/glossary/branch">branches</a>, <a class="gloss" data-term="github" href="#/glossary/github">GitHub</a>.</li>
               <li>When things break: <a class="gloss" data-term="bug" href="#/glossary/bug">bugs</a>, <a class="gloss" data-term="debug" href="#/glossary/debug">debugging</a>, <a class="gloss" data-term="stack-trace" href="#/glossary/stack-trace">stack traces</a>.</li>
+              <li>Putting it online: <a class="gloss" data-term="hosting" href="#/glossary/hosting">hosting</a>, <a class="gloss" data-term="domain" href="#/glossary/domain">domain names</a>, <a class="gloss" data-term="dns" href="#/glossary/dns">DNS</a>.</li>
               <li>Working with AI: <a class="gloss" data-term="prompt" href="#/glossary/prompt">prompts</a>, <a class="gloss" data-term="token" href="#/glossary/token">tokens</a>, <a class="gloss" data-term="hallucination" href="#/glossary/hallucination">hallucinations</a>.</li>
             </ul>
-            <p class="beat-caption">Hover any underlined word on this site to read the short version without leaving the page.</p>
+            <p class="beat-caption">Move your mouse over any underlined word on this site to read a short version, without leaving the page.</p>
           </div>
         </section>
 
@@ -128,16 +133,16 @@
           </div>
           <div class="beat-copy">
             <h3>Read it in Chinese, recognise it in English</h3>
-            <p>Nearly every menu, button and error message you will meet is in English. A student who learns only 仓库 has understood the idea but still cannot find the word <i>repository</i> in GitHub, and a student who learns only the English word may not have understood the idea at all.</p>
-            <p>That is why the switch never hides the English. Turn it on and the explanation becomes Chinese while the term itself stays where it was, with the Chinese term added beneath it. You get the concept and the label together, which is what you need to take part in a conversation about code.</p>
+            <p>Almost every menu, button and error message you will see is in English. Imagine a student who learns only <span lang="zh-Hans">仓库</span>. They understand the idea, but they still cannot find the word <i>repository</i> in GitHub. Another student learns only the English word. They may not understand the idea at all.</p>
+            <p>That is why the switch never hides the English. When you turn it on, the explanation changes to Chinese. The English term stays in the same place, and the Chinese term appears under it. You get the idea and the word together. You need both to talk about code with other people.</p>
           </div>
         </section>
 
         <section class="beat" data-reveal>
           <div class="beat-copy">
-            <h3>The assistant is a colleague, not an oracle</h3>
-            <p>A language model predicts text. It is very good at this, and writing code is largely a text problem, which is why the results can be remarkable. But prediction is not understanding, and a wrong answer arrives with exactly the same confidence as a right one. It cannot see your screen, run your program or know what you tried an hour ago.</p>
-            <p>Everything that follows from that is practical rather than philosophical. Ask for one piece at a time. Run it. Read the error yourself before you paste it. <a class="gloss" data-term="commit" href="#/glossary/commit">Commit</a> before you accept a large change, so you can always get back. None of this is about distrusting the tool; it is about staying the person who knows what the project does.</p>
+            <h3>What an AI assistant can and cannot do</h3>
+            <p>A <a class="gloss" data-term="llm" href="#/glossary/llm">language model</a> predicts text. It is very good at this. Writing code is mostly a text problem, so the results can be impressive. But predicting is not understanding. A wrong answer sounds exactly as sure as a right one. The assistant also cannot see your screen, run your program or know what you tried an hour ago.</p>
+            <p>This leads to some practical habits. Ask for one piece at a time. Run it. Read the error yourself before you paste it. <a class="gloss" data-term="commit" href="#/glossary/commit">Commit</a> before you accept a large change, so you can always return. None of this means you should distrust the tool. It means you stay the person who knows what your project does.</p>
           </div>
           <div class="card beat-visual">
             <h4>Four habits worth having early</h4>
@@ -147,7 +152,7 @@
               <li>Give the assistant the real error text, not a description of it.</li>
               <li>Keep the project in <a class="gloss" data-term="version-control" href="#/glossary/version-control">version control</a> from the first day.</li>
             </ul>
-            <p class="beat-caption">The Workflow tab will go through each of these properly.</p>
+            <p class="beat-caption">The Workflow tab will explain each of these in detail.</p>
           </div>
         </section>
 
@@ -164,7 +169,7 @@
         <div class="tab-card-grid" data-reveal>
           <a class="card tab-card" href="#/glossary">
             <h3>Glossary</h3>
-            <p>Sixty terms in plain language, in English and Chinese. Start here.</p>
+            <p>Every technical word on this site, in plain English and in Chinese. Start here.</p>
           </a>
           <a class="card tab-card" href="#/setup">
             <h3>Setup</h3>
@@ -172,22 +177,216 @@
           </a>
           <a class="card tab-card" href="#/workflow">
             <h3>Workflow</h3>
-            <p>How to run a real project with an assistant without losing the thread.</p>
+            <p>How to build a real project with an assistant, one small step at a time.</p>
           </a>
         </div>
       </section>
     </section>
 
-    <!-- ============ Tab 2 · Setup (placeholder) ============ -->
+    <!-- ============ Tab 2 · Setup (M3: steps 1 to 6) ============
+         Steps live here in the markup, not in a JS data file, so the
+         copy tests read every word (blueprint §4, changed in M3).
+         Windows and Mac blocks carry data-os-only; js/tabs/setup.js
+         sets <html data-os> and CSS hides the other one. With no JS,
+         both show.
+         Screenshots: each .shot points at its final file under
+         images/vscode/. A missing file shows a labelled placeholder
+         (js/tabs/setup.js), so dropping the PNG in is the whole job.
+         Every file name is listed in images/vscode/SHOTLIST.md, and
+         test/links.test.mjs checks that the two agree. -->
     <section class="tab-panel" data-tab="setup" aria-label="Setup">
       <div class="shell-pad stack">
         <header data-reveal>
           <h2>Setup</h2>
-          <p>Getting the tools onto your own computer: a <a class="gloss" data-term="editor" href="#/glossary/editor">code editor</a>, a <a class="gloss" data-term="terminal" href="#/glossary/terminal">terminal</a> you are not afraid of, and <a class="gloss" data-term="git" href="#/glossary/git">Git</a>.</p>
+          <p>This page takes you from an empty laptop to your own webpage in a browser. It takes about 30 minutes. Do the steps in order. Each step ends with a picture. When your screen looks like the picture, go to the next step.</p>
         </header>
+
+        <fieldset class="os-switch" data-reveal>
+          <legend>Your computer</legend>
+          <div class="segmented">
+            <label><input type="radio" name="os" value="win" data-os-choice><span class="seg-opt">Windows</span></label>
+            <label><input type="radio" name="os" value="mac" data-os-choice><span class="seg-opt">Mac</span></label>
+          </div>
+        </fieldset>
+
+        <ol class="steps">
+
+          <!-- ---------- Step 1 ---------- -->
+          <li class="step card" id="setup-step-1" data-reveal>
+            <h3><span class="step-num">1</span> What you need</h3>
+            <ul class="needs">
+              <li>A laptop with Windows 10 or 11, or with macOS.</li>
+              <li>An internet connection. VS Code is a large download: <span data-os-only="win">about 250 MB.</span><span class="os-or"> </span><span data-os-only="mac">about 550 MB on a Mac.</span> On school Wi-Fi, this can take a few minutes.</li>
+              <li>At least 2 GB of free space on your drive.</li>
+              <li>About 30 minutes, and the password for your laptop, in case it asks.</li>
+            </ul>
+            <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are ready when you have all four.</p>
+          </li>
+
+          <!-- ---------- Step 2 ---------- -->
+          <li class="step card" id="setup-step-2" data-reveal>
+            <h3><span class="step-num">2</span> Install VS Code</h3>
+            <p>VS Code is the <a class="gloss" data-term="editor" href="#/glossary/editor">code editor</a> you will use. It is free, and Microsoft makes it.</p>
+
+            <ol class="do" data-os-only="win">
+              <li>Go to <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">code.visualstudio.com/download</a>.</li>
+              <li>Click the big <b>Windows</b> button. The installer downloads.</li>
+              <li>Open the file. Its name starts with <code>VSCodeUserSetup</code>.</li>
+              <li>Click <b>I accept the agreement</b>. Then click <b>Next</b>.</li>
+              <li>Click <b>Next</b> again until you see <b>Select Additional Tasks</b>.</li>
+              <li>Check that <b>Add to PATH</b> is ticked. Also tick the two boxes that start with <b>Add "Open with Code" action</b>. They help you later.</li>
+              <li>Click <b>Next</b>. Then click <b>Install</b>.</li>
+              <li>Keep <b>Launch Visual Studio Code</b> ticked. Click <b>Finish</b>.</li>
+            </ol>
+            <figure class="shot shot--small" data-os-only="win">
+              <img src="images/vscode/setup-02-tasks-win.png" alt="The Select Additional Tasks page of the VS Code installer, with Add to PATH and both Open with Code boxes ticked." loading="lazy">
+            </figure>
+
+            <ol class="do" data-os-only="mac">
+              <li>Go to <a href="https://code.visualstudio.com/download" target="_blank" rel="noopener noreferrer">code.visualstudio.com/download</a>.</li>
+              <li>Click the big <b>Mac</b> button. A <code>.zip</code> file downloads to your <b>Downloads</b> folder.</li>
+              <li>Open <b>Downloads</b>. If you see the <code>.zip</code> file, double-click it.</li>
+              <li>You now have an app called <b>Visual Studio Code</b>. Drag it into your <b>Applications</b> folder.</li>
+              <li>Open <b>Applications</b>. Double-click <b>Visual Studio Code</b>.</li>
+              <li>Your Mac asks if you are sure, because the app came from the internet. Click <b>Open</b>.</li>
+            </ol>
+            <figure class="shot shot--small" data-os-only="mac">
+              <img src="images/vscode/setup-02-applications-mac.png" alt="A Finder window, with Visual Studio Code being dragged into the Applications folder." loading="lazy">
+            </figure>
+
+            <aside class="note">
+              <h4>If VS Code offers Chinese</h4>
+              <p>If your laptop is set to Chinese, VS Code may offer to show its menus in Chinese. We suggest you say no, for now. Guides, error messages and answers from Copilot are all in English. Chinese menus will not match them. Every word you need is in the <a href="#/glossary">glossary</a>, in both languages. It is your choice, and you can change it later.</p>
+            </aside>
+
+            <div class="checkpoint">
+              <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are done when VS Code is open and you can see the <b>Welcome</b> page.</p>
+              <figure class="shot shot--small">
+                <img src="images/vscode/setup-02-checkpoint.png" alt="VS Code open for the first time, showing the Welcome page." loading="lazy">
+              </figure>
+            </div>
+          </li>
+
+          <!-- ---------- Step 3 ---------- -->
+          <li class="step card" id="setup-step-3" data-reveal>
+            <h3><span class="step-num">3</span> The VS Code window</h3>
+            <p>Learn these five names first. Every step after this one uses them.</p>
+
+            <!-- Callout positions (--x, --y) assume VS Code's default layout at
+                 1280×800. Retune them here once the screenshot is in. -->
+            <figure class="shot shot--window">
+              <img src="images/vscode/setup-03-window.png" alt="The VS Code window with a project open. Five parts are numbered: 1 Activity Bar, 2 Side Bar, 3 Editor, 4 Panel, 5 Status Bar." loading="lazy">
+              <div class="shot-schematic" aria-hidden="true">
+                <span class="sch-activity"></span><span class="sch-side"></span><span class="sch-editor"></span><span class="sch-panel"></span><span class="sch-status"></span>
+              </div>
+              <span class="callout" style="--x: 2%;  --y: 30%" aria-hidden="true">1</span>
+              <span class="callout" style="--x: 14%; --y: 40%" aria-hidden="true">2</span>
+              <span class="callout" style="--x: 58%; --y: 30%" aria-hidden="true">3</span>
+              <span class="callout" style="--x: 58%; --y: 80%" aria-hidden="true">4</span>
+              <span class="callout" style="--x: 50%; --y: 97%" aria-hidden="true">5</span>
+            </figure>
+            <ol class="callout-key">
+              <li><a class="gloss" data-term="activity-bar" href="#/glossary/activity-bar">Activity Bar</a>: the icons on the far left. Each one opens a view.</li>
+              <li><a class="gloss" data-term="sidebar" href="#/glossary/sidebar">Side Bar</a>: the panel next to the icons. <b>Explorer</b> shows your files here.</li>
+              <li><a class="gloss" data-term="editor" href="#/glossary/editor">Editor</a>: the big area in the middle. You write code here.</li>
+              <li><b>Panel</b>: the area at the bottom. The <a class="gloss" data-term="terminal" href="#/glossary/terminal">terminal</a> opens here.</li>
+              <li><a class="gloss" data-term="status-bar" href="#/glossary/status-bar">Status Bar</a>: the thin bar along the bottom edge.</li>
+            </ol>
+            <p>The Panel may be closed. To open the terminal in it, press <kbd>Ctrl</kbd>+<kbd>`</kbd>. This is the same on Windows and Mac. The <kbd>`</kbd> key is to the left of <kbd>1</kbd>.</p>
+            <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are done when you can point at all five parts on your own screen.</p>
+          </li>
+
+          <!-- ---------- Step 4 ---------- -->
+          <li class="step card" id="setup-step-4" data-reveal>
+            <h3><span class="step-num">4</span> Make a folder and a file</h3>
+            <p>A website is a folder of files. You will make the folder and the first file now.</p>
+            <ol class="do">
+              <li>In VS Code, click <b>File</b>. Then click <b>Open Folder…</b></li>
+              <li>Go to your <b>Documents</b> folder.</li>
+              <li>Click <b data-os-only="win">New folder</b><span class="os-or"> or </span><b data-os-only="mac">New Folder</b>. Name it <code>my-site</code>.</li>
+              <li>Open <code>my-site</code>. Then click <b data-os-only="win">Select Folder</b><span class="os-or"> or </span><b data-os-only="mac">Open</b>.</li>
+              <li>VS Code asks if you trust the authors of the files. You are the author. Click <b>Yes, I trust the authors</b>.</li>
+              <li>In the <b>Explorer</b>, move your mouse over <b>MY-SITE</b>. Click the <b>New File…</b> icon.</li>
+              <li>Type <code>index.html</code> and press <kbd>Enter</kbd>. The file opens in the editor.</li>
+              <li>Copy this code into the file:</li>
+            </ol>
+            <div class="code-block">
+              <button class="copy-btn" type="button" data-copy="code-index">Copy</button>
+<pre><code id="code-index">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;My first page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello! This is my page.&lt;/h1&gt;
+  &lt;p&gt;I made this with VS Code.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+            <ol class="do" start="9">
+              <li>Save the file. Press <span data-os-only="win"><kbd>Ctrl</kbd>+<kbd>S</kbd></span><span class="os-or"> or </span><span data-os-only="mac"><kbd>Cmd</kbd>+<kbd>S</kbd></span>.</li>
+            </ol>
+            <figure class="shot shot--small">
+              <img src="images/vscode/setup-04-new-file.png" alt="The Explorer in the Side Bar, with the mouse over MY-SITE and the New File icon showing." loading="lazy">
+            </figure>
+            <p>A dot on the file's tab means it has changes that are not saved. When you <a class="gloss" data-term="save-and-reload" href="#/glossary/save-and-reload">save</a>, the dot goes away.</p>
+            <p>Why the name <code>index.html</code>? A browser opens the file with this name first. It is the front page of your site.</p>
+            <div class="checkpoint">
+              <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are done when <code>index.html</code> is in the Explorer, the code is in the editor, and the tab has no dot.</p>
+              <figure class="shot shot--small">
+                <img src="images/vscode/setup-04-checkpoint.png" alt="VS Code with index.html in the Explorer and the starter code in the editor. The tab has no dot." loading="lazy">
+              </figure>
+            </div>
+          </li>
+
+          <!-- ---------- Step 5 ---------- -->
+          <li class="step card" id="setup-step-5" data-reveal>
+            <h3><span class="step-num">5</span> See your page</h3>
+            <p>Now you will see your page next to your code. First, you need one <a class="gloss" data-term="extension" href="#/glossary/extension">extension</a>.</p>
+            <ol class="do">
+              <li>Click the <b>Extensions</b> icon in the Activity Bar. It looks like four small squares.</li>
+              <li>Type <code>Live Preview</code> in the search box.</li>
+              <li>Find <b>Live Preview</b> by <b>Microsoft</b>. Check the name of the publisher, because other extensions have similar names.</li>
+              <li>Click <b>Install</b>.</li>
+              <li>Click <code>index.html</code> in the Explorer to go back to your file.</li>
+              <li>Click the <b>Show Preview</b> button at the top right of the editor.</li>
+            </ol>
+            <figure class="shot shot--small">
+              <img src="images/vscode/setup-05-extension.png" alt="The Extensions view, with Live Preview by Microsoft at the top of the results and its Install button." loading="lazy">
+            </figure>
+            <p>You can also right-click <code>index.html</code> in the Explorer and click <b>Show Preview</b>. Your page opens next to your code. <a class="gloss" data-term="live-preview" href="#/glossary/live-preview">Live Preview</a> runs it on your own computer, so only you can see it.</p>
+            <div class="checkpoint">
+              <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are done when you see <b>Hello! This is my page.</b> as a big heading next to your code. This is your first webpage.</p>
+              <figure class="shot shot--small">
+                <img src="images/vscode/setup-05-checkpoint.png" alt="VS Code with index.html on the left and the preview on the right, showing the heading Hello! This is my page." loading="lazy">
+              </figure>
+            </div>
+          </li>
+
+          <!-- ---------- Step 6 ---------- -->
+          <li class="step card" id="setup-step-6" data-reveal>
+            <h3><span class="step-num">6</span> Change one thing</h3>
+            <ol class="do">
+              <li>In the editor, find the line with <code>&lt;h1&gt;</code>.</li>
+              <li>Change the words between <code>&lt;h1&gt;</code> and <code>&lt;/h1&gt;</code>. Write your name, or anything you like.</li>
+              <li>Watch the preview. It changes while you type.</li>
+              <li>Save the file.</li>
+            </ol>
+            <p>The preview shows your change before you save. A normal browser only shows what is saved. So save each change you want to keep. If you make a mistake, press <span data-os-only="win"><kbd>Ctrl</kbd>+<kbd>Z</kbd></span><span class="os-or"> or </span><span data-os-only="mac"><kbd>Cmd</kbd>+<kbd>Z</kbd></span> to undo it.</p>
+            <p>This is the loop you will use for everything. Change one thing, look at the result, then keep it or undo it. The <a href="#/workflow">Workflow</a> tab explains this loop in detail.</p>
+            <div class="checkpoint">
+              <p class="checkpoint-text"><span class="tick" aria-hidden="true">✓</span> You are done when the preview shows your new heading, and the tab has no dot.</p>
+              <figure class="shot shot--small">
+                <img src="images/vscode/setup-06-checkpoint.png" alt="The preview showing a changed heading, next to the edited h1 line in the editor." loading="lazy">
+              </figure>
+            </div>
+          </li>
+        </ol>
+
         <article class="card" data-reveal>
-          <h3>Not written yet</h3>
-          <p>This page is a placeholder. In the meantime, every tool named above is defined in the <a href="#/glossary">glossary</a>.</p>
+          <h3>Coming next</h3>
+          <p>Steps 7 to 9 are being written. They cover installing <a class="gloss" data-term="git" href="#/glossary/git">Git</a>, saving your first <a class="gloss" data-term="commit" href="#/glossary/commit">commit</a>, and turning on <a class="gloss" data-term="copilot" href="#/glossary/copilot">GitHub Copilot</a>.</p>
         </article>
       </div>
     </section>
@@ -211,7 +410,7 @@
       <div class="shell-pad stack">
         <header data-reveal>
           <h2>Prompting</h2>
-          <p>Asking well: what to include, what to leave out, and why <a class="gloss" data-term="pseudocode" href="#/glossary/pseudocode">pseudocode</a> gets you better code than a description does.</p>
+          <p>How to ask well: what to include, what to skip, and why <a class="gloss" data-term="pseudocode" href="#/glossary/pseudocode">pseudocode</a> gets you better code than a description does.</p>
         </header>
         <article class="card" data-reveal>
           <h3>Not written yet</h3>
@@ -231,7 +430,7 @@
         <header class="gloss-head" data-reveal>
           <div>
             <h2>Glossary</h2>
-            <p>Every technical word used on this site, defined in plain language. Hover any underlined word anywhere here to read a short version without leaving the page. The switch changes the definitions to Chinese and keeps the English term.</p>
+            <p>This page explains every technical word on this site in plain English. Move your mouse over any underlined word on the site to see a short version, without leaving the page. The <span lang="zh-Hans">中文</span> switch shows the explanations in Chinese. The English term always stays.</p>
           </div>
           <button class="lang-switch" data-lang-toggle type="button" aria-pressed="false" aria-label="Show the glossary in Chinese">中文</button>
         </header>
@@ -246,7 +445,7 @@
 
   <footer class="foot">
     <div class="shell-pad foot-inner">
-      <p>Code with AI · a static site; no build step, no external assets.</p>
+      <p>Code with AI is a static site. It has no build step.</p>
     </div>
   </footer>
 

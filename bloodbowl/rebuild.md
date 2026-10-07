@@ -575,8 +575,13 @@ Extended for the 16-team requirement, and built on the **Matched Play** rules (�
     never changed.
   - The builder checks the copy **live against the tournament's rules**, showing every problem inline
     ("2 Secondary skills over the Tier 1 limit").
-  - The coach submits the roster. The organizer can review it and approve it or send it back.
-  - At the registration deadline the roster **locks**. Every tournament game uses the locked roster.
+  - **There is no approval step.** The builder only allows choices inside the organizer's parameters, so a
+    submitted roster is valid by construction and automatically accepted.
+  - At the registration deadline (or when the organizer starts the event) the roster **locks**. Every
+    tournament game uses the locked roster.
+  - **The organizer can unlock any roster**, for example for a day-of problem, or to add a last-minute
+    entrant after the deadline. Unlocking and relocking are logged on the tournament, so everyone can see
+    that the roster changed.
   - Guest-coached entries are built by the organizer or the guest's host.
 - **Roster checks** against the event's settings: budget (1.1M, 1.15M, 1.2M or custom), tier skill points,
   Secondary and Elite limits, star players and Mega-stars, and allowed inducements. Settings are per
@@ -773,7 +778,7 @@ details from an organizer friend.
 | Q17 Trapdoors | (6,10) and (15,2), point-symmetric |
 | Q18 Interceptions | Any part of the square inside the 2-square band counts |
 | Q19 App stores | The fee would be acceptable. **Build web-first**, stay hyper-aware of scaling to packaged apps, and give each platform an appropriate UI (§5.7) |
-| Q20 Rosters | Entirely in-app. Existing teams can be revised as tournament copies, or new teams built for the event (§7.5) |
+| Q20 Rosters | Entirely in-app. Existing teams can be revised as tournament copies, or new teams built for the event. **No approval:** rosters are built inside the organizer's parameters, so they're valid by construction. The organizer can unlock a roster for day-of fixes or late entrants (§7.5) |
 
 ### Still open
 

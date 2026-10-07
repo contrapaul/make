@@ -326,3 +326,222 @@
 /* The hover card carries "Term · 中文" on its own line in Chinese mode,
    so the newline in the text has to survive. */
 .gloss-tip { white-space: pre-line; }
+
+/* ============================================================
+   Setup tab (M3): OS switch, numbered steps, checkpoints,
+   screenshots with HTML callouts, copyable code
+   ============================================================ */
+
+/* ---------- Windows / Mac ----------------------------------------
+   js/tabs/setup.js stamps <html data-os="win|mac">. Until it does
+   (or with no JS), both versions show, joined by an "or". */
+:root[data-os="win"] [data-os-only="mac"],
+:root[data-os="mac"] [data-os-only="win"],
+:root[data-os] .os-or { display: none; }
+
+.os-switch {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.os-switch legend {
+  float: left;               /* sits in the flex row instead of on the border */
+  margin-right: var(--sp-3);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ---------- Steps ----------------------------------------------- */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  /* minmax(0, …): a bare column cannot shrink below its widest content,
+     and the longest line of a code block would stretch every card past
+     a phone's edge. The code scrolls inside its own box instead. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sp-5);
+}
+
+.step { scroll-margin-top: 110px; min-width: 0; }   /* clear the sticky header */
+.step > * + * { margin-top: var(--sp-3); }
+
+.step h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-5);
+}
+
+.step-num {
+  flex: none;
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: var(--fs-3);
+  font-weight: 700;
+  color: var(--on-accent);
+  background: var(--accent-gradient);
+}
+
+.step .do,
+.step .needs,
+.callout-key {
+  margin-bottom: 0;
+  padding-left: 1.6em;
+  display: grid;
+  gap: var(--sp-2);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.step .do li::marker,
+.callout-key li::marker { font-weight: 700; color: var(--accent-solid); }
+
+.step b { color: var(--text-primary); }
+
+/* ---------- Checkpoints ------------------------------------------- */
+.checkpoint {
+  padding: var(--sp-4);
+  border-radius: var(--radius-control);
+  border: 1px solid color-mix(in srgb, var(--ok) 45%, transparent);
+  background: color-mix(in srgb, var(--ok) 8%, transparent);
+}
+
+.checkpoint .shot { margin-bottom: 0; }
+
+.checkpoint-text { color: var(--text-primary) !important; font-weight: 500; }
+.tick { color: var(--ok); font-weight: 800; margin-right: 0.3em; }
+
+/* ---------- Notes ------------------------------------------------- */
+.note {
+  padding: var(--sp-4);
+  border-left: 3px solid var(--accent-solid);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  background: var(--chip-bg);
+}
+
+.note h4 { margin: 0 0 var(--sp-2); font-size: var(--fs-2); }
+
+/* ---------- Screenshots ------------------------------------------
+   A .shot holds one <img> at its final path. If the file is missing,
+   js/tabs/setup.js adds .is-missing and the frame shows the image's
+   alt text and file name instead, at the planned 16:10 shape. */
+.shot {
+  position: relative;
+  margin: var(--sp-3) 0;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--glass-border);
+  overflow: hidden;
+  background: var(--chip-bg);
+}
+
+.shot img { display: block; width: 100%; height: auto; }
+.shot--small { max-width: 520px; }
+
+/* Images load lazily, so a frame further down does not know yet whether
+   its file exists. Hold the planned 16:10 space until it does, so the
+   page never jumps as the student scrolls. A loaded image takes its
+   own shape. */
+.shot:not(.is-loaded) { aspect-ratio: 16 / 10; }
+
+.shot.is-missing {
+  border-style: dashed;
+  border-width: 2px;
+}
+
+.shot.is-missing img { display: none; }
+
+.shot.is-missing::after {
+  content: "Screenshot coming: " attr(data-alt) "\A" attr(data-file);
+  white-space: pre-wrap;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-5);
+  text-align: center;
+  font-size: var(--fs-1);
+  line-height: 1.6;
+  color: var(--text-faint);
+}
+
+/* The window shot draws a rough map of the five parts while the real
+   screenshot is missing, so the callouts point at something. */
+.shot-schematic { display: none; }
+
+.shot--window.is-missing::after { content: none; }
+
+.shot--window.is-missing .shot-schematic {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 4% 20% 1fr;
+  grid-template-rows: 1fr 30% 3%;
+  gap: 2px;
+  padding: 2px;
+}
+
+.shot-schematic span { border-radius: 4px; background: var(--track); }
+.sch-activity { grid-column: 1; grid-row: 1 / 3; }
+.sch-side     { grid-column: 2; grid-row: 1 / 3; }
+.sch-editor   { grid-column: 3; grid-row: 1; opacity: 0.55; }
+.sch-panel    { grid-column: 3; grid-row: 2; }
+.sch-status   { grid-column: 1 / -1; grid-row: 3; background: var(--accent-solid) !important; opacity: 0.6; }
+
+.callout {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  transform: translate(-50%, -50%);
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  font-size: var(--fs-1);
+  font-weight: 800;
+  color: var(--on-accent);
+  background: var(--accent-gradient);
+  box-shadow: 0 0 0 3px var(--bg-base), var(--shadow-panel);   /* ring lifts it off any screenshot */
+  z-index: 1;
+}
+
+/* ---------- Copyable code ----------------------------------------- */
+.code-block { position: relative; }
+
+.code-block pre {
+  margin: 0;
+  padding: var(--sp-4);
+  padding-right: 88px;          /* room for the Copy button */
+  overflow-x: auto;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--glass-border);
+  background: var(--chip-bg);
+  font-size: var(--fs-1);
+  line-height: 1.6;
+}
+
+/* Inside a block, code is the block: no per-word chip. */
+.code-block pre code { padding: 0; border: 0; background: none; font-size: inherit; overflow-wrap: normal; }
+
+.copy-btn {
+  position: absolute;
+  top: var(--sp-2);
+  right: var(--sp-2);
+  min-height: 32px;
+  padding: 0 var(--sp-3);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-primary);
+  font: 600 var(--fs-1) var(--font-sans);
+  cursor: pointer;
+}
+
+.copy-btn:hover { background: var(--chip-bg); }
+.copy-btn.is-done { color: var(--ok); border-color: var(--ok); }

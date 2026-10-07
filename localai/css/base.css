@@ -203,6 +203,55 @@ h1, h2, h3, h4 { line-height: 1.2; letter-spacing: -0.01em; text-wrap: balance; 
   white-space: nowrap;
 }
 
+/* ---------- Nav on narrow screens --------------------------
+   One row needs about 1100 px with the Explorer badge showing
+   (measured 2026-10-01: brand 303 + tabs 563 + badge 98 + toggle 40,
+   plus gaps and padding), about 980 px without it. Below 1100 px the
+   tabs move to their own full-width row and scroll sideways inside
+   it, so the page itself never scrolls sideways. The strip bleeds to
+   the screen edges, and a mask fades its ends to show there is more
+   to scroll. (The mask uses alpha only, so the literal black below
+   is not a theme color.) js/app.js keeps the active tab in view.
+   Same layout as tools/codewithai, which has the same header. */
+@media (max-width: 1099px) {
+  .nav { flex-wrap: wrap; row-gap: 0; padding-bottom: 0; }
+  .brand { flex: 1 1 auto; min-width: 0; }
+  .theme-toggle { order: 2; }
+  .tabs {
+    order: 3;
+    flex: 0 0 calc(100% + 2 * var(--sp-5));
+    margin: 0 calc(-1 * var(--sp-5));
+    padding: 0 var(--sp-5) var(--sp-1);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, black var(--sp-4), black calc(100% - var(--sp-6)), transparent);
+    mask-image: linear-gradient(to right, transparent, black var(--sp-4), black calc(100% - var(--sp-6)), transparent);
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+}
+
+/* The first breadcrumb step is wrapped only so it can be hidden on a
+   phone. "contents" keeps its children in .brand's flex row, so the
+   spacing around both slashes stays identical. */
+.brand-root { display: contents; }
+
+/* On a phone the breadcrumb drops its first step and the badge shrinks
+   to its star, so wordmark, badge and theme toggle share one row. The
+   word stays readable to screen readers (same recipe as .sr-only), and
+   the badge's title still names it on hover. The full first row (brand
+   + badge + toggle) needs about 513 px, hence 560 rather than 480. */
+@media (max-width: 559px) {
+  .brand-root { display: none; }
+  .badge-label {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0; border: 0;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
+
 /* Theme toggle — icon shows the theme you'd switch TO */
 .theme-toggle {
   width: 40px; height: 40px;

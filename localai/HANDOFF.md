@@ -4,6 +4,17 @@
 
 > ⚠ **READ THIS FIRST (2026-09-04 bug-fix pass).** The page was **completely dead in a browser** through all of M1–M4 — a fatal `js/app.js` TDZ error meant no link on any tab did anything, while all 56 UI tests passed. Two of the three fixes touch files this document previously marked **“do not modify”**. See the section below before assuming any P6 milestone was ever visually verified.
 
+## Phone header fix (2026-10-01, owner request)
+
+At 375 px the page was 981 px wide: the nav row (brand + five tabs + Explorer badge + theme toggle) had no small-screen rule, so the tabs ran off-screen and pushed the theme toggle out of reach.
+
+- **Below 1100 px** the tabs get their own full-width row and scroll sideways inside it (`css/base.css`, "Nav on narrow screens"). One row needs about 1100 px with the badge showing (brand 303 + tabs 563 + badge 98 + toggle 40, plus gaps and padding). A mask fades the strip's ends to show there is more to scroll.
+- **Below 560 px** the breadcrumb drops `contrapaul.com /` (`.brand-root`, `display: contents` otherwise, so slash spacing is unchanged) and the badge shrinks to ★. The word "Explorer" stays readable to screen readers via `.badge-label`, and the badge's title still names it.
+- `js/app.js`: `revealActiveTab()` centres the active tab in the strip on every route change, so a deep link never hides the tab you are on. Horizontal only; the stub-based UI tests are unaffected.
+- Separate bug found on the way: `css/tabs.css` switched `.beat` to a bare `1fr` column at ≤ 820 px, which cannot shrink below its widest content and made Home 1 px wider than a phone. Now `minmax(0, 1fr)`, matching the desktop rule.
+
+Verified in headless Edge on all five tabs, badge hidden and shown, at 360, 375, 480, 559, 560, 768, 1099, 1100 and 1280 px: no sideways page scroll, theme toggle and active tab always on screen, header 93 px below 1100 and 57 px above. The comparison table still scrolls inside its own `.table-scroll` box, as intended. `engine.test.mjs` 65/65 and `ui.test.mjs` 141/141 still pass. Same layout as `tools/codewithai`, which shares this header.
+
 ## ⚠ P7 RACE PIVOT (owner decision, 2026-09-05) — READ BEFORE TOUCHING THE RACE
 
 The race is being redesigned. **Do not "fix" it back toward what M1 built.**

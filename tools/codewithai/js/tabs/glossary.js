@@ -17,6 +17,11 @@
    A student who only ever learns 仓库 cannot find the button in
    GitHub that says "repository", which is the whole point.
 
+   Code in the data is marked with backticks: `<p>Hello</p>`. Both
+   surfaces render each marked span as a <code> element through
+   appendRich(), always as text, so a tag in a definition can never
+   become real markup on the page.
+
    Deep links are '#/glossary/<term-id>'. The router only reads
    the first segment, so it routes here and this module reads
    the rest.
@@ -47,6 +52,26 @@ export function tooltipText(id, lang = 'en') {
   return lang === 'zh' ? `${v.term} · ${v.subtitle}\n${v.short}` : v.short;
 }
 
+/** Pure: split text on backtick-marked code into parts.
+ *  'Use `<p>` here' -> [{text:'Use '},{code:'<p>'},{text:' here'}] */
+export function richParts(text) {
+  return String(text ?? '').split('`').map((part, i) => (i % 2 ? { code: part } : { text: part }))
+    .filter((p) => (p.code ?? p.text) !== '');
+}
+
+/** Append text to `parent`, with each backtick span as a <code> element. */
+export function appendRich(doc, parent, text) {
+  for (const part of richParts(text)) {
+    if (part.code !== undefined) {
+      const c = doc.createElement('code');
+      c.textContent = part.code;
+      parent.appendChild(c);
+    } else {
+      parent.appendChild(doc.createTextNode(part.text));
+    }
+  }
+}
+
 /* ---------- page rendering ----------------------------------- */
 
 /** Render one entry as an anchored article. */
@@ -71,7 +96,7 @@ function renderEntry(doc, t, lang) {
 
   const p = doc.createElement('p');
   if (lang === 'zh') p.setAttribute('lang', 'zh-Hans');
-  p.textContent = v.full;
+  appendRich(doc, p, v.full);
   entry.appendChild(p);
 
   // "Learn more" row: outbound references for a reader who wants the full
@@ -147,7 +172,8 @@ export function initTermCards({ doc = defaultDoc(), tip, getLang = () => 'en' } 
     const text = tooltipText(id, getLang());
     if (!text) return hide();
 
-    card.textContent = text;
+    card.textContent = '';
+    appendRich(doc, card, text);
     card.setAttribute('aria-hidden', 'false');
     card.classList.add('is-visible');
 

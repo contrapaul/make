@@ -53,16 +53,23 @@ protecting a file they have no feeling for yet.
 
 ## 3. The reading level, measured
 
-Flesch-Kincaid grade and sentence length across the copy as it stands today
-(`test/readability.mjs`, M0 below, produces these):
+Flesch-Kincaid grade and sentence length across the copy as it stands today,
+as measured by `test/readability.test.mjs` (built in M0):
 
 | Surface | FK grade | Avg words/sentence | Sentences > 25 words |
 |---|---|---|---|
-| Home page prose | 6.9 | 14.5 | 5 |
-| Glossary, hover cards (`short`) | **6.0** | 12.5 | **0** |
+| Home page prose | 5.8 | 11.8 | **4** |
+| Glossary, hover cards (`short`) | 6.1 | 12.7 | 0 |
 | Glossary, full entries (`full`) | **8.9** | 19.6 | **57** |
 
-The hover cards are already right. The full entries, which are what a
+*Corrected 2026-10-01.* The first draft of this table came from a one-off
+script that ran headings and list items into the next sentence, and counted
+the decorative hero labels. That gave Home 6.9 and the hover cards 6.0. The M0
+test treats every block element as a sentence boundary, which is more accurate.
+The conclusion did not change, but Home's real problem is four long sentences,
+not its grade.
+
+The hover cards are nearly right, 0.1 over the cap. The full entries, which are what a
 struggling student actually sits and reads, are nearly three grades harder
 and contain 57 sentences over 25 words. The hardest entries are
 `package-manager` (12.5), `code-completion` (12.1) and `repo` (11.7).
@@ -79,8 +86,12 @@ Every English string a student reads while following instructions:
 - Flesch-Kincaid grade **≤ 6.0**
 - Average **≤ 14 words per sentence**
 - **Zero** sentences over 25 words
-- Glossary `full` entries: FK **≤ 7.0** (slightly looser; they are reference
-  text, read deliberately rather than mid-task)
+- Glossary `full` entries: FK **≤ 7.0** overall with **no single entry over
+  8.0**, and **≤ 16** words per sentence (slightly looser; they are reference
+  text, read deliberately rather than mid-task). Before M2, 42 of the original 60
+  entries are over 8.0.
+- FK is judged only on samples of 10 or more sentences, because on fewer it
+  measures noise. The 25-word cap applies at any size.
 
 Enforced by a test, not by good intentions. See section 8.
 
@@ -119,21 +130,24 @@ this in `style-guide.md` so a future editor does not try to re-align them.
 tools/codewithai/
   index.html                 + 4 panels (setup, workflow, prompting, publish)
   blueprint.md               this file
-  style-guide.md             NEW — copy rules + controlled vocabulary
+  style-guide.md             BUILT (M0) — copy rules + controlled vocabulary
+  package.json               BUILT (M0) — "type": "module", npm test
   css/
     tabs.css                 + .steps, .checkpoint, .shot, .callout, .frame, .os-switch
   js/
     data/glossary.js         + ~28 terms, + 2 groups
-    data/steps.js            NEW — Setup/Workflow step data, so copy is not in markup
-    tabs/setup.js            NEW — OS switch (Windows/Mac), step state
+    tabs/setup.js            BUILT (M3) — OS switch, screenshot placeholders, copy buttons
+                             (no data/steps.js: changed in M3, see below)
     tabs/prompting.js        NEW — copy-to-clipboard for prompt frames
     app.js                   + routes, + new tab init
   images/
-    vscode/*.png             NEW — annotated screenshots (see section 7)
-  test/
-    readability.mjs          NEW — enforces section 3
-    vocabulary.mjs           NEW — enforces the banned-word list
-    links.mjs                NEW — every data-term resolves; every href is real
+    vscode/SHOTLIST.md       BUILT (M3) — every file name, what it shows, how to frame it
+    vscode/*.png             owner to capture; the page shows a placeholder until each exists
+  test/                      BUILT (M0)
+    lib/prose.mjs            page + glossary text extraction, FK scoring
+    readability.test.mjs     enforces section 3
+    vocabulary.test.mjs      enforces the banned-word lists
+    links.test.mjs           every data-term resolves; every href is real
 ```
 
 No build step, no external assets. That constraint holds.
@@ -155,12 +169,14 @@ are not.
 `hosting`, `github-pages`, `domain`, `dns`, `url`, `https`, `static-site`,
 `icp-filing`
 
-**Added to existing groups** — 10 terms
-- *machine:* `extension`, `live-preview`, `sidebar`, `status-bar`
+**Added to existing groups** — 11 terms
+- *machine:* `extension`, `live-preview`, `activity-bar`, `sidebar`, `status-bar`
+  (`activity-bar` added in M1: Setup step 3 names it as one of the five parts
+  of the VS Code window, so the glossary has to define it)
 - *git:* `stage`, `remote`, `diff`, `revert`
 - *ai:* `copilot`, `chat-panel`
 
-Total: 60 → 88. Each needs `term`, `term_zh`, `short`, `short_zh`, `full`,
+Total: 60 → 89. Each needs `term`, `term_zh`, `short`, `short_zh`, `full`,
 `full_zh`, `group`, `links` — the shape is already enforced by the data file's
 contract and checked in M1.
 
@@ -191,8 +207,10 @@ shown by a switch at the top of the tab (`.os-switch`), remembered in
 8. **Your first commit** — using the VS Code Source Control panel, not the
    terminal. The terminal equivalent is shown beside it as reference, because
    every answer they find online will use it.
-9. **Turn on Copilot** — sign in, what the grey text is, Tab to accept,
-   Esc to reject. Explicitly: *this is a suggestion, not an answer.*
+9. **Turn on Copilot** — sign in to VS Code with the **school Microsoft
+   account** (owner, 2026-10-01: this is how students get Copilot), what the
+   grey text is, Tab to accept, Esc to reject. Explicitly: *this is a
+   suggestion, not an answer.*
 
 Every step ends with a **checkpoint**: "✓ You are done when you see this",
 plus a small image. A student who cannot read the paragraph can still match
@@ -255,14 +273,16 @@ site, so it earns its own tab rather than a footnote in Setup.
 
 1. **What putting a site online means** — your file, on a computer that is
    always on. Nothing more magical than that.
-2. **A GitHub account** — and the Student Developer Pack, which is how a
-   student gets Copilot without paying.
+2. **A GitHub account** — needed for the code to live online. Copilot comes
+   from the school Microsoft account (Setup step 9), not from here.
 3. **Push your project** — from the VS Code Source Control panel.
 4. **Turn on GitHub Pages** — settings, branch, wait, the `github.io` address.
    Checkpoint: open it on your phone.
-5. **Buy a domain** — what a domain costs, where to buy one, and **which
-   endings to avoid**: `.dev` is unreliable from China. Recommend a plain
-   `.com` or `.net`.
+5. **Buy a domain** — through Cloudflare (owner's recommendation for
+   everyone: cheap, and sold at cost). What it costs per year, and **which
+   addresses do not work from China**: Cloudflare Pages' free `*.pages.dev`
+   address is not reachable there, which is why the purchased domain is a
+   required step rather than an optional extra. Recommend a plain `.com`.
 6. **Point the domain at the page** — the DNS records, as a copyable table,
    and the wait.
 7. **The honest note on China** — see section 9. Needs verification before
@@ -291,8 +311,9 @@ they are a first-class deliverable, not decoration.
   student will ever meet is in English, and a Chinese menu leaves them unable
   to follow any of it. The language pack gets one honest paragraph on the Setup
   tab describing the trade, and the student decides.
-- **One theme, one window size.** Dark+ (the default) at 1280×800, so every
-  screenshot matches what the student sees and matches every other screenshot.
+- **One theme, one window size.** Whatever theme a fresh install picks (the
+  first draft said Dark+, which is no longer the default), at 1280×800, so
+  every screenshot matches what the student sees and every other screenshot.
 - **Callouts are HTML, not burned into the image.** Numbered circles are
   absolutely positioned over the screenshot with CSS; the label text sits in
   the markup. This means labels stay selectable, searchable, translatable and
@@ -307,14 +328,14 @@ ask, and how a domain reaches a page).
 
 ## 8. Verification
 
-Three scripts, run by `npm test` in this directory, following the localai
-pattern of Node tests with no framework.
+Three test files, run by `npm test` in this directory. They use Node's
+built-in `node:test` runner, so there is still no framework and no install.
 
 | Script | Fails when |
 |---|---|
-| `test/readability.mjs` | Any tab's prose or any glossary entry exceeds the section 3 caps. Prints the offending sentence. |
-| `test/vocabulary.mjs` | A banned phrasal verb or a controlled-vocabulary violation appears. Prints file and line. |
-| `test/links.mjs` | A `data-term` has no glossary entry; a `#/` href names no tab; a Learn more URL is malformed. |
+| `test/readability.test.mjs` | Any tab's prose or any glossary entry exceeds the section 3 caps. Prints the offending sentences. |
+| `test/vocabulary.test.mjs` | A banned punctuation mark, blame word, Latin abbreviation, phrasal verb or controlled-vocabulary word appears. Prints where, with context and the replacement. |
+| `test/links.test.mjs` | A `data-term` has no glossary entry; a `#/` href names no tab; a glossary entry is missing a field or a language; a term id collides with a page id. |
 
 `test/links.mjs` also protects the existing site: the page carries 29
 `data-term` references today (24 of them on Home), checked by hand in the
@@ -328,24 +349,32 @@ sentences that the grade score waves through.
 
 ## 9. Open questions and things to verify before writing
 
-These are stated as unverified on purpose. Each needs checking against a
-current source before it appears as fact on a page a student trusts.
+### Answered by the owner (2026-10-01)
 
-1. **GitHub Student Developer Pack** — what it currently includes for Copilot,
-   and whether a free domain is still part of it. Terms change yearly.
-2. **`github.io` reachability from mainland China.** My understanding is that
-   it is inconsistent rather than blocked, which is exactly the sort of claim
-   that should not be published without checking. If it is unreliable, the
-   Publish tab needs a second host as the recommended path, and Cloudflare
-   Pages is the obvious candidate since this repository already uses Cloudflare.
-3. **ICP filing (备案).** Hosting inside mainland China requires one; hosting
-   outside does not. Whether that belongs on a student page at all is a
-   judgement call for the owner, not for me.
-4. **`.dev` specifics.** The owner reports `.dev` does not load in China. The
-   recommendation to avoid it stands on that report alone; the *reason* should
-   not be guessed at in the copy.
-5. **Copilot in a school setting** — whether a student under 18 can sign in
-   without a parent or school account. This affects the Setup tab's step 9.
+- **Age-gated steps** (accounts, purchases, sign-ins) are assumed to be
+  reviewed by a parent or teacher. The pages therefore give the complete
+  information and never leave out a step that would help. This is now a rule
+  in `style-guide.md`.
+- **Copilot sign-in:** students sign in to VS Code with their school Microsoft
+  account. Setup step 9 is written against that.
+- **`.dev`:** Cloudflare Pages' `*.pages.dev` addresses are not reachable from
+  China. A domain bought through Cloudflare is cheap and is the owner's
+  recommendation for everyone. The copy states the fact and does not guess at
+  the reason.
+
+### Still to verify before the Publish tab is written
+
+Stated as unverified on purpose. Each needs checking against a current source
+before it appears as fact on a page a student trusts.
+
+1. **`github.io` reachability from mainland China.** My understanding is that
+   it is inconsistent rather than blocked. This decides the host: GitHub Pages
+   or Cloudflare Pages, either one behind the Cloudflare-bought domain.
+2. **ICP filing (备案).** Hosting inside mainland China requires one; hosting
+   outside does not. The owner's rule on not withholding helpful information
+   leans toward a short factual note, but the facts need checking first.
+3. **Cloudflare Registrar pricing and payment** — current `.com` price, and
+   which payment methods a parent in China can actually use.
 
 ---
 
@@ -355,21 +384,42 @@ Each milestone has a check that says whether it is done.
 
 | # | Work | Verify |
 |---|---|---|
-| **M0** | `style-guide.md` + the three test scripts | Tests run; readability fails on glossary `full` and Home, as measured in section 3 |
-| **M1** | Glossary: 28 new terms, 2 new groups | 88 entries; every entry has all 8 fields in both languages; `links.mjs` passes |
-| **M2** | Copy pass: Home + all 60 existing `full` entries | `readability.mjs` and `vocabulary.mjs` pass on everything built so far |
-| **M3** | Setup tab, steps 1–6 (through first win) | A person following only the page, on a clean machine, reaches a webpage in a browser |
+| **M0** ✅ | `style-guide.md` + the three test files | **Done 2026-10-01.** 19 checks: 12 pass, 7 fail on existing copy, as expected. Each rule was shown to catch a deliberately broken copy of the site. |
+| **M1** ✅ | Glossary: 29 new terms, 2 new groups | **Done 2026-10-01.** 89 entries. `links.test.mjs` passes. The 29 new entries, tested alone, pass every readability and vocabulary check (hover FK 4.5, full FK 4.0, nothing over 25 words). All 27 Learn more URLs return 200, with titles matching the page landed on. |
+| **M2** ✅ | Copy pass: Home, footer, glossary panel, all 60 original entries, **both `short` and `full`** | **Done 2026-10-01.** `npm test` 21/21. Original 60 alone: hover FK 6.1 → 4.9; full FK 8.9 → 4.9, long sentences 57 → 0, entries over 8.0: 42 → 0. Home FK 5.8 → 4.5, long sentences 4 → 0. Facts kept, so the Chinese needed only code marks; two English sentences were corrected to match the Chinese (`dependency`, `path`). Also fixed: the word "glossary" on Home was a hover link to the CLI entry; "Sixty terms" was stale (now no count). |
+| **M3** ✅ | Setup tab, steps 1–6 (through first win) | **Built 2026-10-01, screenshots pending.** Steps written (FK 2.5, 7 words per sentence). Facts checked against sources: Live Preview's **Show Preview** label from its manifest, VS Code 1.140 download sizes from the update service. 9 screenshots specified in `images/vscode/SHOTLIST.md`; each shows a labelled placeholder until its PNG is added. Checked in a browser: OS switch, placeholders, copy button, step 3 callouts, 360 to 1280 px, both themes. **Still open:** the clean-machine walkthrough, best done when the screenshots are taken. |
 | **M4** | Setup tab, steps 7–9 (Git, Copilot) | Same walkthrough reaches a first commit and an accepted suggestion |
 | **M5** | Workflow tab | The worked example runs as written, all six passes |
 | **M6** | Prompting tab | Every frame copies correctly; every frame produces a usable answer when actually sent to Copilot |
-| **M7** | Publish tab | Section 9 questions answered first; a test repository reaches a live custom domain |
+| **M7** | Publish tab | Section 9 "still to verify" answered first; a test repository reaches a live custom domain |
 | **M8** | Final pass | All tests green; both themes; 375 px; keyboard; read aloud |
+
+**Fixed after M1 (2026-10-01): the header on phones.** At 375 px the page was
+849 px wide, because the nav row had no small-screen rule. Below 960 px the
+tabs now sit on their own row and scroll sideways inside it, with the active
+tab kept in view (`revealActiveTab` in `js/app.js`). Below 480 px the
+breadcrumb drops `contrapaul.com /`. 960 already allows for a sixth tab, so
+M7 needs no header change. Checked at 375, 479, 480, 768, 959, 960 and 1280:
+the page never scrolls sideways, and the theme button and the active tab are
+always on screen. localai has the same bug and is a separate task.
+
+**Code font (2026-10-01):** JetBrains Mono from `/WEB/Jetbrains`, through the
+shared `/WEB/css/jetbrains-mono.css`, with ligatures off. Glossary code is
+marked with backticks (128 spans across 25 entries) and rendered as `<code>`.
+
+**Changed in M3: step text lives in `index.html`, not `js/data/steps.js`.** In a
+JS data file the copy tests (which read the page and the glossary) would never
+see it. The Windows/Mac switch needs no rendering: OS-specific blocks carry
+`data-os-only`, `js/tabs/setup.js` stamps `<html data-os>`, and CSS hides the
+other system. With JS off, both show, joined by "or". Screenshots are real
+`<img>` tags at their final paths, so adding a PNG needs no code change;
+`test/links.test.mjs` checks every file name against the shot list.
 
 M0 to M2 are the foundation and should not be skipped to get to the visible
 tabs faster. M2 in particular is the one that is tempting to postpone and
 expensive to postpone: every new tab links into those entries, and rewriting
 them later means re-checking every link that arrived in the meantime.
 
-**Rough weight:** M1 and M2 are the largest writing jobs (88 bilingual entries
+**Rough weight:** M1 and M2 are the largest writing jobs (89 bilingual entries
 touched between them). M3 and M4 are the largest asset jobs (most of the
 screenshots). M5 to M7 are mostly prose against a settled pattern.

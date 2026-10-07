@@ -201,7 +201,9 @@ sup.fn { color: var(--accent-solid); font-weight: 700; white-space: nowrap; }
   align-items: center;
 }
 
-@media (max-width: 820px) { .beat { grid-template-columns: 1fr; } }
+/* minmax(0, …) as on desktop: a bare 1fr cannot shrink below the widest
+   content in any beat, which pushed the page 1 px wider than a phone. */
+@media (max-width: 820px) { .beat { grid-template-columns: minmax(0, 1fr); } }
 
 .beat-copy h3 { margin: 0 0 var(--sp-3); font-size: var(--fs-5); line-height: 1.2; }
 .beat-copy p { margin: 0; line-height: 1.65; color: var(--text-secondary); }

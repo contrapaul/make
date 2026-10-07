@@ -32,6 +32,17 @@ export function tabFromHash(hash) {
   return m && TABS.includes(m[1]) ? m[1] : null;
 }
 
+/** On narrow screens the tab strip scrolls sideways (css/base.css). Centre
+ *  the active tab in it, so a deep link never hides the tab you are on.
+ *  Horizontal only: the page itself is never scrolled. */
+function revealActiveTab(link) {
+  const strip = link?.parentElement;
+  if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+  const l = link.getBoundingClientRect();
+  const s = strip.getBoundingClientRect();
+  strip.scrollLeft += (l.left + l.width / 2) - (s.left + s.width / 2);
+}
+
 /** Minimal hash router: shows one .tab-panel, marks its nav link active. */
 export function initRouter({ doc = defaultDoc(), hash = defaultHash() } = {}) {
   const panels = Array.from(doc.querySelectorAll('.tab-panel'));
@@ -44,6 +55,7 @@ export function initRouter({ doc = defaultDoc(), hash = defaultHash() } = {}) {
   function show(name) {
     for (const p of panels) p.classList.toggle('is-active', p.dataset.tab === name);
     for (const a of links) a.classList.toggle('is-active', a.dataset.tabLink === name);
+    revealActiveTab(links.find((a) => a.dataset.tabLink === name));
   }
 
   const initial = tabFromHash(hash) || 'home'; // P4: exposed so the tracker can count a deep-link load as a visit
