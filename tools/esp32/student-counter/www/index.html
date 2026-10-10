@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doorway Counter</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: system-ui, sans-serif; background: #10131a; color: #e8ecf4;
+  }
+  h1 { font-size: 1rem; letter-spacing: .18em; text-transform: uppercase; color: #7b8aa5; margin: 0 0 .5rem; }
+  #count { font-size: 30vw; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+  @media (min-width: 700px) { #count { font-size: 12rem; } }
+  #beam { height: 10px; width: 10px; border-radius: 50%; background: #2c3444; margin: .5rem 0 1.5rem; transition: background .15s; }
+  #beam.on { background: #4ade80; box-shadow: 0 0 16px #4ade80; }
+  .row { display: flex; gap: .75rem; }
+  button {
+    font: inherit; font-size: 1.1rem; padding: .8rem 1.6rem; cursor: pointer;
+    border: 1px solid #2c3444; border-radius: .6rem; background: #1a1f2b; color: #e8ecf4;
+  }
+  button:hover { background: #232a38; }
+  button.danger { border-color: #7f3a3a; color: #ff9d9d; }
+  footer { margin-top: 2rem; font-size: .8rem; color: #5a6478; text-align: center; line-height: 1.6; }
+  .stale { opacity: .35; }
+</style>
+</head>
+<body>
+  <h1 id="device">Doorway Counter</h1>
+  <div id="count">–</div>
+  <div id="beam" title="beam broken"></div>
+
+  <div class="row">
+    <button data-action="minus">&minus;1</button>
+    <button data-action="plus">+1</button>
+    <button data-action="reset" class="danger">Reset</button>
+  </div>
+
+  <footer>
+    <div id="detail">connecting…</div>
+  </footer>
+
+<script>
+const el = id => document.getElementById(id);
+
+function render(s) {
+  document.body.classList.remove('stale');
+  el('device').textContent = s.device;
+  el('count').textContent = s.count;
+  el('beam').classList.toggle('on', s.present);
+  el('detail').textContent =
+    `${s.detections} sensor detections · last: ${s.last_event} ` +
+    `(${s.seconds_since_event}s ago) · ` +
+    (s.distance_cm === null ? 'no echo' : `${s.distance_cm} cm`);
+}
+
+async function poll() {
+  try {
+    render(await (await fetch('/api/state')).json());
+  } catch {
+    document.body.classList.add('stale');
+  }
+}
+
+async function send(action) {
+  try {
+    render(await (await fetch('/api/action', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action })
+    })).json());
+  } catch {
+    document.body.classList.add('stale');
+  }
+}
+
+document.querySelectorAll('button').forEach(b =>
+  b.addEventListener('click', () => send(b.dataset.action)));
+
+poll();
+setInterval(poll, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Copy to settings.toml on the CIRCUITPY drive and fill in your network.
+# settings.toml holds secrets and is NOT committed.
+
+CIRCUITPY_WIFI_SSID = "your-hotspot-name"
+CIRCUITPY_WIFI_PASSWORD = "your-password"
+
+# Optional: keeps the USB drive writable and the serial console on.
+CIRCUITPY_WEB_API_PASSWORD = ""

@@ -1,0 +1,22 @@
+{
+  "device_name": "Doorway Counter",
+
+  "display": {
+    "width": 128,
+    "height": 64,
+    "address": 61
+  },
+
+  "sensor": {
+    "trigger_cm": 80,
+    "clear_cm": 95,
+    "confirm_readings": 2,
+    "min_gap_s": 0.35,
+    "poll_s": 0.06
+  },
+
+  "leds": {
+    "detect_flash_s": 1.0,
+    "button_flash_s": 0.25
+  }
+}
