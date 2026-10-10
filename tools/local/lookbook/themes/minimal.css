@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Theme: Minimal
+   Clean whites, generous whitespace, subtle borders, sans-serif body text.
+   Structural changes: tight grid with small gaps, compact cards, minimal
+   hover lift (2px), no card-image placeholder visible, hero is left-aligned.
+   ========================================================================== */
+
+body.theme-minimal {
+  --bg: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #3b82f6;
+  --card-bg: #ffffff;
+  --btn-primary-bg: #1a1a2e;
+  --btn-primary-text: #ffffff;
+  --input-bg: #f9fafb;
+  --selector-bg: #f3f4f6;
+}
+
+body.theme-minimal {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Hero — left-aligned, compact */
+body.theme-minimal .hero {
+  text-align: left;
+  padding-inline: var(--spacing-xl);
+  max-width: 720px;
+}
+body.theme-minimal .hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+body.theme-minimal .hero p {
+  color: var(--muted);
+  max-width: 50ch;
+}
+
+/* Nav — compact, no underline */
+body.theme-minimal .demo-nav a {
+  color: var(--text);
+  font-weight: 500;
+  padding-block: var(--spacing-sm);
+  border-bottom: none;
+}
+body.theme-minimal .demo-nav a:hover { color: var(--accent); }
+
+/* Cards — compact, no image placeholder */
+body.theme-minimal .card-grid {
+  gap: var(--spacing-md);
+}
+body.theme-minimal .card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: var(--spacing-lg);
+}
+body.theme-minimal .card:hover { transform: translateY(-2px); }
+body.theme-minimal .card-image { display: none; }
+body.theme-minimal .card-body { padding: 0; }
+body.theme-minimal .card-title {
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+body.theme-minimal .card-body p { color: var(--muted); font-size: 0.95rem; }
+
+/* Buttons — flat, no border-radius */
+body.theme-minimal .btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: none;
+  border-radius: 3px;
+}
+body.theme-minimal .btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+body.theme-minimal .btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: none;
+}
+
+/* Form — minimal inputs */
+body.theme-minimal .demo-form input,
+body.theme-minimal .demo-form textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 3px;
+}
+body.theme-minimal .demo-form input:focus,
+body.theme-minimal .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.12);
+}
+
+/* Blockquote — subtle left accent */
+body.theme-minimal .callout {
+  background: transparent;
+  border-left: 2px solid var(--accent);
+  color: var(--text);
+  font-style: italic;
+  padding-inline-start: var(--spacing-lg);
+}
+body.theme-minimal .callout cite { color: var(--muted); }
+
+/* Footer */
+body.theme-minimal footer p { color: var(--muted); font-size: 0.85rem; }
+
+/* Style Selector — flush top, minimal */
+body.theme-minimal .style-selector {
+  background: var(--selector-bg);
+  padding-block: var(--spacing-sm);
+}
+body.theme-minimal .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 3px;
+  font-size: 0.85rem;
+}
+body.theme-minimal .style-selector button:hover { background: rgba(0,0,0,0.04); }
+body.theme-minimal .style-selector button.active {
+  background: var(--btn-primary-bg);
+  color: #ffffff;
+}

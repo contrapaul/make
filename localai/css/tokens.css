@@ -1,0 +1,176 @@
+/* ============================================================
+   v100 — Design tokens  (blueprint §7)
+   ------------------------------------------------------------
+   All colors are tokenized here; component CSS must use var()
+   only — no hardcoded color values in base.css or tab CSS.
+
+   Themes: light + dark via [data-theme] on <html>.
+     - default follows prefers-color-scheme (no-JS fallback below)
+     - manual toggle persists to localStorage("v100-theme")
+       and sets [data-theme] explicitly (js/theme.js)
+
+   Glass recipe (§7): translucent panel + backdrop blur(18px)
+   saturate(140%) + 1px hairline border + radius 16–20px.
+   Keep simultaneous backdrop-filter layers ≤ ~8 per screen.
+   ============================================================ */
+
+/* ---------- Shared structural tokens (theme-independent) ---- */
+:root {
+  /* Spacing scale (§7): 4 / 8 / 12 / 16 / 24 / 32 / 48 */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+
+  /* Type scale (§7): 13 / 15 / 17 / 20 / 24 / 32 / 48 */
+  --fs-1: 13px;
+  --fs-2: 15px;   /* body base */
+  --fs-3: 17px;
+  --fs-4: 20px;
+  --fs-5: 24px;
+  --fs-6: 32px;
+  --fs-7: 48px;
+
+  /* System font stack (§7): SF Pro / Segoe UI, CJK fallback */
+  --font-sans: system-ui, -apple-system, "SF Pro Text", "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* Motion (§7): durations + easings */
+  --dur-micro: 150ms;   /* hover / press feedback        */
+  --dur-base: 250ms;    /* toggles, theme crossfade      */
+  --dur-reveal: 400ms;  /* scroll reveals                */
+  --dur-slow: 600ms;    /* ambient / celebration         */
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-toggle: ease-in-out;
+  --stagger-step: 60ms; /* §8 reveal stagger per element */
+
+  /* Shape + glass (§7) */
+  --radius-panel: 18px;      /* panels: within the 16–20 px band */
+  --radius-control: 12px;    /* buttons, segments, inputs        */
+  --radius-chip: 999px;
+  --glass-blur: 18px;
+  --glass-saturate: 140%;
+
+  /* Accent — single electric indigo→cyan (§7). Per-theme values
+     below are tuned for contrast on that theme's glass. */
+  --accent-gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+}
+
+/* ============================================================
+   LIGHT THEME (default)
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  --bg-base: #eef1f9;                 /* cool paper under the mesh   */
+  --text-primary: #1b2440;            /* deep indigo ink             */
+  --text-secondary: rgba(27, 36, 64, 0.64);
+  --text-faint: rgba(27, 36, 64, 0.42);
+
+  --glass-bg: rgba(255, 255, 255, 0.55);          /* §7 exact */
+  --glass-border: rgba(15, 23, 42, 0.08);         /* hairline for light glass */
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --shadow-panel: 0 12px 32px -12px rgba(23, 32, 64, 0.18),
+    0 2px 8px -2px rgba(23, 32, 64, 0.08);
+
+  --accent-1: #4f46e5;   /* indigo */
+  --accent-2: #0891b2;   /* cyan   */
+  --accent-solid: #4f46e5;
+  --on-accent: #ffffff;
+
+  --ok: #059669;         /* fits / success */
+  --warn: #b45309;       /* caution        */
+  --fail: #e11d48;       /* doesn't fit    */
+
+  --track: rgba(27, 36, 64, 0.12);      /* control tracks / ring track */
+  --chip-bg: rgba(27, 36, 64, 0.06);
+  --focus-ring: #4f46e5;
+
+  /* Ambient mesh blobs (§7): soft pastel set for light theme */
+  --mesh-a: rgba(99, 102, 241, 0.38);   /* indigo  */
+  --mesh-b: rgba(34, 211, 238, 0.32);   /* cyan    */
+  --mesh-c: rgba(167, 139, 250, 0.32);  /* violet  */
+  --mesh-d: rgba(251, 146, 160, 0.22);  /* rose    */
+}
+
+/* ============================================================
+   DARK THEME — explicit [data-theme="dark"] (set by js/theme.js)
+   ============================================================ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg-base: #0a0e1c;                 /* deep space indigo           */
+  --text-primary: #e9edfa;
+  --text-secondary: rgba(233, 237, 250, 0.66);
+  --text-faint: rgba(233, 237, 250, 0.44);
+
+  --glass-bg: rgba(255, 255, 255, 0.07);          /* §7 exact */
+  --glass-border: rgba(255, 255, 255, 0.14);      /* §7 exact */
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-panel: 0 16px 40px -16px rgba(0, 0, 0, 0.6),
+    0 2px 8px -2px rgba(0, 0, 0, 0.35);
+
+  --accent-1: #8b93ff;   /* indigo (brightened for dark glass) */
+  --accent-2: #3ee0f5;   /* cyan                               */
+  --accent-solid: #7c86ff;
+  --on-accent: #0a0e1c;
+
+  --ok: #34d399;
+  --warn: #fbbf24;
+  --fail: #fb7185;
+
+  --track: rgba(233, 237, 250, 0.16);
+  --chip-bg: rgba(233, 237, 250, 0.08);
+  --focus-ring: #a5adff;
+
+  /* Ambient mesh blobs (§7): saturated glow set for dark theme */
+  --mesh-a: rgba(79, 70, 229, 0.50);   /* indigo  */
+  --mesh-b: rgba(14, 165, 233, 0.34);  /* cyan    */
+  --mesh-c: rgba(139, 92, 246, 0.40);  /* violet  */
+  --mesh-d: rgba(16, 185, 129, 0.20);  /* emerald */
+}
+
+/* ============================================================
+   NO-JS FALLBACK — follow the system scheme when no explicit
+   [data-theme] has been set (js/theme.js always sets one).
+   ⚠ KEEP IN SYNC with :root[data-theme="dark"] above.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+
+    --bg-base: #0a0e1c;
+    --text-primary: #e9edfa;
+    --text-secondary: rgba(233, 237, 250, 0.66);
+    --text-faint: rgba(233, 237, 250, 0.44);
+
+    --glass-bg: rgba(255, 255, 255, 0.07);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --shadow-panel: 0 16px 40px -16px rgba(0, 0, 0, 0.6),
+      0 2px 8px -2px rgba(0, 0, 0, 0.35);
+
+    --accent-1: #8b93ff;
+    --accent-2: #3ee0f5;
+    --accent-solid: #7c86ff;
+    --on-accent: #0a0e1c;
+
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --fail: #fb7185;
+
+    --track: rgba(233, 237, 250, 0.16);
+    --chip-bg: rgba(233, 237, 250, 0.08);
+    --focus-ring: #a5adff;
+
+    --mesh-a: rgba(79, 70, 229, 0.50);
+    --mesh-b: rgba(14, 165, 233, 0.34);
+    --mesh-c: rgba(139, 92, 246, 0.40);
+    --mesh-d: rgba(16, 185, 129, 0.20);
+  }
+}

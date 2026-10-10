@@ -1,0 +1,6 @@
+{
+  "name": "v100",
+  "private": true,
+  "type": "module",
+  "description": "\"How Local AI Works\" interactive page — static site; this file only enables Node-based engine tests (browsers ignore it)."
+}

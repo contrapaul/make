@@ -1,0 +1,155 @@
+/* ==========================================================================
+   Theme: Paper (Handwritten & Ink)
+   Off-white textured background, handwritten-style fonts for accents, ink-like
+   stroke borders. Structural changes: cards have a subtle skew/rotation to look
+   like they're resting on paper, decorative lines instead of borders, block quotes
+   use a "handwritten" style font with indented quotation mark, hero h1 has an
+   slight italic slant for that pencil-drawn feel, navigation uses underlined
+   text with ink-style dashes. Very organic, very tactile.
+   ========================================================================== */
+
+body.theme-paper {
+  --bg: #fdf6ec;
+  --text: #2d3748;
+  --muted: #718096;
+  --border: #b79500;
+  --accent: #5c4033;
+  --card-bg: rgba(253,246,236, 0.95);
+  --btn-primary-bg: #8B4513;
+  --btn-primary-text: #f5deb3;
+  --input-bg: #fff9e7;
+  --selector-bg: #f5e6d8;
+}
+
+body.theme-paper {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* Paper grain effect via subtle noise pattern */
+  background-image: 
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 4'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 80px 80px;
+}
+
+/* Hero — italic slant for handwritten feel */
+body.theme-paper .hero {
+  text-align: center;
+  padding-block: var(--spacing-2xl);
+}
+body.theme.paper .hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  transform: skewX(-2deg);
+}
+body.theme.paper .hero p {
+  color: var(--muted);
+  max-width: 64ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
+}
+
+/* Navigation — underlined with ink dashes */
+body.theme.paper .demo-nav a {
+  color: var(--text);
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+}
+body.theme.paper .demo-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--accent);
+}
+
+/* Cards — slightly skewed for that "on paper" effect */
+body.theme.paper .card-grid {
+  gap: var(--spacing-lg);
+}
+body.theme.paper .card {
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  padding-block: var(--spacing-md) var(--spacing-xl);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.08);
+  transform: rotate(-0.5deg);
+  transition: transform 0.3s ease;
+}
+body.theme.paper .card:hover {
+  transform: translateY(-4px) rotate(-0.8deg);
+}
+
+/* Card images — ink wash effect */
+body.theme.paper .card-image {
+  background: linear-gradient(to right, rgba(179,69,19,0.3), transparent 70%);
+}
+body.theme.paper .card-title { color: var(--accent); font-weight: 800; margin-bottom: var(--spacing-sm); }
+body.theme.paper .card-body p { color: var(--muted); }
+
+/* Buttons — ink wash effect */
+body.theme.paper .btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 2px solid var(--border);
+}
+body.theme.paper .btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px dashed var(--accent);
+}
+
+/* Form - slightly larger for that handwritten feel */
+body.theme.paper .demo-form input,
+body.theme.paper .demo-form textarea {
+  background: var(--input-bg);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding-block: var(--spacing-sm) var(--spacing-md);
+}
+body.theme.paper .demo-form input:focus,
+body.theme.paper .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(179,69,19,0.3);
+}
+
+/* Blockquote - indented with quotation mark */
+body.theme.paper .callout {
+  position: relative;
+  margin-block-start: var(--spacing-lg);
+}
+body.theme.paper .callout::before {
+  content: '"';
+  font-size: 2rem;
+  color: var(--accent);
+  position: absolute;
+  left: var(--spacing-md);
+  top: -0.25em;
+  line-height: 1;
+}
+body.theme.paper .callout p {
+  margin-inline-start: calc(var(--spacing-lg) + 1rem);
+}
+
+/* Footer */
+body.theme.paper footer p { color: var(--muted); }
+
+/* Style Selector - flush top, paper colored */
+body.theme.paper .style-selector {
+  background: var(--selector-bg);
+}
+body.theme.paper .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 0;
+  font-size: 1rem;
+}
+body.theme.paper .style-selector button:hover { background: rgba(0,0,0,0.05); }
+body.theme.paper .style-selector button.active {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}

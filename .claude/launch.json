@@ -4,13 +4,24 @@
     {
       "name": "bloodbowl",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "5500"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "5500"
+      ],
       "port": 5500
     },
     {
       "name": "site-with-api",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "pages", "dev", ".", "--port", "8788"],
+      "runtimeArgs": [
+        "wrangler",
+        "pages",
+        "dev",
+        ".",
+        "--port",
+        "8788"
+      ],
       "port": 8788
     },
     {
@@ -42,8 +53,68 @@
     {
       "name": "chinese-vocab",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "tools/chinese"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "7788",
+        "--directory",
+        "tools/chinese"
+      ],
       "port": 7788
+    },
+    {
+      "name": "codewithai",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8787",
+        "--directory",
+        "."
+      ],
+      "port": 8787
+    },
+    {
+      "name": "gamebench",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os,http.server as h;h.test(HandlerClass=h.SimpleHTTPRequestHandler,port=int(os.environ.get('PORT','8791')),bind='127.0.0.1')"
+      ],
+      "port": 8791,
+      "autoPort": true
+    },
+    {
+      "name": "tome",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/paul/Documents/GitHub/tomeofsecrets",
+        "run",
+        "dev"
+      ],
+      "port": 5174
+    },
+    {
+      "name": "tome-api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/paul/Documents/GitHub/tomeofsecrets",
+        "run",
+        "dev:api"
+      ],
+      "port": 8788
+    },
+    {
+      "name": "edu-preview",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-c",
+        "import os,http.server as h,functools;h.test(HandlerClass=functools.partial(h.SimpleHTTPRequestHandler,directory='/Users/paul/Documents/GitHub/edu'),port=int(os.environ.get('PORT','8899')),bind='127.0.0.1')"
+      ],
+      "port": 8899,
+      "autoPort": true
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "codewithai",
+  "private": true,
+  "type": "module",
+  "description": "Code with AI — static site; this file only enables the Node copy and link checks (browsers ignore it).",
+  "scripts": {
+    "test": "node --test \"test/*.test.mjs\""
+  }
+}

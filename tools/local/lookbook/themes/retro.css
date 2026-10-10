@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Theme: Retro (90s Web Aesthetic)
+   Warm beige/cream tones, serif fonts, drop shadows, chunky borders.
+   Structural changes: 3px borders on everything, large padding gaps,
+   subtle background pattern via CSS gradient, slightly larger typography
+   for that "early web" feel. Cards get a double-shadow effect.
+   ========================================================================== */
+
+body.theme-retro {
+  --bg: #f5f0e8;
+  --text: #3c2e1f;
+  --muted: #6b4f3d;
+  --border: #8b7a64;
+  --accent: #d48b3a;
+  --card-bg: #ffffff;
+  --btn-primary-bg: #8b4513;
+  --btn-primary-text: #f5f0e8;
+  --input-bg: #eee8dc;
+  --selector-bg: #e6d9c8;
+}
+
+body.theme-retro {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  /* Subtle paper-like texture via repeating gradients */
+  background-image: 
+    linear-gradient(rgba(139, 107, 85, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 107, 85, 0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Hero — larger, more generous spacing */
+body.theme-retro .hero {
+  text-align: center;
+  padding-block: var(--spacing-3xl);
+}
+body.theme-retro .hero h1 {
+  font-size: clamp(2.5rem, 7vw, 4rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-lg);
+}
+body.theme-retro .hero p {
+  color: var(--muted);
+  max-width: 64ch;
+  margin-inline: auto;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* Nav — chunky, with borders */
+body.theme-retro .demo-nav {
+  display: flex;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  padding-block: var(--spacing-md);
+}
+body.theme-retro .demo-nav a {
+  color: var(--text);
+  font-weight: 700;
+  padding-block: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 2px solid var(--border);
+  text-decoration: underline offset 4px;
+}
+
+/* Cards — chunky double-shadow, wide borders */
+body.theme-retro .card-grid {
+  gap: var(--spacing-xl);
+}
+body.theme-retro .card {
+  background: var(--card-bg);
+  border: 3px solid var(--border);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.15), 
+              -4px -6px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+body.theme-retro .card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 6px 8px 20px rgba(0,0,0,0.2), 
+              -6px -8px 20px rgba(0,0,0,0.15);
+}
+
+/* Hero h1 gets a shadow for that 90s web feel */
+body.theme-retro .hero h1 {
+  text-shadow: 3px 3px 0 #d4a86a;
+}
+
+/* Buttons — chunky borders, no rounded corners */
+body.theme-retro .btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 2px solid var(--border);
+  padding-block: var(--spacing-sm) var(--spacing-md);
+}
+body.theme-retro .btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--border);
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,0.3), 
+              inset -1px -1px 0 rgba(0,0,0,0.2);
+}
+body.theme-retro .btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 2px dashed var(--border);
+}
+
+/* Form — chunky borders, slightly larger */
+body.theme-retro .demo-form input,
+body.theme-retro .demo-form textarea {
+  background: var(--input-bg);
+  border: 2px solid var(--border);
+  color: var(--text);
+  padding-block: var(--spacing-sm) var(--spacing-md);
+}
+body.theme-retro .demo-form input:focus,
+body.theme-retro .demo-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(212, 139, 58, 0.25);
+}
+
+/* Blockquote — thick left accent line */
+body.theme-retro .callout {
+  background: transparent;
+  border-left: 4px solid var(--accent);
+  box-shadow: 6px 8px 16px rgba(0,0,0,0.12);
+}
+
+/* Footer — chunky */
+body.theme-retro footer p { color: var(--muted); font-size: 0.9rem; }
+
+/* Style Selector — flush top, chunky buttons */
+body.theme-retro .style-selector {
+  background: var(--selector-bg);
+  padding-block: var(--spacing-sm) var(--spacing-md);
+}
+body.theme-retro .style-selector button {
+  background: transparent;
+  color: var(--text);
+  border-radius: 0;
+  font-size: 1rem;
+}
+body.theme-retro .style-selector button:hover { background: rgba(0,0,0,0.08); }
+body.theme-retro .style-selector button.active {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}

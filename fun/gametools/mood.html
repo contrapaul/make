@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Bench — mood sheet</title>
+<style>
+@font-face { font-family: 'Lexend'; src: url('fonts/Lexend-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Lexend'; src: url('fonts/Lexend-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Lexend'; src: url('fonts/Lexend-SemiBold.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Lexend'; src: url('fonts/Lexend-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+@font-face { font-family: 'Lexend'; src: url('fonts/Lexend-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+@font-face { font-family: 'JetBrains Mono'; src: url('fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'JetBrains Mono'; src: url('fonts/JetBrainsMono-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+
+:root {
+  /* the table */
+  --felt:        #2a6a48;
+  --felt-deep:   #1c4d33;
+  --felt-edge:   #143a26;
+  /* paper on the table */
+  --paper:       #f8f2e4;
+  --paper-2:     #efe6d2;
+  --paper-3:     #e3d8bf;
+  --ink:         #1f1b15;
+  --ink-soft:    #5d5548;
+  --ink-faint:   #9a9182;
+  --line:        #d5c9ad;
+  /* the two accents */
+  --berry:       #c4204f;
+  --berry-deep:  #9d1a40;
+  --berry-ink:   #fff4f7;
+  --brass:       #d9a23a;
+  --brass-deep:  #a87720;
+  --brass-ink:   #2a1f08;
+  /* dice and chips */
+  --bone:        #fffbf1;
+  --pip:         #1f1b15;
+
+  --font-body:    'Lexend', system-ui, sans-serif;
+  --font-display: 'Lexend', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  --r-sm: 6px; --r: 12px; --r-lg: 18px;
+  --shadow-card: 0 1px 0 rgba(255,255,255,.6) inset, 0 6px 14px -6px rgba(20,40,30,.55), 0 2px 4px rgba(20,40,30,.25);
+  --shadow-lift: 0 8px 10px -3px rgba(0,18,10,.85), 0 3px 4px -1px rgba(0,18,10,.45);
+  --btn-press: 0 3px 0 var(--berry-deep);
+}
+[data-theme="dark"] {
+  --felt:        #163d2b;
+  --felt-deep:   #0f2b1e;
+  --felt-edge:   #091c13;
+  --paper:       #2a2620;
+  --paper-2:     #332e27;
+  --paper-3:     #403a31;
+  --ink:         #f1eadb;
+  --ink-soft:    #c2b8a5;
+  --ink-faint:   #8a8172;
+  --line:        #4d463b;
+  --berry:       #e0396a;
+  --berry-deep:  #a8234b;
+  --brass:       #e3b04b;
+  --brass-deep:  #b3842a;
+  --bone:        #f4ecdc;
+  --shadow-card: 0 1px 0 rgba(255,255,255,.05) inset, 0 8px 18px -6px rgba(0,0,0,.7), 0 2px 4px rgba(0,0,0,.4);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; font-family: var(--font-body); color: var(--ink); font-size: 16px; line-height: 1.55;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.10), transparent 60%),
+    radial-gradient(ellipse at 50% 110%, var(--felt-edge), transparent 65%),
+    var(--felt);
+  min-height: 100vh;
+}
+/* felt texture: fine noise via repeating gradients, no image */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .35;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.06) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 3px);
+}
+.wrap { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 24px 16px 80px; }
+
+/* ---- header ---- */
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+.brand { color: var(--bone); }
+.brand h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(40px, 8vw, 72px); line-height: .95; letter-spacing: -.02em; margin: 0; text-shadow: 0 2px 0 rgba(0,0,0,.25); }
+.brand h1 span { color: var(--brass); }
+.brand p { margin: 8px 0 0; font-size: 15px; opacity: .85; max-width: 46ch; }
+.head-tools { display: flex; gap: 8px; }
+
+/* ---- buttons ---- */
+.btn {
+  font: 600 15px/1 var(--font-body); color: var(--berry-ink); background: var(--berry);
+  border: 0; border-radius: var(--r); padding: 14px 20px; cursor: pointer;
+  box-shadow: var(--btn-press), 0 6px 12px -6px rgba(0,0,0,.5);
+  transform: translateY(0); transition: transform .08s, box-shadow .08s, background .15s;
+  min-height: 44px;
+}
+.btn:hover { background: color-mix(in srgb, var(--berry) 90%, white); }
+.btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--berry-deep), 0 2px 4px -2px rgba(0,0,0,.5); }
+.btn.brass { background: var(--brass); color: var(--brass-ink); box-shadow: 0 3px 0 var(--brass-deep), 0 6px 12px -6px rgba(0,0,0,.5); }
+.btn.brass:active { box-shadow: 0 0 0 var(--brass-deep); }
+.btn.paper { background: var(--paper); color: var(--ink); box-shadow: 0 3px 0 var(--paper-3), 0 6px 12px -6px rgba(0,0,0,.5); }
+.btn.paper:active { box-shadow: 0 0 0 var(--paper-3); }
+.btn.ghost { background: transparent; color: var(--bone); box-shadow: inset 0 0 0 2px rgba(255,255,255,.35); }
+.btn.ghost:active { transform: none; }
+.btn.sm { padding: 10px 14px; font-size: 13px; }
+
+/* ---- panels (paper on felt) ---- */
+.panel {
+  background: var(--paper); color: var(--ink); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-card); padding: 20px;
+}
+.panel h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+.panel .kicker { font: 700 11px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--berry); margin: 0 0 10px; }
+.panel p { margin: 0 0 12px; color: var(--ink-soft); font-size: 15px; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-bottom: 16px; }
+
+/* ---- swatches ---- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; }
+.sw { border-radius: var(--r); overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.25); font-size: 11px; }
+.sw i { display: block; height: 54px; }
+.sw b { display: block; padding: 6px 8px 2px; font-weight: 600; }
+.sw code { display: block; padding: 0 8px 7px; font-family: var(--font-mono); font-size: 10px; color: var(--ink-faint); }
+.sw.on-felt { background: var(--paper-2); }
+
+/* ---- type specimen ---- */
+.spec h3 { font-family: var(--font-display); font-weight: 900; font-size: 36px; margin: 0; line-height: 1.05; letter-spacing: -.02em; }
+.spec .num { font-family: var(--font-mono); font-weight: 700; font-size: 44px; letter-spacing: -.02em; line-height: 1; margin: 6px 0; }
+.spec .label { font: 700 11px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
+
+/* ---- nav tiles ---- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.tile {
+  background: var(--paper); border-radius: var(--r); padding: 12px 14px 12px; text-decoration: none; color: var(--ink);
+  box-shadow: var(--shadow-card); transition: transform .14s, box-shadow .14s; display: block;
+  border-top: 5px solid var(--brass);
+}
+.tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+.tile.active { border-top-color: var(--berry); }
+.tile .t { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 800; font-size: 17px; line-height: 1.1; }
+.tile svg { width: 22px; height: 22px; flex: none; color: var(--brass-deep); }
+.tile.active svg { color: var(--berry); }
+[data-theme="dark"] .tile svg { color: var(--brass); }
+[data-theme="dark"] .tile.active svg { color: var(--berry); }
+.tile small { color: var(--ink-soft); font-size: 12.5px; line-height: 1.35; display: block; margin-top: 4px; }
+
+/* ---- a die ---- */
+.dice-row { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.scene { width: 84px; height: 84px; perspective: 500px; }
+.cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transform: rotateX(-24deg) rotateY(32deg); transition: transform .8s cubic-bezier(.2,.9,.3,1.1); }
+.scene:hover .cube, .scene.rolling .cube { transform: rotateX(336deg) rotateY(392deg) rotateZ(20deg); }
+.face {
+  position: absolute; inset: 0; background: var(--bone); border-radius: 14px;
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.06), inset 0 -6px 10px rgba(0,0,0,.08);
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); padding: 12px;
+}
+.face i { width: 12px; height: 12px; border-radius: 50%; background: var(--pip); place-self: center; box-shadow: inset 0 2px 2px rgba(0,0,0,.5); }
+.f1 { transform: translateZ(42px); } .f2 { transform: rotateY(90deg) translateZ(42px); }
+.f3 { transform: rotateY(180deg) translateZ(42px); } .f4 { transform: rotateY(-90deg) translateZ(42px); }
+.f5 { transform: rotateX(90deg) translateZ(42px); } .f6 { transform: rotateX(-90deg) translateZ(42px); }
+.d20 {
+  width: 84px; height: 84px; display: grid; place-items: center; position: relative;
+  font: 700 30px var(--font-mono); color: var(--brass-ink);
+}
+.d20::before { content: ""; position: absolute; inset: 0; background: var(--brass); clip-path: polygon(50% 0, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%); filter: drop-shadow(0 6px 6px rgba(0,0,0,.35)); }
+.d20::after { content: ""; position: absolute; inset: 0; clip-path: polygon(50% 0, 95% 25%, 50% 50%, 5% 25%); background: rgba(255,255,255,.28); }
+.d20 span { position: relative; }
+.chip { width: 56px; height: 56px; border-radius: 50%; background: var(--berry); border: 5px dashed var(--bone); box-shadow: 0 4px 0 var(--berry-deep), 0 8px 12px -6px rgba(0,0,0,.5); display: grid; place-items: center; color: var(--bone); font: 700 16px var(--font-mono); }
+
+/* ---- a card ---- */
+.card {
+  width: 148px; aspect-ratio: 63/88; background: var(--bone); border-radius: 9px; padding: 8px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.08), 0 10px 18px -8px rgba(0,0,0,.55); display: flex; flex-direction: column; gap: 6px;
+  color: #1f1b15; position: relative; transform: rotate(-3deg);
+}
+.card .bar { display: flex; justify-content: space-between; align-items: center; font: 800 12px var(--font-display); }
+.card .cost { width: 22px; height: 22px; border-radius: 50%; background: var(--berry); color: var(--berry-ink); display: grid; place-items: center; font: 700 12px var(--font-mono); }
+.card .art { flex: 1; border-radius: 6px; background: linear-gradient(135deg, var(--felt), var(--felt-deep)); }
+.card .rule { font-size: 9.5px; line-height: 1.3; color: #3d3730; border: 1px solid #ddd2b8; border-radius: 5px; padding: 5px 6px; }
+.card .stats { display: flex; justify-content: space-between; font: 700 11px var(--font-mono); }
+.card .stats b { color: var(--berry); } .card .stats i { color: var(--brass-deep); font-style: normal; }
+.card::after { content: ""; position: absolute; inset: 3px; border: 1px dashed rgba(196,32,79,.35); border-radius: 7px; pointer-events: none; }
+
+/* ---- form bits ---- */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font: 700 11px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+.input { font: 500 16px var(--font-body); color: var(--ink); background: var(--paper-2); border: 2px solid var(--line); border-radius: var(--r-sm); padding: 10px 12px; min-height: 44px; }
+.input:focus { outline: none; border-color: var(--berry); box-shadow: 0 0 0 3px color-mix(in srgb, var(--berry) 25%, transparent); }
+.seg { display: inline-flex; flex-wrap: wrap; background: var(--paper-2); border-radius: var(--r-sm); padding: 4px; gap: 4px; }
+.seg button { font: 600 14px var(--font-body); color: var(--ink-soft); background: transparent; border: 0; border-radius: 4px; padding: 8px 14px; cursor: pointer; min-height: 36px; }
+.seg button.on { background: var(--ink); color: var(--paper); }
+[data-theme="dark"] .seg button.on { background: var(--brass); color: var(--brass-ink); }
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; padding: 6px 0 0; }
+.bars i { flex: 1; background: var(--berry); border-radius: 4px 4px 0 0; position: relative; box-shadow: inset 0 -4px 0 var(--berry-deep); }
+.bars i::after { content: ""; position: absolute; left: -2px; right: -2px; top: calc(var(--exact) * -1); height: 0; border-top: 2px dashed var(--brass-deep); }
+.badge { display: inline-block; font: 700 11px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 8px; border-radius: 999px; background: var(--brass); color: var(--brass-ink); }
+.badge.berry { background: var(--berry); color: var(--berry-ink); }
+.badge.ink { background: var(--ink); color: var(--paper); }
+.note { color: var(--bone); opacity: .8; font-size: 13px; margin: 24px 0 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="brand">
+      <h1>Game<span>Bench</span></h1>
+      <p>Roll it, count it, lay it out, time it. A bench for people making tabletop games.</p>
+    </div>
+    <div class="head-tools">
+      <button class="btn ghost sm" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? '' : 'dark'">Light / dark</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="panel">
+      <p class="kicker">Palette</p>
+      <h2>Baize, paper, berry, brass</h2>
+      <p>Green felt is the table. Paper panels sit on it. Berry does the actions, brass does the highlights. Two accents, no more.</p>
+      <div class="swatches">
+        <div class="sw"><i style="background:var(--felt)"></i><b>felt</b><code>#2a6a48</code></div>
+        <div class="sw"><i style="background:var(--felt-deep)"></i><b>felt deep</b><code>#1c4d33</code></div>
+        <div class="sw"><i style="background:var(--paper);box-shadow:inset 0 0 0 1px var(--line)"></i><b>paper</b><code>#f8f2e4</code></div>
+        <div class="sw"><i style="background:var(--paper-2)"></i><b>paper 2</b><code>#efe6d2</code></div>
+        <div class="sw"><i style="background:var(--ink)"></i><b>ink</b><code>#1f1b15</code></div>
+        <div class="sw"><i style="background:var(--berry)"></i><b>berry</b><code>#c4204f</code></div>
+        <div class="sw"><i style="background:var(--berry-deep)"></i><b>berry deep</b><code>#9d1a40</code></div>
+        <div class="sw"><i style="background:var(--brass)"></i><b>brass</b><code>#d9a23a</code></div>
+        <div class="sw"><i style="background:var(--brass-deep)"></i><b>brass deep</b><code>#a87720</code></div>
+        <div class="sw"><i style="background:var(--bone)"></i><b>bone</b><code>#fffbf1</code></div>
+      </div>
+    </section>
+
+    <section class="panel spec">
+      <p class="kicker">Type</p>
+      <h3>Lexend Black for names.</h3>
+      <p style="margin-top:8px">Lexend Regular for everything you read. It's built for reading ease, which matters for a multilingual class and for a phone held at a table.</p>
+      <div class="label">JetBrains Mono for numbers</div>
+      <div class="num">2d6 → 8</div>
+      <p><span class="badge">locked</span> <span class="badge berry">live</span> <span class="badge ink">10,000 rolls</span></p>
+    </section>
+  </div>
+
+  <div class="grid">
+    <section class="panel">
+      <p class="kicker">Objects</p>
+      <h2>Things on the table</h2>
+      <p>Dice, chips and cards are drawn as things with weight. Hover the d6.</p>
+      <div class="dice-row">
+        <div class="scene" onclick="this.classList.toggle('rolling')">
+          <div class="cube">
+            <div class="face f1"><i style="grid-area:2/2"></i></div>
+            <div class="face f2"><i style="grid-area:1/1"></i><i style="grid-area:3/3"></i></div>
+            <div class="face f3"><i style="grid-area:1/1"></i><i style="grid-area:2/2"></i><i style="grid-area:3/3"></i></div>
+            <div class="face f4"><i style="grid-area:1/1"></i><i style="grid-area:1/3"></i><i style="grid-area:3/1"></i><i style="grid-area:3/3"></i></div>
+            <div class="face f5"><i style="grid-area:1/1"></i><i style="grid-area:1/3"></i><i style="grid-area:2/2"></i><i style="grid-area:3/1"></i><i style="grid-area:3/3"></i></div>
+            <div class="face f6"><i style="grid-area:1/1"></i><i style="grid-area:1/3"></i><i style="grid-area:2/1"></i><i style="grid-area:2/3"></i><i style="grid-area:3/1"></i><i style="grid-area:3/3"></i></div>
+          </div>
+        </div>
+        <div class="d20"><span>17</span></div>
+        <div class="chip">25</div>
+        <div class="card">
+          <div class="bar"><span>Fireball</span><span class="cost">3</span></div>
+          <div class="art"></div>
+          <div class="rule">Deal 2 damage to every enemy. On a 1, it backfires.</div>
+          <div class="stats"><b>ATK 2</b><i>SPELL</i></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <p class="kicker">Controls</p>
+      <h2>Chunky, pressable</h2>
+      <p>Buttons have a 3px ledge and drop when pressed. Inputs are big enough for thumbs.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+        <button class="btn">Roll</button>
+        <button class="btn brass">Shuffle</button>
+        <button class="btn paper">Export CSV</button>
+      </div>
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+        <div class="field"><label>Roll</label><input class="input" value="2d6+1"></div>
+        <div class="field"><label>Times</label><div class="seg"><button>10</button><button class="on">100</button><button>1k</button><button>10k</button></div></div>
+      </div>
+      <div class="field" style="margin-top:14px"><label>Sample vs exact</label>
+        <div class="bars">
+          <i style="height:12%;--exact:0px"></i><i style="height:30%;--exact:3px"></i><i style="height:42%;--exact:2px"></i><i style="height:60%;--exact:-4px"></i><i style="height:74%;--exact:0px"></i><i style="height:88%;--exact:6px"></i><i style="height:70%;--exact:-2px"></i><i style="height:58%;--exact:3px"></i><i style="height:38%;--exact:-1px"></i><i style="height:28%;--exact:2px"></i><i style="height:16%;--exact:0px"></i>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <p class="note">Tool grid. Brass tab and icon at rest, berry on the active one. Hover to lift.</p>
+  <div class="tiles">
+    <a class="tile active" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.3" fill="currentColor" stroke="none"/><circle cx="16" cy="8" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="16" r="1.3" fill="currentColor" stroke="none"/><circle cx="16" cy="16" r="1.3" fill="currentColor" stroke="none"/></svg>Dice</span><small>Roll anything. Custom faces too.</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><rect x="5" y="12" width="3" height="8" rx="1"/><rect x="10.5" y="6" width="3" height="14" rx="1"/><rect x="16" y="10" width="3" height="10" rx="1"/></svg>Odds</span><small>Label the faces, roll it a thousand times.</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="12" height="16" rx="2"/><path d="M4 7v12a2 2 0 0 0 2 2h10"/></svg>Deck</span><small>What's in your opening hand?</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Session</span><small>Does it fit in a recess?</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M17.5 14v7M14 17.5h7"/></svg>Setup</span><small>How long to lay it all out.</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 5V2M9 2h6M9 13l2 2 4-4"/></svg>Playtest</span><small>Stopwatch and tallies, at the table.</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><rect x="7" y="6" width="10" height="12" rx="1" stroke-dasharray="2 2"/></svg>Cards</span><small>Layouts borrowed from games you know.</small></a>
+    <a class="tile" href="#"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6" r="3"/><circle cx="7" cy="18" r="3"/><path d="M9.5 7.5 21 16M9.5 16.5 21 8"/></svg>Simplify</span><small>Big games made recess-sized.</small></a>
+  </div>
+</div>
+</body>
+</html>
