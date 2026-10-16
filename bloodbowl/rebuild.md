@@ -5,6 +5,8 @@ current code in `bloodbowl/`, `functions/api/`, `workers/bb-live/` and `db/migra
 of the running site (desktop and 375px), and the older feedback notes in `BB skills.txt`.
 **Revision 2 (2026-09-30):** updated after the owner's first answers (§0.1) and a review of the rules
 source in `bloodbowl/BB2025data/` (§1.4).
+**Revision 5 (2026-10-16):** the pitch becomes an on-demand tool (§5.4). Rules inputs are counts (§4.3).
+The app never tracks every player's position.
 **Revision 4 (2026-09-30):** Q17–Q20 answered: the trapdoor fix, the interception rule, a web-first build
 with platform-aware UI (§5.7), and in-app tournament rosters (§7.5).
 **Revision 3 (2026-09-30):** owner's answers to Q3–Q16 folded in (§0.1). Adds installable apps and a
@@ -337,6 +339,17 @@ resolve(action, state, ruleset) → {
 }
 ```
 
+**Inputs are counts, not positions.** A resolver takes what the rules need as plain facts:
+
+- assists;
+- the number of players marking;
+- the pass range band (Quick, Short, Long or Long Bomb);
+- which opponents may intercept;
+- the deviation direction and distance.
+
+The coach enters these with steppers and toggles. The pitch (§5.4) is one optional way to work some of
+them out, and it produces the same facts. Nothing in the engine assumes it knows where players stand.
+
 `owner` says which coach makes that roll or choice (§7.2). The action sheet (§5.2) renders any resolver
 without knowing which action it is. Tests walk every branch
 of every resolver and assert each path ends in `terminal:true`. That enforces principle 8 in CI instead of
@@ -356,8 +369,8 @@ owner's pass-zone table round-trips square by square; every resolver branch term
 ┌───────────────────────────────┐
 │ HOME 1 – 0 AWAY   H1 · T4 ⟲3 ⟲2 │  scoreboard bar: fixed, always visible
 ├───────────────────────────────┤
-│  [Home ▾] [Away]   roster /    │  main area: roster list (default) or pitch
-│  pitch toggle                   │  scrolls inside itself
+│  [Grinders] [Anvils]            │  main area: one roster at a time
+│  …                              │  scrolls inside itself
 │  …                              │
 ├───────────────────────────────┤
 │ Block Blitz Pass Hand-off Foul …│  action bar: fixed, thumb zone, scrolls sideways
@@ -365,8 +378,9 @@ owner's pass-zone table round-trips square by square; every resolver branch term
 └───────────────────────────────┘
 ```
 
-Tablet and desktop use the same regions. The rosters sit side by side, and the action sheet docks to the
-right instead of covering the screen.
+Tablet and desktop use the same regions, and the action sheet docks to the right instead of covering the
+screen. On tablets in portrait, the main area holds one roster with a team switch. On wide screens (iPad
+landscape and up), both rosters sit side by side. There's no permanent pitch on any size.
 
 ### 5.2 The action sheet: one template for every action
 
@@ -377,8 +391,10 @@ Block, Pass, Foul and the rest all use the same frame, with zones always in the 
 2. **Participants.** Actor on the left, target on the right, shown as compact trading cards. Tapping one
    opens a picker sheet listing players sorted for the action (PA for throwers, AG for catchers), with the
    relevant skills highlighted. A player chosen on one side is greyed out on the other.
-3. **Context (optional, fixed height).** The pitch for Pass, TTM, scatter and deviation; the block-dice
-   count and assists for Block; the foul assists for Foul. Actions without context keep the zone collapsed
+3. **Context (optional, fixed height).** Steppers and toggles for the facts the rules need: assists for
+   Block and Foul; range band, marking count and possible interceptors for Pass. Pass, Throw/Kick
+   Team-mate, kick-off and ranged special actions add a **"Measure on pitch"** button, which opens the
+   pitch inside this zone and fills the same steppers. Actions without context keep the zone collapsed
    to a known height, so the zones below it never move.
 4. **Math.** The target number and modifier chips (`+1 Accurate`, `−1 Tackle zone`, `−1 Rain`). Every chip
    can be tapped to open the skill in the Reference drawer.
@@ -404,18 +420,33 @@ The same components as the Reference tab, rendered in a drawer: Skills (searchab
 Teams, Star Players, Tables (kickoff, weather, injury, casualty, prayers, block dice, scatter), and Rules
 (sequence of play, actions summary). Opening it mid-action keeps the action sheet exactly as it was.
 
-### 5.4 Pitch component
+### 5.4 Pitch component: an on-demand tool
 
-A standalone pitch built from the spec in `BB skills.txt`: 26×15 plus end zones, thick lines at the
-half-way line, the side-zone boundaries and the end-zone lines, and AWAY and HOME end-zone colours.
-Pinch-zoom and pan are **anchored at the pinch point or cursor** (a past complaint). Pieces can be dragged
-and snap to squares, or placed in two steps (pick, then tap a square). There's a zones overlay from the
-pass table, and a pass line with interception detection.
+The pitch is a **measuring tool you open when it helps, never a live board.** It isn't shown during
+normal play. **The app does not track every player's position**, and nothing here tries to sync a physical
+board (owner decision, 2026-10-16).
 
-- **Portrait phones: the pitch rotates vertical** (15 wide × 28 tall), giving about 25px squares at 375px.
-  Landscape keeps it horizontal. Owner-approved (Q6).
-- Reused for: Pass, TTM, kick deviation, bounce, throw-in, **saved kickoff formations** (an old feature
-  request), and Learn to Play diagrams.
+**Where it opens** (always optional, inside the action sheet's context zone):
+
+| Use | What you place | What it fills in |
+|---|---|---|
+| **Pass** | Thrower, target square, any nearby opponents | Range band, interceptors (the 2-square band from Q12/Q18), marking count |
+| **Throw / Kick Team-mate** | Thrower, target square | Range band, landing and scatter |
+| **Kick-off** | Kick target | Deviation path and landing square, touchback check; Sevens No Man's Land rule |
+| **Scatter, bounce, throw-in** | The starting square | Where the ball ends up, square by square |
+| **Ranged special actions** (Bombardier, Hail Mary Pass, and similar) | Thrower, target | Range band and scatter |
+| **Formation planning** | Your own set-up | Saved formations for personal reference (an old request), not used by the rules |
+
+- Positions placed for an action are **discarded when the sheet closes**. Each use starts fresh, apart
+  from the last thrower and target, which are remembered for convenience.
+- The spec from `BB skills.txt`: 26×15 plus end zones; thick lines at the half-way line, the wide zones
+  and the end zones; AWAY and HOME end zones.
+- Pinch-zoom and pan are **anchored at the pinch point or cursor**. Pieces drag and snap to squares, or
+  are placed in two steps (pick, then tap a square).
+- There's a zones overlay from the owner's pass table.
+- **Portrait phones: the pitch rotates vertical** (15 wide × 28 tall). Landscape keeps it horizontal
+  (Q6).
+- Also used for Learn to Play diagrams.
 
 ### 5.5 Loading and polish (answering "loads in multiple steps")
 
@@ -726,7 +757,7 @@ Owner-approved (Q5).
 | 3 | **Reference** | Skills, Teams, Star Players, Tables, Rules as a tab **and** as the drawer | All 2025 reference content is reachable; search works; drawer opens over a dummy sheet without losing state |
 | 4 | **Accounts and Teams** | New schema with `users` carried over; auth kept; My Teams; team builder (league and Matched Play validation); cloud sync; public browse | Existing accounts log in on the new site; a team round-trips to the cloud; builder usable one-handed at 375 |
 | 5 | **Game sessions (local and live)** | Event store, transports, DO event relay running the engine, DO dice; New Game flow (carries the lineup selection; own teams first; "Other teams"; defaults to Other teams if nothing chosen); invite/join by code, link or QR; Resume/Save/Discard; Continue pill; reconnect; spectate; game Settings | Brief's New Game and Continue issues pass as written; reload never changes state (R1 test); the same scripted game replays identically on a local and a live transport |
-| 6 | **Play core** | Scoreboard, turn engine, pre-game sequence, set-up (readable at 375), kick-off sequence, statuses and conditions, re-roll tracking, stalling, half-time, extra time, end of game, pitch component | A full game can be played start to finish **on one device and on two phones**, using status changes and score only |
+| 6 | **Play core** | Scoreboard, turn engine, pre-game sequence, set-up (readable at 375), kick-off sequence, statuses and conditions, re-roll tracking, stalling, half-time, extra time, end of game, pitch tool (kick-off) | A full game can be played start to finish **on one device and on two phones**, using status changes and score only |
 | 7 | **Action sheets** | The single template; Block first, then Pass (full `BB skills.txt` spec), Foul, Blitz, Hand-off, Secure the Ball, TTM/KTM, Dodge/Rush/Jump/Pick-up, special actions; opponent prompts | Every resolver branch terminates (test); owner signs off Block, Pass and Foul side by side for uniformity, on one and two devices |
 | 8 | **Records and You** | History, match page, team records, player stat pages, MVP; offline history syncing on sign-in (no SPP or advancement: that's League, Phase 12) | A finished local game and a finished live game both appear in History for both coaches, with correct player stats |
 | 9 | **Tournaments** | Organizer settings (format, scoring, tie-breakers, roster rules); guest entries; Matched Play roster checks; pairings; **locked tournament games** started and confirmed by both coaches; organizer overrides; 16-team simulation | Scripted 16-team run completes; **owner's manual walk-through on the test env** passes |
