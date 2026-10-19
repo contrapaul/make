@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Soundboard | build a board of your own sounds, stack effects, and share it. contrapaul / make.">
 <title>contrapaul / make | soundboard</title>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/fredoka-latin-wght-normal.woff2">
 <link rel="stylesheet" href="css/soundboard.css">
 </head>
 <body class="sb-page">
@@ -13,11 +14,8 @@
   <header class="sb-top">
     <div class="sb-brand">
       <a href="/tools/" class="sb-back" title="Back to tools">&#8592; tools</a>
-      <span class="sb-brand__mark">&#9670;</span>
-      <div class="sb-brand__text">
-        <strong>MAKE</strong>
-        <span class="sb-model">SOUND UNIT &middot; SB-01</span>
-      </div>
+      <span class="sb-brand__mark" aria-hidden="true"></span>
+      <span class="sb-brand__name">Soundboard</span>
     </div>
     <div class="sb-top__right">
       <span id="sb-power" class="sb-led on" title="Power"></span>
