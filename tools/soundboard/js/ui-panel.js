@@ -199,10 +199,36 @@
     return make('div', { class: 'sb-block' }, [head, curBox, hintBox('Assign a library clip to this pad below, or load a new file.')]);
   }
 
+  // e01s06 (D24): every pad starts dry. Each toggled effect (filter/echo/reverb/
+  // distortion) gets a pill switch; its sliders + type select collapse and dim when
+  // the effect is off. gain (Volume) and pitch (Pitch/Speed) have no switch — they
+  // are always applied and neutral at 1.0. "Reset effects" restores defaultEffects().
   function effectsControls(pad) {
     var wrap = make('div', { class: 'sb-fxwrap' });
     core.EFFECTS.forEach(function (fx) {
-      var block = make('div', { class: 'sb-fxblock' }, [make('div', { class: 'sb-subhead', text: fx.label })]);
+      var isOn = fx.toggle ? !!pad.effects[fx.id + 'On'] : true;
+      var block = make('div', { class: 'sb-fxblock' + (fx.toggle && !isOn ? ' sb-fxblock--off' : '') });
+
+      var headKids = [make('span', { class: 'sb-fx__label', text: fx.label })];
+      if (fx.toggle) {
+        var sw = make('button', {
+          type: 'button',
+          class: 'sb-switch' + (isOn ? ' is-on' : ''),
+          role: 'switch',
+          'aria-checked': isOn ? 'true' : 'false',
+          'aria-label': fx.label + ' ' + (isOn ? 'on' : 'off'),
+        });
+        var swTxt = make('span', { class: 'sb-switch__txt', text: isOn ? 'On' : 'Off' });
+        sw.appendChild(swTxt);
+        sw.addEventListener('click', function () {
+          pad.effects[fx.id + 'On'] = !pad.effects[fx.id + 'On'];
+          render();
+          persist();
+        });
+        headKids.push(sw);
+      }
+      block.appendChild(make('div', { class: 'sb-fxblock__head' }, headKids));
+
       if (fx.select) {
         var sel = make('select', { class: 'sb-input', 'aria-label': fx.select.label });
         fx.select.options.forEach(function (opt) {
@@ -210,14 +236,25 @@
           if ((pad.effects[fx.select.key] || fx.select.def) === opt) o.selected = true;
           sel.appendChild(o);
         });
-        sel.addEventListener('change', function () { pad.effects[fx.select.key] = sel.value; });
+        // v1 bug fixed here: this handler used to never call persist().
+        sel.addEventListener('change', function () { pad.effects[fx.select.key] = sel.value; persist(); });
         block.appendChild(make('div', { class: 'sb-field' }, [make('label', { text: fx.select.label }), sel]));
       }
-      fx.sliders.forEach(function (s) {
-        block.appendChild(sliderRow(pad, s));
-      });
+
+      var body = make('div', { class: 'sb-fxblock__body' });
+      fx.sliders.forEach(function (s) { body.appendChild(sliderRow(pad, s)); });
+      block.appendChild(body);
+
       wrap.appendChild(block);
     });
+
+    var resetFx = make('button', { type: 'button', class: 'sb-btn sb-btn--warn sb-fxreset', text: 'Reset effects', onclick: function () {
+      pad.effects = core.defaultEffects();
+      render();
+      persist();
+    } });
+    wrap.appendChild(resetFx);
+
     var head = make('div', { class: 'sb-subhead', text: 'Effects' });
     return make('div', { class: 'sb-block' }, [head, wrap]);
   }
