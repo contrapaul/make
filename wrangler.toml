@@ -11,6 +11,10 @@ database_id = "541a4d6c-a488-432c-97c1-3786f995b4cf"
 binding = "PHOTOS"
 bucket_name = "bloodbowl-photos"
 
+[[r2_buckets]]
+binding = "SOUNDS"
+bucket_name = "make-sounds"
+
 [[durable_objects.bindings]]
 name = "LIVE_GAME"
 class_name = "LiveGame"

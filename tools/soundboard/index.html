@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Soundboard | build a pad of your own sounds, stack effects, and share the board. contrapaul / make.">
+<title>contrapaul / make | soundboard</title>
+<link rel="stylesheet" href="css/soundboard.css">
+</head>
+<body class="sb-page">
+
+<div id="sb-app" class="sb">
+  <header class="sb-top">
+    <div class="sb-brand">
+      <a href="/tools/" class="sb-back" title="Back to tools">&#8592; tools</a>
+      <span class="sb-brand__mark">&#9670;</span>
+      <div class="sb-brand__text">
+        <strong>MAKE</strong>
+        <span class="sb-model">SOUND UNIT &middot; SB-01</span>
+      </div>
+    </div>
+    <div class="sb-top__right">
+      <span id="sb-power" class="sb-led" title="audio"></span>
+      <button id="sb-stop" class="sb-btn" type="button" title="Stop all pads">STOP</button>
+      <button id="sb-mode" class="sb-btn sb-btn--mode" type="button" aria-pressed="false">&#9998; EDIT MODE</button>
+    </div>
+  </header>
+
+  <main class="sb-main">
+    <section id="sb-stage" class="sb-stage" aria-label="Pad grid"></section>
+    <aside id="sb-rack" class="sb-rack" aria-label="Control rack"></aside>
+  </main>
+
+  <footer id="sb-lcd" class="sb-lcd" role="status" aria-live="polite">READY</footer>
+
+  <input id="sb-file" type="file" accept="audio/*" hidden>
+</div>
+
+<script src="js/soundboard-core.js"></script>
+<script src="js/audio-engine.js"></script>
+<script src="js/api.js"></script>
+<script src="js/board-model.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/shell.js"></script>
+</body>
+</html>
