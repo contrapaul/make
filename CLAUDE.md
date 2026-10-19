@@ -1,65 +1,83 @@
-# CLAUDE.md
+# make — Claude Code
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+> Personal Cloudflare Pages site. This is the canonical agent context for Claude Code and pi.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+Read `CONVENTIONS.md` before any git or GitHub operation.
 
-## 1. Think Before Coding
+<!-- BEGIN bigpowers:context-routing -->
+## Context Routing
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+Load subdirectory context by file glob:
 
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+| Glob | Context |
+|------|---------|
+| `functions/api/**` | TypeScript Functions API — read `specs/tech-architecture/tech-stack.md` and the relevant `_lib/` helper first |
+| `bloodbowl/**` | Flagship game site — check `bloodbowl/REFACTOR-PLAN.md` and `bloodbowl/rebuild.md` before changes |
+| `workers/bb-live/**` | Durable Object (LiveGame) — highest-complexity area; P0/P1 risk tier |
+| `localai/**` | Self-contained sub-project with its own `package.json` and `test/` |
+<!-- END bigpowers:context-routing -->
 
-## 2. Simplicity First
+<!-- BEGIN bigpowers:learned-preferences -->
+## Learned User Preferences
 
-**Minimum code that solves the problem. Nothing speculative.**
+- (none yet — updated via `session-state`)
 
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
+## Workspace Facts
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+- (none yet — durable facts discovered across sessions)
+<!-- END bigpowers:learned-preferences -->
 
-## 3. Surgical Changes
+<!-- BEGIN bigpowers:project -->
+## Project
 
-**Touch only what you must. Clean up only your own mess.**
+make is a personal Cloudflare Pages site. It hosts several sub-sites (landing, localai, fun, tools, projects). The flagship is the Blood Bowl game. It is a static frontend plus a TypeScript Functions API. Backends are D1, R2 (photos), and the bb-live Durable Object.
 
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
+Stack: TypeScript / Cloudflare (Workers Functions + Durable Objects + D1 + R2) over static HTML/CSS/JS front-ends.
 
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
+## Commands
 
-The test: Every changed line should trace directly to the user's request.
+| Action | Command |
+|--------|---------|
+| Run | `wrangler pages dev` |
+| Deploy | `wrangler pages deploy` |
+| Test | (none — not set up) |
+| Lint | (none — not set up) |
+| Build | (static — no build step) |
+| Preflight | `wrangler pages dev` boots clean (test/lint not set up yet) |
+| CI | `gh pr checks` (when a PR is open) |
 
-## 4. Goal-Driven Execution
+## Architecture
 
-**Define success criteria. Loop until verified.**
+Static sub-sites live under the Pages root. A TypeScript Functions API sits in `functions/api/*`. Shared helpers live in `_lib/`: http, email, crypto, ratelimit, session. Realtime flows through the `LiveGame` Durable Object over WebSocket. D1 holds structured data; R2 stores photos.
 
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
+## Conventions
 
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
+- Server code is TypeScript, one route per file under `functions/api/`.
+- Shared logic lives in `functions/api/_lib/`; do not duplicate http/session/crypto helpers.
+- Route-per-file; keep handlers thin and push logic to `_lib/`.
+- Front-ends are per-site folders with their own `css/` and `js/`.
+- D1 schema changes go through migrations in `db/migrations/`.
 
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+## Never
 
----
+- Never dismiss reproducible gate failures as pre-existing or out of scope.
+- Never proceed on a red Preflight or red CI — invoke quick-fix or fix-bug first.
+- Never treat `bloodbowl/` and `bloodbowl-next/` as the same site. Confirm which is canonical first.
+- Never commit secrets; auth tokens and keys stay in Cloudflare bindings/env, not the repo.
 
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+## Agent Rules
+
+- **Workflow Mandate:** Use bigpowers skills (`plan-work`, `develop-tdd`, `orchestrate-project`) for structured work. Do not write feature code directly from a prompt.
+- **Always Green:** Preflight and CI must be green before forward work.
+- Read `specs/` and `CONVENTIONS.md` before writing code.
+- Write the minimum code that solves the stated problem.
+- Show evidence (a clean run) before declaring done.
+- All planning output goes in `specs/`.
+
+## Token Economy — Minimal Footprint
+
+1. **Check existing dependencies first.** Inspect what is already available before adding a package.
+2. **Prefer mature, maintained libraries.** Do not rewrite a capability a library provides without a documented reason.
+3. **Copy validated patterns.** Study how established products solve the same problem first.
+4. **Keep the simplest working implementation.** Write the least code that satisfies the requirement. Do not add preventive abstraction.
+<!-- END bigpowers:project -->
