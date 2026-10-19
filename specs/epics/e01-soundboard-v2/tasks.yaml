@@ -1,0 +1,78 @@
+# e01 — Soundboard v2. One entry per story; details live in the story .md files.
+# owner is a recommendation (see README "Owner split").
+epic: e01
+title: Soundboard v2 (classroom-friendly overhaul)
+stories:
+  - id: e01s01
+    file: s01-split-ui-and-test-harness.md
+    owner: claude
+    wave: 1
+    depends_on: []
+    verify: ["npm test", "wc -l tools/soundboard/js/*.js"]
+  - id: e01s02
+    file: s02-light-friendly-theme.md
+    owner: local-ai
+    wave: 1
+    depends_on: []
+    verify: ["grep -c '@font-face' tools/soundboard/css/soundboard.css"]
+  - id: e01s03
+    file: s03-header-account-chip.md
+    owner: local-ai
+    wave: 2
+    depends_on: [e01s01, e01s02]
+    verify: ["manual: screenshots 390x844 + 820x1180, popover open/closed"]
+  - id: e01s04
+    file: s04-viewport-fit-layout.md
+    owner: claude
+    wave: 2
+    depends_on: [e01s01, e01s02]
+    verify: ["manual: scrollHeight <= innerHeight in play mode at 4 sizes"]
+  - id: e01s05
+    file: s05-mode-rename-and-save.md
+    owner: local-ai
+    wave: 2
+    depends_on: [e01s01]
+    verify: ["! grep -rn 'PLAY MODE\\|EDIT MODE' tools/soundboard/"]
+  - id: e01s06
+    file: s06-effects-off-by-default.md
+    owner: local-ai
+    wave: 2
+    depends_on: [e01s01]
+    must_finish_before: [e01s07, e01s09]
+    verify: ["npm test"]
+  - id: e01s07
+    file: s07-retrigger-voices.md
+    owner: claude
+    wave: 2
+    depends_on: [e01s01, e01s06]
+    verify: ["npm test"]
+  - id: e01s08
+    file: s08-edit-grid-drag-resize.md
+    owner: claude
+    wave: 3
+    depends_on: [e01s04, e01s07]
+    verify: ["npm test"]
+  - id: e01s09
+    file: s09-pad-style-fonts-colours.md
+    owner: local-ai
+    wave: 3
+    depends_on: [e01s02, e01s06]
+    verify: ["npm test", "du -ch tools/soundboard/fonts/*.woff2 | tail -1"]
+  - id: e01s10
+    file: s10-record-up-to-10s.md
+    owner: claude
+    wave: 4
+    depends_on: [e01s04, e01s07]
+    verify: ["npm test"]
+  - id: e01s11
+    file: s11-trim-and-cleanup.md
+    owner: claude
+    wave: 4
+    depends_on: [e01s10]
+    verify: ["npm test"]
+  - id: e01s12
+    file: s12-v1-bug-fixes.md
+    owner: split   # B1 claude, B2 folded into s06, B3 folded into s07, B4 separate task
+    wave: any-after-s01
+    depends_on: [e01s01]
+    verify: ["manual: signed-in refresh reloads server board"]

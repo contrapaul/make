@@ -1,0 +1,27 @@
+# Discovered defects. Story-tracked fixes reference the story instead of a BUG-*.md.
+bugs:
+  - id: SB-B1
+    title: Signed-in boot without ?board loads the localStorage board, never the server board
+    area: tools/soundboard/js/ui.js bootCloud
+    fix: e01s12-B1
+    status: open
+  - id: SB-B2
+    title: Filter type select change is not persisted
+    area: tools/soundboard/js/ui.js effectsControls
+    fix: e01s06
+    status: open
+  - id: SB-B3
+    title: Echo/reverb tails cut at source end; pad._onended overwritten causes stale live highlight
+    area: tools/soundboard/js/audio-engine.js play, ui.js trigger
+    fix: e01s07
+    status: open
+  - id: SB-B4
+    title: GET /api/public/soundboards/:id is called by the client but does not exist; share links never load
+    area: functions/api/public/
+    fix: separate task (public read route)
+    status: open
+  - id: SB-B5
+    title: BLUEPRINT drift (migration command, D20 claimed built)
+    area: tools/soundboard/BLUEPRINT.md
+    fix: corrected 2026-10-19
+    status: done

@@ -1,1 +1,3 @@
 workflow_mode: solo-git
+active_epic: e01
+next: e01s01 (Claude) and e01s02 (local AI) in parallel

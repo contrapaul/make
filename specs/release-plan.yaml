@@ -1,0 +1,11 @@
+# Release ordering only — story status lives in execution-status.yaml.
+releases:
+  - id: soundboard-v2
+    epic: e01
+    goal: Classroom-friendly soundboard (light theme, fit-to-screen, retrigger, drag/resize, styling, record + trim)
+    order:
+      - wave-1: [e01s01, e01s02]
+      - wave-2: [e01s03, e01s04, e01s05, e01s06, e01s07]
+      - wave-3: [e01s08, e01s09]
+      - wave-4: [e01s10, e01s11, e01s12]
+    ship_rule: deploy (push to main) after each wave once its stories verify green

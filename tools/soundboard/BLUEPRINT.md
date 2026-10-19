@@ -5,7 +5,7 @@ A user-customizable soundboard that lives at `/tools/soundboard/`. A user builds
 and shares the finished board with others by URL. Signed-in users get persistent,
 account-scoped boards; signed-out visitors can play any shared board.
 
-Status: **Phase A + Phase B + Phase C — BUILT (2026-07-10)** + **UX polish pass applied**. Phase D remaining: test harness (vitest, Q5) + 3-month orphan-sound GC + optional effect extensions (bitcrusher/tape-delay/pan).
+Status: **Phase A + Phase B + Phase C — BUILT (2026-07-10)** + **UX polish pass applied**. **Deployed 2026-10-19** (R2 `make-sounds` + D1 tables live). **Phase E (v2 classroom overhaul) — PLANNED**, see §16 and `specs/epics/e01-soundboard-v2/`. Phase D remaining: test harness (vitest, Q5) + 3-month orphan-sound GC + optional effect extensions (bitcrusher/tape-delay/pan).
 - **Phase A** (client, no server): `index.html`, `css/soundboard.css`, and
   `js/{soundboard-core,audio-engine,board-model,ui,shell}.js` — 6×9 pad grid,
   add/remove/reposition/resize, local-file sounds, the 6 base effects (extensible
@@ -19,12 +19,11 @@ Status: **Phase A + Phase B + Phase C — BUILT (2026-07-10)** + **UX polish pas
   cached client-side and re-fetched on load; `localStorage` remains the signed-out stopgap.
   `tools/index.html` ROW 04 card added. Decisions: §12 D1–D20.
 
-**Deploy prerequisites (Phase B) — do before `wrangler pages deploy`:**
-1. Create the R2 bucket: `wrangler r2 bucket create make-sounds`.
-2. Add the binding to `wrangler.toml`: `[[r2_buckets]] binding="SOUNDS" bucket_name="make-sounds"`.
-3. Apply the D1 migration: `wrangler d1 migrations apply bloodbowl-db` (runs `0005_soundboard.sql`).
-Until 1–2 exist the sound endpoints return 5xx (`env.SOUNDS` undefined); boards + auth work
-against the existing `DB` binding.
+**Deploy prerequisites (Phase B) — DONE 2026-10-19:** R2 bucket `make-sounds` created; `SOUNDS`
+binding in `wrangler.toml`; `0005_soundboard.sql` applied to remote + local D1 with
+`wrangler d1 execute bloodbowl-db --remote --file db/migrations/0005_soundboard.sql` (this repo
+has no `migrations_dir`, so `d1 migrations apply` does **not** apply). Pages deploys on push to
+`main` (Git-connected project `make`).
 
 ---
 
@@ -323,7 +322,8 @@ tools/soundboard/
   __tests__/            vitest: pure math (effect curves, free-cell find, board-JSON guards)
 ```
 
-- **Two modes:**
+- **Two modes** (v2: the toggle is labelled by its action — **"✎ Edit soundboard"** while
+  playing, **"✓ Save edits"** while editing; see §16):
   - **Play mode** (default, works signed-out for public boards): big pads, click/tap to fire.
   - **Edit mode** (owner only): per-pad effect sliders, assign/reassign sound from the
     library, rename, recolor, set position + size on the grid, add/remove pads, save,
@@ -337,6 +337,11 @@ tools/soundboard/
 ---
 
 ## 10. Visual design (ENTIRELY NEW identity — user addendum)
+
+> **Superseded by D22 (2026-10-19).** v2 replaces the dark hardware look with a light,
+> bright, rounded, thick-outline classroom theme — tokens and rules in
+> `specs/epics/e01-soundboard-v2/s02-light-friendly-theme.md`. The section below is kept
+> for history. The "do not match the core Make site" rule still stands.
 
 > "Do NOT match the site … an entirely new look and feel — unrelated to the core Make
 > pages." So this is **not** the paper/ink Make look. It is a self-contained
@@ -401,7 +406,7 @@ tools/soundboard/
 | D17 | **Phase A board persistence via `localStorage`** (layout + effects + pad metadata; sound buffers NOT persisted — pads show "re-attach") | Meets the Phase A acceptance test "refresh keeps the board" with no server; now the *signed-out* stopgap; signed-in boards persist to the server |
 | D18 | **`js/api.js` client wrapper reuses the existing `/api/auth/*` + `bb_session` cookie** (no auth fork); sound buffers held in a client-side cache keyed by sound id, re-fetched via `/api/sounds/<id>` on board load | One login across the site; buffers never serialized to localStorage/server (they live in R2) |
 | D19 | **Server caps: 50 sounds/user, 2 MB/sound, 100 KB board JSON**; board upsert is last-write-wins with an optional `baseUpdatedAt` 409 guard | Mirrors the `photos` pattern; caps keep D1 quotas sane; 409 lets a stale client re-pull |
-| D20 | **Public boards via `GET /api/public/soundboards/<id>`** — no session required; owner + `isPublic=1` gate; signed-out playback in `readOnly` mode (mutations guarded in the model, UI hides edit controls); share link = `origin + /tools/soundboard/?board=<id>`; the published board is the same D1 `soundboards` row, so it **reflects the owner's latest save** (deleting a referenced sound leaves a dangling pad → shows 're-attach') | Q2 (public/private only); lets anyone play a shared board with no account; reuses the existing soundboards row (no separate publish copy) |
+| D20 | **⚠ NOT BUILT (found 2026-10-19 — client calls it, route missing; bug SB-B4).** **Public boards via `GET /api/public/soundboards/<id>`** — no session required; owner + `isPublic=1` gate; signed-out playback in `readOnly` mode (mutations guarded in the model, UI hides edit controls); share link = `origin + /tools/soundboard/?board=<id>`; the published board is the same D1 `soundboards` row, so it **reflects the owner's latest save** (deleting a referenced sound leaves a dangling pad → shows 're-attach') | Q2 (public/private only); lets anyone play a shared board with no account; reuses the existing soundboards row (no separate publish copy) |
 | D21 | **UX polish pass (2026-07-10)** — keyboard-operable pads (`keydown` Enter/Space + `:focus-visible`), dead-pad state (`is-dead`, "no clip", press shows an LCD error), **play mode hides the rack** (full-width "instrument" stage), power LED always on + pulses when playing, STOP gets a distinct danger treatment, dark-theme scrollbars + select chevron + LCD scanline, pad-label ellipsis, "Current" (disabled) on the active board, `ERR ` prefix on LCD errors, contrast bump (`--faint-2`), reduced-motion also stops the LED pulse. **Also fixed a real bug:** `--ink` was referenced but never defined in `:root` (board names + public label fell back to browser-default black on dark panels) → now `--text` | Reviewer agent cold-read + my own pass; every P0/P1 finding grounded in a real line; kept surgical (no layout rewrite, no new deps) |
 
 ---
@@ -489,3 +494,41 @@ distortion. Add/remove any (e.g. "bitcrusher", "tape delay", "pan")? -The three 
 **Addendum**
 
 **Styling** Do NOT match the site, this is to have an entirely new look and feel- unrelated to the core Make pages.
+
+---
+
+## 16. Phase E — v2 classroom overhaul (PLANNED 2026-10-19)
+
+Audience widened to **primary-school music classrooms, media production, and live use at
+classes/events**. Requirements from the user, each mapped to a story in
+`specs/epics/e01-soundboard-v2/` (README there has waves, file ownership, and the
+local-AI / Claude split):
+
+| Requirement | Story |
+|---|---|
+| Split `ui.js`, add `node --test` runner (enabler) | e01s01 |
+| Light, friendly theme: rounder, brighter, thicker outlines | e01s02 |
+| Account as a small header chip + popover, not a panel block | e01s03 |
+| Fit-to-screen layout (iPad portrait/landscape, phone); bottom-sheet edit panel on portrait | e01s04 |
+| Mode toggle labelled **"Edit soundboard" / "Save edits"**; Save edits really saves | e01s05 |
+| New pads start with **no effects**; per-effect on/off | e01s06 |
+| Re-tap restarts a pad (choke); other pads unaffected | e01s07 |
+| Edit mode shows the grid; drag/resize pads by mouse or touch, snapping to cells | e01s08 |
+| Far more pad colours + fonts, all inline (no pop-up picker) | e01s09 |
+| Record up to 10 s onto a pad | e01s10 |
+| Small trim/clean-up toolset for recordings | e01s11 |
+| v1 bugs found in review (SB-B1…B5) | e01s12 |
+
+### Phase E decisions
+
+| # | Decision | Why |
+|---|---|---|
+| D22 | **Light classroom theme replaces D16** (cream page, white cards, 3px ink outlines, pill buttons, full-strength pad colours, vendored Fredoka + Nunito) | Primary-school + projector use; user asked for friendlier, brighter, rounder, thicker outlines, light UI |
+| D23 | **`node --test` instead of vitest** (supersedes the tool choice in D14) | Zero new dependencies; Node 24 present; `soundboard-core.js` already CommonJS-exports |
+| D24 | **Effects are opt-in per pad** (`filterOn/echoOn/reverbOn/distortionOn`, default off); v1 pads load with all off | v1 defaults (echo 0.25, reverb 0.2) were wired into every trigger; user wants dry pads by default |
+| D25 | **Per-pad choke:** a re-tap fades the pad's previous voice in 8 ms and restarts from 0; other pads never affected; loops restart too (STOP ends them) | Enables the classic stutter ("Co-Co-Come on down!"); matches sampler "mono retrigger" behaviour |
+| D26 | **Drag/resize snaps to whole cells; invalid drops revert** (no swap/push in v2) | Simple, predictable for kids; swap/push can be added later |
+| D27 | **No pop-up colour picker:** swatches + inline hue/lightness sliders + hex field; never `<input type=color>` | User: pop-ups are "annoying to close" |
+| D28 | **Recordings: ≤ 10 s, mono 16-bit WAV, client-encoded**, uploaded through the existing `/api/sounds` path (≤ 2 MB holds at 48 kHz) | No server change; one format that every browser decodes |
+| D29 | **Edit mode taps select (no sound); ▶ Preview button in the panel** | A tap that may start a drag must not fire audio |
+
