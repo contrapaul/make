@@ -64,7 +64,9 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 | `js/board-model.js` | s12-B1 | state + persistence |
 | `js/ui.js` | s01 creates, then s05 | init, boot, `setMode`, render orchestration |
 | `js/ui-stage.js` (new) | s07 (trigger hookup), s08 | pad grid render + pointer handling |
-| `js/ui-panel.js` (new) | s06 (effect toggles), s12-B2 | edit panel: board, pad, sound, effects, library |
+| `js/ui-panel.js` (new) | s06 (effect toggles), s08 (grid steppers), s09 (swap colour block) | edit panel: board, boards list, pad, geometry, sound, effects |
+| `js/ui-library.js` (new) | s10 (Record entry point) | library list, file load/upload, assign, hydrate |
+| `js/ui-dom.js` (new) | s01 only (add helpers sparingly) | `$`, `make`, `section`, `hintBox`, `fmtVal`, … |
 | `js/ui-style.js` (new) | s09 | inline colour/font controls |
 | `js/ui-account.js` (new) | s03 | header account chip + popover |
 | `js/recorder.js`, `js/ui-recorder.js` (new) | s10, s11 | mic capture + recorder/trim panel |
@@ -92,7 +94,7 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 
 - **Run locally:** `npx wrangler pages dev --port 8788` from the repo root, then open
   `http://localhost:8788/tools/soundboard/`.
-- **Unit tests (after s01):** `node --test tools/soundboard/test/`
+- **Unit tests (after s01):** `npm test` (= `node --test 'tools/soundboard/test/*.test.js'`)
 - **Screens to check** (any story that changes layout or looks):
   phone 390×844, iPad portrait 820×1180, iPad landscape 1180×820, desktop 1440×900.
   Headless Edge over CDP works for screenshots and touch input on this machine (the

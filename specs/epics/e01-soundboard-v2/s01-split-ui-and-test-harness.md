@@ -8,6 +8,7 @@ files:
   - tools/soundboard/js/ui.js
   - tools/soundboard/js/ui-stage.js (new)
   - tools/soundboard/js/ui-panel.js (new)
+  - tools/soundboard/js/ui-library.js (new — added during build, see Notes)
   - tools/soundboard/js/ui-account.js (new)
   - tools/soundboard/js/ui-dom.js (new)
   - tools/soundboard/index.html (script tags only)
@@ -47,7 +48,7 @@ CONVENTIONS.md also wants files under ~300 lines and runnable tests.
    behaviour-neutral addition allowed in this story.
 7. `index.html` load order: core → engine → api → model → ui-dom → ui-stage → ui-panel →
    ui-account → ui → shell.
-8. Test runner: add `"test": "node --test tools/soundboard/test/"` to `package.json`
+8. Test runner: add `"test": "node --test 'tools/soundboard/test/*.test.js'"` to `package.json`
    `scripts`. **No new dependencies.** `soundboard-core.js` already exports through
    `module.exports`, so tests can `require('../js/soundboard-core.js')`.
 9. Write `test/core.test.js` covering what exists today: `fits`, `findFreeCell`, `addPad`
@@ -70,7 +71,7 @@ CLAUDE.md. Recorded as BLUEPRINT D23.
 ## Verify
 
 ```bash
-npm test
+npm test   # node --test 'tools/soundboard/test/*.test.js'
 wc -l tools/soundboard/js/*.js
 npx wrangler pages dev --port 8788
 ```
@@ -78,3 +79,20 @@ npx wrangler pages dev --port 8788
 Manual smoke test at `http://localhost:8788/tools/soundboard/`, signed out: add a pad, load
 a local file, assign it, play it, switch modes, refresh (the board comes back from
 localStorage), press STOP. The browser console must show no errors.
+
+## Notes (as built, 2026-10-19)
+
+- **Extra module `ui-library.js`** (`window.SoundBoard.library`): library section, file
+  load/upload (`onFile`, `isAudioFile`, size cap), `assignToPad`, `padSoundAssign`,
+  `openFilePicker`, `hydrateSounds`. Without it `ui-panel.js` would have been about 360
+  lines. Owner for later stories: **s10** (recording entry point in the Library header).
+- Modules call each other through late-bound wrappers (`function render() { S.ui.render(); }`),
+  so load order only matters for the top-level `S.stage.livePads` reference.
+- **Test command:** `node --test` given a bare directory fails on Node 24, so the script is
+  `node --test 'tools/soundboard/test/*.test.js'` (run it with `npm test`).
+- **Proof that behaviour is unchanged:** a headless-Edge scenario ran against the old and new
+  code (boot, add pad, load a WAV, press pad, toggle mode, STOP, relabel, reload). The two
+  traces of LCD text, pad classes and panel sections were identical, with zero console
+  errors. A signed-in run on `wrangler pages dev` (new board, upload, reload by `?board=`,
+  sign out) also had zero errors.
+

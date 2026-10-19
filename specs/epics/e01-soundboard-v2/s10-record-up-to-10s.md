@@ -8,7 +8,7 @@ files:
   - tools/soundboard/js/recorder.js (new — mic capture, no DOM)
   - tools/soundboard/js/audio-dsp.js (new — pure: WAV encode, peaks)
   - tools/soundboard/js/ui-recorder.js (new — inline recorder panel)
-  - tools/soundboard/js/ui-panel.js (add the "● Record" entry points only)
+  - tools/soundboard/js/ui-panel.js + ui-library.js (add the "● Record" entry points only)
   - tools/soundboard/index.html (script tags)
   - tools/soundboard/css/soundboard.css (/* ==== recorder ==== */ section only)
   - tools/soundboard/test/dsp.test.js (new)
