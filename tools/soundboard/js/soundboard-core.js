@@ -227,6 +227,7 @@
     function validateBoard(data) {
       var errors = [];
       var d = data && typeof data === 'object' ? data : {};
+      if (d && d.board && typeof d.board === 'object') d = d.board; // accept a board or a { board } wrapper
       var board = {
         name: typeof d.name === 'string' && d.name ? d.name : 'Untitled Board',
         isPublic: !!d.isPublic,

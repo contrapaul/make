@@ -64,6 +64,9 @@
     getBoard(id) { return req('GET', '/api/soundboards/' + id); },
     putBoard(id, body) { return req('PUT', '/api/soundboards/' + id, body); },
     deleteBoard(id) { return req('DELETE', '/api/soundboards/' + id); },
+
+    // --- public boards (signed-out playback of a shared board) -------------
+    loadPublicBoard(id) { return req('GET', '/api/public/soundboards/' + id); },
   };
 
   window.SBApi = SBApi;

@@ -26,6 +26,8 @@
     serverUpdatedAt: null,   // last server updatedAt (base for 409 detection)
     saving: false,
     saveError: null,
+    readOnly: false,         // viewing a public board as a signed-out guest
+    publicOwner: null,       // username of the public board's owner
   };
   var buffers = {};          // soundId -> AudioBuffer
   var library = [];          // session sounds: { id, name, size, mime, buffer? }
@@ -42,17 +44,18 @@
 
   // --- board CRUD (delegates to core) ------------------------------------
   function addPad(opts) {
+    if (state.readOnly) return null; // public board: play-only
     var p = core.addPad(state.board, opts); // throws when the board is full
     if (!state.selectedId) state.selectedId = p.id;
     return p;
   }
-  function removePad(id) { core.removePad(state.board, id); if (state.selectedId === id) state.selectedId = null; }
+  function removePad(id) { if (state.readOnly) return; core.removePad(state.board, id); if (state.selectedId === id) state.selectedId = null; }
   function getPad(id) { return findPad(id); }
   function setSelected(id) { state.selectedId = id; }
-  function movePad(id, x, y) { return core.movePad(state.board, id, x, y); }
-  function resizePad(id, w, h) { return core.resizePad(state.board, id, w, h); }
+  function movePad(id, x, y) { if (state.readOnly) return null; return core.movePad(state.board, id, x, y); }
+  function resizePad(id, w, h) { if (state.readOnly) return null; return core.resizePad(state.board, id, w, h); }
 
-  function renameBoard(name) { state.board.name = name; }
+  function renameBoard(name) { if (state.readOnly) return; state.board.name = name; }
   function setMaster(gain) { state.board.master.gain = gain; }
   function setPublic(v) { state.board.isPublic = !!v; }
 
@@ -90,6 +93,7 @@
 
   // --- persistence ----------------------------------------------------------
   function save() {
+    if (state.readOnly) return Promise.resolve({ ok: false, readOnly: true });
     if (state.serverId && api) return saveToServer();
     return saveToLocal();
   }
@@ -149,6 +153,15 @@
       return g.board;
     });
   }
+  function loadPublicBoard(id) {
+    return api.loadPublicBoard(id).then(function (g) {
+      state.serverId = null;         // signed out \u2014 never save back
+      state.readOnly = true;
+      state.publicOwner = g.board.owner || null;
+      applyBoard(g.board.data);
+      return g.board;
+    });
+  }
   function deleteBoard(id) { return api.deleteBoard(id); }
 
   function reset() {
@@ -156,6 +169,8 @@
     state.selectedId = null;
     state.serverId = null;
     state.serverUpdatedAt = null;
+    state.readOnly = false;
+    state.publicOwner = null;
     clearBuffers();
     library = [];
     state.saveError = null;
@@ -184,6 +199,8 @@
     get serverId() { return state.serverId; },
     get saving() { return state.saving; },
     get saveError() { return state.saveError; },
+    get readOnly() { return state.readOnly; },
+    get publicOwner() { return state.publicOwner; },
     getBuffer: getBuffer,
     setBuffer: setBuffer,
     clearBuffers: clearBuffers,
@@ -195,6 +212,7 @@
     listBoards: listBoards,
     createBoard: createBoard,
     loadBoard: loadBoard,
+    loadPublicBoard: loadPublicBoard,
     deleteBoard: deleteBoard,
   };
 

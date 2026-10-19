@@ -5,7 +5,7 @@ A user-customizable soundboard that lives at `/tools/soundboard/`. A user builds
 and shares the finished board with others by URL. Signed-in users get persistent,
 account-scoped boards; signed-out visitors can play any shared board.
 
-Status: **Phase A + Phase B — BUILT (2026-07-10).**
+Status: **Phase A + Phase B + Phase C — BUILT (2026-07-10)** + **UX polish pass applied**. Phase D remaining: test harness (vitest, Q5) + 3-month orphan-sound GC + optional effect extensions (bitcrusher/tape-delay/pan).
 - **Phase A** (client, no server): `index.html`, `css/soundboard.css`, and
   `js/{soundboard-core,audio-engine,board-model,ui,shell}.js` — 6×9 pad grid,
   add/remove/reposition/resize, local-file sounds, the 6 base effects (extensible
@@ -17,7 +17,7 @@ Status: **Phase A + Phase B — BUILT (2026-07-10).**
   `bb_session` cookie), and `board-model.js` + `ui.js` rewritten for server save/load,
   sign-in/out, "New board" / "My boards", and `?board=` link loading. Sound buffers are
   cached client-side and re-fetched on load; `localStorage` remains the signed-out stopgap.
-  `tools/index.html` ROW 04 card added. Decisions: §12 D1–D19.
+  `tools/index.html` ROW 04 card added. Decisions: §12 D1–D20.
 
 **Deploy prerequisites (Phase B) — do before `wrangler pages deploy`:**
 1. Create the R2 bucket: `wrangler r2 bucket create make-sounds`.
@@ -401,6 +401,8 @@ tools/soundboard/
 | D17 | **Phase A board persistence via `localStorage`** (layout + effects + pad metadata; sound buffers NOT persisted — pads show "re-attach") | Meets the Phase A acceptance test "refresh keeps the board" with no server; now the *signed-out* stopgap; signed-in boards persist to the server |
 | D18 | **`js/api.js` client wrapper reuses the existing `/api/auth/*` + `bb_session` cookie** (no auth fork); sound buffers held in a client-side cache keyed by sound id, re-fetched via `/api/sounds/<id>` on board load | One login across the site; buffers never serialized to localStorage/server (they live in R2) |
 | D19 | **Server caps: 50 sounds/user, 2 MB/sound, 100 KB board JSON**; board upsert is last-write-wins with an optional `baseUpdatedAt` 409 guard | Mirrors the `photos` pattern; caps keep D1 quotas sane; 409 lets a stale client re-pull |
+| D20 | **Public boards via `GET /api/public/soundboards/<id>`** — no session required; owner + `isPublic=1` gate; signed-out playback in `readOnly` mode (mutations guarded in the model, UI hides edit controls); share link = `origin + /tools/soundboard/?board=<id>`; the published board is the same D1 `soundboards` row, so it **reflects the owner's latest save** (deleting a referenced sound leaves a dangling pad → shows 're-attach') | Q2 (public/private only); lets anyone play a shared board with no account; reuses the existing soundboards row (no separate publish copy) |
+| D21 | **UX polish pass (2026-07-10)** — keyboard-operable pads (`keydown` Enter/Space + `:focus-visible`), dead-pad state (`is-dead`, "no clip", press shows an LCD error), **play mode hides the rack** (full-width "instrument" stage), power LED always on + pulses when playing, STOP gets a distinct danger treatment, dark-theme scrollbars + select chevron + LCD scanline, pad-label ellipsis, "Current" (disabled) on the active board, `ERR ` prefix on LCD errors, contrast bump (`--faint-2`), reduced-motion also stops the LED pulse. **Also fixed a real bug:** `--ink` was referenced but never defined in `:root` (board names + public label fell back to browser-default black on dark panels) → now `--text` | Reviewer agent cold-read + my own pass; every P0/P1 finding grounded in a real line; kept surgical (no layout rewrite, no new deps) |
 
 ---
 
@@ -425,7 +427,7 @@ Sequenced so each phase is independently usable and verifiable. (Promote to
 - B2. `functions/api/soundboards/*` (CRUD) + `board-model.js` save/load. *verify:* refresh keeps the board.
 - B3. Auth bar wired to existing `/api/auth/*`; "New board", "My boards". *verify:* same login as Bloodbowl.
 
-**Phase C — Editor + sharing**
+**Phase C — Editor + sharing + public boards (BUILT)**
 - C1. Pad editor: add/remove/reorder, assign sound, rename, recolor. *verify:* changes persist after save.
 - C2. Per-pad effect panel bound to the engine. *verify:* effect params round-trip through save.
 - C3. Public toggle + share URL; signed-out playback of a public board. *verify:* open share link in a fresh (signed-out) browser context and play it.

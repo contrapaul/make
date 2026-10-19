@@ -22,7 +22,12 @@
   var saveTimer = null;
   function persist() {
     if (saveTimer) return;
-    saveTimer = setTimeout(function () { saveTimer = null; model.save(); }, 150);
+    saveTimer = setTimeout(function () {
+      saveTimer = null;
+      model.save().catch(function (e) {
+        lcdError((e && e.message) ? e.message : 'Save failed');
+      });
+    }, 150);
   }
 
   // ---- tiny DOM helpers ----------------------------------------------------
@@ -64,10 +69,10 @@
     el.textContent = status.text;
     el.className = 'sb-lcd' + (status.tone === 'error' ? ' is-error' : '');
     var led = $('#sb-power');
-    if (led) led.className = 'sb-led' + (engine.running() || livePads.size > 0 ? ' on' : '');
+    if (led) led.className = 'sb-led on' + (livePads.size > 0 ? ' is-live' : '');
   }
   function lcdMsg(text) { status = { text: text, tone: 'ok' }; renderLCD(); }
-  function lcdError(text) { status = { text: text, tone: 'error' }; renderLCD(); }
+  function lcdError(text) { status = { text: 'ERR ' + text, tone: 'error' }; renderLCD(); }
 
   // ---- rendering -----------------------------------------------------------
   function render() {
@@ -95,7 +100,7 @@
   function padNode(pad) {
     var b = make('button', {
       type: 'button',
-      class: 'sb-pad' + (model.selectedId === pad.id ? ' is-selected' : '') + (livePads.has(pad.id) ? ' is-live' : ''),
+      class: 'sb-pad' + (model.selectedId === pad.id ? ' is-selected' : '') + (livePads.has(pad.id) ? ' is-live' : '') + (pad.sound && !model.getBuffer(pad.sound.id) ? ' is-dead' : ''),
       'data-pad': pad.id,
       'aria-label': 'Pad ' + pad.label,
     });
@@ -108,12 +113,20 @@
       make('span', { class: 'sb-pad__led' }),
       make('span', { class: 'sb-pad__emoji', text: pad.emoji || '' }),
       make('span', { class: 'sb-pad__label', text: pad.label }),
-      make('span', { class: 'sb-pad__snd', text: pad.sound ? (pad.sound.name || '\u266a') : '' }),
+      make('span', { class: 'sb-pad__snd', text: pad.sound ? (model.getBuffer(pad.sound.id) ? (pad.sound.name || '\u266a') : 'no clip') : '' }),
     );
     b.addEventListener('pointerdown', function (e) {
       e.preventDefault();
-      select(pad.id);
+      if (mode !== 'play') select(pad.id);
       if (pad.sound && model.getBuffer(pad.sound.id)) trigger(pad);
+      else if (pad.sound) lcdError('No clip for ' + pad.label + (model.readOnly ? '' : ' - re-attach it in EDIT'));
+    });
+    b.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (mode !== 'play') select(pad.id);
+        if (pad.sound && model.getBuffer(pad.sound.id)) trigger(pad);
+      }
     });
     return b;
   }
@@ -123,6 +136,10 @@
     if (!rack) return;
     rack.innerHTML = '';
     rack.appendChild(accountSection());
+    if (model.readOnly) {
+      rack.appendChild(hintBox('You are viewing a public board. Pads are play-only. Sign in above to create and share your own board.'));
+      return;
+    }
     if (mode === 'play') {
       rack.appendChild(hintBox('PLAY MODE — tap the pads to fire. Switch to EDIT to change the board.'));
     } else {
@@ -163,7 +180,29 @@
       master,
     ]);
     var btnRow = make('div', { class: 'sb-row' }, [addBtn, resetBtn]);
-    return section('Board', [nameField, masterField, btnRow]);
+
+    // Public toggle + share link (needs a signed-in owner with a saved board).
+    var pubField = make('div', { class: 'sb-field sb-pub' });
+    var shareField = null;
+    if (api && api.user && model.serverId) {
+      var pub = make('input', { type: 'checkbox', 'aria-label': 'Public board' });
+      pub.checked = !!model.board.isPublic;
+      pub.addEventListener('change', function () { model.setPublic(pub.checked); persist(); });
+      pubField.appendChild(make('label', { class: 'sb-pub__label' }, [pub, make('span', { text: 'Public \u2014 anyone with the link can open and play it.' })]));
+      var shareUrl = location.origin + '/tools/soundboard/?board=' + encodeURIComponent(model.serverId);
+      var shareInput = make('input', { class: 'sb-input sb-share', type: 'text', value: shareUrl, readonly: 'readonly' });
+      var copyBtn = make('button', { type: 'button', class: 'sb-btn', text: 'Copy link', onclick: function () {
+        shareInput.select();
+        var done = function () { copyBtn.textContent = 'Copied'; setTimeout(function () { copyBtn.textContent = 'Copy link'; }, 1200); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(done, function () { shareInput.select(); document.execCommand('copy'); done(); });
+        } else { shareInput.select(); document.execCommand('copy'); done(); }
+      }});
+      shareField = make('div', { class: 'sb-field' }, [make('label', { text: 'Share link' }), make('div', { class: 'sb-row' }, [shareInput, copyBtn])]);
+    } else {
+      pubField.appendChild(hintBox('Sign in and save a board to unlock the public toggle and a share link.'));
+    }
+    return section('Board', [nameField, masterField, btnRow, pubField, shareField]);
   }
 
   function addPadClick() {
@@ -326,7 +365,7 @@
             make('span', { class: 'lib-item__size', text: (s.size / 1024).toFixed(0) + ' KB' }),
           ]),
           make('button', { type: 'button', class: 'sb-btn', text: target ? 'Assign' : 'Pick pad', onclick: function () { assignToPad(s); } }),
-          make('button', { type: 'button', class: 'sb-btn sb-btn--warn', text: '\u00d7', onclick: function () { model.removeLibrarySound(s.id); render(); } }),
+          make('button', { type: 'button', class: 'sb-btn sb-btn--warn', text: '\u00d7', title: 'Remove', 'aria-label': 'Remove ' + s.name + ' from library', onclick: function () { model.removeLibrarySound(s.id); render(); } }),
         ]);
         list.appendChild(item);
       });
@@ -439,7 +478,8 @@
         var active = model.serverId === b.id;
         var item = make('div', { class: 'board-item' + (active ? ' is-active' : '') }, [
           make('span', { class: 'board-item__name', text: b.name }),
-          make('button', { type: 'button', class: 'sb-btn', text: active ? 'Open' : 'Load', onclick: function () {
+          make('button', { type: 'button', class: 'sb-btn', text: active ? 'Current' : 'Load', 'disabled': active ? 'disabled' : null, 'aria-label': active ? 'Current board: ' + b.name : 'Load board ' + b.name, onclick: function () {
+            if (active) return;
             model.loadBoard(b.id)
               .then(function () { return hydrateSounds(); })
               .then(function () { render(); lcdMsg('Loaded board'); })
@@ -469,6 +509,7 @@
   }
 
   function select(id) {
+    if (model.selectedId === id) return;
     model.setSelected(id);
     renderStage();
     renderRack();
@@ -492,11 +533,17 @@
   }
 
   function setMode(m) {
+    if (model.readOnly && m === 'edit') return; // public board: play-only
     mode = m;
     var app = $('#sb-app');
     if (app) { app.classList.toggle('is-play', m === 'play'); app.classList.toggle('is-edit', m === 'edit'); }
     var btn = $('#sb-mode');
-    if (btn) { btn.textContent = m === 'play' ? '\u25b6 PLAY MODE' : '\u270e EDIT MODE'; btn.setAttribute('aria-pressed', m === 'play' ? 'true' : 'false'); }
+    if (btn) {
+      btn.textContent = m === 'play' ? '\u25b6 PLAY MODE' : '\u270e EDIT MODE';
+      btn.setAttribute('aria-pressed', m === 'play' ? 'true' : 'false');
+      btn.disabled = !!model.readOnly;
+      btn.title = model.readOnly ? 'Public board \u2014 play only' : '';
+    }
     render();
   }
 
@@ -520,12 +567,37 @@
     var file = $('#sb-file');
     if (file) file.addEventListener('change', function () { onFile(file.files); file.value = ''; });
 
-    // Re-render whenever the signed-in user changes (login / logout).
-    document.addEventListener('sb:auth-changed', function () { render(); });
+    // Re-evaluate the board mode whenever auth changes (sign in / out).
+    document.addEventListener('sb:auth-changed', function () { boot(); });
 
-    // Boot: check auth, then decide local vs cloud and load the board.
-    if (!api) { bootLocal(); return; }
-    api.me().then(function (user) { user ? bootCloud(user) : bootLocal(); });
+    boot();
+  }
+
+  function boot() {
+    var boardParam = new URLSearchParams(location.search).get('board');
+    if (!api) { if (boardParam) bootPublic(boardParam); else bootLocal(); return; }
+    api.me().then(function (user) {
+      if (user) { bootCloud(user); }
+      else if (boardParam) { bootPublic(boardParam); }
+      else { bootLocal(); }
+    });
+  }
+
+  function bootPublic(boardId) {
+    model.reset();
+    setMode('play');
+    model.loadPublicBoard(boardId)
+      .then(function (g) { return hydrateSounds().then(function () { return g; }); })
+      .then(function (g) {
+        var owner = g.owner ? (' \u00b7 by ' + g.owner) : '';
+        lcdMsg('PUBLIC \u00b7 ' + (g.name || 'board') + owner + ' \u00b7 ' + model.board.pads.length + ' pads \u00b7 tap to play');
+        setMode('play'); // refreshes the (now disabled) mode button
+      })
+      .catch(function () {
+        model.reset();
+        bootLocal();
+        lcdError('Board not found or not public \u2014 started local');
+      });
   }
 
   function bootLocal() {
@@ -555,7 +627,10 @@
       model.loadBoard(boardParam)
         .then(function (g) { return hydrateSounds().then(function () { return g; }); })
         .then(function (g) { finish(g.name); })
-        .catch(function () { bootLocal(); lcdError('Board not found \u2014 started local'); });
+        .catch(function () {
+          // Not this user's board (403/404); it may be a shared public board. Try the public endpoint.
+          bootPublic(boardParam);
+        });
     } else {
       model.loadFromStorage();
       hydrateSounds().then(function () { finish(null); });
