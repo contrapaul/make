@@ -72,7 +72,7 @@ stories:
     verify: ["npm test"]
   - id: e01s12
     file: s12-v1-bug-fixes.md
-    owner: split   # B1 claude, B2 folded into s06, B3 folded into s07, B4 separate task
+    owner: split   # B1 claude, B2 folded into s06, B3 folded into s07, B4 fixed in d453ab5
     wave: any-after-s01
     depends_on: [e01s01]
     verify: ["manual: signed-in refresh reloads server board"]

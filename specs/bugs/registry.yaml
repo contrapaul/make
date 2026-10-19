@@ -18,10 +18,10 @@ bugs:
   - id: SB-B4
     title: GET /api/public/soundboards/:id is called by the client but does not exist; share links never load
     area: functions/api/public/
-    fix: separate task (public read route)
-    status: open
+    fix: functions/api/public/soundboards/[id].ts (d453ab5)
+    status: done
   - id: SB-B5
-    title: BLUEPRINT drift (migration command, D20 claimed built)
+    title: BLUEPRINT drift (migration command)
     area: tools/soundboard/BLUEPRINT.md
     fix: corrected 2026-10-19
     status: done

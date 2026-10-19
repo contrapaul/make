@@ -86,7 +86,7 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 7. Commits: Conventional Commits, scope `soundboard`, e.g.
    `feat(soundboard): restart pad on re-tap (e01s07)`.
 8. Don't touch `functions/`, `wrangler.toml`, or `db/` — no story here needs server
-   changes except s12-B4, which is its own task.
+   changes.
 
 ## Shared verification setup
 
@@ -102,7 +102,7 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 
 ## Out of scope for e01
 
-- Server changes (except the separate public-board route, s12-B4).
+- Server changes.
 - Real-time collaboration, MIDI, sequencing, recordings longer than 10 s.
 - Baking effects into files (effects stay live and non-destructive, D3).
 

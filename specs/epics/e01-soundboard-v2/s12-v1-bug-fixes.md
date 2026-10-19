@@ -2,7 +2,7 @@
 story: e01s12
 title: v1 bugs found during the e01 review
 owner: split per item
-wave: B1/B2 any time after s01; B4 is its own task
+wave: B1/B2 any time after s01
 depends_on: [e01s01]
 ---
 
@@ -41,19 +41,14 @@ If s06 is already merged, close B2 as done.
 **Fixed inside s07** (`onended` disconnects immediately; `pad._onended` gets overwritten).
 Nothing extra to do. Close it when s07 merges.
 
-## B4 — Shared/public board links don't load (separate task)
+## B4 — Shared/public board links don't load — FIXED (d453ab5)
 
-**Where:** the client calls `GET /api/public/soundboards/<id>` (`api.js`
-`loadPublicBoard`), but **that route doesn't exist**. Only `functions/api/public/teams`
-does. BLUEPRINT D20 describes it as built, but it was never written. A signed-out visitor
-opening a share link always falls back to a local board with "Board not found or not
-public".
-
-**Fix:** this is a server change, tracked as its own Claude Code task ("Soundboard:
-public read route for shared boards", already proposed). It is independent of e01's UI
-work and can land any time.
+The client calls `GET /api/public/soundboards/<id>`. That route was missing when this plan
+was first drafted. `functions/api/public/soundboards/[id].ts` was added in commit `d453ab5`
+("Soundboard polish pass"), so this is resolved. Remaining check: open a public board's
+share link signed out on the live site and play it.
 
 ## B5 — Blueprint drift (done in this planning pass)
 
 The blueprint said `wrangler d1 migrations apply` (the repo actually uses
-`d1 execute --file`) and claimed D20 was built. Corrected in `BLUEPRINT.md`.
+`d1 execute --file`). Corrected in `BLUEPRINT.md`.
