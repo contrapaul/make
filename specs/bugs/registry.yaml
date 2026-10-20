@@ -14,7 +14,7 @@ bugs:
     title: Echo/reverb tails cut at source end; pad._onended overwritten causes stale live highlight
     area: tools/soundboard/js/audio-engine.js play, ui.js trigger
     fix: e01s07
-    status: open
+    status: done
   - id: SB-B4
     title: GET /api/public/soundboards/:id is called by the client but does not exist; share links never load
     area: functions/api/public/

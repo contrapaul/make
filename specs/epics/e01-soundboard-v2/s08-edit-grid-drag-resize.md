@@ -6,7 +6,7 @@ wave: 3
 depends_on: [e01s04, e01s07]
 files:
   - tools/soundboard/js/ui-stage.js
-  - tools/soundboard/js/soundboard-core.js (pure geometry helpers)
+  - tools/soundboard/js/board-geometry.js (new — pure geometry helpers; core is already over 300 lines, so move fits/findFreeCell/padAt there too)
   - tools/soundboard/js/ui-panel.js (remove X/Y/W/H inputs; add grid-size steppers)
   - tools/soundboard/css/soundboard.css (/* ==== edit-grid ==== */ section only)
   - tools/soundboard/test/geometry.test.js (new)

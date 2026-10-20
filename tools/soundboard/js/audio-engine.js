@@ -19,7 +19,8 @@
   var ctx = null;
   var master = null; // master GainNode — pads connect here
   var assets = {}; // shared nodes (reverb impulse)
-  var voices = new Set(); // active play handles
+  var voices = core.voiceTable(); // one current voice per pad; re-tap chokes (D25)
+  var CHOKE_FADE = 0.008;   // seconds: fast enough to feel instant, slow enough not to click
 
   function AC() { return root.AudioContext || root.webkitAudioContext; }
 
@@ -118,7 +119,7 @@
   // e01s06 (D24): only wire the effects the pad has switched on. core.activeEffectIds
   // returns canonical order: always 'gain', then each toggled effect with its *On flag.
   // A brand-new or v1-migrated pad therefore plays source -> gain -> master only.
-  function buildChain(e) {
+  function buildChain(e, out) {
     var head = ctx.createGain();
     var tail = head;
     var ids = core.activeEffectIds ? core.activeEffectIds(e) : ['gain'];
@@ -129,7 +130,7 @@
       tail.connect(built.input);
       tail = built.output;
     });
-    tail.connect(master);
+    tail.connect(out);
     return head;
   }
 
@@ -143,8 +144,13 @@
     return p.then(function (buf) { return c.decodeAudioData(buf); });
   }
 
-  // Play a pad now: builds a fresh chain, starts the source, returns a handle.
-  function play(buffer, pad) {
+  // Play a pad now. Graph: source -> effect chain -> voiceGain -> master. Fading
+  // voiceGain silences the voice including its echo/reverb tail.
+  // Same pad re-tapped while sounding: the previous voice is choked (8 ms fade) and
+  // the clip restarts from 0 — the radio-stutter "Co-Co-Come on down!". Other pads'
+  // voices are never touched. opts.onEnded(handle, wasCurrent) fires once the voice
+  // is fully gone (after its tail); wasCurrent is false for a choked voice.
+  function play(buffer, pad, opts) {
     if (!buffer) return null;
     var c = ensure();
     if (c.state === 'suspended') c.resume();
@@ -153,32 +159,68 @@
     src.buffer = buffer;
     src.loop = !!(pad && pad.loop);
     src.playbackRate.value = clamp(num(e.playbackRate, 1), 0.05, 8);
-    var head = buildChain(e);
+    var voiceGain = c.createGain();
+    voiceGain.connect(master);
+    var head = buildChain(e, voiceGain);
     src.connect(head);
-    var handle = { source: src, head: head, startedAt: c.currentTime };
-    voices.add(handle);
-    src.onended = function () {
-      voices.delete(handle);
-      try { src.disconnect(); } catch (_) {}
-      try { head.disconnect(); } catch (_) {}
-      if (pad && typeof pad._onended === 'function') pad._onended(handle);
+    var handle = {
+      padId: (pad && pad.id) || '__anon',
+      source: src, head: head, voiceGain: voiceGain,
+      startedAt: c.currentTime, releasing: false,
+      onEnded: opts && opts.onEnded,
     };
-    src.start();
+    var prev = voices.register(handle.padId, handle);
+    if (prev) choke(prev);
+    var tail = core.tailSeconds(e);
+    src.onended = function () { release(handle, tail); }; // no-op if already choked (sooner deadline)
+    src.start(c.currentTime);
     return handle;
   }
 
+  // Fast stop with a short fade so there is no click.
+  function choke(h) {
+    var t = ctx.currentTime;
+    var g = h.voiceGain.gain;
+    g.cancelScheduledValues(t);
+    g.setValueAtTime(g.value, t);
+    g.linearRampToValueAtTime(0, t + CHOKE_FADE);
+    try { h.source.stop(t + CHOKE_FADE + 0.002); } catch (_) {}
+    release(h, 0.05);
+  }
+
+  // Disconnect a voice once its tail has rung out. Calling it again only ever brings
+  // the deadline forward: a choke during a long echo tail finishes in 50 ms, and a
+  // choked voice's own late onended is ignored.
+  function release(h, afterSeconds) {
+    var ms = Math.max(0, afterSeconds) * 1000;
+    var due = Date.now() + ms;
+    if (h.releaseTimer) {
+      if (due >= h.releaseDue) return;
+      clearTimeout(h.releaseTimer);
+    }
+    h.releasing = true;
+    h.releaseDue = due;
+    h.releaseTimer = setTimeout(function () {
+      try { h.source.disconnect(); } catch (_) {}
+      try { h.head.disconnect(); } catch (_) {}
+      try { h.voiceGain.disconnect(); } catch (_) {}
+      var wasCurrent = voices.release(h);
+      if (typeof h.onEnded === 'function') h.onEnded(h, wasCurrent);
+    }, ms);
+  }
+
+  // Always fades, even a voice already releasing: STOP must also silence echo tails.
   function stop(handle) {
-    if (!handle) return;
-    try { handle.source.stop(); } catch (_) {}
+    if (handle) choke(handle);
   }
   function stopAll() {
-    voices.forEach(function (h) { stop(h); });
+    voices.forEach(stop);
   }
   function setMaster(g) {
     var c = ensure();
     master.gain.value = clamp(num(g, 1), 0, 2);
   }
-  function activeCount() { return voices.size; }
+  function activeCount() { return voices.size(); }
   function running() { return !!(ctx && (ctx.state === 'running')); }
 
   root.SoundBoard = root.SoundBoard || {};

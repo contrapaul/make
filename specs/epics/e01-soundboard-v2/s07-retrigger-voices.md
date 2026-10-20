@@ -115,3 +115,20 @@ npm test
 Manual check: open the dev console. Tap one pad five times quickly →
 `SoundBoard.engine._voices.size` must never be above 1 for that pad, plus at most a couple
 of voices still fading out within 50ms. Then hold one long clip and tap others.
+
+## Notes (as built, 2026-10-20)
+
+- `release(h, after)` only ever brings a voice's deadline **forward**. Without this,
+  STOP or a re-tap during a long echo tail silenced the audio but left the voice
+  counted for up to 4 s. `stop()` always fades, so STOP silences tails too.
+- `src.start(ctx.currentTime)` always plays from offset 0, so each re-tap restarts
+  the clip.
+- **Browser check** (headless Edge, an analyser spliced onto `ctx.destination`): 15/15
+  passed. Three taps 150 ms apart gave 3 starts and 2 stops, with at most 1 voice
+  counted; tapping B left A playing (no stop logged for A); the echo tail was audible
+  after the clip ended (RMS 0.33); STOP brought the output to RMS 0 within 120 ms; a
+  re-tap during a tail left 1 current voice; no page errors.
+- `soundboard-core.js` is now 355 lines, over the ~300 guideline (it was already 309
+  after s06). **s08 should move the geometry helpers to their own file** rather than add
+  to core.
+

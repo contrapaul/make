@@ -64,21 +64,29 @@
     return b;
   }
 
+  // Fire a pad. A re-tap restarts it (the engine chokes the previous voice), so the
+  // press animation restarts too. The highlight clears only when the pad's current
+  // voice ends — a choked older voice finishing must not clear it.
   function trigger(pad) {
     var buf = pad.sound && model.getBuffer(pad.sound.id);
     if (!buf) return;
     engine.setMaster(model.board.master.gain);
-    engine.play(buf, pad);
+    engine.play(buf, pad, { onEnded: function (h, wasCurrent) { if (wasCurrent) clearLive(pad.id); } });
     livePads.add(pad.id);
     var node = $('#sb-stage [data-pad="' + pad.id + '"]');
-    if (node) node.classList.add('is-live');
+    if (node) {
+      node.classList.remove('is-live');
+      void node.offsetWidth; // reflow so the press animation replays on every tap
+      node.classList.add('is-live');
+    }
     renderLCD();
-    pad._onended = function () {
-      livePads.delete(pad.id);
-      var n = $('#sb-stage [data-pad="' + pad.id + '"]');
-      if (n) n.classList.remove('is-live');
-      renderLCD();
-    };
+  }
+
+  function clearLive(padId) {
+    livePads.delete(padId);
+    var n = $('#sb-stage [data-pad="' + padId + '"]');
+    if (n) n.classList.remove('is-live');
+    renderLCD();
   }
 
   root.SoundBoard.stage = { renderStage: renderStage, trigger: trigger, livePads: livePads };

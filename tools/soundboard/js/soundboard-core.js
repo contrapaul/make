@@ -108,6 +108,48 @@
       return e;
     }
 
+    // ---- voices (e01s07, D25) ----------------------------------------------
+    // How long a voice keeps sounding after its clip ends: echo repeats until they
+    // fall below -60 dB (capped at 4 s); reverb rings for the impulse length.
+    function tailSeconds(effects) {
+      var e = effects || {};
+      var tail = 0;
+      if (e.echoOn) {
+        var fb = Math.max(num(e.echoFeedback, 0.35), 0.01);
+        var repeats = Math.ceil(Math.log(0.001) / Math.log(fb));
+        tail = Math.min(4, num(e.echoTime, 0.25) * repeats);
+      }
+      if (e.reverbOn) tail = Math.max(tail, 2.4);
+      return tail;
+    }
+
+    // Bookkeeping for playing voices: one "current" voice per pad (a re-tap chokes
+    // the previous one), any number of voices overall. Handles are opaque objects
+    // that must carry a padId. Pure so the choke/release rules are unit-testable.
+    function voiceTable() {
+      var current = new Map(); // padId -> handle
+      var all = new Set();
+      return {
+        // Make h the pad's current voice; returns the voice it replaced (to choke) or null.
+        register: function (padId, h) {
+          var prev = current.get(padId) || null;
+          current.set(padId, h);
+          all.add(h);
+          return prev;
+        },
+        // Forget h; true when it was still its pad's current voice.
+        release: function (h) {
+          all.delete(h);
+          if (current.get(h.padId) !== h) return false;
+          current.delete(h.padId);
+          return true;
+        },
+        current: function (padId) { return current.get(padId) || null; },
+        size: function () { return all.size; },
+        forEach: function (fn) { Array.from(all).forEach(fn); },
+      };
+    }
+
     // e01s06 (D24): which chain ids should be wired, in canonical order.
     // Always 'gain'; plus each toggled effect whose <id>On flag is true.
     function activeEffectIds(effects) {
@@ -296,6 +338,8 @@
       PALETTE: PALETTE,
       defaultEffects: defaultEffects,
       activeEffectIds: activeEffectIds,
+      tailSeconds: tailSeconds,
+      voiceTable: voiceTable,
       defaultBoard: defaultBoard,
       addPad: addPad,
       removePad: removePad,
