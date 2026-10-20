@@ -4,7 +4,8 @@
  *   ready      big red ● Record, input meter, 3-2-1 count-in toggle, Cancel
  *   counting   3 · 2 · 1
  *   recording  ■ Stop inside a ring that empties over 10 s, seconds left, meter
- *   review     waveform, ▶ Play, ↺ Re-record, Use recording, Cancel   (s11 adds tools)
+ *   review     the trim & clean-up editor (ui-trim.js): waveform, handles, tools,
+ *              ▶ Play, Use recording, ↺ Re-record, Cancel
  *
  * "Use recording" encodes a mono 16-bit WAV and hands it to the normal file path
  * (ui-library onFile): signed in -> uploaded to the account; signed out -> local.
@@ -14,13 +15,11 @@
 
   var S = root.SoundBoard;
   var model = S.model;
-  var engine = S.engine;
   var rec = S.recorder;
   var dsp = S.dsp;
   var make = S.dom.make;
 
   var MAX_SECONDS = 10;
-  var QUIET_DB = -50;     // a take whose peak is below this is probably a dead mic
   var RING_R = 52;        // svg units; circumference drives the countdown ring
   var RING_C = 2 * Math.PI * RING_R;
   var COUNTIN_KEY = 'soundboard:countin';
@@ -28,7 +27,6 @@
 
   var host = null;        // element the recorder is drawn into
   var take = null;        // AudioBuffer under review
-  var preview = null;     // engine handle while ▶ Play is sounding
   var gen = 0;            // bumped per attempt/open/close; async callbacks from an
                           // older attempt (e.g. a count-in timer after Cancel) bail out
 
@@ -52,7 +50,7 @@
   function close(rerender) {
     gen++;
     rec.cancel();
-    stopPreview();
+    S.trimUI.unmount();
     take = null;
     if (host) host.classList.remove('sb-rec-host');
     host = null;
@@ -63,7 +61,7 @@
   // drop the session so the mic is never left open behind the user's back.
   function alive() {
     if (host && document.body.contains(host)) return true;
-    rec.cancel(); stopPreview(); host = null; take = null;
+    rec.cancel(); S.trimUI.unmount(); host = null; take = null;
     return false;
   }
   // Still the attempt that scheduled this callback, and still on the page?
@@ -188,33 +186,20 @@
     });
   }
 
+  // Review = the trim & clean-up editor (ui-trim.js, e01s11) on the mono take.
   function review(buffer, g) {
     if (!live(g) || !buffer) return;
     take = buffer;
-    var mono = dsp.toMono(channelsOf(buffer));
-    var quiet = dsp.peakAbs(mono) < dsp.dbToGain(QUIET_DB);
-    var canvas = make('canvas', { class: 'sb-rec__wave', role: 'img', 'aria-label': 'Waveform of the recording, ' + buffer.duration.toFixed(1) + ' seconds' });
-    var play = make('button', { type: 'button', class: 'sb-btn', text: '▶ Play' });
-    play.addEventListener('click', function () { togglePreview(play); });
-    frame([
-      canvas,
-      make('p', { class: 'sb-rec__status' + (quiet ? ' is-error' : ''), role: 'status', text: quiet
-        ? 'That was very quiet. Check the mic and try again.'
-        : buffer.duration.toFixed(1) + ' s recorded.' }),
-      make('div', { class: 'sb-row sb-rec__actions' }, [
-        play,
-        make('button', { type: 'button', class: 'sb-btn', text: '↺ Re-record', onclick: function () { stopPreview(); take = null; showReady(); } }),
-      ]),
-      make('div', { class: 'sb-row sb-rec__actions' }, [
-        make('button', { type: 'button', class: 'sb-btn sb-btn--primary', text: 'Use recording', onclick: useRecording }),
-        make('button', { type: 'button', class: 'sb-btn', text: 'Cancel', onclick: function () { close(); } }),
-      ]),
-    ]);
-    drawWave(canvas, mono);
-    if (root.ResizeObserver) {
-      var ro = new ResizeObserver(function () { if (!document.body.contains(canvas)) { ro.disconnect(); return; } drawWave(canvas, mono); });
-      ro.observe(canvas);
-    }
+    var box = make('div', { class: 'sb-rec' }, [make('div', { class: 'sb-subhead', text: 'Trim & clean up' })]);
+    host.textContent = '';
+    host.appendChild(box);
+    S.trimUI.mount(box, {
+      samples: dsp.toMono(channelsOf(buffer)),
+      sampleRate: buffer.sampleRate,
+      onUse: function (samples) { useSamples(samples, buffer.sampleRate); },
+      onRerecord: function () { take = null; showReady(); },
+      onCancel: function () { close(); },
+    });
   }
 
   function channelsOf(buffer) {
@@ -223,33 +208,8 @@
     return out;
   }
 
-  function drawWave(canvas, mono) {
-    var dpr = root.devicePixelRatio || 1;
-    var w = Math.max(1, Math.round(canvas.clientWidth * dpr)), h = Math.max(1, Math.round(canvas.clientHeight * dpr));
-    canvas.width = w; canvas.height = h;
-    var g = canvas.getContext('2d');
-    var css = getComputedStyle(canvas);
-    g.clearRect(0, 0, w, h);
-    g.fillStyle = css.getPropertyValue('--wave').trim() || '#5B6CFF';
-    var p = dsp.peaks(mono, w), mid = h / 2;
-    for (var x = 0; x < w; x++) {
-      var top = mid - p.max[x] * mid, bottom = mid - p.min[x] * mid;
-      g.fillRect(x, top, 1, Math.max(1, bottom - top));
-    }
-  }
-
-  function togglePreview(btn) {
-    if (preview) { stopPreview(); btn.textContent = '▶ Play'; return; }
-    preview = engine.play(take, { id: '__preview', effects: {} }, { onEnded: function () { preview = null; btn.textContent = '▶ Play'; } });
-    btn.textContent = '■ Stop';
-  }
-  function stopPreview() { if (preview) { engine.stop(preview); preview = null; } }
-
-  function useRecording() {
-    if (!take) return;
-    stopPreview();
-    var mono = dsp.toMono(channelsOf(take));
-    var wav = dsp.encodeWav(mono, take.sampleRate);
+  function useSamples(samples, sampleRate) {
+    var wav = dsp.encodeWav(samples, sampleRate);
     takeNo += 1;
     var file = new File([wav], 'Recording ' + takeNo + '.wav', { type: 'audio/wav' });
     var target = model.getPad(model.selectedId);

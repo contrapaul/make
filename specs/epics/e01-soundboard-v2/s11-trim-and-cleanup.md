@@ -78,3 +78,33 @@ Extend `test/dsp.test.js` with:
 
 Manual check: record "Come on down!" with a pause before it → Auto-trim → Louder → Use →
 tap the pad three times quickly, and you should hear the stutter from s07.
+
+## Notes (as built, 2026-10-20)
+
+- **Files:** `audio-dsp.js` gains `crop`, `findSoundBounds`, `normalize`, `fade` and
+  `highpass` (RBJ biquad, 90 Hz, Q 0.707); 7 more unit tests. The new **`ui-trim.js`**
+  (`SoundBoard.trimUI.mount(host, { samples, sampleRate, onUse, onRerecord, onCancel })`) is
+  the editor. `ui-recorder.js`'s review step now just mounts it, which shrank that file from
+  277 to 238 lines because its own waveform/preview code went.
+- **"Use recording" saves the selection**, so what ▶ Play plays is what you get. Press
+  ✂ Trim to make the selection permanent before more edits.
+  `trimUI.selection()` returns those samples without closing (used by the tests).
+- Louder, fades and Less rumble apply to the whole clip and keep the handles where they are.
+  Trim and Auto-trim reset the handles to the new clip.
+- Handles: Pointer Events + capture, 44px touch targets, `touch-action: none`. Arrow keys
+  nudge 10 ms (100 ms with Shift). The two handles never cross and keep ≥ 50 ms selected.
+- Undo keeps 10 steps; Reset itself can be undone.
+- Auto-trim runs once on arrival and says so: "Silence trimmed automatically · ↶ Undo brings
+  it back".
+- **Stretch goal not done:** "✂ Trim" for an existing pad sound (it would save a new sound).
+  `trimUI.mount` takes any mono samples, so this is a small follow-up when wanted.
+- **Verified** in headless Edge (`trim.mjs`): 20/20 checks pass.
+  - Synthetic take: auto-trim leaves 30 ms of leading silence and 1.06 s total. Undo
+    restores the take sample-exactly. Louder peaks at −1.0000 dB. Fades end at exactly 0.
+    Less rumble takes the DC mean to 8e-11. Reset works. Undo is capped at 10.
+  - Real touch-drag on the handles selects 40–80% without scrolling. Play shows a playhead,
+    which hides at the end. Trim gives exactly 1.0 s. The handles can't cross.
+  - Real fake-mic take: the editor opens, Louder, then Use puts the edited clip on the pad.
+    The mic is released and there are no errors.
+  - 53/53 unit tests. The recorder suite was updated for the new review step.
+
