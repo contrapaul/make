@@ -40,7 +40,8 @@ Stack: TypeScript / Cloudflare (Workers Functions + Durable Objects + D1 + R2) o
 |--------|---------|
 | Run | `wrangler pages dev` |
 | Deploy | `wrangler pages deploy` |
-| Test | (none — not set up) |
+| Test | `npm test` (soundboard unit tests, `node --test`) |
+| Browser test | `npm run test:browser` — soundboard headless-Edge suites against `wrangler pages dev` on :8788; run before deploying the soundboard (macOS + Microsoft Edge; ports 8788/9222 must be free) |
 | Lint | (none — not set up) |
 | Build | (static — no build step) |
 | Preflight | `wrangler pages dev` boots clean (test/lint not set up yet) |

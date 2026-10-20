@@ -9,3 +9,6 @@ bloodbowl/BB2025data/
 
 # local symlink to the bigpowers npx cache; breaks Pages builds if committed
 /scripts
+
+# soundboard browser-suite screenshots (npm run test:browser)
+tools/soundboard/test/browser/shots/

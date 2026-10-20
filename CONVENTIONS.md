@@ -84,7 +84,8 @@ Do not use these (or close paraphrases) to ignore reproducible failures:
 
 ## Tests (F.I.R.S.T)
 
-- Tests run headless with a single command (recorded in `CLAUDE.md`). **Not set up yet** — add when test coverage is desired.
+- Tests run headless with a single command (recorded in `CLAUDE.md`): `npm test` runs the soundboard unit tests (`node --test`, no dependencies).
+- `npm run test:browser` runs the soundboard browser suites (`tools/soundboard/test/browser/`): it starts `wrangler pages dev` on :8788 and headless Microsoft Edge (CDP on :9222, fake mic), seeds throwaway `sbtest-*` users/sessions in local D1, runs every suite, deletes the test rows and uploaded clips, and exits non-zero on any failure. Run it before each soundboard deploy; pass suite names to run a subset (`npm run test:browser -- rec trim`). Screenshots go to the gitignored `tools/soundboard/test/browser/shots/`.
 - Every new function gets a test; every bug fix gets a regression test.
 - Mocks for external I/O are named fakes, not inline stubs.
 - Tests are Fast, Independent, Repeatable, Self-Validating, Timely.
