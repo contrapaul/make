@@ -35,8 +35,9 @@
     }, 150);
   }
 
+  // A pad counts only if its clip is loaded; local-only clips are gone after a refresh.
   function hasSoundPads() {
-    return model.board.pads.some(function (p) { return !!p.sound; });
+    return model.board.pads.some(function (p) { return !!(p.sound && model.getBuffer(p.sound.id)); });
   }
 
   // Explicit "I'm done": flush the pending autosave, save, then switch to play mode.
@@ -58,6 +59,7 @@
       renderMode(); // button was disabled while saving — restore the label
     }).then(function () {
       saveEdits.saving = false;
+      renderMode(); // re-enable the button (it was rendered while saving was still true)
     });
   }
 
@@ -105,13 +107,14 @@
     }
   }
 
-  // When called from saveEdits, render=false: the board was already saved, so skip
-  // the (redundant) persist() that render() would schedule.
-  function setMode(m, render) {
+  // When called from saveEdits, shouldPersist=false: the board was already saved, so
+  // skip the (redundant) persist() that render() would schedule. (Not named `render`:
+  // that shadowed render() and made every setMode('edit') throw.)
+  function setMode(m, shouldPersist) {
     if (model.readOnly && m === 'edit') return; // public board: play-only
     mode = m;
     renderMode();
-    if (render === false) { renderStage(); renderRack(); renderLCD(); }
+    if (shouldPersist === false) paint();
     else render();
   }
 
@@ -184,7 +187,7 @@
     var needing = 0;
     model.board.pads.forEach(function (p) { if (p.sound && !model.getBuffer(p.sound.id)) needing++; });
     if (restored && hasSoundPads()) { mode = 'play'; renderMode(); paint(); }
-    else if (restored) { setMode('edit'); }
+    else { setMode('edit'); } // fresh visit or nothing playable: open the editor
     lcdMsg((restored ? 'Restored ' : 'READY ') + '\u00b7 ' + model.board.pads.length + ' pads' +
       (needing ? ' \u00b7 ' + needing + ' re-attach' : '') + ' \u00b7 local mode' +
       (!restored ? ' \u00b7 sign in to save' : ''));
