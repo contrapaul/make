@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Soundboard | build a board of your own sounds, stack effects, and share it. contrapaul / make.">
 <title>contrapaul / make | soundboard</title>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/fredoka-latin-wght-normal.woff2">
@@ -13,20 +13,26 @@
 <div id="sb-app" class="sb">
   <header class="sb-top">
     <div class="sb-brand">
-      <a href="/tools/" class="sb-back" title="Back to tools">&#8592; tools</a>
+      <a href="/tools/" class="sb-back" title="Back to tools" aria-label="Back to tools">&#8592;<span class="sb-wide"> tools</span></a>
       <span class="sb-brand__mark" aria-hidden="true"></span>
-      <span class="sb-brand__name">Soundboard</span>
+      <span class="sb-brand__name sb-wide">Soundboard</span>
+      <span id="sb-title" class="sb-title"></span>
     </div>
     <div class="sb-top__right">
       <span id="sb-power" class="sb-led on" title="Power"></span>
-      <button id="sb-stop" class="sb-btn" type="button" title="Stop all pads">STOP</button>
+      <button id="sb-stop" class="sb-btn" type="button" title="Stop all pads" aria-label="Stop all"><span class="sb-stop__icon" aria-hidden="true">&#9632;</span><span class="sb-stop__txt">STOP</span></button>
       <button id="sb-mode" class="sb-btn sb-btn--primary" type="button" aria-label="Save edits">&#10003; Save edits</button>
     </div>
   </header>
 
   <main class="sb-main">
-    <section id="sb-stage" class="sb-stage" aria-label="Pad grid"></section>
-    <aside id="sb-rack" class="sb-rack" aria-label="Control rack"></aside>
+    <div class="sb-stage-wrap">
+      <section id="sb-stage" class="sb-stage" aria-label="Pad grid"></section>
+    </div>
+    <aside class="sb-sheet" aria-label="Edit panel">
+      <button id="sb-grab" class="sb-sheet__grab" type="button" aria-label="Resize edit panel"><span class="sb-sheet__bar" aria-hidden="true"></span><span id="sb-grab-label" class="sb-sheet__label"></span></button>
+      <div id="sb-rack" class="sb-rack"></div>
+    </aside>
   </main>
 
   <footer id="sb-lcd" class="sb-lcd" role="status" aria-live="polite">READY</footer>
@@ -43,6 +49,7 @@
 <script src="js/ui-library.js"></script>
 <script src="js/ui-panel.js"></script>
 <script src="js/ui-account.js"></script>
+<script src="js/ui-sheet.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/shell.js"></script>
 </body>

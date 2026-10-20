@@ -79,3 +79,25 @@ In **edit mode**, the stage stays visible and usable at every size (the sheet si
 (play + edit). At each size, run this in the console:
 `document.scrollingElement.scrollHeight <= innerHeight`. It must be `true` in play mode.
 Report `#sb-stage` `getBoundingClientRect()` for each size against the table.
+
+## Notes (as built, 2026-10-20)
+
+- New wrappers: `.sb-stage-wrap` (`container-type: size`) around `#sb-stage`, and an
+  `.sb-sheet` card around `#sb-rack` with a grab button (`#sb-grab`). The panel card
+  styling moved from `.sb-rack` to `.sb-sheet`, and `#sb-rack` is now just the scroller.
+- Sheet logic lives in a new **`js/ui-sheet.js`** (`SoundBoard.sheet`), not `ui.js`, to keep
+  `ui.js` under 250 lines. The state is stored as `data-sheet` on `#sb-app` and in
+  `localStorage['soundboard:sheet']`.
+- The header shows the board name (`#sb-title`, kept current by `ui.renderChrome()`). Below
+  600px the back link, the "Soundboard" wordmark and the extra word in the mode label
+  ("soundboard"/"edits") hide via `.sb-wide`. Below 400px, STOP shows as ■ and the
+  power LED hides.
+- **Verified** in headless Edge (`layout.mjs`): 27/27 checks pass. Header is 52px on
+  phone and 60px elsewhere. Stage measures 358w (phone), 788w (iPad portrait),
+  724h (iPad landscape) and 804h (desktop). No page scroll and every pad on screen in play
+  mode at all four sizes. Sheet taps cycle half → full → peek; dragging down snaps to
+  peek; the state is remembered across reloads. The s07 retrigger checks and the
+  mode/save flow still pass.
+- On a phone a 9×6 grid gives ~34px cells. That follows from the grid size, and s08's
+  Columns/Rows steppers address it.
+

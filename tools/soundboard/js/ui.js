@@ -80,16 +80,30 @@
     renderStage();
     renderRack();
     renderLCD();
+    renderChrome();
     persist();
   }
   // Render without persisting — used on boot so we don't PUT an unchanged board.
-  function paint() { renderStage(); renderRack(); renderLCD(); }
+  function paint() { renderStage(); renderRack(); renderLCD(); renderChrome(); }
+
+  // Header board name + the bottom sheet's grab-bar label (shown when peeking).
+  function renderChrome() {
+    var title = $('#sb-title');
+    if (title) title.textContent = model.board.name || '';
+    var grab = $('#sb-grab-label');
+    if (grab) {
+      var pad = model.getPad(model.selectedId);
+      grab.textContent = pad ? 'Pad \u00b7 ' + pad.label : 'Board settings';
+    }
+  }
+
 
   function select(id) {
     if (model.selectedId === id) return;
     model.setSelected(id);
     renderStage();
     renderRack();
+    renderChrome();
   }
 
   // Button label says the action: in play mode "Edit soundboard", in edit mode "Save edits".
@@ -99,8 +113,14 @@
     var btn = $('#sb-mode');
     if (btn) {
       btn.classList.toggle('sb-btn--primary', mode === 'edit');
-      btn.textContent = mode === 'play' ? '\u270e Edit soundboard' : '\u2713 Save edits';
-      btn.setAttribute('aria-label', btn.textContent);
+      // Short label + a word that hides on small screens ("✎ Edit[ soundboard]").
+      var parts = mode === 'play' ? ['\u270e Edit', ' soundboard'] : ['\u2713 Save', ' edits'];
+      btn.textContent = parts[0];
+      var wide = document.createElement('span');
+      wide.className = 'sb-wide';
+      wide.textContent = parts[1];
+      btn.appendChild(wide);
+      btn.setAttribute('aria-label', parts[0] + parts[1]);
       btn.classList.toggle('is-hidden', !!model.readOnly); // public board: hidden, not disabled
       btn.disabled = saveEdits.saving;
       btn.title = model.readOnly ? 'Public board \u2014 play only' : '';
@@ -122,6 +142,7 @@
   function init() {
     if (init.done) return;
     init.done = true;
+    S.sheet.init();
 
     var modeBtn = $('#sb-mode');
     if (modeBtn) modeBtn.addEventListener('click', function () {
@@ -222,6 +243,6 @@
   root.SoundBoard.ui = {
     init: init, setMode: setMode, getMode: function () { return mode; },
     render: render, paint: paint, persist: persist, select: select,
-    renderLCD: renderLCD, lcdMsg: lcdMsg, lcdError: lcdError,
+    renderLCD: renderLCD, lcdMsg: lcdMsg, lcdError: lcdError, renderChrome: renderChrome,
   };
 })(typeof self !== 'undefined' ? self : this);

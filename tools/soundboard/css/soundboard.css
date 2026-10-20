@@ -52,20 +52,15 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 
+html, body { height: 100%; }
 body.sb-page {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.45;
-  min-height: 100vh;
+  overflow: hidden; /* the shell fits the screen; only the edit panel scrolls */
   -webkit-font-smoothing: antialiased;
-}
-
-#sb-app.sb {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 22px 16px 44px;
 }
 
 /* every control gets a friendly, visible focus ring */
@@ -84,18 +79,20 @@ body.sb-page {
 
 /* ==== header ==== */
 .sb-top {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 20px;
+  gap: 10px;
+  height: 60px;
+  padding: 0 12px 0 14px;
   background: var(--surface);
   border: var(--outline) solid var(--ink);
   border-radius: var(--r-lg);
   box-shadow: var(--lift);
 }
 
-.sb-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.sb-brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; }
 .sb-back {
   font: 600 15px/1 var(--font-body);
   color: var(--ink-2);
@@ -116,9 +113,22 @@ body.sb-page {
   font: 700 22px/1.1 var(--font-ui);
   letter-spacing: .01em;
   color: var(--ink);
+  flex: 0 0 auto;
 }
+/* current board name; truncates before anything else in the header gives way */
+.sb-title {
+  font: 600 16px/1.2 var(--font-ui);
+  color: var(--ink-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sb-brand__name + .sb-title::before { content: "\00b7  "; color: var(--ink-3); }
 
-.sb-top__right { display: flex; align-items: center; gap: 10px; }
+.sb-top__right { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.sb-top .sb-btn { min-height: 44px; padding-top: 0; padding-bottom: 0; }
+.sb-stop__icon { display: none; }
 .sb-led {
   width: 12px; height: 12px; border-radius: 50%;
   background: var(--grid-line);
@@ -133,34 +143,117 @@ body.sb-page {
 /* (empty — s03 rewrites the account chip here) */
 
 /* ==== layout ==== */
-/* (owned by s04 — fit-to-screen layout; keep edits here) */
-@media (max-width: 940px) {
-  .sb-main { grid-template-columns: 1fr; }
-  .sb-rack { max-height: none; }
-  .sb-stage { aspect-ratio: auto; min-height: 320px; }
-  .sb-grid4 { grid-template-columns: repeat(2, 1fr); }
+/* e01s04: the whole app is one screen-high column — header, workspace, status —
+ * and the page itself never scrolls. The workspace holds the stage (as big as fits)
+ * and, in edit mode, the panel: a right-hand column in landscape, a bottom sheet
+ * (peek / half / full) in portrait or on narrow screens. */
+#sb-app.sb {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
 }
 
 .sb-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
-  gap: 16px;
-  align-items: start;
-  margin-top: 16px;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.sb.is-play .sb-main { grid-template-columns: 1fr; }
-.sb.is-play .sb-rack { display: none; }
-/* edit mode: rack visible (default grid above); hook kept for s04 */
-.sb.is-edit .sb-rack { display: flex; }
+.sb-stage-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  container-type: size;
+  display: grid;
+  place-items: center;
+}
+
+/* edit panel wrapper (the scrolling content inside is #sb-rack) */
+.sb-sheet {
+  flex: 0 0 45%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: var(--outline) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--lift);
+  overflow: hidden;
+}
+.sb[data-sheet="peek"] .sb-sheet { flex-basis: 64px; }
+.sb[data-sheet="full"] .sb-sheet { flex-basis: 85%; }
+.sb.is-play .sb-sheet { display: none; }
+
+.sb-sheet__grab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 0;
+  border-bottom: 2px solid var(--grid-line);
+  background: transparent;
+  color: var(--ink);
+  font: 600 15px/1.2 var(--font-ui);
+  text-align: left;
+  cursor: grab;
+  touch-action: none; /* the grab bar is dragged; don't scroll the page */
+}
+.sb-sheet__grab:focus-visible { outline: 3px solid var(--accent); outline-offset: -3px; }
+.sb-sheet__bar {
+  flex: 0 0 auto;
+  width: 44px; height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--grid-line);
+  box-shadow: inset 0 0 0 2px var(--ink-3);
+}
+.sb-sheet__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* landscape with room: panel becomes a right-hand column, no grab bar */
+@media (min-aspect-ratio: 1/1) and (min-width: 900px) {
+  .sb-main { flex-direction: row; }
+  .sb-sheet,
+  .sb[data-sheet] .sb-sheet { flex: 0 0 360px; height: 100%; }
+  .sb-sheet__grab { display: none; }
+}
+
+/* small screens: tighter header; icon-only back link, STOP and mode labels */
+@media (max-width: 600px) {
+  #sb-app.sb { gap: 10px; }
+  .sb-top { height: 52px; padding: 0 8px 0 10px; gap: 8px; }
+  .sb-top__right { gap: 8px; }
+  .sb-wide { display: none; }
+  .sb-brand__name { display: none; }
+  .sb-back { padding: 8px 6px; }
+}
+@media (max-width: 400px) {
+  .sb-stop__icon { display: inline; }
+  .sb-stop__txt { display: none; }
+  .sb-led { display: none; }
+}
 
 /* ==== stage ==== */
 .sb-stage {
   display: grid;
-  grid-template-columns: repeat(var(--cols, 9), 1fr);
-  grid-template-rows: repeat(var(--rows, 6), 1fr);
-  gap: 10px;
-  aspect-ratio: calc(var(--cols, 9) / var(--rows, 6));
-  padding: 14px;
+  grid-template-columns: repeat(var(--cols, 9), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 6), minmax(0, 1fr));
+  gap: clamp(6px, 1.2cqmin, 14px);
+  /* as large as the wrap allows while keeping the grid's cols:rows shape */
+  width: min(100cqw, 100cqh * var(--cols, 9) / var(--rows, 6));
+  height: min(100cqh, 100cqw * var(--rows, 6) / var(--cols, 9));
+  padding: clamp(8px, 1.6cqmin, 16px);
   background: var(--surface-2);
   border: var(--outline) solid var(--ink);
   border-radius: var(--r-lg);
@@ -257,16 +350,14 @@ body.sb-page {
 
 /* ==== panel ==== */
 .sb-rack {
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 14px;
-  background: var(--surface);
-  border: var(--outline) solid var(--ink);
-  border-radius: var(--r-lg);
   padding: 14px;
-  box-shadow: var(--lift);
-  max-height: 760px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .sb-sec {
@@ -536,20 +627,20 @@ input[type="range"].sb-range::-moz-range-thumb {
 
 /* ==== status ==== */
 .sb-lcd {
-  margin-top: 16px;
+  flex: 0 0 auto;
   display: block;
-  font: 700 14px/1.5 var(--font-body);
+  height: 32px;
+  font: 700 14px/26px var(--font-body);
   color: var(--ink);
   background: var(--surface);
   border: var(--outline) solid var(--ink);
   border-radius: var(--r-pill);
-  box-shadow: var(--lift);
-  padding: 10px 20px;
-  min-height: 22px;
-  max-height: 4.5em;
+  padding: 0 16px;
   overflow: hidden;
-  word-break: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+.sb.is-play .sb-lcd:not(.is-error) { display: none; }
 .sb-lcd.is-error {
   background: var(--danger);
   color: #000;

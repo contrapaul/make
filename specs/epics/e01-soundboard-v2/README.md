@@ -66,6 +66,7 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 | `js/ui-stage.js` (new) | s07 (trigger hookup), s08 | pad grid render + pointer handling |
 | `js/ui-panel.js` (new) | s06 (effect toggles), s08 (grid steppers), s09 (swap colour block) | edit panel: board, boards list, pad, geometry, sound, effects |
 | `js/ui-library.js` (new) | s10 (Record entry point) | library list, file load/upload, assign, hydrate |
+| `js/ui-sheet.js` (new, s04) | s04 | edit-panel bottom sheet (peek/half/full) |
 | `js/ui-dom.js` (new) | s01 only (add helpers sparingly) | `$`, `make`, `section`, `hintBox`, `fmtVal`, … |
 | `js/ui-style.js` (new) | s09 | inline colour/font controls |
 | `js/ui-account.js` (new) | s03 | header account chip + popover |

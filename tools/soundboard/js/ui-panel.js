@@ -48,7 +48,7 @@
   // ---- board section (always visible) --------------------------------------
   function boardSection() {
     var name = make('input', { class: 'sb-input', type: 'text', value: model.board.name, 'aria-label': 'Board name' });
-    name.addEventListener('input', function () { model.board.name = name.value; persist(); });
+    name.addEventListener('input', function () { model.board.name = name.value; S.ui.renderChrome(); persist(); });
     var master = make('input', { class: 'sb-range', type: 'range', min: 0, max: 2, step: 0.01, value: model.board.master.gain, 'aria-label': 'Master volume' });
     var masterVal = make('span', { class: 'sb-fx__val', text: fmtVal(model.board.master.gain, '') });
     master.addEventListener('input', function () {
