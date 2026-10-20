@@ -51,8 +51,6 @@
     return buf;
   }
 
-  // Canonical chain order (pitch handled on the source, not here).
-  var CHAIN_ORDER = ['gain', 'filter', 'echo', 'reverb', 'distortion'];
 
   // Each builder returns { input, output }. `e` is the flat pad.effects object.
   var BUILDERS = {
@@ -117,10 +115,14 @@
     },
   };
 
+  // e01s06 (D24): only wire the effects the pad has switched on. core.activeEffectIds
+  // returns canonical order: always 'gain', then each toggled effect with its *On flag.
+  // A brand-new or v1-migrated pad therefore plays source -> gain -> master only.
   function buildChain(e) {
     var head = ctx.createGain();
     var tail = head;
-    CHAIN_ORDER.forEach(function (id) {
+    var ids = core.activeEffectIds ? core.activeEffectIds(e) : ['gain'];
+    ids.forEach(function (id) {
       var b = BUILDERS[id];
       if (!b) return;
       var built = b(e);
