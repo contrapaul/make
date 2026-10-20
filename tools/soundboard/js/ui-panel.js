@@ -22,7 +22,7 @@
   function renderStage() { S.stage.renderStage(); }
   function librarySection() { return S.library.librarySection(); }
   function openFilePicker() { S.library.openFilePicker(); }
-  function hydrateSounds() { return S.library.hydrateSounds(); }
+  function boardsSection() { return S.boards.boardsSection(); }
 
   function renderRack() {
     var rack = $('#sb-rack');
@@ -35,10 +35,11 @@
     if (S.ui.getMode() === 'play') {
       rack.appendChild(hintBox('Tap the pads to fire. Tap “✎ Edit soundboard” to change the board.'));
     } else {
-      rack.appendChild(boardsSection());
-      rack.appendChild(boardSection());
-      rack.appendChild(selectedPadSection());
-      rack.appendChild(librarySection());
+      // The selected pad's settings come first: on a phone the sheet shows only the top.
+      var order = model.getPad(model.selectedId)
+        ? [selectedPadSection, librarySection, boardSection, boardsSection]
+        : [boardSection, boardsSection, selectedPadSection, librarySection];
+      order.forEach(function (build) { rack.appendChild(build()); });
     }
   }
 
@@ -66,6 +67,13 @@
       master,
     ]);
     var btnRow = make('div', { class: 'sb-row' }, [addBtn, resetBtn]);
+    var gridField = make('div', { class: 'sb-field' }, [
+      make('label', { text: 'Grid size' }),
+      make('div', { class: 'sb-row sb-steppers' }, [
+        stepper('Columns', 'cols'),
+        stepper('Rows', 'rows'),
+      ]),
+    ]);
 
     // Public toggle + share link (needs a signed-in owner with a saved board).
     var pubField = make('div', { class: 'sb-field sb-pub' });
@@ -88,7 +96,29 @@
     } else {
       pubField.appendChild(hintBox('Sign in and save a board to unlock the public toggle and a share link.'));
     }
-    return section('Board', [nameField, masterField, btnRow, pubField, shareField]);
+    return section('Board', [nameField, masterField, gridField, btnRow, pubField, shareField]);
+  }
+
+  // − / value / + for the grid size (3–12). Shrinking past a pad is refused, not forced.
+  function stepper(label, key) {
+    var val = model.board.layout[key];
+    function change(delta) {
+      var cols = model.board.layout.cols + (key === 'cols' ? delta : 0);
+      var rows = model.board.layout.rows + (key === 'rows' ? delta : 0);
+      if (cols < 3 || rows < 3 || cols > 12 || rows > 12) return;
+      if (!S.geometry.layoutFits(model.board, cols, rows)) {
+        lcdError('Move or shrink the pads in the last ' + (key === 'cols' ? 'column' : 'row') + ' first');
+        return;
+      }
+      core.setLayout(model.board, cols, rows);
+      render();
+    }
+    return make('div', { class: 'sb-stepper', role: 'group', 'aria-label': label }, [
+      make('span', { class: 'sb-stepper__label', text: label }),
+      make('button', { type: 'button', class: 'sb-btn sb-stepper__btn', text: '\u2212', 'aria-label': 'Fewer ' + label.toLowerCase(), disabled: val <= 3 ? 'disabled' : null, onclick: function () { change(-1); } }),
+      make('span', { class: 'sb-stepper__val', text: String(val), 'aria-live': 'polite' }),
+      make('button', { type: 'button', class: 'sb-btn sb-stepper__btn', text: '+', 'aria-label': 'More ' + label.toLowerCase(), disabled: val >= 12 ? 'disabled' : null, onclick: function () { change(1); } }),
+    ]);
   }
 
   function addPadClick() {
@@ -133,8 +163,14 @@
     loop.addEventListener('change', function () { pad.loop = loop.checked; persist(); });
     var loopRow = make('label', { class: 'sb-check' }, [loop, make('span', { text: 'Loop' })]);
 
-    // geometry (x, y, w, h)
-    var geo = geoControls(pad);
+    // preview (edit-mode taps select instead of playing, D29) + how to move/resize
+    var canPlay = !!(pad.sound && model.getBuffer(pad.sound.id));
+    var preview = make('button', { type: 'button', class: 'sb-btn', text: '\u25b6 Preview', disabled: canPlay ? null : 'disabled',
+      onclick: function () { S.stage.trigger(pad); } });
+    var geo = make('div', { class: 'sb-block' }, [
+      make('div', { class: 'sb-row' }, [preview]),
+      hintBox('Drag the pad to move it. Drag a handle on its outline to resize. Arrow keys move it; Shift + arrows resize.'),
+    ]);
 
     // sound
     var sound = soundControls(pad);
@@ -161,28 +197,6 @@
 
   function syncPadLabel(pad) { var n = $('#sb-stage [data-pad="' + pad.id + '"] .sb-pad__label'); if (n) n.textContent = pad.label; }
   function syncPadEmoji(pad) { var n = $('#sb-stage [data-pad="' + pad.id + '"] .sb-pad__emoji'); if (n) n.textContent = pad.emoji || ''; }
-
-  function geoControls(pad) {
-    var cols = model.board.layout.cols, rows = model.board.layout.rows;
-    function field(key, min, max, setter) {
-      var inp = make('input', { class: 'sb-num', type: 'number', min: min, max: max, step: 1, value: String(pad[key]), 'aria-label': key });
-      inp.addEventListener('change', function () {
-        var v = parseInt(inp.value, 10);
-        var ok = setter(v);
-        if (ok) { renderStage(); persist(); }
-        else { lcdError('Can\u2019t place/size there'); renderRack(); }
-      });
-      return make('div', { class: 'sb-field sb-field--sm' }, [make('label', { text: key.toUpperCase() }), inp]);
-    }
-    var wrap = make('div', { class: 'sb-grid4' }, [
-      field('x', 0, cols - 1, function (v) { return model.movePad(pad.id, v, pad.y); }),
-      field('y', 0, rows - 1, function (v) { return model.movePad(pad.id, pad.x, v); }),
-      field('w', 1, cols, function (v) { return model.resizePad(pad.id, v, pad.h); }),
-      field('h', 1, rows, function (v) { return model.resizePad(pad.id, pad.w, v); }),
-    ]);
-    var head = make('div', { class: 'sb-subhead', text: 'Position & size (grid ' + cols + '\u00d7' + rows + ')' });
-    return make('div', {}, [head, wrap]);
-  }
 
   function soundControls(pad) {
     var current = pad.sound;
@@ -270,46 +284,6 @@
       make('div', { class: 'sb-fx__head' }, [make('span', { class: 'sb-fx__label', text: s.label }), valEl]),
       input,
     ]);
-  }
-
-  // ---- boards (server) -----------------------------------------------------
-  function boardsSection() {
-    if (!(api && api.user)) {
-      return section('Boards', [hintBox('Sign in (top right) to create boards and save them to your account.')]);
-    }
-    var newBtn = make('button', { type: 'button', class: 'sb-btn', text: '+ New board', onclick: function () {
-      model.createBoard()
-        .then(function () { return hydrateSounds(); })
-        .then(function () { render(); lcdMsg('New board created'); })
-        .catch(function (e) { lcdError((e && e.message) || 'Could not create board'); });
-    }});
-    var listEl = make('div', { class: 'sb-boards' });
-    listEl.appendChild(hintBox('Loading boards\u2026'));
-    refreshBoardList(listEl);
-    return section('Boards', [make('div', { class: 'sb-row' }, [newBtn]), listEl]);
-  }
-  function refreshBoardList(el) {
-    el.innerHTML = '';
-    model.listBoards().then(function (boards) {
-      if (!boards.length) { el.appendChild(hintBox('No boards yet \u2014 create one.')); return; }
-      boards.forEach(function (b) {
-        var active = model.serverId === b.id;
-        var item = make('div', { class: 'board-item' + (active ? ' is-active' : '') }, [
-          make('span', { class: 'board-item__name', text: b.name }),
-          make('button', { type: 'button', class: 'sb-btn', text: active ? 'Current' : 'Load', 'disabled': active ? 'disabled' : null, 'aria-label': active ? 'Current board: ' + b.name : 'Load board ' + b.name, onclick: function () {
-            if (active) return;
-            model.loadBoard(b.id)
-              .then(function () { return hydrateSounds(); })
-              .then(function () { render(); lcdMsg('Loaded board'); })
-              .catch(function (e) { lcdError((e && e.message) || 'Could not load board'); });
-          }}),
-        ]);
-        el.appendChild(item);
-      });
-    }).catch(function (e) {
-      el.innerHTML = '';
-      el.appendChild(hintBox('Could not load boards' + (e && e.message ? ': ' + e.message : '')));
-    });
   }
 
   root.SoundBoard.panel = { renderRack: renderRack };

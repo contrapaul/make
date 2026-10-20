@@ -6,7 +6,7 @@ wave: 3
 depends_on: [e01s04, e01s07]
 files:
   - tools/soundboard/js/ui-stage.js
-  - tools/soundboard/js/board-geometry.js (new — pure geometry helpers; core is already over 300 lines, so move fits/findFreeCell/padAt there too)
+  - tools/soundboard/js/board-geometry.js (new — pure geometry helpers; core is already over 300 lines)
   - tools/soundboard/js/ui-panel.js (remove X/Y/W/H inputs; add grid-size steppers)
   - tools/soundboard/css/soundboard.css (/* ==== edit-grid ==== */ section only)
   - tools/soundboard/test/geometry.test.js (new)
@@ -94,3 +94,32 @@ clamping at the grid edge and the 1×1 minimum.
 Manual check in headless Edge with touch emulation at 820×1180: drag a 1×1 pad from (0,0)
 to (4,3); resize it with the `se` handle to 3×2; try to drop it onto another pad and see it
 revert. Screenshot the edit grid with a pad selected.
+
+## Notes (as built, 2026-10-20)
+
+- **Files:** `board-geometry.js` (pure: `cellFromPoint`, `deltaCells`, `dragRect`,
+  `sameRect`, `setPadRect`, `layoutFits`; Node-testable), `ui-grid-edit.js` (cells, frame,
+  ghost, pointer and keyboard gestures), and small hooks in `ui-stage.js`. `fits`, `padAt`
+  and `findFreeCell` stay in core, because `addPad`/`movePad` use them. Moving them was
+  churn with no gain.
+- **`ui-boards.js`** (new): the server boards list moved out of `ui-panel.js`, which would
+  otherwise have been 329 lines. s12-B1 works there.
+- Gestures use **window-level** pointer listeners, not pointer capture. Selecting a pad
+  re-renders the stage and replaces the node the press started on. A new primary pointer
+  cancels a stale gesture, for example when the mouse is released outside the window.
+- Combined left/top resizes go through `setPadRect`, which checks the whole new rect in one
+  step. Calling `movePad` then `resizePad` could fail half-way.
+- The grid-size steppers **refuse** to shrink past a pad ("Move or shrink the pads in the
+  last column first") instead of letting `core.setLayout` pull pads on top of each other.
+- Extras done here: pads now fill with the **full-strength** colour (`--pad-color`), so the
+  edit grid no longer shows through them (s02 left this note for s08). The selection ring
+  only shows in edit mode. With a pad selected, the panel shows that pad's section first
+  (on a phone the sheet only shows the top).
+- **Verified** with real CDP mouse and touch input (`drag.mjs`, 22/22): 54 cells; click
+  selects with 8 handles and no sound; mouse move to (4,3); `se` resize to 3×2; an
+  overlapping drop reverts with shake + error; touch `w`-handle resize; touch body move; no
+  page scroll; tap an empty cell to add; arrow and Shift+arrow keys; column shrink allowed,
+  then refused; rows + redraws; play mode has no grid and fires two pads with two fingers;
+  layout survives reload; no errors. 33/33 unit tests. The s04 layout, s07 retrigger and
+  s05 flow suites still pass.
+
