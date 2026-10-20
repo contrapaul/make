@@ -6,7 +6,8 @@ wave: 4
 depends_on: [e01s10]
 files:
   - tools/soundboard/js/audio-dsp.js (add the pure edit operations)
-  - tools/soundboard/js/ui-recorder.js (trim editor view)
+  - tools/soundboard/js/ui-trim.js (new — trim editor view; ui-recorder.js is already 277 lines, so it only hands the take over)
+  - tools/soundboard/js/ui-recorder.js (call the trim editor from the review state only)
   - tools/soundboard/css/soundboard.css (/* ==== recorder ==== */ section only)
   - tools/soundboard/test/dsp.test.js (extend)
 ---

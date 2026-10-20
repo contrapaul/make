@@ -27,6 +27,8 @@
   // ---- library section (edit mode) -----------------------------------------
   function librarySection() {
     var add = make('button', { type: 'button', class: 'sb-btn', text: '+ Load audio file', onclick: openFilePicker });
+    var sec; // the recorder (e01s10) opens in place of this whole section
+    var recBtn = S.recorderUI.recordButton(function () { return sec; });
     var list = make('div', { class: 'sb-lib' });
     if (!model.library.length) {
       list.appendChild(hintBox('No clips yet. Load a file (max 2 MB); it appears here for any pad.'));
@@ -44,7 +46,8 @@
         list.appendChild(item);
       });
     }
-    return section('Library', [make('div', { class: 'sb-row' }, [add]), list]);
+    sec = section('Library', [make('div', { class: 'sb-row' }, [add, recBtn]), list]);
+    return sec;
   }
 
   function assignToPad(s) {

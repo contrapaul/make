@@ -106,3 +106,38 @@ Manual check on `localhost` (which counts as a secure context): record for 12 s 
 confirm it stops at 10; check the size of the uploaded WAV in the network tab. Real-iPad
 Safari testing has to happen after deploy (https). List it as **needs a real-device check** in the
 hand-back if no device is available.
+
+## Notes (as built, 2026-10-20)
+
+- **API differs slightly from the plan above:** `recorder.open({ onLevel })` (asks for the
+  mic; the meter runs) is separate from `recorder.record({ maxSeconds, onTick, onAutoStop })`,
+  so the 3-2-1 count-in happens with the mic already open and the meter live.
+  `stop()` → `Promise<AudioBuffer>`; `cancel()` releases everything.
+- **Files:** `audio-dsp.js` (pure: `toMono`, `encodeWav`, `peaks`, `peakAbs`, `dbToGain`;
+  6 unit tests), `recorder.js` (capture), `ui-recorder.js` (inline panel; **277 lines, so s11
+  should put the trim editor in its own `ui-trim.js`**). Entry points: "● Record" in the
+  Sound block (`ui-panel.js`) and the Library (`ui-library.js`).
+- Cancel is available in every state: ready, count-in, recording and review.
+- **Mic is never left open.** Three bugs were found and fixed while testing:
+  1. A panel re-render mid-take made the meter callback cancel the session, and the next
+     timer tick then dereferenced the null session.
+  2. A count-in timer from a cancelled attempt could fire after the recorder was reopened
+     and "start recording" without a mic. Fixed with a per-attempt `gen` guard.
+  3. Closing the recorder while the browser was still asking for permission left the
+     late-arriving stream running. `open()` is now voided by `cancel()`/a newer `open()`,
+     and a superseded grant is stopped immediately.
+- **Verified** with Edge's fake microphone on `wrangler pages dev` (`rec.mjs`): 28/28
+  checks pass.
+  - Inline (no dialog); count-in ~2.1 s; meter moves (peak 87); ring empties; stop leads to
+    review with a drawn waveform; mic released.
+  - ▶ Play previews; Use recording gives the pad `Recording 1.wav` (`audio/wav`, playable).
+  - Library entry point; count-in off; **auto-stop at 10.0 s** (measured 10005 ms); the 10 s
+    take is 956 KB, under 2 MB.
+  - Re-render mid-take, Cancel during count-in, Cancel while recording, and cancel during a
+    slow permission prompt all release the mic. A blocked mic shows the plain-words message.
+  - Signed in: `POST /api/sounds` `audio/wav` → 200; the pad points at the server UUID; D1
+    row `Recording 1.wav`, `audio/wav`, 144044 bytes. No page errors.
+  - 46/46 unit tests; the s04/s07/s08/s09 suites still pass.
+- **Needs a real-device check:** iPad Safari (`audio/mp4` capture) and a real microphone
+  over https. Headless testing used Chromium's fake mic only.
+

@@ -74,7 +74,8 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 | `js/ui-style.js` (new) | s09 | inline colour/font controls |
 | `js/pad-style.js` (new, s09) | s09 | pure font/colour data + maths (loaded before core) |
 | `js/ui-account.js` (new) | s03 | header account chip + popover |
-| `js/recorder.js`, `js/ui-recorder.js` (new) | s10, s11 | mic capture + recorder/trim panel |
+| `js/recorder.js`, `js/ui-recorder.js` (new) | s10 (s11 hooks the review state) | mic capture + inline recorder panel |
+| `js/ui-trim.js` (new, s11) | s11 | trim / clean-up editor |
 | `css/soundboard.css` | s02 rewrites; then each story edits **only its own marked section** | see s02 for section markers |
 | `index.html` | s02 (head/fonts), s03 (header slot), s04 (layout wrappers), s10 (script tags) | |
 | `test/*.test.js` (new) | each story adds its own test file | `node --test` |

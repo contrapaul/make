@@ -202,8 +202,11 @@
     if (current) {
       curBox.appendChild(make('button', { type: 'button', class: 'sb-btn sb-btn--warn', text: 'Clear', onclick: function () { pad.sound = null; render(); } }));
     }
+    var block;
+    curBox.appendChild(S.recorderUI.recordButton(function () { return block; })); // e01s10
     var head = make('div', { class: 'sb-subhead', text: 'Sound' });
-    return make('div', { class: 'sb-block' }, [head, curBox, hintBox('Assign a library clip to this pad below, or load a new file.')]);
+    block = make('div', { class: 'sb-block' }, [head, curBox, hintBox('Record a sound, assign a library clip below, or load a file.')]);
+    return block;
   }
 
   // e01s06 (D24): every pad starts dry. Each toggled effect (filter/echo/reverb/
