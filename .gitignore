@@ -6,3 +6,6 @@ node_modules/
 
 # Blood Bowl 2025 rules source pages (reference only, not for deploy)
 bloodbowl/BB2025data/
+
+# local symlink to the bigpowers npx cache; breaks Pages builds if committed
+/scripts
