@@ -250,10 +250,39 @@
           // Not this user's board (403/404); it may be a shared public board. Try the public endpoint.
           bootPublic(boardParam);
         });
+    } else if (model.hasLocalWork()) {
+      // Signed in with a board made on this device: move it into the account (B1).
+      lcdMsg('Saving your board from this device to your account\u2026');
+      model.importLocal()
+        .then(function (r) {
+          setBoardParam(r.id);
+          return hydrateSounds().then(function () {
+            finish(null);
+            lcdMsg('Your board from this device is now saved to your account' +
+              (r.missing ? ' \u00b7 ' + r.missing + ' sound' + (r.missing > 1 ? 's' : '') + ' to re-attach' : ''));
+          });
+        })
+        .catch(function (e) { lcdError('Could not save your board to your account: ' + ((e && e.message) || 'error')); bootLocal(); });
     } else {
-      model.loadFromStorage();
-      hydrateSounds().then(function () { finish(null); });
+      // Signed in, no ?board=: open the most recent board (or a new one) — never the
+      // local copy, so edits always save to the account (B1).
+      model.openLatestOrNew()
+        .then(function (r) {
+          setBoardParam(r.id);
+          return hydrateSounds().then(function () { finish(r.name); });
+        })
+        .catch(function (e) { lcdError('Could not open your boards: ' + ((e && e.message) || 'error')); bootLocal(); });
     }
+  }
+
+  // Keep ?board=<id> in the address bar in step with the open server board, so a
+  // refresh or a bookmark comes back to it. null removes it.
+  function setBoardParam(id) {
+    try {
+      var u = new URL(location.href);
+      if (id) u.searchParams.set('board', id); else u.searchParams.delete('board');
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    } catch (_) {}
   }
 
   root.SoundBoard = root.SoundBoard || {};
@@ -261,5 +290,6 @@
     init: init, setMode: setMode, getMode: function () { return mode; },
     render: render, paint: paint, persist: persist, select: select,
     renderLCD: renderLCD, lcdMsg: lcdMsg, lcdError: lcdError, lcdAction: lcdAction, renderChrome: renderChrome,
+    setBoardParam: setBoardParam,
   };
 })(typeof self !== 'undefined' ? self : this);

@@ -134,6 +134,75 @@
   }
   function clearLocal() { try { localStorage.removeItem(LS_KEY); } catch {} }
 
+  // ---- signed-in boot (e01s12-B1) ------------------------------------------
+  var MAX_UPLOAD = 2 * 1024 * 1024;
+  var SERVER_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+  function readLocal() {
+    try { var raw = localStorage.getItem(LS_KEY); return raw ? core.validateBoard(JSON.parse(raw)).board : null; } catch (_) { return null; }
+  }
+  // A pad's content without its random id, for comparing against the default board.
+  function shape(b) {
+    return JSON.stringify({ name: b.name, layout: b.layout, pads: b.pads.map(function (p) {
+      var c = Object.assign({}, p); delete c.id; return c;
+    }) });
+  }
+  // Did the user make anything on this device (vs. the untouched default board)?
+  function hasLocalWork() {
+    var local = readLocal();
+    return !!local && local.pads.length > 0 && shape(local) !== shape(core.validateBoard(core.defaultBoard()).board);
+  }
+
+  // Sign-in with work on this device: move it into a NEW server board (never merged
+  // into or overwriting an existing one). Clips still decoded in memory are uploaded as
+  // mono WAV (<= 2 MB); clips that can't be (gone after a refresh, or too long) stay as
+  // "re-attach" pads. Clears the local copy once the board is safely on the server.
+  function importLocal() {
+    var local = readLocal();
+    var dsp = root.SoundBoard.dsp;
+    var uploaded = 0, missing = 0;
+    var jobs = local.pads.map(function (p) {
+      if (!p.sound || SERVER_ID.test(p.sound.id)) return Promise.resolve();
+      var buf = buffers[p.sound.id];
+      if (!buf || !dsp) { missing++; return Promise.resolve(); }
+      var chans = [];
+      for (var c = 0; c < buf.numberOfChannels; c++) chans.push(buf.getChannelData(c));
+      var wav = dsp.encodeWav(dsp.toMono(chans), buf.sampleRate);
+      if (wav.byteLength > MAX_UPLOAD) { missing++; return Promise.resolve(); }
+      var name = String(p.sound.name || 'sound').replace(/\.[^.]+$/, '') + '.wav';
+      return api.uploadSound(new Blob([wav], { type: 'audio/wav' }), name, 'audio/wav')
+        .then(function (meta) {
+          setBuffer(meta.id, buf);
+          addLibrarySound(meta);
+          p.sound = { id: meta.id, name: meta.name, size: meta.size, mime: meta.mime };
+          uploaded++;
+        })
+        .catch(function () { missing++; });
+    });
+    return Promise.all(jobs)
+      .then(function () { return api.createBoard(); })
+      .then(function (d) {
+        state.serverId = d.id;
+        state.serverUpdatedAt = null;
+        state.board = local;
+        state.selectedId = null;
+        return saveToServer();
+      })
+      .then(function () {
+        clearLocal();
+        return { id: state.serverId, uploaded: uploaded, missing: missing };
+      });
+  }
+
+  // Signed in, no ?board=: the most recently saved board, or a fresh one.
+  function openLatestOrNew() {
+    clearLocal(); // nothing worth keeping here (hasLocalWork() was false)
+    return listBoards().then(function (boards) {
+      if (boards.length) return loadBoard(boards[0].id).then(function (b) { return { id: boards[0].id, name: b.name }; });
+      return createBoard().then(function (id) { return { id: id, name: null, created: true }; });
+    });
+  }
+
   // --- server boards --------------------------------------------------------
   function listBoards() { return api.listBoards().then(function (d) { return d.boards || []; }); }
   function createBoard() {
@@ -215,6 +284,9 @@
     loadBoard: loadBoard,
     loadPublicBoard: loadPublicBoard,
     deleteBoard: deleteBoard,
+    hasLocalWork: hasLocalWork,
+    importLocal: importLocal,
+    openLatestOrNew: openLatestOrNew,
   };
 
   root.SoundBoard = root.SoundBoard || {};

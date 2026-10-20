@@ -4,12 +4,12 @@ bugs:
     title: Signed-in boot without ?board loads the localStorage board, never the server board
     area: tools/soundboard/js/ui.js bootCloud
     fix: e01s12-B1
-    status: open
+    status: done
   - id: SB-B2
     title: Filter type select change is not persisted
     area: tools/soundboard/js/ui.js effectsControls
     fix: e01s06
-    status: open
+    status: done
   - id: SB-B3
     title: Echo/reverb tails cut at source end; pad._onended overwritten causes stale live highlight
     area: tools/soundboard/js/audio-engine.js play, ui.js trigger

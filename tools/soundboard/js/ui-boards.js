@@ -23,7 +23,7 @@
     var newBtn = make('button', { type: 'button', class: 'sb-btn', text: '+ New board', onclick: function () {
       model.createBoard()
         .then(function () { return hydrateSounds(); })
-        .then(function () { render(); lcdMsg('New board created'); })
+        .then(function () { S.ui.setBoardParam(model.serverId); render(); lcdMsg('New board created'); })
         .catch(function (e) { lcdError((e && e.message) || 'Could not create board'); });
     }});
     var listEl = make('div', { class: 'sb-boards' });
@@ -43,7 +43,7 @@
             if (active) return;
             model.loadBoard(b.id)
               .then(function () { return hydrateSounds(); })
-              .then(function () { render(); lcdMsg('Loaded board'); })
+              .then(function () { S.ui.setBoardParam(b.id); render(); lcdMsg('Loaded board'); })
               .catch(function (e) { lcdError((e && e.message) || 'Could not load board'); });
           }}),
         ]);

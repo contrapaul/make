@@ -123,6 +123,7 @@
     var who = make('p', { class: 'sb-popover__title' }, [make('span', { text: 'Signed in as ' }), make('strong', { text: name })]);
     var out = make('button', { type: 'button', class: 'sb-btn', text: 'Sign out', onclick: function () {
       out.disabled = true;
+      S.ui.setBoardParam(null); // the open board is the account's; don't reopen it signed out
       api.logout().then(function () {
         close(false);
         model.clearBuffers(); model.reset(); render();
