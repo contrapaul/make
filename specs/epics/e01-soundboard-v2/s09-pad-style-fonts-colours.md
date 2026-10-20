@@ -1,7 +1,7 @@
 ---
 story: e01s09
 title: Far more pad colour and font options, with no pop-up pickers
-owner: Local AI
+owner: Claude (reassigned 2026-10-20)
 wave: 3
 depends_on: [e01s02, e01s06]   # s06 must be merged first: both edit soundboard-core.js
 files:
@@ -116,3 +116,31 @@ white, the hue/lightness → hex conversion round-trip (`hslToHex(0,90,50)` ≈ 
 default.
 
 Screenshot a board of 9 pads using 9 different fonts and colours at 820×1180.
+
+## Notes (as built, 2026-10-20 — done by Claude; local model busy elsewhere)
+
+- **Files:** `js/pad-style.js` (pure: `FONTS`, `SIZES`, `defaults`, `normalize`, `normHex`,
+  `readableText`, `contrast`, `hslToHex`, `hexToHsl`, `recentColors`), loaded **before**
+  core, which uses it in `addPad`/`validateBoard`. `js/ui-style.js` holds the inline
+  controls and `SoundBoard.applyPadStyle`. Core was already 355 lines, so nothing went there
+  beyond a few hook lines.
+- `board-model.serialize()` lists pad fields explicitly, so the five style fields were added
+  there. Without that they would have been lost on save.
+- `validateBoard` now also **rejects a non-hex pad colour** (it falls back to a palette
+  colour); before, any string was passed straight into a CSS variable.
+- **Fonts:** 5 new families vendored from fontsource 5.3.0 (+140 KB, 212 KB total).
+  Permanent Marker is **Apache-2.0**, not OFL. Every font's own licence file is in
+  `fonts/` and listed in `fonts/README.md`, including Nunito's (previously only Fredoka's
+  OFL notice was shipped).
+- Swatches = 12 palette + 6 neutrals, with white de-duplicated (17). Text colour = Auto + 17.
+- Sizes are capped at 40% of the pad's smaller side (`min(36px, 40cqmin)` for XL), so text
+  never overflows a small pad.
+- "Apply style to all pads" shows "Applied to N pads · Undo" in the status line for 5 s,
+  using a new `ui.lcdAction(text, label, fn)`.
+- **Verified** in headless Edge (`style.mjs`): 24/24 checks pass, covering live swatch
+  colour, inline `<details>` (no colour input/dialog), hue slider → pad + hex, `#abc`
+  accepted and junk ignored, Recent colours, text colour + Auto, 8 font chips in their own
+  fonts, the Pixel font loading, XL cap, bold/caps, apply-to-all copying text style but not
+  colour, Undo, reload persistence, fonts fetched only from `/tools/soundboard/fonts/`, and
+  no errors. 40/40 unit tests. The s04/s07/s08 suites still pass.
+

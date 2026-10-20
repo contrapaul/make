@@ -6,7 +6,10 @@
  * can run in a unit test with zero browser.
  */
 (function (root, factory) {
-  var api = factory();
+  // pad-style.js (e01s09) supplies per-pad font/colour fields; loaded first in the page.
+  var padStyle = (root && root.SoundBoard && root.SoundBoard.padStyle) ||
+    (typeof require === 'function' ? require('./pad-style.js') : null);
+  var api = factory(padStyle);
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = api; // Node / vitest
   }
@@ -20,7 +23,7 @@
     : typeof globalThis !== 'undefined'
       ? globalThis
       : this,
-  function () {
+  function (PS) {
     'use strict';
 
     // ---- tiny helpers -------------------------------------------------------
@@ -234,6 +237,7 @@
         h: h,
         effects: defaultEffects(),
       };
+      Object.assign(pad, PS.defaults()); // font + text style (e01s09)
       board.pads.push(pad);
       return pad;
     }
@@ -297,10 +301,10 @@
       pads.forEach(function (raw) {
         try {
           var r = raw && typeof raw === 'object' ? raw : {};
-          board.pads.push({
+          board.pads.push(Object.assign({
             id: typeof r.id === 'string' && r.id ? r.id : uid('p_'),
             label: typeof r.label === 'string' ? r.label : 'Pad',
-            color: typeof r.color === 'string' ? r.color : PALETTE[0],
+            color: PS.normHex(r.color) || PALETTE[board.pads.length % PALETTE.length],
             emoji: typeof r.emoji === 'string' ? r.emoji : '',
             sound: r.sound && typeof r.sound === 'object' ? r.sound : null,
             loop: !!r.loop,
@@ -320,7 +324,7 @@
               });
               return fx;
             })(),
-          });
+          }, PS.normalize(r)));
         } catch (e) {
           errors.push('pad: ' + (e && e.message));
         }

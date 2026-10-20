@@ -54,7 +54,7 @@ stories:
     verify: ["npm test"]
   - id: e01s09
     file: s09-pad-style-fonts-colours.md
-    owner: local-ai
+    owner: claude
     wave: 3
     depends_on: [e01s02, e01s06]
     verify: ["npm test", "du -ch tools/soundboard/fonts/*.woff2 | tail -1"]

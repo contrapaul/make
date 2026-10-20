@@ -78,6 +78,7 @@
       return {
         id: p.id, label: p.label, color: p.color, emoji: p.emoji, loop: p.loop,
         x: p.x, y: p.y, w: p.w, h: p.h, effects: p.effects,
+        textColor: p.textColor, font: p.font, fontSize: p.fontSize, bold: p.bold, caps: p.caps,
         sound: s ? { id: s.id, name: s.name, size: s.size, mime: s.mime } : null,
       };
     });

@@ -18,13 +18,13 @@ way to make sounds without a file (recording).
 |---|---|---|---|
 | 0 | (enabler) split `ui.js` so several agents can work in parallel; add a test runner | [s01](s01-split-ui-and-test-harness.md) | Claude |
 | 1 | Friendlier **light** theme: rounder buttons, brighter colours, thicker outlines | [s02](s02-light-friendly-theme.md) | Local AI |
-| 2 | Account lives in the **header**, small and out of the way | [s03](s03-header-account-chip.md) | Local AI |
+| 2 | Account lives in the **header**, small and out of the way | [s03](s03-header-account-chip.md) | Claude (reassigned) |
 | 3 | Page must not waste space on iPad / tall windows | [s04](s04-viewport-fit-layout.md) | Claude |
 | 4 | Rename modes to **"Edit soundboard"** / **"Save edits"** | [s05](s05-mode-rename-and-save.md) | Local AI |
 | 5 | New pads start with **no effects** | [s06](s06-effects-off-by-default.md) | Local AI |
 | 6 | Re-tapping a pad **restarts** it (stutter / "Co-Co-Come on down!"); other pads unaffected | [s07](s07-retrigger-voices.md) | Claude |
 | 7 | **Drag and resize** pads by mouse or touch, snapping to the grid; edit mode shows the grid | [s08](s08-edit-grid-drag-resize.md) | Claude |
-| 8 | Far more **font and colour** options, with **no pop-up** colour picker | [s09](s09-pad-style-fonts-colours.md) | Local AI |
+| 8 | Far more **font and colour** options, with **no pop-up** colour picker | [s09](s09-pad-style-fonts-colours.md) | Claude (reassigned) |
 | 9 | **Record** up to 10 s | [s10](s10-record-up-to-10s.md) | Claude |
 | 10 | A small set of **trim and clean-up** tools for recordings | [s11](s11-trim-and-cleanup.md) | Claude |
 | — | Bugs found while reviewing the v1 code | [s12](s12-v1-bug-fixes.md) | split (see story) |
@@ -72,6 +72,7 @@ down in your story's "Notes for other stories" and leave the change to the ownin
 | `js/ui-sheet.js` (new, s04) | s04 | edit-panel bottom sheet (peek/half/full) |
 | `js/ui-dom.js` (new) | s01 only (add helpers sparingly) | `$`, `make`, `section`, `hintBox`, `fmtVal`, … |
 | `js/ui-style.js` (new) | s09 | inline colour/font controls |
+| `js/pad-style.js` (new, s09) | s09 | pure font/colour data + maths (loaded before core) |
 | `js/ui-account.js` (new) | s03 | header account chip + popover |
 | `js/recorder.js`, `js/ui-recorder.js` (new) | s10, s11 | mic capture + recorder/trim panel |
 | `css/soundboard.css` | s02 rewrites; then each story edits **only its own marked section** | see s02 for section markers |

@@ -69,11 +69,27 @@
     if (!el) return;
     el.textContent = status.text;
     el.className = 'sb-lcd' + (status.tone === 'error' ? ' is-error' : '');
+    if (status.action) {
+      var act = status.action;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sb-lcd__action';
+      b.textContent = act.label;
+      b.addEventListener('click', function () { if (status.action === act) { status.action = null; act.fn(); } });
+      el.append(' \u00b7 ', b);
+    }
     var led = $('#sb-power');
     if (led) led.className = 'sb-led on' + (livePads.size > 0 ? ' is-live' : '');
   }
   function lcdMsg(text) { status = { text: text, tone: 'ok' }; renderLCD(); }
   function lcdError(text) { status = { text: 'ERR ' + text, tone: 'error' }; renderLCD(); }
+  // A message with one action button (e.g. "Applied to 9 pads · Undo") that lapses.
+  function lcdAction(text, label, fn, ms) {
+    var act = { label: label, fn: fn };
+    status = { text: text, tone: 'ok', action: act };
+    renderLCD();
+    setTimeout(function () { if (status.action === act) { status.action = null; renderLCD(); } }, ms || 5000);
+  }
 
   // ---- rendering -----------------------------------------------------------
   function render() {
@@ -244,6 +260,6 @@
   root.SoundBoard.ui = {
     init: init, setMode: setMode, getMode: function () { return mode; },
     render: render, paint: paint, persist: persist, select: select,
-    renderLCD: renderLCD, lcdMsg: lcdMsg, lcdError: lcdError, renderChrome: renderChrome,
+    renderLCD: renderLCD, lcdMsg: lcdMsg, lcdError: lcdError, lcdAction: lcdAction, renderChrome: renderChrome,
   };
 })(typeof self !== 'undefined' ? self : this);

@@ -19,7 +19,6 @@
   function lcdMsg(t) { S.ui.lcdMsg(t); }
   function lcdError(t) { S.ui.lcdError(t); }
   function select(id) { S.ui.select(id); }
-  function renderStage() { S.stage.renderStage(); }
   function librarySection() { return S.library.librarySection(); }
   function openFilePicker() { S.library.openFilePicker(); }
   function boardsSection() { return S.boards.boardsSection(); }
@@ -150,12 +149,8 @@
     var emoji = make('input', { class: 'sb-input', type: 'text', value: pad.emoji || '', placeholder: 'e.g. \ud83d\udd0a', 'aria-label': 'Pad emoji' });
     emoji.addEventListener('input', function () { pad.emoji = emoji.value; syncPadEmoji(pad); persist(); });
 
-    // color swatches
-    var swatches = make('div', { class: 'swatches' });
-    core.PALETTE.forEach(function (c) {
-      var sw = make('button', { type: 'button', class: 'swatch' + (pad.color === c ? ' is-active' : ''), style: 'background:' + c, 'aria-label': 'color ' + c, onclick: function () { pad.color = c; renderStage(); swatches.querySelectorAll('.swatch').forEach(function (s) { s.classList.remove('is-active'); }); sw.classList.add('is-active'); persist(); } });
-      swatches.appendChild(sw);
-    });
+    // colours + fonts, all inline (ui-style.js, e01s09)
+    var look = S.styleControls(pad);
 
     // loop
     var loop = make('input', { type: 'checkbox', 'aria-label': 'Loop' });
@@ -185,10 +180,10 @@
         make('div', { class: 'sb-field' }, [make('label', { text: 'Label' }), label]),
         make('div', { class: 'sb-field' }, [make('label', { text: 'Emoji' }), emoji]),
       ]),
-      make('div', { class: 'sb-field' }, [make('label', { text: 'Color' }), swatches]),
       loopRow,
       geo,
       sound,
+      look,
       fx,
       del,
     ];
