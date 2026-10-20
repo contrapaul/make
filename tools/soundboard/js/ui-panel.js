@@ -35,7 +35,7 @@
       return;
     }
     if (S.ui.getMode() === 'play') {
-      rack.appendChild(hintBox('PLAY MODE — tap the pads to fire. Switch to EDIT to change the board.'));
+      rack.appendChild(hintBox('Tap the pads to fire. Tap “✎ Edit soundboard” to change the board.'));
     } else {
       rack.appendChild(boardsSection());
       rack.appendChild(boardSection());

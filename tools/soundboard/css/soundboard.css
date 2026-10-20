@@ -438,12 +438,15 @@ body.sb-page {
 }
 .sb-btn:disabled { opacity: .45; cursor: default; box-shadow: var(--lift); }
 
-/* primary = accent fill + black text (mode button in PLAY; black for 5:1) */
-.sb-btn--mode[aria-pressed="true"] {
+/* primary = accent fill + black text ("Save edits"; black for 5.03:1 on accent) */
+.sb-btn--primary {
   background: var(--accent);
   color: #000;
   box-shadow: var(--lift), 0 0 0 2px var(--surface), 0 0 0 5px color-mix(in srgb, var(--accent) 35%, transparent);
 }
+
+/* public board: mode button hidden entirely (not just disabled) */
+.sb-btn.is-hidden { display: none; }
 
 /* warn = amber fill + ink text (Reset board, Clear) */
 .sb-btn--warn {

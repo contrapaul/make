@@ -50,7 +50,7 @@
       e.preventDefault();
       if (S.ui.getMode() !== 'play') select(pad.id);
       if (pad.sound && model.getBuffer(pad.sound.id)) trigger(pad);
-      else if (pad.sound) lcdError('No clip for ' + pad.label + (model.readOnly ? '' : ' - re-attach it in EDIT'));
+      else if (pad.sound) lcdError('No clip for ' + pad.label + (model.readOnly ? '' : ' — re-attach it in Edit soundboard'));
     });
     b.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ') {
