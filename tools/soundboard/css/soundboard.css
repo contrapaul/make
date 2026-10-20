@@ -140,7 +140,58 @@ body.sb-page {
 .sb-led.is-live { animation: sb-breathe 1.4s ease-in-out infinite; }
 
 /* ==== account ==== */
-/* (empty — s03 rewrites the account chip here) */
+/* e01s03: one small control at the right of the header + an anchored popover */
+.sb-account { position: relative; flex: 0 0 auto; display: flex; align-items: center; }
+.sb-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; max-width: 180px;
+  padding: 0 12px 0 6px;
+  background: var(--surface);
+  color: var(--ink);
+  border: var(--outline) solid var(--ink);
+  border-radius: var(--r-pill);
+  box-shadow: var(--lift);
+  font: 600 15px/1 var(--font-ui);
+  cursor: pointer;
+}
+.sb-chip:active { transform: translateY(2px); box-shadow: var(--lift-pressed); }
+.sb-chip:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.sb-chip__initial {
+  flex: 0 0 auto;
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--accent); color: #fff;
+  border: 2px solid var(--ink);
+  font: 700 16px/1 var(--font-ui);
+}
+.sb-chip__name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.sb-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 20;
+  width: min(320px, calc(100vw - 32px));
+  padding: 16px;
+  background: var(--surface);
+  border: var(--outline) solid var(--ink);
+  border-radius: var(--r-md);
+  box-shadow: var(--lift);
+  font: 400 15px/1.45 var(--font-body);
+  color: var(--ink);
+}
+.sb-popover__title { margin: 0; font: 600 17px/1.3 var(--font-ui); }
+.sb-popover .sb-hint { margin: 4px 0 12px; }
+.sb-popover__form .sb-btn { width: 100%; justify-content: center; }
+.sb-popover__err { margin: 0 0 10px; min-height: 0; color: var(--danger); font-weight: 700; }
+.sb-popover__err:empty { display: none; }
+.sb-popover__foot { margin: 12px 0 0; font-size: 14px; color: var(--ink-2); }
+.sb-popover__foot a { color: var(--accent); font-weight: 700; }
+
+@media (max-width: 600px) {
+  .sb-chip { padding: 0 6px; }
+  .sb-chip__name { display: none; }
+}
 
 /* ==== layout ==== */
 /* e01s04: the whole app is one screen-high column — header, workspace, status —
@@ -236,6 +287,8 @@ body.sb-page {
   .sb-top__right { gap: 8px; }
   .sb-wide { display: none; }
   .sb-brand__name { display: none; }
+  .sb-brand__mark { display: none; }
+  .sb-title::before, .sb-brand__name + .sb-title::before { content: none; }
   .sb-back { padding: 8px 6px; }
 }
 @media (max-width: 400px) {

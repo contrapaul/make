@@ -1,7 +1,7 @@
 ---
 story: e01s03
 title: Account moves into the header as a small chip
-owner: Local AI
+owner: Claude (reassigned 2026-10-20)
 wave: 2
 depends_on: [e01s01, e01s02]
 files:
@@ -64,3 +64,21 @@ Keep the existing `api.login` / `api.logout` calls and their success behaviour
 the **local** D1 only. Screenshots at 390×844 and 820×1180: signed out (popover closed),
 signed out (popover open), signed in (closed). Then check that Escape, an outside tap and
 a successful sign-in each close the popover.
+
+## Notes (as built, 2026-10-20 — done by Claude at the user's request)
+
+- `ui-account.js` now exports `{ render, close }`. `ui.renderChrome()` calls
+  `account.render()`, which rebuilds the chip **only when the signed-in user changes**, so an
+  open popover survives the app's frequent re-renders.
+- Sign-in is a real `<form>`: Enter submits, errors show inline (`.sb-popover__err`), and the
+  `email` / `current-password` autocomplete hints let password managers fill it.
+- Below 600px the chip shows only the initial. The logo dot and the "·" separator hide so the
+  board name gets the space.
+- **Verified** on `wrangler pages dev` with a temporary local test user (`account.mjs`):
+  17/17 checks pass. Covered: Sign in button; no account block in the panel; open, email
+  focused, `aria-expanded`; no backdrop; sign-up link; Escape, outside tap and a second
+  trigger click all close it (Escape returns focus); a wrong password shows "Incorrect email
+  or password." inline; the popover survives a re-render; signed-in chip "S | sbtest"; header
+  60px in both states; reachable in play mode; sign out; phone header 52px on one row; phone
+  popover fully on screen; no page errors.
+

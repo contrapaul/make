@@ -88,6 +88,7 @@
 
   // Header board name + the bottom sheet's grab-bar label (shown when peeking).
   function renderChrome() {
+    S.account.render();
     var title = $('#sb-title');
     if (title) title.textContent = model.board.name || '';
     var grab = $('#sb-grab-label');

@@ -20,7 +20,6 @@
   function lcdError(t) { S.ui.lcdError(t); }
   function select(id) { S.ui.select(id); }
   function renderStage() { S.stage.renderStage(); }
-  function accountSection() { return S.account.accountSection(); }
   function librarySection() { return S.library.librarySection(); }
   function openFilePicker() { S.library.openFilePicker(); }
   function hydrateSounds() { return S.library.hydrateSounds(); }
@@ -29,9 +28,8 @@
     var rack = $('#sb-rack');
     if (!rack) return;
     rack.innerHTML = '';
-    rack.appendChild(accountSection());
     if (model.readOnly) {
-      rack.appendChild(hintBox('You are viewing a public board. Pads are play-only. Sign in above to create and share your own board.'));
+      rack.appendChild(hintBox('You are viewing a public board. Pads are play-only. Sign in (top right) to create and share your own board.'));
       return;
     }
     if (S.ui.getMode() === 'play') {
@@ -277,7 +275,7 @@
   // ---- boards (server) -----------------------------------------------------
   function boardsSection() {
     if (!(api && api.user)) {
-      return section('Boards', [hintBox('Sign in above to create boards and save them to the cloud.')]);
+      return section('Boards', [hintBox('Sign in (top right) to create boards and save them to your account.')]);
     }
     var newBtn = make('button', { type: 'button', class: 'sb-btn', text: '+ New board', onclick: function () {
       model.createBoard()

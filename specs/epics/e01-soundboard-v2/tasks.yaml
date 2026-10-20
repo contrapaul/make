@@ -17,7 +17,7 @@ stories:
     verify: ["grep -c '@font-face' tools/soundboard/css/soundboard.css"]
   - id: e01s03
     file: s03-header-account-chip.md
-    owner: local-ai
+    owner: claude
     wave: 2
     depends_on: [e01s01, e01s02]
     verify: ["manual: screenshots 390x844 + 820x1180, popover open/closed"]
