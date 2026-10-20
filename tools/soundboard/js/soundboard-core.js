@@ -77,6 +77,7 @@
       {
         id: 'filter',
         label: 'Filter',
+        toggle: true,
         select: { key: 'filterType', label: 'Type', def: 'lowpass', options: ['lowpass', 'highpass', 'bandpass', 'lowshelf', 'highshelf'] },
         sliders: [
           { key: 'filterFreq', label: 'Cutoff', min: 60, max: 18000, step: 1, def: 12000, unit: 'Hz' },
@@ -86,14 +87,15 @@
       {
         id: 'echo',
         label: 'Echo',
+        toggle: true,
         sliders: [
           { key: 'echoTime', label: 'Time', min: 0.01, max: 1, step: 0.01, def: 0.25, unit: 's' },
           { key: 'echoFeedback', label: 'Feedback', min: 0, max: 0.9, step: 0.01, def: 0.35, unit: '' },
           { key: 'echoWet', label: 'Mix', min: 0, max: 1, step: 0.01, def: 0.25, unit: '' },
         ],
       },
-      { id: 'reverb', label: 'Reverb', sliders: [{ key: 'reverbWet', label: 'Mix', min: 0, max: 1, step: 0.01, def: 0.2, unit: '' }] },
-      { id: 'distortion', label: 'Distortion', sliders: [{ key: 'distortion', label: 'Drive', min: 0, max: 1, step: 0.01, def: 0, unit: '' }] },
+      { id: 'reverb', label: 'Reverb', toggle: true, sliders: [{ key: 'reverbWet', label: 'Mix', min: 0, max: 1, step: 0.01, def: 0.2, unit: '' }] },
+      { id: 'distortion', label: 'Distortion', toggle: true, sliders: [{ key: 'distortion', label: 'Drive', min: 0, max: 1, step: 0.01, def: 0.3, unit: '' }] },
     ];
 
     function defaultEffects() {
@@ -101,11 +103,25 @@
       EFFECTS.forEach(function (fx) {
         fx.sliders.forEach(function (s) { e[s.key] = s.def; });
         if (fx.select) e[fx.select.key] = fx.select.def;
+        if (fx.toggle) e[fx.id + 'On'] = false;
       });
       return e;
     }
 
-    var PALETTE = ['#ff8a1e', '#22d3ee', '#f45bb0', '#a3e635', '#ff5a4d', '#38f2a6', '#ffd23f', '#7aa2ff'];
+    // e01s06 (D24): which chain ids should be wired, in canonical order.
+    // Always 'gain'; plus each toggled effect whose <id>On flag is true.
+    function activeEffectIds(effects) {
+      var e = effects || {};
+      var ids = ['gain'];
+      EFFECTS.forEach(function (fx) {
+        if (fx.toggle && e[fx.id + 'On']) ids.push(fx.id);
+      });
+      return ids;
+    }
+
+    // e01s02 (D22): bright classroom palette — all carry dark --ink text at >= 4.5:1.
+    var PALETTE = ['#FF6B6B', '#FF9F43', '#FFD93D', '#6BCB77', '#4DD4F0', '#6C8CFF', '#B47CFF', '#FF7AC6',
+                   '#FFFFFF', '#C8F169', '#FFB3A7', '#9EE8DA'];
 
     // ---- board model (pure) ------------------------------------------------
     function defaultBoard() {
@@ -250,7 +266,18 @@
             y: clamp(num(r.y, 0), 0, board.layout.rows - 1),
             w: clamp(num(r.w, 1), 1, board.layout.cols),
             h: clamp(num(r.h, 1), 1, board.layout.rows),
-            effects: Object.assign(defaultEffects(), r.effects || {}),
+            effects: (function () {
+              // e01s06: v1 pads saved before the *On flags existed have no flag —
+              // fill the missing ones with false so they play dry until an effect
+              // is turned back on. Pads that already saved a flag (true or false)
+              // keep it, so a v2 board round-trips unchanged.
+              var fx = Object.assign(defaultEffects(), r.effects || {});
+              var saved = r.effects || {};
+              EFFECTS.forEach(function (f) {
+                if (f.toggle && !(f.id + 'On' in saved)) fx[f.id + 'On'] = false;
+              });
+              return fx;
+            })(),
           });
         } catch (e) {
           errors.push('pad: ' + (e && e.message));
@@ -268,6 +295,7 @@
       EFFECTS: EFFECTS,
       PALETTE: PALETTE,
       defaultEffects: defaultEffects,
+      activeEffectIds: activeEffectIds,
       defaultBoard: defaultBoard,
       addPad: addPad,
       removePad: removePad,

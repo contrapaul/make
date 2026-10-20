@@ -35,6 +35,32 @@
     }, 150);
   }
 
+  function hasSoundPads() {
+    return model.board.pads.some(function (p) { return !!p.sound; });
+  }
+
+  // Explicit "I'm done": flush the pending autosave, save, then switch to play mode.
+  function saveEdits() {
+    if (saveEdits.saving) return;
+    saveEdits.saving = true;
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; } // supersede the pending autosave
+    var btn = $('#sb-mode');
+    if (btn) {
+      btn.textContent = 'Saving…';
+      btn.disabled = true;
+      btn.setAttribute('aria-label', 'Saving…');
+    }
+    model.save().then(function () {
+      setMode('play', false); // already saved — don't re-persist
+      lcdMsg(model.serverId ? 'Saved' : 'Saved on this device · sign in to keep it');
+    }).catch(function (e) {
+      lcdError((e && e.message) ? e.message : 'Save failed');
+      renderMode(); // button was disabled while saving — restore the label
+    }).then(function () {
+      saveEdits.saving = false;
+    });
+  }
+
   // ---- status LCD ----------------------------------------------------------
   function renderLCD() {
     var el = $('#sb-lcd');
@@ -64,19 +90,29 @@
     renderRack();
   }
 
-  function setMode(m) {
-    if (model.readOnly && m === 'edit') return; // public board: play-only
-    mode = m;
+  // Button label says the action: in play mode "Edit soundboard", in edit mode "Save edits".
+  function renderMode() {
     var app = $('#sb-app');
-    if (app) { app.classList.toggle('is-play', m === 'play'); app.classList.toggle('is-edit', m === 'edit'); }
+    if (app) { app.classList.toggle('is-play', mode === 'play'); app.classList.toggle('is-edit', mode === 'edit'); }
     var btn = $('#sb-mode');
     if (btn) {
-      btn.textContent = m === 'play' ? '\u25b6 PLAY MODE' : '\u270e EDIT MODE';
-      btn.setAttribute('aria-pressed', m === 'play' ? 'true' : 'false');
-      btn.disabled = !!model.readOnly;
+      btn.classList.toggle('sb-btn--primary', mode === 'edit');
+      btn.textContent = mode === 'play' ? '\u270e Edit soundboard' : '\u2713 Save edits';
+      btn.setAttribute('aria-label', btn.textContent);
+      btn.classList.toggle('is-hidden', !!model.readOnly); // public board: hidden, not disabled
+      btn.disabled = saveEdits.saving;
       btn.title = model.readOnly ? 'Public board \u2014 play only' : '';
     }
-    render();
+  }
+
+  // When called from saveEdits, render=false: the board was already saved, so skip
+  // the (redundant) persist() that render() would schedule.
+  function setMode(m, render) {
+    if (model.readOnly && m === 'edit') return; // public board: play-only
+    mode = m;
+    renderMode();
+    if (render === false) { renderStage(); renderRack(); renderLCD(); }
+    else render();
   }
 
   // ---- init ----------------------------------------------------------------
@@ -85,7 +121,18 @@
     init.done = true;
 
     var modeBtn = $('#sb-mode');
-    if (modeBtn) modeBtn.addEventListener('click', function () { setMode(mode === 'play' ? 'edit' : 'play'); });
+    if (modeBtn) modeBtn.addEventListener('click', function () {
+      if (modeBtn.classList.contains('is-hidden')) return; // public board: button hidden
+      if (mode === 'play') setMode('edit');
+      else saveEdits(); // "Save edits" is an action, not a toggle
+    });
+
+    // Ctrl/\u2318+S in edit mode acts like "Save edits"; Escape does NOT save.
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 's' || e.key === 'S')) {
+        if (mode === 'edit' && !model.readOnly) { e.preventDefault(); saveEdits(); }
+      }
+    });
 
     var stopBtn = $('#sb-stop');
     if (stopBtn) stopBtn.addEventListener('click', function () {
@@ -123,7 +170,7 @@
       .then(function (g) {
         var owner = g.owner ? (' \u00b7 by ' + g.owner) : '';
         lcdMsg('PUBLIC \u00b7 ' + (g.name || 'board') + owner + ' \u00b7 ' + model.board.pads.length + ' pads \u00b7 tap to play');
-        setMode('play'); // refreshes the (now disabled) mode button
+        setMode('play'); // re-render so the mode button is hidden (readOnly is now true)
       })
       .catch(function () {
         model.reset();
@@ -134,26 +181,25 @@
 
   function bootLocal() {
     var restored = model.loadFromStorage();
-    setMode('edit');
     var needing = 0;
     model.board.pads.forEach(function (p) { if (p.sound && !model.getBuffer(p.sound.id)) needing++; });
-    if (restored) {
-      lcdMsg('Restored \u00b7 ' + model.board.pads.length + ' pads' + (needing ? ' \u00b7 ' + needing + ' re-attach' : '') + ' \u00b7 local mode');
-    } else {
-      lcdMsg('READY \u00b7 ' + model.board.pads.length + ' pads \u00b7 local mode \u00b7 sign in to save');
-    }
+    if (restored && hasSoundPads()) { mode = 'play'; renderMode(); paint(); }
+    else if (restored) { setMode('edit'); }
+    lcdMsg((restored ? 'Restored ' : 'READY ') + '\u00b7 ' + model.board.pads.length + ' pads' +
+      (needing ? ' \u00b7 ' + needing + ' re-attach' : '') + ' \u00b7 local mode' +
+      (!restored ? ' \u00b7 sign in to save' : ''));
   }
 
   function bootCloud(user) {
     var params = new URLSearchParams(location.search);
     var boardParam = params.get('board');
     function finish(boardName) {
-      setMode('edit');
+      if (hasSoundPads()) { mode = 'play'; renderMode(); paint(); } else { setMode('edit'); }
       var needing = 0;
       model.board.pads.forEach(function (p) { if (p.sound && !model.getBuffer(p.sound.id)) needing++; });
       lcdMsg((boardName ? 'Loaded ' + boardName : 'Cloud ready') + ' \u00b7 ' + model.board.pads.length + ' pads' +
         (needing ? ' \u00b7 ' + needing + ' re-attach' : '') + ' \u00b7 ' + (user.username || 'signed in'));
-      paint();
+      if (mode === 'play') paint();
     }
     if (boardParam) {
       model.loadBoard(boardParam)
