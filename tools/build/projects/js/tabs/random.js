@@ -1,6 +1,7 @@
 // e02s03t01: Random tab. One big card + "Another one", three filters.
 // pickRandom is pure and seeded so Node can test it (test/random.test.mjs).
 import { PROJECTS } from '../data/projects.js';
+import { cardNotesHtml } from '../cards.js';
 import { SECTIONS } from '../data/buckets.js';
 import { registerTab } from '../app.js';
 
@@ -55,6 +56,7 @@ function cardHtml(p) {
       <h2>${p.name}</h2>
       <p>${p.description}</p>
       <p style="margin-top:.6rem">${chips} ${mode} ${langs}</p>${sub}
+      ${cardNotesHtml(p)}
     </div>`;
 }
 

@@ -1,6 +1,7 @@
 // e02s02t03: Browse tab. 150 cards in 9 sections, section toggles.
 // No localStorage. Part 3 shows audience + subgroup headings.
 import { PROJECTS } from '../data/projects.js';
+import { cardNotesHtml } from '../cards.js';
 import { SECTIONS } from '../data/buckets.js';
 import { registerTab } from '../app.js';
 
@@ -34,6 +35,7 @@ function part3Cards(rows) {
         <p class="desc">${p.description}</p>
         <p class="mono">${p.stack} | ${p.audience}</p>
         <p>${chip(p)}</p>
+        ${cardNotesHtml(p)}
       </article>`;
   }
   return html;
@@ -46,6 +48,7 @@ function flatCards(rows, base) {
       <p class="desc">${p.description}</p>
       <p class="mono">${p.stack}</p>
       <p>${chip(p)}</p>
+      ${cardNotesHtml(p)}
     </article>`).join('');
 }
 
