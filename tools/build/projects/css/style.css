@@ -204,3 +204,9 @@ a.gloss:hover, a.gloss:focus { color: var(--accent); }
 .res-list .res .desc { color: var(--ink-soft); margin: 0.2rem 0 0; }
 .res-ghost { border-style: dashed; color: var(--ink-soft); }
 @media (min-width: 1200px) { :root { --hero: 18; } }
+/* card notes (e02s07) */
+.card-notes { margin-top: .5rem; border-top: 1px solid var(--line); font-size: .9em; }
+.card-notes summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.card-notes .notes-why { margin: .4rem 0 .2rem; }
+.card-notes .notes-refs { margin: .3rem 0 0; }
+.card-notes .notes-refs a { color: var(--accent); text-decoration: none; margin-right: .8rem; }
