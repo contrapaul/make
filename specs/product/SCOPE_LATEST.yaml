@@ -1,0 +1,36 @@
+# Planning spine for the current initiative. Overwritten per initiative (bigpowers scope-work).
+initiative: one-afternoon-coding-projects-site
+dated: 2026-10-26
+core_value: A student gets a fun, doable, fully-briefed coding project for one
+  afternoon, drawn or browsed, with every term they will meet defined.
+summary: >
+  Static sub-site at tools/build/projects/ presenting all 150 one-afternoon
+  projects as compact briefs with four tabs: Random, Browse, Resources,
+  Glossary. Full approved plan: specs/product/PROJECTS_SITE_LATEST.md.
+  Context: tools/build/projects/HANDOFF.md.
+in_scope:
+  - Data conversion: projects.md to js data with 150 validated records (e02s01)
+  - Shell with tab strip, hash router, Browse tab with 9 category sections (e02s02)
+  - Random tab: one card, redraw, language/category/mode filters, pool count (e02s03)
+  - Resources tab: 3 link cards, languages card ghosted (e02s04)
+  - Glossary tab: localai mechanism port, 44 approved terms defined, auto-linking cards (e02s05)
+  - Style-audit guard test, npm test green, preflight, browser check, deploy (e02s06)
+out_of_scope:
+  - Paste-ready prompt generator: owner decision, future iteration.
+  - New npm dependencies or build step: owner decision, plain static.
+  - Glossary terms beyond the 44-approved list except owner review/comments: explicit gate.
+  - languages contraindication placeholder other than the ghost card: separate initiative.
+constraints:
+  - No npm dependencies, no build step; plain static files.
+  - localai/style-guide.md rules enforced mechanically (no em dashes, no dot in the middle of case name, do not use an unexplained term to explain another term).
+  - All glossary URLs verified live before deploy.
+success_criteria:
+  - 150 projects render on Browse; Random draws from filtered pool with pool count.
+  - All 44 terms defined; all card terms auto-resolved; all URLs live.
+  - npm test green; wrangler pages dev boots; phone and desktop browser checks pass.
+references:
+  - specs/product/PROJECTS_SITE_LATEST.md
+  - tools/build/projects/HANDOFF.md
+  - tools/build/projects/projects.md
+  - tools/build/projects/glossary-terms.md
+  - localai/style-guide.md
