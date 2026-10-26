@@ -177,6 +177,11 @@ no Chinese record prose (chrome only, decision 8).
 15. **Git shape (2026-10-26).** One PR per milestone: M0+M1, M2, M3, M4, M5+M6. Five PRs, each
     independently testable and revertible. The sibling site plans one PR per story; this site has
     one data layer and one template, so milestone granularity is the honest unit.
+16. **Visual system (2026-10-26).** Ink-on-paper, **fully divorced** from `localai`, from
+    `tools/codewithai`, and from the root `make` theme. Its own `tokens.css`, no import of any
+    existing sheet, system font stacks, no dark mode in v1, no decorative imagery. §6.4 holds the
+    proposed values and the one remaining taste call (text face). The first draft of §6.4 argued
+    for deriving from the root sheet; the owner overruled that, so the derivation is gone.
 
 ---
 
@@ -345,42 +350,73 @@ Rules:
 §6.1 named this file and the first draft of this plan never specified it, which is how a site
 ends up with hex codes in six places. Fixed here.
 
-**Look: the editorial house style, not a third dialect.** Both sibling sub-sites (`localai`,
-`tools/codewithai`) shipped their own glass-on-dark token set, and the root site is ink-on-paper
-editorial. Three visual systems on one domain is three more things to maintain, and this site is
-text, so it should read like the rest of `make.contrapaul.com`.
+**Look: an original ink-on-paper system, independent of every existing sheet.** Owner's call,
+2026-10-26: the language site is "fully divorced from localai and codewithai, as well as the main
+make themes" and goes ink-on-paper. The first draft of this section argued the opposite, that
+three visual dialects on one domain is one too many, and proposed deriving from root
+`style.css`. That argument is over. This site gets its own `tokens.css` and `@import` nothing.
 
-| Token | Source of truth | Value at time of writing |
+Two consequences are accepted rather than hidden:
+
+- A student moving from the home page to `/tools/languages/` sees a different typographic voice.
+  That is the point of the call, not an oversight to apologise for.
+- Nothing in `localai/css/`, `tools/codewithai/css/`, or root `style.css` is a source of truth
+  for a value below. The shared **discipline** stays (one token file, no raw hex elsewhere); the
+  **values** are this site's own.
+
+### 6.4.1 Starting tokens (drafted here, tuned in M1)
+
+These are proposals, not measurements. They exist so M1 has a place to start and so the contrast
+rule below can be checked, and every one is negotiable until the owner sees a rendered page.
+
+| Token | Proposed | Role |
 |---|---|---|
-| Ink, paper, lines | root `style.css:10-22` | `--ink #16140f`, `--paper #ece8df`, `--line`, `--line-soft` |
-| Accents | root `style.css:15-16` | `--orange #ff4d1c`, `--teal #0ad6c0` |
-| Type | root `style.css:24-25` | Space Grotesk, display and body the same family |
-| Spacing scale | `localai/css/tokens.css` | 4 8 12 16 24 32 48 64, 80 at XL |
-| Type scale | `localai/css/tokens.css` | 13 15 17 20 24 32 48 64, 80 at XL |
-| Radius, motion | `localai/css/tokens.css` | 2 4 8 12 16 24; 150 250 400 600 ms |
+| `--paper` | `#f7f4ec` | Page ground, warm off-white, never pure white |
+| `--ink` | `#1b1a17` | Body text, near-black warm |
+| `--ink-quiet` | `#5c584e` | Captions, source notes, as-of dates |
+| `--rule` | `#cdc7b8` | Rules and card edges, 1 px only |
+| `--accent` | `#a33d1f` | Burnt sienna. Links, one emphasis per view |
+| `--focus` | `#1b1a17` 2 px offset ring | Keyboard focus, always visible |
+| `--hl-key` / `--hl-str` / `--hl-com` / `--hl-num` | four values, set in M1 | Syntax classes, each ≥ 4.5:1 on `--paper` |
+
+Type, one family for reading and one for code, both **system stacks**, so the site adds zero font
+requests:
+
+- `--font-text`: `Charter, "Bitstream Charter", "Sitka Text", Cambria, serif`
+- `--font-code`: `"SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace`
+
+**Open visual call for M1:** the text face. A serif is the honest reading choice for a site that
+is prose and code, and it is what separates this site's voice from the root site's Space Grotesk.
+It also costs nothing in requests as a system stack. If you would rather this site not read as a
+book, the alternative is a grotesque at 17 px, and that is your call, not mine.
+
+Scale: 8 pt rhythm (`--sp-1` 4 px through `--sp-8` 64 px), type sizes 15 17 20 24 32 48. Radius
+0 or 2 px, no exception. Motion 120 and 200 ms, and only for focus, copy confirmation, and panel
+open.
 
 Rules for `tokens.css`, `base.css`, `views.css`:
 
-1. **Color lives in `tokens.css` only.** Component CSS reads `var(--ink)`. A raw hex outside
-   that file is a review defect, same standard as `localai/css/tokens.css`.
-2. **Restate once, not six times.** The root sheet carries color and type but has no tokens for
-   radius, spacing, or motion, so those values get restated here, in one file. That is the honest
-   cost of matching the root look without a build step or a shared package.
-3. **No theme toggle in v1.** `localai` carries light and dark with a persisted switch.
-   This site is prose: one paper theme, high contrast, and `prefers-color-scheme` respected only
-   by not fighting it. A second theme later is a token change, not a rewrite, *if* rule 1 holds.
-4. **Code blocks:** `--paper` background with a `--line-soft` rule at the left, not a dark panel.
-   Highlight colors are new tokens (`--hl-key`, `--hl-str`, `--hl-com`, `--hl-num`), each checked
-   for at least 4.5:1 against the block background. A token that cannot be read is not a token.
-5. **Grid: single column, 68-character measure, flush left.** This is the grid the root site
-   already uses, and one column is right for text a student reads on a phone. `align-grid` is the
-   skill to use if that ever changes.
+1. **Color lives in `tokens.css` only.** Component CSS reads `var(--ink)`. A raw hex anywhere
+   else is a review defect.
+2. **One file states each value once.** Spacing, type sizes, radius, motion, and colour all
+   originate in `tokens.css`. No second table of magic numbers in a view sheet.
+3. **No theme toggle in v1.** One paper theme, high contrast, and `prefers-color-scheme` is
+   respected only by not fighting it. A dark theme later is a token change, not a rewrite, *if*
+   rule 1 holds.
+4. **Code blocks:** `--paper` ground with a 1 px `--rule` stripe at the left, not a dark panel.
+   Every highlight colour is checked for at least 4.5:1 against the block background, by the same
+   kind of assertion the soundboard suite already makes about its palette. A token that cannot be
+   read is not a token.
+5. **Grid: single column, 68-character measure, flush left, ragged right.** One column is right
+   for text a student reads on a phone. `align-grid` is the skill to use if this ever becomes a
+   modular-grid page.
 6. **No decorative imagery in v1.** No logos, no flags, no mascot art, nothing that needs a
    licence check, and nothing that adds a request a 15-year-old on a phone pays for. A language's
    page is text and code, or it is an index entry.
 
-Done when: `views.css` and `base.css` contain zero hex codes, and a 375 px screenshot of
-`#/l/python` looks like a page of this domain rather than a guest in it.
+Done when: `views.css` and `base.css` contain zero hex codes, the page asks for zero font files
+over the network, and a 375 px screenshot of `#/l/python` could not be mistaken for `localai`,
+`codewithai`, or the home page.
 
 ### 6.5 Difficulty scale (reader-facing, so it must be plain)
 
