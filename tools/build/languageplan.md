@@ -154,7 +154,7 @@ no Chinese record prose (chrome only, decision 8).
    cited evidence (the AP Java Quick Reference, The Book's pacing, real compiler error text),
    and the owner approves, rejects, or rewrites each one before M3. Extended 14 pages do not
    show a difficulty line at all, per §5.3; a missing note must never read as "hard". The 1-5
-   scale in §6.3 stays frozen.
+   scale in §6.4 stays frozen.
 10. **Syntax highlighting (2026-10-26).** A hand-rolled tokenizer, not a vendored Prism or
     highlight.js. About 250 lines covering comments, strings, numbers, and per-language keyword
     lists. It deliberately mis-highlights nothing dangerous and does not try for Rust lifetimes,
@@ -180,7 +180,7 @@ no Chinese record prose (chrome only, decision 8).
 16. **Visual system (2026-10-26).** Ink-on-paper, **fully divorced** from `localai`, from
     `tools/codewithai`, and from the root `make` theme. Its own `tokens.css`, no import of any
     existing sheet, system font stacks, serif text face (see above), no dark mode in v1, no
-    decorative imagery. §6.4 holds the proposed values. The first draft of §6.4 argued for
+    decorative imagery. §6.3 holds the proposed values. The first draft of §6.3 argued for
     deriving from the root sheet; the owner overruled that, so the derivation is gone.
 17. **`tools/build/languages-blueprint.md` is not a spec (2026-10-26).** An untracked file of
     unknown authorship appeared next to this plan naming the site "machines-site", proposing a
@@ -331,7 +331,7 @@ The plan itself lives at `tools/build/languageplan.md` (this file), next to the 
   demo:   { title, language, code, output, note }, // L1 contract, §9.2
   run_it: { kind: "link-out" | "none", label, url },
   prereqs: [ids], first_language: bool,
-  difficulty: 1..5,                                // scale defined in §6.3
+  difficulty: 1..5,                                // scale defined in §6.4
   needs_install: "none" | "browser only" | "download an editor" | "download a toolkit",
   history: { creator, org, year, note },
   stats: [ { metric, value, as_of, source } ],     // NEVER an unnumbered number
@@ -350,7 +350,7 @@ Rules:
 - One record per language. The MATLAB/Julia row becomes two records, each with its own history
   and stats.
 
-### 6.4 Design system (`css/tokens.css`)
+### 6.3 Design system (`css/tokens.css`)
 
 §6.1 named this file and the first draft of this plan never specified it, which is how a site
 ends up with hex codes in six places. Fixed here.
@@ -369,7 +369,7 @@ Two consequences are accepted rather than hidden:
   for a value below. The shared **discipline** stays (one token file, no raw hex elsewhere); the
   **values** are this site's own.
 
-### 6.4.1 Starting tokens (drafted here, tuned in M1)
+### 6.3.1 Starting tokens (drafted here, tuned in M1)
 
 These are proposals, not measurements. They exist so M1 has a place to start and so the contrast
 rule below can be checked, and every one is negotiable until the owner sees a rendered page.
@@ -422,7 +422,7 @@ Done when: `views.css` and `base.css` contain zero hex codes, the page asks for 
 over the network, and a 375 px screenshot of `#/l/python` could not be mistaken for `localai`,
 `codewithai`, or the home page.
 
-### 6.5 Difficulty scale (reader-facing, so it must be plain)
+### 6.4 Difficulty scale (reader-facing, so it must be plain)
 
 | Value | Label shown | Meaning to a student |
 |---|---|---|
@@ -434,6 +434,37 @@ over the network, and a 375 px screenshot of `#/l/python` could not be mistaken 
 
 Scale is assigned by the owner, not by a model. Propose in M0, freeze before M2.
 
+### 6.5 Core difficulty notes (M0 draft, awaiting owner sign-off)
+
+Decision 9 says the agent drafts these and the owner approves, rejects, or rewrites each line
+before M3. A value with no sentence behind it is not a difficulty note, so each row states the
+one thing that is actually hard, and where that claim came from. All 25 words or fewer, per the
+copy standard in §8.2. Extended 14 pages show no note at all (§3.9).
+
+| Language | Value | Label | Note as it will read | Grounded in | Owner |
+|---|---|---|---|---|---|
+| Scratch | 1 | Easy to start | Blocks snap together, so the shape of a command is always valid. You work on the order and the values instead. | Scratch credits and editor design, `languages.md` [S13] | pending |
+| HTML | 1 | Easy to start | You mark what is on a page. A mistake shows as broken layout, not a crash. The work is learning which tag fits. | `languages.md` Core row: "Not a programming language", [S11] | pending |
+| Python | 1 | Easy to start | One line says one thing, and a failure names the line it failed on. The long part is the size of the library to borrow from. | `languages.md` Core row: easiest text language to read, vocabulary large later, [S2] | pending |
+| CSS | 2 | Gentle | The rule list is short. Difficulty starts when four rules reach for one value, and an order decides which one wins. | `languages.md` Core row: "the rules are few, the interactions are not", [S12] | pending |
+| JavaScript | 2 | Gentle | Nothing checks your types before the page runs, so a mistake can wait for the wrong click. The browser tools are part of the course. | definitional: JavaScript is dynamically typed, so a bad type surfaces at run time | pending |
+| SQL | 2 | Gentle | You describe the rows you want, not the steps to fetch them. One table reads like a sentence. Joins and empty values are the climb. | SQL history and the relational model, [S3] | pending |
+| Java | 3 | Steady | Every value needs a type, and code lives inside a class. The exam gives students a reference sheet, because the vocabulary is that wide. | AP Computer Science A Java Quick Reference, [S10] | pending |
+| TypeScript | 3 | Steady | Types find mistakes before the program runs and point at the line. It helps only after JavaScript, or the reason stays invisible. | `languages.md` Core row: "a mistake shows before you run anything" | pending |
+
+Three notes are deliberately not difficulty claims:
+
+- Scratch is **not in the 2026 survey's language list**, so no share backs it up. Its note rests
+  on the editor, which is what a beginner meets.
+- HTML and CSS carry one combined survey figure (58.2 %) [S1]. Neither page may imply its own
+  number.
+- Java's value is the highest in Core, and the reason is a fact about the course rather than about
+  the student: College Board hands out a reference sheet [S10].
+
+Done when: every row above carries an owner yes, no, or rewrite. M3 does not start on unsigned
+copy. If the owner waives the gate, that is recorded here too, and these become real numbers
+without a signature.
+
 ---
 
 ## 7. Information architecture
@@ -443,6 +474,7 @@ Scale is assigned by the owner, not by a model. Propose in M0, freeze before M2.
 | `#/` | Index | Hero, then two blocks: "Start here" (Core 8 as cards with difficulty + first task), "Reference" (Extended 14 as a compact list). Filter chips by `category` |
 | `#/l/<slug>` | Language | Template in §9.1 |
 | `#/glossary/<term-id>` | Glossary | Every term in `data/glossary.js`, A–Z, with the language pages that use it. The deep-link form is what hover cards and the projects site point at |
+
 
 Two views are specified but not built in v1, by decision 11: `#/compare/<a>/<b>`, a side-by-side
 of the §6.2 fields for two languages that never invents a difference, and the "I am not sure"
@@ -642,7 +674,7 @@ parallelism, 9 with the M4 batch split across three fresh agents. Adding the two
 
 | M | Deliverable | Steps | Done when | Cost |
 |---|---|---|---|---|
-| **M0** | Decisions frozen | 1. Draft the 8 Core difficulty notes for owner approval (§3.9, §6.3). 2. Add a `languages_site:` block to `specs/state.yaml` mirroring `projects_site:`, recording the eleven owner decisions in §3. 3. Confirm the 22-record catalogue against `languages.md` second edition | `specs/state.yaml` records the decisions. §3 has no open item. Core notes approved or explicitly waived | 0.5 d |
+| **M0** | Decisions frozen | 1. Draft the 8 Core difficulty notes for owner approval (§3.9, §6.5). **Drafted 2026-10-26, awaiting sign-off.** 2. Add a `languages_site:` block to `specs/state.yaml` recording the seventeen owner decisions in §3. **Done 2026-10-26.** 3. Confirm the 22-record catalogue against `languages.md` second edition. **Done: Core 8 and Extended 14 set-equal, 22 total, slugs unique.** | `specs/state.yaml` records the decisions. §3 has no open item. Core notes approved or explicitly waived | 0.5 d |
 | **M1** | Skeleton | Tree from §6.1, tokens, base styles, hash router, index with static fallback, `package.json`, one placeholder record | `wrangler pages dev` serves the index and one page; `npm test` runs (green on the placeholder) | 1 d |
 | **M2** | Content data | 1. Write the 22-record table: category, makes, difficulty, prereqs, demo choice. 2. Owner review, Core 8 as one pass, then Extended in three batches of four to five (§3.13). 3. Fill records fully, including `history` and `stats` from `languages.md` second edition | `data.test.mjs` passes on all 22 records. No empty fields, no unlinked numbers, no draft left unreviewed | 2 d |
 | **M3** | Core 8 pages | Demo widget, page template, 8 pages, glossary seed, link-out buttons | Z1–Z4 green for Core. Reading-level tests pass with zero exceptions | 2.5 d |
