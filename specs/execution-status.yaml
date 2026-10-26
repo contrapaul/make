@@ -1,5 +1,5 @@
 # Story status. Values: planned | in_progress | review | done
-updated: 2026-10-20
+updated: 2026-10-26
 stories:
   e01s01: done
   e01s02: done
@@ -13,3 +13,9 @@ stories:
   e01s10: review
   e01s11: review
   e01s12: review
+  e02s01: done
+  e02s02: done
+  e02s03: done
+  e02s04: done
+  e02s05: done
+  e02s06: done

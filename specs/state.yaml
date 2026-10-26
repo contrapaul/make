@@ -1,10 +1,9 @@
 workflow_mode: solo-git
-active_epic: e01
-next: e01s01 (Claude) and e01s02 (local AI) in parallel
+active_epic: e02
+next: (e02 complete 2026-10-26)
 
 projects_site:
-  status: planned-approved-not-built
-  paused: 2026-10-26 (owner doing model testing before the build)
+  status: e02-built (all 6 stories done, deployed 2026-10-26)
   plan: specs/product/PROJECTS_SITE_LATEST.md
   handoff: tools/build/projects/HANDOFF.md
   first_step: produce glossary term list (~50-65 terms) for owner approval, then planning spine, then build per plan
