@@ -179,9 +179,14 @@ no Chinese record prose (chrome only, decision 8).
     one data layer and one template, so milestone granularity is the honest unit.
 16. **Visual system (2026-10-26).** Ink-on-paper, **fully divorced** from `localai`, from
     `tools/codewithai`, and from the root `make` theme. Its own `tokens.css`, no import of any
-    existing sheet, system font stacks, no dark mode in v1, no decorative imagery. §6.4 holds the
-    proposed values and the one remaining taste call (text face). The first draft of §6.4 argued
-    for deriving from the root sheet; the owner overruled that, so the derivation is gone.
+    existing sheet, system font stacks, serif text face (see above), no dark mode in v1, no
+    decorative imagery. §6.4 holds the proposed values. The first draft of §6.4 argued for
+    deriving from the root sheet; the owner overruled that, so the derivation is gone.
+17. **`tools/build/languages-blueprint.md` is not a spec (2026-10-26).** An untracked file of
+    unknown authorship appeared next to this plan naming the site "machines-site", proposing a
+    different Core 8, and putting a live per-language virtual machine on every page. Owner's
+    ruling: ignore and delete. It is deleted, and no value, palette, or section from it is a
+    source for this site. If it reappears, it is stale by construction and this decision governs.
 
 ---
 
@@ -385,10 +390,9 @@ requests:
 - `--font-text`: `Charter, "Bitstream Charter", "Sitka Text", Cambria, serif`
 - `--font-code`: `"SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace`
 
-**Open visual call for M1:** the text face. A serif is the honest reading choice for a site that
-is prose and code, and it is what separates this site's voice from the root site's Space Grotesk.
-It also costs nothing in requests as a system stack. If you would rather this site not read as a
-book, the alternative is a grotesque at 17 px, and that is your call, not mine.
+**Text face: serif. Decided 2026-10-26, owner's call.** A serif is the honest reading choice for a
+site that is prose and code, and it is what separates this site's voice from the root site's Space
+Grotesk while costing no font requests. The grotesque alternative is dropped, not deferred.
 
 Scale: 8 pt rhythm (`--sp-1` 4 px through `--sp-8` 64 px), type sizes 15 17 20 24 32 48. Radius
 0 or 2 px, no exception. Motion 120 and 200 ms, and only for focus, copy confirmation, and panel
