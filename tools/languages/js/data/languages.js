@@ -37,7 +37,7 @@ export const LANGUAGES = [
       creator: "Mitchel Resnick and the Lifelong Kindergarten group",
       org: "MIT Media Lab",
       year: "2002",
-      note: "Publicly launched 15 May 2007; version 3.0 in January 2019; run by the Scratch Foundation, a nonprofit, since 2019. Based on Logo and Squeak.",
+      note: "The MIT group began it in 2002. It opened to the public on 15 May 2007. Version 3.0 came in January 2019. A nonprofit, the Scratch Foundation, has run it since. It grows from Logo and Squeak.",
     },
     stats: [],
     links: [{ label: "scratch.mit.edu", url: "https://scratch.mit.edu/"}, { label: "Scratch Foundation", url: "https://www.scratchfoundation.org/"}, { label: "educator page", url: "https://www.scratchfoundation.org/learn/for-educators"}],
@@ -101,7 +101,7 @@ export const LANGUAGES = [
       creator: "Håkon Wium Lie",
       org: "W3C",
       year: "1996",
-      note: "Proposed in 1994 at CERN; CSS 1 became a W3C Recommendation on 17 December 1996.",
+      note: "Bos and Lie first wrote it down at CERN in 1994. CSS 1 left the W3C as a Recommendation in December 1996.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "58.2 %", as_of: "2026", source: "S1", note: "The survey counts HTML and CSS as one answer." },
@@ -134,7 +134,7 @@ export const LANGUAGES = [
       creator: "Brendan Eich",
       org: "Netscape",
       year: "1995",
-      note: "Named Mocha, then LiveScript, then JavaScript in early December 1995. Eich has described the first prototype as about ten days of work.",
+      note: "Its first name was Mocha, then LiveScript. It took this name in early December 1995. Eich says the start took some ten days.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "62.0 %", as_of: "2026", source: "S1", note: "First of the twenty-two for the twelfth year running." },
@@ -167,7 +167,7 @@ export const LANGUAGES = [
       creator: "Anders Hejlsberg and his team",
       org: "Microsoft",
       year: "2012",
-      note: "Unveiled 1 October 2012. Hejlsberg also worked on Turbo Pascal, Delphi, and C#.",
+      note: "Microsoft showed it on 1 October 2012. Hejlsberg led that work, and he had done C#.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "43.8 %", as_of: "2026", source: "S1", note: "Sixth of the languages in the survey." },
@@ -229,7 +229,7 @@ export const LANGUAGES = [
       creator: "Donald Chamberlin and Raymond Boyce",
       org: "IBM",
       year: "1976",
-      note: "Built on E. F. Codd's 1970 relational model; published as SEQUEL in 1976 and renamed SQL, since SEQUEL was already a trademark elsewhere.",
+      note: "It grew from Codd's 1970 model of data. It came out as SEQUEL in 1976. The name became SQL, as SEQUEL was a mark held elsewhere.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "58.4 %", as_of: "2026", source: "S1", note: "Second of the languages in the survey, and the first year it passed HTML and CSS." },
@@ -257,13 +257,13 @@ export const LANGUAGES = [
     run_it: { kind: "none" },
     prereqs: [],
     first_language: true,
-    difficulty: { value: 3, label: "Steady", note: "Every value needs a type, and code lives inside a class, so the words come before the result." },
+    difficulty: { value: 3, label: "Steady", note: "Each value needs a type. Code sits in a class. So the words come before the run." },
     needs_install: "download a toolkit",
     history: {
       creator: "James Gosling and his team",
       org: "Sun Microsystems, then Oracle",
       year: "1996",
-      note: "First released as Java 1.0 on 23 January 1996; Oracle owns Sun's assets from 2010.",
+      note: "It first shipped as Java 1.0 in January 1996. Oracle has held Sun's assets since 2010.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "27.6 %", as_of: "2026", source: "S1", note: "Seventh of the languages in the survey." },
@@ -329,7 +329,7 @@ export const LANGUAGES = [
       creator: "Dennis Ritchie",
       org: "Bell Labs",
       year: "1973",
-      note: "First implemented 1972 to 1973 to rewrite Unix. Its syntax is the ancestor of C++, C#, Java, and JavaScript.",
+      note: "Ritchie wrote it at Bell Labs in 1972 and 1973, to build Unix. C++, C#, Java, and JavaScript all take its look.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "21.8 %", as_of: "2026", source: "S1", note: "Eleventh of the languages in the survey." },
@@ -395,7 +395,7 @@ export const LANGUAGES = [
       creator: "Anders Hejlsberg, Scott Wiltamuth, Peter Golde",
       org: "Microsoft",
       year: "2000",
-      note: "Announced 26 June 2000; the first widely distributed implementation came in July 2000, and .NET Framework 1.0 in February 2002. The name uses a sharp symbol, not a hash.",
+      note: "Microsoft told of it on 26 June 2000. A wide release came that July. .NET Framework 1.0 followed in February 2002. Its name takes a sharp sign, not a hash.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "27.1 %", as_of: "2026", source: "S1", note: "Eighth of the languages in the survey." },
@@ -444,7 +444,7 @@ export const LANGUAGES = [
     tier: "extended",
     category: "Scientific computing",
     reads: "A script with the maths written close to the page it came from.",
-    makes: ["A model of a physical system", "A numerics study", "Finance research"],
+    makes: ["A model of how things move", "A numerics study", "Finance research"],
     demo: {
       title: "Three equations, solved at once",
       language: "julia",
@@ -461,7 +461,7 @@ export const LANGUAGES = [
       creator: "Jeff Bezanson, Stefan Karpinski, Viral Shah, Alan Edelman",
       org: "MIT",
       year: "2012",
-      note: "First released 2012, pitched as a faster open alternative to MATLAB for the same work.",
+      note: "The first release came in 2012. It was pitched as a free, faster path than MATLAB for the same work.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "1.5 %", as_of: "2026", source: "S1", note: "A small community beside the others on this page." },
@@ -494,7 +494,7 @@ export const LANGUAGES = [
       creator: "JetBrains team",
       org: "JetBrains",
       year: "2011",
-      note: "Announced 2011. Google took it on as a first-class Android language at its 2017 developer conference and called Android \"increasingly Kotlin-first\" in 2019.",
+      note: "JetBrains told of it in 2011. Google backed it for Android at its 2017 conference. By 2019 it called Android increasingly Kotlin-first.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "10.8 %", as_of: "2026", source: "S1", note: "Fifteenth of the languages in the survey." },
@@ -560,7 +560,7 @@ export const LANGUAGES = [
       creator: "Rasmus Lerdorf",
       org: "PHP Group",
       year: "1995",
-      note: "Grew from tools Lerdorf wrote in 1994 to track visitors to his own page, announced as Personal Home Page Tools on 8 June 1995. Andi Gutmans and Zeev Suraski rewrote it in 1997, and the name became a recursive acronym: PHP: Hypertext Preprocessor.",
+      note: "It starts as tools Lerdorf wrote for his own page in 1994. It took a name in June 1995. Gutmans and Suraski rewrote it in 1997 and gave it the folded-back name it holds now.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "17.7 %", as_of: "2026", source: "S1", note: "Thirteenth of the languages in the survey." },
@@ -594,7 +594,7 @@ export const LANGUAGES = [
       creator: "Jeffrey Snover",
       org: "Microsoft",
       year: "2006",
-      note: "Designed in Snover's 2002 Monad manifesto, renamed Windows PowerShell in April 2006, and released as version 1.0 on 14 November 2006. Open source with Linux support since 18 August 2016.",
+      note: "Snover first drew it up in 2002, in a plan he called Monad. It came out as version 1.0 in November 2006. It turned to open source, with Linux, in August 2016.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "24.6 %", as_of: "2026", source: "S1", note: "Ninth of the languages in the survey, ahead of C++ and C." },
@@ -609,7 +609,7 @@ export const LANGUAGES = [
     name: "R",
     tier: "extended",
     category: "Statistics and data",
-    reads: "Functions over whole columns at once, with a pipe that passes a result along.",
+    reads: "One call works on a whole column. A pipe hands the next call what came back.",
     makes: ["A research figure", "A public dashboard", "A data-journalism story"],
     demo: {
       title: "Read a table, draw one chart",
@@ -627,7 +627,7 @@ export const LANGUAGES = [
       creator: "Robert Gentleman and Ross Ihaka",
       org: "R Foundation, grown out of the University of Auckland",
       year: "1993",
-      note: "First binaries posted with an August 1993 announcement; version 1.0.0 came in 1995. Named for the statisticians, and for the S language it implements.",
+      note: "Gentleman and Ihaka sent out the first files in August 1993. Version 1.0.0 came in 1995. Its name marks the two, and the S it builds on.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "4.5 %", as_of: "2026", source: "S1", note: "Twenty-first of the languages in the survey." },
@@ -674,8 +674,8 @@ export const LANGUAGES = [
     slug: "rust",
     name: "Rust",
     tier: "extended",
-    category: "Systems language with a strict compiler",
-    reads: "C-sized power with ownership written into the types, and many small symbols.",
+    category: "Systems language, strict compiler",
+    reads: "The reach of C. The types state who holds each part, and much turns on small marks.",
     makes: ["An operating-system part", "A browser engine piece", "A WebAssembly module", "A fast command-line tool"],
     demo: {
       title: "The compiler says no first",
@@ -727,7 +727,7 @@ export const LANGUAGES = [
       creator: "Chris Lattner and his Apple team",
       org: "Apple",
       year: "2014",
-      note: "Announced at Apple's developer week in June 2014 and open sourced in December 2015. It replaced Objective-C as the default for new apps.",
+      note: "Apple told of it at its own conference in June 2014. The source opened in December 2015. It took the place of Objective-C for new apps.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "5.9 %", as_of: "2026", source: "S1", note: "Eighteenth of the languages in the survey." },
