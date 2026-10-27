@@ -25,6 +25,12 @@
       "port": 8788
     },
     {
+      "name": "bb-next-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/paul/Documents/GitHub/bloodbowl", "run", "dev"],
+      "port": 8790
+    },
+    {
       "name": "flashstone",
       "runtimeExecutable": "npm",
       "runtimeArgs": [
