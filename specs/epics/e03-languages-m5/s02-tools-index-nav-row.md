@@ -18,11 +18,11 @@ follows the site's style rules.
 
 ## Tasks
 
-- [ ] e03s02t01: copy one of the four existing rows, renumber remaining rows;
+- [x] e03s02t01: copy one of the four existing rows, renumber remaining rows;
       label `05: Language`, blurb covers what 22-language reference with a
       glossary means, 2-3 tags (Reference, Languages, Glossary)
       - verify: `node -e "const s=require('fs').readFileSync('tools/index.html','utf8');console.log((s.match(/trow/g)||[]).length)"` (expect 5)
-- [ ] e03s02t02: verify the href path `/tools/languages/` resolves (no 404,
+- [x] e03s02t02: verify the href path `/tools/languages/` resolves (no 404,
       page is the languages home) — the 200-homepage catch-all means we check
       the title, not the status
       - verify-script: `curl -s https://make.contrapaul.com/tools/languages/ | grep -o '<title>[^<]*' `
