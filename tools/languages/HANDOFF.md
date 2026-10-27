@@ -18,9 +18,9 @@ no teacher in the room. Source of facts: `tools/build/languages.md` (second edit
 | M1 skeleton | **Done and committed.** Shell, router, i18n, hand-rolled highlighter, design tokens, six test files |
 | M2 content data | **Done and committed.** All 22 records, every field filled, every number sourced |
 | M3 Core 8 pages | **Ready for the owner's read.** The pages render from the data through the template in `js/views.js`; the 19 over-grade strings are rewritten and the reading gate is green. What M3 still lacks is the human walkthrough (V1-V8 below) and the owner's sign-off on the copy |
-| M4 Extended 14 pages + glossary | **Done in data.** The 14 Extended pages use the same template with `difficulty: null` (decision 9). The glossary holds **37 entries** and every term the 22 records name now has one |
+| M4 Extended 14 pages + glossary | **Done.** The 14 Extended pages use the same template with `difficulty: null` (decision 9). The glossary holds **37 entries**, every term the 22 records name has one, and the set is **live on production** (PR #34, squash `d9a5e64`) |
 | M5 integration | Not started. The index filter, the `tools/index.html` card, and the cross-links to the sibling site (only where its target exists) |
-| M6 ship | **Partly done, and by the owner's instruction.** `make.contrapaul.com/tools/languages/` serves production from `main`. Still owed: the a11y and mobile passes, a link re-validation on the day, and the decision about shipping `test/` in the deployed tree (see Ship) |
+| M6 ship | **Partly done, and by the owner's instruction.** `make.contrapaul.com/tools/languages/` serves production from `main`, with the finished glossary. Still owed: the a11y and mobile passes, a link re-validation on the day, and the decision about shipping `test/` in the deployed tree (see Ship) |
 
 ## Commands
 
