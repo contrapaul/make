@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Languages - what each one is for</title>
+    <meta
+      name="description"
+      content="Twenty-two programming languages, each with what it reads like, what it is used for, and one short example."
+    />
+    <link rel="stylesheet" href="./css/tokens.css" />
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/views.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead">
+      <h1 class="wordmark">
+        <a href="#/" data-i18n="site.name">Languages</a>
+      </h1>
+      <p class="tagline" data-i18n="site.tagline">What each one is for.</p>
+      <nav class="tabs" aria-label="Sections">
+        <a href="#/" data-route="index" data-i18n="nav.index">All languages</a>
+        <a href="#/glossary" data-route="glossary" data-i18n="nav.glossary">Glossary</a>
+        <a href="#/about" data-route="about" data-i18n="nav.about">About</a>
+      </nav>
+      <form class="lang-switch" id="lang-switch">
+        <label for="lang" data-i18n="nav.language">Language</label>
+        <select id="lang" name="lang">
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
+      </form>
+    </header>
+
+    <main id="main"></main>
+
+    <!--
+      Static fallback. A crawler that runs no script sees this list and nothing
+      else, so it must name the same records js/data/languages.js does.
+      js/app.js hides it once a view is drawn; test/data.test.mjs fails the
+      build when the two lists drift.
+    -->
+    <nav class="static-index" id="static-index" aria-label="All languages">
+      <h2>Core eight</h2>
+      <ul>
+        <li><a href="#/l/scratch">Scratch</a></li>
+        <li><a href="#/l/html">HTML</a></li>
+        <li><a href="#/l/css">CSS</a></li>
+        <li><a href="#/l/javascript">JavaScript</a></li>
+        <li><a href="#/l/typescript">TypeScript</a></li>
+        <li><a href="#/l/python">Python</a></li>
+        <li><a href="#/l/sql">SQL</a></li>
+        <li><a href="#/l/java">Java</a></li>
+      </ul>
+      <h2>Extended fourteen</h2>
+      <ul>
+        <li><a href="#/l/bash">Bash</a></li>
+        <li><a href="#/l/c">C</a></li>
+        <li><a href="#/l/cpp">C++</a></li>
+        <li><a href="#/l/csharp">C#</a></li>
+        <li><a href="#/l/go">Go</a></li>
+        <li><a href="#/l/julia">Julia</a></li>
+        <li><a href="#/l/kotlin">Kotlin</a></li>
+        <li><a href="#/l/matlab">MATLAB</a></li>
+        <li><a href="#/l/php">PHP</a></li>
+        <li><a href="#/l/powershell">PowerShell</a></li>
+        <li><a href="#/l/r">R</a></li>
+        <li><a href="#/l/ruby">Ruby</a></li>
+        <li><a href="#/l/rust">Rust</a></li>
+        <li><a href="#/l/swift">Swift</a></li>
+      </ul>
+    </nav>
+
+    <footer class="site-foot">
+      <p data-i18n="footer.sources">Every figure names its source and its date.</p>
+      <p data-i18n="footer.note">The survey counts those who answer it. It misses the rest.</p>
+      <p data-i18n="footer.updated">Built 2026-10-26</p>
+    </footer>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>

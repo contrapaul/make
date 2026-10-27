@@ -149,12 +149,15 @@ no Chinese record prose (chrome only, decision 8).
    `lang` key that survives navigation. Every reader-facing string therefore lives in a data
    file, never inline in `views.js` (§8.2 rule extended to chrome). No machine translation in
    v1, and no unreviewed Chinese: each `zh` string is owner-approved before it merges, the same
-   gate as English copy. §12 asserts the two columns have identical key sets.
+   gate as English copy. **Signed off 2026-10-27** by a reader who reads Chinese, through the
+   owner's colleague: the 42 chrome strings are approved as they stand, and the switcher is on.
+   The approval covers chrome only. Record prose is still English and `content.lang_note` says so
+   in both languages. §12 asserts the two columns have identical key sets.
 9. **Difficulty notes (2026-10-26).** The agent drafts a 25-word note per Core language from
    cited evidence (the AP Java Quick Reference, The Book's pacing, real compiler error text),
    and the owner approves, rejects, or rewrites each one before M3. Extended 14 pages do not
    show a difficulty line at all, per §5.3; a missing note must never read as "hard". The 1-5
-   scale in §6.3 stays frozen.
+   scale in §6.4 stays frozen.
 10. **Syntax highlighting (2026-10-26).** A hand-rolled tokenizer, not a vendored Prism or
     highlight.js. About 250 lines covering comments, strings, numbers, and per-language keyword
     lists. It deliberately mis-highlights nothing dangerous and does not try for Rust lifetimes,
@@ -177,6 +180,16 @@ no Chinese record prose (chrome only, decision 8).
 15. **Git shape (2026-10-26).** One PR per milestone: M0+M1, M2, M3, M4, M5+M6. Five PRs, each
     independently testable and revertible. The sibling site plans one PR per story; this site has
     one data layer and one template, so milestone granularity is the honest unit.
+16. **Visual system (2026-10-26).** Ink-on-paper, **fully divorced** from `localai`, from
+    `tools/codewithai`, and from the root `make` theme. Its own `tokens.css`, no import of any
+    existing sheet, system font stacks, serif text face (see above), no dark mode in v1, no
+    decorative imagery. §6.3 holds the proposed values. The first draft of §6.3 argued for
+    deriving from the root sheet; the owner overruled that, so the derivation is gone.
+17. **`tools/build/languages-blueprint.md` is not a spec (2026-10-26).** An untracked file of
+    unknown authorship appeared next to this plan naming the site "machines-site", proposing a
+    different Core 8, and putting a live per-language virtual machine on every page. Owner's
+    ruling: ignore and delete. It is deleted, and no value, palette, or section from it is a
+    source for this site. If it reappears, it is stale by construction and this decision governs.
 
 ---
 
@@ -321,7 +334,7 @@ The plan itself lives at `tools/build/languageplan.md` (this file), next to the 
   demo:   { title, language, code, output, note }, // L1 contract, §9.2
   run_it: { kind: "link-out" | "none", label, url },
   prereqs: [ids], first_language: bool,
-  difficulty: 1..5,                                // scale defined in §6.3
+  difficulty: 1..5,                                // scale defined in §6.4
   needs_install: "none" | "browser only" | "download an editor" | "download a toolkit",
   history: { creator, org, year, note },
   stats: [ { metric, value, as_of, source } ],     // NEVER an unnumbered number
@@ -340,49 +353,79 @@ Rules:
 - One record per language. The MATLAB/Julia row becomes two records, each with its own history
   and stats.
 
-### 6.4 Design system (`css/tokens.css`)
+### 6.3 Design system (`css/tokens.css`)
 
 §6.1 named this file and the first draft of this plan never specified it, which is how a site
 ends up with hex codes in six places. Fixed here.
 
-**Look: the editorial house style, not a third dialect.** Both sibling sub-sites (`localai`,
-`tools/codewithai`) shipped their own glass-on-dark token set, and the root site is ink-on-paper
-editorial. Three visual systems on one domain is three more things to maintain, and this site is
-text, so it should read like the rest of `make.contrapaul.com`.
+**Look: an original ink-on-paper system, independent of every existing sheet.** Owner's call,
+2026-10-26: the language site is "fully divorced from localai and codewithai, as well as the main
+make themes" and goes ink-on-paper. The first draft of this section argued the opposite, that
+three visual dialects on one domain is one too many, and proposed deriving from root
+`style.css`. That argument is over. This site gets its own `tokens.css` and `@import` nothing.
 
-| Token | Source of truth | Value at time of writing |
+Two consequences are accepted rather than hidden:
+
+- A student moving from the home page to `/tools/languages/` sees a different typographic voice.
+  That is the point of the call, not an oversight to apologise for.
+- Nothing in `localai/css/`, `tools/codewithai/css/`, or root `style.css` is a source of truth
+  for a value below. The shared **discipline** stays (one token file, no raw hex elsewhere); the
+  **values** are this site's own.
+
+### 6.3.1 Starting tokens (drafted here, tuned in M1)
+
+These are proposals, not measurements. They exist so M1 has a place to start and so the contrast
+rule below can be checked, and every one is negotiable until the owner sees a rendered page.
+
+| Token | Proposed | Role |
 |---|---|---|
-| Ink, paper, lines | root `style.css:10-22` | `--ink #16140f`, `--paper #ece8df`, `--line`, `--line-soft` |
-| Accents | root `style.css:15-16` | `--orange #ff4d1c`, `--teal #0ad6c0` |
-| Type | root `style.css:24-25` | Space Grotesk, display and body the same family |
-| Spacing scale | `localai/css/tokens.css` | 4 8 12 16 24 32 48 64, 80 at XL |
-| Type scale | `localai/css/tokens.css` | 13 15 17 20 24 32 48 64, 80 at XL |
-| Radius, motion | `localai/css/tokens.css` | 2 4 8 12 16 24; 150 250 400 600 ms |
+| `--paper` | `#f7f4ec` | Page ground, warm off-white, never pure white |
+| `--ink` | `#1b1a17` | Body text, near-black warm |
+| `--ink-quiet` | `#5c584e` | Captions, source notes, as-of dates |
+| `--rule` | `#cdc7b8` | Rules and card edges, 1 px only |
+| `--accent` | `#a33d1f` | Burnt sienna. Links, one emphasis per view |
+| `--focus` | `#1b1a17` 2 px offset ring | Keyboard focus, always visible |
+| `--hl-key` / `--hl-str` / `--hl-com` / `--hl-num` | four values, set in M1 | Syntax classes, each ≥ 4.5:1 on `--paper` |
+
+Type, one family for reading and one for code, both **system stacks**, so the site adds zero font
+requests:
+
+- `--font-text`: `Charter, "Bitstream Charter", "Sitka Text", Cambria, serif`
+- `--font-code`: `"SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace`
+
+**Text face: serif. Decided 2026-10-26, owner's call.** A serif is the honest reading choice for a
+site that is prose and code, and it is what separates this site's voice from the root site's Space
+Grotesk while costing no font requests. The grotesque alternative is dropped, not deferred.
+
+Scale: 8 pt rhythm (`--sp-1` 4 px through `--sp-8` 64 px), type sizes 15 17 20 24 32 48. Radius
+0 or 2 px, no exception. Motion 120 and 200 ms, and only for focus, copy confirmation, and panel
+open.
 
 Rules for `tokens.css`, `base.css`, `views.css`:
 
-1. **Color lives in `tokens.css` only.** Component CSS reads `var(--ink)`. A raw hex outside
-   that file is a review defect, same standard as `localai/css/tokens.css`.
-2. **Restate once, not six times.** The root sheet carries color and type but has no tokens for
-   radius, spacing, or motion, so those values get restated here, in one file. That is the honest
-   cost of matching the root look without a build step or a shared package.
-3. **No theme toggle in v1.** `localai` carries light and dark with a persisted switch.
-   This site is prose: one paper theme, high contrast, and `prefers-color-scheme` respected only
-   by not fighting it. A second theme later is a token change, not a rewrite, *if* rule 1 holds.
-4. **Code blocks:** `--paper` background with a `--line-soft` rule at the left, not a dark panel.
-   Highlight colors are new tokens (`--hl-key`, `--hl-str`, `--hl-com`, `--hl-num`), each checked
-   for at least 4.5:1 against the block background. A token that cannot be read is not a token.
-5. **Grid: single column, 68-character measure, flush left.** This is the grid the root site
-   already uses, and one column is right for text a student reads on a phone. `align-grid` is the
-   skill to use if that ever changes.
+1. **Color lives in `tokens.css` only.** Component CSS reads `var(--ink)`. A raw hex anywhere
+   else is a review defect.
+2. **One file states each value once.** Spacing, type sizes, radius, motion, and colour all
+   originate in `tokens.css`. No second table of magic numbers in a view sheet.
+3. **No theme toggle in v1.** One paper theme, high contrast, and `prefers-color-scheme` is
+   respected only by not fighting it. A dark theme later is a token change, not a rewrite, *if*
+   rule 1 holds.
+4. **Code blocks:** `--paper` ground with a 1 px `--rule` stripe at the left, not a dark panel.
+   Every highlight colour is checked for at least 4.5:1 against the block background, by the same
+   kind of assertion the soundboard suite already makes about its palette. A token that cannot be
+   read is not a token.
+5. **Grid: single column, 68-character measure, flush left, ragged right.** One column is right
+   for text a student reads on a phone. `align-grid` is the skill to use if this ever becomes a
+   modular-grid page.
 6. **No decorative imagery in v1.** No logos, no flags, no mascot art, nothing that needs a
    licence check, and nothing that adds a request a 15-year-old on a phone pays for. A language's
    page is text and code, or it is an index entry.
 
-Done when: `views.css` and `base.css` contain zero hex codes, and a 375 px screenshot of
-`#/l/python` looks like a page of this domain rather than a guest in it.
+Done when: `views.css` and `base.css` contain zero hex codes, the page asks for zero font files
+over the network, and a 375 px screenshot of `#/l/python` could not be mistaken for `localai`,
+`codewithai`, or the home page.
 
-### 6.5 Difficulty scale (reader-facing, so it must be plain)
+### 6.4 Difficulty scale (reader-facing, so it must be plain)
 
 | Value | Label shown | Meaning to a student |
 |---|---|---|
@@ -394,6 +437,37 @@ Done when: `views.css` and `base.css` contain zero hex codes, and a 375 px scree
 
 Scale is assigned by the owner, not by a model. Propose in M0, freeze before M2.
 
+### 6.5 Core difficulty notes (M0 draft, awaiting owner sign-off)
+
+Decision 9 says the agent drafts these and the owner approves, rejects, or rewrites each line
+before M3. A value with no sentence behind it is not a difficulty note, so each row states the
+one thing that is actually hard, and where that claim came from. All 25 words or fewer, per the
+copy standard in §8.2. Extended 14 pages show no note at all (§3.9).
+
+| Language | Value | Label | Note as it will read | Grounded in | Owner |
+|---|---|---|---|---|---|
+| Scratch | 1 | Easy to start | Blocks snap together, so the shape of a command is always valid. You work on the order and the values instead. | Scratch credits and editor design, `languages.md` [S13] | pending |
+| HTML | 1 | Easy to start | You mark what is on a page. A mistake shows as broken layout, not a crash. The work is learning which tag fits. | `languages.md` Core row: "Not a programming language", [S11] | pending |
+| Python | 1 | Easy to start | One line says one thing, and a failure names the line it failed on. The long part is the size of the library to borrow from. | `languages.md` Core row: easiest text language to read, vocabulary large later, [S2] | pending |
+| CSS | 2 | Gentle | The rule list is short. Difficulty starts when four rules reach for one value, and an order decides which one wins. | `languages.md` Core row: "the rules are few, the interactions are not", [S12] | pending |
+| JavaScript | 2 | Gentle | Nothing checks your types before the page runs, so a mistake can wait for the wrong click. The browser tools are part of the course. | definitional: JavaScript is dynamically typed, so a bad type surfaces at run time | pending |
+| SQL | 2 | Gentle | You describe the rows you want, not the steps to fetch them. One table reads like a sentence. Joins and empty values are the climb. | SQL history and the relational model, [S3] | pending |
+| Java | 3 | Steady | Every value needs a type, and code lives inside a class. The exam gives students a reference sheet, because the vocabulary is that wide. | AP Computer Science A Java Quick Reference, [S10] | pending |
+| TypeScript | 3 | Steady | Types find mistakes before the program runs and point at the line. It helps only after JavaScript, or the reason stays invisible. | `languages.md` Core row: "a mistake shows before you run anything" | pending |
+
+Three notes are deliberately not difficulty claims:
+
+- Scratch is **not in the 2026 survey's language list**, so no share backs it up. Its note rests
+  on the editor, which is what a beginner meets.
+- HTML and CSS carry one combined survey figure (58.2 %) [S1]. Neither page may imply its own
+  number.
+- Java's value is the highest in Core, and the reason is a fact about the course rather than about
+  the student: College Board hands out a reference sheet [S10].
+
+Done when: every row above carries an owner yes, no, or rewrite. M3 does not start on unsigned
+copy. If the owner waives the gate, that is recorded here too, and these become real numbers
+without a signature.
+
 ---
 
 ## 7. Information architecture
@@ -403,6 +477,7 @@ Scale is assigned by the owner, not by a model. Propose in M0, freeze before M2.
 | `#/` | Index | Hero, then two blocks: "Start here" (Core 8 as cards with difficulty + first task), "Reference" (Extended 14 as a compact list). Filter chips by `category` |
 | `#/l/<slug>` | Language | Template in §9.1 |
 | `#/glossary/<term-id>` | Glossary | Every term in `data/glossary.js`, A–Z, with the language pages that use it. The deep-link form is what hover cards and the projects site point at |
+
 
 Two views are specified but not built in v1, by decision 11: `#/compare/<a>/<b>`, a side-by-side
 of the §6.2 fields for two languages that never invents a difference, and the "I am not sure"
@@ -602,7 +677,7 @@ parallelism, 9 with the M4 batch split across three fresh agents. Adding the two
 
 | M | Deliverable | Steps | Done when | Cost |
 |---|---|---|---|---|
-| **M0** | Decisions frozen | 1. Draft the 8 Core difficulty notes for owner approval (§3.9, §6.3). 2. Add a `languages_site:` block to `specs/state.yaml` mirroring `projects_site:`, recording the eleven owner decisions in §3. 3. Confirm the 22-record catalogue against `languages.md` second edition | `specs/state.yaml` records the decisions. §3 has no open item. Core notes approved or explicitly waived | 0.5 d |
+| **M0** | Decisions frozen | 1. Draft the 8 Core difficulty notes for owner approval (§3.9, §6.5). **Drafted 2026-10-26, awaiting sign-off.** 2. Add a `languages_site:` block to `specs/state.yaml` recording the seventeen owner decisions in §3. **Done 2026-10-26.** 3. Confirm the 22-record catalogue against `languages.md` second edition. **Done: Core 8 and Extended 14 set-equal, 22 total, slugs unique.** | `specs/state.yaml` records the decisions. §3 has no open item. Core notes approved or explicitly waived | 0.5 d |
 | **M1** | Skeleton | Tree from §6.1, tokens, base styles, hash router, index with static fallback, `package.json`, one placeholder record | `wrangler pages dev` serves the index and one page; `npm test` runs (green on the placeholder) | 1 d |
 | **M2** | Content data | 1. Write the 22-record table: category, makes, difficulty, prereqs, demo choice. 2. Owner review, Core 8 as one pass, then Extended in three batches of four to five (§3.13). 3. Fill records fully, including `history` and `stats` from `languages.md` second edition | `data.test.mjs` passes on all 22 records. No empty fields, no unlinked numbers, no draft left unreviewed | 2 d |
 | **M3** | Core 8 pages | Demo widget, page template, 8 pages, glossary seed, link-out buttons | Z1–Z4 green for Core. Reading-level tests pass with zero exceptions | 2.5 d |
@@ -657,7 +732,7 @@ Tests run in plain Node, no browser, no network in the default run (link checks 
 | V5 | Reduced-motion setting respected, no animation depends on hover |
 | V6 | 375 px, 768 px, 1440 px, no horizontal scroll, code blocks scroll internally |
 | V7 | One random page per deploy: numbers match the source, dates are visible |
-| V8 | Switch to Chinese as a reader who cannot read English: reach the index, one language page, and the glossary without touching English-only controls. Ask a Chinese-reading reviewer, not the model that wrote the strings |
+| V8 | Switch to Chinese as a reader who cannot read English: reach the index, one language page, and the glossary without touching English-only controls. Ask a Chinese-reading reviewer, not the model that wrote the strings. **Chrome strings passed this on 2026-10-27** (the owner's colleague, a reader of Chinese, approved the 42 chrome keys). Re-run it for any new key, and for record prose whenever that ships |
 
 **Gates:** CI green before merge; `wrangler pages dev` boots clean; the 22-page link check runs
 the same day as the deploy, not the week before.
@@ -805,3 +880,31 @@ with no way to check either.
 (mean FK 8.8 against a §8.1 cap of 6.0) because it is internal research. Reader prose is M2-M3
 work against the §8 standard. Fixing the file early buys the build a better input; fixing it now
 would buy a second document to maintain.
+
+### 15.4 M1 and M2 built, and what the build found
+
+M0-M2 landed on `feature/languages-site` on 2026-10-27: the skeleton (shell, router, i18n,
+hand-rolled highlighter, tokens, six test files) and all 22 records. Four things the plan did not
+know until the code existed:
+
+- **§8.1 needs a label exception.** Flesch-Kincaid divides by sentence length, so a two-word chip
+  like `python.category = "General purpose"` scores 14.7. Forty-seven "offenders" were mostly
+  such chips. `readability.test.mjs` now skips a string with no sentence-ending punctuation and
+  four words or fewer; labels stay under human review (V3) and any word one introduces still has
+  to exist in the glossary (V4). The cap governs prose, which is what it always meant.
+- **Decision 9 propagates.** `difficulty: null` on fourteen records meant guarding four readers of
+  that field in `views.js` and three test files. The plan said what an Extended page shows; it did
+  not say that the data layer has to survive the absence.
+- **A string can survive a syntax error.** An unescaped inner quote in a JS literal folded
+  `"…print("` into arithmetic: `demo.code` became `NaN`, `node --check` passed, the module
+  imported. `data.test.mjs` now asserts the type of every text field. Add that assertion to any
+  future data file.
+- **The demo contract decides what can be claimed.** Eight records' outputs were executed here
+  (python3, node, sqlite3, ruby, bash, clang, clang++, swift all present). Ten more could not be:
+  no Java runtime (the binary is a stub), no php, go, rustc, kotlinc, R, julia, matlab, pwsh. Their
+  notes say "Not run here", which is the honest form §9.2 asked for and the only form the machine
+  allows.
+
+Two gates are red on purpose, and they are the first work of M3 and M4: nineteen real prose
+strings over the cap, and thirty-one of the thirty-five terms the records name missing from the
+glossary. `tools/languages/HANDOFF.md` lists both. Nothing here was fixed by weakening a test.
