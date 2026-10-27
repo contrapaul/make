@@ -1,36 +1,75 @@
-# Planning spine for the current initiative. Overwritten per initiative (bigpowers scope-work).
-initiative: one-afternoon-coding-projects-site
-dated: 2026-10-26
-core_value: A student gets a fun, doable, fully-briefed coding project for one
-  afternoon, drawn or browsed, with every term they will meet defined.
+# M5 — Languages site integration
+# Epic e03. Canonical plan: tools/build/languageplan.md §11 (M5 row), §7 (IA),
+# decision 14 (cross-links). Overwrites the e02 scope; e02 is shipped on main.
+# Scoped: 2026-10-28.
+feature_name: languages-site-m5-integration
+
+core_value: >
+  A student reaches the languages reference from the tools index page, can narrow
+  the 22 languages to the ones that matter to them, and each language page points
+  at real practice projects from the sibling site.
+
 summary: >
-  Static sub-site at tools/build/projects/ presenting all 150 one-afternoon
-  projects as compact briefs with four tabs: Random, Browse, Resources,
-  Glossary. Full approved plan: specs/product/PROJECTS_SITE_LATEST.md.
-  Context: tools/build/projects/HANDOFF.md.
+  M5 is the integration milestone of the languages site, a 1-day item in the
+  approved plan. Three deliverables: (1) filter chips on the index that narrow the
+  Core 8 and Extended 14 lists, with labels in chrome.js so the Chinese switcher
+  covers them; (2) a .trow entry for the site in tools/index.html, matching the
+  existing row markup; (3) cross-links from each language page's footer to project
+  ideas on the sibling projects site, only where the target project exists (plan
+  decision 14). All copy follows the site's style rules; the link target on the
+  200-home-page catch-all domain is verified by title, not status code.
+
 in_scope:
-  - Data conversion: projects.md to js data with 150 validated records (e02s01)
-  - Shell with tab strip, hash router, Browse tab with 9 category sections (e02s02)
-  - Random tab: one card, redraw, language/category/mode filters, pool count (e02s03)
-  - Resources tab: 3 link cards, languages card ghosted (e02s04)
-  - Glossary tab: localai mechanism port, 44 approved terms defined, auto-linking cards (e02s05)
-  - Style-audit guard test, npm test green, preflight, browser check, deploy (e02s06)
+  - e03s01: index filter — pure filter function over the 22 records with a
+    quantized category dimension (plan §7 names "filter chips by category", but
+    the raw category field is a varied phrase per record, so the chip set is a
+    design decision to be made at slice time with a named category vocabulary);
+    i18n labels for chips and the "no matches" state in chrome.js
+  - e03s02: tools/index.html nav row for /tools/languages/ matching the .trow
+    markup of the existing rows (label, blurb, tags, media placeholder)
+  - e03s03: language-page → sibling cross-links. The set of matching projects is
+    computed from the sibling's already-converted data (PROJECTS[].languages tags
+    in tools/build/projects/js/data/projects.js, 150 records). Deep-link shape
+    follows the sibling site's hash router; every link target is verified to
+    resolve to a real project, not the 200-homepage catch-all
+  - e03s04: i18n coverage for the new chrome strings (chips, cross-link footer,
+    no-match state) via chrome.js; existing 42 approved keys untouched. Note: V8
+    (Chinese-reader check) applies to any new key before M6 ship — the owner
+    assigns the reviewer
 out_of_scope:
-  - Paste-ready prompt generator: owner decision, future iteration.
-  - New npm dependencies or build step: owner decision, plain static.
-  - Glossary terms beyond the 44-approved list except owner review/comments: explicit gate.
-  - languages contraindication placeholder other than the ghost card: separate initiative.
+  - M6 ship pass (a11y + mobile walk, link re-validation, test/ ship decision,
+    deploy, smoke-test) — separate milestone, owner-gated
+  - Owner's M3 copy sign-off and V1-V8 browser walkthrough — owner-gated,
+    independent of M5
+  - v1.1 items: compare view, "I am not sure" chooser (plan decision 11)
+  - Chinese record prose (plan decision 8, English-only this release)
+  - Changes to the sibling projects site — its artifacts; its languages card
+    point-fix already shipped in this repo's working tree (2026-10-28)
+  - Sibling site deep-routes per-project IDs if the sibling does not support a
+    browse-by-language route — the fallback is a link to the browse tab with an
+    in-page filter set; shape decided at slice time
 constraints:
-  - No npm dependencies, no build step; plain static files.
-  - localai/style-guide.md rules enforced mechanically (no em dashes, no dot in the middle of case name, do not use an unexplained term to explain another term).
-  - All glossary URLs verified live before deploy.
+  - Static, zero dependencies, one index.html, hash router (plan decision 12)
+  - Copy lives in JS: style-rule guards must check runtime copy, not just HTML
+  - Link verification: the domain answers unknown paths with the homepage (200),
+    so a link is only "verified" if the target's title confirms the expected page
+  - Reading level: new reader-facing prose must pass the grade-6 readability gate
+  - i18n: chrome strings both languages, no machine translation
+  - PR shape: plan decision 15 says M5+M6 ship as one PR; the owner wants M6
+    after a readiness pass, so M5 ships as its own PR (deviation from decision
+    15, owner-directed 2026-10-28)
 success_criteria:
-  - 150 projects render on Browse; Random draws from filtered pool with pool count.
-  - All 44 terms defined; all card terms auto-resolved; all URLs live.
-  - npm test green; wrangler pages dev boots; phone and desktop browser checks pass.
+  - npm test green including: filter-purity tests (every record reachable, every
+    chip non-empty, no-match state), chrome-key parity test (new keys present in
+    both languages), cross-link integrity test (every generated href resolves to
+    a project id that exists in the sibling data)
+  - A student on the index: sees the 22 languages, filters to a narrow set, opens
+    one language page, and follows a footer link into the projects site
+  - tools/index.html shows the new row, consistent with the four existing rows
+  - The V8 Chinese check has a named owner before M6 (noted in the scope,
+    executed in M6)
 references:
-  - specs/product/PROJECTS_SITE_LATEST.md
-  - tools/build/projects/HANDOFF.md
-  - tools/build/projects/projects.md
-  - tools/build/projects/glossary-terms.md
-  - localai/style-guide.md
+  - tools/build/languageplan.md §7, §11 (M5, M6 rows), decisions 8/11/12/14/15
+  - tools/languages/HANDOFF.md "Suggested next session" item 3
+  - specs/product/PROJECTS_SITE_LATEST.md (sibling data model: PROJECTS records)
+  - tools/build/projects/js/data/projects.js (150 records, languages tags)

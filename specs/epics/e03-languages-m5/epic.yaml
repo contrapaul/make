@@ -1,0 +1,20 @@
+e03:
+  title: Languages site M5 — integration
+  scope: specs/product/SCOPE_LATEST.yaml
+  plan: tools/build/languageplan.md (M5 row, §7, decision 14)
+  stories:
+    - id: e03s01
+      title: index filter chips (category axis + i18n)
+      bcps: 3
+    - id: e03s02
+      title: nav row on tools index page
+      bcps: 1
+    - id: e03s03
+      title: language-page cross-links to sibling projects
+      bcps: 3
+  order: e03s01 -> e03s02 -> e03s03 (s02 is a 20-minute insert, runs between the two)
+  done_when:
+    - npm test green (all suites)
+    - wrangler pages dev boots clean
+    - the student walkthrough from SCOPE_LATEST.yaml success_criteria passes in a browser
+    - new chrome keys present in BOTH languages before M6 (V8 reviewer noted, not this epic)
