@@ -20,7 +20,7 @@ export const LANGUAGES = [
     tier: "core",
     category: "Blocks, not text",
     reads: "You snap coloured blocks together. Nothing needs to be typed correctly.",
-    makes: ["A story that answers back", "A simple game", "An animated name card"],
+    makes: ["A story that answers back", "A game of tag", "An animated name card"],
     demo: {
       title: "A cat says hello, then walks",
       language: "scratch",
@@ -693,7 +693,7 @@ export const LANGUAGES = [
       creator: "Graydon Hoare",
       org: "begun at Mozilla, now the Rust Project",
       year: "2015",
-      note: "Begun as Hoare's work at Mozilla; version 1.0 shipped in April 2015.",
+      note: "Begun as Hoare's work at Mozilla; version 1.0 was announced on 15 May 2015.",
     },
     stats: [
       { metric: "Share of surveyed developers using it", value: "18.0 %", as_of: "2026", source: "S1", note: "Twelfth of the languages in the survey, up two places on last year." },

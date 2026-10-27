@@ -38,7 +38,6 @@ const allLinks = () => {
   const add = (where, url, label) => out.push({ where, url, label });
   for (const rec of LANGUAGES) {
     rec.links.forEach((l, i) => add(`${rec.slug}.links[${i}]`, l.url, l.label));
-    if (rec.run_it.url) add(`${rec.slug}.run_it`, rec.run_it.url, null);
   }
   for (const g of GLOSSARY) {
     g.links.forEach((l, i) => add(`glossary.${g.id}.links[${i}]`, l.url, l.source));
@@ -47,17 +46,31 @@ const allLinks = () => {
   return out;
 };
 
+const runItLinks = () => {
+  const out = [];
+  for (const rec of LANGUAGES) {
+    if (rec.run_it.url) out.push({ where: `${rec.slug}.run_it`, url: rec.run_it.url, label: undefined });
+  }
+  return out;
+};
+
 const blocked = (url) => BOT_BLOCKED.some((host) => url.includes(`//${host}`) || url.includes(`//www.${host}`));
 
-test("every link is https, and every link has a label", () => {
-  const bad = allLinks().filter((l) => !/^https:\/\//.test(l.url) || !l.label || !l.label.trim());
+// A run-it button takes its text from chrome.js, not from the record, so it is
+// an unlabelled URL. It must still be https. Labelled links are the ones whose
+// text a student reads as a citation.
+const urlSweep = () => [...allLinks(), ...runItLinks()];
+const labelledLinks = () => allLinks().filter((l) => l.label !== undefined);
+
+test("every link is https, and every labelled link has a label", () => {
+  const bad = urlSweep().filter((l) => !/^https:\/\//.test(l.url) || (l.label !== undefined && !l.label.trim()));
   assert.deepEqual(bad.map((b) => `${b.where} = ${b.url}`), []);
 });
 
 test("the same URL never carries two labels", () => {
   const byUrl = new Map();
   const clash = [];
-  for (const l of allLinks()) {
+  for (const l of labelledLinks()) {
     if (byUrl.has(l.url) && byUrl.get(l.url) !== l.label) {
       clash.push(`${l.url}: "${byUrl.get(l.url)}" vs "${l.label}" at ${l.where}`);
     }

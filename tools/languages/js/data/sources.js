@@ -1,7 +1,9 @@
 /**
  * Where every number and every date on this site comes from.
- * A record points here with `stats[].source`. Keys, labels, and urls are copied
- * from the source list in tools/build/languages.md, so the two agree.
+ * A record points here with `stats[].source`. The `url` of each key is copied
+ * from the source list in tools/build/languages.md, so the two agree. The
+ * `label` is the short name a student reads, because one URL must never carry
+ * two names on this site: the citation text from the document goes in `note`.
  *
  * Source [S27] of that document is an internal note about auditing the first
  * edition's links. It has no URL, so it is not a source a student can be sent
@@ -66,10 +68,10 @@ export const SOURCES = {
     note: "",
   },
   S10: {
-    label: "College Board AP Computer Science A course page, exam format, and Java Quick Reference",
+    label: "AP Computer Science A",
     url: "https://apcentral.collegeboard.org/courses/ap-computer-science-a",
     as_of: "2026-10-26",
-    note: "",
+    note: "College Board course page, exam format, and the Java Quick Reference sheet.",
   },
   S11: {
     label: "W3C history pages: the 1989 WWW proposal and \"Some early ideas for HTML\"",
@@ -108,7 +110,7 @@ export const SOURCES = {
     note: "",
   },
   S17: {
-    label: "Julia Language: the original paper and project history",
+    label: "julialang.org",
     url: "https://julialang.org/",
     as_of: "2026-10-26",
     note: "",
@@ -156,13 +158,13 @@ export const SOURCES = {
     note: "",
   },
   S25: {
-    label: "Rust 1.0 announcement (April 2015) and The Rust Programming Language",
-    url: "https://doc.rust-lang.org/book/",
-    as_of: "2026-10-26",
-    note: "",
+    label: "Announcing Rust 1.0",
+    url: "https://blog.rust-lang.org/2015-05-15/Rust-1.0/",
+    as_of: "2015-05-15",
+    note: "Rust team, 15 May 2015. The Rust Book is offered as a course link, not as a source for a date.",
   },
   S26: {
-    label: "Swift documentation and Apple's 2015 open-source announcement",
+    label: "The Swift Book (free)",
     url: "https://docs.swift.org/swift-book/",
     as_of: "2026-10-26",
     note: "",
