@@ -1,0 +1,212 @@
+/* 1-Afternoon Coding Projects, editorial, warm-neutral paper.
+   Design direction: handwritable poster with editorial soul (see specs/product/PROJECTS_SITE_LATEST.md).
+   Max UI text ~20px (h1 is the single display exception). */
+:root {
+  --paper: #f2efe8;
+  --paper-deep: #e9e4d8;
+  --ink: #2b2620;
+  --ink-soft: #5b5348;
+  --line: #cfc7b6;
+  --accent: #3a6a5e;
+  --accent-ink: #f2efe8;
+  --hero: 14;
+  --font-serif: Georgia, 'Times New Roman', 'Songti SC', serif;
+  --font-grotesk: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', Consolas, 'Courier New', monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-grotesk);
+  font-size: 15px;
+  line-height: 1.45;
+  padding-bottom: 3rem;
+}
+header {
+  border-bottom: 3px solid var(--ink);
+  padding: 1.5rem 1.25rem 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+h1 {
+  font-family: var(--font-serif);
+  font-size: min(13vw, var(--hero) * 4px);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.tag {
+  margin: 0.5rem 0 0;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-top: 1.1rem;
+  overflow-x: auto;
+}
+.tabs a {
+  text-decoration: none;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0.55rem 0.95rem;
+  border-top: 3px solid transparent;
+  white-space: nowrap;
+}
+.tabs a.active { border-top-color: var(--accent); color: var(--accent); }
+.stage {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.4rem 1.25rem;
+  min-height: 55vh;
+}
+footer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+/* cards */
+.card {
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 1rem 1.1rem;
+}
+.card h3 {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  margin-bottom: 0.3rem;
+}
+.chip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  margin-right: 0.35rem;
+}
+.chip.mode-online { border-color: var(--accent); color: var(--accent); }
+.chip.lang { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mono { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); }
+/* buttons */
+button {
+  font: 600 15px var(--font-grotesk);
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  padding: 0.55rem 1.1rem;
+  cursor: pointer;
+}
+button:hover { background: var(--accent); border-color: var(--accent); }
+select {
+  font: 15px var(--font-grotesk);
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  padding: 0.45rem 0.5rem;
+}
+/* random tab */
+.random-hero {
+  border: 2px solid var(--ink);
+  background: var(--paper-deep);
+  padding: 1.4rem 1.3rem;
+}
+.random-hero h2 {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  margin-bottom: 0.35rem;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1.1rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--line);
+}
+.filter-row label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+.pool-line { font-size: 13px; color: var(--ink-soft); margin-top: 0.6rem; }
+/* browse */
+.browse-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+.browse-controls button { font-size: 13px; padding: 0.35rem 0.7rem; }
+.browse-controls button.off { background: var(--paper); color: var(--ink); }
+.section { margin-bottom: 1.6rem; }
+.section > h2 {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.8rem;
+}
+.card .desc { color: var(--ink-soft); margin: 0.25rem 0 0.5rem; }
+.subgroup {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0.7rem 0 0.45rem;
+}
+/* glossary */
+.tab-intro { color: var(--ink-soft); max-width: 640px; margin-bottom: 1.2rem; }
+.glossary-list { max-width: 720px; }
+.gloss-entry { border-bottom: 1px solid var(--line); padding: 0.8rem 0; }
+.gloss-entry h3 { font-family: var(--font-serif); font-size: 19px; margin-bottom: 0.3rem; }
+.gloss-entry p { margin: 0; }
+.gloss-more { font-size: 13px; color: var(--ink-soft); margin-top: 0.45rem; }
+.gloss-more a { color: var(--ink-soft); }
+.gloss-entry.is-target { outline: 2px solid var(--accent); outline-offset: 6px; background: rgba(255, 140, 60, 0.06); }
+a.gloss {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+  cursor: help;
+}
+a.gloss:hover, a.gloss:focus { color: var(--accent); }
+#gloss-tip {
+  position: fixed;
+  z-index: 50;
+  max-width: 340px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.6rem 0.8rem;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  border-radius: 2px;
+  pointer-events: none;
+  display: none;
+}
+#gloss-tip.is-visible { display: block; }
+/* resources */
+.res-list { display: grid; gap: 0.8rem; max-width: 720px; }
+.res-list a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.res-list a:hover { color: var(--accent); }
+.res-list .res .desc { color: var(--ink-soft); margin: 0.2rem 0 0; }
+.res-ghost { border-style: dashed; color: var(--ink-soft); }
+@media (min-width: 1200px) { :root { --hero: 18; } }
+/* card notes (e02s07) */
+.card-notes { margin-top: .5rem; border-top: 1px solid var(--line); font-size: .9em; }
+.card-notes summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+.card-notes .notes-why { margin: .4rem 0 .2rem; }
+.card-notes .notes-refs { margin: .3rem 0 0; }
+.card-notes .notes-refs a { color: var(--accent); text-decoration: none; margin-right: .8rem; }

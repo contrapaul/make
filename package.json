@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "node --test 'tools/soundboard/test/*.test.js'",
+    "test": "node --test 'tools/soundboard/test/*.test.js' 'tools/build/projects/test/*.test.mjs'",
     "test:browser": "node tools/soundboard/test/browser/run.mjs"
   },
   "devDependencies": {

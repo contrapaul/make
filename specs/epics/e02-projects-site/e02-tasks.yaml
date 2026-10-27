@@ -1,0 +1,97 @@
+# e02 — 1-Afternoon Coding Projects site
+# One vertical slice per story. Owner gate met: glossary-terms.md approved 2026-10-26.
+# Canonical plan: specs/product/PROJECTS_SITE_LATEST.md. Deviate from it = bug.
+
+- id: e02s01
+  slice: data layer — 150 records load and pass validation
+  stories:
+  - id: e02s01t01
+    seed: test/data.test.mjs (fail: js/data/projects.js absent)
+    task: Write a conversion script (tools/build/projects/build-data.mjs) that
+      parses projects.md into js/data/projects.js: one array of 150 records shaped
+      {id, name, part, category, mode, stack, languages, audience, description}.
+      source tables: 3, 6-col (name/online-offline/stack/purpose/description),
+      part 3 is 7-col (extra Target col). Category normalized to the plan's 9
+      buckets; Part 3 keeps its 5 sub-groups; languages normalized to tags for
+      filtering. ids kebab-case stable/unique. Test: 150 records, unique ids,
+      every record has id/name/stack/description/category.
+    verify: node --test tools/build/projects/test/data.test.mjs
+
+- id: e02s02
+  slice: shell + browse — the 150 cards in 9 sections, navigable
+  stories:
+  - id: e02s02t01
+    seed: test/buckets.test.mjs (normalize() maps the 9 code buckets)
+    task: tools/build/projects/js/data/buckets.js: normalize purposes/targets
+      before categorizing into the 9 buckets from the plan: Games & Fun,
+      Creative, Utilities, Task Processing, Data & Analysis, Web & DevOps,
+      Learning & CS, Productivity, Education (5 sub-groups: teacher tools,
+      learning aids, subject drill, accessibility & readability improvements,
+      admin & workflow). Pure function, unit-tested.
+    verify: node --test tools/build/projects/test/buckets.test.mjs
+  - id: e02s02t02
+    seed: test/router.test.mjs (the hash + tab map)
+    task: index.html shell (h1 + tab strip: browse/random/resources/glossary +
+      favicon), css/style.css, js/app.js hash router (#/random, #/browse,
+      #/resources, #/glossary[/<id>]), deep-links to browse cards. No build
+      step, no npm dependencies.
+    verify: node --test tools/build/projects/test/router.test.mjs
+  - id: e02s02t03
+    seed: test/browse.test.mjs (card markup from records)
+    task: js/tabs/browse.js: 150 cards go into 9 sections, section show/hide
+      toggles + show all/hide all; card = name, one-line description, stack,
+      mode chip, audience tag (part 3). No localStorage.
+    verify: node --test tools/build/projects/test/browse.test.mjs
+
+- id: e02s03
+  slice: random — one card, filterable, pooled
+  stories:
+  - id: e02s03t01
+    seed: test/random.test.mjs (pickRandom seeded with a deterministic RNG)
+    task: js/tabs/random.js per the plan: full card + "Another one" button;
+      filter rows are language/category/mode; draws from the filtered pool;
+      pool count is "one of 37 matching"; no immediate repeats if pool > 1
+      (pure pickRandom(pool, excludeId), seeded-RNG tested).
+    verify: node --test tools/build/projects/test/random.test.mjs
+
+- id: e02s04
+  slice: resources — the plan's exact 3 cards
+  stories:
+  - id: e02s04t01
+    seed: test/resources.test.mjs (3 entries exactly, languaging flag)
+    task: js/data/resources.js (the 3 links only). js/tabs/resources.js:
+      build.contrapaul.com (AI agent build/publish);
+      make.contrapaul.com/tools/build/languages ("coming soon" ghost card, no
+      live href, never 404s); edu.contrapaul.com/codewithai (AI programming
+      education materials).
+    verify: node --test tools/build/projects/test/resources.test.mjs
+
+- id: e02s05
+  slice: glossary — 44 terms that behave exactly like localai
+  stories:
+  - id: e02s05t01
+    seed: test/glossary.test.mjs (js/data/glossary.js: no 44-key → fail)
+    task: js/data/glossary.js from tools/build/projects/glossary-terms.md —
+      same shape as localai/js/data/glossary.js (verify that file first):
+      one data file, short + full definitions, alphabetical index, deep-links
+      #/glossary/<id>. All 44, all with sense notes.
+    verify: node --test tools/build/projects/test/glossary.test.mjs
+  - id: e02s05t02
+    seed: test/gloss-hover.test.mjs (card excerpt → linked terms)
+    task: js/gloss-hover.js + js/tabs/glossary.js: "exactly like localai"
+      mechanism (port the pattern from localai/js/tabs/glossary.js + its
+      hover mechanism): whole-word auto-links with conservative sense
+      approval, hover cards on class="gloss" terms, deep-links.
+    verify: node --test tools/build/projects/test/gloss-hover.test.mjs
+
+- id: e02s06
+  slice: gates — test, pre-flight, deploy, smoke
+  stories:
+  - id: e02s06t01
+    seed: npm test + node tools/build/projects/check-doc.mjs
+    task: Green gate: npm test green (all suites in tools/build/projects/test/);
+      no em dashes/middle dots anywhere in the site tree (consistency-with-
+      style audit lightly); wrangler pages dev booted cleanly; deployed;
+      smoke-test the live URL; check-doc.mjs: all glossary + resource links
+      live (re-script from tools/build/chk-links.cjs).
+    verify: npm test && npx wrangler pages deploy && node tools/build/projects/check-doc.mjs
