@@ -93,8 +93,9 @@ check and one `run_it` label case). The two failures are real and are the first 
 - Rust is "highest admired of the twenty most used (67.4 %)", never "most admired" plain.
 - Site prose: grade 6.0, no banned words (`simply`, `just`, `obvious`, `of course`, `page` for
   website, `run` for execute, `list` for array), no em dash, no middot inside a sentence.
-- Chinese strings in `js/data/chrome.js` are **unreviewed**. Every one is marked. They need a
-  human who reads Chinese (plan §12 V8) before any deploy that advertises the switcher.
+- Chinese strings in `js/data/chrome.js` are **signed off** (2026-10-27, by a reader who reads
+  Chinese at the owner's colleague). That is plan §12 V8 for the 42 chrome keys. Re-run V8 for any
+  new key. Record prose stays English in v1 (decision 8) and `content.lang_note` says so.
 - `tools/build/` hosts a second, unrelated project (the 150-project site). Never edit its
   artifacts from this work, including the link it advertises to `/tools/build/languages`, which
   404s. That project fixes its own link (owner ruling, 2026-10-27).

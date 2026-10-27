@@ -36,7 +36,8 @@ languages_site:
     text_face: serif system stack, zero font requests
     blueprint_file: tools/build/languages-blueprint.md ruled not a spec and deleted
   open:
-    - owner review of every Chinese chrome string (plan §12 V8, needs a human who reads Chinese)
     - M3 core pages, M4 extended pages, M5 integration, M6 ship
+    - 31 of the 35 terms the records name have no glossary entry (M4 owns it)
+    - 19 record prose cells read above grade six (the M3 copy pass)
     - the merged projects site links to /tools/build/languages, which does not exist; that project owns the fix
 
