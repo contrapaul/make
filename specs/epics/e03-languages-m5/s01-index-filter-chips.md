@@ -31,14 +31,14 @@ C. Selection: single-select, "all" default (simplest working model).
 
 ## Tasks
 
-- [ ] e03s01t01: pick the category vocabulary (A); code the `filterLanguages`
+- [x] e03s01t01: pick the category vocabulary (A); code the `filterLanguages`
       pure function + unit tests verifying every record is included under
       "all" and each non-empty chip includes only recorded records
       - verify: `node --test tools/languages/test/filter.test.mjs`
-- [ ] e03s01t02: wire chips into `indexView` (`views.js`); both tiers
+- [x] e03s01t02: wire chips into `indexView` (`views.js`); both tiers
       observable to react; no-match state visible when the filter exclude-all
       - verify: `node --test tools/languages/test/*.test.mjs`
-- [ ] e03s01t03: chrome strings for `filter.label`, `filter.<chip>`,
+- [x] e03s01t03: chrome strings for `filter.label`, `filter.<chip>`,
       `filter.all`, `filter.none` in both languages; update the chrome-parity
       test to cover the new keys
       - verify: `node --test tools/languages/test/chrome.test.mjs`
