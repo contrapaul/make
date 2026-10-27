@@ -149,7 +149,10 @@ no Chinese record prose (chrome only, decision 8).
    `lang` key that survives navigation. Every reader-facing string therefore lives in a data
    file, never inline in `views.js` (§8.2 rule extended to chrome). No machine translation in
    v1, and no unreviewed Chinese: each `zh` string is owner-approved before it merges, the same
-   gate as English copy. §12 asserts the two columns have identical key sets.
+   gate as English copy. **Signed off 2026-10-27** by a reader who reads Chinese, through the
+   owner's colleague: the 42 chrome strings are approved as they stand, and the switcher is on.
+   The approval covers chrome only. Record prose is still English and `content.lang_note` says so
+   in both languages. §12 asserts the two columns have identical key sets.
 9. **Difficulty notes (2026-10-26).** The agent drafts a 25-word note per Core language from
    cited evidence (the AP Java Quick Reference, The Book's pacing, real compiler error text),
    and the owner approves, rejects, or rewrites each one before M3. Extended 14 pages do not
@@ -729,7 +732,7 @@ Tests run in plain Node, no browser, no network in the default run (link checks 
 | V5 | Reduced-motion setting respected, no animation depends on hover |
 | V6 | 375 px, 768 px, 1440 px, no horizontal scroll, code blocks scroll internally |
 | V7 | One random page per deploy: numbers match the source, dates are visible |
-| V8 | Switch to Chinese as a reader who cannot read English: reach the index, one language page, and the glossary without touching English-only controls. Ask a Chinese-reading reviewer, not the model that wrote the strings |
+| V8 | Switch to Chinese as a reader who cannot read English: reach the index, one language page, and the glossary without touching English-only controls. Ask a Chinese-reading reviewer, not the model that wrote the strings. **Chrome strings passed this on 2026-10-27** (the owner's colleague, a reader of Chinese, approved the 42 chrome keys). Re-run it for any new key, and for record prose whenever that ships |
 
 **Gates:** CI green before merge; `wrangler pages dev` boots clean; the 22-page link check runs
 the same day as the deploy, not the week before.

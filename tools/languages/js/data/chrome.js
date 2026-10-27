@@ -4,8 +4,11 @@
  * lives in a record, and stays English in this version (decision 8).
  *
  * Shape: one key, then the string in each language.
- * Every Chinese string below awaits the owner's review before release. That is
- * a gate in plan §12 (V8), not a suggestion: no machine translation ships.
+ *
+ * The Chinese strings were signed off on 2026-10-27 by a reader who reads
+ * Chinese, at the owner's colleague, which is the gate in plan §12 (V8). That
+ * review covers chrome only: what a language *is* stays English in this
+ * version (decision 8), and each page says so once.
  *
  * The language picker needs no key here. A language is called by its own name
  * in every language.
