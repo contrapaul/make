@@ -50,8 +50,8 @@ check and one `run_it` label case). The two failures are real and are the first 
    strings: the test already exempts labels (any string with no sentence-ending punctuation and
    four words or fewer, such as `"General purpose"`), and that exemption is documented in the
    test file. Raising the bar to pass is the one move that is forbidden.
-2. **`terms exist in the glossary`** (M4) — the 22 records name 35 distinct terms; 6 have
-   entries. Missing: loop, event, tag, element, selector, rule, cascade, compiler, list, query,
+2. **`terms exist in the glossary`** (M4) — the 22 records name 35 distinct terms; 4 of them have
+   entries (variable, function, string, type). Missing: loop, event, tag, element, selector, rule, cascade, compiler, list, query,
    table, row, class, object, script, pointer, array, memory, garbage collection, goroutine,
    channel, matrix, null, plot, server, pipeline, data frame, block, ownership, borrow, optional.
    Write them to plan §10.1's rules: `short` under 12 words, `full` under grade 7.0, never define

@@ -877,3 +877,31 @@ with no way to check either.
 (mean FK 8.8 against a §8.1 cap of 6.0) because it is internal research. Reader prose is M2-M3
 work against the §8 standard. Fixing the file early buys the build a better input; fixing it now
 would buy a second document to maintain.
+
+### 15.4 M1 and M2 built, and what the build found
+
+M0-M2 landed on `feature/languages-site` on 2026-10-27: the skeleton (shell, router, i18n,
+hand-rolled highlighter, tokens, six test files) and all 22 records. Four things the plan did not
+know until the code existed:
+
+- **§8.1 needs a label exception.** Flesch-Kincaid divides by sentence length, so a two-word chip
+  like `python.category = "General purpose"` scores 14.7. Forty-seven "offenders" were mostly
+  such chips. `readability.test.mjs` now skips a string with no sentence-ending punctuation and
+  four words or fewer; labels stay under human review (V3) and any word one introduces still has
+  to exist in the glossary (V4). The cap governs prose, which is what it always meant.
+- **Decision 9 propagates.** `difficulty: null` on fourteen records meant guarding four readers of
+  that field in `views.js` and three test files. The plan said what an Extended page shows; it did
+  not say that the data layer has to survive the absence.
+- **A string can survive a syntax error.** An unescaped inner quote in a JS literal folded
+  `"…print("` into arithmetic: `demo.code` became `NaN`, `node --check` passed, the module
+  imported. `data.test.mjs` now asserts the type of every text field. Add that assertion to any
+  future data file.
+- **The demo contract decides what can be claimed.** Eight records' outputs were executed here
+  (python3, node, sqlite3, ruby, bash, clang, clang++, swift all present). Ten more could not be:
+  no Java runtime (the binary is a stub), no php, go, rustc, kotlinc, R, julia, matlab, pwsh. Their
+  notes say "Not run here", which is the honest form §9.2 asked for and the only form the machine
+  allows.
+
+Two gates are red on purpose, and they are the first work of M3 and M4: nineteen real prose
+strings over the cap, and thirty-one of the thirty-five terms the records name missing from the
+glossary. `tools/languages/HANDOFF.md` lists both. Nothing here was fixed by weakening a test.

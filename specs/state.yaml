@@ -15,7 +15,7 @@ languages_site:
   note: unrelated to projects_site; tools/build/ hosts both. Do not edit that project's artifacts from here.
   red_gates:
     - readability.test.mjs — 19 record strings over the FK 6.0 cap, owned by the M3 copy pass
-    - data.test.mjs — 29 of 35 terms named by records have no glossary entry, owned by M4
+    - data.test.mjs — 31 of 35 terms named by records have no glossary entry, owned by M4
   contrast: text and highlight colours are 5.36:1 to 15.83:1 on --paper; --rule is a hairline, not text
   decisions:
     reader: a student using the site alone, no teacher in the room
