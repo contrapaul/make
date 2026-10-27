@@ -10,6 +10,28 @@
 import { t } from "./i18n.js";
 import { href } from "./router.js";
 import { KINDS, filterLanguages } from "./filter.js";
+import { LIST as PROJECT_LISTS } from "./data/project-lists.js";
+
+/**
+ * e03s03: the one sibling route every cross-link targets. A single constant so
+ * test/xlink.test.mjs can pin it (owner decision 2026-10-28: the random tab is
+ * the only target that really answers), and no view may retype the path.
+ */
+export const XLINK_HREF = "/tools/build/projects/#/random";
+
+/**
+ * Pure: what the footer says for a language, or null when the join table has
+ * no row so the view omits the whole block (no empty chip, no awkward zero).
+ */
+export function projectLinksForLanguage(slug) {
+  const rec = PROJECT_LISTS[slug];
+  if (!rec || !rec.count) return null;
+  return {
+    names: rec.projects.map((p) => p.name),
+    count: rec.count,
+    href: XLINK_HREF,
+  };
+}
 import { demoBlock, runItLink } from "./demo.js";
 import { LANGUAGES } from "./data/languages.js";
 import { GLOSSARY } from "./data/glossary.js";
@@ -220,6 +242,23 @@ export function languageView(lang, rec) {
       list.append(li);
     }
     v.append(section("page.links", list));
+  }
+
+  // e03s03: footer cross-link into the sibling projects site. Omitted when
+  // the join table has no row: a language with no sibling tag gets no
+  // block, never an empty chip.
+  const xl = projectLinksForLanguage(rec.slug);
+  if (xl) {
+    const names = el("p", "prose", xl.names.join(", "));
+    const a = el("a", "xlink-link",
+      t(lang, "xlink.link", { count: xl.count }) +
+      (xl.count > xl.names.length ? t(lang, "xlink.more", { count: xl.count }) : "")
+    );
+    a.href = xl.href;
+    const box = el("div", "xlink-box");
+    box.append(el("h2", "sect-h", t(lang, "xlink.title")));
+    box.append(names, a);
+    v.append(box);
   }
   return v;
 }

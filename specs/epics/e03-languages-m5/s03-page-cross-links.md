@@ -47,22 +47,22 @@ Acceptance (owner-signed 2026-10-28):
 
 ## Tasks
 
-- [ ] e03s03t01: build `tools/languages/js/data/project-lists.js` — a
+- [x] e03s03t01: build `tools/languages/js/data/project-lists.js` — a
       generated module mapping each of the 22 language slugs to 3-4 matching
       sibling project `{id, name}` pairs (or fewer, or nothing)
       - verify: `node -e "import('...').then(m=>console.log(Object.keys(m.LIST).length))"` == 22
-- [ ] e03s03t02: a pure helper `projectLinksForLanguage(slug, list, fmt)`
+- [x] e03s03t02: a pure helper `projectLinksForLanguage(slug, list, fmt)`
       that returns the footer nodes (empty when the map has no entries);
       unit-test: (i) a core language has at least one entry, (ii) a language
       with no matches yields no block, (iii) the href deep-links to the
       chosen sibling route, (iv) every href ends with `#/random` (decision
       above)
       - verify: `node --test tools/languages/test/xlink.test.mjs`
-- [ ] e03s03t03: wire into `languageView` (`views.js`); copy in chrome.js in
+- [x] e03s03t03: wire into `languageView` (`views.js`); copy in chrome.js in
       both languages for the footer heading ("Practice projects with
       <language>") and the button/link wording; update chrome parity test
       - verify: `node --test tools/languages/test/*.test.mjs`
-- [ ] e03s03t04: pin the selected sibling deep-link shape with a regression
+- [x] e03s03t04: pin the selected sibling deep-link shape with a regression
       test (`xlinkHref` for a known slug). prevents a later sibling-route
       change from silently breaking the miles
       - verify: `node --test tools/languages/test/xlink.test.mjs`

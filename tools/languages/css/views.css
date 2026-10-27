@@ -71,6 +71,25 @@
   font-size: var(--t-small);
 }
 
+/* e03s03: the footer cross-link to the sibling projects site. Rules match
+   the site-wide section dividers; the single link stays the only ink that
+   moves. */
+.xlink-box {
+  border-top: 1px solid var(--rule);
+  margin-block-start: var(--s4);
+  padding-block-start: var(--s3);
+}
+
+.xlink-box .sect-h {
+  font-size: var(--t-small);
+}
+
+.xlink-link {
+  color: var(--ink);
+  display: inline-block;
+  margin-block-start: var(--s2);
+}
+
 .idx-hero {
   margin-block-end: var(--s4);
 }
