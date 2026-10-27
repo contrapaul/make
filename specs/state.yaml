@@ -3,19 +3,20 @@ active_epic: e01
 next: e01s01 (Claude) and e01s02 (local AI) in parallel
 
 languages_site:
-  status: m2-complete-m3-ready
+  status: glossary-complete-m3-review-ready
   plan: tools/build/languageplan.md
   source: tools/build/languages.md
   handoff: tools/languages/HANDOFF.md
-  branch: feature/languages-site
+  branch: feature/languages-glossary
   worktree: ../languages-site
   baseline: npm test 53 pass / 0 fail (soundboard suite, unchanged by this project)
-  suite: node --test tools/languages/test/*.test.mjs — 34 pass, 2 fail, 2 skipped
-  first_step: clear the two red gates (19 readability strings, 29 missing glossary terms), then M3
+  suite: node --test tools/languages/test/*.test.mjs — 37 pass, 0 fail, 1 skipped (the live link check, LINKS=1)
+  first_step: walk V1-V8 in a browser, then M3 (the owner reads the Core 8 pages and signs the copy)
   note: unrelated to projects_site; tools/build/ hosts both. Do not edit that project's artifacts from here.
-  red_gates:
-    - readability.test.mjs — 19 record strings over the FK 6.0 cap, owned by the M3 copy pass
-    - data.test.mjs — 31 of 35 terms named by records have no glossary entry, owned by M4
+  live: https://make.contrapaul.com/tools/languages/ (main carries M1+M2; this branch carries the glossary)
+  gates_closed:
+    - readability.test.mjs — the 19 over-cap strings were split into short clauses, facts unchanged
+    - data.test.mjs — all 35 terms named by records now have an entry; the glossary holds 37
   contrast: text and highlight colours are 5.36:1 to 15.83:1 on --paper; --rule is a hairline, not text
   decisions:
     reader: a student using the site alone, no teacher in the room

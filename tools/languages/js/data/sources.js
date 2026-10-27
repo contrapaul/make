@@ -159,7 +159,7 @@ export const SOURCES = {
   },
   S25: {
     label: "Announcing Rust 1.0",
-    url: "https://blog.rust-lang.org/2015-05-15/Rust-1.0/",
+    url: "https://blog.rust-lang.org/2015/05/15/Rust-1.0.html",
     as_of: "2015-05-15",
     note: "Rust team, 15 May 2015. The Rust Book is offered as a course link, not as a source for a date.",
   },
