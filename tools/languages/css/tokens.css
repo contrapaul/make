@@ -1,0 +1,44 @@
+/* tokens.css — design tokens for the languages site. Source: tools/build/languageplan.md 6.3.1. Ink-on-paper. Divorced from localai, codewithai, and the root theme (decision 16). Do not @import any other sheet. */
+
+:root {
+  /* colour (paper-ink-hairline) */
+  --paper: #f7f4ec;
+  --ink: #1b1a17;
+  --ink-quiet: #5c584e;
+  --rule: #cdc7b8;
+  --accent: #a33d1f;
+  --focus: #1b1a17;
+
+  /* syntax tokens, each >= 4.5:1 on --paper (plan rule 5) */
+  --hl-key: #7a2c14;
+  --hl-str: #2c5c3a;
+  --hl-com: #6a6455;
+  --hl-num: #3a4a7a;
+
+  /* type: text is serif by owner decision 17; code is mono */
+  --font-text: Charter, "Bitstream Charter", "Sitka Text", Cambria, serif;
+  --font-code: "SF Mono", "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+
+  /* 8 pt spacing rhythm: 8 16 24 32 48 64 96 */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 48px;
+  --s6: 64px;
+  --s7: 96px;
+
+  /* type scale: 15 17 20 24 32 48 */
+  --t-body: 17px;
+  --t-small: 15px;
+  --t-h3: 20px;
+  --t-h2: 24px;
+  --t-h1: 32px;
+  --t-display: 48px;
+
+  --radius-sm: 0px;
+  --radius-lg: 2px;
+
+  --motion-fast: 120ms;
+  --motion-slow: 200ms;
+}

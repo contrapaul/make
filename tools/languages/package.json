@@ -1,0 +1,9 @@
+{
+  "name": "languages-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tools/languages/test/*.test.mjs\"",
+    "test:links": "node --test \"tools/languages/test/links.test.mjs\""
+  }
+}
