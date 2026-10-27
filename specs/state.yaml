@@ -3,17 +3,17 @@ active_epic: e01
 next: e01s01 (Claude) and e01s02 (local AI) in parallel
 
 languages_site:
-  status: glossary-complete-m3-review-ready
+  status: glossary-live-on-main
   plan: tools/build/languageplan.md
   source: tools/build/languages.md
   handoff: tools/languages/HANDOFF.md
-  branch: feature/languages-glossary
+  branch: shipped through PR #34 (squash d9a5e64 on main); local work branches can go
   worktree: ../languages-site
   baseline: npm test 53 pass / 0 fail (soundboard suite, unchanged by this project)
   suite: node --test tools/languages/test/*.test.mjs — 37 pass, 0 fail, 1 skipped (the live link check, LINKS=1)
   first_step: walk V1-V8 in a browser, then M3 (the owner reads the Core 8 pages and signs the copy)
   note: unrelated to projects_site; tools/build/ hosts both. Do not edit that project's artifacts from here.
-  live: https://make.contrapaul.com/tools/languages/ (main carries M1+M2; this branch carries the glossary)
+  live: https://make.contrapaul.com/tools/languages/ — production serves M1, M2 and the finished glossary (37 entries)
   gates_closed:
     - readability.test.mjs — the 19 over-cap strings were split into short clauses, facts unchanged
     - data.test.mjs — all 35 terms named by records now have an entry; the glossary holds 37
