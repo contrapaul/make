@@ -27,6 +27,50 @@
 
 /* ---------- index view ---------- */
 
+/* e03s01: the kind chips. Plain ink-on-paper buttons: bordered, flat, the
+   active one filled. No transitions beyond the site-wide token. */
+.chips-line {
+  margin-block-end: var(--s2);
+  font-size: var(--t-small);
+}
+
+.chips-label {
+  color: var(--ink-quiet);
+  margin-inline-end: var(--s1);
+}
+
+.chips {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  vertical-align: middle;
+}
+
+.chip {
+  font: var(--t-small) var(--font-text);
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 0 var(--s2);
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--ink);
+}
+
+.chip-on {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.lrow-none {
+  color: var(--ink-quiet);
+  font-size: var(--t-small);
+}
+
 .idx-hero {
   margin-block-end: var(--s4);
 }

@@ -20,7 +20,7 @@ const html = readFileSync(new URL("index.html", root), "utf8");
  * reaches `t()` through a variable. A namespace prefix keeps the last pattern
  * from catching class names and file names.
  */
-const NAMESPACE = "site|nav|lang|foot|footer|index|page|demo|glossary|notfound|content|about";
+const NAMESPACE = "site|nav|lang|foot|footer|index|page|demo|glossary|notfound|content|about|filter";
 const ASK_SHAPE = new RegExp(`"((?:${NAMESPACE})\\.[a-z_]+(?:\\.[a-z_]+)*)"`, "g");
 
 const KEYS_ASKED_FOR = (() => {
