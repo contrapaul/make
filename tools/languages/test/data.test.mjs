@@ -106,7 +106,6 @@ test("terms exist in the glossary", () => {
 
 test(
   "next points at a real slug",
-  { skip: "waived until milestone M2 fills the catalogue; it names TypeScript, which is not a record yet" },
   () => {
     const slugs = new Set(LANGUAGES.map((r) => r.slug));
     for (const rec of LANGUAGES) {

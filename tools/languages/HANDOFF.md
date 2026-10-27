@@ -17,10 +17,10 @@ no teacher in the room. Source of facts: `tools/build/languages.md` (second edit
 | M0 decisions frozen | **Done.** Seventeen decisions in plan §3. The eight Core difficulty ratings were accepted by the owner "for now" on 2026-10-26 |
 | M1 skeleton | **Done and committed.** Shell, router, i18n, hand-rolled highlighter, design tokens, six test files |
 | M2 content data | **Done and committed.** All 22 records, every field filled, every number sourced |
-| M3 Core 8 pages | **Not started.** Two test gates are red and belong to M3 and M4 (see Red below) |
-| M4 Extended 14 pages | Not started |
-| M5 integration | Not started |
-| M6 ship | Not started. Nothing is deployed. `origin/feature/languages-site` exists; no PR opened |
+| M3 Core 8 pages | **Ready for the owner's read.** The pages render from the data through the template in `js/views.js`; the 19 over-grade strings are rewritten and the reading gate is green. What M3 still lacks is the human walkthrough (V1-V8 below) and the owner's sign-off on the copy |
+| M4 Extended 14 pages + glossary | **Done in data.** The 14 Extended pages use the same template with `difficulty: null` (decision 9). The glossary holds **37 entries** and every term the 22 records name now has one |
+| M5 integration | Not started. The index filter, the `tools/index.html` card, and the cross-links to the sibling site (only where its target exists) |
+| M6 ship | **Partly done, and by the owner's instruction.** `make.contrapaul.com/tools/languages/` serves production from `main`. Still owed: the a11y and mobile passes, a link re-validation on the day, and the decision about shipping `test/` in the deployed tree (see Ship) |
 
 ## Commands
 
@@ -39,23 +39,25 @@ server above — the site is static and needs no functions for these pages.
 Root `npm test` runs the soundboard suite only. It does **not** include this site's tests, and
 the repo has no CI. Nothing will catch a regression here automatically. Say so in any review.
 
-## Red: two gates, both by design
+## Green: the two gates that were red, and how they closed
 
-`node --test test/*.test.mjs` → 34 pass, 2 fail, 2 skipped (the skips are the `LINKS=1` live
-check and one `run_it` label case). The two failures are real and are the first work of M3/M4.
+`node --test test/*.test.mjs` → **37 pass, 0 fail, 1 skipped** (the skip is the `LINKS=1` live
+check, which passes on its own). Both gates closed on 2026-10-27.
 
-1. **`record prose reads at grade six or below`** (M3) — 19 record strings score above the
-   Flesch-Kincaid 6.0 cap. They are all short factual notes I wrote, mostly `history.note`.
-   Fix = rewrite with short clauses, one idea each. Do not raise the cap and do not exempt more
-   strings: the test already exempts labels (any string with no sentence-ending punctuation and
-   four words or fewer, such as `"General purpose"`), and that exemption is documented in the
-   test file. Raising the bar to pass is the one move that is forbidden.
-2. **`terms exist in the glossary`** (M4) — the 22 records name 35 distinct terms; 4 of them have
-   entries (variable, function, string, type). Missing: loop, event, tag, element, selector, rule, cascade, compiler, list, query,
-   table, row, class, object, script, pointer, array, memory, garbage collection, goroutine,
-   channel, matrix, null, plot, server, pipeline, data frame, block, ownership, borrow, optional.
-   Write them to plan §10.1's rules: `short` under 12 words, `full` under grade 7.0, never define
-   a term with a term that has no entry.
+1. **`record prose reads at grade six or below`** — 19 strings were over the Flesch-Kincaid 6.0
+   cap. Fixed by rewriting each with short clauses, one idea each, facts and dates untouched.
+   **The cap was not raised and no string was newly exempted.** The only exemption is the
+   documented label rule: a string of four words or fewer with no sentence-ending punctuation is
+   a chip, not prose, because FK divides by sentence length and would score `"General purpose"`
+   at grade 14.7. Keep it that way; do not widen it.
+2. **`terms exist in the glossary`** — the 22 records name 35 distinct terms and all 35 now have
+   entries, so `js/data/glossary.js` holds 37 (35 plus two the records do not name but the copy
+   leans on). Rules kept: `short` under 12 words, each `full` under 7.0 with the set mean under
+   6.5, and **never define a term with a term that has no entry**. Two entries broke that rule
+   while being written and were repaired: `ownership` said "lifetime", and `pointer` was a
+   verbless fragment.
+
+Adding a record term without its glossary entry fails the suite on purpose.
 
 ## Traps I already fell into
 
@@ -114,12 +116,38 @@ is already identical on both sides and `tools/build/languageplan.md` will confli
 branch's version. Conventional Commits with subject ≤ 72 characters; the pre-commit hook blocks a
 longer one, and a blocked commit unstages, so re-`git add`.
 
+## Live, and what "deploy" means here
+
+Production serves this site at **`https://make.contrapaul.com/tools/languages/`** (owner's call on
+2026-10-27: land it on `main`, do not move it under `tools/build/`). Two things a newcomer should
+not have to discover the hard way:
+
+- `make` is a **git-integrated Cloudflare Pages project**, so there is no deploy command to run.
+  Pushing a branch mints a Preview at `https://<deployment-id>.make-dl1.pages.dev`; merging to
+  `main` is the production deploy. List them with
+  `wrangler pages deployment list --project-name make` (run wrangler from the main checkout, which
+  has it; it is authenticated as contrapaul@gmail.com).
+- **Pages answers an unknown path with the home page and status 200.** `make.contrapaul.com/tools/build/languages`
+  and `make.contrapaul.com/nope-does-not-exist` both return the root `index.html` titled
+  `contrapaul / make`. A wrong link here is a silent wrong page, never a 404, so check the
+  `<title>` when verifying any URL on this domain.
+
+One packaging question is still open and belongs to M6: the deploy publishes the whole tree, so
+`/tools/languages/test/data.test.mjs` is fetchable in production (200, `application/javascript`).
+Nothing secret is in it. Either exclude `test/` from what Pages serves, or decide on purpose to
+ship it; do not leave it as an accident.
+
 ## Suggested next session
 
-1. Move the main checkout off `main`, open no PR yet.
-2. Fix the 19 readability strings, then close the glossary gap. Suite green = M3 unblocked.
-3. M3: the language page as built in `views.js` already renders every section; M3 is content and
-   layout polish, plus `wrangler pages dev` on a real boot, not a placeholder record.
-4. Owner review of Core 8 pages as one pass (decision 13) before Extended is touched.
-5. Deploy is M6, with the same-day `LINKS=1` run and a V1-V8 log in
-   `specs/VERIFICATION_LANGUAGES_LATEST.md`.
+1. Walk **V1-V8** (plan §12) in a real browser against production: keyboard, screen reader, 375px,
+   reduced motion, print, and the Chinese switcher with a person who reads Chinese. Log it in
+   `specs/VERIFICATION_LANGUAGES_LATEST.md`. Nothing has been seen in a browser by the authors of
+   this code, which is the largest unknown left.
+2. M3's owner review: read the Core 8 pages as one pass (decision 13) and sign or amend the copy.
+   The eight difficulty notes were accepted "for now" on 2026-10-26; the sentence rewrites that
+   brought them under grade six have **not** been read by the owner since.
+3. M5: the index filter, a `tools/index.html` card (that page links Inteam, tone-trainer, esp32,
+   and soundboard — **no** Languages row exists yet), and cross-links to the sibling site only
+   where its target really answers. Remember the 200-home-page trap above when testing a link.
+4. Before the sibling's `/tools/build/languages` href is fixed, say so out loud: it is their
+   artifact (decision 2), and it currently shows the wrong page rather than an error.
