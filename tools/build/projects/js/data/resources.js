@@ -1,6 +1,6 @@
 // e02s04t01: the 3 Resources-tab links (data only, "3 links only" per plan).
-// Ghost entry has url: null - the languages page is not deployed yet, so we
-// show no link rather than a 404.
+// The languages card was ghosted (url: null) until the page shipped; it is
+// live at /tools/languages/ (PR #34), so it is a normal link now.
 export const RESOURCES = [
   {
     id: 'build',
@@ -11,8 +11,8 @@ export const RESOURCES = [
   {
     id: 'languages',
     title: 'Languages, one screen each',
-    url: null,
-    desc: 'A hand-built reference covering the 22 languages that appear in these 150 rows. In progress: no link yet.',
+    url: '/tools/languages/',
+    desc: 'A hand-built reference covering the 22 languages that appear in these 150 rows, with a glossary.',
   },
   {
     id: 'codewithai',

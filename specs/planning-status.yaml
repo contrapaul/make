@@ -1,0 +1,3 @@
+workflow_mode: solo-git
+active_epic: e03
+next: e03s01 -> e03s02 -> e03s03 (specs/epics/e03-languages-m5/)

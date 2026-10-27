@@ -11,7 +11,7 @@ Load subdirectory context by file glob:
 
 | Glob | Context |
 |------|---------|
-| `tools/build/projects/**` | New tabbed "1-Afternoon Coding Projects" site (PLANNED, not built) — read `tools/build/projects/HANDOFF.md` and `specs/product/PROJECTS_SITE_LATEST.md` before any change; glossary term-list checkpoint is owner-gated |
+| `tools/build/projects/**` | Tabbed "1-Afternoon Coding Projects" site (built, live; e02 done) — read `tools/build/projects/HANDOFF.md` and `specs/product/PROJECTS_SITE_LATEST.md` before any change; glossary terms are in `glossary-terms.md` (owner-approved) |
 | `functions/api/**` | TypeScript Functions API — read `specs/tech-architecture/tech-stack.md` and the relevant `_lib/` helper first |
 | `bloodbowl/**` | Flagship game site — check `bloodbowl/REFACTOR-PLAN.md` and `bloodbowl/rebuild.md` before changes |
 | `workers/bb-live/**` | Durable Object (LiveGame) — highest-complexity area; P0/P1 risk tier |

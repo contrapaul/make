@@ -1,5 +1,5 @@
 // e02s04t01 seed: the 3 Resources cards, data-only.
-// 3 entries exactly, the languages one ghosted (url: null, never 404s).
+// 3 entries exactly, all live (the languages page shipped at /tools/languages/).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { RESOURCES } from '../js/data/resources.js';
@@ -10,16 +10,11 @@ test('resources: exactly 3 entries, ids pinned by the plan', () => {
   assert.deepEqual(RESOURCES.map(r => r.id), ['build', 'languages', 'codewithai']);
 });
 
-test('resources: live entries point at the two real sites', () => {
+test('resources: all entries point at real destinations', () => {
   const byId = Object.fromEntries(RESOURCES.map(r => [r.id, r]));
   assert.equal(byId.build.url, 'https://build.contrapaul.com');
+  assert.equal(byId.languages.url, '/tools/languages/');
   assert.equal(byId.codewithai.url, 'https://edu.contrapaul.com/codewithai');
-});
-
-test('resources: languages is the ghost card (no href, no 404)', () => {
-  const ghost = RESOURCES.find(r => r.id === 'languages');
-  assert.equal(ghost.url, null);
-  assert.ok(ghost.desc.toLowerCase().includes('in progress'), 'ghost card signals in-progress');
 });
 
 test('resources: tabs module re-exports the same data (no duplicates)', () => {
@@ -37,8 +32,7 @@ test('resources: render lists live links, ghost as plain card', () => {
   const stage = { innerHTML: '' };
   renderResources(stage);
   assert.ok(stage.innerHTML.includes('href="https://build.contrapaul.com"'), 'build link');
+  assert.ok(stage.innerHTML.includes('href="/tools/languages/"'), 'languages link');
   assert.ok(stage.innerHTML.includes('href="https://edu.contrapaul.com/codewithai"'), 'codewithai link');
-  assert.ok(stage.innerHTML.includes('res-ghost'), 'ghost card class');
-  const live = (stage.innerHTML.match(/href="https?:/g) || []).length;
-  assert.equal(live, 2, 'no extra live hrefs, ghost included');
+  assert.ok(!stage.innerHTML.includes('res-ghost'), 'no ghost card left');
 });
