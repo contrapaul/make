@@ -3,14 +3,20 @@ active_epic: e01
 next: e01s01 (Claude) and e01s02 (local AI) in parallel
 
 languages_site:
-  status: m0-in-progress
+  status: m2-complete-m3-ready
   plan: tools/build/languageplan.md
   source: tools/build/languages.md
+  handoff: tools/languages/HANDOFF.md
   branch: feature/languages-site
   worktree: ../languages-site
   baseline: npm test 53 pass / 0 fail (soundboard suite, unchanged by this project)
-  first_step: owner signs the 8 Core difficulty notes (plan §6.5), then M1 skeleton
+  suite: node --test tools/languages/test/*.test.mjs — 34 pass, 2 fail, 2 skipped
+  first_step: clear the two red gates (19 readability strings, 29 missing glossary terms), then M3
   note: unrelated to projects_site; tools/build/ hosts both. Do not edit that project's artifacts from here.
+  red_gates:
+    - readability.test.mjs — 19 record strings over the FK 6.0 cap, owned by the M3 copy pass
+    - data.test.mjs — 29 of 35 terms named by records have no glossary entry, owned by M4
+  contrast: text and highlight colours are 5.36:1 to 15.83:1 on --paper; --rule is a hairline, not text
   decisions:
     reader: a student using the site alone, no teacher in the room
     location: tools/languages/ (own sub-site, static, no deps)
@@ -30,6 +36,7 @@ languages_site:
     text_face: serif system stack, zero font requests
     blueprint_file: tools/build/languages-blueprint.md ruled not a spec and deleted
   open:
-    - owner sign-off on the 8 Core difficulty notes (plan §6.5)
-    - proposed token values in plan §6.3.1 (tuned against the contrast rule in M1)
+    - owner review of every Chinese chrome string (plan §12 V8, needs a human who reads Chinese)
+    - M3 core pages, M4 extended pages, M5 integration, M6 ship
+    - the merged projects site links to /tools/build/languages, which does not exist; that project owns the fix
 
