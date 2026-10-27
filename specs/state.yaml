@@ -1,17 +1,42 @@
 workflow_mode: solo-git
-active_epic: e02
-next: (e02 complete 2026-10-26)
+active_epic: e01
+next: e01s01 (Claude) and e01s02 (local AI) in parallel
 
-projects_site:
-  status: e02-built (all 6 stories done, deployed 2026-10-26)
-  plan: specs/product/PROJECTS_SITE_LATEST.md
-  handoff: tools/build/projects/HANDOFF.md
-  first_step: produce glossary term list (~50-65 terms) for owner approval, then planning spine, then build per plan
+languages_site:
+  status: m2-complete-m3-ready
+  plan: tools/build/languageplan.md
+  source: tools/build/languages.md
+  handoff: tools/languages/HANDOFF.md
+  branch: feature/languages-site
+  worktree: ../languages-site
+  baseline: npm test 53 pass / 0 fail (soundboard suite, unchanged by this project)
+  suite: node --test tools/languages/test/*.test.mjs — 34 pass, 2 fail, 2 skipped
+  first_step: clear the two red gates (19 readability strings, 29 missing glossary terms), then M3
+  note: unrelated to projects_site; tools/build/ hosts both. Do not edit that project's artifacts from here.
+  red_gates:
+    - readability.test.mjs — 19 record strings over the FK 6.0 cap, owned by the M3 copy pass
+    - data.test.mjs — 31 of 35 terms named by records have no glossary entry, owned by M4
+  contrast: text and highlight colours are 5.36:1 to 15.83:1 on --paper; --rule is a hairline, not text
   decisions:
-    location: tools/build/projects/ (own sub-site, static, no deps)
-    scope: all 150 projects (Parts 1-3 of tools/build/projects.md)
-    presentation: compact briefs only (no prompt generator)
-    tab2_sections: 9 normalized categories (Part 3 = Education with 5 sub-groups)
-    tab3_resources: build.contrapaul.com, make .../tools/build/languages (ghosted coming-soon), edu .../codewithai
-    tab4_glossary: localai mechanism, verbatim port; auto-links on project cards
-    checkpoint: term list approved by owner BEFORE any definitions written
+    reader: a student using the site alone, no teacher in the room
+    location: tools/languages/ (own sub-site, static, no deps)
+    demo_depth: L1 copy plus syntax highlight, no runtimes and no sandboxes
+    catalogue: 22 records, 20 finished from languages.md second edition plus PowerShell
+    tiers: Core 8 (Scratch, HTML, CSS, JavaScript, Python, SQL, Java, TypeScript) and Extended 14
+    glossary: this site owns the language terms; other sites link to #/glossary/<term-id>
+    i18n: switcher ships, chrome strings bilingual, record prose English in v1, no machine translation
+    difficulty_notes: agent drafts for Core 8 only, owner signs each before M3, Extended shows none
+    highlighting: hand-rolled ~250-line tokenizer, escape then wrap, no external library
+    v1_scope: compare view and "I am not sure" chooser deferred to v1.1
+    routing: hash router, one index.html, static index fallback for crawlers
+    review_cadence: Core 8 as one pass, then Extended in 3 batches
+    cross_links: only where the sibling target exists at build time
+    git_shape: one PR per milestone (M0+M1, M2, M3, M4, M5+M6)
+    visual_system: ink-on-paper, own tokens.css, divorced from localai, codewithai, and root theme
+    text_face: serif system stack, zero font requests
+    blueprint_file: tools/build/languages-blueprint.md ruled not a spec and deleted
+  open:
+    - owner review of every Chinese chrome string (plan §12 V8, needs a human who reads Chinese)
+    - M3 core pages, M4 extended pages, M5 integration, M6 ship
+    - the merged projects site links to /tools/build/languages, which does not exist; that project owns the fix
+

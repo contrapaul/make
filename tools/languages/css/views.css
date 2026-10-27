@@ -1,0 +1,231 @@
+/* views.css — index and language-page views for the languages site. Colour lives only in tokens.css; no hex codes here. */
+
+/* ---------- navigation + view shell ---------- */
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1) var(--s2);
+  font-size: var(--t-small);
+  color: var(--ink-quiet);
+  margin-block-end: var(--s3);
+}
+
+.nav a {
+  color: var(--ink-quiet);
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.view {
+  display: block;
+}
+
+/* ---------- index view ---------- */
+
+.idx-hero {
+  margin-block-end: var(--s4);
+}
+
+.idx-hero h1,
+.fallback h1 {
+  font-size: var(--t-display);
+  line-height: 1.1;
+  margin-block-end: var(--s2);
+}
+
+.idx-hero p,
+.fallback p {
+  color: var(--ink-quiet);
+  font-size: var(--t-small);
+}
+
+.tier-head {
+  font-size: var(--t-h2);
+  margin-block-start: var(--s5);
+  margin-block-end: var(--s3);
+  color: var(--ink);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--s3);
+}
+
+.card {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: var(--s2);
+}
+
+.card h3 {
+  font-size: var(--t-h3);
+  margin-block: 0 var(--s1);
+}
+
+.card .meta {
+  font-size: var(--t-small);
+  color: var(--ink-quiet);
+  margin-block: 0;
+}
+
+.list-ref {
+  list-style: none;
+  padding-inline-start: 0;
+  margin-block: 0;
+  display: grid;
+  gap: var(--s1);
+  font-size: var(--t-small);
+}
+
+.row-ref {
+  border-block-end: 1px solid var(--rule);
+  padding-block: var(--s1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--s1);
+}
+
+/* ---------- language page view ---------- */
+
+.page {
+  display: block;
+}
+
+.kicker {
+  font-size: var(--t-h3);
+  margin-block: 0 var(--s4);
+}
+
+.sec {
+  margin-block-start: var(--s4);
+}
+
+.sec > h2 {
+  font-size: var(--t-h2);
+  margin-block: 0 var(--s2);
+}
+
+.makes {
+  list-style: disc;
+  padding-inline-start: var(--s3);
+  margin-block: 0;
+}
+
+/* ---------- code block (plan rule 6: paper ground, left stripe, never a dark panel) ---------- */
+
+.block {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--ink);
+  border-radius: var(--radius-lg);
+  padding: var(--s2);
+}
+
+.block pre {
+  overflow-x: auto;
+  margin-block: 0;
+}
+
+/* syntax token classes (plan §9.2 highlighter output) */
+
+.token-key {
+  color: var(--hl-key);
+}
+
+.token-str {
+  color: var(--hl-str);
+}
+
+.token-com {
+  color: var(--hl-com);
+}
+
+.token-num {
+  color: var(--hl-num);
+}
+
+/* ---------- toolbar: Copy / Run it ---------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin-block-start: var(--s2);
+}
+
+.btn {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: var(--radius-lg);
+  padding: var(--s1) var(--s2);
+  font-family: var(--font-text);
+  font-size: var(--t-small);
+  cursor: pointer;
+  transition: color var(--motion-fast);
+}
+
+.btn:hover {
+  color: var(--accent);
+}
+
+.out {
+  border-top: 1px solid var(--rule);
+  margin-block-start: var(--s2);
+  padding-block-start: var(--s1);
+  font-size: var(--t-small);
+}
+
+.out .tag {
+  color: var(--ink-quiet);
+  display: block;
+  margin-block-end: var(--s1);
+}
+
+/* ---------- glossary surfaces ---------- */
+
+.gloss {
+  border-bottom: 1px dotted var(--ink-quiet);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.gloss:hover {
+  color: var(--accent);
+}
+
+.card-pop {
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  box-shadow: 0 1px 0 var(--rule);
+  padding: var(--s2);
+  max-width: 46ch;
+  border-radius: var(--radius-lg);
+  font-size: var(--t-small);
+}
+
+/* ---------- no-JS fallback (same look as .idx) ---------- */
+
+.fallback {
+  display: block;
+  margin-block-end: var(--s4);
+}
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 400px) {
+  :root {
+    --t-display: 32px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
