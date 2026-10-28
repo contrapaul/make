@@ -3,7 +3,7 @@
 export const NOTES = [
 {
   "id": "p001-flappy-bird-clone",
-  "why": "The intriguing part is procedural generation. Give each new pipe a random gap height and the game never repeats itself. You will see that randomness plus collision checks is what makes every run feel alive.",
+  "why": "The intriguing part is procedural generation. Give each new pipe a random gap height and the game never repeats itself. Randomness plus collision checks is what makes every run feel different.",
   "starter": "Draw two rectangles (pipe tops) with a random vertical gap on a Canvas, and move them left every frame with requestAnimationFrame. Add the bird as a rectangle with gravity and a flap impulse before anything looks pretty.",
   "references": [
     {
@@ -18,7 +18,7 @@ export const NOTES = [
 },
 {
   "id": "p002-memory-card-match",
-  "why": "You will practice the kinds of state a real game needs: a moves counter, a timer, and knowing when the board is cleared. CSS Grid makes the layout almost free, so your time goes into the logic.",
+  "why": "A moves counter, a timer, and knowing when the board is cleared: the standard state of a real game, all in one small build. CSS Grid makes the layout almost free, so the time goes into the logic.",
   "starter": "Build a 4 by 4 board with CSS grid and empty card divs. In JS, shuffle an array of pairs, render each card face down, and flip on click. Add the move counter and timer once matching works.",
   "references": [
     {
@@ -29,7 +29,7 @@ export const NOTES = [
 },
 {
   "id": "p003-simon-says",
-  "why": "The Web Audio API can make real tones with no sound files at all, which is a skill that sticks. You will also watch players fail in a fun way: human memory runs out around seven items.",
+  "why": "The Web Audio API can make real tones with no sound files at all, a skill that sticks in a way bigger libraries never teach. And it settles a question worth trying: human memory runs out around seven items.",
   "starter": "Make four coloured buttons and use an AudioContext with a short oscillator, one frequency per colour, so one button plays one beep. Get that working, then store the growing sequence in an array and replay it.",
   "references": [
     {
@@ -59,7 +59,7 @@ export const NOTES = [
 },
 {
   "id": "p005-mini-tower-defense",
-  "why": "Enemies following a path plus a wave that gets harder is the actual design of a whole game genre. You will see how much fun you can get from one list of path points and one update loop.",
+  "why": "Enemies following a path plus a wave that gets harder is the whole design of a tower-defense genre. One list of path points and one update loop carry a surprising amount of game.",
   "starter": "Define the path as an ordered list of x, y points and move one enemy point to point in a Pygame loop. Add a single turret type that shoots when an enemy is in range, and hold off on waves and menus.",
   "references": [
     {
@@ -160,7 +160,7 @@ export const NOTES = [
 },
 {
   "id": "p012-gitignore-generator",
-  "why": "You will read real .gitignore patterns until logs/ and *.pyc stop looking like magic. And building a download is a good small server skill that a lot of tutorials skip, so this is doubly useful.",
+  "why": "Real .gitignore patterns read like an alien script until the build is done: logs/ and *.pyc stop looking mysterious once you know what they mean. A downloadable result file is a small server skill a lot of tutorials skip.",
   "starter": "Start with a JS object that maps each language name to its list of ignore rules. Render a checkbox for each language, and append the selected rules to a growing string. On submit, create a Blob and trigger a download.",
   "references": [
     {
@@ -171,7 +171,7 @@ export const NOTES = [
 },
 {
   "id": "p013-interactive-dockerfile-builder",
-  "why": "Dockerfiles feel like a foreign language until you watch one assembled from answers to plain questions. You will learn how the pieces of the base image, the port, and the run command fit in, and leave with a Dockerfile you actually understand.",
+  "why": "Dockerfiles feel like a foreign language until you watch one assembled from answers to plain questions. The base image, the port, the run command: fitting those together is what actually ships a container.",
   "starter": "Make a form with four or five questions: base image, exposed port, install command, start command. Keep one JS function that takes the picked options and stitches the Dockerfile string in order, and display it in a copyable block.",
   "references": [
     {
@@ -208,7 +208,7 @@ export const NOTES = [
 },
 {
   "id": "p016-batch-file-renamer",
-  "why": "The killer feature is the preview: a table of old to new names before anything touches disk. Nearly every real rename tool does this, and building a two-step flow is a safety habit you will keep for every script you ever write.",
+  "why": "The preview is the part of a real rename tool nobody skips: a table of old to new names before anything touches disk. Building that two-step flow is a safety habit that transfers to every script you ever write.",
   "starter": "List the folder with os.listdir and only compute the new file names, storing old and new as pairs. Print them as a table, and add a flag that performs the rename loop only after the user confirms the list.",
   "references": [
     {
@@ -223,7 +223,7 @@ export const NOTES = [
 },
 {
   "id": "p017-image-format-converter",
-  "why": "You will answer the real question of why this file is WebP and that one is JPEG, and you will be choosing by size and quality. The drag-and-drop or folder-watch mode is where this stops being an exercise and starts being a tool you keep.",
+  "why": "Why is this file WebP and that one JPEG? Choosing by size and quality instead of habit is the real lesson. Add drag-and-drop or a folder-watch mode and it stops being an exercise and becomes a tool.",
   "starter": "Convert one PNG to WebP with Pillow and compare the size to the file on disk. Then wrap it in a loop over the folder, skipping files that are already the target format, and keep the quality constant under one name everywhere.",
   "references": [
     {
@@ -339,7 +339,7 @@ export const NOTES = [
 },
 {
   "id": "p025-broken-link-checker",
-  "why": "You will crawl a site, follow every link, and report the rot: 404s, 500s, and links that hang forever. Timeouts are the real trap, because a dead link fails differently from an error page, and handling both cleanly is operations-minded thinking.",
+  "why": "Crawl a site, follow every link, and report the rot: 404s, 500s, and links that hang forever. Timeouts are the real trap, because a dead link fails differently from an error page, and handling both cleanly is operations-minded thinking.",
   "starter": "Take a page URL, extract same-domain links, and request each with requests with a five second timeout, recording the status. Mark 2xx and 3xx as pass, 4xx and 5xx as fail, and timeouts as a warning in the report.",
   "references": [
     {
@@ -350,7 +350,7 @@ export const NOTES = [
 },
 {
   "id": "p026-http-response-inspector",
-  "why": "Browsers hide the boring part: how long DNS took, how long the connection took, how long the body took. Building this makes it all visible, and you will finally be able to read a performance summary with understanding instead of vibes.",
+  "why": "Looking at a site's raw timing is rare: how long DNS took, connection, body transfer. Making it visible is what turns the performance summary from a wall of numbers into something a developer can read.",
   "starter": "Wrap the server-side request with a high-resolution timer, and keep three numbers: total time, time until the first header, and time until the full content. Present the status, every header, and the three timings in a tidy list.",
   "references": [
     {
@@ -492,7 +492,7 @@ export const NOTES = [
 },
 {
   "id": "p036-svg-geometric-pattern-generator",
-  "why": "SVG is a format you will actually ship in production, and you will build it out of primitives: circles, polygons, paths, transforms. Turning one function that places the tile into a full-bleed pattern is one of the fastest satisfying payoffs in generative design.",
+  "why": "SVG is a format that ships in production, and it builds out of primitives: circles, polygons, paths, transforms. One small function that places a tile, repeated, is a full-bleed pattern.",
   "starter": "Build a grid of circles in an SVG element with document.createElementNS, varying radius and colour from the column and row. Get one tiling (triangles, hexagons) working, then export the whole element as an .svg file.",
   "references": [
     {
@@ -634,7 +634,7 @@ export const NOTES = [
 },
 {
   "id": "p046-finite-state-machine-builder",
-  "why": "State machines drive UI flows, network handshakes, and the string matching you will build anyway. Drawing a machine by dragging states and arrows, and watching an input string light up character by character, makes an Accept/Reject call concrete in a way a slide never could.",
+  "why": "State machines drive UI flows, network handshakes, and the string matching in this build. Dragging states and arrows, then watching an input string light up character by character, makes an Accept/Reject call concrete in a way a slide never could.",
   "starter": "Represent the machine as plain JS: a states array and a transitions array of from, symbol, and to. Hand-draw it in SVG with circles for states and arrows for transitions. Then add the simulation that steps one symbol at a time.",
   "references": [
     {

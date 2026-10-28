@@ -5,22 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>1-Afternoon Coding Projects</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/fredoka-latin-wght-normal.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/nunito-latin-wght-normal.woff2">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header>
-  <h1>1-Afternoon Coding Projects</h1>
-  <p class="tag">150 small builds you can ship in one sitting with an AI assistant.</p>
-  <nav class="tabs">
+  <div class="brand-bar">
+    <div class="brand-row">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <h1>1-Afternoon Coding Projects</h1>
+    </div>
+    <p class="tag">150 tiny builds. Pick one, ship it in one afternoon with an AI assistant, and you’ll know more than before dinner.</p>
+    <nav class="tabs">
     <a data-tab="random" href="#/random">Random</a>
     <a data-tab="browse" href="#/browse">Browse</a>
     <a data-tab="resources" href="#/resources">Resources</a>
     <a data-tab="glossary" href="#/glossary">Glossary</a>
   </nav>
+  </div>
 </header>
 <main id="stage" class="stage" aria-live="polite"></main>
 <footer>
-  <p>Three parts, fifty projects each, every row scoped to a single afternoon (about three to five hours).</p>
+  <p>Every idea here fits in one sitting. Done a build? The next draw is always free.</p>
 </footer>
 <script type="module" src="js/tabs/random.js"></script>
 <script type="module" src="js/tabs/browse.js"></script>
