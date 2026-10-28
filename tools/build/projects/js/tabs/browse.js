@@ -3,6 +3,7 @@
 import { PROJECTS } from '../data/projects.js';
 import { cardNotesHtml } from '../cards.js';
 import { SECTIONS } from '../data/buckets.js';
+import { colorForCategory } from '../data/colors.js';
 import { registerTab } from '../app.js';
 
 const SUBGROUP_LABELS = [
@@ -29,27 +30,24 @@ function part3Cards(rows) {
       const match = SUBGROUP_LABELS.find(s => s.id === groupId);
       html += `<h4 class="subgroup">${match ? match.label : groupId}</h4>`;
     }
-    html += `
-      <article class="card" id="${base}/${p.id}">
-        <h3>${p.name}</h3>
-        <p class="desc">${p.description}</p>
-        <p class="mono">${p.stack} | ${p.audience}</p>
-        <p>${chip(p)}</p>
-        ${cardNotesHtml(p)}
-      </article>`;
+    html += articleCard(p, base);
   }
   return html;
 }
 
 function flatCards(rows, base) {
-  return rows.map(p => `
-    <article class="card" id="${base}/${p.id}">
+  return rows.map(p => articleCard(p, base)).join('');
+}
+
+function articleCard(p, base) {
+  return `
+    <article class="card" id="${base}/${p.id}" style="border-left-color:${colorForCategory(p.category)}">
       <h3>${p.name}</h3>
       <p class="desc">${p.description}</p>
-      <p class="mono">${p.stack}</p>
+      <p class="mono">${p.stack}${p.audience ? ' | ' + p.audience : ''}</p>
       <p>${chip(p)}</p>
       ${cardNotesHtml(p)}
-    </article>`).join('');
+    </article>`;
 }
 
 export default function renderBrowse(stage) {
@@ -63,7 +61,7 @@ export default function renderBrowse(stage) {
   function drawControls() {
     controlsEl.innerHTML = SECTIONS.map(s => {
       const off = hidden.has(s.id) ? ' off' : '';
-      return `<button data-sec="${s.id}" class="${off}">${hidden.has(s.id) ? 'Show' : 'Hide'} ${s.label}</button>`;
+      return `<button data-sec="${s.id}" type="button" class="ctl${off ? ' off' : ''}">${hidden.has(s.id) ? 'Show' : 'Hide'} ${s.label}</button>`;
     }).join('');
     controlsEl.insertAdjacentHTML('beforeend',
       `<button data-sec="__all">Show all</button><button data-sec="__none">Hide all</button>`);
@@ -83,10 +81,19 @@ export default function renderBrowse(stage) {
         part3Cards(rows3);
       return `
         <section class="section" data-sec="${s.id}" ${hidden.has(s.id) ? 'hidden' : ''}>
-          <h2>${s.label} <span class="pool-line">(${rows1.length + rows2.length + rows3.length})</span></h2>
+          <h2 style="--sec-color:${colorForCategory(s.id)}">${s.label} <span class="count">(${rows1.length + rows2.length + rows3.length})</span></h2>
           <div class="grid">${body}</div>
         </section>`;
     }).join('');
+    // Staggered reveal, capped: only the first 20 cards in the page animate.
+    if (typeof sectionsEl.querySelectorAll === 'function') {
+      sectionsEl.querySelectorAll('.grid > .card').forEach((c, i) => {
+        if (i < 20) {
+          c.classList.add('is-fresh');
+          c.style.setProperty?.('--i', i);
+        }
+      });
+    }
   }
 
   controlsEl.addEventListener('click', e => {

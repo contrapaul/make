@@ -520,7 +520,7 @@ export const NOTES = [
 },
 {
   "id": "p036-anatomy-label-the-diagram-quiz",
-  "why": "Anatomy class lives or dies on remembering where each structure goes, and clicking dots on a diagram is far closer to the real skill than crossword sheets. A scored label the diagram quiz with a reveal correct labels mode sizes for whole-class review.",
+  "why": "Anatomy class lives or dies on remembering where each structure goes, and clicking dots on a diagram is far closer to the real skill than crossword sheets. Scored rounds with a reveal-the-labels mode make it work across a whole class, not just the confident few.",
   "starter": "Get one clean SVG of a heart with hotspots defined as circles over each chamber and valve. Wire a click to reveal the label and update a score. Start with seven structures and add the brain diagram once the flow works.",
   "references": [
     {

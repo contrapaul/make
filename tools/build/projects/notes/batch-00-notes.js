@@ -18,7 +18,7 @@ export const NOTES = [
 },
 {
   "id": "p002-2048-puzzle",
-  "why": "Looks trivial, then you spend three days on it. The grid becomes a data model, not a drawing. You will learn when a move merges equal tiles and how to animate the slide.",
+  "why": "Looks trivial, then you spend three days on it. The grid becomes a data model, not a drawing. The real work is knowing when a move merges equal tiles, then animating the slide.",
   "starter": "Model the board as a 4 by 4 array of integers, zero for empty. Write a shift-and-merge function for one row. Render the board in a CSS grid of divs, then wire two arrow keys to that row.",
   "references": [
     {
@@ -97,7 +97,7 @@ export const NOTES = [
 },
 {
   "id": "p007-expense-tracker-cli",
-  "why": "CSV almost has no type, and summarizing three months of spending means dealing with missing categories, mixed currencies, and rounding that does not sum to the total. The exercise is small but you will touch every CSV edge case in production.",
+  "why": "CSV almost has no type, and summarizing three months of spending means dealing with missing categories, mixed currencies, and rounding that does not sum to the total. The exercise is small, but it touches nearly every CSV edge case production data throws at you.",
   "starter": "Define a struct with serde that matches the CSV columns, one field per column. Write a command that reads the file and prints the total by month using an iterator over a grouped map. Verify on a small hand-makes file before chaining anything else.",
   "references": [
     {
@@ -157,7 +157,7 @@ export const NOTES = [
 },
 {
   "id": "p011-file-duplicate-finder",
-  "why": "A file tree is a graph and hashing a gigabyte of documents is a real I/O job. You will want two passes, the cheap size check first and the hash only for suspicious groups, or the user will wait forever. That decision IS the program.",
+  "why": "A file tree is a graph and hashing a gigabyte of documents is a real I/O job. Two passes are the answer, the cheap size check first and the hash only for suspicious groups, because anything slower makes the user wait forever. That decision is the program.",
   "starter": "Walk the tree with filepath.WalkDir into a map keyed by size. For each size bucket with more than one file, walk the directory with an io copy and hash it with a hash function. Print groups of identical hashes. Use a flag if the default output is off.",
   "references": [
     {
@@ -187,7 +187,7 @@ export const NOTES = [
 },
 {
   "id": "p013-sudoku-solver-generator",
-  "why": "Solving is backtracking, and generating is deleting cells while keeping the solution unique, which means you need a solver that can count the number of solutions. One idea, two programs, and you will count nodes visited on a hard-to-destroy hard puzzle.",
+  "why": "Solving is backtracking, and generating is deleting cells while keeping the solution unique, which means you need a solver that can count the number of solutions. One idea, two programs, and node counts show which version wins on a stubborn puzzle.",
   "starter": "Represent the puzzle as an array of 81 characters. Write the solver as a recursive call that picks the cell with the fewest candidates, tries each candidate, and backtracks. Time it and count the nodes visited. Then convert the solved board to a string to verify the generation output.",
   "references": [
     {
@@ -202,7 +202,7 @@ export const NOTES = [
 },
 {
   "id": "p014-meme-caption-generator",
-  "why": "Canvas is a document, not an image. Draw a base, draw two lines of text on top, and export a PNG with a download link. You will get the exact behavior of a compositing operation, and the toBlob callback teaches you how the browser hands you a byte.",
+  "why": "Canvas is a document, not an image. Draw a base, draw two lines of text on top, and export a PNG with a download link. The layers compose exactly like a document, and the toBlob callback is a close look at how the browser hands you back a file.",
   "starter": "Drop in a base image and a canvas. On load, use drawImage to fill the canvas and use fillStyle to add a white border and shadow to the caption. Draw the upper and lower lines with a font that insists on bold uppercase, and export the result with a link to canvas.toBlob.",
   "references": [
     {
@@ -352,7 +352,7 @@ export const NOTES = [
 },
 {
   "id": "p024-random-story-generator",
-  "why": "Template-based story generators are a miniature language: slots, list choices, conditional branches, and template composition. It makes you think about what grammatical structure actually is, and the output is fun enough that you will iterate on the templates way past the point where the code should be done.",
+  "why": "Template-based story generators are a miniature language: slots, list choices, conditional branches, and template composition. It makes you think about what grammatical structure actually is, and the templates are worth tuning long after the code is finished.",
   "starter": "Write a few Jinja2 templates with slots like \"There was once a NAME in PLACE.\" Load them from files, fill the slots with random list items, a random verb, a random adjective, and print the assembled paragraph with a restart loop.",
   "references": [
     {
@@ -442,7 +442,7 @@ export const NOTES = [
 },
 {
   "id": "p030-word-frequency-counter",
-  "why": "Counting words looks trivial until you decide what a word even is. Hyphens, apostrophes, and case turn a ten line script into a small language study, with a tool you will keep using.",
+  "why": "Counting words looks trivial until you decide what a word even is. Hyphens, apostrophes, and case turn a ten line script into a small language study, and the counter stays a handy tool afterwards.",
   "starter": "In Python, read the file, lowercase it, and split into words. Count with collections.Counter, print the top twenty with rank and count, and write the same rows to CSV with the csv module. Then trim a bit of punctuation and hyphens before counting so mother-in-law counts once.",
   "references": [
     {
@@ -538,7 +538,7 @@ export const NOTES = [
 },
 {
   "id": "p038-markdown-notes-app",
-  "why": "A notes app feels selfevident, but it is really an exercise in indexing: how to search without a database and when to export. IndexedDB is async in a way localStorage is not, and you will feel it.",
+  "why": "A notes app feels self-evident, but it is really an exercise in indexing: how to search without a database and when to export. IndexedDB is async in a way localStorage is not, and the difference shows up fast.",
   "starter": "In vanilla JS, open IndexedDB with one object store keyed by id. Build the note editor around debounced save, meaning wait 300 ms after the user stops typing before persisting. The search box filters in memory by substring on title and body. To export, get the note and download it as a Blob.",
   "references": [
     {
@@ -549,7 +549,7 @@ export const NOTES = [
 },
 {
   "id": "p039-text-to-speech-reader",
-  "why": "Web Speech is already installed in every browser, so this is a visible bridge from code to hearing. Highlighting the word being spoken is the fun part, and it forces you to sync text with the spoke-word event.",
+  "why": "Web Speech is already installed in every browser, so this is a visible bridge from code to hearing. Highlighting the spoken word is the hard part: the boundary event fires mid-word, so the highlight only feels right when the sync is tight.",
   "starter": "In JavaScript, use speechSynthesis.speak with a SpeechSynthesisUtterance built from the input text. In the utterance onboundary event, set the event name to word, and use event.charIndex to find the current word in the text and wrap it in a mark. Pick a voice with speechSynthesis.getVoices one.",
   "references": [
     {

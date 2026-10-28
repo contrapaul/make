@@ -6,19 +6,21 @@ import { RESOURCES } from '../data/resources.js';
 
 export { RESOURCES };
 
+const GLYPHS = { build: '\u{1F4E6}', languages: '\u{1F1EB}', codewithai: '\u{1F393}' };
+
 export default function renderResources(stage) {
   stage.innerHTML = `
-    <p class="pool-line" style="max-width:60ch;margin-bottom:1rem">
-      Three things worth keeping open next to this site while you build:
-      how to ship it, what every stack row means, and how to teach from it.
-    </p>
+    <p class="tab-intro">Three worth-keeping-open tabs next to this one: how to ship the
+    build, what every stack row means, and how to teach from it.</p>
     <div class="res-list">
       ${RESOURCES.map(r => r.url
         ? `<div class="card res">
-             <a href="${r.url}" target="_blank" rel="noopener">${r.title} ↗</a>
+             <span class="res-glyph" aria-hidden="true">${GLYPHS[r.id] || '\u{1F517}'}</span>
+             <a href="${r.url}" target="_blank" rel="noopener">${r.title} \u2197</a>
              <p class="desc">${r.desc}</p>
            </div>`
         : `<div class="card res res-ghost">
+             <span class="res-glyph" aria-hidden="true">${GLYPHS[r.id] || '\u{1F517}'}</span>
              <span>${r.title}</span>
              <p class="desc">${r.desc}</p>
            </div>`

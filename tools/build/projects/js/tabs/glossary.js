@@ -150,11 +150,21 @@ export function renderGlossaryTab(stage) {
   lastTarget = null;
 
   stage.innerHTML = `
-    <p class="tab-intro">Words this site uses, in plain sight. Hover a marked word on
-    any tab for the short definition, or click it to open the full entry below.</p>
+    <p class="tab-intro">Every word this site uses, in plain sight. Hover a marked word on
+    any tab for the short definition, or tap it to open the full entry.</p>
+    <div class="gloss-jumps" id="gloss-jumps"></div>
     <div id="glossary-list" class="glossary-list"></div>`;
   const list = stage.querySelector('#glossary-list');
   renderGlossary(stage.ownerDocument, list);
+  // A-Z jump chip strip: one pill per letter that has entries.
+  const jumps = stage.querySelector('#gloss-jumps');
+  const letters = new Set(GLOSSARY.map(t => t.term[0].toUpperCase()));
+  for (const letter of [...letters].sort()) {
+    const a = stage.ownerDocument.createElement('a');
+    a.href = '#/glossary/' + GLOSSARY.find(t => t.term[0].toUpperCase() === letter).id;
+    a.textContent = letter;
+    jumps.appendChild(a);
+  }
   cardsApi = initTermCards({ doc: stage.ownerDocument });
 
   // Deep link: a hash like #/glossary/commit keeps pointing at its entry.
