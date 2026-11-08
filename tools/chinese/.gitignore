@@ -1,0 +1,4 @@
+# Upstream TTFs downloaded by build_fonts.py, fetched from the pinned commit
+.fonts-src/
+__pycache__/
+test/shots/

@@ -155,10 +155,10 @@ document.addEventListener('DOMContentLoaded', () => {
         pinyinHint.textContent = `${entry.hanzi} = ${entry.pinyin} (${entry.definition}) — sentence: ${sent.pinyin}`;
 
         if (isCorrect) {
-          showFeedback(`✅ Correct! ${numberToMarked(base + correctTone)} — ${entry.definition}`, 'correct');
+          showFeedback(`Correct! ${numberToMarked(base + correctTone)} — ${entry.definition}`, 'correct');
         } else {
           showFeedback(
-            `❌ It's ${numberToMarked(base + correctTone)} (tone ${correctTone}) — ${entry.hanzi} = ${entry.pinyin}`,
+            `It's ${numberToMarked(base + correctTone)} (tone ${correctTone}) — ${entry.hanzi} = ${entry.pinyin}`,
             'incorrect'
           );
         }

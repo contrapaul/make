@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (verdict === 'red') {
       word.status = 'red';
-      showFeedback(`❌ ${chipLabel(word)} isn't in this sentence.`, 'incorrect');
+      showFeedback(`${chipLabel(word)} isn't in this sentence.`, 'incorrect');
       return verdict;
     }
     // Displace any occupant back to the bank (yellow — it belongs).
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveStats();
     const s = sentences[currentIdx];
     const answer = mode === 'zh' ? `${s.zh} — ${s.pinyin}` : s.en;
-    showFeedback(`✅ Solved! ${answer}`, 'correct');
+    showFeedback(`Solved! ${answer}`, 'correct');
   }
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -354,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!solvedLock) {
           const rm = document.createElement('button');
           rm.className = 'remove-btn';
-          rm.textContent = '✕';
           rm.setAttribute('aria-label', 'Remove');
           rm.addEventListener('pointerdown', e => e.stopPropagation());
           rm.addEventListener('click', e => { e.stopPropagation(); removeSlot(idx); });

@@ -5,6 +5,45 @@
    Hanzi is always the largest element of any card; pinyin at its side.
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── Fonts ───────────────────────────────────────────────────────────
+   Self-hosted. Nothing in this site is fetched from another host: the
+   audience reaches us from mainland China school and venue wifi, where
+   Google's font CDN is blocked. Source Serif 4 carries the pinyin
+   tone marks (ǎ ǐ ǒ ǔ ǖ ǘ ǚ ǜ) that Newsreader lacks, so the tone
+   marks are no longer left to the browser's system serif. Noto Serif SC
+   sits second in each stack so ↕ ≡ ▼ and CJK punctuation come from a
+   file we ship. Regenerate with build_fonts.py; font_coverage.py audits
+   every rendered glyph against these faces. Licences: fonts/LICENSE-*.txt.
+   ─────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Noto Serif SC";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/noto-serif-sc.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/source-serif-4.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/instrument-sans.woff2") format("woff2");
+}
+
 /* ── Tokens ──────────────────────────────────────────────────────── */
 :root {
   --ground:  #F6F5F0;   /* xuan paper */
@@ -28,8 +67,8 @@
   --red-line:   #D9958E;
 
   --cjk:   "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --latin: "Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
-  --ui:    "Instrument Sans", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --latin: "Source Serif 4", "Noto Serif SC", "Iowan Old Style", Palatino, Georgia, serif;
+  --ui:    "Instrument Sans", "Noto Serif SC", -apple-system, "Helvetica Neue", Arial, sans-serif;
 
   --radius: 4px;
   --radius-sm: 3px;
@@ -978,6 +1017,21 @@ th.sorted .sort-indicator { color: var(--seal); }
   line-height: 1;
   padding: 0;
 }
+/* The cross is drawn, not typed: ✕ U+2715 is in no shipped face. Two bars, rotated.
+   The button carries aria-label="Remove", so an empty element is complete. */
+.slot .remove-btn::before,
+.slot .remove-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+}
+.slot .remove-btn::before { transform: translate(-50%, -50%) rotate(45deg); }
+.slot .remove-btn::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .slot.filled:hover .remove-btn { display: flex; }
 @media (hover: none) {
   .slot.filled .remove-btn { display: flex; }
@@ -1114,6 +1168,12 @@ th.sorted .sort-indicator { color: var(--seal); }
   border: 1px solid;
 }
 .feedback-bar.show { display: block; }
+/* State marks replace the ✅ ❌ emoji, which no shipped face carries. Drawn as
+   glyphs from the --cjk face (Noto Serif SC has ✓ U+2713 and ✗ U+2717). */
+.feedback-bar.correct::before,
+.trainer-feedback.correct::before { content: "✓"; margin-right: 7px; font-weight: 600; }
+.feedback-bar.incorrect::before,
+.trainer-feedback.incorrect::before { content: "×"; margin-right: 7px; font-weight: 600; }
 .feedback-bar.correct { background: var(--green-bg); color: var(--green); border-color: var(--green-line); }
 .feedback-bar.correct { font-family: var(--latin); }
 .feedback-bar.incorrect { background: var(--red-bg); color: var(--red); border-color: var(--red-line); }
