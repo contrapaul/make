@@ -17,7 +17,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const siteDir = resolve(here, '..');
 const shots = join(here, 'shots');
 const PAGES = ['index.html', 'lessons.html', 'glossary.html', 'sentence-builder.html',
-  'tone-trainer.html'];
+  'tone-trainer.html', 'conversations.html'];
 const EXPECTED_FACES = ['Noto Serif SC', 'Source Serif 4', 'Source Serif 4 Italic', 'Instrument Sans'];
 const CARONS = ['ǎ', 'ǐ', 'ǒ', 'ǔ', 'ǖ', 'ǘ', 'ǚ', 'ǜ'];
 // Families we did not ship. If one of these paints a pinyin glyph, self-hosting leaked.
