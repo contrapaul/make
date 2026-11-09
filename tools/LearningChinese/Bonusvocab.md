@@ -1,8 +1,8 @@
 ---
 
-# 📘 Bonus Lessons — Vocabulary Sets
+# 📘 Bonus Lessons: Vocabulary Sets
 
-## Bonus Lesson 1 — Computer Parts & Building PCs
+## Bonus Lesson 1: Computer Parts & Building PCs
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -29,7 +29,7 @@
 
 ---
 
-## Bonus Lesson 2 — 3D Printing (FDM)
+## Bonus Lesson 2: 3D Printing (FDM)
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -56,7 +56,7 @@
 
 ---
 
-## Bonus Lesson 3 — 3D Modeling & CAD (Fusion)
+## Bonus Lesson 3: 3D Modeling & CAD (Fusion)
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -83,7 +83,7 @@
 
 ---
 
-## Bonus Lesson 4 — Teaching Design Technology
+## Bonus Lesson 4: Teaching Design Technology
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -110,7 +110,7 @@
 
 ---
 
-## Bonus Lesson 5 — Microcontrollers & Electronics
+## Bonus Lesson 5: Microcontrollers & Electronics
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -138,7 +138,7 @@
 
 ---
 
-## Bonus Lesson 6 — Coding & Building Websites
+## Bonus Lesson 6: Coding & Building Websites
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -166,7 +166,7 @@
 
 ---
 
-## Bonus Lesson 7 — PC Gaming
+## Bonus Lesson 7: PC Gaming
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -194,7 +194,7 @@
 
 ---
 
-## Bonus Lesson 8 — Painting Miniatures & Blood Bowl
+## Bonus Lesson 8: Painting Miniatures & Blood Bowl
 
 | Hanzi | Pinyin | Definition |
 |-------|--------|------------|
@@ -223,5 +223,91 @@
 | 阻挡 | zǔdǎng | block |
 | 传球 | chuánqiú | pass |
 | 冲刺 | chōngcì | rush |
+
+---
+
+## Bonus Lesson 9: AI (人工智能)
+
+New words from the flash conversation cards (Topic 1: AI).
+
+| Hanzi | Pinyin | Definition |
+|-------|--------|------------|
+| 人工智能 | réngōng zhìnéng | AI (artificial intelligence) |
+| 运行 | yùnxíng | to run (a program, a machine) |
+| 模型 | móxíng | model (an AI model); also in Bonus Lesson 2, where it means a physical model |
+| 兴趣 | xìngqù | interest |
+| 感兴趣 | gǎn xìngqù | to be interested in |
+| 发展 | fāzhǎn | development; development |
+| 告诉 | gàosù | to tell |
+| 什么时候 | shénme shíhòu | when |
+| 大多数 | dàduōshù | the majority; most |
+| 用 | yòng | to use |
+| 觉得 | juéde | to think; to feel |
+| 在线 | zàixiàn | online |
+| 教材 | jiàocái | teaching material; textbook |
+| 国际文凭 | guójì wénbīng | International Baccalaureate (IB) |
+
+Notes: brand names (DeepSeek, Autodesk Fusion, IB) are said in English at the event. The official Chinese name for DeepSeek is 深度求索 (shēndù qiúsù).
+
+---
+
+## Bonus Lesson 10: The Event, and Sharing Our Work
+
+New words from the flash conversation cards (Topic 2: Maker Faire).
+
+| Hanzi | Pinyin | Definition |
+|-------|--------|------------|
+| 展位 | zhànwèi | booth |
+| 分享 | fēnxiǎng | to share |
+| 作品 | zuòpǐn | work (a piece of creative work); pieces |
+| 资源 | zīyuán | resources |
+| 免费 | miǎnfèi | free of charge |
+| 课程 | kèchéng | course; curriculum |
+| 了解 | liǎojiě | to understand; to get to know |
+| 有时候 | yǒushíhòu | sometimes |
+| 视频 | shìpín | video |
+| 微信 | Wēixìn | WeChat |
+| 私教课 | sījiào kè | private lesson |
+| 课外活动 | wàikè huódòng | extracurricular activity; club activity |
+| 快 | kuài | almost (before a number), e.g. 快八年了; also "fast" (in the textbook) |
+| 多久 | duōjiǔ | how long (a period of time) |
+| 东西 | dōngxi | thing(s); stuff |
+
+---
+
+## Bonus Lesson 11: Companies and Booth Visits
+
+New words from the flash conversation cards (Topic 3: visiting tech companies and makers at the event).
+
+| Hanzi | Pinyin | Definition |
+|-------|--------|------------|
+| 深圳 | Shēnzhèn | Shenzhen |
+| 南山 | Nánshān | Nanshan (district of Shenzhen) |
+| 桃源村 | Táoyuáncūn | Taoyuancun (metro station and village) |
+| 国际 | guójì | international |
+| 东莞 | Dōngguǎn | Dongguan (city) |
+| 广州 | Guǎngzhōu | Guangzhou (city) |
+| 惠州 | Huìzhōu | Huizhou (city) |
+| 参观 | cānguā | to visit (a place, a company) |
+| 有空 | yǒu kòng | to be free; to have time |
+| 名片 | míngpiàn | business card |
+| 加 | jiā | to add (someone on WeChat) |
+| 中文 | Zhōngwén | Chinese (the language) |
+| 点 | diǎn | bit; drop (as in 一点, "a little") |
+| 产品 | chǎnpǐn | product |
+| 明年 | míngnián | next year |
+| 不能 | bùnéng | cannot |
+| 机器 | jīqì | machine; device |
+| 发布 | fābù | to release; to launch |
+| 上个月 | shàng gè yuè | last month |
+| 刚刚 | gānggāng | just (a moment ago) |
+| 元 | yuán | yuan (Chinese currency unit) |
+| 人民币 | Rénmínbì | RMB (Renminbi, Chinese currency) |
+| 样品 | yàngpǐn | sample (example product) |
+| 高中 | gāozhōng | high school |
+| 年级 | niánjí | grade (school year) |
+| 妻子 | qīzi | wife |
+| 姥姥 | lǎolao | grandmother (mother's side) |
+| 奶奶 | nǎinai | grandmother (father's side) |
 
 ---
