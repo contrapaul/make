@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof sentences !== 'undefined') {
     document.querySelectorAll('#countSentences').forEach(el => el.textContent = sentences.length);
   }
+  if (typeof CONVERSATION_COUNTS !== 'undefined') {
+    document.querySelectorAll('#countCards').forEach(el => el.textContent = CONVERSATION_COUNTS.total.cards);
+  }
 
   // ── Random sentence ───────────────────────────────────────────────────────
   const zhEl  = document.getElementById('randomZh');

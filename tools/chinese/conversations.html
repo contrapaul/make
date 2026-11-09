@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Conversations · 汉语词汇</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar" aria-label="Site navigation">
+  <div class="sidebar-header">
+    <div class="seal-mark" aria-hidden="true"><span>汉</span><span>语</span><span>词</span><span>汇</span></div>
+    <div>
+      <div class="sidebar-title">汉语词汇</div>
+      <div class="sidebar-subtitle">Vocabulary Review</div>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Tools</div>
+    <a href="index.html" class="sidebar-link"><span class="glyph">首</span> Home</a>
+    <a href="lessons.html" class="sidebar-link tool-link"><span class="glyph">课</span> Lessons</a>
+    <a href="glossary.html" class="sidebar-link tool-link"><span class="glyph">词</span> Glossary</a>
+    <a href="sentence-builder.html" class="sidebar-link tool-link"><span class="glyph">句</span> Sentence Builder</a>
+    <a href="conversations.html" class="sidebar-link tool-link active"><span class="glyph">对</span> Flash Conversations</a>
+    <a href="tone-trainer.html" class="sidebar-link tool-link"><span class="glyph">声</span> Tone Trainer</a>
+    <a href="chinese_vocab_anki.apkg" class="sidebar-link tool-link" download><span class="glyph">卡</span> Anki Deck</a>
+  </div>
+</nav>
+
+<div class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle menu">≡</button>
+      <span class="topbar-title">对 · Flash Conversations</span>
+    </div>
+    <div class="topbar-controls">
+      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">暗</button>
+    </div>
+  </header>
+
+  <div class="conversations-page">
+    <div class="builder-header">
+      <h2 class="section-title">Flash Conversations</h2>
+      <p class="section-subtitle">Cards for Maker Faire Shenzhen. Each card plays the whole exchange. <span id="cvTotal">…</span> cards.</p>
+    </div>
+
+    <div class="mode-tabs" id="sectionTabs" role="tablist" aria-label="Card sections">
+      <button class="mode-tab active" data-section="" role="tab" aria-selected="true">
+        <span class="mode-tab-word">全部</span><span class="mode-tab-py">All</span>
+      </button>
+      <button class="mode-tab" data-section="A" role="tab" aria-selected="false">
+        <span class="mode-tab-word">问</span><span class="mode-tab-py">Asked to me</span>
+      </button>
+      <button class="mode-tab" data-section="B" role="tab" aria-selected="false">
+        <span class="mode-tab-word">说</span><span class="mode-tab-py">I say</span>
+      </button>
+      <button class="mode-tab" data-section="C" role="tab" aria-selected="false">
+        <span class="mode-tab-word">问</span><span class="mode-tab-py">I ask</span>
+      </button>
+    </div>
+
+    <p class="cv-caption" id="cvCaption"></p>
+
+    <div class="cv-toolbar">
+      <input type="search" class="search-input" id="cvSearch" placeholder="Search hanzi, pinyin, English, or card id…" autocomplete="off">
+      <button class="btn btn-secondary btn-sm" id="cvAutoplay" aria-pressed="false" title="Play a card when it is opened">
+        自动播放 · Auto-play
+      </button>
+      <button class="btn btn-secondary btn-sm" id="cvPlayAll">播放全部 · Play all</button>
+      <button class="btn btn-ghost btn-sm hidden" id="cvStopAll">停止 · Stop</button>
+      <span class="results-count" id="cvResults"></span>
+    </div>
+
+    <p class="cv-audio-status" id="cvAudioStatus" role="status"></p>
+
+    <div class="cv-list" id="cvList">
+      <p class="cv-empty">载入中…</p>
+    </div>
+  </div>
+</div>
+
+<nav class="tabbar" aria-label="Primary">
+  <a href="index.html"><span class="glyph">首</span>Home</a>
+  <a href="lessons.html"><span class="glyph">课</span>Lessons</a>
+  <a href="glossary.html"><span class="glyph">词</span>Glossary</a>
+  <a href="sentence-builder.html"><span class="glyph">句</span>Builder</a>
+  <a href="conversations.html" class="active"><span class="glyph">对</span>Chats</a>
+</nav>
+
+<script src="js/conversations-data.js"></script>
+<script src="js/conversations.js"></script>
+<script>
+  (function(){ const t=localStorage.getItem('cv-theme')||'light'; document.documentElement.setAttribute('data-theme',t); })();
+  document.addEventListener('DOMContentLoaded',()=>{
+    const themeBtn=document.getElementById('themeToggle');
+    const sidebar=document.getElementById('sidebar');
+    const overlay=document.getElementById('sidebarOverlay');
+    const toggle=document.getElementById('sidebarToggle');
+    function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); localStorage.setItem('cv-theme',t); if(themeBtn) themeBtn.textContent=t==='dark'?'亮':'暗'; }
+    applyTheme(localStorage.getItem('cv-theme')||'light');
+    themeBtn?.addEventListener('click',()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); });
+    toggle?.addEventListener('click',()=>{ sidebar?.classList.add('open'); overlay?.classList.add('open'); });
+    overlay?.addEventListener('click',()=>{ sidebar?.classList.remove('open'); overlay?.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>

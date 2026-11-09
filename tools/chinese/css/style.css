@@ -5,6 +5,45 @@
    Hanzi is always the largest element of any card; pinyin at its side.
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── Fonts ───────────────────────────────────────────────────────────
+   Self-hosted. Nothing in this site is fetched from another host: the
+   audience reaches us from mainland China school and venue wifi, where
+   Google's font CDN is blocked. Source Serif 4 carries the pinyin
+   tone marks (ǎ ǐ ǒ ǔ ǖ ǘ ǚ ǜ) that Newsreader lacks, so the tone
+   marks are no longer left to the browser's system serif. Noto Serif SC
+   sits second in each stack so ↕ ≡ ▼ and CJK punctuation come from a
+   file we ship. Regenerate with build_fonts.py; font_coverage.py audits
+   every rendered glyph against these faces. Licences: fonts/LICENSE-*.txt.
+   ─────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Noto Serif SC";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/noto-serif-sc.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/source-serif-4.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/source-serif-4-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("../fonts/instrument-sans.woff2") format("woff2");
+}
+
 /* ── Tokens ──────────────────────────────────────────────────────── */
 :root {
   --ground:  #F6F5F0;   /* xuan paper */
@@ -28,8 +67,8 @@
   --red-line:   #D9958E;
 
   --cjk:   "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --latin: "Newsreader", "Iowan Old Style", Palatino, Georgia, serif;
-  --ui:    "Instrument Sans", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --latin: "Source Serif 4", "Noto Serif SC", "Iowan Old Style", Palatino, Georgia, serif;
+  --ui:    "Instrument Sans", "Noto Serif SC", -apple-system, "Helvetica Neue", Arial, sans-serif;
 
   --radius: 4px;
   --radius-sm: 3px;
@@ -978,6 +1017,21 @@ th.sorted .sort-indicator { color: var(--seal); }
   line-height: 1;
   padding: 0;
 }
+/* The cross is drawn, not typed: ✕ U+2715 is in no shipped face. Two bars, rotated.
+   The button carries aria-label="Remove", so an empty element is complete. */
+.slot .remove-btn::before,
+.slot .remove-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 9px;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 1px;
+}
+.slot .remove-btn::before { transform: translate(-50%, -50%) rotate(45deg); }
+.slot .remove-btn::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .slot.filled:hover .remove-btn { display: flex; }
 @media (hover: none) {
   .slot.filled .remove-btn { display: flex; }
@@ -1114,6 +1168,12 @@ th.sorted .sort-indicator { color: var(--seal); }
   border: 1px solid;
 }
 .feedback-bar.show { display: block; }
+/* State marks replace the ✅ ❌ emoji, which no shipped face carries. Drawn as
+   glyphs from the --cjk face (Noto Serif SC has ✓ U+2713 and ✗ U+2717). */
+.feedback-bar.correct::before,
+.trainer-feedback.correct::before { content: "✓"; margin-right: 7px; font-weight: 600; }
+.feedback-bar.incorrect::before,
+.trainer-feedback.incorrect::before { content: "×"; margin-right: 7px; font-weight: 600; }
 .feedback-bar.correct { background: var(--green-bg); color: var(--green); border-color: var(--green-line); }
 .feedback-bar.correct { font-family: var(--latin); }
 .feedback-bar.incorrect { background: var(--red-bg); color: var(--red); border-color: var(--red-line); }
@@ -1216,6 +1276,188 @@ th.sorted .sort-indicator { color: var(--seal); }
 
 .trainer-controls { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 
+/* ── Flash Conversations ─────────────────────────────────────────── */
+.conversations-page { max-width: 760px; margin: 0 auto; padding: 32px 24px 80px; }
+
+.cv-caption {
+  font-family: var(--ui);
+  font-size: 0.8rem;
+  color: var(--soft);
+  margin: 14px 0 0;
+}
+
+.cv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 6px;
+}
+.cv-toolbar .search-input { flex: 1 1 220px; }
+.cv-toolbar .results-count { margin-left: auto; }
+
+.cv-audio-status {
+  font-family: var(--ui);
+  font-size: 0.74rem;
+  color: var(--faint);
+  margin: 0 0 14px;
+  min-height: 1em;
+}
+
+.cv-list { display: flex; flex-direction: column; gap: 12px; }
+
+.cv-empty {
+  font-family: var(--ui);
+  font-size: 0.85rem;
+  color: var(--faint);
+  padding: 24px 0;
+}
+
+.cv-card {
+  background: var(--surface);
+  border: 1px solid var(--hair);
+  border-radius: var(--radius);
+  padding: 16px 18px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cv-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cv-id {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px solid var(--seal);
+  border-radius: 2px;
+  font-family: var(--ui);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--seal);
+}
+
+.cv-title {
+  margin: 0;
+  font-family: var(--ui);
+  font-size: 0.95rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+/* Play button: CSS-drawn triangle, so no ▶ from a system face. */
+.cv-play {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  background: var(--ground);
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--transition);
+}
+.cv-play::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent var(--ink);
+  transform: translate(-40%, -50%);
+}
+.cv-play:hover { border-color: var(--seal); }
+.cv-play[data-state="playing"] { border-color: var(--seal); background: var(--seal); }
+.cv-play[data-state="playing"]::before {
+  /* two bars = stop */
+  border: none;
+  width: 10px;
+  height: 10px;
+  transform: translate(-50%, -50%);
+  background:
+    linear-gradient(var(--on-seal), var(--on-seal)) left / 3px 100% no-repeat,
+    linear-gradient(var(--on-seal), var(--on-seal)) right / 3px 100% no-repeat;
+}
+.cv-play[data-state="pending"] { opacity: 0.5; border-style: dashed; }
+.cv-play[data-state="pending"]:hover { border-color: var(--hair); }
+.cv-play[data-state="pending"]::before {
+  /* A second cue besides opacity: an unrecorded card shows a hollow outline triangle,
+     so it stays distinguishable in sunlight on a glossy iPad. */
+  border-left-color: var(--faint);
+}
+
+/* Auto-play is remembered between visits, so its on state has to be readable at a
+   glance, not only through aria-pressed. */
+#cvAutoplay[aria-pressed="true"] {
+  background: var(--seal);
+  color: var(--on-seal);
+  border-color: var(--seal);
+}
+
+.cv-lines { display: flex; flex-direction: column; gap: 10px; }
+
+.cv-line { display: flex; gap: 10px; align-items: flex-start; }
+
+/* Role glyph: 问 ask, 答 answer, 说 say. Keeps a section C card's three
+   candidate answers readable. Always smaller than the hanzi it labels. */
+.cv-role {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+  border: 1px solid var(--hair);
+  border-radius: var(--radius-sm);
+  font-family: var(--cjk);
+  font-size: 0.66rem;
+  line-height: 18px;
+  text-align: center;
+  color: var(--faint);
+}
+
+.cv-line-text { flex: 1; min-width: 0; }
+
+.cv-zh {
+  font-family: var(--cjk);
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.cv-py {
+  font-family: var(--latin);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--seal);
+}
+
+.cv-en { font-size: 0.88rem; color: var(--soft); }
+
+.cv-label {
+  font-family: var(--ui);
+  font-size: 0.7rem;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
+.cv-note {
+  border-top: 1px solid var(--hair);
+  padding-top: 8px;
+  margin: 0;
+  font-family: var(--ui);
+  font-size: 0.74rem;
+  color: var(--faint);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-100%); box-shadow: none; }
@@ -1225,7 +1467,7 @@ th.sorted .sort-indicator { color: var(--seal); }
   .tabbar { display: flex; }
 
   .topbar { padding: 10px 16px; }
-  .page-section, .accordion-group, .lessons-page, .builder-page { padding-left: 16px; padding-right: 16px; }
+  .page-section, .accordion-group, .lessons-page, .builder-page, .conversations-page { padding-left: 16px; padding-right: 16px; }
   .home-hero { padding-left: 16px; padding-right: 16px; }
   .sentence-widget, .tool-index { margin-left: 16px; margin-right: 16px; }
   .vocab-card-grid { grid-template-columns: 1fr; }
@@ -1238,7 +1480,8 @@ th.sorted .sort-indicator { color: var(--seal); }
 }
 
 @media (max-width: 480px) {
-  .builder-controls .btn { flex: 1; }
+  .builder-controls .btn, .cv-toolbar .btn { flex: 1; }
+  .cv-toolbar .results-count { margin-left: 0; }
   .slots-area { padding: 10px; }
   .glossary-controls .filter-select { max-width: none; flex: 1; }
 }
@@ -1248,6 +1491,7 @@ th.sorted .sort-indicator { color: var(--seal); }
   .word-chip { padding: 9px 16px 8px; }
   .slot { min-width: 62px; min-height: 62px; }
   .slot .remove-btn { width: 22px; height: 22px; font-size: 0.75rem; top: -9px; right: -9px; }
+  .cv-play { width: 44px; height: 44px; }
 }
 
 /* ── Utilities ───────────────────────────────────────────────────── */
