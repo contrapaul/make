@@ -32,7 +32,9 @@ export function collectLinks(glossary = GLOSSARY, resources = RESOURCES) {
     }
   }
   for (const r of resources) {
-    if (r.url) out.push({ label: `resources/${r.id}`, url: r.url });
+    // Same-site relative urls (e.g. /tools/languages/) are internal links,
+    // not external references - the link-live check only targets http(s).
+    if (r.url && /^https?:\/\//.test(r.url)) out.push({ label: `resources/${r.id}`, url: r.url });
   }
   return out;
 }

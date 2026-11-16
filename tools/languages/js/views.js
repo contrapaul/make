@@ -9,6 +9,29 @@
 
 import { t } from "./i18n.js";
 import { href } from "./router.js";
+import { KINDS, filterLanguages } from "./filter.js";
+import { LIST as PROJECT_LISTS } from "./data/project-lists.js";
+
+/**
+ * e03s03: the one sibling route every cross-link targets. A single constant so
+ * test/xlink.test.mjs can pin it (owner decision 2026-10-28: the random tab is
+ * the only target that really answers), and no view may retype the path.
+ */
+export const XLINK_HREF = "/tools/build/projects/#/random";
+
+/**
+ * Pure: what the footer says for a language, or null when the join table has
+ * no row so the view omits the whole block (no empty chip, no awkward zero).
+ */
+export function projectLinksForLanguage(slug) {
+  const rec = PROJECT_LISTS[slug];
+  if (!rec || !rec.count) return null;
+  return {
+    names: rec.projects.map((p) => p.name),
+    count: rec.count,
+    href: XLINK_HREF,
+  };
+}
 import { demoBlock, runItLink } from "./demo.js";
 import { LANGUAGES } from "./data/languages.js";
 import { GLOSSARY } from "./data/glossary.js";
@@ -71,18 +94,56 @@ function statTable(stats) {
   return box;
 }
 
-export function indexView(lang) {
+export function indexView(lang, kind = "all") {
   LANG_CACHE = lang;
   const v = el("div", "view view-index");
   v.append(el("h1", "display", t(lang, "site.name")));
   v.append(el("p", "lede", t(lang, "site.tagline")));
+
+  // e03s01: the kind chips. Keys are plain strings on purpose: the chrome
+  // gate (test/chrome.test.mjs) collects them by literal, and re-rendering
+  // this view on a click keeps one owner of the list so nothing drifts.
+  const KIND_KEYS = {
+    all: "filter.all",
+    blocks: "filter.kind.blocks",
+    web: "filter.kind.web",
+    general: "filter.kind.general",
+    systems: "filter.kind.systems",
+    data: "filter.kind.data",
+    terminal: "filter.kind.terminal",
+  };
+  const chips = el("div", "chips");
+  for (const k of ["all", ...KINDS]) {
+    const b = el("button", k === kind ? "chip chip-on" : "chip", t(lang, KIND_KEYS[k]));
+    b.type = "button";
+    b.dataset.kind = k;
+    b.setAttribute("aria-pressed", k === kind ? "true" : "false");
+    b.addEventListener("click", () => {
+      const main = document.querySelector("#main");
+      if (!main) return;
+      main.replaceChildren();
+      main.append(indexView(LANG_CACHE, k));
+      b.focus();
+    });
+    chips.append(b);
+  }
+  const chipline = el("p", "chips-line");
+  chipline.append(el("span", "chips-label", t(lang, "filter.label") + ":"), chips);
+  v.append(chipline);
+
   const groups = [
     ["core", "index.core.title", "index.core.body"],
     ["extended", "index.extended.title", "index.extended.body"],
   ];
   for (const [tier, head, body] of groups) {
-    const rows = LANGUAGES.filter((r) => r.tier === tier);
-    if (!rows.length) continue;
+    const rows = filterLanguages(LANGUAGES, kind, tier);
+    const box = el("div", "index-group");
+    box.append(el("h2", "sect-h", t(lang, head)), el("p", "group-body", t(lang, body)));
+    if (!rows.length) {
+      box.append(el("p", "lrow-none", t(lang, "filter.none")));
+      v.append(box);
+      continue;
+    }
     const list = el("ul", "lrow-list");
     for (const r of rows) {
       const li = el("li", "lrow");
@@ -95,8 +156,7 @@ export function indexView(lang) {
       }
       list.append(li);
     }
-    const box = el("div", "index-group");
-    box.append(el("h2", "sect-h", t(lang, head)), el("p", "group-body", t(lang, body)), list);
+    box.append(list);
     v.append(box);
   }
   const actions = el("div", "actions");
@@ -182,6 +242,23 @@ export function languageView(lang, rec) {
       list.append(li);
     }
     v.append(section("page.links", list));
+  }
+
+  // e03s03: footer cross-link into the sibling projects site. Omitted when
+  // the join table has no row: a language with no sibling tag gets no
+  // block, never an empty chip.
+  const xl = projectLinksForLanguage(rec.slug);
+  if (xl) {
+    const names = el("p", "prose", xl.names.join(", "));
+    const a = el("a", "xlink-link",
+      t(lang, "xlink.link", { count: xl.count }) +
+      (xl.count > xl.names.length ? t(lang, "xlink.more", { count: xl.count }) : "")
+    );
+    a.href = xl.href;
+    const box = el("div", "xlink-box");
+    box.append(el("h2", "sect-h", t(lang, "xlink.title")));
+    box.append(names, a);
+    v.append(box);
   }
   return v;
 }

@@ -120,7 +120,7 @@ Cited as `[Sn]`. Every URL was retrieved 2026-10-26. When the build writes these
 - **[S22]** PowerShell Team blog: "Monad Manifesto: the Origin of Windows PowerShell", "It's a Wrap! Windows PowerShell 1.0 Released!" (14 November 2006), "PowerShell on Linux and Open Source!" (18 August 2016), and Microsoft Learn Monad Manifesto page. https://devblogs.microsoft.com/powershell/monad-manifesto-the-origin-of-windows-powershell/ and https://devblogs.microsoft.com/powershell/powershell-on-linux-and-open-source-2/
 - **[S23]** Ihaka and Gentleman, "R: Past and Future History"; R 1.0.0 release notice; Ihaka and Gentleman, "R: A Language for Data Analysis and Graphics", 1996. https://cran.r-project.org/doc/html/interface98-paper/paper_2.html and https://developer.r-project.org/R-release-1.0.0.txt
 - **[S24]** Ruby official history page and Matsumoto interviews. https://www.ruby-lang.org/en/about/
-- **[S25]** Rust team, "Announcing Rust 1.0", 15 May 2015. https://blog.rust-lang.org/2015-05-15/Rust-1.0/
+- **[S25]** Rust team, "Announcing Rust 1.0", 15 May 2015. https://blog.rust-lang.org/2015/05/15/Rust-1.0.html
 - **[S26]** Swift documentation and Apple's 2015 open-source announcement. https://docs.swift.org/swift-book/
 - **[S27]** Link audit of the first edition of this file, 38 unique URLs, run 2026-10-26 with a browser user agent following redirects. Recorded in plan §14.
 

@@ -29,6 +29,8 @@ const BOT_BLOCKED = [
   "www.mathworks.com", // 403 on /company/history
   "www.ibm.com", // 403 on /docs
   "dl.acm.org", // 403 on /doi
+  "doi.org", // resolves, then portal.acm.org answers 403 to a scripted client
+  "portal.acm.org", // the DOI target above; fine in a browser
   "realpython.com", // 403 to curl, fine in a browser
   "developer.android.com", // 302 to Google sign-in without a cookie
 ];
@@ -120,14 +122,24 @@ test("live check", { skip: process.env.LINKS ? false : "set LINKS=1 to run the n
   const fetch1 = (url) =>
     fetch(url, { redirect: "follow", headers: { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)" } });
   const fails = [];
+  // A status code is a fact about the link. A thrown error can be a momentary
+  // network fault, and this machine saw one on gnu.org, so it is retried once
+  // before it counts. A second failure is reported, never forgiven.
+  const check = async (url) => {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const res = await fetch1(url);
+        return res.ok ? null : `${res.status}`;
+      } catch (error) {
+        if (attempt === 1) return error.message;
+      }
+    }
+    return "unreachable";
+  };
   for (const l of allLinks()) {
     if (blocked(l.url)) continue;
-    try {
-      const res = await fetch1(l.url);
-      if (!res.ok) fails.push(`${l.where} -> ${res.status} ${l.url}`);
-    } catch (error) {
-      fails.push(`${l.where} -> ${error.message} ${l.url}`);
-    }
+    const bad = await check(l.url);
+    if (bad) fails.push(`${l.where} -> ${bad} ${l.url}`);
   }
   assert.deepEqual(fails, [], `links that did not answer 200:\n${fails.join("\n")}`);
 });

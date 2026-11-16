@@ -45,7 +45,10 @@ const CANONICAL = {
   program: "programme",
   repo: "repository",
   run: "execute",
-  list: "array",
+  // "array" is NOT banned as a rival of "list" here. Plan §10.1 asks for both as
+  // separate entries, and they name different things on this site: a Python list
+  // is ordered and changeable, a C array holds one kind of value side by side in
+  // memory. A glossary reader needs both words, so collapsing them would be wrong.
 };
 
 const fields = () => {

@@ -1,6 +1,6 @@
 // e02s04t01: Resources tab. Exactly 3 cards, data-driven.
-// Card 2 is a ghost (no live href): the languages page is not deployed yet,
-// so we link nowhere rather than 404.
+// All 3 cards are live links. The template still renders a ghost card for any
+// entry with url: null, in case a link is pulled before its target ships.
 import { registerTab } from '../app.js';
 import { RESOURCES } from '../data/resources.js';
 

@@ -8,7 +8,7 @@ import { GLOSSARY } from '../js/data/glossary.js';
 import { RESOURCES } from '../js/data/resources.js';
 
 const GLOSS_LINKS = GLOSSARY.reduce((n, t) => n + (t.links || []).filter(l => l && l.url).length, 0);
-const RES_LINKS = RESOURCES.filter(r => r.url).length;
+const RES_LINKS = RESOURCES.filter(r => r.url && /^https?:\/\//.test(r.url)).length;
 
 test('collectLinks: every glossary link + every live resource, in order', () => {
   const links = collectLinks();
@@ -20,9 +20,9 @@ test('collectLinks: every glossary link + every live resource, in order', () => 
   ]);
 });
 
-test('collectLinks: the ghost resource contributes no link', () => {
+test('collectLinks: the same-site resource contributes no external link', () => {
   const links = collectLinks();
-  assert.equal(links.length, GLOSS_LINKS + 2, 'only 2 live resources');
+  assert.equal(links.length, GLOSS_LINKS + 2, 'only the 2 external resources');
   assert.ok(links.every(l => l.url), 'no null urls');
 });
 
@@ -89,8 +89,10 @@ test('classifyError: ENOTFOUND / ECONNREFUSED / EAI_AGAIN are dead', () => {
   }
 });
 
-test('check-doc site data: 24 links total (22 glossary + 2 resources)', () => {
+test('check-doc site data: 24 links total (22 glossary + 2 external resources)', () => {
   assert.equal(collectLinks().length, 24);
   assert.equal(GLOSS_LINKS, 22, 'glossary reference links');
-  assert.equal(RES_LINKS, 2, 'resource links');
+  assert.equal(RES_LINKS, 2, 'external resource links, same-site link excluded');
+  assert.ok(RESOURCES.find(r => r.id === 'languages').url.startsWith('/tools/languages/'),
+    'languages card points at the same-site languages page');
 });

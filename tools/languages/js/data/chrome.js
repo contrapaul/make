@@ -36,6 +36,26 @@ export const CHROME = {
     zh: "还有十四种。每个页面都可以单独阅读。",
   },
 
+  // e03s01 (2026-10-28): the index filter. Chinese below is zh pending V8 -
+  // a draft for the M6 pass with the owner's colleague (non-engineer reader).
+  // Do not treat those strings as signed until that pass is logged.
+  "filter.label": { en: "Type", zh: "类型" },
+  "filter.all": { en: "All", zh: "全部" },
+  "filter.kind.blocks": { en: "Blocks, not text", zh: "拼积木，不是打字" },
+  "filter.kind.web": { en: "Web", zh: "网页" },
+  "filter.kind.general": { en: "Everyday", zh: "日常" },
+  "filter.kind.systems": { en: "Systems", zh: "系统" },
+  "filter.kind.data": { en: "Data", zh: "数据" },
+  "filter.kind.terminal": { en: "Terminal", zh: "终端" },
+  "filter.none": { en: "Nothing here yet. Clear the filter to see all of them.", zh: "这里现在没有。清除过滤器就能看到全部。" },
+
+  // e03s03 (2026-10-28): the footer that links each language page into the
+  // sibling projects site. Chinese is zh pending V8 for the M6 pass - the
+  // same rule as the filter keys above.
+  "xlink.title": { en: "One-afternoon projects", zh: "一个下午的小项目" },
+  "xlink.more": { en: "and more in the project list", zh: "更多项目见项目列表" },
+  "xlink.link": { en: "Open the project list", zh: "打开项目列表" },
+
   "page.reads": { en: "What it reads like", zh: "读起来像什么" },
   "page.category": { en: "What kind it is", zh: "它属于哪一类" },
   "page.makes": { en: "What it builds", zh: "它能建造什么" },
