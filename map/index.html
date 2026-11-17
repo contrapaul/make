@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An interactive map of Paul's home network: the computers, how Tailscale joins them, and what runs on each one.">
+<title>Network map</title>
+<link rel="stylesheet" href="css/map.css">
+</head>
+<body data-view="map">
+
+<header class="bar" id="bar">
+  <a class="brand" href="#">network map</a>
+  <nav aria-label="Sections">
+    <a href="#about" data-tab="about">about</a>
+    <a href="#history" data-tab="history">history</a>
+    <a href="#contact" data-tab="contact">contact</a>
+    <a href="https://contrapaul.com" class="ext">contrapaul.com</a>
+  </nav>
+</header>
+
+<main>
+  <svg id="scene" role="group" aria-label="Map of the network. Each machine is a button that zooms in to its details."></svg>
+
+  <aside class="panel" id="panel" tabindex="-1" aria-label="Details" inert></aside>
+
+  <!-- ABOUT: why I built this -->
+  <section class="sheet" data-sheet="about" inert>
+    <article>
+      <a class="close" href="#">Back to the map</a>
+      <h1 tabindex="-1">About</h1>
+      <p>[Paul] Why I built this.</p>
+    </article>
+  </section>
+
+  <!-- HISTORY: a long time building PCs -->
+  <section class="sheet" data-sheet="history" inert>
+    <article>
+      <a class="close" href="#">Back to the map</a>
+      <h1 tabindex="-1">History</h1>
+      <p>[Paul] My history of building PCs.</p>
+    </article>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="sheet" data-sheet="contact" inert>
+    <article>
+      <a class="close" href="#">Back to the map</a>
+      <h1 tabindex="-1">Contact</h1>
+      <p>[Paul] A line inviting people to get in touch.</p>
+      <form class="contact-form" id="contact-form" novalidate>
+        <label>
+          <span>Name</span>
+          <input type="text" name="name" required autocomplete="name" maxlength="100">
+        </label>
+        <label>
+          <span>Email</span>
+          <input type="email" name="email" required autocomplete="email" maxlength="200">
+        </label>
+        <label>
+          <span>Message</span>
+          <textarea name="message" rows="5" required maxlength="5000"></textarea>
+        </label>
+        <input type="text" name="company" class="contact-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">Send message</button>
+        <div class="contact-status" role="status" aria-live="polite"></div>
+      </form>
+      <p class="fallback">Or email <a href="mailto:hello@contrapaul.com">hello@contrapaul.com</a></p>
+    </article>
+  </section>
+</main>
+
+<dialog class="lightbox" id="lightbox" aria-label="Photo, zoomed in. Click to close.">
+  <img src="" alt="">
+</dialog>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
