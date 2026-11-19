@@ -2,6 +2,43 @@
 
 Newest entry first. Spec: `specs/product/NETWORK_MAP_LATEST.md`.
 
+## 2026-11-19: specs and photos from specs.md
+
+**Asked:** fill `js/data.js` from the new `map/specs.md` and add the four
+webp photos from `map/media/` to the right machines. No motherboard rows for
+the Mini PC, Spark and Macbook Pro. Missing notes stay as `[Paul]`.
+
+**Built:** specs, purposes and notes from `specs.md` for Home desktop, Work
+desktop, Mini PC, AI Rig, Spark, Home server, Test bench, Minecraft server
+and Macbook Pro. Photos: `media/homeserver.webp` on Home desktop and Home
+server, `media/workdesktop.webp` on Work desktop, `media/airig.webp` on the
+AI Rig, `media/minecraftserver.webp` on the Minecraft server. Spark's CPU
+row is labelled "SoC" (the GB10 is a system-on-chip, not a CPU); the panel
+test at `test/map.test.mjs:213` now asserts `SoC` + `Superchip` instead of
+`CPU`.
+
+**Decided, and why:**
+
+- Home desktop now uses `media/homedesktop.webp` (Paul added the real
+  photo after the first pass, when `homeserver.webp` stood in for it).
+  `homeserver.webp` belongs to the Home server only.
+- Alt text was written from the spec notes (e.g. the AI Rig's water cooling)
+  since the photos could not be inspected at this step.
+
+**Verified:** `node --test map/test/map.test.mjs`, 27 pass, 0 fail. All five
+image paths exist in `map/media/`.
+
+**Not verified:** the panel image layouts in a real browser (no headless
+browser installed here); a photo zoom click.
+
+## 2026-11-17: live
+
+The map did not load at make.contrapaul.com/map/ because it was only on
+branch `docs/languages-glossary-unblock` (open PR #42), and production deploys
+from `main`. Pages served the home page for the missing path. PR #42 was
+squash merged into `main` (f1a3473). The live page now shows the map with no
+console errors. Still to do in Cloudflare Pages: set `CONTACT_TO`.
+
 ## 2026-11-14: label changes
 
 Asked by Paul: Home server and Minecraft server subtitles read "Linux";

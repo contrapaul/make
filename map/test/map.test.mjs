@@ -210,7 +210,8 @@ test('panelHtml: machine panel lists specs and links to its services', async () 
   assert.match(html, /<h2 class="group-ai">Spark <em>\(On loan\)<\/em><\/h2>/);
   assert.doesNotMatch(html, /tailnet/i);
   assert.match(html, /href="#spark\/model-server"/);
-  assert.match(html, /<dt>CPU<\/dt>/);
+  assert.match(html, /<dt>SoC<\/dt>/);
+  assert.match(html, /Superchip/);
   const service = panelHtml(parseRoute('#spark/model-server', NODES));
   assert.match(service, /Runs on Spark/);
   assert.match(service, /href="#spark"/);
